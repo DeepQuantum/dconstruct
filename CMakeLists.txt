@@ -26,6 +26,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         cfgelement.h
         cfgelement.cpp
         disassembler.h disassembler.cpp
+        script.h script.cpp
+        DCHeader.h
+        DCScript.h
+        base.h
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -10,7 +10,9 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     Disassembler *dis = new Disassembler();
-    dis->loadSidbase("C:/Users/damix/Documents/GitHub/TLOU2Modding/t2r-dc-disasm/sid1/sidbase.bin");
+    dis->loadSidbase("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase.bin");
+    Script test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/ss-ellie-hoodie-manager.bin");
+    dis->disassembleFile(test);
 
     w.show();
     return a.exec();
