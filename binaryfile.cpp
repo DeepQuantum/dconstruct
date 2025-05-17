@@ -1,12 +1,12 @@
-#include "script.h"
+#include "binaryfile.h"
 
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 
-Script::Script() {}
+BinaryFile::BinaryFile() {}
 
-Script::Script(const std::string &path) {
+BinaryFile::BinaryFile(const std::string &path) {
     std::ifstream scriptstream(path, std::ios::binary);
 
     if (!scriptstream.is_open()) {

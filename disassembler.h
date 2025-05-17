@@ -5,7 +5,7 @@
 #include <map>
 #include "base.h"
 
-#include "script.h"
+#include "binaryfile.h"
 
 
 
@@ -14,14 +14,15 @@ class Disassembler
 public:
     Disassembler();
     void loadSidbase(const std::string &path = "sidbase.bin");
-    int32_t disassembleFile(Script &script);
+    i32 disassembleFile(BinaryFile &script);
     std::map<stringid_64, std::string> m_sidbase;
 
 private:
 
     bool readRelocTable(uint8_t *data, DC_Header *header);
-    void disassembleEntry(Script &script, Entry *entry);
-    void disassembleStateScript(Script &script, StateScript *entry);
+    void disassembleEntry(BinaryFile &script, Entry *entry);
+    StateScript disassembleStateScript(BinaryFile &script, Entry *entry);
+    template <typename T> T disassemblePrimitive(Entry *entry);
 
 };
 

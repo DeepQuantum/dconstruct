@@ -1,5 +1,5 @@
-#ifndef SCRIPT_H
-#define SCRIPT_H
+#ifndef BINARYFILE_H
+#define BINARYFILE_H
 
 #include "DCHeader.h"
 #include "DCScript.h"
@@ -7,27 +7,32 @@
 #include <string>
 #include <vector>
 
-
-template <typename T>
-struct Symbol {
-    uint8_t *offset;
-    stringid_64 hash;
-    T *value;
+union SymbolValue {
+    i32 i32;
+    float f32;
+    StateScript ss;
+    bool b8;
 };
 
-class Script
+struct Symbol {
+    u8 *offset;
+    stringid_64 hash;
+    SymbolValue value;
+};
+
+class BinaryFile
 {
 public:
-    Script();
+    BinaryFile();
 
-    Script(const std::string &path);
+    BinaryFile(const std::string &path);
 
     DC_Header *m_dcheader;
     StateScript *m_dcscript;
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
-    std::vector<Symbol<void>> m_symbols;
+    std::vector<Symbol> m_symbols;
 
 };
 
-#endif // SCRIPT_H
+#endif // BINARYFILE_H

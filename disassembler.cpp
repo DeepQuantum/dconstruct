@@ -8,7 +8,7 @@ Disassembler::Disassembler() {
 }
 
 void Disassembler::loadSidbase(const std::string &path) {
-    uint64_t num_entries, loc, hash_value;
+    u64 num_entries, loc, hash_value;
     std::ifstream sidfile(path, std::ios::binary);
     std::size_t fsize = std::filesystem::file_size(path);
 
@@ -24,7 +24,7 @@ void Disassembler::loadSidbase(const std::string &path) {
 
     for (std::size_t i = 0; i < num_entries; ++i) {
         hash_value = *reinterpret_cast<stringid_64*>(bytes + i * 16 + 0);
-        loc = *reinterpret_cast<uint64_t*>(bytes + i * 16 + 8);
+        loc = *reinterpret_cast<u64*>(bytes + i * 16 + 8);
 
         this->m_sidbase.emplace(hash_value, std::string(bytes + loc - 8));
     }
@@ -32,9 +32,9 @@ void Disassembler::loadSidbase(const std::string &path) {
 }
 
 
-int32_t Disassembler::disassembleFile(Script &script) {
-    constexpr uint32_t magic = 0x44433030;
-    constexpr uint32_t version = 0x1;
+int32_t Disassembler::disassembleFile(BinaryFile &script) {
+    constexpr u32 magic = 0x44433030;
+    constexpr u32 version = 0x1;
 
     script.m_dcheader = reinterpret_cast<DC_Header*>(script.m_bytes.data());
 
@@ -59,20 +59,36 @@ int32_t Disassembler::disassembleFile(Script &script) {
     return 1;
 }
 
-void Disassembler::disassembleEntry(Script &script, Entry *entry) {
-    stringid_64 type = entry->m_typeId;
+void Disassembler::disassembleEntry(BinaryFile &script, Entry *entry) {
+    Symbol symbol = Symbol{};
 
-    if (this->m_sidbase[type] == "state-script") {
-        this->disassembleStateScript(script, reinterpret_cast<StateScript*>(entry));
-    } else if (this->m_sidbase[type] == "int32") {
-        script.m_symbols.emplace_back(Symbol<int32_t>{reinterpret_cast<uint8_t*>(entry), entry->m_scriptId, reinterpret_cast<int32_t*>(entry->m_entryPtr)});
+    symbol.offset = reinterpret_cast<u8*>(entry);
+    symbol.hash = entry->m_scriptId;
+    std::string typeName = this->m_sidbase[entry->m_typeId];
+
+    if (typeName == "state-script") {
+        symbol.value.ss = this->disassembleStateScript(script, entry);
+    } else if (typeName == "int32") {
+        symbol.value.i32 = this->disassemblePrimitive<i32>(entry);
+    } else if (typeName == "float") {
+        symbol.value.f32 = this->disassemblePrimitive<f32>(entry);
+    } else if (typeName == "boolean") {
+        symbol.value.b8 = this->disassemblePrimitive<b8>(entry);
     } else {
-        throw std::runtime_error("Unknown type: " + this->m_sidbase[type]);
+        // symbol.value = tryBuildCustomStruct(entry);
     }
+
+    script.m_symbols.push_back(symbol);
 }
 
-void Disassembler::disassembleStateScript(Script &script, StateScript *entry) {
-    throw std::runtime_error(entry->m_pDebugFileName);
+StateScript Disassembler::disassembleStateScript(BinaryFile &script, Entry *entry) {
+    StateScript ss = *reinterpret_cast<StateScript*>(entry);
+    return ss;
+}
+
+template <typename T>
+T Disassembler::disassemblePrimitive(Entry *entry) {
+    return *reinterpret_cast<T*>(entry);
 }
 
 bool Disassembler::readRelocTable(uint8_t *data, DC_Header *header) {
