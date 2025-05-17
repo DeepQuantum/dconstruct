@@ -7,6 +7,14 @@
 #include <string>
 #include <vector>
 
+
+template <typename T>
+struct Symbol {
+    uint8_t *offset;
+    stringid_64 hash;
+    T *value;
+};
+
 class Script
 {
 public:
@@ -18,6 +26,7 @@ public:
     StateScript *m_dcscript;
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
+    std::vector<Symbol<void>> m_symbols;
 
 };
 

@@ -8,6 +8,7 @@
 #include "script.h"
 
 
+
 class Disassembler
 {
 public:
@@ -18,8 +19,9 @@ public:
 
 private:
 
-    bool checkScriptData(uint8_t *data, const DC_Header *header);
-    void disassembleEntry(const Entry *entry);
+    bool readRelocTable(uint8_t *data, DC_Header *header);
+    void disassembleEntry(Script &script, Entry *entry);
+    void disassembleStateScript(Script &script, StateScript *entry);
 
 };
 

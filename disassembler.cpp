@@ -46,30 +46,36 @@ int32_t Disassembler::disassembleFile(Script &script) {
         throw std::runtime_error("Version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(script.m_bytes.data() + 8)));
     }
 
-    bool checked = this->checkScriptData(script.m_bytes.data(), script.m_dcheader);
+    bool checked = this->readRelocTable(script.m_bytes.data(), script.m_dcheader);
 
     if (!checked) {
         throw std::runtime_error("Script data check was not succesfull");
     }
 
     for (std::size_t i = 0; i < script.m_dcheader->m_numEntries; ++i) {
-        this->disassembleEntry(&script.m_dcheader->m_pStartOfData[i]);
+        this->disassembleEntry(script, &script.m_dcheader->m_pStartOfData[i]);
     }
 
     return 1;
 }
 
-void Disassembler::disassembleEntry(const Entry *entry) {
+void Disassembler::disassembleEntry(Script &script, Entry *entry) {
     stringid_64 type = entry->m_typeId;
 
     if (this->m_sidbase[type] == "state-script") {
-        throw std::runtime_error("StateScript") ;
+        this->disassembleStateScript(script, reinterpret_cast<StateScript*>(entry));
+    } else if (this->m_sidbase[type] == "int32") {
+        script.m_symbols.emplace_back(Symbol<int32_t>{reinterpret_cast<uint8_t*>(entry), entry->m_scriptId, reinterpret_cast<int32_t*>(entry->m_entryPtr)});
     } else {
         throw std::runtime_error("Unknown type: " + this->m_sidbase[type]);
     }
 }
 
-bool Disassembler::checkScriptData(uint8_t *data, const DC_Header *header) {
+void Disassembler::disassembleStateScript(Script &script, StateScript *entry) {
+    throw std::runtime_error(entry->m_pDebugFileName);
+}
+
+bool Disassembler::readRelocTable(uint8_t *data, DC_Header *header) {
     int32_t size = *(int32_t*)(data + header->m_textSize);
     uint8_t *data_copy = data;
     uint8_t *pUnk = data + header->m_textSize;
