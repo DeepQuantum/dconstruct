@@ -22,7 +22,6 @@ private:
     bool readRelocTable(uint8_t *data, DC_Header *header);
     void disassembleEntry(BinaryFile &script, Entry *entry);
     StateScript disassembleStateScript(BinaryFile &script, Entry *entry);
-    template <typename T> T disassemblePrimitive(Entry *entry);
 
 };
 

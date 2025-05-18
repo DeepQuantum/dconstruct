@@ -12,25 +12,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-set(PROJECT_SOURCES
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
+set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
+
+set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/source/ui")
+
+
+file(GLOB_RECURSE SOURCE_FILES
+    "${SOURCE_DIR}/*.cpp"
+    "${SOURCE_DIR}/*.c"
+    "${SOURCE_DIR}/*.h"
+    "${SOURCE_DIR}/*.hpp"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(tlou2_disasm
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        cfgelement.h
-        cfgelement.cpp
-        disassembler.h disassembler.cpp
-        binaryfile.h binaryfile.cpp
-        DCHeader.h
-        DCScript.h
-        base.h
-
+        ${SOURCE_FILES}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET tlou2_disasm APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -39,13 +36,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
     if(ANDROID)
         add_library(tlou2_disasm SHARED
-            ${PROJECT_SOURCES}
+            ${SOURCE_FILES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(tlou2_disasm
-            ${PROJECT_SOURCES}
+            ${SOURCE_FILES}
         )
     endif()
 endif()

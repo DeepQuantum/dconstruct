@@ -69,11 +69,11 @@ void Disassembler::disassembleEntry(BinaryFile &script, Entry *entry) {
     if (typeName == "state-script") {
         symbol.value.ss = this->disassembleStateScript(script, entry);
     } else if (typeName == "int32") {
-        symbol.value.i32 = this->disassemblePrimitive<i32>(entry);
+        symbol.value.i32 = *reinterpret_cast<i32*>(entry);
     } else if (typeName == "float") {
-        symbol.value.f32 = this->disassemblePrimitive<f32>(entry);
+        symbol.value.f32 = *reinterpret_cast<f32*>(entry);
     } else if (typeName == "boolean") {
-        symbol.value.b8 = this->disassemblePrimitive<b8>(entry);
+        symbol.value.b8 = *reinterpret_cast<b8*>(entry);
     } else {
         // symbol.value = tryBuildCustomStruct(entry);
     }
@@ -86,10 +86,6 @@ StateScript Disassembler::disassembleStateScript(BinaryFile &script, Entry *entr
     return ss;
 }
 
-template <typename T>
-T Disassembler::disassemblePrimitive(Entry *entry) {
-    return *reinterpret_cast<T*>(entry);
-}
 
 bool Disassembler::readRelocTable(uint8_t *data, DC_Header *header) {
     int32_t size = *(int32_t*)(data + header->m_textSize);

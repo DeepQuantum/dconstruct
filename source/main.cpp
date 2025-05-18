@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include "disassembler.h"
+#include "disassembly/disassembler.h"
 
 int main(int argc, char *argv[])
 {

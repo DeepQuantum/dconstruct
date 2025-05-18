@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 #include <QScrollBar>
-#include "cfgelement.h"
+#include "cfg/cfgelement.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
