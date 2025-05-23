@@ -4,7 +4,6 @@
 
 #include <QApplication>
 #include "disassembly/disassembler.h"
-#include <cassert>
 
 int main(int argc, char *argv[])
 {
@@ -16,5 +15,6 @@ int main(int argc, char *argv[])
     BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/ss-ellie-hoodie-manager.bin");
     dis->disassembleFile(test);
     w.show();
+    delete dis;
     return a.exec();
 }

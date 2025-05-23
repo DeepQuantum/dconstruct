@@ -12,11 +12,11 @@ union SymbolValue {
     float f32;
     StateScript ss;
     bool b8;
+    stringid_64 hash;
 };
 
 struct Symbol {
     u8 *offset;
-    stringid_64 hash;
     SymbolValue value;
 };
 

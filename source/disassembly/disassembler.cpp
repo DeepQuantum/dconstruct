@@ -56,6 +56,7 @@ int32_t Disassembler::disassembleFile(BinaryFile &script) {
         this->disassembleEntry(script, &script.m_dcheader->m_pStartOfData[i]);
     }
 
+    this->m_scripts.push_back(script);
     return 1;
 }
 
@@ -63,7 +64,6 @@ void Disassembler::disassembleEntry(BinaryFile &script, Entry *entry) {
     Symbol symbol = Symbol{};
 
     symbol.offset = reinterpret_cast<u8*>(entry);
-    symbol.hash = entry->m_scriptId;
     std::string typeName = this->m_sidbase[entry->m_typeId];
 
     if (typeName == "state-script") {
@@ -82,7 +82,7 @@ void Disassembler::disassembleEntry(BinaryFile &script, Entry *entry) {
 }
 
 StateScript Disassembler::disassembleStateScript(BinaryFile &script, Entry *entry) {
-    StateScript ss = *reinterpret_cast<StateScript*>(entry);
+    StateScript ss = *reinterpret_cast<StateScript*>(entry->m_entryPtr);
     return ss;
 }
 

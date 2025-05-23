@@ -1,34 +1,16 @@
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include <QApplication>
+#include <QMainWindow>
+#include "ui_mainwindow.h"  // Include the generated UI header
 
-#include <QPushButton>
-#include <QGraphicsScene>
-#include <QGraphicsProxyWidget>
-#include <QScrollBar>
-#include "cfg/cfgelement.h"
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+int main(int argc, char *argv[])
 {
-    ui->setupUi(this);
-    QGraphicsScene *scene = new QGraphicsScene(this);
+    QApplication app(argc, argv);
 
-    scene->setBackgroundBrush(QBrush(Qt::white));
+    QMainWindow mainWindow;        // Create the main window
+    Ui::MainWindow ui;             // Create an instance of your UI class
+    ui.setupUi(&mainWindow);       // Setup the UI on the main window
 
-    ui->graphicsView->setScene(scene);
-    ui->graphicsView->verticalScrollBar()->hide();
-    ui->graphicsView->horizontalScrollBar()->hide();
+    mainWindow.show();             // Show the window
 
-    CFGElement *cfgs[4];
-    int i = 0;
-    for (auto &cfg : cfgs) {
-        cfg = new CFGElement("Hello\ntest", QRectF(i, i/2, 50, 50));
-        scene->addItem(cfg);
-        i += 500;
-    }
-}
-MainWindow::~MainWindow()
-{
-    delete ui;
+    return app.exec();             // Run the application loop
 }
