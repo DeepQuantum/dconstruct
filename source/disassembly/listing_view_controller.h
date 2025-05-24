@@ -1,16 +1,21 @@
 #include "base.h"
-
-#include "disassembler.h"
+#include "binaryfile.h"
 #include <QtWidgets/QTextEdit>
+#include "../mainwindow.h"
+
 
 class ListingViewController {
 public:
-    ListingViewController(Disassembler *disassebler, QTextEdit *textEdit);
+    ListingViewController(BinaryFile &file, MainWindow *mainWindow);
     void setScriptById(stringid_64 id);
     void createListingView();
 
 private:
-    Disassembler *m_disassembler;
-    StateScript *m_currentScript;
-    QTextEdit *m_textEdit;
+    BinaryFile m_currentFile;
+    MainWindow *m_mainWindow;
+
+    void insertLine(const std::string &line, QColor color = MainWindow::BLANK_COLOR, int fontSize = 10, u8 indent = 0);
+    void insertHeaderLine();
+
+    void appendLine(const std::string &line);
 };

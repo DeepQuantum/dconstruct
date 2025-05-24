@@ -3,32 +3,34 @@
 #include <stdexcept>
 
 
-ListingViewController::ListingViewController(Disassembler *disassembler, QTextEdit *textEdit) {
-    this->m_disassembler = disassembler;
-    this->m_textEdit = textEdit;
-    this->m_currentScript = disassembler->m_scripts[0].m_dcscript;
+ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow) {
+    this->m_mainWindow = mainWindow;
+    this->m_currentFile = file;
     this->createListingView();
 }
 
-void ListingViewController::setScriptById(stringid_64 id) {
-    if (this->m_disassembler == nullptr) {
-        throw std::runtime_error("Disassembler is not set");
-    }
+void ListingViewController::insertLine(const std::string &line, QColor color, int fontSize, u8 indent) {
+    QTextCursor cursor = this->m_mainWindow->getListingView()->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    this->m_mainWindow->getListingView()->setTextCursor(cursor);
 
-    for (const auto &script : this->m_disassembler->m_scripts) {
-        if (script.m_dcheader->m_pStartOfData->m_scriptId == id) {
-            this->m_currentScript = script.m_dcscript;
-            return;
-        }
-    }
 
-    throw std::runtime_error("Script with the given ID not found");
+    QTextCharFormat format;
+    format.setForeground(color);
+    format.setFontPointSize(fontSize);
+    cursor.insertText(QString::fromStdString(std::string(indent, ' ') + line + "\n"), format);
 }
 
 void ListingViewController::createListingView() {
-    if (this->m_currentScript == nullptr) {
-        throw std::runtime_error("Current script is not set");
-    }
+    this->insertHeaderLine();
+}
 
-    this->m_textEdit->setText(QString::fromStdString(std::string("ja lol")));
+void ListingViewController::insertHeaderLine() {
+    std::string current_script_name = this->m_mainWindow->m_sidbase[this->m_currentFile.m_dcscript->m_stateScriptId];
+    this->m_mainWindow->getListingView()->clear();
+    this->m_mainWindow->getListingView()->setReadOnly(true);
+    this->insertLine("DeepQuantum's DC Disassembler", MainWindow::STRING_COLOR, 14, 20);
+    this->insertLine("Listing for script: " + current_script_name, MainWindow::STRING_COLOR, 14, 20);
+    this->insertLine("Script ID: " + MainWindow::intToSIDString(this->m_currentFile.m_dcscript->m_stateScriptId), MainWindow::STRING_COLOR, 14, 20);
+    this->insertLine("Filesize: " + std::to_string(this->m_currentFile.m_size) + " bytes", MainWindow::STRING_COLOR, 14, 20);
 }

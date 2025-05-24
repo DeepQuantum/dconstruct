@@ -3,16 +3,46 @@
 #include <QMainWindow>
 #include "ui_mainwindow.h"
 
+#include "disassembly/base.h"
+#include "disassembly/binaryfile.h"
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    QTextEdit *getListingView() const {
+
+    constexpr static QColor OPCODE_COLOR = QColor(84, 179, 183);
+    constexpr static QColor STRING_COLOR = QColor(159, 41, 68);
+    constexpr static QColor COMMENT_COLOR = QColor(255, 255, 0);
+    constexpr static QColor BLANK_COLOR = QColor(183, 210, 210);
+    constexpr static QColor NUM_LITERAL_COLOR = QColor(112, 160, 112);
+    constexpr static QColor BACKGROUND_COLOR = QColor(28, 29, 30);
+
+
+    QTextEdit *getListingView() const noexcept {
         return ui.ListingView;
+    }
+
+    void loadSidbase(const std::string &path = "sidbase.bin");
+    std::unordered_map<stringid_64, std::string> m_sidbase;
+    std::vector<BinaryFile> m_scripts;
+
+    static std::string intToSIDString(stringid_64 sid) {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(16) << sid;
+        std::string str = ss.str();
+        std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
+            return std::toupper(c);
+        });
+        return str;
     }
 
 private:
     Ui::MainWindow ui;
+
 };
