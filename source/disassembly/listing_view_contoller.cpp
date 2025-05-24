@@ -1,10 +1,13 @@
 #include "listing_view_controller.h"
-#include "mainwindow.h"
+#include "../mainwindow.h"
 #include <stdexcept>
 
 
-void ListingViewController::setDisassembler(Disassembler *disassembler) {
+ListingViewController::ListingViewController(Disassembler *disassembler, QTextEdit *textEdit) {
     this->m_disassembler = disassembler;
+    this->m_textEdit = textEdit;
+    this->m_currentScript = disassembler->m_scripts[0].m_dcscript;
+    this->createListingView();
 }
 
 void ListingViewController::setScriptById(stringid_64 id) {
@@ -27,5 +30,5 @@ void ListingViewController::createListingView() {
         throw std::runtime_error("Current script is not set");
     }
 
-    m_textEdit.set
+    this->m_textEdit->setText(QString::fromStdString(std::string("ja lol")));
 }

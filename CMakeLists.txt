@@ -16,12 +16,12 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/source/ui")
 
-
 file(GLOB_RECURSE SOURCE_FILES
     "${SOURCE_DIR}/*.cpp"
     "${SOURCE_DIR}/*.c"
     "${SOURCE_DIR}/*.h"
     "${SOURCE_DIR}/*.hpp"
+    "${SOURCE_DIR}/*.ui"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -29,17 +29,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${SOURCE_FILES}
     )
+
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET tlou2_disasm APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# set_property(TARGET tlou2_disasm APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+# ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
         add_library(tlou2_disasm SHARED
             ${SOURCE_FILES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+
+    # Define properties for Android with Qt 5 after find_package() calls as:
+    # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(tlou2_disasm
             ${SOURCE_FILES}
@@ -47,14 +49,15 @@ else()
     endif()
 endif()
 
-target_link_libraries(tlou2_disasm PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(tlou2_disasm PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm)
 endif()
+
 set_target_properties(tlou2_disasm PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

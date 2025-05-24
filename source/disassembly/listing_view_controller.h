@@ -1,11 +1,11 @@
 #include "base.h"
 
 #include "disassembler.h"
+#include <QtWidgets/QTextEdit>
 
 class ListingViewController {
 public:
-    ListingViewController();
-    void setDisassembler(Disassembler *disassembler);
+    ListingViewController(Disassembler *disassebler, QTextEdit *textEdit);
     void setScriptById(stringid_64 id);
     void createListingView();
 
