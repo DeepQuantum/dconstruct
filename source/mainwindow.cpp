@@ -40,3 +40,23 @@ void MainWindow::loadSidbase(const std::string &path) {
     }
     delete[] bytes;
 }
+
+std::string MainWindow::resolveHash(stringid_64 sid) const {
+    auto it = this->m_sidbase.find(sid);
+    if (it != this->m_sidbase.end()) {
+        return it->second;
+    }
+    return this->intToSIDString(sid);
+}
+
+std::string MainWindow::intToSIDString(stringid_64 sid) {
+    char buffer[16];
+    sprintf(buffer, "%016llX", sid);
+    return std::string(buffer);
+}
+
+std::string MainWindow::offsetToString(u32 offset) {
+    char buffer[8];
+    sprintf(buffer, "0x%06llX", offset);
+    return std::string(buffer);
+}

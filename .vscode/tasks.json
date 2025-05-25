@@ -23,8 +23,7 @@
         {
             "label": "complete",
             "dependsOn": [
-                "build",
-                "windeployqt"
+                "build"
             ],
             "group": {
                 "kind": "build",

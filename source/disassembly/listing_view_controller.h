@@ -16,6 +16,6 @@ private:
 
     void insertLine(const std::string &line, QColor color = MainWindow::BLANK_COLOR, int fontSize = 10, u8 indent = 0);
     void insertHeaderLine();
-
-    void appendLine(const std::string &line);
+    void insertFunctionDisassembly(ScriptLambda *lambda);
+    u32 getOffset(const void *symbol);
 };

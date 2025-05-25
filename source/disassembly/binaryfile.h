@@ -8,17 +8,28 @@
 #include <string>
 #include <vector>
 
-union SymbolValue {
-    i32 i32;
-    float f32;
-    StateScript ss;
-    bool b8;
-    stringid_64 hash;
+enum SymbolType {
+    B8,
+    I32,
+    F32,
+    SS, 
+    HASH,
+    LAMBDA,
+    UNKNOWN
 };
 
 struct Symbol {
-    u8 *offset;
-    SymbolValue value;
+    SymbolType type;
+    stringid_64 id;
+    union {
+        i32 *i32_ptr;
+        f32 *f32_ptr;
+        b8 *b8_ptr;
+        StateScript *ss_ptr;
+        ScriptLambda *lambda_ptr;
+        uint64_t *hash_ptr;
+        uintptr_t i32_ptr_raw;
+    };
 };
 
 class BinaryFile

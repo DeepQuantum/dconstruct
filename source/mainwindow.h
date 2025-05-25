@@ -8,6 +8,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
+#include <execution>
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +24,9 @@ public:
     constexpr static QColor BLANK_COLOR = QColor(183, 210, 210);
     constexpr static QColor NUM_LITERAL_COLOR = QColor(112, 160, 112);
     constexpr static QColor BACKGROUND_COLOR = QColor(28, 29, 30);
+    
+    std::unordered_map<stringid_64, std::string> m_sidbase;
+    constexpr static u8 VersionNumber = 0x01;
 
 
     QTextEdit *getListingView() const noexcept {
@@ -29,20 +34,11 @@ public:
     }
 
     void loadSidbase(const std::string &path = "sidbase.bin");
-    std::unordered_map<stringid_64, std::string> m_sidbase;
+    std::string resolveHash(stringid_64 sid) const;
     std::vector<BinaryFile> m_scripts;
-
-    static std::string intToSIDString(stringid_64 sid) {
-        std::stringstream ss;
-        ss << std::hex << std::setfill('0') << std::setw(16) << sid;
-        std::string str = ss.str();
-        std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
-            return std::toupper(c);
-        });
-        return str;
-    }
+    static std::string intToSIDString(stringid_64 sid);
+    static std::string offsetToString(u32 offset);
 
 private:
     Ui::MainWindow ui;
-
 };

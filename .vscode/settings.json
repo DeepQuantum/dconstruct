@@ -84,6 +84,9 @@
         "xloctime": "cpp",
         "xmemory": "cpp",
         "xtr1common": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "deque": "cpp",
+        "execution": "cpp",
+        "queue": "cpp"
     },
 }

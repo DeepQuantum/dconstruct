@@ -50,22 +50,32 @@ i32 BinaryFile::disassembleFile(std::unordered_map<stringid_64, std::string> &si
 void BinaryFile::disassembleEntry(Entry *entry, std::unordered_map<stringid_64, std::string> &sidbase) {
     Symbol symbol = Symbol{};
 
-    symbol.offset = reinterpret_cast<u8*>(entry);
     std::string typeName = sidbase[entry->m_typeId];
+    symbol.id = entry->m_scriptId;
 
     if (typeName == "state-script") {
         this->m_dcscript = reinterpret_cast<StateScript*>(entry->m_entryPtr);
+        symbol.type = SymbolType::SS;
+        symbol.ss_ptr = reinterpret_cast<StateScript*>(entry->m_entryPtr);
     } else if (typeName == "int32") {
-        symbol.value.i32 = *reinterpret_cast<i32*>(entry);
+        symbol.type = SymbolType::I32;
+        symbol.i32_ptr = reinterpret_cast<i32*>(entry->m_entryPtr);
     } else if (typeName == "float") {
-        symbol.value.f32 = *reinterpret_cast<f32*>(entry);
+        symbol.type = SymbolType::F32;
+        symbol.f32_ptr = reinterpret_cast<f32*>(entry->m_entryPtr);
     } else if (typeName == "boolean") {
-        symbol.value.b8 = *reinterpret_cast<b8*>(entry);
-    } else {
-        // symbol.value = tryBuildCustomStruct(entry);
+        symbol.type = SymbolType::B8;
+        symbol.b8_ptr = reinterpret_cast<b8*>(entry->m_entryPtr);
+    } else if (typeName == "script-lambda") {
+        symbol.type = SymbolType::LAMBDA;
+        symbol.lambda_ptr = reinterpret_cast<ScriptLambda*>(entry->m_entryPtr);
+    }
+    else {
+        symbol.type = SymbolType::UNKNOWN;
+        symbol.i32_ptr_raw = reinterpret_cast<uintptr_t>(entry->m_entryPtr);
     }
 
-    //this->m_symbols.push_back(symbol);
+    this->m_symbols.push_back(symbol);
 }
 
 
