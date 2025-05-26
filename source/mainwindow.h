@@ -24,6 +24,7 @@ public:
     constexpr static QColor BLANK_COLOR = QColor(183, 210, 210);
     constexpr static QColor NUM_LITERAL_COLOR = QColor(112, 160, 112);
     constexpr static QColor BACKGROUND_COLOR = QColor(28, 29, 30);
+    constexpr static QColor HASH_COLOR = QColor(150, 0, 150);
     
     std::unordered_map<stringid_64, std::string> m_sidbase;
     constexpr static u8 VersionNumber = 0x01;

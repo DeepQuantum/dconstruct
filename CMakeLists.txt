@@ -9,6 +9,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG")
+
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -28,6 +31,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(tlou2_disasm
         MANUAL_FINALIZATION
         ${SOURCE_FILES}
+    )
+    target_compile_options(tlou2_disasm PRIVATE
+        $<$<CONFIG:Release>:-Ofast>
+        $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
+        $<$<CONFIG:Debug>:-O0 -g>
     )
 
 # Define target properties for Android with Qt 6 as:

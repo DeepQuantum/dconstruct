@@ -87,6 +87,7 @@
         "xtree": "cpp",
         "deque": "cpp",
         "execution": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "qtextedit": "cpp"
     },
 }
