@@ -2,6 +2,7 @@
 #include "../mainwindow.h"
 #include <stdexcept>
 #include "instructions.h"
+#include <cmath>
 #include <sstream>
 
 
@@ -82,7 +83,7 @@ u32 ListingViewController::getOffset(const void *symbol) {
     return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);
 }
 
-void ListingViewController::insertSymbolTable(u64 *symbolPtr) const noexcept {
+void ListingViewController::insertSymbolTable(u64 *symbolPtr, const u8 size) const noexcept {
 
 }
 
@@ -90,14 +91,13 @@ void ListingViewController::insertFunctionDisassembly(ScriptLambda *lambda) {
     this->insertSpan("INSTRUCTION POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
     this->insertSpan("SYMBOL TABLE: " + MainWindow::offsetToString(this->getOffset(lambda->m_pSymbols)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
 
-    this->insertSymbolTable(lambda->m_pSymbols);
-    
-
-    std::unordered_map<u64, std::string> labels;
-
     u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - reinterpret_cast<Instruction*>(lambda->m_pOpcode);
+    u8 symbolTableSize = 0;
     std::vector<std::pair<u8, std::string>> instructionLines(instructionCount);
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
+    std::unordered_map<u64, std::string> labels;
+
+    
     char ss[256];
     for (u64 i = 0; i < instructionCount; ++i) {
         sprintf(ss, "%04X   0x%06X   %02X %02X %02X %02X       %-20s%s", 

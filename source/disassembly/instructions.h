@@ -110,8 +110,8 @@ struct Instruction {
     u32 padding;
 
     std::string opcodeToString() const noexcept;
-
     std::string getRegisterString() const noexcept;
+    b8 isSymbolLoadInstruction() const noexcept;
 };
 
 

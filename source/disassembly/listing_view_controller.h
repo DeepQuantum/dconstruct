@@ -20,6 +20,6 @@ private:
     void insertInstructioN(const std::string &instruction);
     void insertHeaderLine();
     void insertFunctionDisassembly(ScriptLambda *lambda);
-    void insertSymbolTable(u64 *symbolPtr) const noexcept;
+    void insertSymbolTable(u64 *symbolPtr, const u8 size) const noexcept;
     u32 getOffset(const void *symbol);
 };
