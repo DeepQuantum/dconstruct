@@ -39,8 +39,8 @@ public:
 
     BinaryFile(const std::string &path);
 
-    DC_Header *m_dcheader;
-    StateScript *m_dcscript;
+    DC_Header *m_dcheader = nullptr;
+    StateScript *m_dcscript = nullptr;
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
     std::vector<Symbol> m_symbols;

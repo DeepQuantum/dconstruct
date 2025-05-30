@@ -91,39 +91,39 @@ u32 ListingViewController::getOffset(const void *symbol) {
     return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);
 }
 
-void ListingViewController::checkSymbolTableLoad(const Instruction &instruction, u64 * const tablePtr, std::map<u8, SymbolTableEntry> &symbols) {
-    SymbolTableEntry ste{};
-    ste.m_index = instruction.operand1;
-    switch (instruction.opcode) {
-        case Opcode::LoadStaticInt:
-            ste.m_type = SymbolTableEntryType::INT;
-            ste.m_i32 = *reinterpret_cast<i32*>(&tablePtr[instruction.operand1]);
-            break;
-        case Opcode::LookupPointer:
-        case Opcode::LoadStaticPointerImm:
-            ste.m_type = SymbolTableEntryType::POINTER;
-            ste.m_pointer = *reinterpret_cast<intptr_t*>(&tablePtr[instruction.operand1]);
-            break;
-        case Opcode::LoadStaticFloatImm:
-            ste.m_type = SymbolTableEntryType::FLOAT;
-            ste.m_f32 = *reinterpret_cast<f32*>(&tablePtr[instruction.operand1]);
-            break;
-        default:
-            ste.m_type = SymbolTableEntryType::UNKNOWN_TYPE;
-            ste.m_hash = tablePtr[instruction.operand1];
-    }
-    symbols.emplace(instruction.operand1, ste);
-}
+// void ListingViewController::checkSymbolTableLoad(const Instruction &instruction, u64 * const tablePtr, std::map<u8, SymbolTableEntry> &symbols) {
+//     SymbolTableEntry ste{};
+//     ste.m_index = instruction.operand1;
+//     switch (instruction.opcode) {
+//         case Opcode::LoadStaticInt:
+//             ste.m_type = SymbolTableEntryType::INT;
+//             ste.m_i32 = *reinterpret_cast<i32*>(&tablePtr[instruction.operand1]);
+//             break;
+//         case Opcode::LookupPointer:
+//         case Opcode::LoadStaticPointerImm:
+//             ste.m_type = SymbolTableEntryType::POINTER;
+//             ste.m_pointer = *reinterpret_cast<intptr_t*>(&tablePtr[instruction.operand1]);
+//             break;
+//         case Opcode::LoadStaticFloatImm:
+//             ste.m_type = SymbolTableEntryType::FLOAT;
+//             ste.m_f32 = *reinterpret_cast<f32*>(&tablePtr[instruction.operand1]);
+//             break;
+//         default:
+//             ste.m_type = SymbolTableEntryType::UNKNOWN_TYPE;
+//             ste.m_hash = tablePtr[instruction.operand1];
+//     }
+//     symbols.emplace(instruction.operand1, ste);
+// }
 
 FunctionDisassembly ListingViewController::createFunctionDisassembly(ScriptLambda *lambda) {
     this->insertSpan("INSTRUCTION POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
     this->insertSpan("SYMBOL TABLE POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pSymbols)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
 
     StackFrame stackFrame;
+    stackFrame.m_symbolTablePtr = lambda->m_pSymbols;
 
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
-    u8 symbolTableSize = 0;
 
     std::vector<FunctionDisassemblyLine> lines;
     lines.reserve(instructionCount);
@@ -150,8 +150,9 @@ FunctionDisassembly ListingViewController::createFunctionDisassembly(ScriptLambd
 
 void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionDisassemblyLine &line) {
     char disassembly_text[256] = {0};
-    std::string comment = "";
+    char comment[128] = {0};
     const Instruction istr = line.m_instruction;
+    SymbolTableEntry table_entry = {};
     sprintf(disassembly_text, "%04X   0x%06X   %02X %02X %02X %02X       %-20s",
             line.m_location,
             this->getOffset((void*)line.m_globalPointer),
@@ -162,79 +163,154 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
             istr.opcodeToString().c_str()
     );
     char *varying = disassembly_text + 49;
+    Register &dest = stackFrame.registers[istr.destination];
+    Register &op1 = stackFrame.registers[istr.operand1];
+    Register &op2 = stackFrame.registers[istr.operand2];
     switch (istr.opcode) {
         case Return: {
             sprintf(varying, "r%d", istr.operand1);
-            comment = "Return " + stackFrame[istr.operand1];
+            sprintf(comment, "Return %s", stackFrame[istr.operand1].c_str());
             break;
         }
         case IAdd: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s + %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_I64;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_I64 + stackFrame.registers[istr.operand2].m_value.m_I64;
+            if (op1.m_type == RegisterValueType::R_POINTER) {
+                dest.m_type = RegisterValueType::R_POINTER;
+                dest.m_PTR.m_base = op1.m_PTR.m_base;
+                dest.m_PTR.m_offset = op1.m_PTR.m_base + op1.m_I64;
+            } else {
+                dest.m_type = RegisterValueType::R_I64;
+                dest.m_I64 = op1.m_I64 + op2.m_I64;
+            }
+            sprintf(comment, "%s = %s + %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case ISub: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s - %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_I64;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_I64 - stackFrame.registers[istr.operand2].m_value.m_I64;
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = op1.m_I64 - op2.m_I64;
+            sprintf(comment, "%s = %s - %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case IMul: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s * %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_I64;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_I64 * stackFrame.registers[istr.operand2].m_value.m_I64;
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = op1.m_I64 * op2.m_I64;
+            sprintf(comment, "%s = %s * %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case IDiv: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s / %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_I64;
-            if (stackFrame.registers[istr.operand2].m_value.m_I64 == 0) {
-                stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_I64 / 1;
-                comment += " divide by 0";
+            dest.m_type = RegisterValueType::R_I64;
+            if (op2.m_I64 == 0) {
+                dest.m_I64 = op1.m_I64 / 1;
+                sprintf(comment + 13, "%s", " divide by 0");
             } else {
-                stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_I64 / stackFrame.registers[istr.operand2].m_value.m_I64;
+                dest.m_I64 = op1.m_I64 / op2.m_I64;
             }
+            sprintf(comment, "%s = %s / %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case FAdd: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s + %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_F32;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_F32 + stackFrame.registers[istr.operand2].m_value.m_F32;
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_I64 = op1.m_F32 + op2.m_F32;
+            sprintf(comment, "%s = %s + %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case FSub: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s - %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_F32;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_F32 - stackFrame.registers[istr.operand2].m_value.m_F32;
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_I64 = op1.m_F32 - op2.m_F32;
+            sprintf(comment, "%s = %s - %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case FMul: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s * %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_F32;
-            stackFrame.registers[istr.destination].m_value.m_I64 = stackFrame.registers[istr.operand1].m_value.m_F32 * stackFrame.registers[istr.operand2].m_value.m_F32;
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_I64 = op1.m_F32 * op2.m_F32;
+            sprintf(comment, "%s = %s * %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case FDiv: {
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            comment = "%s = %s / %s" + stackFrame[istr.destination], stackFrame[istr.operand1], stackFrame[istr.operand2];
-            stackFrame.registers[istr.destination].m_type = RegisterValueType::R_F32;
-            if (stackFrame.registers[istr.operand2].m_value.m_F32 == 0) {
-                stackFrame.registers[istr.destination].m_value.m_F32 = stackFrame.registers[istr.operand1].m_value.m_F32 / 1;
-                comment += " divide by 0";
+            dest.m_type = RegisterValueType::R_F32;
+            if (op2.m_F32 == 0) {
+                dest.m_F32 = op1.m_F32 / 1;
+                sprintf(comment + 13, "%s", " divide by 0");
             } else {
-                stackFrame.registers[istr.destination].m_value.m_F32 = stackFrame.registers[istr.operand1].m_value.m_F32 / stackFrame.registers[istr.operand2].m_value.m_F32;
+                dest.m_F32 = op1.m_F32 / op2.m_F32;
             }
+            sprintf(comment, "%s = %s / %s", stackFrame[istr.destination].c_str(), stackFrame[istr.operand1].c_str(), stackFrame[istr.operand2].c_str());
+            break;
         }
         case LoadStaticInt: {
-            
+            const i64 table_value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            table_entry.m_type = INT;
+            table_entry.m_i64 = table_value;
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            stackFrame.m_symbolTable.push_back(table_entry);
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = table_value;
+            sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
+            break;
+        }
+        case LoadStaticFloat: {
+            const f32 table_value = reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            table_entry.m_type = FLOAT;
+            table_entry.m_f32 = table_value;
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            stackFrame.m_symbolTable.push_back(table_entry);
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_F32 = table_value;
+            sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
+            break;
+        }
+        case LoadStaticPointer: {
+            const intptr_t table_value = reinterpret_cast<intptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            table_entry.m_type = POINTER;
+            table_entry.m_pointer = table_value;
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            stackFrame.m_symbolTable.push_back(table_entry);
+            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_PTR.m_base = table_value;
+            sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
+            break;
+        }
+        case LoadU16Imm: {
+            const u16 value = istr.operand1 | (istr.operand2 << 8);
+            sprintf(varying, "r%d, %d", istr.destination, value);
+            dest.m_type = RegisterValueType::R_U16;
+            dest.m_U16 = value;
+            sprintf(comment, "r%d = %d", istr.destination, value);
+            break;
+        }
+        case LoadU32: {
+            sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_U32;
+            dest.m_U32 = 0;
+            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            break;
+        }
+        case LoadFloat: {
+            sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_F32 = 0.f;
+            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            break;
+        }
+        case LoadPointer: {
+            sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_PTR = {0, 0};
+            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            break;
         }
         case Branch: {
-            
         }
     }
     line.m_text = std::string(disassembly_text);
-    line.m_comment = comment + "\n";
+    line.m_comment = std::string(comment) + "\n";
 }
 
 void ListingViewController::insertFunctionDisassemblyText(const FunctionDisassembly &functionDisassembly) {
@@ -257,12 +333,20 @@ void ListingViewController::insertFunctionDisassemblyText(const FunctionDisassem
 }
 
 void ListingViewController::insertHeaderLine() {
-    std::string current_script_name = this->m_mainWindow->resolveHash(this->m_currentFile.m_dcscript->m_stateScriptId);
+    std::string current_script_name;
+    std::string current_script_id;
+    if (this->m_currentFile.m_dcscript != nullptr) {
+        current_script_name = this->m_mainWindow->resolveHash(this->m_currentFile.m_dcscript->m_stateScriptId);
+        current_script_id = MainWindow::intToSIDString(this->m_currentFile.m_dcscript->m_stateScriptId);
+    } else {
+        current_script_name = "UNKOWN SCRIPT";
+        current_script_id = "UNKNOWN SCRIPT ID";
+    }
     this->m_mainWindow->getListingView()->clear();
     this->m_mainWindow->getListingView()->setReadOnly(true);
     this->insertSpan("DeepQuantum's DC Disassembler ver. " + std::to_string(MainWindow::VersionNumber) + "\n", MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("Listing for script: " + current_script_name + "\n", MainWindow::STRING_COLOR , 14, 20);
-    this->insertSpan("Script ID: " + MainWindow::intToSIDString(this->m_currentFile.m_dcscript->m_stateScriptId), MainWindow::STRING_COLOR, 14, 20);
+    this->insertSpan("Script ID: " + current_script_id, MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("Filesize: " + std::to_string(this->m_currentFile.m_size) + " bytes\n\n", MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("START OF DISASSEMBLY\n", MainWindow::COMMENT_COLOR, 14, 20);
     this->insertSpan("--------------------------------------------------\n", MainWindow::COMMENT_COLOR, 14, 20);

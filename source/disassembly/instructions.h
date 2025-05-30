@@ -127,12 +127,11 @@ enum SymbolTableEntryType {
 };
 
 struct SymbolTableEntry {
-    u8 m_index;
     SymbolTableEntryType m_type;
     union {
         stringid_64 m_hash;
         f32 m_f32;
-        i32 m_i32;
+        i64 m_i64;
         intptr_t m_pointer;
     };
 };
@@ -159,20 +158,9 @@ struct FunctionDisassembly {
     std::vector<SymbolTableEntry> m_symbolTable;
 };
 
-union RegisterValue {
-    i8			m_I8;
-	i8			m_U8;
-	i16			m_I16;
-	u16		    m_U16;
-	u16		    m_F16;
-	i32			m_I32;
-	u32		    m_U32;
-	f32		    m_F32;
-	f64		    m_F64;
-	int64_t		m_I64;
-	uint64_t	m_U64;
-    stringid_64 m_SID;
-    intptr_t    m_PTR;
+struct RegisterPointer {
+    intptr_t m_base;
+    u64 m_offset;
 };
 
 enum RegisterValueType {
@@ -192,15 +180,30 @@ enum RegisterValueType {
 };
 
 struct Register {
-    RegisterValue m_value;
     RegisterValueType m_type;
+    union {
+        i8			       m_I8;
+        i8			       m_U8;
+        i16			       m_I16;
+        u16		           m_U16;
+        u16		           m_F16;
+        i32			       m_I32;
+        u32		           m_U32;
+        f32		           m_F32;
+        f64		           m_F64;
+        int64_t		       m_I64;
+        uint64_t	       m_U64;
+        stringid_64        m_SID;
+        RegisterPointer    m_PTR;
+    };
 };
 
 struct StackFrame {
     Register registers[128];
+    u64 *m_symbolTablePtr;
+    std::vector<SymbolTableEntry> m_symbolTable;
 
     std::string operator[](const u64 idx) const noexcept;
 };
-
 
 
