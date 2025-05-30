@@ -103,30 +103,24 @@ std::string Instruction::opcodeToString() const noexcept {
     }
 }
 
-std::string Instruction::getRegisterString() const noexcept {
-    char buffer[64] = {0};
-    const char *reg1 = ((this->destination > 9 ? " r" : "  r") + std::to_string(this->operand1)).c_str();
-    const char *reg2 = ((this->operand1 > 9 ? " r" : "  r") + std::to_string(this->operand2)).c_str();
-    
-    switch (this->opcode) {
-        case Return:
-            sprintf(buffer, "r%d", this->destination);
-            break;
-        case Branch:
-        case BranchIf:
-        case BranchIfNot:
-            sprintf(buffer, "%2X, r%d", this->destination, this->operand1);
-            break;
-        default:
-            sprintf(buffer, "r%d,%s,%s", this->destination, reg1, reg2);
-            break;
-    }
-    return std::string(buffer);
-}
-
 b8 Instruction::isSymbolLoadInstruction() const noexcept {
     Opcode op = this->opcode;
     return (op > LoadStaticU32Imm && op < LoadU64) || 
     op == LoadStaticI32Imm || op == LoadStaticFloatImm || op == LoadStaticPointerImm || 
     op == LookupInt ||op == LookupFloat || op == LookupPointer;
+}
+
+b8 Instruction::isBranchInstruction() const noexcept {
+    return this->opcode == Branch || this->opcode == BranchIf || this->opcode == BranchIfNot;
+}
+
+std::string StackFrame::operator[](const u64 idx) const noexcept {
+    char out[128];
+    const Register reg = this->registers[idx];
+    switch (reg.m_type) {
+        default: {
+            sprintf(out, "%d", reg.m_value.m_U64);
+        } 
+    }
+    return out;
 }

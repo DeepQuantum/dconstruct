@@ -2,6 +2,9 @@
 #pragma once
 #include "base.h"
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
 
 enum Opcode : u8 {
     Return,
@@ -112,6 +115,91 @@ struct Instruction {
     std::string opcodeToString() const noexcept;
     std::string getRegisterString() const noexcept;
     b8 isSymbolLoadInstruction() const noexcept;
+    b8 isBranchInstruction() const noexcept;
+};
+
+enum SymbolTableEntryType { 
+    STRINGID_64,
+    FLOAT,
+    INT,
+    POINTER,
+    UNKNOWN_TYPE
+};
+
+struct SymbolTableEntry {
+    u8 m_index;
+    SymbolTableEntryType m_type;
+    union {
+        stringid_64 m_hash;
+        f32 m_f32;
+        i32 m_i32;
+        intptr_t m_pointer;
+    };
+};
+
+struct FunctionDisassemblyLine {
+    Instruction m_instruction;
+    u64 m_location;
+    std::string m_text;
+    intptr_t m_globalPointer;
+    std::string m_comment;
+    std::vector<u64> m_locationsPointedFrom;
+
+    FunctionDisassemblyLine() = default;
+
+    FunctionDisassemblyLine(u64 idx, Instruction *ptr) :
+        m_instruction(ptr[idx]),
+        m_location(idx),
+        m_globalPointer(reinterpret_cast<intptr_t>(ptr))
+    {}
+};
+
+struct FunctionDisassembly {
+    std::vector<FunctionDisassemblyLine> m_lines;
+    std::vector<SymbolTableEntry> m_symbolTable;
+};
+
+union RegisterValue {
+    i8			m_I8;
+	i8			m_U8;
+	i16			m_I16;
+	u16		    m_U16;
+	u16		    m_F16;
+	i32			m_I32;
+	u32		    m_U32;
+	f32		    m_F32;
+	f64		    m_F64;
+	int64_t		m_I64;
+	uint64_t	m_U64;
+    stringid_64 m_SID;
+    intptr_t    m_PTR;
+};
+
+enum RegisterValueType {
+    R_I8,
+	R_U8,
+	R_I16,
+	R_U16,
+	R_F16,
+	R_I32,
+	R_U32,
+	R_F32,
+	R_F64,
+    R_I64,
+    R_U64,
+    R_HASH,
+    R_POINTER
+};
+
+struct Register {
+    RegisterValue m_value;
+    RegisterValueType m_type;
+};
+
+struct StackFrame {
+    Register registers[128];
+
+    std::string operator[](const u64 idx) const noexcept;
 };
 
 
