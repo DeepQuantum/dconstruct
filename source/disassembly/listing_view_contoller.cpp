@@ -152,7 +152,8 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
     char disassembly_text[256] = {0};
     char comment[128] = {0};
     const Instruction istr = line.m_instruction;
-    SymbolTableEntry table_entry = {};
+    SymbolTableEntry table_entry;
+    table_entry.m_type = NONE;
     sprintf(disassembly_text, "%04X   0x%06X   %02X %02X %02X %02X       %-20s",
             line.m_location,
             this->getOffset((void*)line.m_globalPointer),
@@ -168,8 +169,8 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
     Register &op2 = stackFrame.registers[istr.operand2];
     switch (istr.opcode) {
         case Return: {
-            sprintf(varying, "r%d", istr.operand1);
-            sprintf(comment, "Return %s", stackFrame[istr.operand1].c_str());
+            sprintf(varying, "r%d", istr.destination);
+            sprintf(comment, "Return %s", stackFrame[istr.destination].c_str());
             break;
         }
         case IAdd: {
@@ -246,10 +247,9 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
         }
         case LoadStaticInt: {
             const i64 table_value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
-            table_entry.m_type = INT;
+            table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            stackFrame.m_symbolTable.push_back(table_entry);
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = table_value;
             sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
@@ -257,10 +257,9 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
         }
         case LoadStaticFloat: {
             const f32 table_value = reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr)[istr.operand1];
-            table_entry.m_type = FLOAT;
+            table_entry.m_type = SymbolTableEntryType::FLOAT;
             table_entry.m_f32 = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            stackFrame.m_symbolTable.push_back(table_entry);
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = table_value;
             sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
@@ -268,10 +267,9 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
         }
         case LoadStaticPointer: {
             const intptr_t table_value = reinterpret_cast<intptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1];
-            table_entry.m_type = POINTER;
+            table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            stackFrame.m_symbolTable.push_back(table_entry);
             dest.m_type = RegisterValueType::R_POINTER;
             dest.m_PTR.m_base = table_value;
             sprintf(comment, "%s = ST[%d] -> <%s>", stackFrame[istr.destination], istr.operand1, stackFrame[istr.operand1]); 
@@ -287,27 +285,78 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
         }
         case LoadU32: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_U32;
-            dest.m_U32 = 0;
-            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            dest.m_type = RegisterValueType::R_I32;
+            dest.m_I32 = 0;
+            sprintf(comment, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadFloat: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = 0.f;
-            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(comment, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadPointer: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_POINTER;
             dest.m_PTR = {0, 0};
-            sprintf(comment, "r%d = [r%d + %d]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(comment, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
+        }
+        case LoadI64: {
+            sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = 0;
+            sprintf(comment, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            break;
+        }
+        case LoadU64: {
+            sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_U64;
+            dest.m_U64 = 0;
+            sprintf(comment, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            break;
+        }
+        case StoreInt: {
+            sprintf(varying, "[r%d], r%d", istr.destination, istr.operand1);
+            break;
+        }
+        case LookupInt: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            i64 value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = value;
+            table_entry.m_type = SymbolTableEntryType::POINTER;
+            table_entry.m_i64 = value;
+            sprintf(comment, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolveHash(value).c_str());
+            break;
+        }
+        case LookupFloat: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            f32 value = reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_F32 = value;
+            table_entry.m_type = SymbolTableEntryType::FLOAT;
+            table_entry.m_f32 = value;
+            sprintf(comment, "r%d = ST[%d] -> <%.2f>", istr.destination, istr.operand1, value);
+            break;
+        }
+        case LookupPointer: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            intptr_t value = reinterpret_cast<intptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_PTR.m_base = value;
+            dest.m_PTR.m_offset = 0;
+            table_entry.m_type = SymbolTableEntryType::POINTER;
+            table_entry.m_pointer = value;
+            sprintf(comment, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolveHash(value).c_str());
         }
         case Branch: {
         }
+    }
+    if (table_entry.m_type != NONE) {
+        stackFrame.m_symbolTable.push_back(table_entry);
     }
     line.m_text = std::string(disassembly_text);
     line.m_comment = std::string(comment) + "\n";
@@ -346,7 +395,7 @@ void ListingViewController::insertHeaderLine() {
     this->m_mainWindow->getListingView()->setReadOnly(true);
     this->insertSpan("DeepQuantum's DC Disassembler ver. " + std::to_string(MainWindow::VersionNumber) + "\n", MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("Listing for script: " + current_script_name + "\n", MainWindow::STRING_COLOR , 14, 20);
-    this->insertSpan("Script ID: " + current_script_id, MainWindow::STRING_COLOR, 14, 20);
+    this->insertSpan("Script ID: " + current_script_id + "\n", MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("Filesize: " + std::to_string(this->m_currentFile.m_size) + " bytes\n\n", MainWindow::STRING_COLOR, 14, 20);
     this->insertSpan("START OF DISASSEMBLY\n", MainWindow::COMMENT_COLOR, 14, 20);
     this->insertSpan("--------------------------------------------------\n", MainWindow::COMMENT_COLOR, 14, 20);

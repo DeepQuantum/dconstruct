@@ -119,8 +119,8 @@ std::string StackFrame::operator[](const u64 idx) const noexcept {
     const Register reg = this->registers[idx];
     switch (reg.m_type) {
         default: {
-            sprintf(out, "%d", reg.m_U64);
+            sprintf(out, "0x%llX", reg.m_U64);
         } 
     }
-    return out;
+    return std::string(out);
 }

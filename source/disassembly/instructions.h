@@ -123,7 +123,8 @@ enum SymbolTableEntryType {
     FLOAT,
     INT,
     POINTER,
-    UNKNOWN_TYPE
+    UNKNOWN_TYPE,
+    NONE
 };
 
 struct SymbolTableEntry {
