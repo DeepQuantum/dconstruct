@@ -141,8 +141,9 @@ struct FunctionDisassemblyLine {
     Instruction m_instruction;
     u64 m_location;
     std::string m_text;
-    intptr_t m_globalPointer;
+    Instruction *m_globalPointer;
     std::string m_comment;
+    i64 m_label = -1;
     std::vector<u64> m_locationsPointedFrom;
 
     FunctionDisassemblyLine() = default;
@@ -150,23 +151,25 @@ struct FunctionDisassemblyLine {
     FunctionDisassemblyLine(u64 idx, Instruction *ptr) :
         m_instruction(ptr[idx]),
         m_location(idx),
-        m_globalPointer(reinterpret_cast<intptr_t>(ptr))
+        m_globalPointer(ptr)
     {}
 };
 
-struct FunctionDisassembly {
-    std::vector<FunctionDisassemblyLine> m_lines;
-    std::vector<SymbolTableEntry> m_symbolTable;
-};
+
 
 struct RegisterPointer {
     intptr_t m_base;
     u64 m_offset;
+
+    intptr_t get() {
+        return m_base + m_offset;
+    }
 };
 
 enum RegisterValueType {
     R_I8,
 	R_U8,
+    R_BOOL,
 	R_I16,
 	R_U16,
 	R_F16,
@@ -185,6 +188,7 @@ struct Register {
     union {
         i8			       m_I8;
         i8			       m_U8;
+        b8                 m_BOOL;
         i16			       m_I16;
         u16		           m_U16;
         u16		           m_F16;
@@ -203,8 +207,27 @@ struct StackFrame {
     Register registers[128];
     u64 *m_symbolTablePtr;
     std::vector<SymbolTableEntry> m_symbolTable;
+    std::vector<u32> m_labels;
 
     std::string operator[](const u64 idx) const noexcept;
+
+    u32 getLabelIndex(const u32 target) noexcept {
+        u32 label_name;
+        auto res = std::find(this->m_labels.begin(), this->m_labels.end(), target);
+        if (res != this->m_labels.end()) {
+            label_name = std::distance(this->m_labels.begin(), res);
+        } else {
+            label_name = this->m_labels.size();
+            this->m_labels.push_back(target);
+        }
+        return label_name;
+    }
+    
 };
 
+struct FunctionDisassembly {
+    std::vector<FunctionDisassemblyLine> m_lines;
+    std::vector<SymbolTableEntry> m_symbolTable;
+    StackFrame m_stackFrame;
+};
 

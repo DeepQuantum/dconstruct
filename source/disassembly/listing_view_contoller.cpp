@@ -119,8 +119,6 @@ FunctionDisassembly ListingViewController::createFunctionDisassembly(ScriptLambd
     this->insertSpan("INSTRUCTION POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
     this->insertSpan("SYMBOL TABLE POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pSymbols)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
 
-    StackFrame stackFrame;
-    stackFrame.m_symbolTablePtr = lambda->m_pSymbols;
 
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
@@ -130,20 +128,18 @@ FunctionDisassembly ListingViewController::createFunctionDisassembly(ScriptLambd
 
     FunctionDisassembly functionDisassembly {
         std::move(lines),
-        std::vector<SymbolTableEntry>()
+        std::vector<SymbolTableEntry>(),
+        StackFrame(),
     };
+
+    functionDisassembly.m_stackFrame.m_symbolTablePtr = lambda->m_pSymbols;
 
     for (u64 i = 0; i < instructionCount; ++i) {
         functionDisassembly.m_lines.emplace_back(i, instructionPtr);
     }
 
     for (u64 i = 0; i < instructionCount; ++i) {
-        auto &line = functionDisassembly.m_lines[i];
-        processInstruction(stackFrame, line);
-        if (line.m_instruction.isBranchInstruction()) {
-            functionDisassembly.m_lines[line.m_instruction.destination].m_locationsPointedFrom.push_back(i); 
-        }
-        functionDisassembly.m_lines[i] = line;
+        processInstruction(functionDisassembly.m_stackFrame, functionDisassembly.m_lines[i]);
     }
     return functionDisassembly;
 }
@@ -154,9 +150,9 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
     const Instruction istr = line.m_instruction;
     SymbolTableEntry table_entry;
     table_entry.m_type = NONE;
-    sprintf(disassembly_text, "%04X   0x%06X   %02X %02X %02X %02X       %-20s",
+    sprintf(disassembly_text, "%04X   0x%06X   %02X %02X %02X %02X    %-25s",
             line.m_location,
-            this->getOffset((void*)line.m_globalPointer),
+            this->getOffset((void*)(line.m_globalPointer + line.m_location)),
             istr.opcode,
             istr.destination,
             istr.operand1,
@@ -351,33 +347,307 @@ void ListingViewController::processInstruction(StackFrame &stackFrame, FunctionD
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
             sprintf(comment, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolveHash(value).c_str());
+            break;
+        }
+        case MoveInt: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            dest.m_type = R_I64;
+            dest.m_I64 = op1.m_I64;
+            sprintf(comment, "r%d = r%d <%d>", istr.destination, istr.operand1, op1.m_I64);
+            break;
+        }
+        case MoveFloat: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            dest.m_type = R_F32;
+            dest.m_F32 = op1.m_F32;
+            sprintf(comment, "r%d = r%d <%f>", istr.destination, istr.operand1, op1.m_I64);
+            break;
+        }
+        case MovePointer: {
+            sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
+            dest.m_type = R_POINTER;
+            dest.m_PTR = op1.m_PTR;
+            sprintf(comment, "r%d = r%d <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolveHash(op1.m_PTR.get()).c_str());
+            break;
+        }
+        case CastInteger: {
+            sprintf(varying, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = R_I32;
+            dest.m_I32 = (i32)op1.m_F32;
+            sprintf(comment, "r%d = int(r%d) -> <%f> => <%d>", istr.destination, istr.operand1, op1.m_F32, dest.m_I32);
+            break;
+        }
+        case CastFloat: {
+            sprintf(varying, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = R_F32;
+            dest.m_F32 = (f32)op1.m_I32;
+            sprintf(comment, "r%d = float(r%d) -> <%d> => <%f>", istr.destination, istr.operand1, op1.m_I32, dest.m_F32);
+            break;
+        }
+        case Call: {
+            sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
+            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->m_mainWindow->resolveHash(op1.m_PTR.get()) + "(";
+            for (u64 i = 0; i < istr.operand2; ++i) {
+                if (i != 0) {
+                    comment_str += ", ";
+                }
+                switch (stackFrame.registers[49 + i].m_type) {
+                    case R_POINTER: {
+                        comment_str += "0x" + std::to_string(stackFrame.registers[49 + i].m_PTR.get());
+                        break;
+                    }
+                    case R_HASH: {
+                        comment_str += this->m_mainWindow->resolveHash(stackFrame.registers[49 + i].m_SID);
+                        break;
+                    }
+                    default: {
+                        comment_str += std::to_string(stackFrame.registers[49 + i].m_U64);
+                    }
+                }
+            }
+            comment_str += ")";
+            sprintf(comment, "%s", comment_str.c_str());
+            break;
+        }
+        case CallFf: {
+            sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
+            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->m_mainWindow->resolveHash(op1.m_PTR.get()) + "(";
+            for (u64 i = 0; i < istr.operand2; ++i) {
+                if (i != 0) {
+                    comment_str += ", ";
+                }
+                switch (stackFrame.registers[49 + i].m_type) {
+                    case R_POINTER: {
+                        comment_str += "0x" + std::to_string(stackFrame.registers[49 + i].m_PTR.get());
+                        break;
+                    }
+                    case R_HASH: {
+                        comment_str += this->m_mainWindow->resolveHash(stackFrame.registers[49 + i].m_SID);
+                        break;
+                    }
+                    default: {
+                        comment_str += std::to_string(stackFrame.registers[49 + i].m_U64);
+                    }
+                }
+            }
+            comment_str += ")";
+            sprintf(comment, "%s", comment_str.c_str());
+            break;
+        }
+        case IEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_I64 == op2.m_I64;
+            sprintf(comment, "r%d = r%d [%d] == r%d [%d] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case IGreaterThan: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_I64 > op2.m_I64;
+            sprintf(comment, "r%d = r%d [%d] > r%d [%d] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case IGreaterThanEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_I64 >= op2.m_I64;
+            sprintf(comment, "r%d = r%d [%d] >= r%d [%d] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+        }
+        case ILessThan: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_I64 < op2.m_I64;
+            sprintf(comment, "r%d = r%d [%d] < r%d [%d] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case ILessThanEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_I64 <= op2.m_I64;
+            sprintf(comment, "r%d = r%d [%d] <= r%d [%d] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case FEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_F32 == op2.m_F32;
+            sprintf(comment, "r%d = r%d [%f] == r%d [%f] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_F32,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case FGreaterThanEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_F32 >= op2.m_F32;
+            sprintf(comment, "r%d = r%d [%f] >= r%d [%f] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_F32,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case FLessThan: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_F32 < op2.m_F32;
+            sprintf(comment, "r%d = r%d [%f] < r%d [%f] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_F32,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case FLessThanEqual: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_F32 <= op2.m_F32;
+            sprintf(comment, "r%d = r%d [%f] <= r%d [%f] -> <%s>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_F32,
+                dest.m_BOOL ? "TRUE" : "FALSE"
+            );
+            break;
+        }
+        case IMod: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_I32;
+            if (op2.m_I64 == 0) {
+                dest.m_I32 = op1.m_I64 % 1;
+            } else {
+                dest.m_I32 = op1.m_I64 % op2.m_I64;
+            }
+            sprintf(comment, "r%d = r%d [%d] % r%d [%d] -> <%d>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_I64,
+                dest.m_I32
+            );
+            break;
+        }
+        case FMod: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_F32;
+            if (op2.m_F32 == 0.f) {
+                dest.m_F32 = fmodf(op1.m_F32, 1.f);
+            } else {
+                dest.m_F32 = fmodf(op1.m_F32, op2.m_F32);
+            }
+            sprintf(comment, "r%d = r%d [%f] % r%d [%f] -> <%f>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame.registers[istr.operand2].m_F32,
+                dest.m_F32
+            );
+            break;
+        }
+        case IAbs: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_I32;
+            dest.m_I64 = abs(op1.m_I64);
+            sprintf(comment, "r%d = ABS(r%d) [%d] -> <%d>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_I64,
+                dest.m_I64
+            );
+            break;
+        }
+        case FAbs: {
+            sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_I32;
+            dest.m_F32 = abs(op1.m_F32);
+            sprintf(comment, "r%d = ABS(r%d) [%f] -> <%f>", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame.registers[istr.operand1].m_F32,
+                dest.m_F32
+            );
+            break;
         }
         case Branch: {
+            u32 target = istr.destination | (istr.operand2 << 8);
+            sprintf(varying, "0x%X", target);
+            u32 label_name = stackFrame.getLabelIndex(target);
+            sprintf(comment, "BRANCH");
+            line.m_label = target;
         }
     }
     if (table_entry.m_type != NONE) {
         stackFrame.m_symbolTable.push_back(table_entry);
     }
     line.m_text = std::string(disassembly_text);
-    line.m_comment = std::string(comment) + "\n";
+    line.m_comment = std::string(comment);
 }
 
 void ListingViewController::insertFunctionDisassemblyText(const FunctionDisassembly &functionDisassembly) {
-    std::set<u64> labels;
+    auto labels = functionDisassembly.m_stackFrame.m_labels;
     for (const auto &line : functionDisassembly.m_lines) {
-        if (!line.m_locationsPointedFrom.empty()) {
-            auto label_index_it = labels.find(line.m_location);
-            u64 label_index;
-            if (label_index_it != labels.end()) {
-                label_index = *label_index_it;
-            } else {
-                label_index = labels.size();
-                labels.insert(line.m_location);
-            }
-            this->insertSpan("LABEL_" + std::to_string(label_index) + ":\n", MainWindow::COMMENT_COLOR, 10, 12);
+        auto label_loc = std::find(labels.begin(), labels.end(), line.m_location);
+        if (label_loc != labels.end()) {
+            this->insertSpan("LABEL_" + std::to_string(std::distance(labels.begin(), label_loc)) + ":\n", MainWindow::COMMENT_COLOR, 10, 12);
         }
         this->insertSpan(line.m_text, MainWindow::OPCODE_COLOR, 12, 14);
         this->insertSpan(line.m_comment, MainWindow::STRING_COLOR, 12, 14);
+        if (line.m_label != -1) {
+            this->insertSpan(" LABEL_" + std::to_string(line.m_label) + "\n", MainWindow::COMMENT_COLOR, 10, 12);
+        } else {
+            this->insertSpan("\n");
+        }
     }
 }
 
