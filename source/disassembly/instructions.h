@@ -158,10 +158,10 @@ struct FunctionDisassemblyLine {
 
 
 struct RegisterPointer {
-    intptr_t m_base;
+    uintptr_t m_base;
     u64 m_offset;
 
-    intptr_t get() {
+    uintptr_t get() {
         return m_base + m_offset;
     }
 };
@@ -201,6 +201,7 @@ struct Register {
         stringid_64        m_SID;
         RegisterPointer    m_PTR;
     };
+    b8 isReturn;
 };
 
 struct StackFrame {
@@ -209,7 +210,9 @@ struct StackFrame {
     std::vector<SymbolTableEntry> m_symbolTable;
     std::vector<u32> m_labels;
 
-    std::string operator[](const u64 idx) const noexcept;
+    Register& operator[](const u64 idx) noexcept;
+
+    std::string toString(const u64 idx, const std::string &resolved = "") const noexcept;
 
     u32 getLabelIndex(const u32 target) noexcept {
         u32 label_name;
@@ -221,8 +224,7 @@ struct StackFrame {
             this->m_labels.push_back(target);
         }
         return label_name;
-    }
-    
+    } 
 };
 
 struct FunctionDisassembly {

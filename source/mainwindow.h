@@ -19,7 +19,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
 
     constexpr static QColor OPCODE_COLOR = QColor(84, 179, 183);
-    constexpr static QColor STRING_COLOR = QColor(159, 41, 68);
+    constexpr static QColor STRING_COLOR = QColor(170, 41, 80);
     constexpr static QColor COMMENT_COLOR = QColor(255, 255, 0);
     constexpr static QColor BLANK_COLOR = QColor(183, 210, 210);
     constexpr static QColor NUM_LITERAL_COLOR = QColor(112, 160, 112);

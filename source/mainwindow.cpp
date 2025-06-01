@@ -50,8 +50,8 @@ std::string MainWindow::resolveHash(stringid_64 sid) const {
 }
 
 std::string MainWindow::intToSIDString(stringid_64 sid) {
-    char buffer[16];
-    sprintf(buffer, "%016llX", sid);
+    char buffer[16] = {0};
+    sprintf(buffer, "#%016llX", sid);
     return std::string(buffer);
 }
 
