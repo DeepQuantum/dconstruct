@@ -18,4 +18,16 @@ typedef bool b8;
 typedef float f32;
 typedef double f64;
 
+#define SID(str) (ToStringId64(str))
+
+constexpr stringid_64 ToStringId64(const char* str) {
+	u64 base = 0xCBF29CE484222325;
+	if (*str) {
+		do {
+			base = 0x100000001B3 * (base ^ *str++);
+		} while (*str);
+	}
+	return base;
+}
+
 #endif // BASE_H

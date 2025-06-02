@@ -19,9 +19,11 @@ private:
     void insertComment(const std::string &comment, u8 indent = 0);
     void insertHash(const std::string &hash, b8 surround = false);
     void insertHeaderLine();
+    void disassembleStateScript(StateScript *stateScript);
+    void insertVariable(SsDeclaration *var);
+    void insertOnBlock(SsOnBlock *block);
     FunctionDisassembly createFunctionDisassembly(ScriptLambda *lambda);
     void processInstruction(StackFrame &stackFrame, FunctionDisassemblyLine &functionLine);
     void insertFunctionDisassemblyText(const FunctionDisassembly &functionDisassembly);
-    void checkSymbolTableLoad(const Instruction &instruction, u64 * const tablePtr, std::map<u8, SymbolTableEntry> &symbols);
     u32 getOffset(const void *symbol);
 };

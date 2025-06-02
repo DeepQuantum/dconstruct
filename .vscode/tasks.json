@@ -4,7 +4,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cmake --build . --parallel --config Debug",
+            "command": "cmake --build . --parallel --config Release",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}/build"

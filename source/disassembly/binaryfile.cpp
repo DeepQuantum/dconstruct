@@ -56,7 +56,7 @@ void BinaryFile::disassembleEntry(Entry *entry, std::unordered_map<stringid_64, 
     if (typeName == "state-script") {
         this->m_dcscript = reinterpret_cast<StateScript*>(entry->m_entryPtr);
         symbol.type = SymbolType::SS;
-        symbol.ss_ptr = reinterpret_cast<StateScript*>(entry->m_entryPtr);
+        symbol.ss_ptr = this->m_dcscript;
     } else if (typeName == "int32") {
         symbol.type = SymbolType::I32;
         symbol.i32_ptr = reinterpret_cast<i32*>(entry->m_entryPtr);

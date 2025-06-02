@@ -63,8 +63,9 @@ void ListingViewController::createListingView() {
                 break;
             }
             case SymbolType::SS: {
-                line = "State Script ID: " + MainWindow::intToSIDString(reinterpret_cast<StateScript*>(symbol.ss_ptr)->m_stateScriptId);
+                line = "State Script ID: " + MainWindow::intToSIDString(symbol.ss_ptr->m_stateScriptId);
                 this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10, 2);
+                this->disassembleStateScript(symbol.ss_ptr);
                 break;
             }
             case SymbolType::LAMBDA: {
@@ -91,29 +92,175 @@ u32 ListingViewController::getOffset(const void *symbol) {
     return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);
 }
 
-// void ListingViewController::checkSymbolTableLoad(const Instruction &instruction, u64 * const tablePtr, std::map<u8, SymbolTableEntry> &symbols) {
-//     SymbolTableEntry ste{};
-//     ste.m_index = instruction.operand1;
-//     switch (instruction.opcode) {
-//         case Opcode::LoadStaticInt:
-//             ste.m_type = SymbolTableEntryType::INT;
-//             ste.m_i32 = *reinterpret_cast<i32*>(&tablePtr[instruction.operand1]);
-//             break;
-//         case Opcode::LookupPointer:
-//         case Opcode::LoadStaticPointerImm:
-//             ste.m_type = SymbolTableEntryType::POINTER;
-//             ste.m_pointer = *reinterpret_cast<intptr_t*>(&tablePtr[instruction.operand1]);
-//             break;
-//         case Opcode::LoadStaticFloatImm:
-//             ste.m_type = SymbolTableEntryType::FLOAT;
-//             ste.m_f32 = *reinterpret_cast<f32*>(&tablePtr[instruction.operand1]);
-//             break;
-//         default:
-//             ste.m_type = SymbolTableEntryType::UNKNOWN_TYPE;
-//             ste.m_hash = tablePtr[instruction.operand1];
-//     }
-//     symbols.emplace(instruction.operand1, ste);
-// }
+void ListingViewController::insertVariable(SsDeclaration *var) {
+    char buffer[128] = {0};
+    std::string type_name;
+    char var_format[36] = {0};
+
+    b8 is_nullptr = var->m_pDeclValue == nullptr;
+
+    switch (var->m_declTypeId) {
+        case SID("boolean"): {
+            type_name = "BOOLEAN";
+            if (!is_nullptr) 
+                sprintf(var_format, "%s", *reinterpret_cast<b8*>(var->m_pDeclValue) == 1 ? "TRUE" : "FALSE");
+            break;
+        }
+        case SID("vector"): {
+            type_name = "VECTOR";
+            if (!is_nullptr) {
+                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                sprintf(var_format, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
+            }
+            break;
+        }
+        case SID("quat"): {
+            type_name = "QUAT";
+            if (!is_nullptr) {
+                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                sprintf(var_format, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
+            }
+            break;
+        }
+        case SID("float"): {
+            type_name = "FLOAT";
+            if (!is_nullptr) {
+                sprintf(var_format, "%.4f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+            }
+            break;
+        }
+        case SID("string"): {
+            type_name = "STRING";
+            if (!is_nullptr) {
+                sprintf(var_format, "%s", *reinterpret_cast<const char**>(var->m_pDeclValue));
+            }
+            break;
+        }
+        case SID("symbol"): {
+            type_name = "SYMBOL";
+            if (!is_nullptr) {
+                const std::string val = this->m_mainWindow->resolveHash(*reinterpret_cast<stringid_64*>(var->m_pDeclValue));
+                sprintf(var_format, "%s", val.c_str());
+            }
+            break;
+        }
+        case SID("int32"): {
+            type_name = "INT32";
+            if (!is_nullptr) {
+                sprintf(var_format, "%d", *reinterpret_cast<i32*>(var->m_pDeclValue));
+            }
+            break;
+        }
+        case SID("uint64"): {
+            type_name = "UINT64";
+            if (!is_nullptr) {
+                sprintf(var_format, "%llX", *reinterpret_cast<u64*>(var->m_pDeclValue));
+            }
+            break;
+        }
+        case SID("timer"): {
+            type_name = "TIMER";
+            if (!is_nullptr) {
+                sprintf(var_format, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+            }
+            break;
+        }
+        case SID("point"): {
+            type_name = "POINT";
+            if (!is_nullptr) {
+                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                sprintf(var_format, "(%.2f, %.2f, %.2f)", val[0], val[1], val[2]);
+            }
+            break;
+        }
+        case SID("bound-frame"): {
+            type_name = "BOUND-FRAME";
+            if (!is_nullptr) {
+                sprintf(var_format, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+            }
+            break;
+        }
+        default: {
+            type_name = this->m_mainWindow->resolveHash(var->m_declTypeId);
+            strcpy(var_format, "???");
+            break;
+        }
+    }
+    if (is_nullptr) {
+        strcpy(var_format, "UNINITIALIZED");
+    }
+    const std::string name_id = this->m_mainWindow->resolveHash(var->m_declId);
+    sprintf(buffer, "[%05X] %s %s = <%s>\n", this->getOffset(var), type_name.c_str(), name_id.c_str(), var_format);
+    this->insertSpan(buffer, MainWindow::OPCODE_COLOR, 12, 8);
+}
+
+void ListingViewController::insertOnBlock(SsOnBlock *block) {
+    std::string block_type;
+    switch (block->m_blockType) {
+        case 0: {
+            block_type = "start";
+            break;
+        }
+        case 1: {
+            block_type = "end";
+            break;
+        }
+        case 2: {
+            block_type = "event " + this->m_mainWindow->resolveHash(block->m_blockEventId);
+            break;
+        }
+        case 3: {
+            block_type = "update";
+            break;
+        }
+        case 4: {
+            block_type = "virtual";
+            break;
+        }
+        default: {
+            block_type = "UNKNOWN";
+            break;
+        }
+    }
+    this->insertSpan("ON " + block_type + ":\n", MainWindow::COMMENT_COLOR, 12, 9);
+    for (u64 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
+        SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
+        const std::string track_name = this->m_mainWindow->resolveHash(track_ptr->m_trackId);
+        this->insertSpan("TRACK " + track_name + ":\n", MainWindow::COMMENT_COLOR, 12, 10);
+        for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
+            FunctionDisassembly function = this->createFunctionDisassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
+            this->insertFunctionDisassemblyText(function);
+        }
+    }
+}
+
+void ListingViewController::disassembleStateScript(StateScript *stateScript) {
+    if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
+        SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
+        this->insertSpan("OPTIONS: ", MainWindow::COMMENT_COLOR, 14, 6);
+        for (u64 i = 0; i < s_array->m_numEntries; ++i) {
+            this->insertSpan(this->m_mainWindow->resolveHash(s_array->m_pSymbols[i]) + "\n");
+        }
+    }
+    SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
+    if (decl_table != nullptr) {
+        this->insertSpan("DECLARATIONS: \n", MainWindow::COMMENT_COLOR, 14, 6);
+        for (u64 i = 0; i < decl_table->m_numDeclarations; ++i) {
+            SsDeclaration *decl = decl_table->m_pDeclarations + i;
+            if (decl->m_isVar) {
+                this->insertVariable(decl);
+            }
+        }
+    }
+    for (u64 i = 0; i < stateScript->m_stateCount; ++i) {
+        SsState *state_ptr = stateScript->m_pSsStateTable + i;
+        const std::string state_name = this->m_mainWindow->resolveHash(state_ptr->m_stateId);
+        this->insertSpan("STATE " + state_name + ":\n", MainWindow::COMMENT_COLOR, 14, 6);
+        for (u64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
+            this->insertOnBlock(state_ptr->m_pSsOnBlocks + j);
+        }
+    }
+}
 
 FunctionDisassembly ListingViewController::createFunctionDisassembly(ScriptLambda *lambda) {
     this->insertSpan("INSTRUCTION POINTER: " + MainWindow::offsetToString(this->getOffset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
@@ -817,16 +964,25 @@ void ListingViewController::insertFunctionDisassemblyText(const FunctionDisassem
     for (const auto &line : functionDisassembly.m_lines) {
         auto label_loc = std::find(labels.begin(), labels.end(), line.m_location);
         if (label_loc != labels.end()) {
-            this->insertSpan("L_" + std::to_string(std::distance(labels.begin(), label_loc)) + ":\n", MainWindow::COMMENT_COLOR, 14, 10);
+            const u32 label_idx = std::distance(labels.begin(), label_loc);
+            if (line.m_location == functionDisassembly.m_lines.size() - 1) {
+                this->insertSpan("L_RETURN:\n", MainWindow::COMMENT_COLOR, 14, 10);
+            } else {
+                this->insertSpan("L_" + std::to_string(label_idx) + ":\n", MainWindow::COMMENT_COLOR, 14, 10);  
+            }
         }
         this->insertSpan(line.m_text, MainWindow::OPCODE_COLOR, 12, 14);
         std::string comment = std::string(70 - line.m_text.length(), ' ') + line.m_comment;
         this->insertSpan(comment, MainWindow::STRING_COLOR, 12);
         if (line.m_label != -1) {
             u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_label));
-            this->insertSpan("=> L_" + std::to_string(target), MainWindow::COMMENT_COLOR, 12);
+            if (line.m_label == functionDisassembly.m_lines.size() - 1) {
+                this->insertSpan("=> L_RETURN", MainWindow::COMMENT_COLOR, 12);
+            } else {
+                this->insertSpan("=> L_" + std::to_string(target), MainWindow::COMMENT_COLOR, 12);
+            }
         }
-        this->insertSpan("\n\n");
+        this->insertSpan("\n");
     }
 }
 
