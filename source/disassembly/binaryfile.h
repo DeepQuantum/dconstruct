@@ -28,7 +28,7 @@ struct Symbol {
         StateScript *ss_ptr;
         ScriptLambda *lambda_ptr;
         uint64_t *hash_ptr;
-        uintptr_t i32_ptr_raw;
+        Entry raw_entry;
     };
 };
 

@@ -42,7 +42,7 @@ i32 BinaryFile::disassembleFile(std::unordered_map<stringid_64, std::string> &si
     }
 
     for (std::size_t i = 0; i < this->m_dcheader->m_numEntries; ++i) {
-        this->disassembleEntry(&this->m_dcheader->m_pStartOfData[i], sidbase);
+        this->disassembleEntry(this->m_dcheader->m_pStartOfData + i, sidbase);
     }
     return 1;
 }
@@ -72,7 +72,7 @@ void BinaryFile::disassembleEntry(Entry *entry, std::unordered_map<stringid_64, 
     }
     else {
         symbol.type = SymbolType::UNKNOWN;
-        symbol.i32_ptr_raw = reinterpret_cast<uintptr_t>(entry->m_entryPtr);
+        symbol.raw_entry = *entry;
     }
 
     this->m_symbols.push_back(symbol);

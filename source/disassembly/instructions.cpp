@@ -1,5 +1,5 @@
 #include "instructions.h"
-
+#include "string.h"
 
 std::string Instruction::opcodeToString() const noexcept {
     switch (this->opcode) {
@@ -122,13 +122,22 @@ std::string StackFrame::toString(const u64 idx, const std::string &resolved) con
             sprintf(out, "%s", resolved.c_str());
             break;
         }
+        case RegisterValueType::R_U16: 
+        case RegisterValueType::R_U32: 
+        case RegisterValueType::R_U64:
+        case RegisterValueType::R_I16:
+        case RegisterValueType::R_I32:
+        case RegisterValueType::R_I64: {
+            sprintf(out, "%i", reg.m_U64);
+            break;
+        }
         default: {
-            sprintf(out, "0x%16llX", reg.m_U64);
+            sprintf(out, "0x%X", reg.m_U64);
             break;
         } 
     }
     if (reg.isReturn) {
-        sprintf(out + std::string(out).length(), "()");
+        sprintf(out + strlen(out), "()");
     }
     return std::string(out);
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <set>
+#include <map>
 
 enum Opcode : u8 {
     Return,
@@ -133,7 +133,7 @@ struct SymbolTableEntry {
         stringid_64 m_hash;
         f32 m_f32;
         i64 m_i64;
-        intptr_t m_pointer;
+        uintptr_t m_pointer;
     };
 };
 
@@ -207,7 +207,7 @@ struct Register {
 struct StackFrame {
     Register registers[128];
     u64 *m_symbolTablePtr;
-    std::vector<SymbolTableEntry> m_symbolTable;
+    std::map<u32, SymbolTableEntry> m_symbolTable;
     std::vector<u32> m_labels;
 
     Register& operator[](const u64 idx) noexcept;
@@ -229,7 +229,6 @@ struct StackFrame {
 
 struct FunctionDisassembly {
     std::vector<FunctionDisassemblyLine> m_lines;
-    std::vector<SymbolTableEntry> m_symbolTable;
     StackFrame m_stackFrame;
 };
 
