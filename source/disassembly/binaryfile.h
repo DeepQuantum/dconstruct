@@ -44,7 +44,7 @@ public:
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
     std::vector<Symbol> m_symbols;
-    bool readRelocTable();
+    void readRelocTable();
     int32_t disassembleFile(std::unordered_map<stringid_64, std::string> &sidbase);
     void disassembleEntry(Entry *entry, std::unordered_map<stringid_64, std::string> &sidbase);
 

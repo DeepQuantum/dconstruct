@@ -1,9 +1,9 @@
-#include "listing_view_controller.h"
+#include "custom_structs.h"
 #include "../mainwindow.h"
 #include <stdexcept>
 #include <cmath>
 #include <sstream>
-
+#include "listing_view_controller.h"
 
 ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow) {
     this->m_mainWindow = mainWindow;
@@ -38,9 +38,22 @@ void ListingViewController::insertHash(const std::string &hash, b8 surround) {
 }
 
 void ListingViewController::parseCustomStruct(const Symbol &symbol) {
+    const u8 *base = this->m_currentFile.m_bytes.data();
     switch (symbol.raw_entry.m_typeId) {
+        case SID("array"): {
+            //DCArray 
+        }
         case SID("map"): {
-            this->parseMap(symbol);
+            DCMap *map = reinterpret_cast<DCMap*>(symbol.raw_entry.m_entryPtr);
+            for (u64 i = 0; i < map->size; ++i) {
+                const std::string key_hash = this->m_mainWindow->resolveHash(map->keys.data[i]);
+                Symbol dummy = Symbol{
+                    SymbolType::UNKNOWN,
+
+                }
+                //this->insertEntry()
+                this->insertSpan(key_hash + " : " + value_hash + "\n", MainWindow::STRING_COLOR, 12, 12);
+            }
         }
     }
     this->insertSpan("\n");
@@ -49,55 +62,66 @@ void ListingViewController::parseCustomStruct(const Symbol &symbol) {
 void ListingViewController::createListingView() {
     this->insertHeaderLine();
     for (const auto &symbol : this->m_currentFile.m_symbols) {
-        std::string line;
-        char buffer[32] = {0};
-        sprintf(buffer, "[0x%06X] ", this->getOffset((void*)symbol.raw_entry.m_entryPtr));
-        this->insertSpan(buffer, MainWindow::COMMENT_COLOR, 12, 6);
-        switch (symbol.type) {
-            case SymbolType::B8: {
-                line = "BOOL: " + MainWindow::offsetToString(this->getOffset(symbol.b8_ptr)) + " <" + (*symbol.b8_ptr ? "true" : "false") + ">";
-                this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
-                break;
-            }
-            case SymbolType::I32: {
-                line = "Integer: " + MainWindow::offsetToString(this->getOffset(symbol.i32_ptr)) + " <" + std::to_string(*symbol.i32_ptr) + ">";
-                this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
-                break;
-            }
-            case SymbolType::F32: {
-                line = "Float: " + MainWindow::offsetToString(this->getOffset(symbol.f32_ptr)) + " <" + std::to_string(*symbol.f32_ptr) + ">";
-                this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
-                break;
-            }
-            case SymbolType::HASH: {
-                line = "Hash: " + MainWindow::intToSIDString(*reinterpret_cast<uint64_t*>(symbol.hash_ptr));
-                this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
-                break;
-            }
-            case SymbolType::SS: {
-                line = "State Script ID: " + MainWindow::intToSIDString(symbol.ss_ptr->m_stateScriptId);
-                this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
-                this->disassembleStateScript(symbol.ss_ptr);
-                break;
-            }
-            case SymbolType::LAMBDA: {
-                this->insertComment("BEGIN LAMBDA ", 20);
-                this->insertHash(this->m_mainWindow->resolveHash(symbol.id), true);
-                this->insertSpan(" AT ", MainWindow::COMMENT_COLOR, 14);
-                this->insertSpan("[" + MainWindow::offsetToString(this->getOffset(symbol.lambda_ptr)) + "]\n", MainWindow::OPCODE_COLOR, 14);
-                auto function = this->createFunctionDisassembly(symbol.lambda_ptr);
-                this->insertFunctionDisassemblyText(function);
-                break;
-            }
-            default: {
-                this->insertSpan(this->m_mainWindow->resolveHash(symbol.raw_entry.m_typeId) + ": " + this->m_mainWindow->resolveHash(symbol.id));
-                this->parseCustomStruct(symbol);
-                break;
-            }
-        }
+        insertEntry(symbol);
     }
 }
 
+void ListingViewController::insertEntry(const Symbol &symbol) {
+    std::string line;
+    char buffer[32] = {0};
+    sprintf(buffer, "[0x%06X] ", this->getOffset((void *)symbol.raw_entry.m_entryPtr));
+    this->insertSpan(buffer, MainWindow::COMMENT_COLOR, 12, 6);
+    switch (symbol.type)
+    {
+    case SymbolType::B8:
+    {
+        line = "BOOL: " + MainWindow::offsetToString(this->getOffset(symbol.b8_ptr)) + " <" + (*symbol.b8_ptr ? "true" : "false") + ">";
+        this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
+        break;
+    }
+    case SymbolType::I32:
+    {
+        line = "Integer: " + MainWindow::offsetToString(this->getOffset(symbol.i32_ptr)) + " <" + std::to_string(*symbol.i32_ptr) + ">";
+        this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
+        break;
+    }
+    case SymbolType::F32:
+    {
+        line = "Float: " + MainWindow::offsetToString(this->getOffset(symbol.f32_ptr)) + " <" + std::to_string(*symbol.f32_ptr) + ">";
+        this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
+        break;
+    }
+    case SymbolType::HASH:
+    {
+        line = "Hash: " + MainWindow::intToSIDString(*reinterpret_cast<uint64_t *>(symbol.hash_ptr));
+        this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
+        break;
+    }
+    case SymbolType::SS:
+    {
+        line = "State Script ID: " + MainWindow::intToSIDString(symbol.ss_ptr->m_stateScriptId);
+        this->insertSpan(line + "\n", MainWindow::OPCODE_COLOR, 10);
+        this->disassembleStateScript(symbol.ss_ptr);
+        break;
+    }
+    case SymbolType::LAMBDA:
+    {
+        this->insertComment("BEGIN LAMBDA ", 20);
+        this->insertHash(this->m_mainWindow->resolveHash(symbol.id), true);
+        this->insertSpan(" AT ", MainWindow::COMMENT_COLOR, 14);
+        this->insertSpan("[" + MainWindow::offsetToString(this->getOffset(symbol.lambda_ptr)) + "]\n", MainWindow::OPCODE_COLOR, 14);
+        auto function = this->createFunctionDisassembly(symbol.lambda_ptr);
+        this->insertFunctionDisassemblyText(function);
+        break;
+    }
+    default:
+    {
+        this->insertSpan(this->m_mainWindow->resolveHash(symbol.raw_entry.m_typeId) + ": " + this->m_mainWindow->resolveHash(symbol.id));
+        this->parseCustomStruct(symbol);
+        break;
+    }
+    }
+}
 
 u32 ListingViewController::getOffset(const void *symbol) {
     return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);

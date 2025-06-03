@@ -10,6 +10,7 @@ public:
     ListingViewController(BinaryFile &file, MainWindow *mainWindow);
     void setScriptById(stringid_64 id);
     void createListingView();
+void insertEntry(const Symbol & symbol);
     void insertSpan(const std::string &text, QColor color = MainWindow::BLANK_COLOR, int fonzSize = 10, u8 indent = 0);
 
 private:
