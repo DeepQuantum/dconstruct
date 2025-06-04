@@ -1,7 +1,7 @@
 #include "instructions.h"
 #include "string.h"
 
-std::string Instruction::opcodeToString() const noexcept {
+std::string Instruction::opcode_to_string() const noexcept {
     switch (this->opcode) {
         case Opcode::Return: return "Return";
         case Opcode::IAdd: return "IAdd";
@@ -114,7 +114,7 @@ b8 Instruction::isBranchInstruction() const noexcept {
     return this->opcode == Branch || this->opcode == BranchIf || this->opcode == BranchIfNot;
 }
 
-std::string StackFrame::toString(const u64 idx, const std::string &resolved) const noexcept {
+std::string StackFrame::to_string(const u64 idx, const std::string &resolved) const noexcept {
     char out[128] = {0};
     const Register reg = this->registers[idx];
     switch (reg.m_type) {

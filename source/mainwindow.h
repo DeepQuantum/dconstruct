@@ -35,10 +35,10 @@ public:
     }
 
     void loadSidbase(const std::string &path = "sidbase.bin");
-    std::string resolveHash(stringid_64 sid) const;
+    std::string resolve_hash(stringid_64 sid) const;
     std::vector<BinaryFile> m_scripts;
-    static std::string intToSIDString(stringid_64 sid);
-    static std::string offsetToString(u32 offset);
+    static std::string int_to_string_id(stringid_64 sid);
+    static std::string offset_to_string(u32 offset);
 
 private:
     Ui::MainWindow ui;

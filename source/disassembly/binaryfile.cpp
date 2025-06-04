@@ -21,7 +21,7 @@ BinaryFile::BinaryFile(const std::string &path) {
     scriptstream.read((char*)m_bytes.data(), m_size);
 }
 
-i32 BinaryFile::disassembleFile(std::unordered_map<stringid_64, std::string> &sidbase) {
+i32 BinaryFile::disassembly_file(std::unordered_map<stringid_64, std::string> &sidbase) {
     constexpr u32 magic = 0x44433030;
     constexpr u32 version = 0x1;
 
@@ -35,46 +35,14 @@ i32 BinaryFile::disassembleFile(std::unordered_map<stringid_64, std::string> &si
         throw std::runtime_error("Version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(this->m_bytes.data() + 8)));
     }
 
-    this->readRelocTable();
+    this->read_reloc_table();
 
-    for (std::size_t i = 0; i < this->m_dcheader->m_numEntries; ++i) {
-        this->disassembleEntry(this->m_dcheader->m_pStartOfData + i, sidbase);
-    }
+    this->m_entries.reserve(this->m_dcheader->m_numEntries);
+    
     return 1;
 }
 
-void BinaryFile::disassembleEntry(Entry *entry, std::unordered_map<stringid_64, std::string> &sidbase) {
-    Symbol symbol = Symbol{};
-
-    std::string typeName = sidbase[entry->m_typeId];
-    symbol.id = entry->m_scriptId;
-
-    if (typeName == "state-script") {
-        this->m_dcscript = reinterpret_cast<StateScript*>(entry->m_entryPtr);
-        symbol.type = SymbolType::SS;
-        symbol.ss_ptr = this->m_dcscript;
-    } else if (typeName == "int32") {
-        symbol.type = SymbolType::I32;
-        symbol.i32_ptr = reinterpret_cast<i32*>(entry->m_entryPtr);
-    } else if (typeName == "float") {
-        symbol.type = SymbolType::F32;
-        symbol.f32_ptr = reinterpret_cast<f32*>(entry->m_entryPtr);
-    } else if (typeName == "boolean") {
-        symbol.type = SymbolType::B8;
-        symbol.b8_ptr = reinterpret_cast<b8*>(entry->m_entryPtr);
-    } else if (typeName == "script-lambda") {
-        symbol.type = SymbolType::LAMBDA;
-        symbol.lambda_ptr = reinterpret_cast<ScriptLambda*>(entry->m_entryPtr);
-    }
-    else {
-        symbol.type = SymbolType::UNKNOWN;
-        symbol.raw_entry = *entry;
-    }
-
-    this->m_symbols.push_back(symbol);
-}
-
-void BinaryFile::readRelocTable() {
+void BinaryFile::read_reloc_table() {
     u8 *data = this->m_bytes.data();
     u8 *reloc_data = data + this->m_dcheader->m_textSize;
 
@@ -91,7 +59,7 @@ void BinaryFile::readRelocTable() {
 }
 
 
-// bool BinaryFile::readRelocTable() {
+// bool BinaryFile::read_reloc_table() {
 //     u8* data = this->m_bytes.data();
 //     DC_Header *header = this->m_dcheader;
 //     int32_t size = *(i32*)(data + this->m_dcheader->m_textSize);

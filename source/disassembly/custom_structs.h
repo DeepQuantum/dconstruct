@@ -4,6 +4,10 @@
 
 struct DCArray {
     const u64* data;
+
+    const u64 &operator[](const u64 idx) {
+        return this->data[idx];
+    }
 };
 
 struct DCMap {

@@ -112,7 +112,7 @@ struct Instruction {
     u8 operand2;
     u32 padding;
 
-    std::string opcodeToString() const noexcept;
+    std::string opcode_to_string() const noexcept;
     std::string getRegisterString() const noexcept;
     b8 isSymbolLoadInstruction() const noexcept;
     b8 isBranchInstruction() const noexcept;
@@ -212,9 +212,9 @@ struct StackFrame {
 
     Register& operator[](const u64 idx) noexcept;
 
-    std::string toString(const u64 idx, const std::string &resolved = "") const noexcept;
+    std::string to_string(const u64 idx, const std::string &resolved = "") const noexcept;
 
-    u32 getLabelIndex(const u32 target) noexcept {
+    u32 get_label_index(const u32 target) noexcept {
         u32 label_name;
         auto res = std::find(this->m_labels.begin(), this->m_labels.end(), target);
         if (res != this->m_labels.end()) {

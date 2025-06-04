@@ -43,10 +43,9 @@ public:
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
-    std::vector<Symbol> m_symbols;
-    void readRelocTable();
-    int32_t disassembleFile(std::unordered_map<stringid_64, std::string> &sidbase);
-    void disassembleEntry(Entry *entry, std::unordered_map<stringid_64, std::string> &sidbase);
+    std::vector<Entry*> m_entries;
+    void read_reloc_table();
+    i32 disassembly_file(std::unordered_map<stringid_64, std::string> &sidbase);
 
 };
 
