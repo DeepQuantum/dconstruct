@@ -18,6 +18,7 @@ private:
 
     void insert_comment(const std::string &comment, u8 indent = 0);
     void insert_hash(const std::string &hash, b8 surround = false);
+    std::string resolve_hash(const stringid_64 hash);
     void insert_header_line();
     void disassemble_state_script(StateScript *stateScript);
     void parse_custom_struct(Entry *symbol);

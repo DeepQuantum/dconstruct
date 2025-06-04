@@ -11,6 +11,10 @@ ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainW
     this->create_listing_view();
 }
 
+std::string ListingViewController::resolve_hash(const stringid_64 hash) {
+    return this->m_mainWindow->resolve_hash(hash);
+}
+
 void ListingViewController::insert_span(const std::string &line, QColor color, int fontSize, u8 indent) {
     QTextCursor cursor = this->m_mainWindow->getListingView()->textCursor();
     cursor.movePosition(QTextCursor::End);
@@ -39,7 +43,7 @@ void ListingViewController::insert_hash(const std::string &hash, b8 surround) {
 }
 
 void ListingViewController::parse_custom_strucht_from_pointer(const u64 *p) {
-    const std::string type_id = this->m_mainWindow->resolve_hash(*reinterpret_cast<const stringid_64*>(p - 1));
+    const std::string type_id = this->resolve_hash(*reinterpret_cast<const stringid_64*>(p - 1));
 }
 
 void ListingViewController::parse_custom_struct(Entry *entry) {
@@ -52,7 +56,7 @@ void ListingViewController::parse_custom_struct(Entry *entry) {
         case SID("map"): {
             DCMap *map = reinterpret_cast<DCMap*>(entry->m_entryPtr);
             for (u64 i = 0; i < map->size; ++i) {
-                const std::string key_hash = this->m_mainWindow->resolve_hash(map->keys[i]);
+                const std::string key_hash = this->resolve_hash(map->keys[i]);
                 u64 *value_ptr = reinterpret_cast<u64*>(map->values[i]);
                 Entry dummy = Entry{
                     entry->m_scriptId,
@@ -108,7 +112,7 @@ void ListingViewController::insert_entry(Entry *entry) {
         }
         case SID("sid"):
         {
-            line = "HASH: " + this->m_mainWindow->resolve_hash(*reinterpret_cast<stringid_64*>(entry->m_entryPtr));
+            line = "HASH: " + this->resolve_hash(*reinterpret_cast<stringid_64*>(entry->m_entryPtr));
             this->insert_span(line + "\n", MainWindow::OPCODE_COLOR, 10);
             break;
         }
@@ -120,7 +124,7 @@ void ListingViewController::insert_entry(Entry *entry) {
         case SID("script-lambda"):
         {
             this->insert_comment("BEGIN LAMBDA ", 20);
-            this->insert_hash(this->m_mainWindow->resolve_hash(entry->m_scriptId), true);
+            this->insert_hash(this->resolve_hash(entry->m_scriptId), true);
             this->insert_span(" AT ", MainWindow::COMMENT_COLOR, 14);
             this->insert_span("[" + MainWindow::offset_to_string(this->get_offset(entry->m_entryPtr)) + "]\n", MainWindow::OPCODE_COLOR, 14);
             auto function = this->create_function_disassembly(reinterpret_cast<ScriptLambda*>(entry->m_entryPtr));
@@ -129,7 +133,7 @@ void ListingViewController::insert_entry(Entry *entry) {
         }
         default:
         {
-            this->insert_span(this->m_mainWindow->resolve_hash(entry->m_typeId) + ": " + this->m_mainWindow->resolve_hash(entry->m_scriptId) + "\n", MainWindow::STRING_COLOR, 14, 7);
+            this->insert_span(this->resolve_hash(entry->m_typeId) + ": " + this->resolve_hash(entry->m_scriptId) + "\n", MainWindow::STRING_COLOR, 14, 7);
             this->parse_custom_struct(entry);
             break;
         }
@@ -187,7 +191,7 @@ void ListingViewController::insert_variable(SsDeclaration *var) {
         case SID("symbol"): {
             type_name = "SYMBOL";
             if (!is_nullptr) {
-                const std::string val = this->m_mainWindow->resolve_hash(*reinterpret_cast<stringid_64*>(var->m_pDeclValue));
+                const std::string val = this->resolve_hash(*reinterpret_cast<stringid_64*>(var->m_pDeclValue));
                 sprintf(var_format, "%s", val.c_str());
             }
             break;
@@ -229,7 +233,7 @@ void ListingViewController::insert_variable(SsDeclaration *var) {
             break;
         }
         default: {
-            type_name = this->m_mainWindow->resolve_hash(var->m_declTypeId);
+            type_name = this->resolve_hash(var->m_declTypeId);
             strcpy(var_format, "???");
             break;
         }
@@ -237,7 +241,7 @@ void ListingViewController::insert_variable(SsDeclaration *var) {
     if (is_nullptr) {
         strcpy(var_format, "UNINITIALIZED");
     }
-    const std::string name_id = this->m_mainWindow->resolve_hash(var->m_declId);
+    const std::string name_id = this->resolve_hash(var->m_declId);
     sprintf(buffer, "[%05X] %s %s = <%s>\n", this->get_offset(var), type_name.c_str(), name_id.c_str(), var_format);
     this->insert_span(buffer, MainWindow::OPCODE_COLOR, 12, 8);
 }
@@ -254,7 +258,7 @@ void ListingViewController::insert_on_block(SsOnBlock *block) {
             break;
         }
         case 2: {
-            block_type = "event " + this->m_mainWindow->resolve_hash(block->m_blockEventId);
+            block_type = "event " + this->resolve_hash(block->m_blockEventId);
             break;
         }
         case 3: {
@@ -273,7 +277,7 @@ void ListingViewController::insert_on_block(SsOnBlock *block) {
     this->insert_span("ON " + block_type + ":\n", MainWindow::COMMENT_COLOR, 12, 9);
     for (u64 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        const std::string track_name = this->m_mainWindow->resolve_hash(track_ptr->m_trackId);
+        const std::string track_name = this->resolve_hash(track_ptr->m_trackId);
         this->insert_span("TRACK " + track_name + ":\n", MainWindow::COMMENT_COLOR, 12, 10);
         for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             FunctionDisassembly function = this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
@@ -287,7 +291,7 @@ void ListingViewController::disassemble_state_script(StateScript *stateScript) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
         this->insert_span("OPTIONS: ", MainWindow::COMMENT_COLOR, 14, 6);
         for (u64 i = 0; i < s_array->m_numEntries; ++i) {
-            this->insert_span(this->m_mainWindow->resolve_hash(s_array->m_pSymbols[i]) + "\n");
+            this->insert_span(this->resolve_hash(s_array->m_pSymbols[i]) + "\n");
         }
     }
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
@@ -302,7 +306,7 @@ void ListingViewController::disassemble_state_script(StateScript *stateScript) {
     }
     for (u64 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        const std::string state_name = this->m_mainWindow->resolve_hash(state_ptr->m_stateId);
+        const std::string state_name = this->resolve_hash(state_ptr->m_stateId);
         this->insert_span("STATE " + state_name + ":\n", MainWindow::COMMENT_COLOR, 14, 6);
         for (u64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
             this->insert_on_block(state_ptr->m_pSsOnBlocks + j);
@@ -359,9 +363,9 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
     Register &op1 = stackFrame[istr.operand1 < 128 ? istr.operand1 : 0];
     Register &op2 = stackFrame[istr.operand2 < 128 ? istr.operand2 : 0];
 
-    const std::string dst_stdstr = stackFrame.to_string(istr.destination < 128 ? istr.destination : 0, this->m_mainWindow->resolve_hash(dest.m_SID));
-    const std::string op1_stdstr = stackFrame.to_string(istr.operand1 < 128 ? istr.operand1 : 0, this->m_mainWindow->resolve_hash(op1.m_SID));
-    const std::string op2_stdstr = stackFrame.to_string(istr.operand2 < 128 ? istr.operand2 : 0, this->m_mainWindow->resolve_hash(op2.m_SID));
+    const std::string dst_stdstr = stackFrame.to_string(istr.destination < 128 ? istr.destination : 0, this->resolve_hash(dest.m_SID));
+    const std::string op1_stdstr = stackFrame.to_string(istr.operand1 < 128 ? istr.operand1 : 0, this->resolve_hash(op1.m_SID));
+    const std::string op2_stdstr = stackFrame.to_string(istr.operand2 < 128 ? istr.operand2 : 0, this->resolve_hash(op2.m_SID));
 
     const char *dst_str = dst_stdstr.c_str();
     const char *op1_str = op1_stdstr.c_str();
@@ -529,7 +533,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_i64 = value;
-            sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolve_hash(value).c_str());
+            sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->resolve_hash(value).c_str());
             break;
         }
         case LookupFloat: {
@@ -550,7 +554,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             dest.m_PTR.m_offset = 0;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
-            sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolve_hash(value).c_str());
+            sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->resolve_hash(value).c_str());
             break;
         }
         case MoveInt: {
@@ -571,7 +575,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
             dest.m_type = R_POINTER;
             dest.m_PTR = op1.m_PTR;
-            sprintf(interpreted, "r%d = r%d <%s>", istr.destination, istr.operand1, this->m_mainWindow->resolve_hash(op1.m_PTR.get()).c_str());
+            sprintf(interpreted, "r%d = r%d <%s>", istr.destination, istr.operand1, this->resolve_hash(op1.m_PTR.get()).c_str());
             break;
         }
         case CastInteger: {
@@ -590,12 +594,12 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case Call: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
-            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->m_mainWindow->resolve_hash(op1.m_PTR.get()) + "(";
+            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->resolve_hash(op1.m_PTR.get()) + "(";
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     comment_str += ", ";
                 }
-                comment_str += stackFrame.to_string(49 + i, this->m_mainWindow->resolve_hash(stackFrame[i + 49].m_SID));
+                comment_str += stackFrame.to_string(49 + i, this->resolve_hash(stackFrame[i + 49].m_SID));
             }
             dest.m_type = R_HASH;
             dest.isReturn = true;
@@ -605,12 +609,12 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case CallFf: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
-            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->m_mainWindow->resolve_hash(op1.m_PTR.get()) + "(";
+            std::string comment_str = "r" + std::to_string(istr.destination) + " = " + this->resolve_hash(op1.m_PTR.get()) + "(";
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     comment_str += ", ";
                 }
-                comment_str += stackFrame.to_string(49 + i, this->m_mainWindow->resolve_hash(stackFrame[i + 49].m_SID));
+                comment_str += stackFrame.to_string(49 + i, this->resolve_hash(stackFrame[i + 49].m_SID));
             }
             dest.m_type = R_HASH;
             dest.isReturn = true;
@@ -982,7 +986,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
                 dest.m_SID = value;
                 table_entry.m_type = SymbolTableEntryType::STRINGID_64;
                 table_entry.m_hash = value;
-                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, stackFrame.to_string(istr.destination, this->m_mainWindow->resolve_hash(value)).c_str());
+                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, stackFrame.to_string(istr.destination, this->resolve_hash(value)).c_str());
             } else if (value % 8 == 0 && value < this->m_currentFile.m_bytes.size()) {
                 dest.m_type = RegisterValueType::R_POINTER;
                 dest.m_PTR = {value, 0};
@@ -1058,11 +1062,11 @@ void ListingViewController::insert_function_disassembly_text(const FunctionDisas
                 break;
             }
             case SymbolTableEntryType::POINTER:{
-                sprintf(type, "POINTER <%s>\n", this->m_mainWindow->resolve_hash(entry.m_hash).c_str());
+                sprintf(type, "POINTER <%s>\n", this->resolve_hash(entry.m_hash).c_str());
                 break;
             }
             case SymbolTableEntryType::STRINGID_64: {
-                sprintf(type, "SID <%s>\n", this->m_mainWindow->resolve_hash(entry.m_hash).c_str());
+                sprintf(type, "SID <%s>\n", this->resolve_hash(entry.m_hash).c_str());
                 break;
             }
         }
@@ -1074,7 +1078,7 @@ void ListingViewController::insert_header_line() {
     std::string current_script_name;
     std::string current_script_id;
     if (this->m_currentFile.m_dcscript != nullptr) {
-        current_script_name = this->m_mainWindow->resolve_hash(this->m_currentFile.m_dcscript->m_stateScriptId);
+        current_script_name = this->resolve_hash(this->m_currentFile.m_dcscript->m_stateScriptId);
         current_script_id = MainWindow::int_to_string_id(this->m_currentFile.m_dcscript->m_stateScriptId);
     } else {
         current_script_name = "UNKOWN SCRIPT";
