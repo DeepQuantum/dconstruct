@@ -3,8 +3,8 @@
 
 #include "DCHeader.h"
 #include "DCScript.h"
+#include "sidbase.h"
 
-#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -45,7 +45,7 @@ public:
     std::vector<uint8_t> m_bytes;
     std::vector<Entry*> m_entries;
     void read_reloc_table();
-    i32 disassembly_file(std::unordered_map<stringid_64, std::string> &sidbase);
+    i32 disassemble_file(SIDBase &sidbase);
 
 };
 

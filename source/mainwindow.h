@@ -5,6 +5,7 @@
 
 #include "disassembly/base.h"
 #include "disassembly/binaryfile.h"
+#include "disassembly/sidbase.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
     constexpr static QColor OPCODE_COLOR = QColor(84, 179, 183);
     constexpr static QColor STRING_COLOR = QColor(170, 41, 80);
@@ -26,7 +28,8 @@ public:
     constexpr static QColor BACKGROUND_COLOR = QColor(28, 29, 30);
     constexpr static QColor HASH_COLOR = QColor(150, 0, 150);
     
-    std::unordered_map<stringid_64, std::string> m_sidbase;
+    SIDBase m_sidbase;
+
     constexpr static u8 VersionNumber = 0x01;
 
 
@@ -34,12 +37,13 @@ public:
         return ui.ListingView;
     }
 
-    void loadSidbase(const std::string &path = "sidbase.bin");
-    std::string resolve_hash(stringid_64 sid) const;
+    void load_sidbase(const std::string &path = "sidbase.bin") noexcept;
+    [[nodiscard]] const std::string lookup(const stringid_64 hash) const noexcept;
     std::vector<BinaryFile> m_scripts;
-    static std::string int_to_string_id(stringid_64 sid);
-    static std::string offset_to_string(u32 offset);
+    static const std::string int_to_string_id(stringid_64 sid);
+    static const std::string offset_to_string(u32 offset);
 
 private:
+    u8 *m_sidbytes;
     Ui::MainWindow ui;
 };

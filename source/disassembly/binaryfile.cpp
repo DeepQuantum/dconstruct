@@ -4,8 +4,6 @@
 #include <fstream>
 #include <filesystem>
 
-#include <intrin.h> // for _bittest
-
 BinaryFile::BinaryFile() {}
 
 BinaryFile::BinaryFile(const std::string &path) {
@@ -21,7 +19,7 @@ BinaryFile::BinaryFile(const std::string &path) {
     scriptstream.read((char*)m_bytes.data(), m_size);
 }
 
-i32 BinaryFile::disassembly_file(std::unordered_map<stringid_64, std::string> &sidbase) {
+i32 BinaryFile::disassemble_file(SIDBase &sidbase) {
     constexpr u32 magic = 0x44433030;
     constexpr u32 version = 0x1;
 

@@ -30,7 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${SOURCE_FILES}
     )
     target_compile_options(tlou2_disasm PRIVATE
-        $<$<CONFIG:Release>:-O1>
+        $<$<CONFIG:Release>:-O1 -mavx512f>
         $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
         $<$<CONFIG:Debug>:-O0 -g>
     )
