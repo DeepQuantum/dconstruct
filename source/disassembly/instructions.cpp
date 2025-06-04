@@ -114,12 +114,11 @@ b8 Instruction::isBranchInstruction() const noexcept {
     return this->opcode == Branch || this->opcode == BranchIf || this->opcode == BranchIfNot;
 }
 
-std::string StackFrame::to_string(const u64 idx, const std::string &resolved) const noexcept {
-    char out[128] = {0};
+void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) const noexcept {
     const Register reg = this->registers[idx];
     switch (reg.m_type) {
         case RegisterValueType::R_HASH: {
-            sprintf(out, "%s", resolved.c_str());
+            strcpy(buffer, resolved);
             break;
         }
         case RegisterValueType::R_U16: 
@@ -128,18 +127,17 @@ std::string StackFrame::to_string(const u64 idx, const std::string &resolved) co
         case RegisterValueType::R_I16:
         case RegisterValueType::R_I32:
         case RegisterValueType::R_I64: {
-            sprintf(out, "%i", reg.m_U64);
+            sprintf(buffer, "%i", reg.m_U64);
             break;
         }
         default: {
-            sprintf(out, "0x%X", reg.m_U64);
+            sprintf(buffer, "0x%X", reg.m_U64);
             break;
         } 
     }
     if (reg.isReturn) {
-        sprintf(out + strlen(out), "()");
+        strcat(buffer, "()");
     }
-    return std::string(out);
 }
 
 Register& StackFrame::operator[](const u64 idx) noexcept {

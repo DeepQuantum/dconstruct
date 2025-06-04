@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef BINARYFILE_H
 #define BINARYFILE_H
 
@@ -7,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 enum SymbolType {
     B8,
@@ -39,13 +42,18 @@ public:
 
     BinaryFile(const std::string &path);
 
+    ~BinaryFile();
+
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
     std::vector<uint8_t> m_bytes;
     std::vector<Entry*> m_entries;
-    void read_reloc_table();
     i32 disassemble_file(SIDBase &sidbase);
+    std::map<stringid_64, const char*> sid_cache;
+
+private:
+    void read_reloc_table();
 
 };
 

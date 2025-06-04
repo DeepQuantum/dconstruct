@@ -212,7 +212,7 @@ struct StackFrame {
 
     Register& operator[](const u64 idx) noexcept;
 
-    std::string to_string(const u64 idx, const std::string &resolved = "") const noexcept;
+    void to_string(char *buffer, const u64 idx, const char *resolved = "") const noexcept;
 
     u32 get_label_index(const u32 target) noexcept {
         u32 label_name;

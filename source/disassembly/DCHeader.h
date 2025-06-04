@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DCHEADER_H
 #define DCHEADER_H
 

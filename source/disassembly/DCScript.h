@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DCSCRIPT_H
 #define DCSCRIPT_H
 

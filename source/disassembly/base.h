@@ -1,11 +1,10 @@
-#ifndef BASE_H
-#define BASE_H
+#pragma once
 
+#include "string.h"
+#include "stdio.h"
 #include <cstdint>
 
 typedef uint64_t stringid_64;
-
-
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -30,4 +29,14 @@ constexpr stringid_64 ToStringId64(const char* str) {
 	return base;
 }
 
-#endif // BASE_H
+inline const char *int_to_string_id(stringid_64 sid) {
+	char *buffer = new char[16];
+    sprintf(buffer, "#%016llX", sid);
+    return buffer;
+}
+
+inline const char *offset_to_string(u32 offset) {
+    char *buffer = new char[8];
+    sprintf(buffer, "0x%06llX", offset);
+    return buffer;
+}

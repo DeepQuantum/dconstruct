@@ -56,59 +56,8 @@ void BinaryFile::read_reloc_table() {
     }
 }
 
-
-// bool BinaryFile::read_reloc_table() {
-//     u8* data = this->m_bytes.data();
-//     DC_Header *header = this->m_dcheader;
-//     int32_t size = *(i32*)(data + this->m_dcheader->m_textSize);
-//     uint8_t *data_copy = this->m_bytes.data();
-//     uint8_t *pUnk = data + header->m_textSize;
-//     int32_t max = size * 8;
-//     int32_t iPtr = 0;
-//     int32_t byteIndex = 0;
-//     int32_t v1 = 0;
-//     int8_t r12d = 0x0;
-//     int32_t v2 = 0x0;
-//     int32_t r15d = 0x0;
-//     uint64_t loc = 0;
-//     uint64_t tmp = 0;
-
-//     if (!(size & 0x1FFFFFFF)) {
-//         return false;
-//     }
-
-//     do {
-//         if (byteIndex < size)
-//         {
-//             r12d = v1 + 1;
-//             v2 = *(pUnk + byteIndex + 0x4);
-//             if (r12d == 8)
-//             {
-//                 r15d = 1;
-//                 r12d = 0;
-//             }
-//             else
-//             {
-//                 r15d = 0;
-//             }
-//             if (_bittest(reinterpret_cast<long*>(&v2), v1))
-//             {
-//                 loc = *(uint64_t*)(data + (iPtr * 0x8));
-//                 tmp = 0;
-//                 if (loc != 0)
-//                 {
-//                     if ((loc >= 0 && loc < 0xFFFFFFFFFFFFFFFF))
-//                     {
-//                         tmp = loc;
-//                     }
-//                 }
-//                 *(uint64_t*)(data + (iPtr * 0x8)) = (uint64_t)(data_copy + tmp);
-//             }
-//             byteIndex += r15d;
-//             iPtr++;
-//             v1 = r12d;
-//         }
-//     } while (max > iPtr);
-
-//     return true;
-// }
+BinaryFile::~BinaryFile() {
+    for (const auto &[sid, string] : this->sid_cache) {
+        delete[] string;
+    }
+}

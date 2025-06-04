@@ -23,41 +23,15 @@ void MainWindow::load_sidbase(const std::string &path) noexcept {
         exit(-1);
     }
 
-    u8 *m_sidbytes = new u8[fsize];
+    u8 *sidbytes = new u8[fsize];
 
     sidfile.read(reinterpret_cast<char*>(&num_entries), 8);
-    sidfile.read(reinterpret_cast<char*>(m_sidbytes), fsize);
+    sidfile.seekg(0);
+    sidfile.read(reinterpret_cast<char*>(sidbytes), fsize);
 
-    this->m_sidbase = SIDBase{
-        num_entries,
-        m_sidbytes - 8,
-        reinterpret_cast<SIDBaseEntry*>(m_sidbytes),
-    };
-}
-
-MainWindow::~MainWindow() {
-    delete[] this->m_sidbytes;
+    this->m_sidbase.m_num_entries = num_entries;
+    this->m_sidbase.m_sidbytes = sidbytes;
+    this->m_sidbase.m_entries = reinterpret_cast<SIDBaseEntry*>(sidbytes + 8);
 }
 
 
-
-[[nodiscard]] const std::string MainWindow::lookup(const stringid_64 sid) const noexcept {
-    const char *hash = this->m_sidbase.search(sid, this->m_sidbase.m_entries, this->m_sidbase.m_num_entries);
-    if (hash == nullptr) {
-        return int_to_string_id(sid);
-    } else {
-        return hash;
-    }
-}
-
-const std::string MainWindow::int_to_string_id(stringid_64 sid) {
-    char buffer[16] = {0};
-    sprintf(buffer, "#%016llX", sid);
-    return buffer;
-}
-
-const std::string MainWindow::offset_to_string(u32 offset) {
-    char buffer[8];
-    sprintf(buffer, "0x%06llX", offset);
-    return buffer;
-}
