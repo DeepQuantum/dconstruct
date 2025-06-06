@@ -12,11 +12,18 @@ struct TextFormat {
     u64 indent = 0;
 };
 
+struct DC_Struct {
+    stringid_64 m_typeID;
+    const void *m_data;
+};
+
 class ListingViewController {
 public:
     ListingViewController(BinaryFile &file, MainWindow *mainWindow);
+    ~ListingViewController();
     void create_listing_view();
     void insert_entry(const Entry *entry);
+    void insert_struct(const DC_Struct *entry, const u64 indent = 0);
     void insert_span(const char *text, const TextFormat &text_format = TextFormat{});
     template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
 
@@ -24,11 +31,13 @@ private:
     BinaryFile m_currentFile;
     MainWindow *m_mainWindow;
 
+    std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
+
     [[nodiscard]] const char *lookup(const stringid_64 hash) noexcept;
     void insert_header_line();
+    void process_unmapped_structs() noexcept;
     void disassemble_state_script(const StateScript *stateScript);
-    void parse_custom_struct(const Entry *symbol);
-    void parse_custom_strucht_from_pointer(const u64 *p);
+    void parse_custom_struct(const DC_Struct *symbol, const u64 indent);
     void insert_variable(const SsDeclaration *var);
     void insert_on_block(const SsOnBlock *block);
     FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);

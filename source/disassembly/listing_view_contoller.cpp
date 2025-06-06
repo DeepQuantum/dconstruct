@@ -12,6 +12,12 @@ ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainW
     this->create_listing_view();
 }
 
+ListingViewController::~ListingViewController() {
+    for (auto &[hash, string] : this->m_currentFile.sid_cache) {
+        delete[] string;
+    }
+}
+
 [[nodiscard]] const char *ListingViewController::lookup(const stringid_64 sid) noexcept {
     auto res = this->m_currentFile.sid_cache.find(sid);
     if (res != this->m_currentFile.sid_cache.end()) {
@@ -46,106 +52,109 @@ void ListingViewController::insert_span(const char *line, const TextFormat &text
     cursor.insertText(QString(text_format.indent, ' ') + QString::fromStdString(line), format);
 }
 
-void ListingViewController::parse_custom_strucht_from_pointer(const u64 *p) {
-    const std::string type_id = this->lookup(*reinterpret_cast<const stringid_64*>(p - 1));
+void ListingViewController::process_unmapped_structs() noexcept {
+    
 }
 
-void ListingViewController::parse_custom_struct(const Entry *entry) {
+void ListingViewController::parse_custom_struct(const DC_Struct *entry, const u64 indent) {
     const u8 *base = this->m_currentFile.m_bytes.data();
     char buffer[64] = {0};
-    TextFormat format{MainWindow::HASH_COLOR, 14, 12};
-    switch (entry->m_typeId) {
+    TextFormat format{MainWindow::HASH_COLOR, 16, 14 + indent};
+    switch (entry->m_typeID) {
         case SID("symbol-array"): {
-            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(entry->m_entryPtr);
+            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(entry->m_data);
+            this->insert_span("\n");
             for (u64 i = 0; i < array->contents.size; ++i) {
-                this->insert_span(this->lookup(array->contents.keys[i]), format);
-                this->insert_span("\n");
+                this->insert_span_fmt("%d. %s\n", format, i + 1, this->lookup(array->contents.keys[i]), format);
             }
             break;
         }
         case SID("map"): {
-            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(entry->m_entryPtr);
+            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(entry->m_data);
+            this->insert_span_fmt("keys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16, 4 + indent}, this->get_offset(map->keys.data), this->get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = this->lookup(map->keys[i]);
+                this->insert_span(key_hash, format);
                 const u64 *value_ptr = reinterpret_cast<const u64*>(map->values[i]);
-                Entry dummy = Entry{
-                    entry->m_scriptId,
-                    *reinterpret_cast<const stringid_64*>(value_ptr - 1),
-                    value_ptr
-                };
-                this->insert_entry(&dummy);
-                this->insert_span_fmt("%s:\n", TextFormat{.m_color = MainWindow::STRING_COLOR}, key_hash);
+                const DC_Struct *struct_ptr = reinterpret_cast<const DC_Struct*>(map->values[i] - 8);
+                this->insert_struct(struct_ptr, indent + 4);
             }
             break;
         }
         default: {
-            this->insert_span("Unhandled");
+            this->m_unmappedEntries[entry->m_typeID].push_back(entry);
+            this->insert_span_fmt("__UNMAPPED_STRUCT_%s_IDX_%d", {}, this->lookup(entry->m_typeID), this->m_unmappedEntries[entry->m_typeID].size() - 1);
         }
     }
-    this->insert_span("\n");
+    this->insert_span("\n\n\n");
 }
 
 void ListingViewController::create_listing_view() {
     this->insert_header_line();
+    const std::string sep = std::string(100, '#') + "\n";
     for (std::size_t i = 0; i < this->m_currentFile.m_dcheader->m_numEntries; ++i) {
         this->insert_entry(this->m_currentFile.m_dcheader->m_pStartOfData + i);
+        this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14, .indent = 0});
     }
     this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
     this->m_mainWindow->getListingView()->ensureCursorVisible();
 }
 
 void ListingViewController::insert_entry(const Entry *entry) {
+    this->insert_span(this->lookup(entry->m_scriptId));
+    const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(&entry->m_typeId);
+    this->insert_struct(_struct);
+}
+
+void ListingViewController::insert_struct(const DC_Struct *entry, const u64 indent) {
     const char *line;
     char buffer[300] = {0};
-    char offset_str[10] = {0};
-    const u64 offset = this->get_offset((void*)entry->m_entryPtr);
+    const u64 offset = this->get_offset((void*)&(entry->m_data));
 
-    sprintf(offset_str, "[0x%06X] ", offset);
-
-    this->insert_span(offset_str, TextFormat{MainWindow::NUM_COLOR, 12, 6});
+    this->insert_span_fmt("[0x%06X] ", TextFormat{MainWindow::NUM_COLOR, 16, 2}, offset);
 
     TextFormat opcode_format = TextFormat{MainWindow::OPCODE_COLOR, 10};
 
-    switch (entry->m_typeId)
+    switch (entry->m_typeID)
     {
         case SID("boolean"):
         {
-            this->insert_span_fmt("BOOL: <%s>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr) ? "true" : "false");
+            this->insert_span_fmt("BOOL: <%s>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_data) ? "true" : "false");
             break;
         }
         case SID("int"):
         {
-            this->insert_span_fmt("INT: <%d>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr));
+            this->insert_span_fmt("INT: <%d>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_data));
             break;
         }
         case SID("float"):
         {
-            this->insert_span_fmt("INT: <%.2f>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr));
+            this->insert_span_fmt("FLOAT: <%.2f>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_data));
             break;
         }
         case SID("sid"):
         {
-            this->insert_span_fmt("SID: <%s>\n", opcode_format,  this->lookup(*reinterpret_cast<const stringid_64*>(entry->m_entryPtr)));
+            this->insert_span_fmt("SID: <%s>\n", opcode_format,  this->lookup(*reinterpret_cast<const stringid_64*>(entry->m_data)));
             break;
         }
         case SID("state-script"):
         {
-            this->disassemble_state_script(reinterpret_cast<const StateScript*>(entry->m_entryPtr));
+            this->disassemble_state_script(reinterpret_cast<const StateScript*>(entry->m_data));
             break;
         }
         case SID("script-lambda"):
         {
             this->insert_span("LAMBDA", TextFormat{.m_fontSize = 20});
-            this->insert_span_fmt("<%s>", TextFormat{.m_color = MainWindow::HASH_COLOR}, this->lookup(entry->m_scriptId));
-            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(entry->m_entryPtr));
+            this->insert_span_fmt("<%s>", TextFormat{.m_color = MainWindow::HASH_COLOR}, "ANONYMOUS");
+            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(entry->m_data));
             this->insert_function_disassembly_text(function);
             break;
         }
         default:
         {
-            this->insert_span(this->lookup(entry->m_typeId), {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 20});
-            this->insert_span_fmt(": %s\n",  {.m_color = MainWindow::VAR_COLOR, .m_fontSize = 20}, this->lookup(entry->m_scriptId));
-            this->parse_custom_struct(entry);
+            this->insert_span(this->lookup(entry->m_typeID), {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 20});
+            this->insert_span(": \n",  {.m_color = MainWindow::VAR_COLOR, .m_fontSize = 20}); //this->lookup(entry->m_scriptId));
+            this->parse_custom_struct(entry, indent);
             break;
         }
     }
