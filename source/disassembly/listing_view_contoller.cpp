@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <sstream>
+#include <QScrollBar>
 #include "listing_view_controller.h"
 
 ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow) {
@@ -25,57 +26,55 @@ ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainW
     return hash_string;
 }
 
-void ListingViewController::insert_span(const char *line, QColor color, int fontSize, u8 indent) {
+template<typename... Args>
+void ListingViewController::insert_span_fmt(const char *format, const TextFormat &text_format, Args ...args) {
+    char *buffer = new char[256];
+    sprintf(buffer, format, args...);
+    this->insert_span(buffer, text_format);
+    delete[] buffer;
+}
+
+void ListingViewController::insert_span(const char *line, const TextFormat &text_format) {
     auto* view = this->m_mainWindow->getListingView();
     QTextCursor cursor = view->textCursor();
     cursor.movePosition(QTextCursor::End);
     view->setTextCursor(cursor);
 
     QTextCharFormat format;
-    format.setForeground(color);
-    format.setFontPointSize(fontSize);
-    cursor.insertText(QString(indent, ' ') + QString::fromStdString(line), format);
-}
-
-void ListingViewController::insert_comment(const std::string &comment, u8 indent) {
-    this->insert_span(comment.c_str(), MainWindow::COMMENT_COLOR, 14, indent);
-}
-
-void ListingViewController::insert_hash(const std::string &hash, b8 surround) {
-    std::string out;
-    if (surround) {
-        out = "<" + hash + ">";
-    } else {
-        out = hash;
-    }
-    this->insert_span(out.c_str(), MainWindow::HASH_COLOR, 14, 0);
+    format.setForeground(text_format.m_color);
+    format.setFontPointSize(text_format.m_fontSize);
+    cursor.insertText(QString(text_format.indent, ' ') + QString::fromStdString(line), format);
 }
 
 void ListingViewController::parse_custom_strucht_from_pointer(const u64 *p) {
     const std::string type_id = this->lookup(*reinterpret_cast<const stringid_64*>(p - 1));
 }
 
-void ListingViewController::parse_custom_struct(Entry *entry) {
+void ListingViewController::parse_custom_struct(const Entry *entry) {
     const u8 *base = this->m_currentFile.m_bytes.data();
     char buffer[64] = {0};
+    TextFormat format{MainWindow::HASH_COLOR, 14, 12};
     switch (entry->m_typeId) {
-        case SID("array"): {
-            //DCArray 
+        case SID("symbol-array"): {
+            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(entry->m_entryPtr);
+            for (u64 i = 0; i < array->contents.size; ++i) {
+                this->insert_span(this->lookup(array->contents.keys[i]), format);
+                this->insert_span("\n");
+            }
             break;
         }
         case SID("map"): {
-            DCMap *map = reinterpret_cast<DCMap*>(entry->m_entryPtr);
+            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(entry->m_entryPtr);
             for (u64 i = 0; i < map->size; ++i) {
-                const std::string key_hash = this->lookup(map->keys[i]);
-                u64 *value_ptr = reinterpret_cast<u64*>(map->values[i]);
+                const char *key_hash = this->lookup(map->keys[i]);
+                const u64 *value_ptr = reinterpret_cast<const u64*>(map->values[i]);
                 Entry dummy = Entry{
                     entry->m_scriptId,
                     *reinterpret_cast<const stringid_64*>(value_ptr - 1),
                     value_ptr
                 };
                 this->insert_entry(&dummy);
-                sprintf(buffer, "%s:\n", key_hash);
-                this->insert_span(buffer, MainWindow::STRING_COLOR, 14, 12);
+                this->insert_span_fmt("%s:\n", TextFormat{.m_color = MainWindow::STRING_COLOR}, key_hash);
             }
             break;
         }
@@ -91,9 +90,11 @@ void ListingViewController::create_listing_view() {
     for (std::size_t i = 0; i < this->m_currentFile.m_dcheader->m_numEntries; ++i) {
         this->insert_entry(this->m_currentFile.m_dcheader->m_pStartOfData + i);
     }
+    this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
+    this->m_mainWindow->getListingView()->ensureCursorVisible();
 }
 
-void ListingViewController::insert_entry(Entry *entry) {
+void ListingViewController::insert_entry(const Entry *entry) {
     const char *line;
     char buffer[300] = {0};
     char offset_str[10] = {0};
@@ -101,54 +102,49 @@ void ListingViewController::insert_entry(Entry *entry) {
 
     sprintf(offset_str, "[0x%06X] ", offset);
 
-    this->insert_span(offset_str, MainWindow::COMMENT_COLOR, 12, 6);
+    this->insert_span(offset_str, TextFormat{MainWindow::NUM_COLOR, 12, 6});
+
+    TextFormat opcode_format = TextFormat{MainWindow::OPCODE_COLOR, 10};
 
     switch (entry->m_typeId)
     {
         case SID("boolean"):
         {
-            sprintf(buffer + 10, "BOOL: <%s>\n", *reinterpret_cast<i32*>(entry->m_entryPtr) ? "true" : "false");
-            this->insert_span(line, MainWindow::OPCODE_COLOR, 10);
+            this->insert_span_fmt("BOOL: <%s>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr) ? "true" : "false");
             break;
         }
         case SID("int"):
         {
-            sprintf(buffer + 10, "INT: <%s>\n", *reinterpret_cast<i32*>(entry->m_entryPtr));
-            this->insert_span(line, MainWindow::OPCODE_COLOR, 10);
+            this->insert_span_fmt("INT: <%d>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr));
             break;
         }
         case SID("float"):
         {
-            sprintf(buffer + 10, "FLOAT: <%s>\n", *reinterpret_cast<f32*>(entry->m_entryPtr));
-            this->insert_span(line, MainWindow::OPCODE_COLOR, 10);
+            this->insert_span_fmt("INT: <%.2f>\n", opcode_format, *reinterpret_cast<const i32*>(entry->m_entryPtr));
             break;
         }
         case SID("sid"):
         {
-            sprintf(buffer + 10, "SID: <%s>\n", this->lookup(*reinterpret_cast<stringid_64*>(entry->m_entryPtr)));
-            this->insert_span(line, MainWindow::OPCODE_COLOR, 10);
+            this->insert_span_fmt("SID: <%s>\n", opcode_format,  this->lookup(*reinterpret_cast<const stringid_64*>(entry->m_entryPtr)));
             break;
         }
         case SID("state-script"):
         {
-            this->disassemble_state_script(reinterpret_cast<StateScript*>(entry->m_entryPtr));
+            this->disassemble_state_script(reinterpret_cast<const StateScript*>(entry->m_entryPtr));
             break;
         }
         case SID("script-lambda"):
         {
-            this->insert_comment("BEGIN LAMBDA ", 20);
-            this->insert_hash(this->lookup(entry->m_scriptId), true);
-            this->insert_span(" AT [", MainWindow::COMMENT_COLOR, 14);
-            this->insert_span(offset_str, MainWindow::OPCODE_COLOR, 14);
-            this->insert_span("]\n", MainWindow::COMMENT_COLOR, 14);
-            auto function = this->create_function_disassembly(reinterpret_cast<ScriptLambda*>(entry->m_entryPtr));
+            this->insert_span("LAMBDA", TextFormat{.m_fontSize = 20});
+            this->insert_span_fmt("<%s>", TextFormat{.m_color = MainWindow::HASH_COLOR}, this->lookup(entry->m_scriptId));
+            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(entry->m_entryPtr));
             this->insert_function_disassembly_text(function);
             break;
         }
         default:
         {
-            sprintf(buffer, "%s: %s\n", this->lookup(entry->m_typeId), this->lookup(entry->m_scriptId));
-            this->insert_span(buffer);
+            this->insert_span(this->lookup(entry->m_typeId), {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 20});
+            this->insert_span_fmt(": %s\n",  {.m_color = MainWindow::VAR_COLOR, .m_fontSize = 20}, this->lookup(entry->m_scriptId));
             this->parse_custom_struct(entry);
             break;
         }
@@ -159,142 +155,132 @@ u32 ListingViewController::get_offset(const void *symbol) {
     return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);
 }
 
-void ListingViewController::insert_variable(SsDeclaration *var) {
+void ListingViewController::insert_variable(const SsDeclaration *var) {
     char buffer[128] = {0};
-    std::string type_name;
-    char var_format[36] = {0};
+    char var_contents[36] = {0};
 
     b8 is_nullptr = var->m_pDeclValue == nullptr;
 
+    const char *type_name = this->lookup(var->m_declTypeId);
+    const char *var_name = this->lookup(var->m_declId);
+
+    this->insert_span_fmt("[0x%06X]", TextFormat{.m_color = MainWindow::NUM_COLOR}, this->get_offset(var));
+    this->insert_span(type_name, TextFormat{.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 14});
+    this->insert_span(var_name, TextFormat{.m_color = MainWindow::VAR_COLOR, .m_fontSize = 14});
+
     switch (var->m_declTypeId) {
         case SID("boolean"): {
-            type_name = "BOOLEAN";
             if (!is_nullptr) 
-                sprintf(var_format, "%s", *reinterpret_cast<b8*>(var->m_pDeclValue) == 1 ? "TRUE" : "FALSE");
+                this->insert_span_fmt(*reinterpret_cast<b8*>(var->m_pDeclValue) == 1 ? "TRUE" : "FALSE", TextFormat{.m_color = MainWindow::HASH_COLOR});
             break;
         }
         case SID("vector"): {
-            type_name = "VECTOR";
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                sprintf(var_format, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
+                sprintf(var_contents, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("quat"): {
-            type_name = "QUAT";
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                sprintf(var_format, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
+                sprintf(var_contents, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("float"): {
-            type_name = "FLOAT";
             if (!is_nullptr) {
-                sprintf(var_format, "%.4f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%.4f", *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("string"): {
-            type_name = "STRING";
             if (!is_nullptr) {
-                sprintf(var_format, "%s", *reinterpret_cast<const char**>(var->m_pDeclValue));
+                sprintf(var_contents, "%s", *reinterpret_cast<const char**>(var->m_pDeclValue));
             }
             break;
         }
         case SID("symbol"): {
-            type_name = "SYMBOL";
             if (!is_nullptr) {
-                const std::string val = this->lookup(*reinterpret_cast<stringid_64*>(var->m_pDeclValue));
-                sprintf(var_format, "%s", val.c_str());
+                sprintf(var_contents, "%s", this->lookup(*reinterpret_cast<stringid_64*>(var->m_pDeclValue)));
             }
             break;
         }
         case SID("int32"): {
-            type_name = "INT32";
             if (!is_nullptr) {
-                sprintf(var_format, "%d", *reinterpret_cast<i32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%d", *reinterpret_cast<i32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("uint64"): {
-            type_name = "UINT64";
             if (!is_nullptr) {
-                sprintf(var_format, "%llX", *reinterpret_cast<u64*>(var->m_pDeclValue));
+                sprintf(var_contents, "%llX", *reinterpret_cast<u64*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("timer"): {
-            type_name = "TIMER";
             if (!is_nullptr) {
-                sprintf(var_format, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("point"): {
-            type_name = "POINT";
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                sprintf(var_format, "(%.2f, %.2f, %.2f)", val[0], val[1], val[2]);
+                sprintf(var_contents, "(%.2f, %.2f, %.2f)", val[0], val[1], val[2]);
             }
             break;
         }
         case SID("bound-frame"): {
-            type_name = "BOUND-FRAME";
             if (!is_nullptr) {
-                sprintf(var_format, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         default: {
-            type_name = this->lookup(var->m_declTypeId);
-            strcpy(var_format, "???");
+            strcpy(var_contents, "???");
             break;
         }
     }
     if (is_nullptr) {
-        strcpy(var_format, "UNINITIALIZED");
+        strcpy(var_contents, "UNINITIALIZED");
     }
-    const std::string name_id = this->lookup(var->m_declId);
-    sprintf(buffer, "[%05X] %s %s = <%s>\n", this->get_offset(var), type_name.c_str(), name_id.c_str(), var_format);
-    this->insert_span(buffer, MainWindow::OPCODE_COLOR, 12, 8);
+    this->insert_span_fmt("<%s>\n", TextFormat{MainWindow::OPCODE_COLOR, 12, 8}, var_contents);
 }
 
-void ListingViewController::insert_on_block(SsOnBlock *block) {
+void ListingViewController::insert_on_block(const SsOnBlock *block) {
     char buffer[32] = {0};
+    TextFormat block_format{MainWindow::COMMENT_COLOR, 12, 9};
     switch (block->m_blockType) {
         case 0: {
-            strcpy(buffer,"ON start\n");
+            this->insert_span("ON start\n", block_format);
             break;
         }
         case 1: {
-            strcpy(buffer,"ON end\n");
+            this->insert_span("ON end\n", block_format);
             break;
         }
         case 2: {
-            sprintf(buffer, "ON event %s\n", this->lookup(block->m_blockEventId));
+            this->insert_span_fmt("ON event %s\n", block_format, this->lookup(block->m_blockEventId));
             break;
         }
         case 3: {
-            strcpy(buffer,"ON update\n");
+            this->insert_span("ON update\n", block_format);
             break;
         }
         case 4: {
-            strcpy(buffer,"ON virtual\n");
+            this->insert_span("ON virtual\n", block_format);
             break;
         }
         default: {
-            strcpy(buffer,"ON UNKNOWN\n");
+            this->insert_span_fmt("ON UNKNOWN [%d]\n", block_format, block->m_blockType);
             break;
         }
     }
-    this->insert_span(buffer, MainWindow::COMMENT_COLOR, 12, 9);
+
     for (u64 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        const char *track_name = this->lookup(track_ptr->m_trackId);
-        sprintf(buffer, "TRACK %s:\n", track_name);
-        this->insert_span(buffer, MainWindow::COMMENT_COLOR, 12, 10);
+        this->insert_span_fmt("TRACK %s:\n", {MainWindow::COMMENT_COLOR, 12, 10}, this->lookup(track_ptr->m_trackId));
         for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             FunctionDisassembly function = this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
             this->insert_function_disassembly_text(function);
@@ -302,10 +288,11 @@ void ListingViewController::insert_on_block(SsOnBlock *block) {
     }
 }
 
-void ListingViewController::disassemble_state_script(StateScript *stateScript) {
+void ListingViewController::disassemble_state_script(const StateScript *stateScript) {
+    TextFormat header_format{MainWindow::COMMENT_COLOR, 14, 6};
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
-        this->insert_span("OPTIONS: ", MainWindow::COMMENT_COLOR, 14, 6);
+        this->insert_span("OPTIONS: ", header_format);
         for (u64 i = 0; i < s_array->m_numEntries; ++i) {
             this->insert_span(this->lookup(s_array->m_pSymbols[i]));
             this->insert_span("\n");
@@ -313,7 +300,7 @@ void ListingViewController::disassemble_state_script(StateScript *stateScript) {
     }
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
     if (decl_table != nullptr) {
-        this->insert_span("DECLARATIONS: \n", MainWindow::COMMENT_COLOR, 14, 6);
+        this->insert_span("DECLARATIONS: \n", header_format);
         for (u64 i = 0; i < decl_table->m_numDeclarations; ++i) {
             SsDeclaration *decl = decl_table->m_pDeclarations + i;
             if (decl->m_isVar) {
@@ -324,16 +311,14 @@ void ListingViewController::disassemble_state_script(StateScript *stateScript) {
     char buffer[64] = {0};
     for (u64 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        const char* state_name = this->lookup(state_ptr->m_stateId);
-        sprintf(buffer, "STATE %s:\n", state_name);
-        this->insert_span(buffer, MainWindow::COMMENT_COLOR, 14, 6);
+        this->insert_span_fmt("STATE %s:\n", header_format, this->lookup(state_ptr->m_stateId));
         for (u64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
             this->insert_on_block(state_ptr->m_pSsOnBlocks + j);
         }
     }
 }
 
-FunctionDisassembly ListingViewController::create_function_disassembly(ScriptLambda *lambda) {
+FunctionDisassembly ListingViewController::create_function_disassembly(const ScriptLambda *lambda) {
     // this->insert_span("INSTRUCTION POINTER: " + MainWindow::offset_to_string(this->get_offset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
     // this->insert_span("SYMBOL TABLE POINTER: " + MainWindow::offset_to_string(this->get_offset(lambda->m_pSymbols)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
 
@@ -583,6 +568,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
             sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value));
+            //this->insert_span_fmt("r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value), MainWindow::COMMENT_COLOR, 12, 12);
             break;
         }
         case MoveInt: {
@@ -1040,33 +1026,36 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
 void ListingViewController::insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly) {
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[128] = {0};
+    TextFormat label_format = {MainWindow::COMMENT_COLOR, 14, 10};
+    TextFormat text_format = {MainWindow::OPCODE_COLOR, 12, 14};
+    TextFormat comment_format = {MainWindow::COMMENT_COLOR, 12, 0};
     for (const auto &line : functionDisassembly.m_lines) {
         u32 line_offset = std::max(67ull - line.m_text.length(), 0ull);
         auto label_loc = std::find(labels.begin(), labels.end(), line.m_location);
         if (label_loc != labels.end()) {
             const u32 label_idx = std::distance(labels.begin(), label_loc);
             if (line.m_location == functionDisassembly.m_lines.size() - 1) {
-                this->insert_span("L_RETURN:\n", MainWindow::COMMENT_COLOR, 14, 10);
+                this->insert_span("L_RETURN:\n", label_format);
             } else {
                 sprintf(buffer, "L_%d:\n", label_idx);
-                this->insert_span(buffer, MainWindow::COMMENT_COLOR, 14, 10);  
+                this->insert_span(buffer, label_format);  
             }
         }
-        this->insert_span(line.m_text.c_str(), MainWindow::OPCODE_COLOR, 12, 14);
+        this->insert_span(line.m_text.c_str(), text_format);
         std::string comment = std::string(line_offset, ' ') + line.m_comment;
-        this->insert_span(comment.c_str(), MainWindow::STRING_COLOR, 12);
+        this->insert_span(comment.c_str(), {MainWindow::STRING_COLOR, 12});
         if (line.m_label != -1) {
             u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_label));
             if (line.m_label == functionDisassembly.m_lines.size() - 1) {
-                this->insert_span("=> L_RETURN", MainWindow::COMMENT_COLOR, 12);
+                this->insert_span("=> L_RETURN", comment_format);
             } else {
                 sprintf(buffer, "=> L_%d", target);
-                this->insert_span(buffer, MainWindow::COMMENT_COLOR, 12);
+                this->insert_span(buffer, comment_format);
             }
         }
         this->insert_span("\n");
     }
-    this->insert_span("SYMBOL TABLE: \n", MainWindow::COMMENT_COLOR, 12, 12);
+    this->insert_span("SYMBOL TABLE: \n", {MainWindow::COMMENT_COLOR, 12, 12});
 
     char line_start[64] = {0};
     char type[128] = {0};
@@ -1095,13 +1084,14 @@ void ListingViewController::insert_function_disassembly_text(const FunctionDisas
             }
         }
         sprintf(buffer, "%s %s", line_start, type);
-        this->insert_span(buffer, MainWindow::COMMENT_COLOR, 12, 14);
+        this->insert_span(buffer, {MainWindow::COMMENT_COLOR, 12, 14});
     }
 }
 
 void ListingViewController::insert_header_line() {
     const char* current_script_name;
     const char* current_script_id;
+    const TextFormat header_format = {MainWindow::STRING_COLOR, 14, 20};
     if (this->m_currentFile.m_dcscript != nullptr) {
         current_script_name = this->lookup(this->m_currentFile.m_dcscript->m_stateScriptId);
         current_script_id = int_to_string_id(this->m_currentFile.m_dcscript->m_stateScriptId);
@@ -1111,10 +1101,10 @@ void ListingViewController::insert_header_line() {
     }
     this->m_mainWindow->getListingView()->clear();
     this->m_mainWindow->getListingView()->setReadOnly(true);
-    // this->insert_span("DeepQuantum's DC Disassembler ver. " + std::to_string(MainWindow::VersionNumber) + "\n", MainWindow::STRING_COLOR, 14, 20);
-    // this->insert_span("Listing for script: " + current_script_name + "\n", MainWindow::STRING_COLOR , 14, 20);
-    // this->insert_span("Script ID: " + current_script_id + "\n", MainWindow::STRING_COLOR, 14, 20);
-    // this->insert_span("Filesize: " + std::to_string(this->m_currentFile.m_size) + " bytes\n\n", MainWindow::STRING_COLOR, 14, 20);
-    // this->insert_span("START OF DISASSEMBLY\n", MainWindow::COMMENT_COLOR, 14, 20);
-    // this->insert_span("--------------------------------------------------\n", MainWindow::COMMENT_COLOR, 14, 20);
+    this->insert_span_fmt("DeepQuantum's DC Disassembler ver. %d\n", header_format, MainWindow::VersionNumber);
+    this->insert_span_fmt("Listing for script: %s\n", header_format, current_script_name);
+    this->insert_span_fmt("Script ID: %s\n", header_format, current_script_id);
+    this->insert_span_fmt("Filesize: %d bytes\n", header_format, this->m_currentFile.m_size);
+    this->insert_span("START OF DISASSEMBLY\n", header_format);
+    this->insert_span("--------------------------------------------------\n", header_format);
 }

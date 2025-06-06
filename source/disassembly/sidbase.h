@@ -1,5 +1,6 @@
 #pragma once
 #include "base.h"
+#include <cassert>
 
 struct SIDBaseEntry {
     stringid_64 hash;
@@ -12,31 +13,24 @@ struct SIDBase {
     SIDBaseEntry *m_entries;
 
     [[nodiscard]] const char *search(const stringid_64 hash) const noexcept {
-        const SIDBaseEntry &middle = m_entries[this->m_num_entries / 2];
-        if (this->m_num_entries == 1 && middle.hash != hash) {
-            return nullptr;
-        }
-        if (middle.hash == hash) {
-            return reinterpret_cast<const char*>(this->m_sidbytes + middle.offset);
-        } else if (hash > middle.hash) {
-            return this->search(hash, m_entries + this->m_num_entries / 2, m_num_entries / 2);
-        } else {
-            return this->search(hash, m_entries, this->m_num_entries / 2);
-        }
-    }
+        u64 low = 0;
+        u64 high = m_num_entries - 1;
+        u64 mid = 0;
 
-    [[nodiscard]] const char *search(const stringid_64 hash, const SIDBaseEntry *begin, const u64 num_entries) const noexcept {
-        const SIDBaseEntry &middle = begin[num_entries / 2];
-        if (num_entries == 1 && middle.hash != hash) {
-            return nullptr;
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+            const SIDBaseEntry* current = m_entries + mid;
+
+            if (current->hash == hash) [[unlikely]]
+                return reinterpret_cast<const char*>(this->m_sidbytes + current->offset);
+
+            if (current->hash < hash) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
         }
-        if (middle.hash == hash) {
-            return reinterpret_cast<const char*>(this->m_sidbytes + middle.offset);
-        } else if (hash > middle.hash) {
-            return this->search(hash, begin + num_entries / 2, num_entries / 2);
-        } else {
-            return this->search(hash, begin, num_entries / 2);
-        }
+        return nullptr;
     }
 
     ~SIDBase() {

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     ui.setupUi(this);
     QPalette p = this->getListingView()->palette();
     p.setColor(QPalette::Base, MainWindow::BACKGROUND_COLOR);
-    p.setColor(QPalette::Text, MainWindow::BLANK_COLOR);
+    p.setColor(QPalette::Text, MainWindow::COMMENT_COLOR);
     getListingView()->setPalette(p);
 }
 

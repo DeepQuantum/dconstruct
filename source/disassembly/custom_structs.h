@@ -1,17 +1,26 @@
 #pragma once 
 #include "base.h"
 
+namespace dc_structs {
+    struct array {
+        const u64* data;
+        const u64 &operator[](const u64 idx) const noexcept {
+            return this->data[idx];
+        }
+    };
 
-struct DCArray {
-    const u64* data;
+    struct symbol_array_contents {
+        u64 size;
+        array keys;
+    };
 
-    const u64 &operator[](const u64 idx) {
-        return this->data[idx];
-    }
-};
+    struct symbol_array {
+        symbol_array_contents contents;
+    };
 
-struct DCMap {
-    u32 size;
-    DCArray keys;
-    DCArray values;
-};
+    struct map {
+        u32 size;
+        array keys;
+        array values;
+    };
+}

@@ -24,7 +24,7 @@ struct Entry
 {
     stringid_64			    m_scriptId;				///< <c>0x00</c>: StringId64 of the script name
     stringid_64				m_typeId;				///< <c>0x08</c>: StringId64 of the script type eg SID("state-script")
-    void*					m_entryPtr;				///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
+    const void*					m_entryPtr;				///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
 };
 
 #endif // DCHEADER_H
