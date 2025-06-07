@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 enum SymbolType {
     B8,
@@ -47,10 +48,13 @@ public:
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
-    std::vector<uint8_t> m_bytes;
-    std::vector<Entry*> m_entries;
-    i32 disassemble_file(SIDBase &sidbase);
+    u8 *m_bytes;
+    const char *m_stringsPtr;
+    std::set<uintptr_t> m_filePtrs;
+    std::vector<const Entry*> m_entries;
+    i32 disassemble_file(const SIDBase &sidbase);
     std::map<stringid_64, const char*> sid_cache;
+
 
 private:
     void read_reloc_table();

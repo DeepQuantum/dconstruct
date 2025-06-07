@@ -35,9 +35,11 @@ private:
 
     [[nodiscard]] const char *lookup(const stringid_64 hash) noexcept;
     void insert_header_line();
-    void process_unmapped_structs() noexcept;
+    b8 is_possible_float(const f32 *ptr);
+    void process_unmapped_structs();
     void disassemble_state_script(const StateScript *stateScript);
-    void parse_custom_struct(const DC_Struct *symbol, const u64 indent);
+    void insert_non_primitive_struct(const DC_Struct *symbol, const u64 indent);
+    void insert_unmapped_struct(const DC_Struct *_struct, const u64 indent);
     void insert_variable(const SsDeclaration *var);
     void insert_on_block(const SsOnBlock *block);
     FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);
