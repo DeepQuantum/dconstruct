@@ -19,7 +19,7 @@ struct DC_Struct {
 
 class ListingViewController {
 public:
-    ListingViewController(BinaryFile &file, MainWindow *mainWindow);
+    ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase);
     ~ListingViewController();
     void create_listing_view();
     void insert_entry(const Entry *entry);
@@ -30,6 +30,7 @@ public:
 private:
     BinaryFile m_currentFile;
     MainWindow *m_mainWindow;
+    const SIDBase *m_sidbase;
 
     std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
 

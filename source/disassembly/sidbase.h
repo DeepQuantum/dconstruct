@@ -7,35 +7,17 @@ struct SIDBaseEntry {
     u64 offset;
 };
 
-struct SIDBase {
-    u64 m_num_entries;
-    u8 *m_sidbytes;
-    SIDBaseEntry *m_entries;
+class SIDBase {
 
-    [[nodiscard]] const char *search(const stringid_64 hash) const noexcept {
-        u64 low = 0;
-        u64 high = m_num_entries - 1;
-        u64 mid = 0;
-
-        while (low <= high) {
-            mid = low + (high - low) / 2;
-            const SIDBaseEntry* current = m_entries + mid;
-
-            if (current->hash == hash) [[unlikely]]
-                return reinterpret_cast<const char*>(this->m_sidbytes + current->offset);
-
-            if (current->hash < hash) {
-                low = mid + 1;
-            } else {
-                if (mid == 0) break;
-                high = mid - 1;
-            }
-        }
-        return nullptr;
-    }
-
-    ~SIDBase() {
-        delete[] this->m_sidbytes;
-    }
+public:
+    void load(const char* path = "./sidbase.bin") noexcept;
+    [[nodiscard]] const char *search(const stringid_64 hash) const noexcept;
+    [[nodiscard]] const b8 sid_exists(const stringid_64 hash) const noexcept;
+    ~SIDBase() noexcept;
+    
+private:
+    u64 m_num_entries = 0;
+    u8 *m_sidbytes = nullptr;
+    SIDBaseEntry *m_entries = nullptr;
 };
 

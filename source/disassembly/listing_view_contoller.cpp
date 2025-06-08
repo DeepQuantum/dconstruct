@@ -6,9 +6,10 @@
 #include <QScrollBar>
 #include "listing_view_controller.h"
 
-ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow) {
+ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase) {
     this->m_mainWindow = mainWindow;
     this->m_currentFile = file;
+    this->m_sidbase = sidbase;
     this->create_listing_view();
 }
 
@@ -24,7 +25,7 @@ ListingViewController::~ListingViewController() {
         return res->second;
     }
 
-    const char *hash_string = this->m_mainWindow->m_sidbase.search(sid);
+    const char *hash_string = this->m_sidbase->search(sid);
     if (hash_string == nullptr) {
         hash_string = int_to_string_id(sid);
         this->m_currentFile.sid_cache.emplace(sid, hash_string);
@@ -86,7 +87,7 @@ void ListingViewController::process_unmapped_structs() {
                     struct_map += "\n";
                     offset += 4;
                 }
-                is_next_hash = this->m_mainWindow->m_sidbase.search(*reinterpret_cast<const stringid_64*>(data_ptr)) != nullptr;
+                is_next_hash = this->m_sidbase->search(*reinterpret_cast<const stringid_64*>(data_ptr)) != nullptr;
             } while (!is_next_hash);
             this->insert_span(struct_map.c_str());
         }
@@ -99,6 +100,7 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
     std::string struct_map = this->lookup(struct_ptr->m_typeID);
     struct_map += ":\n";
     do { 
+        struct_map += std::string(indent, ' ');
         const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(&struct_ptr->m_data) + offset;
         auto ptr_loc = this->m_currentFile.m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
         if (ptr_loc != this->m_currentFile.m_filePtrs.end()) {
@@ -107,10 +109,9 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
             } else {
                 const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(*ptr_loc - 8);
                 std::string type = this->lookup(_struct->m_typeID);
-                struct_map += "  ";
                 struct_map += type;
                 struct_map += "*\n";
-                this->insert_struct(_struct);
+                this->insert_struct(_struct, indent + 4);
             }
             offset += 8;
         }
@@ -126,7 +127,7 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
             struct_map += "\n";
             offset += 4;
         }
-        is_next_hash = this->m_mainWindow->m_sidbase.search(*reinterpret_cast<const stringid_64*>(data_ptr)) != nullptr;
+        is_next_hash = this->m_sidbase->sid_exists(*reinterpret_cast<const stringid_64*>(data_ptr));
     } while (!is_next_hash);
     this->insert_span(struct_map.c_str());
 }
@@ -138,7 +139,7 @@ void ListingViewController::insert_non_primitive_struct(const DC_Struct *entry, 
             const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&entry->m_data);
             this->insert_span("\n");
             for (u64 i = 0; i < array->contents.size; ++i) {
-                this->insert_span_fmt("%d. %s\n", format, i + 1, this->lookup(array->contents.keys[i]), format);
+                this->insert_span_fmt("%d. %s\n", format, i + 1, this->lookup(array->contents.keys[i]));
             }
             break;
         }
@@ -169,7 +170,6 @@ void ListingViewController::create_listing_view() {
         this->insert_entry(this->m_currentFile.m_dcheader->m_pStartOfData + i);
         this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14, .indent = 0});
     }
-    //this->process_unmapped_structs();
     this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
     this->m_mainWindow->getListingView()->ensureCursorVisible();
 }
@@ -181,11 +181,9 @@ void ListingViewController::insert_entry(const Entry *entry) {
 }
 
 void ListingViewController::insert_struct(const DC_Struct *entry, const u64 indent) {
-    const char *line;
-    char buffer[300] = {0};
     const u64 offset = this->get_offset((void*)entry);
 
-    this->insert_span_fmt("[0x%06X] ", TextFormat{MainWindow::NUM_COLOR, 16, 2}, offset);
+    this->insert_span_fmt("[0x%06X] ", TextFormat{MainWindow::NUM_COLOR, 16, indent + 2}, offset);
 
     TextFormat opcode_format = TextFormat{MainWindow::OPCODE_COLOR, 10};
 
@@ -332,7 +330,6 @@ void ListingViewController::insert_variable(const SsDeclaration *var) {
 }
 
 void ListingViewController::insert_on_block(const SsOnBlock *block) {
-    char buffer[32] = {0};
     TextFormat block_format{MainWindow::COMMENT_COLOR, 12, 9};
     switch (block->m_blockType) {
         case 0: {
@@ -373,6 +370,7 @@ void ListingViewController::insert_on_block(const SsOnBlock *block) {
 
 void ListingViewController::disassemble_state_script(const StateScript *stateScript) {
     TextFormat header_format{MainWindow::COMMENT_COLOR, 14, 6};
+
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
         this->insert_span("OPTIONS: ", header_format);
@@ -381,6 +379,7 @@ void ListingViewController::disassemble_state_script(const StateScript *stateScr
             this->insert_span("\n");
         }
     }
+
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
     if (decl_table != nullptr) {
         this->insert_span("DECLARATIONS: \n", header_format);
@@ -391,7 +390,6 @@ void ListingViewController::disassemble_state_script(const StateScript *stateScr
             }
         }
     }
-    char buffer[64] = {0};
     for (u64 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
         this->insert_span_fmt("STATE %s:\n", header_format, this->lookup(state_ptr->m_stateId));

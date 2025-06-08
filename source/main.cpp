@@ -8,10 +8,14 @@ int main(int argc, char *argv[]) {
     //a.setStyleSheet("Fusion");
     MainWindow w;
     
-    w.load_sidbase("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
+    SIDBase *base = new SIDBase();
+    base->load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
+    w.m_sidbase = base;
     BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/weapon-gameplay.bin");
-    test.disassemble_file(w.m_sidbase);
-    ListingViewController *controller = new ListingViewController(test, &w);
+    test.disassemble_file(*base);
+    ListingViewController *controller = new ListingViewController(test, &w, base);
     w.show();
+
+    delete base;
     return a.exec();
 }
