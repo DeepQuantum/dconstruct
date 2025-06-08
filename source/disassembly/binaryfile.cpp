@@ -55,8 +55,7 @@ void BinaryFile::read_reloc_table() {
         }
     }
 
-    const u64 string_offset = *reinterpret_cast<const u32*>(this->m_bytes + 0x0C);
-    this->m_stringsPtr = reinterpret_cast<const char*>(this->m_bytes + string_offset); 
+    this->m_stringsPtr = reinterpret_cast<const char*>(this->m_bytes + this->m_dcheader->m_stringsOffset);
 }
 
 BinaryFile::~BinaryFile() {
