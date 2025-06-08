@@ -13,9 +13,10 @@ int main(int argc, char *argv[]) {
     w.m_sidbase = base;
     BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/weapon-gameplay.bin");
     test.disassemble_file(*base);
-    ListingViewController *controller = new ListingViewController(test, &w, base);
+    FILE *file = fopen("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test.txt", "w");
+    ListingViewController *controller = new ListingViewController(test, &w, base, file);
     w.show();
-
+ 
     delete base;
     return a.exec();
 }

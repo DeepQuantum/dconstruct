@@ -6,10 +6,11 @@
 #include <QScrollBar>
 #include "listing_view_controller.h"
 
-ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase) {
+ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr) {
     this->m_mainWindow = mainWindow;
     this->m_currentFile = file;
     this->m_sidbase = sidbase;
+    this->m_outfptr = outfptr;
     this->create_listing_view();
 }
 
@@ -41,6 +42,12 @@ void ListingViewController::insert_span_fmt(const char *format, const TextFormat
 }
 
 void ListingViewController::insert_span(const char *line, const TextFormat &text_format, const u64 indent) {
+    if (this->m_outfptr != nullptr) {
+        char buffer[256] = {0};
+        sprintf(buffer, "%*s%s", indent, "", line);
+        fwrite(buffer, sizeof(char), strlen(buffer), this->m_outfptr);
+        return;
+    }
     auto* view = this->m_mainWindow->getListingView();
     QTextCursor cursor = view->textCursor();
     cursor.movePosition(QTextCursor::End);
@@ -53,50 +60,16 @@ void ListingViewController::insert_span(const char *line, const TextFormat &text
 }
 
 b8 ListingViewController::is_possible_float(const f32 *val) {
-    return *val == roundf(*val * 100.f) / 100.f && *val > -1000.f && *val < 1000.f;
-}
-
-void ListingViewController::process_unmapped_structs() {
-    for (const auto& [sid, struct_ptrs] : this->m_unmappedEntries) {
-        std::string struct_map = this->lookup(sid);
-        struct_map += ":\n";
-        for (const auto& struct_ptr : struct_ptrs) {
-            u64 offset = 0;
-            b8 is_next_hash = false;
-            do { 
-                const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(struct_ptr->m_data) + offset;
-                auto ptr_loc = this->m_currentFile.m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
-                if (ptr_loc != this->m_currentFile.m_filePtrs.end()) {
-                    const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(*ptr_loc - 8);
-                    std::string type = this->lookup(_struct->m_typeID);
-                    struct_map += "  ";
-                    struct_map += type;
-                    struct_map += "*\n";
-                    offset += 8;
-                }
-                else if (this->is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
-                    struct_map += "float: ";
-                    struct_map += std::to_string(*reinterpret_cast<const f32*>(data_ptr));
-                    struct_map += "\n";
-                    offset += 4;
-                }
-                else {
-                    struct_map += "int: ";
-                    struct_map += std::to_string(*reinterpret_cast<const i32*>(data_ptr));
-                    struct_map += "\n";
-                    offset += 4;
-                }
-                is_next_hash = this->m_sidbase->search(*reinterpret_cast<const stringid_64*>(data_ptr)) != nullptr;
-            } while (!is_next_hash);
-            this->insert_span(struct_map.c_str());
-        }
-    }
+    float rounded = roundf(*val * 1e5f) / 1e5f;
+    return fabsf(*val - rounded) < 1e-5f && *val > -1e5f && *val < 1e5f;
 }
 
 void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64 indent) {
     u64 offset = 0;
     b8 offset_gets_pointed_to = false;
+    u64 move = 0;
     while (!offset_gets_pointed_to) {
+        offset += move;
         const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(&struct_ptr->m_data) + offset;
         auto ptr_loc = this->m_currentFile.m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
         const char *str_ptr = nullptr;
@@ -110,21 +83,21 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
                 this->insert_struct(_struct, indent + 2);
                 this->insert_span("}\n", {.m_color = MainWindow::TYPE_COLOR}, indent);
             }
-            offset += 4;
-        }
-        else if (this->is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
-            this->insert_span_fmt("float: %.2f\n", {.m_color = MainWindow::NUM_COLOR}, indent, *reinterpret_cast<const f32*>(data_ptr));
-            offset += 4;
+            move = 8;
         }
         else if ((str_ptr = this->m_sidbase->search(*reinterpret_cast<const stringid_64*>(data_ptr))) != nullptr) {
-            this->insert_span_fmt("sid: %s\n", {.m_color = MainWindow::TYPE_COLOR}, indent, str_ptr);
-            offset += 4;
+            this->insert_span_fmt("sid: %s\n", {.m_color = MainWindow::HASH_COLOR}, indent, str_ptr);
+            move = 8;
+        }
+        else if (this->is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
+            this->insert_span_fmt("float: %.4f\n", {.m_color = MainWindow::NUM_COLOR}, indent, *reinterpret_cast<const f32*>(data_ptr));
+            move = 4;
         }
         else {
             this->insert_span_fmt("int: %d\n", {.m_color = MainWindow::NUM_COLOR}, indent, *reinterpret_cast<const i32*>(data_ptr));
-            offset += 4;
+            move = 4;
         }
-        offset_gets_pointed_to = this->m_currentFile.m_filePtrs.find(data_ptr + offset + 4) != this->m_currentFile.m_filePtrs.end();
+        offset_gets_pointed_to = this->m_currentFile.m_filePtrs.find(data_ptr + move + 8) != this->m_currentFile.m_filePtrs.end();
     }
 }
 
@@ -152,6 +125,7 @@ void ListingViewController::insert_entry(const Entry *entry) {
 void ListingViewController::insert_struct(const DC_Struct *entry, const u64 indent) {
     const u64 offset = this->get_offset((void*)entry);
     TextFormat opcode_format = TextFormat{MainWindow::OPCODE_COLOR, 14};
+    
 
     switch (entry->m_typeID)
     {
@@ -199,7 +173,7 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
             this->insert_span_fmt("keys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16}, indent + 4, this->get_offset(map->keys.data), this->get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = this->lookup(map->keys[i]);
-                this->insert_span(key_hash, opcode_format);
+                this->insert_span_fmt("%s:\n", opcode_format, indent + 4, key_hash);
                 const u64 *value_ptr = reinterpret_cast<const u64*>(map->values[i]);
                 const DC_Struct *struct_ptr = reinterpret_cast<const DC_Struct*>(map->values[i] - 8);
                 this->insert_struct(struct_ptr, indent + 4);
@@ -208,10 +182,15 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         }
         default:
         {
+            if (this->m_currentFile.m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile.m_emittedStructs.end()) {
+                this->insert_span("ALREADY_EMITTED\n", {.m_color = MainWindow::COMMENT_COLOR}, indent);
+                return;
+            }
             this->insert_unmapped_struct(entry, indent + 4);
             break;
         }
     }
+    this->m_currentFile.m_emittedStructs.insert(reinterpret_cast<uintptr_t>(entry));
 }
 
 u32 ListingViewController::get_offset(const void *symbol) {
@@ -1159,7 +1138,7 @@ void ListingViewController::insert_header_line() {
         current_script_name = this->lookup(this->m_currentFile.m_dcscript->m_stateScriptId);
         current_script_id = int_to_string_id(this->m_currentFile.m_dcscript->m_stateScriptId);
     } else {
-        current_script_name = "UNKOWN SCRIPT";
+        current_script_name = "UNKNOWN SCRIPT";
         current_script_id = "UNKNOWN SCRIPT ID";
     }
     this->m_mainWindow->getListingView()->clear();

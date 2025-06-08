@@ -54,6 +54,8 @@ public:
     std::vector<const Entry*> m_entries;
     i32 disassemble_file(const SIDBase &sidbase);
     std::map<stringid_64, const char*> sid_cache;
+    std::set<uintptr_t> m_emittedStructs{};
+
 
 
 private:

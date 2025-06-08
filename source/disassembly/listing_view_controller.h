@@ -18,7 +18,7 @@ struct DC_Struct {
 
 class ListingViewController {
 public:
-    ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase);
+    ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr = nullptr);
     ~ListingViewController();
     void create_listing_view();
     void insert_entry(const Entry *entry);
@@ -30,6 +30,7 @@ private:
     BinaryFile m_currentFile;
     MainWindow *m_mainWindow;
     const SIDBase *m_sidbase;
+    FILE *m_outfptr;
 
     std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
 
@@ -40,7 +41,6 @@ private:
     [[nodiscard]] const char *lookup(const stringid_64 hash) noexcept;
     void insert_header_line();
     b8 is_possible_float(const f32 *ptr);
-    void process_unmapped_structs();
     void disassemble_state_script(const StateScript *stateScript);
     void insert_unmapped_struct(const DC_Struct *_struct, const u64 indent);
     void insert_variable(const SsDeclaration *var);
