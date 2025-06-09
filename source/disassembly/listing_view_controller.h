@@ -28,7 +28,7 @@ public:
 
 private:
     BinaryFile m_currentFile;
-    MainWindow *m_mainWindow;
+    MainWindow *m_mainWindow = nullptr;
     const SIDBase *m_sidbase;
     FILE *m_outfptr;
 

@@ -31,8 +31,6 @@ public:
     constexpr static QColor BACKGROUND_COLOR = QColor(28, 29, 30);
     constexpr static QColor HASH_COLOR = QColor(86, 156, 214);
     
-    SIDBase *m_sidbase;
-
     constexpr static u8 VersionNumber = 0x01;
 
     QTextEdit *getListingView() const noexcept {

@@ -108,8 +108,10 @@ void ListingViewController::create_listing_view() {
         this->insert_entry(this->m_currentFile.m_dcheader->m_pStartOfData + i);
         this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14});
     }
-    this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
-    this->m_mainWindow->getListingView()->ensureCursorVisible();
+    if (this->m_mainWindow != nullptr) {
+        this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
+        this->m_mainWindow->getListingView()->ensureCursorVisible();
+    }
 }
 
 void ListingViewController::insert_entry(const Entry *entry) {
@@ -1141,8 +1143,10 @@ void ListingViewController::insert_header_line() {
         current_script_name = "UNKNOWN SCRIPT";
         current_script_id = "UNKNOWN SCRIPT ID";
     }
-    this->m_mainWindow->getListingView()->clear();
-    this->m_mainWindow->getListingView()->setReadOnly(true);
+    if (this->m_mainWindow != nullptr) {
+        this->m_mainWindow->getListingView()->clear();
+        this->m_mainWindow->getListingView()->setReadOnly(true);
+    }
     this->insert_span_fmt("DeepQuantum's DC Disassembler ver. %d\n", header_format, 14, MainWindow::VersionNumber);
     this->insert_span_fmt("Listing for script: %s\n", header_format, 14, current_script_name);
     this->insert_span_fmt("Script ID: %s\n", header_format, 14, current_script_id);

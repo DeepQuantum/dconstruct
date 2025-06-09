@@ -10,7 +10,7 @@
         "cwd": "${workspaceFolder}/build",
         "preLaunchTask": "build",
         "environment": [],
-        "externalConsole": false,
+        "externalConsole": true,
         "MIMode": "gdb",
         "miDebuggerPath": "C:/Qt/Tools/mingw1310_64/bin/gdb.exe",
         "setupCommands": [

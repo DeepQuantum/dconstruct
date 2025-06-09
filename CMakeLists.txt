@@ -14,9 +14,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/source/ui")
+set(CMAKE_AUTOUIC_SEARCH_PATHS "${SOURCE_DIR}/ui")
 
-file(GLOB_RECURSE SOURCE_FILES
+file(GLOB_RECURSE ALL_SOURCE_FILES
     "${SOURCE_DIR}/*.cpp"
     "${SOURCE_DIR}/*.c"
     "${SOURCE_DIR}/*.h"
@@ -24,60 +24,103 @@ file(GLOB_RECURSE SOURCE_FILES
     "${SOURCE_DIR}/*.ui"
 )
 
+# Separate main files
+set(GUI_MAIN "${SOURCE_DIR}/main_gui.cpp")
+set(CLI_MAIN "${SOURCE_DIR}/main_cli.cpp")
+
+# Filter common sources (exclude both mains)
+list(REMOVE_ITEM ALL_SOURCE_FILES ${GUI_MAIN} ${CLI_MAIN})
+
+# --- GUI TARGET ---
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(tlou2_disasm
+    qt_add_executable(tlou2_disasm_gui
         MANUAL_FINALIZATION
-        ${SOURCE_FILES}
+        ${GUI_MAIN}
+        ${ALL_SOURCE_FILES}
     )
-    target_compile_options(tlou2_disasm PRIVATE
-        $<$<CONFIG:Release>:-Ofast -march=znver4>
-        $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
-        $<$<CONFIG:Debug>:-O0 -g>
-    )
-
-# Define target properties for Android with Qt 6 as:
-# set_property(TARGET tlou2_disasm APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-# ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
-    if(ANDROID)
-        add_library(tlou2_disasm SHARED
-            ${SOURCE_FILES}
-        )
-
-    # Define properties for Android with Qt 5 after find_package() calls as:
-    # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(tlou2_disasm
-            ${SOURCE_FILES}
-        )
-    endif()
+    add_executable(tlou2_disasm_gui
+        ${GUI_MAIN}
+        ${ALL_SOURCE_FILES}
+    )
 endif()
 
-target_link_libraries(tlou2_disasm PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
+target_link_libraries(tlou2_disasm_gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm)
-endif()
-
-set_target_properties(tlou2_disasm PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+target_compile_options(tlou2_disasm_gui PRIVATE
+    $<$<CONFIG:Release>:-Ofast -march=znver4>
+    $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
+    $<$<CONFIG:Debug>:-O0 -g>
 )
 
-include(GNUInstallDirs)
-install(TARGETS tlou2_disasm
+set_target_properties(tlou2_disasm_gui PROPERTIES
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+)
+
+# Optional bundle ID
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+    set_target_properties(tlou2_disasm_gui PROPERTIES
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm
+    )
+endif()
+
+install(TARGETS tlou2_disasm_gui
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(tlou2_disasm)
+    qt_finalize_executable(tlou2_disasm_gui)
+endif()
+
+# --- CLI TARGET ---
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mconsole")
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(tlou2_disasm_cli
+        MANUAL_FINALIZATION
+        ${CLI_MAIN}
+        ${ALL_SOURCE_FILES}
+    )
+else()
+    add_executable(tlou2_disasm_cli
+        ${CLI_MAIN}
+        ${ALL_SOURCE_FILES}
+    )
+endif()
+
+target_link_libraries(tlou2_disasm_cli PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
+
+target_compile_options(tlou2_disasm_cli PRIVATE
+    $<$<CONFIG:Release>:-Ofast -march=znver4>
+    $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
+    $<$<CONFIG:Debug>:-O0 -g>
+)
+
+set_target_properties(tlou2_disasm_cli PROPERTIES
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+)
+
+# Optional bundle ID
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+    set_target_properties(tlou2_disasm_cli PROPERTIES
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm
+    )
+endif()
+
+install(TARGETS tlou2_disasm_cli
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(tlou2_disasm_cli)
 endif()
