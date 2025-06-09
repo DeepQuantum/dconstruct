@@ -1,6 +1,6 @@
 #pragma once
 
-#include "string.h"
+#include <string>
 #include "stdio.h"
 #include <cstdint>
 
@@ -29,14 +29,14 @@ constexpr stringid_64 ToStringId64(const char* str) {
 	return base;
 }
 
-inline const char *int_to_string_id(stringid_64 sid) {
-	char *buffer = new char[16];
+inline const std::string int_to_string_id(stringid_64 sid) {
+	char buffer[20] = {0};
     sprintf(buffer, "#%016llX", sid);
     return buffer;
 }
 
-inline const char *offset_to_string(u32 offset) {
-    char *buffer = new char[8];
+inline const std::string offset_to_string(u32 offset) {
+    char buffer[20] = {0};
     sprintf(buffer, "0x%06llX", offset);
     return buffer;
 }

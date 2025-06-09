@@ -18,8 +18,7 @@ struct DC_Struct {
 
 class ListingViewController {
 public:
-    ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr = nullptr);
-    ~ListingViewController();
+    ListingViewController(BinaryFile *file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr = nullptr);
     void create_listing_view();
     void insert_entry(const Entry *entry);
     void insert_struct(const DC_Struct *entry, const u64 indent = 0);
@@ -27,10 +26,10 @@ public:
     template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, const u64 indent = 0, Args ...args);
 
 private:
-    BinaryFile m_currentFile;
+    BinaryFile *m_currentFile = nullptr;
     MainWindow *m_mainWindow = nullptr;
-    const SIDBase *m_sidbase;
-    FILE *m_outfptr;
+    const SIDBase *m_sidbase = nullptr;
+    FILE *m_outfptr = nullptr;
 
     std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
 

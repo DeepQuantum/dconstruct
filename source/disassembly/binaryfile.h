@@ -48,12 +48,12 @@ public:
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
-    u8 *m_bytes;
+    u8 *m_bytes = nullptr;
     const char *m_stringsPtr;
     std::set<uintptr_t> m_filePtrs;
     std::vector<const Entry*> m_entries;
     i32 disassemble_file(const SIDBase &sidbase);
-    std::map<stringid_64, const char*> sid_cache;
+    std::map<stringid_64, const std::string> sid_cache;
     std::set<uintptr_t> m_emittedStructs{};
 
 

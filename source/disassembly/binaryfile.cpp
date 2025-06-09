@@ -60,7 +60,4 @@ void BinaryFile::read_reloc_table() {
 
 BinaryFile::~BinaryFile() {
     delete[] this->m_bytes;
-    for (const auto &[sid, string] : this->sid_cache) {
-        delete[] string;
-    }
 }

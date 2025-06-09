@@ -6,7 +6,7 @@
 #include <QScrollBar>
 #include "listing_view_controller.h"
 
-ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr) {
+ListingViewController::ListingViewController(BinaryFile *file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr) {
     this->m_mainWindow = mainWindow;
     this->m_currentFile = file;
     this->m_sidbase = sidbase;
@@ -14,22 +14,17 @@ ListingViewController::ListingViewController(BinaryFile &file, MainWindow *mainW
     this->create_listing_view();
 }
 
-ListingViewController::~ListingViewController() {
-    for (auto &[hash, string] : this->m_currentFile.sid_cache) {
-        delete[] string;
-    }
-}
-
 [[nodiscard]] const char *ListingViewController::lookup(const stringid_64 sid) noexcept {
-    auto res = this->m_currentFile.sid_cache.find(sid);
-    if (res != this->m_currentFile.sid_cache.end()) {
-        return res->second;
+    auto res = this->m_currentFile->sid_cache.find(sid);
+    if (res != this->m_currentFile->sid_cache.end()) {
+        return res->second.c_str();
     }
 
     const char *hash_string = this->m_sidbase->search(sid);
     if (hash_string == nullptr) {
-        hash_string = int_to_string_id(sid);
-        this->m_currentFile.sid_cache.emplace(sid, hash_string);
+        const std::string new_hash_string = int_to_string_id(sid);
+        auto [iter, inserted] = this->m_currentFile->sid_cache.emplace(sid, std::move(new_hash_string));
+        hash_string = iter->second.c_str();
     }
     return hash_string;
 }
@@ -71,10 +66,10 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
     while (!offset_gets_pointed_to) {
         offset += move;
         const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(&struct_ptr->m_data) + offset;
-        auto ptr_loc = this->m_currentFile.m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
+        auto ptr_loc = this->m_currentFile->m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
         const char *str_ptr = nullptr;
-        if (ptr_loc != this->m_currentFile.m_filePtrs.end()) {
-            if (*ptr_loc >= reinterpret_cast<uintptr_t>(this->m_currentFile.m_stringsPtr)) {
+        if (ptr_loc != this->m_currentFile->m_filePtrs.end()) {
+            if (*ptr_loc >= reinterpret_cast<uintptr_t>(this->m_currentFile->m_stringsPtr)) {
                 this->insert_span("string: ", {.m_color = MainWindow::TYPE_COLOR}, indent);
                 this->insert_span_fmt("%s\n", {.m_color = MainWindow::STRING_COLOR}, 0, reinterpret_cast<const char*>(*ptr_loc));
             } else {
@@ -97,15 +92,15 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
             this->insert_span_fmt("int: %d\n", {.m_color = MainWindow::NUM_COLOR}, indent, *reinterpret_cast<const i32*>(data_ptr));
             move = 4;
         }
-        offset_gets_pointed_to = this->m_currentFile.m_filePtrs.find(data_ptr + move + 8) != this->m_currentFile.m_filePtrs.end();
+        offset_gets_pointed_to = this->m_currentFile->m_filePtrs.find(data_ptr + move + 8) != this->m_currentFile->m_filePtrs.end();
     }
 }
 
 void ListingViewController::create_listing_view() {
     this->insert_header_line();
     const std::string sep = std::string(100, '#') + "\n";
-    for (std::size_t i = 0; i < this->m_currentFile.m_dcheader->m_numEntries; ++i) {
-        this->insert_entry(this->m_currentFile.m_dcheader->m_pStartOfData + i);
+    for (std::size_t i = 0; i < this->m_currentFile->m_dcheader->m_numEntries; ++i) {
+        this->insert_entry(this->m_currentFile->m_dcheader->m_pStartOfData + i);
         this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14});
     }
     if (this->m_mainWindow != nullptr) {
@@ -153,13 +148,13 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         }
         case SID("state-script"):
         {
-            this->disassemble_state_script(reinterpret_cast<const StateScript*>(entry->m_data));
+            this->disassemble_state_script(reinterpret_cast<const StateScript*>(&entry->m_data));
             break;
         }
         case SID("script-lambda"):
         {
             this->insert_span("LAMBDA", TextFormat{.m_fontSize = 20}, indent);
-            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(entry->m_data));
+            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data));
             this->insert_function_disassembly_text(function);
             break;
         }
@@ -184,7 +179,7 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         }
         default:
         {
-            if (this->m_currentFile.m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile.m_emittedStructs.end()) {
+            if (this->m_currentFile->m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
                 this->insert_span("ALREADY_EMITTED\n", {.m_color = MainWindow::COMMENT_COLOR}, indent);
                 return;
             }
@@ -192,11 +187,11 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
             break;
         }
     }
-    this->m_currentFile.m_emittedStructs.insert(reinterpret_cast<uintptr_t>(entry));
+    this->m_currentFile->m_emittedStructs.insert(reinterpret_cast<uintptr_t>(entry));
 }
 
 u32 ListingViewController::get_offset(const void *symbol) {
-    return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile.m_dcheader);
+    return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile->m_dcheader);
 }
 
 void ListingViewController::insert_variable(const SsDeclaration *var) {
@@ -1037,14 +1032,15 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
                 dest.m_SID = value;
                 table_entry.m_type = SymbolTableEntryType::STRINGID_64;
                 table_entry.m_hash = value;
-                stackFrame.to_string(dst_str, istr.destination, this->lookup(value));
+                const char* test = this->lookup(value);
+                stackFrame.to_string(dst_str, istr.destination, test);
                 sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, dst_str);
-            } else if (value % 8 == 0 && value < this->m_currentFile.m_size) {
+            } else if (value % 8 == 0 && value < this->m_currentFile->m_size) {
                 dest.m_type = RegisterValueType::R_POINTER;
                 dest.m_PTR = {value, 0};
                 table_entry.m_type = SymbolTableEntryType::POINTER;
                 table_entry.m_pointer = value;
-                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_currentFile.m_bytes[value]);
+                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_currentFile->m_bytes[value]);
             }
             break;
         }
@@ -1136,9 +1132,9 @@ void ListingViewController::insert_header_line() {
     const char* current_script_name;
     const char* current_script_id;
     const TextFormat header_format = {MainWindow::STRING_COLOR, 14};
-    if (this->m_currentFile.m_dcscript != nullptr) {
-        current_script_name = this->lookup(this->m_currentFile.m_dcscript->m_stateScriptId);
-        current_script_id = int_to_string_id(this->m_currentFile.m_dcscript->m_stateScriptId);
+    if (this->m_currentFile->m_dcscript != nullptr) {
+        current_script_name = this->lookup(this->m_currentFile->m_dcscript->m_stateScriptId);
+        current_script_id = int_to_string_id(this->m_currentFile->m_dcscript->m_stateScriptId).c_str();
     } else {
         current_script_name = "UNKNOWN SCRIPT";
         current_script_id = "UNKNOWN SCRIPT ID";
@@ -1150,7 +1146,7 @@ void ListingViewController::insert_header_line() {
     this->insert_span_fmt("DeepQuantum's DC Disassembler ver. %d\n", header_format, 14, MainWindow::VersionNumber);
     this->insert_span_fmt("Listing for script: %s\n", header_format, 14, current_script_name);
     this->insert_span_fmt("Script ID: %s\n", header_format, 14, current_script_id);
-    this->insert_span_fmt("Filesize: %d bytes\n", header_format, 14, this->m_currentFile.m_size);
+    this->insert_span_fmt("Filesize: %d bytes\n", header_format, 14, this->m_currentFile->m_size);
     this->insert_span("START OF DISASSEMBLY\n", header_format, 14);
     this->insert_span("--------------------------------------------------\n", header_format, 14);
 }
