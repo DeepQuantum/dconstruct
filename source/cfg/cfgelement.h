@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <vector>
 
+#include "../disassembly/instructions.h"
+
 class CFGElement : public QGraphicsItem {
 public:
     CFGElement(const QString &text, const QRectF &rect, QGraphicsItem *parent = nullptr);
@@ -15,8 +17,8 @@ public:
 private:
     QString m_text;
     QRectF m_rect;
-    std::vector<CFGElement*> m_incoming;
-    std::vector<CFGElement*> m_outgoing;
+    std::vector<CFGElement*> m_incoming{};
+    std::vector<CFGElement*> m_outgoing{};
 };
 
 #endif // LABELEDRECTITEM_H

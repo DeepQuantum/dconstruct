@@ -33,8 +33,12 @@ public:
     
     constexpr static u8 VersionNumber = 0x01;
 
-    QTextEdit *getListingView() const noexcept {
-        return ui.ListingView;
+    QTextEdit *get_listing_view() const noexcept {
+        return this->ui.ListingView;
+    }
+
+    QGraphicsView *get_graphics_view() const noexcept {
+        return this->ui.graphicsView;
     }
 
     std::vector<BinaryFile> m_scripts;

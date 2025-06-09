@@ -78,8 +78,6 @@ if(QT_VERSION_MAJOR EQUAL 6)
 endif()
 
 # --- CLI TARGET ---
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mconsole")
-
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(tlou2_disasm_cli
         MANUAL_FINALIZATION
@@ -94,6 +92,8 @@ else()
 endif()
 
 target_link_libraries(tlou2_disasm_cli PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
+
+target_link_options(tlou2_disasm_cli PRIVATE -mconsole)
 
 target_compile_options(tlou2_disasm_cli PRIVATE
     $<$<CONFIG:Release>:-Ofast -march=znver4>

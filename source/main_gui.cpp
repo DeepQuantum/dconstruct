@@ -2,20 +2,28 @@
 
 #include <QApplication>
 #include "disassembly/listing_view_controller.h"
+#include "cfg/gaph_view_controller.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     MainWindow w;
-    
-    SIDBase *base = new SIDBase();
-    base->load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
-    BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/weapon-gameplay.bin");
-    test.disassemble_file(*base);
-    FILE *file = fopen("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test.txt", "w");
-    ListingViewController *controller = new ListingViewController(&test, nullptr, base, file);
+    QGraphicsScene s;
+
+    SIDBase base = SIDBase();
+    base.load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
+    BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/ss-wave-manager.bin");
+    test.disassemble_file(base);
+
+    ListingViewController *lvc = new ListingViewController(&test, &w, &base);
+
+    if (test.m_functions.size() >= 1) {
+        GraphicsViewController *gvc = new GraphicsViewController(w.get_graphics_view(), &s, test.m_functions[0].get());
+        gvc->start_draw();
+    }
     w.show();
+    w.get_graphics_view()->setScene(&s);
+    w.get_graphics_view()->show();
  
-    delete base;
     return a.exec();
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "base.h"
 #include <cassert>
+#include <memory>
 
 struct SIDBaseEntry {
     stringid_64 hash;
@@ -13,11 +14,10 @@ public:
     void load(const char* path = "./sidbase.bin") noexcept;
     [[nodiscard]] const char *search(const stringid_64 hash) const noexcept;
     [[nodiscard]] const b8 sid_exists(const stringid_64 hash) const noexcept;
-    ~SIDBase() noexcept;
     
 private:
     u64 m_num_entries = 0;
-    u8 *m_sidbytes = nullptr;
+    std::unique_ptr<u8[]> m_sidbytes;
     SIDBaseEntry *m_entries = nullptr;
 };
 

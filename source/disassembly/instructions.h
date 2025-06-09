@@ -112,8 +112,7 @@ struct Instruction {
     u8 operand2;
     u32 padding;
 
-    std::string opcode_to_string() const noexcept;
-    std::string getRegisterString() const noexcept;
+    const char *opcode_to_string() const noexcept;
     b8 isSymbolLoadInstruction() const noexcept;
     b8 isBranchInstruction() const noexcept;
 };

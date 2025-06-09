@@ -6,7 +6,9 @@
 #include "DCHeader.h"
 #include "DCScript.h"
 #include "sidbase.h"
+#include "instructions.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>
@@ -43,18 +45,17 @@ public:
 
     BinaryFile(const std::string &path);
 
-    ~BinaryFile();
-
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
-    u8 *m_bytes = nullptr;
+    std::unique_ptr<u8[]> m_bytes;
     const char *m_stringsPtr;
     std::set<uintptr_t> m_filePtrs;
     std::vector<const Entry*> m_entries;
     i32 disassemble_file(const SIDBase &sidbase);
     std::map<stringid_64, const std::string> sid_cache;
     std::set<uintptr_t> m_emittedStructs{};
+    std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
 
 
 

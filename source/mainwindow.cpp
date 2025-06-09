@@ -7,11 +7,15 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    ui.setupUi(this);
-    QPalette p = this->getListingView()->palette();
+    this->ui.setupUi(this);
+    QPalette p = this->get_listing_view()->palette();
     p.setColor(QPalette::Base, MainWindow::BACKGROUND_COLOR);
     p.setColor(QPalette::Text, MainWindow::COMMENT_COLOR);
-    getListingView()->setPalette(p);
+    this->get_listing_view()->setPalette(p);
+    this->get_graphics_view()->setRenderHint(QPainter::Antialiasing);  // Optional for better visuals
+    this->get_graphics_view()->setWindowTitle("CFG Element Example");
+    this->get_graphics_view()->resize(400, 300);
+    this->get_graphics_view()->show();
 }
 
 

@@ -1,7 +1,7 @@
 #include "instructions.h"
 #include "string.h"
 
-std::string Instruction::opcode_to_string() const noexcept {
+const char *Instruction::opcode_to_string() const noexcept {
     switch (this->opcode) {
         case Opcode::Return: return "Return";
         case Opcode::IAdd: return "IAdd";

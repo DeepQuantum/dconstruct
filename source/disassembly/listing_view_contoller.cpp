@@ -43,7 +43,7 @@ void ListingViewController::insert_span(const char *line, const TextFormat &text
         fwrite(buffer, sizeof(char), strlen(buffer), this->m_outfptr);
         return;
     }
-    auto* view = this->m_mainWindow->getListingView();
+    auto* view = this->m_mainWindow->get_listing_view();
     QTextCursor cursor = view->textCursor();
     cursor.movePosition(QTextCursor::End);
     view->setTextCursor(cursor);
@@ -104,8 +104,8 @@ void ListingViewController::create_listing_view() {
         this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14});
     }
     if (this->m_mainWindow != nullptr) {
-        this->m_mainWindow->getListingView()->moveCursor(QTextCursor::Start);
-        this->m_mainWindow->getListingView()->ensureCursorVisible();
+        this->m_mainWindow->get_listing_view()->moveCursor(QTextCursor::Start);
+        this->m_mainWindow->get_listing_view()->ensureCursorVisible();
     }
 }
 
@@ -154,8 +154,9 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         case SID("script-lambda"):
         {
             this->insert_span("LAMBDA", TextFormat{.m_fontSize = 20}, indent);
-            auto function = this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data));
-            this->insert_function_disassembly_text(function);
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
+            this->insert_function_disassembly_text(*function);
+            this->m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
         case SID("symbol-array"): {
@@ -320,8 +321,9 @@ void ListingViewController::insert_on_block(const SsOnBlock *block) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
         this->insert_span_fmt("TRACK %s:\n", {MainWindow::COMMENT_COLOR, 12}, 10, this->lookup(track_ptr->m_trackId));
         for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
-            FunctionDisassembly function = this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
-            this->insert_function_disassembly_text(function);
+            auto function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
+            this->insert_function_disassembly_text(*function);
+            this->m_currentFile->m_functions.push_back(std::move(function));
         }
     }
 }
@@ -397,7 +399,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             istr.destination,
             istr.operand1,
             istr.operand2,
-            istr.opcode_to_string().c_str()
+            istr.opcode_to_string()
     );
     char *varying = disassembly_text + strlen(disassembly_text);
 
@@ -1140,8 +1142,8 @@ void ListingViewController::insert_header_line() {
         current_script_id = "UNKNOWN SCRIPT ID";
     }
     if (this->m_mainWindow != nullptr) {
-        this->m_mainWindow->getListingView()->clear();
-        this->m_mainWindow->getListingView()->setReadOnly(true);
+        this->m_mainWindow->get_listing_view()->clear();
+        this->m_mainWindow->get_listing_view()->setReadOnly(true);
     }
     this->insert_span_fmt("DeepQuantum's DC Disassembler ver. %d\n", header_format, 14, MainWindow::VersionNumber);
     this->insert_span_fmt("Listing for script: %s\n", header_format, 14, current_script_name);
