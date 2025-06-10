@@ -38,7 +38,8 @@ test/
 *.pro.user*
 *.qbs.user*
 CMakeLists.txt.user*
-
+*.asm
+*.txt
 # xemacs temporary files
 *.flc
 
