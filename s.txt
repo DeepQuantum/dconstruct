@@ -1,0 +1,1567 @@
+              DeepQuantum's DC Disassembler ver. 1
+              Listing for script: UNKNOWN SCRIPT
+              Script ID: UNKNOWN SCRIPT ID
+              Filesize: 126819 bytes
+              START OF DISASSEMBLY
+              --------------------------------------------------
+  [0x000130] *abby-weapons*: symbol-array 
+  {
+      1. pistol-glock
+      2. pistol-xcaliber
+      3. rifle-vepr
+      4. crossbow
+      5. shotgun-baserri-over-under
+      6. flamethrower
+  }
+####################################################################################################
+  [0x000148] *non-aim-damage-movement*: firearm-damage-movement-def 
+  {
+    point-curve* -> [0x01228] {
+          float: 0.0000
+          float: 0.0000
+          float: 20.0000
+          float: 55.0000
+          float: 100.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 40.0000
+          float: 60.0000
+          float: 100.0000
+          float: 140.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+    }
+    float: 8.5000
+    float: 10.0000
+    float: 0.0000
+    float: 0.3000
+    sid: player-weapon-pickup-settings
+    float: 2.0000
+    float: 0.0000
+    sid: reticle-offset-def-1080p
+    float: 0.0000
+    float: -45.0000
+    sid: symbol-array
+  }
+####################################################################################################
+  [0x000168] *player-weapon-pickup-settings*: player-weapon-pickup-settings 
+  {
+    float: 2.0000
+    float: 0.0000
+    sid: reticle-offset-def-1080p
+    float: 0.0000
+    float: -45.0000
+    sid: symbol-array
+  }
+####################################################################################################
+  [0x000178] *reticle-offset*: reticle-offset-def-1080p 
+  {
+    float: 0.0000
+    float: -45.0000
+    sid: symbol-array
+  }
+####################################################################################################
+  [0x0012B0] *aim-damage-movement*: firearm-damage-movement-def 
+  {
+    point-curve* -> [0x039F8] {
+          float: 0.0000
+          float: 0.0000
+          float: 20.0000
+          float: 55.0000
+          float: 100.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 20.0000
+          float: 35.0000
+          float: 60.0000
+          float: 75.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          sid: weapon-gameplay-def
+          float: 0.0000
+          float: 0.0000
+    }
+    float: 7.5000
+    float: 14.0000
+    float: 0.0000
+    float: 0.2250
+    sid: array
+    sid: ammo-pistol
+    sid: ammo-revolver
+    sid: ammo-xcaliber
+    sid: ammo-revolver-joel
+    sid: ammo-rifle
+    sid: ammo-rifle-tommy
+    sid: ammo-rifle-tommy-boss
+    sid: ammo-rifle-tommy-boss-no-tracer
+    sid: ammo-rifle-tommy-boss-close
+    sid: ammo-rifle-vepr
+    sid: ammo-rifle-galil
+    sid: ammo-rifle-mpx5
+    sid: ammo-rifle-scar
+    sid: ammo-rifle-tommy-buddy
+    sid: ammo-shotgun
+    sid: ammo-shotgun-baserri
+    sid: ammo-shotgun-dragons-breath
+    sid: ammo-shotgun-npc-ellie
+    sid: ammo-arrow
+    sid: ammo-arrow-explosive
+    sid: ammo-arrow-fire
+    sid: ammo-arrow-npc-ellie
+    sid: ammo-crossbow
+    sid: ammo-arrow-toy
+    sid: ammo-arrow-lev
+    sid: ammo-arrow-scar
+    sid: ammo-arrow-explosive-scar
+    sid: ammo-arrow-scar-trailer
+    sid: ammo-flamethrower
+    sid: array
+    sid: pistol-glock
+    sid: pistol-xcaliber
+    sid: rifle-vepr
+    sid: crossbow
+    sid: shotgun-baserri-over-under
+    sid: flamethrower
+    sid: weapon-gameplay-def
+    float: 0.0000
+    int: -1
+    float: 0.0000
+    int: -1
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+  }
+####################################################################################################
+  [0x000188] *ellie-weapons*: symbol-array 
+  {
+      1. pistol-beretta
+      2. pistol-revolver-taurus
+      3. rifle-remington-bolt
+      4. bow-ellie
+      5. shotgun-remington-pump
+      6. rifle-mpx5
+  }
+####################################################################################################
+  [0x000758] *shotgun-aim-damage-movement*: firearm-damage-movement-def 
+  {
+    point-curve* -> [0x01530] {
+          float: 0.0000
+          float: 0.0000
+          float: 10.0000
+          float: 100.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 55.0000
+          float: 70.0000
+          float: 100.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          float: 0.0000
+          sid: weapon-gameplay-def
+          float: 0.0000
+          float: 0.0000
+    }
+    float: 8.0000
+    float: 30.0000
+    float: 0.0000
+    float: 0.2000
+    sid: array
+    sid: pistol-beretta
+    sid: pistol-revolver-taurus
+    sid: rifle-remington-bolt
+    sid: bow-ellie
+    sid: shotgun-remington-pump
+    sid: rifle-mpx5
+    sid: array
+    sid: infected-pustule-thrower
+    sid: fire-trap
+    sid: machete-joel
+    sid: knife-survival-mel-player
+    sid: hammer-modern
+    sid: rifle-mini-14-manny
+    sid: shotgun-remington-pump-black
+    sid: rifle-tommy
+    sid: baseball-bat
+    sid: gas-mask-lev
+    sid: machete
+    sid: trap-bomb
+    sid: trauma-kit
+    sid: bow-scar-explosive
+    sid: map-compass
+    sid: pistol-browning-jesse
+    sid: pistol-revolver-joel-player
+    sid: shotgun-pump-stock-black
+    sid: pistol-beretta
+    sid: rifle-bolt-m24-dark
+    sid: tennis-ball-single-use
+    sid: bow-ellie
+    sid: short-pipe
+    sid: infected-runner-unarmed
+    sid: molotov
+    sid: shotgun-scar
+    sid: hatchet
+    sid: shotgun-remington-pump-ellie-npc
+    sid: tomahawk-sp
+    sid: pistol-browning-yara
+    sid: pain-killer
+    sid: shotgun-remington-manny
+    sid: dagger-scar-lev-player
+    sid: trip-wire-bomb
+    sid: rifle-tommy-buddy
+    sid: hatchet-black
+    sid: pistol-xcaliber
+    sid: axe-scar
+    sid: infected-bloater-unarmed-no-damage
+    sid: infected-rat-king-super-stalker-unarmed
+    sid: baseball-bat-metal
+    sid: unarmed
+    sid: rifle-mpx5-tilt
+    sid: shotgun-dbl-barrel-abby
+    sid: pistol-ruger-jordan
+    sid: hammer-scar
+    sid: pistol-cz75-dina
+    sid: rifle-tommy-boss
+    sid: switchblade-dina-player
+    sid: flamethrower
+    sid: human-unarmed
+    sid: bow-scar
+    sid: pipe-bomb-manny
+    sid: dagger
+    sid: bow-ellie-npc
+    float: -0.0000
+    int: 1374882219
+    sid: infected-rat-king-unarmed
+    sid: pistol-colt-1911-manny
+    sid: squid-squeaky-toy
+    sid: rifle-mel
+    sid: pistol-revolver-militia
+    sid: rifle-m14
+    sid: rifle-tommy-boss-no-tracer
+    sid: pistol-scar
+    sid: pipe-bomb-npc
+    sid: rifle-mpx5
+    sid: pistol-ruger-mel
+    sid: pickaxe-scar
+    sid: rifle-tommy-boss-close
+    sid: torch
+    float: -0.0000
+    int: 1727634360
+    sid: infected-clicker-unarmed
+    sid: abby-unarmed
+    sid: shotgun-baserri-over-under
+    sid: axe-fireman
+    sid: snowball-unarmed
+    sid: infected-pustule-ratking
+    sid: rifle-vepr
+    sid: pistol-glock
+    sid: tomahawk
+    sid: rifle-tommy-abby-player
+    sid: shotgun-pump-joel
+    sid: pipe-wrench
+    sid: crowbar
+    sid: switchblade-abby
+    sid: joel-fists
+    sid: infected-pustule-superstalker
+    sid: rifle-assault-firefly-ellie-player
+    sid: switchblade-exhausted
+    sid: basketball
+    sid: knife-survival-mel
+    sid: crossbow
+    sid: rifle-mini-14-wood
+    sid: pistol-cz75-black
+    sid: stun-bomb
+    sid: rifle-dina-player
+    sid: bow-npc-ellie
+    sid: npc-abby-unarmed
+    sid: rifle-lever-action
+    sid: distraction
+    sid: lead-pipe
+    sid: bow-joel
+    float: -0.0000
+    float: -0.0000
+    sid: sledgehammer
+    sid: rifle-bolt-scar
+    sid: turret-basic
+    sid: infected-bloater-unarmed
+    sid: rifle-lever-jesse
+    sid: rifle-bolt-m24
+    sid: bow-lev
+    sid: smoke-bomb
+    sid: hatchet-scar
+    sid: boar-unarmed
+    sid: health-kit
+    sid: switchblade-npc-ellie
+    sid: machete-wood
+    sid: hunting-knife
+    sid: infected-stalker-unarmed
+    sid: switchblade-stab-combo
+    sid: shotgun-remington-pump-bill
+    sid: fish
+    sid: pistol-revolver-357
+    sid: infected-shambler-unarmed
+    sid: switchblade-dina
+    sid: tennis-ball
+    sid: ellie-unarmed
+    sid: shotgun-pump-mel
+    sid: scythe-scar
+    sid: molotov-npc
+    sid: pistol-tommy
+    sid: infected-runner-unarmed-reduced-damage
+    sid: shotgun-pump-joel-v-bloater
+    sid: shotgun-remington-pump
+    sid: pickaxe-player
+    sid: switchblade
+    sid: two-by-four
+    sid: dog-unarmed
+    sid: pistol-militia
+    sid: snowball
+    sid: dagger-scar-lev
+    sid: pipe-bomb
+    sid: pistol-revolver-joel
+    sid: bow-toy
+    sid: rifle-galil
+    sid: rifle-lever-joel
+    sid: rifle-mini-14
+    sid: bottle
+    sid: machete-scar
+    sid: rifle-remington-bolt
+    sid: pistol-revolver-owen
+    sid: pistol-isaac
+    sid: axe
+    sid: club-2h-scar
+    sid: pistol-revolver-owen-player
+    sid: rifle-dina
+    sid: switchblade-trained-combo
+    sid: pistol-revolver-taurus
+    sid: molotov-npc-ellie
+    sid: bow-scar-trailer
+    sid: infected-unarmed
+    sid: bow-workbench
+    sid: club-1h-police
+    sid: club-1h-scar
+    sid: brick
+    sid: shiv-d
+    sid: shiv-e
+    sid: shiv-f
+    sid: shiv-a
+    sid: shiv-b
+    sid: shiv-c
+    sid: infected-pustule-bloater
+    sid: pistol-revolver-scar
+    sid: array
+    sid: ammo-pistol
+    sid: pistol-beretta
+    sid: ammo-pistol
+    sid: pistol-glock
+    sid: ammo-revolver
+    sid: pistol-revolver-taurus
+    sid: ammo-xcaliber
+    sid: pistol-revolver-owen-player
+    sid: ammo-revolver-joel
+    sid: pistol-revolver-joel-player
+    sid: ammo-xcaliber
+    sid: pistol-xcaliber
+    sid: ammo-pistol
+    sid: pistol-scar
+    sid: ammo-revolver
+    sid: pistol-revolver-scar
+    sid: ammo-pistol
+    sid: pistol-cz75-dina
+    sid: ammo-pistol
+    sid: pistol-cz75-black
+    sid: ammo-pistol
+    sid: pistol-militia
+    sid: ammo-pistol
+    sid: pistol-colt-1911-manny
+    sid: ammo-pistol
+    sid: pistol-ruger-mel
+    sid: ammo-pistol
+    sid: pistol-ruger-jordan
+    sid: ammo-pistol
+    sid: pistol-browning-jesse
+    sid: ammo-pistol
+    sid: pistol-browning-yara
+    sid: ammo-pistol
+    sid: pistol-tommy
+    sid: ammo-pistol
+    sid: pistol-isaac
+    sid: ammo-revolver
+    sid: pistol-revolver-militia
+    sid: ammo-revolver
+    sid: pistol-revolver-357
+    sid: ammo-revolver
+    sid: pistol-revolver-joel
+    sid: ammo-revolver
+    sid: pistol-revolver-owen
+    sid: ammo-rifle
+    sid: rifle-remington-bolt
+    sid: ammo-rifle-tommy
+    sid: rifle-tommy
+    sid: ammo-rifle-tommy-boss
+    sid: rifle-tommy-boss
+    sid: ammo-rifle-tommy-boss-no-tracer
+    sid: rifle-tommy-boss-no-tracer
+    sid: ammo-rifle-tommy-boss-close
+    sid: rifle-tommy-boss-close
+    sid: ammo-rifle-vepr
+    sid: rifle-vepr
+    sid: ammo-rifle-galil
+    sid: rifle-galil
+    sid: ammo-rifle-mpx5
+    sid: rifle-mpx5
+    sid: ammo-rifle-vepr
+    sid: rifle-mini-14
+    sid: ammo-rifle-scar
+    sid: rifle-bolt-scar
+    sid: ammo-rifle
+    sid: rifle-lever-action
+    sid: ammo-rifle-mpx5
+    sid: rifle-mpx5-tilt
+    sid: ammo-rifle-vepr
+    sid: rifle-m14
+    sid: ammo-rifle
+    sid: rifle-tommy-abby-player
+    sid: ammo-rifle-mpx5
+    sid: rifle-assault-firefly-ellie-player
+    sid: ammo-rifle-tommy-buddy
+    sid: rifle-tommy-buddy
+    sid: ammo-rifle-vepr
+    sid: rifle-mini-14-manny
+    sid: ammo-rifle-vepr
+    sid: rifle-mini-14-wood
+    sid: ammo-rifle
+    sid: rifle-lever-jesse
+    sid: ammo-rifle
+    sid: rifle-lever-joel
+    sid: ammo-rifle-vepr
+    sid: rifle-dina
+    sid: ammo-rifle-vepr
+    sid: rifle-mel
+    sid: ammo-rifle-vepr
+    sid: rifle-dina-player
+    sid: ammo-rifle
+    sid: rifle-bolt-m24
+    sid: ammo-rifle
+    sid: rifle-bolt-m24-dark
+    sid: ammo-shotgun
+    sid: shotgun-remington-pump
+    sid: ammo-shotgun
+    sid: shotgun-remington-pump-bill
+    sid: ammo-shotgun-baserri
+    sid: shotgun-baserri-over-under
+    sid: ammo-shotgun-dragons-breath
+    sid: shotgun-baserri-over-under
+    sid: ammo-shotgun
+    sid: shotgun-dbl-barrel-abby
+    sid: ammo-shotgun-dragons-breath
+    sid: shotgun-dbl-barrel-abby
+    sid: ammo-shotgun
+    sid: shotgun-remington-pump-black
+    sid: ammo-shotgun-npc-ellie
+    sid: shotgun-remington-pump-ellie-npc
+    sid: ammo-shotgun
+    sid: shotgun-scar
+    sid: ammo-shotgun
+    sid: shotgun-pump-stock-black
+    sid: ammo-shotgun
+    sid: shotgun-pump-mel
+    sid: ammo-shotgun
+    sid: shotgun-remington-manny
+    sid: ammo-shotgun
+    sid: shotgun-pump-joel
+    sid: ammo-shotgun
+    sid: shotgun-pump-joel-v-bloater
+    sid: ammo-arrow
+    sid: bow-ellie
+    sid: ammo-arrow-explosive
+    sid: bow-ellie
+    sid: ammo-arrow-fire
+    sid: bow-ellie
+    sid: ammo-arrow-npc-ellie
+    sid: bow-npc-ellie
+    sid: ammo-arrow
+    sid: bow-workbench
+    sid: ammo-arrow-explosive
+    sid: bow-workbench
+    sid: ammo-arrow-fire
+    sid: bow-workbench
+    sid: ammo-crossbow
+    sid: crossbow
+    sid: ammo-arrow-toy
+    sid: bow-toy
+    sid: ammo-arrow-lev
+    sid: bow-lev
+    sid: ammo-arrow-lev
+    sid: bow-joel
+    sid: ammo-arrow-scar
+    sid: bow-scar
+    sid: ammo-arrow-scar
+    sid: bow-scar-explosive
+    sid: ammo-arrow-explosive-scar
+    sid: bow-scar-explosive
+    sid: ammo-arrow-scar-trailer
+    sid: bow-scar-trailer
+    sid: ammo-arrow-scar
+    sid: bow-ellie-npc
+    sid: ammo-arrow-explosive
+    sid: bow-ellie-npc
+    sid: ammo-flamethrower
+    sid: flamethrower
+    sid: ammo-pistol
+    sid: turret-basic
+    sid: point-curve
+    float: 0.0000
+    float: 0.0000
+    float: 20.0000
+    float: 55.0000
+    float: 100.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 40.0000
+    float: 60.0000
+    float: 100.0000
+    float: 140.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+    float: 0.0000
+  }
+####################################################################################################
+  [0x000758] *sniper-aim-damage-movement*: firearm-damage-movement-def 
+  {
+ALREADY_EMITTED
+  }
+####################################################################################################
+  [0x0001A0] *ammo-to-weapon-array*: ammo-to-weapon-array 
+  {
+    float: 0.0000
+  }
+####################################################################################################
+  [0x0001B8] *weapon-gameplay-defs*: map 
+  {
+    keys: [0x007B8], values: [0x001F8]
+
+    infected-pustule-thrower:
+        float: 0.0000
+        int: -1
+    fire-trap:
+        float: 0.0000
+        float: 0.0000
+    machete-joel:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    knife-survival-mel-player:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    hammer-modern:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    rifle-mini-14-manny:
+        float: 0.0000
+        float: 0.0000
+    shotgun-remington-pump-black:
+        float: 0.0000
+        float: 0.0000
+    rifle-tommy:
+        float: 0.0000
+        float: 0.0000
+    baseball-bat:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    gas-mask-lev:
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    machete:
+    ALREADY_EMITTED
+    trap-bomb:
+        float: 0.0000
+        float: 0.0000
+    trauma-kit:
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    bow-scar-explosive:
+        float: 0.0000
+        float: 0.0000
+    map-compass:
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    pistol-browning-jesse:
+        float: 0.0000
+        float: 0.0000
+    pistol-revolver-joel-player:
+        float: 0.0000
+        float: 0.0000
+    shotgun-pump-stock-black:
+    ALREADY_EMITTED
+    pistol-beretta:
+        float: 0.0000
+        float: 0.0000
+    rifle-bolt-m24-dark:
+        float: 0.0000
+        float: 0.0000
+    tennis-ball-single-use:
+        float: 0.0000
+        float: 0.0000
+    bow-ellie:
+        float: 0.0000
+        float: 0.0000
+    short-pipe:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    infected-runner-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    molotov:
+        float: 0.0000
+        float: 0.0000
+    shotgun-scar:
+        float: 0.0000
+        float: 0.0000
+    hatchet:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-remington-pump-ellie-npc:
+        float: 0.0000
+        float: 0.0000
+    tomahawk-sp:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    pistol-browning-yara:
+    ALREADY_EMITTED
+    pain-killer:
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-remington-manny:
+    ALREADY_EMITTED
+    dagger-scar-lev-player:
+    ALREADY_EMITTED
+    trip-wire-bomb:
+        float: 0.0000
+        float: 0.0000
+    rifle-tommy-buddy:
+        float: 0.0000
+        float: 0.0000
+    hatchet-black:
+    ALREADY_EMITTED
+    pistol-xcaliber:
+        float: 0.0000
+        float: 0.0000
+    axe-scar:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    infected-bloater-unarmed-no-damage:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    infected-rat-king-super-stalker-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    baseball-bat-metal:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    unarmed:
+        float: 0.0000
+        int: -1
+    rifle-mpx5-tilt:
+        float: 0.0000
+        float: 0.0000
+    shotgun-dbl-barrel-abby:
+        float: 0.0000
+        float: 0.0000
+    pistol-ruger-jordan:
+        float: 0.0000
+        float: 0.0000
+    hammer-scar:
+    ALREADY_EMITTED
+    pistol-cz75-dina:
+    ALREADY_EMITTED
+    rifle-tommy-boss:
+        float: 0.0000
+        float: 0.0000
+    switchblade-dina-player:
+    ALREADY_EMITTED
+    flamethrower:
+        float: 0.0000
+        float: 0.0000
+    human-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    bow-scar:
+        float: 0.0000
+        float: 0.0000
+    pipe-bomb-manny:
+        float: 0.0000
+        float: 0.0000
+    dagger:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    bow-ellie-npc:
+        float: 0.0000
+        float: 0.0000
+    #51F309AB9D13A384:
+        float: 0.0000
+        float: 0.0000
+    infected-rat-king-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    pistol-colt-1911-manny:
+    ALREADY_EMITTED
+    squid-squeaky-toy:
+        float: 0.0000
+        float: 0.0000
+    rifle-mel:
+        float: 0.0000
+        float: 0.0000
+    pistol-revolver-militia:
+        float: 0.0000
+        float: 0.0000
+    rifle-m14:
+    ALREADY_EMITTED
+    rifle-tommy-boss-no-tracer:
+        float: 0.0000
+        float: 0.0000
+    pistol-scar:
+    ALREADY_EMITTED
+    pipe-bomb-npc:
+        float: 0.0000
+        float: 0.0000
+    rifle-mpx5:
+        float: 0.0000
+        float: 0.0000
+    pistol-ruger-mel:
+    ALREADY_EMITTED
+    pickaxe-scar:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    rifle-tommy-boss-close:
+        float: 0.0000
+        float: 0.0000
+    torch:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    #66F99BB88C023A29:
+        float: 0.0000
+        int: -1
+    infected-clicker-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    abby-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-baserri-over-under:
+        float: 0.0000
+        float: 0.0000
+    axe-fireman:
+    ALREADY_EMITTED
+    snowball-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    infected-pustule-ratking:
+        float: 0.0000
+        int: -1
+    rifle-vepr:
+        float: 0.0000
+        float: 0.0000
+    pistol-glock:
+        float: 0.0000
+        float: 0.0000
+    tomahawk:
+        float: 0.0000
+        float: 0.0000
+    rifle-tommy-abby-player:
+        float: 0.0000
+        float: 0.0000
+    shotgun-pump-joel:
+    ALREADY_EMITTED
+    pipe-wrench:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    crowbar:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    switchblade-abby:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    joel-fists:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    infected-pustule-superstalker:
+        float: 0.0000
+        int: -1
+    rifle-assault-firefly-ellie-player:
+        float: 0.0000
+        float: 0.0000
+    switchblade-exhausted:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    basketball:
+        float: 0.0000
+        float: 0.0000
+    knife-survival-mel:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    crossbow:
+        float: 0.0000
+        float: 0.0000
+    rifle-mini-14-wood:
+    ALREADY_EMITTED
+    pistol-cz75-black:
+    ALREADY_EMITTED
+    stun-bomb:
+        float: 0.0000
+        float: 0.0000
+    rifle-dina-player:
+        float: 0.0000
+        float: 0.0000
+    bow-npc-ellie:
+        float: 0.0000
+        float: 0.0000
+    npc-abby-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    rifle-lever-action:
+        float: 0.0000
+        float: 0.0000
+    distraction:
+        float: 0.0000
+        float: 0.0000
+    lead-pipe:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    bow-joel:
+        float: 0.0000
+        float: 0.0000
+    #91DBA2A882E9AD55:
+        float: 0.0000
+        float: 0.0000
+    sledgehammer:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    rifle-bolt-scar:
+        float: 0.0000
+        float: 0.0000
+    turret-basic:
+        float: 0.0000
+        float: 0.0000
+    infected-bloater-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    rifle-lever-jesse:
+    ALREADY_EMITTED
+    rifle-bolt-m24:
+    ALREADY_EMITTED
+    bow-lev:
+    ALREADY_EMITTED
+    smoke-bomb:
+        float: 0.0000
+        float: 0.0000
+    hatchet-scar:
+    ALREADY_EMITTED
+    boar-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    health-kit:
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    switchblade-npc-ellie:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    machete-wood:
+    ALREADY_EMITTED
+    hunting-knife:
+    ALREADY_EMITTED
+    infected-stalker-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    switchblade-stab-combo:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-remington-pump-bill:
+        float: 0.0000
+        float: 0.0000
+    fish:
+        float: 0.0000
+        float: 0.0000
+    pistol-revolver-357:
+    ALREADY_EMITTED
+    infected-shambler-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    switchblade-dina:
+    ALREADY_EMITTED
+    tennis-ball:
+        float: 0.0000
+        float: 0.0000
+    ellie-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-pump-mel:
+    ALREADY_EMITTED
+    scythe-scar:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    molotov-npc:
+        float: 0.0000
+        float: 0.0000
+    pistol-tommy:
+    ALREADY_EMITTED
+    infected-runner-unarmed-reduced-damage:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shotgun-pump-joel-v-bloater:
+    ALREADY_EMITTED
+    shotgun-remington-pump:
+    ALREADY_EMITTED
+    pickaxe-player:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    switchblade:
+    ALREADY_EMITTED
+    two-by-four:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    dog-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    pistol-militia:
+    ALREADY_EMITTED
+    snowball:
+        float: 0.0000
+        float: 0.0000
+    dagger-scar-lev:
+    ALREADY_EMITTED
+    pipe-bomb:
+        float: 0.0000
+        float: 0.0000
+    pistol-revolver-joel:
+    ALREADY_EMITTED
+    bow-toy:
+        float: 0.0000
+        float: 0.0000
+    rifle-galil:
+        float: 0.0000
+        float: 0.0000
+    rifle-lever-joel:
+    ALREADY_EMITTED
+    rifle-mini-14:
+    ALREADY_EMITTED
+    bottle:
+        float: 0.0000
+        float: 0.0000
+    machete-scar:
+    ALREADY_EMITTED
+    rifle-remington-bolt:
+    ALREADY_EMITTED
+    pistol-revolver-owen:
+    ALREADY_EMITTED
+    pistol-isaac:
+    ALREADY_EMITTED
+    axe:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    club-2h-scar:
+    ALREADY_EMITTED
+    pistol-revolver-owen-player:
+        float: 0.0000
+        float: 0.0000
+    rifle-dina:
+    ALREADY_EMITTED
+    switchblade-trained-combo:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    pistol-revolver-taurus:
+    ALREADY_EMITTED
+    molotov-npc-ellie:
+        float: 0.0000
+        float: 0.0000
+    bow-scar-trailer:
+        float: 0.0000
+        float: 0.0000
+    infected-unarmed:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    bow-workbench:
+    ALREADY_EMITTED
+    club-1h-police:
+    ALREADY_EMITTED
+    club-1h-scar:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    brick:
+        float: 0.0000
+        float: 0.0000
+    shiv-d:
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        int: -1
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+        float: 0.0000
+    shiv-e:
+    ALREADY_EMITTED
+    shiv-f:
+    ALREADY_EMITTED
+    shiv-a:
+    ALREADY_EMITTED
+    shiv-b:
+    ALREADY_EMITTED
+    shiv-c:
+    ALREADY_EMITTED
+    infected-pustule-bloater:
+        float: 0.0000
+        int: -1
+    pistol-revolver-scar:
+        float: 0.0000
+        float: 0.0000
+  }
+####################################################################################################
+  [0x0001D8] *weapon-ammos-sp*: symbol-array 
+  {
+      1. ammo-pistol
+      2. ammo-revolver
+      3. ammo-xcaliber
+      4. ammo-revolver-joel
+      5. ammo-rifle
+      6. ammo-rifle-tommy
+      7. ammo-rifle-tommy-boss
+      8. ammo-rifle-tommy-boss-no-tracer
+      9. ammo-rifle-tommy-boss-close
+      10. ammo-rifle-vepr
+      11. ammo-rifle-galil
+      12. ammo-rifle-mpx5
+      13. ammo-rifle-scar
+      14. ammo-rifle-tommy-buddy
+      15. ammo-shotgun
+      16. ammo-shotgun-baserri
+      17. ammo-shotgun-dragons-breath
+      18. ammo-shotgun-npc-ellie
+      19. ammo-arrow
+      20. ammo-arrow-explosive
+      21. ammo-arrow-fire
+      22. ammo-arrow-npc-ellie
+      23. ammo-crossbow
+      24. ammo-arrow-toy
+      25. ammo-arrow-lev
+      26. ammo-arrow-scar
+      27. ammo-arrow-explosive-scar
+      28. ammo-arrow-scar-trailer
+      29. ammo-flamethrower
+  }
+####################################################################################################

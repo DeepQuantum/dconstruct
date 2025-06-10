@@ -61,19 +61,19 @@ b8 ListingViewController::is_possible_float(const f32 *val) {
 
 void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64 indent) {
     u64 offset = 0;
-    b8 offset_gets_pointed_to = false;
+    b8 offset_gets_pointed_at = false;
     u64 move = 0;
-    while (!offset_gets_pointed_to) {
+    const char *str_ptr = nullptr;
+    while (!offset_gets_pointed_at) {
         offset += move;
         const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(&struct_ptr->m_data) + offset;
-        auto ptr_loc = this->m_currentFile->m_filePtrs.find(reinterpret_cast<uintptr_t>(*reinterpret_cast<const u64*>(data_ptr)));
-        const char *str_ptr = nullptr;
-        if (ptr_loc != this->m_currentFile->m_filePtrs.end()) {
-            if (*ptr_loc >= reinterpret_cast<uintptr_t>(this->m_currentFile->m_stringsPtr)) {
+        if (this->m_currentFile->is_file_ptr(data_ptr)) {
+            const uintptr_t ptr_loc = *reinterpret_cast<const uintptr_t*>(data_ptr);
+            if (ptr_loc >= this->m_currentFile->m_stringsPtr) {
                 this->insert_span("string: ", {.m_color = MainWindow::TYPE_COLOR}, indent);
-                this->insert_span_fmt("%s\n", {.m_color = MainWindow::STRING_COLOR}, 0, reinterpret_cast<const char*>(*ptr_loc));
+                this->insert_span_fmt("%s\n", {.m_color = MainWindow::STRING_COLOR}, 0, reinterpret_cast<const char*>(ptr_loc));
             } else {
-                const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(*ptr_loc - 8);
+                const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(ptr_loc - 8);
                 this->insert_span_fmt("%s* -> [0x%05X] {\n", {.m_color = MainWindow::TYPE_COLOR}, indent, this->lookup(_struct->m_typeID), this->get_offset(_struct) + 8);
                 this->insert_struct(_struct, indent + 2);
                 this->insert_span("}\n", {.m_color = MainWindow::TYPE_COLOR}, indent);
@@ -92,7 +92,7 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
             this->insert_span_fmt("int: %d\n", {.m_color = MainWindow::NUM_COLOR}, indent, *reinterpret_cast<const i32*>(data_ptr));
             move = 4;
         }
-        offset_gets_pointed_to = this->m_currentFile->m_filePtrs.find(data_ptr + move + 8) != this->m_currentFile->m_filePtrs.end();
+        offset_gets_pointed_at = this->m_currentFile->location_gets_pointed_at((void*)(data_ptr + move + 8));
     }
 }
 
@@ -321,7 +321,7 @@ void ListingViewController::insert_on_block(const SsOnBlock *block) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
         this->insert_span_fmt("TRACK %s:\n", {MainWindow::COMMENT_COLOR, 12}, 10, this->lookup(track_ptr->m_trackId));
         for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
-            auto function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
             this->insert_function_disassembly_text(*function);
             this->m_currentFile->m_functions.push_back(std::move(function));
         }

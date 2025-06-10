@@ -6,7 +6,7 @@
 class GraphicsViewController {
 public:
     GraphicsViewController(QGraphicsView *view, QGraphicsScene *scene, const FunctionDisassembly *function);
-    void start_draw() noexcept;
+    void create_cfg() noexcept;
 
 private:
     std::unique_ptr<CFGElement> m_head;

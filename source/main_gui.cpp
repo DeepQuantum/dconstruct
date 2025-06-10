@@ -18,12 +18,12 @@ int main(int argc, char *argv[]) {
 
     if (test.m_functions.size() >= 1) {
         GraphicsViewController *gvc = new GraphicsViewController(w.get_graphics_view(), &s, test.m_functions[0].get());
-        gvc->start_draw();
+        gvc->create_cfg();
     }
-    w.show();
     w.get_graphics_view()->setScene(&s);
     w.get_graphics_view()->show();
- 
+    
+    w.show();
     return a.exec();
 }
 

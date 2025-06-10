@@ -34,10 +34,21 @@ i32 BinaryFile::disassemble_file(const SIDBase &sidbase) {
     }
 
     this->read_reloc_table();
-
-    this->m_entries.reserve(this->m_dcheader->m_numEntries);
     
     return 1;
+}
+
+
+[[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const void *ptr) const noexcept {
+    uintptr_t proper_offset = reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(this->m_bytes.get());
+    proper_offset /= 8;
+    return this->m_pointedAtTable[proper_offset / 8] & (1 << (proper_offset % 8));
+}
+
+[[nodiscard]] b8 BinaryFile::is_file_ptr(const uintptr_t ptr) const noexcept {
+    uintptr_t proper_offset = (ptr - reinterpret_cast<uintptr_t>(this->m_bytes.get())) / 8;
+    const u8* table = this->m_bytes.get() + this->m_dcheader->m_textSize + 4;
+    return table[proper_offset / 8] & (1 << (proper_offset % 8));
 }
 
 void BinaryFile::read_reloc_table() {
@@ -45,15 +56,16 @@ void BinaryFile::read_reloc_table() {
 
     const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
     u8 *bitmap = reloc_data + 4;
+    this->m_pointedAtTable = std::make_unique<u8[]>(table_size);
 
     for (u64 i = 0; i < table_size * 8; ++i) {
         if (bitmap[i / 8] & (1 << (i % 8))) {
             u64* entry = reinterpret_cast<u64*>(this->m_bytes.get() + i * 8);
             u64 offset = *entry;
             *entry = reinterpret_cast<u64>(this->m_bytes.get() + offset);
-            this->m_filePtrs.insert(reinterpret_cast<uintptr_t>(*entry));
+            this->m_pointedAtTable[offset / 64] |= (1 << ((offset / 8) % 8));
         }
     }
 
-    this->m_stringsPtr = reinterpret_cast<const char*>(this->m_bytes.get() + this->m_dcheader->m_stringsOffset);
+    this->m_stringsPtr = reinterpret_cast<uintptr_t>(this->m_bytes.get() + this->m_dcheader->m_stringsOffset);
 }

@@ -6,8 +6,19 @@ GraphicsViewController::GraphicsViewController(QGraphicsView *view, QGraphicsSce
     this->m_currentFunction = function;
 }
 
-void GraphicsViewController::start_draw() noexcept {
-    QString test = QString::fromStdString(this->m_currentFunction->m_lines[0].m_comment);
-    this->m_head = std::make_unique<CFGElement>(test, QRectF(0, 0, 100, 50), nullptr);
+void GraphicsViewController::create_cfg() noexcept {
+    this->m_head = std::make_unique<CFGElement>("head_node", QRectF(450, 450, 500, 500));
+    std::string next_node_text = "";
+    int i = 0;
+    for (const auto &line : this->m_currentFunction->m_lines) {
+        if (line.m_label == -1) {
+            next_node_text += line.m_comment;
+            next_node_text += "\n";
+        } else {
+            break;
+        }
+        this->m_head->m_text = QString::fromStdString(next_node_text);
+    }
+    this->m_head->update_rect(QRectF(450, 450, 500, 500));
     this->m_graphicsScene->addItem(this->m_head.get());
 }

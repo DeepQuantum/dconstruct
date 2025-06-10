@@ -49,14 +49,14 @@ public:
     StateScript *m_dcscript = nullptr;
     std::size_t m_size;
     std::unique_ptr<u8[]> m_bytes;
-    const char *m_stringsPtr;
-    std::set<uintptr_t> m_filePtrs;
-    std::vector<const Entry*> m_entries;
+    std::unique_ptr<u8[]> m_pointedAtTable;
+    uintptr_t m_stringsPtr;
     i32 disassemble_file(const SIDBase &sidbase);
     std::map<stringid_64, const std::string> sid_cache;
     std::set<uintptr_t> m_emittedStructs{};
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
-
+    [[nodiscard]] b8 is_file_ptr(const uintptr_t ptr) const noexcept;
+    [[nodiscard]] b8 location_gets_pointed_at(const void *ptr) const noexcept;
 
 
 private:
