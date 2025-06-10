@@ -6,12 +6,12 @@ CFGElement::CFGElement(const QString &text, const QRectF rect, QGraphicsItem *pa
 
 void CFGElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(Qt::darkBlue);
+    painter->setBrush(Qt::white);
     painter->setPen(Qt::black);
     painter->drawRect(m_rect);
     painter->setPen(Qt::black);
-    //const int padding = 10;
-    //QRectF textRect = m_rect.adjusted(padding, padding, -padding, -padding);
+    const QFont font("Consolas", 10);
+    painter->setFont(font);
     painter->drawText(this->m_rect, Qt::AlignLeft | Qt::AlignVCenter, m_text);
 }
 

@@ -5,6 +5,7 @@
 #include <QtWidgets/QTextEdit>
 #include "../mainwindow.h"
 #include "instructions.h"
+#include <vector>
 
 struct TextFormat {
     QColor m_color = MainWindow::COMMENT_COLOR;
@@ -30,6 +31,7 @@ private:
     MainWindow *m_mainWindow = nullptr;
     const SIDBase *m_sidbase = nullptr;
     FILE *m_outfptr = nullptr;
+    std::string m_outbuf;
 
     std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
 

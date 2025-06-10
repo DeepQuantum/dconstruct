@@ -38,9 +38,8 @@ void ListingViewController::insert_span_fmt(const char *format, const TextFormat
 
 void ListingViewController::insert_span(const char *line, const TextFormat &text_format, const u64 indent) {
     if (this->m_outfptr != nullptr) {
-        char buffer[256] = {0};
-        sprintf(buffer, "%*s%s", indent, "", line);
-        fwrite(buffer, sizeof(char), strlen(buffer), this->m_outfptr);
+        this->m_outbuf += std::string(indent, ' ');
+        this->m_outbuf += line;
         return;
     }
     auto* view = this->m_mainWindow->get_listing_view();
@@ -107,6 +106,7 @@ void ListingViewController::create_listing_view() {
         this->m_mainWindow->get_listing_view()->moveCursor(QTextCursor::Start);
         this->m_mainWindow->get_listing_view()->ensureCursorVisible();
     }
+    fwrite(this->m_outbuf.c_str(), sizeof(char), this->m_outbuf.size(), this->m_outfptr);
 }
 
 void ListingViewController::insert_entry(const Entry *entry) {

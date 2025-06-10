@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <immintrin.h>
+#include <chrono>
 
 BinaryFile::BinaryFile() {}
 
@@ -46,9 +48,9 @@ i32 BinaryFile::disassemble_file(const SIDBase &sidbase) {
 }
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const uintptr_t ptr) const noexcept {
-    uintptr_t proper_offset = (ptr - reinterpret_cast<uintptr_t>(this->m_bytes.get())) / 8;
+    uintptr_t offset = (ptr - reinterpret_cast<uintptr_t>(this->m_bytes.get())) / 8;
     const u8* table = this->m_bytes.get() + this->m_dcheader->m_textSize + 4;
-    return table[proper_offset / 8] & (1 << (proper_offset % 8));
+    return table[offset / 8] & (1 << (offset % 8));
 }
 
 void BinaryFile::read_reloc_table() {

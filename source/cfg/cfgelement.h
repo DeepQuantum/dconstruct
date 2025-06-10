@@ -1,10 +1,13 @@
+#pragma once
+
 #ifndef CFGELEMENT_H
 #define CFGELEMENT_H
 
 #include <QGraphicsItem>
 #include <QPainter>
-#include <vector>
 #include <QTextEdit>
+#include <QLine>
+#include <vector>
 
 
 #include "../disassembly/instructions.h"
@@ -23,6 +26,7 @@ public:
     u32 m_lineCount;
     QString m_text;
     QRectF m_rect;
+    std::vector<QLine> m_pointers;
     std::vector<CFGElement*> m_incoming{};
     std::vector<CFGElement*> m_outgoing{};
 };
