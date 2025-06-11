@@ -45,7 +45,7 @@ i32 BinaryFile::disassemble_file(const SIDBase &sidbase) {
 [[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const void *ptr) const noexcept {
     uintptr_t proper_offset = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(this->m_bytes.get())) / 8;
     printf("\n%d\n", proper_offset);
-    return this->m_pointedAtTable[proper_offset] == 1;
+    return this->m_pointedAtTable[proper_offset];
 }
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const uintptr_t ptr) const noexcept {
@@ -77,6 +77,7 @@ void BinaryFile::read_reloc_table() {
     const __m512i _indices = _mm512_set_epi64(7,6,5,4,3,2,1,0);
     const __m512i _1 = _mm512_set1_epi64(0x1);
     const __m512i _7 = _mm512_set1_epi64(0x7);
+    const __m512i _3 = _mm512_set1_epi64(0x3);
     const __m512i _base = _mm512_set1_epi64(reinterpret_cast<uintptr_t>(this->m_bytes.get()));
 
 #define DERANGED
@@ -99,13 +100,14 @@ void BinaryFile::read_reloc_table() {
 
         _mm512_store_epi64((void *)data_segment_ptr, _data_segment_masked);
 
-        print_m512i(&_bit_mask);
-        printf("offset: %d\n", this->m_pointedAtTable[40]);
+        printf("offset: %d\n", this->m_pointedAtTable[94664]);
         printf("data_segmenti: %d\n", bitmap[i]);
 
+        _data_segment = _mm512_srlv_epi64(_data_segment, _3);
         print_m512i(&_data_segment);
         _mm512_mask_i64scatter_epi64((void *)this->m_pointedAtTable.get(), (__mmask8)bitmap[i], _data_segment, _bit_mask, 0x1);
-        printf("offset: %d\n", this->m_pointedAtTable[40]);
+        printf("offset: %d\n", this->m_pointedAtTable[94664]);
+        exit(0);
     }
 #else
     for (u64 i = 0; i < table_size * 8; ++i) {
