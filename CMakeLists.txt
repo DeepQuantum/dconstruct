@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
@@ -48,9 +48,9 @@ endif()
 target_link_libraries(tlou2_disasm_gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
 
 target_compile_options(tlou2_disasm_gui PRIVATE
-    $<$<CONFIG:Release>:-Ofast -march=znver4>
-    $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
-    $<$<CONFIG:Debug>:-O0 -g>
+    $<$<CONFIG:Release>:-Og -g -march=znver4 -mavx512f>
+    $<$<CONFIG:RelWithDebInfo>:-Og -g -mavx512f -march=znver4 -DNDEBUG>
+    $<$<CONFIG:Debug>:-Og -g>
 )
 
 set_target_properties(tlou2_disasm_gui PROPERTIES
@@ -96,9 +96,9 @@ target_link_libraries(tlou2_disasm_cli PRIVATE Qt${QT_VERSION_MAJOR}::Widgets st
 target_link_options(tlou2_disasm_cli PRIVATE -mconsole)
 
 target_compile_options(tlou2_disasm_cli PRIVATE
-    $<$<CONFIG:Release>:-Ofast -march=znver4>
+    $<$<CONFIG:Release>:-Ofast -march=znver4 -mavx512f>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
-    $<$<CONFIG:Debug>:-O0 -g>
+    $<$<CONFIG:Debug>:-Og -g>
 )
 
 set_target_properties(tlou2_disasm_cli PROPERTIES

@@ -24,7 +24,7 @@ public:
     void insert_entry(const Entry *entry);
     void insert_struct(const DC_Struct *entry, const u64 indent = 0);
     void insert_span(const char *text, const TextFormat &text_format = TextFormat{}, const u64 indent = 0);
-    template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, const u64 indent = 0, Args ...args);
+    template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
 
 private:
     BinaryFile *m_currentFile = nullptr;

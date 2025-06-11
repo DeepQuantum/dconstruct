@@ -20,9 +20,13 @@ int main(int argc, char *argv[]) {
     BinaryFile test(filepath);
     test.disassemble_file(base);
     FILE *file = fopen("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test.txt", "w");
+    
     ListingViewController controller(&test, nullptr, &base, file);
+    controller.create_listing_view();
+    
     auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-    std::cout << "Took " << time_taken.count() << " ms";
+
+    std::cout << "\n\nTotal: " << time_taken.count() << " ms";
 
     return 0;
 }
