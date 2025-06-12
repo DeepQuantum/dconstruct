@@ -15,16 +15,12 @@ void SIDBase::load(const char *path) noexcept {
     }
     sidfile.read(reinterpret_cast<char*>(&this->m_num_entries), 8);
     sidfile.seekg(0);
-    auto start = std::chrono::high_resolution_clock::now();
 
     sidfile.read(reinterpret_cast<char*>(temp_buffer), fsize);
-    auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
 
     this->m_num_entries = m_num_entries;
     this->m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
     this->m_sidbytes = std::unique_ptr<u8[]>(temp_buffer);
-
-    std::cout << "Took " << time_taken.count() << " ms";
 
 }
 

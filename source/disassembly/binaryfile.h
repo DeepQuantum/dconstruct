@@ -61,7 +61,6 @@ public:
 
 private:
     void read_reloc_table();
-
 };
 
 #endif // BINARYFILE_H
