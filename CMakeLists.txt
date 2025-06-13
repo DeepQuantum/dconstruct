@@ -48,9 +48,9 @@ endif()
 target_link_libraries(tlou2_disasm_gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
 
 target_compile_options(tlou2_disasm_gui PRIVATE
-    $<$<CONFIG:Release>:-Og -g -mavx512f -march=native>
+    $<$<CONFIG:Release>:-Ofast -mavx512f -march=native>
     $<$<CONFIG:RelWithDebInfo>:-Og -g -mavx512f -march=znver4 -DNDEBUG>
-    $<$<CONFIG:Debug>:-O0 -g>
+    $<$<CONFIG:Debug>:-Og -g>
 )
 
 set_target_properties(tlou2_disasm_gui PROPERTIES

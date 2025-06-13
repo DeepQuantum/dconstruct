@@ -44,8 +44,8 @@ i32 BinaryFile::disassemble_file(const SIDBase &sidbase) {
 
 
 [[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const void *ptr) const noexcept {
-    uintptr_t proper_offset = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(this->m_bytes.get()));
-    return this->m_pointedAtTable[proper_offset];
+    uintptr_t proper_offset = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(this->m_bytes.get())) / 8;
+    return this->m_pointedAtTable[proper_offset / 8] & (1 << (proper_offset % 8));
 }
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const uintptr_t ptr) const noexcept {
@@ -69,11 +69,10 @@ void BinaryFile::read_reloc_table() {
     u8 *reloc_data = this->m_bytes.get() + this->m_dcheader->m_textSize;
 
     const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
-    this->m_pointedAtTable = std::make_unique<u8[]>(table_size * 64);
+    this->m_pointedAtTable = std::make_unique<u8[]>(table_size);
     
     const u8 *bitmap = reloc_data + 4;
 
-#define DERANGED
 #ifdef DERANGED
     const __m512i _indices = _mm512_set_epi64(7,6,5,4,3,2,1,0);
     const __m512i _1 = _mm512_set1_epi64(0x1);

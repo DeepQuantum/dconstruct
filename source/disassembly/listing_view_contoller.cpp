@@ -58,8 +58,8 @@ void ListingViewController::insert_span(const char *line, const TextFormat &text
 }
 
 b8 ListingViewController::is_possible_float(const f32 *val) {
-    float rounded = roundf(*val * 1e5f) / 1e5f;
-    return fabsf(*val - rounded) < 1e-5f && *val > -1e5f && *val < 1e5f;
+    f32 rounded = roundf(*val * 1e5f) / 1e5f;
+    return fabsf(*val - rounded) < 1e-5f && *val > -1e5f && *val < 1e5f && rounded != 0.f;
 }
 
 void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64 indent) {
@@ -174,11 +174,10 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         }
         case SID("map"): {
             const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&entry->m_data);
-            this->insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16}, indent + 4, "", this->get_offset(map->keys.data), this->get_offset(map->values.data));
+            this->insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16}, indent, "", this->get_offset(map->keys.data), this->get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = this->lookup(map->keys[i]);
-                this->insert_span_fmt("%*s%s:\n", opcode_format, indent + 4, "", key_hash);
-                const u64 *value_ptr = reinterpret_cast<const u64*>(map->values[i]);
+                this->insert_span_fmt("%*s%s:\n", opcode_format, indent, "", key_hash);
                 const DC_Struct *struct_ptr = reinterpret_cast<const DC_Struct*>(map->values[i] - 8);
                 this->insert_struct(struct_ptr, indent + 4);
             }
@@ -186,10 +185,10 @@ void ListingViewController::insert_struct(const DC_Struct *entry, const u64 inde
         }
         default:
         {
-            if (this->m_currentFile->m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
-                this->insert_span("ALREADY_EMITTED\n", {.m_color = MainWindow::COMMENT_COLOR}, indent);
-                return;
-            }
+            // if (this->m_currentFile->m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
+            //     this->insert_span("ALREADY_EMITTED\n", {.m_color = MainWindow::COMMENT_COLOR}, indent);
+            //     return;
+            // }
             this->insert_unmapped_struct(entry, indent + 4);
             break;
         }
