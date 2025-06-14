@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     SIDBase base{};
     base.load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
     BinaryFile test(filepath);
-    test.disassemble_file(base);
+    test.disassemble_file();
     FILE *file = fopen("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test.txt", "w");
     
     ListingViewController controller(&test, nullptr, &base, file);

@@ -121,17 +121,28 @@ void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) co
             strcpy(buffer, resolved);
             break;
         }
-        case RegisterValueType::R_U16: 
+        case RegisterValueType::R_U16:
         case RegisterValueType::R_U32: 
-        case RegisterValueType::R_U64:
-        case RegisterValueType::R_I16:
-        case RegisterValueType::R_I32:
-        case RegisterValueType::R_I64: {
-            sprintf(buffer, "%i", reg.m_U64);
+        case RegisterValueType::R_U64: {
+            sprintf(buffer, "%llu", reg.m_U64);
             break;
         }
+        case RegisterValueType::R_I16:
+        case RegisterValueType::R_I32: {
+            sprintf(buffer, "%li", reg.m_I32);
+            break;
+        }
+        case RegisterValueType::R_I64: {
+            sprintf(buffer, "%lli", reg.m_I64);
+            break;
+        }
+        case RegisterValueType::R_F16:
+        case RegisterValueType::R_F32:
+        case RegisterValueType::R_F64:
+            sprintf(buffer, "%f", reg.m_F32);
+            break;
         default: {
-            sprintf(buffer, "0x%X", reg.m_U64);
+            sprintf(buffer, "0x%llX", reg.m_U64);
             break;
         } 
     }

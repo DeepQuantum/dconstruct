@@ -20,9 +20,9 @@ struct ScriptLambda;
 
 struct StateScript //0x50
 {
-    stringid_64				m_stateScriptId;		///< <c>0x00</c>: StringId64 of the script name
+    sid64				m_stateScriptId;		///< <c>0x00</c>: StringId64 of the script name
     SsDeclarationList*		m_pSsDeclList;			///< <c>0x08</c>: ptr to the declaration list
-    stringid_64				m_initialStateId;		///< <c>0x10</c>: StringId64 of the initial state
+    sid64				m_initialStateId;		///< <c>0x10</c>: StringId64 of the initial state
     SsOptions*				m_pSsOptions;			///< <c>0x18</c>: ptr to the SsOptions
     uint64_t				field_20;				///< <c>0x20</c>: always 0 ?
     SsState*				m_pSsStateTable;		///< <c>0x28</c>: ptr to the SsState Table
@@ -44,9 +44,9 @@ struct SsDeclarationList //0x10
 
 struct SsDeclaration //0x30
 {
-    stringid_64				m_declId;				///< <c>0x00</c>: StringId of the declaration name
+    sid64				m_declId;				///< <c>0x00</c>: StringId of the declaration name
     uint64_t				m_padding;				///< <c>0x08</c>: padding probably
-    stringid_64				m_declTypeId;			///< <c>0x10</c>: StringId of the declaration type eg: boolean, int32, float etc..
+    sid64				m_declTypeId;			///< <c>0x10</c>: StringId of the declaration type eg: boolean, int32, float etc..
     int16_t					m_unk;					///< <c>0x18</c>: unk number
     int16_t					m_isVar;				///< <c>0x1A</c>: is variable ?
     uint32_t				unk3;					///< <c>0x1C</c>: always 0 ?
@@ -67,12 +67,12 @@ struct SymbolArray //0x10
 {
     int32_t					m_numEntries;			///< <c>0x00</c>: number of entries
     uint32_t				m_unk;					///< <c>0x04</c>: always 0 ?
-    stringid_64*			m_pSymbols;				///< <c>0x08</c>: ptr to the symbols
+    sid64*			m_pSymbols;				///< <c>0x08</c>: ptr to the symbols
 };
 
 struct SsState //0x18
 {
-    stringid_64				m_stateId;				///< <c>0x00</c>: StringId64 of the state name
+    sid64				m_stateId;				///< <c>0x00</c>: StringId64 of the state name
     int64_t					m_numSsOnBlocks;		///< <c>0x08</c>: numSsOnBlocks
     SsOnBlock*				m_pSsOnBlocks;			///< <c>0x10</c>: ptr to the SsOnBlocks table
 };
@@ -94,14 +94,14 @@ struct SsOnBlock //
 {
     int32_t					m_blockType;			///< <c>0x00</c>: //on start || on update || on event etc
     uint32_t				m_unkNumber;			///< <c>0x04</c>: unk number
-    stringid_64				m_blockEventId;			///< <c>0x08</c>: UNSURE. Can be null. if its null there's no script lambda ptr
+    sid64				m_blockEventId;			///< <c>0x08</c>: UNSURE. Can be null. if its null there's no script lambda ptr
     void* m_pScriptLambda;		///< <c>0x10</c>: ptr to the script Lambda
     SsTrackGroup            m_trackGroup;
 };
 
 struct SsTrack //0x18
 {
-    stringid_64				m_trackId;				///< <c>0x00</c>: StringId64 of the track name
+    sid64				m_trackId;				///< <c>0x00</c>: StringId64 of the track name
     uint16_t				field_8;				///< <c>0x08</c>: always 0?
     int16_t					m_totalLambdaCount;		///< <c>0x0A</c>: unsure
     uint32_t				m_padding;				///< <c>0x0C</c>: padding probably
@@ -118,7 +118,7 @@ struct ScriptLambda //0x40 || 0x48 unsure
 {
     uint8_t*				m_pOpcode;				///< <c>0x00</c>: ptr to the first opcode of the script
     uint64_t*				m_pSymbols;				///< <c>0x08</c>: ptr to the symbol table
-    stringid_64				m_typeId;				///< <c>0x10</c>: usually SID("function")
+    sid64				m_typeId;				///< <c>0x10</c>: usually SID("function")
     uint64_t				m_unkNumber;			///< <c>0x18</c>: no idea what this is used for
     uint64_t				m_unk;					///< <c>0x20</c>: always 0?
     uint64_t				m_instructionFlag;		///< <c>0x28</c>: 0xDEADBEEF1337F00D

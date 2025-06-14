@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
@@ -50,7 +50,7 @@ target_link_libraries(tlou2_disasm_gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets st
 target_compile_options(tlou2_disasm_gui PRIVATE
     $<$<CONFIG:Release>:-Ofast -mavx512f -march=native>
     $<$<CONFIG:RelWithDebInfo>:-Og -g -mavx512f -march=znver4 -DNDEBUG>
-    $<$<CONFIG:Debug>:-Og -g>
+    $<$<CONFIG:Debug>:-Og -g -Wall -Wextra>
 )
 
 set_target_properties(tlou2_disasm_gui PROPERTIES

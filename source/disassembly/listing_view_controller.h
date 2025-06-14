@@ -13,7 +13,7 @@ struct TextFormat {
 };
 
 struct DC_Struct {
-    stringid_64 m_typeID;
+    sid64 m_typeID;
     const void *m_data;
 };
 
@@ -33,21 +33,23 @@ private:
     FILE *m_outfptr = nullptr;
     std::string m_outbuf;
 
-    std::map<stringid_64, std::vector<const DC_Struct*>> m_unmappedEntries;
+    std::map<sid64, std::vector<const DC_Struct*>> m_unmappedEntries;
 
     constexpr static TextFormat ENTRY_HEADER_FMT = {.m_color = MainWindow::VAR_COLOR, .m_fontSize = 20};
     constexpr static TextFormat ENTRY_TYPE_FMT   = {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 20};
     constexpr static TextFormat STRUCT_TYPE_FMT  = {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 14};
 
-    [[nodiscard]] const char *lookup(const stringid_64 hash) noexcept;
+    constexpr static u32 m_indentPerLevel = 2;
+
+    [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
     void insert_header_line();
     b8 is_possible_float(const f32 *ptr);
-    void disassemble_state_script(const StateScript *stateScript);
+    void insert_state_script(const StateScript *stateScript, const u32 indent);
     void insert_unmapped_struct(const DC_Struct *_struct, const u64 indent);
-    void insert_variable(const SsDeclaration *var);
-    void insert_on_block(const SsOnBlock *block);
+    void insert_variable(const SsDeclaration *var, const u32 indent);
+    void insert_on_block(const SsOnBlock *block, const u32 indent);
     FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);
     void process_instruction(StackFrame &stackFrame, FunctionDisassemblyLine &functionLine);
-    void insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly);
+    void insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent);
     u32 get_offset(const void *symbol);
 };

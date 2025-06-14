@@ -12,9 +12,9 @@ int main(int argc, char *argv[]) {
     SIDBase base = SIDBase();
     base.load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
     BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/ss-wave-manager.bin");
-    test.disassemble_file(base);
+    test.disassemble_file();
 
-    ListingViewController *lvc = new ListingViewController(&test, &w, &base);
+    //ListingViewController *lvc = new ListingViewController(&test, &w, &base);
 
     if (test.m_functions.size() >= 1) {
         GraphicsViewController *gvc = new GraphicsViewController(w.get_graphics_view(), &s, test.m_functions[0].get());

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <QScrollBar>
 #include "listing_view_controller.h"
+#include <bit>
 
 ListingViewController::ListingViewController(BinaryFile *file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr) {
     this->m_mainWindow = mainWindow;
@@ -13,7 +14,7 @@ ListingViewController::ListingViewController(BinaryFile *file, MainWindow *mainW
     this->m_outfptr = outfptr;
 }
 
-[[nodiscard]] const char *ListingViewController::lookup(const stringid_64 sid) noexcept {
+[[nodiscard]] const char *ListingViewController::lookup(const sid64 sid) noexcept {
     auto res = this->m_currentFile->sid_cache.find(sid);
     if (res != this->m_currentFile->sid_cache.end()) {
         return res->second.c_str();
@@ -69,30 +70,30 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
     const char *str_ptr = nullptr;
     while (!offset_gets_pointed_at) {
         offset += move;
-        const uintptr_t data_ptr = reinterpret_cast<uintptr_t>(&struct_ptr->m_data) + offset;
+        const p64 data_ptr = std::bit_cast<p64>(&struct_ptr->m_data) + offset;
         if (this->m_currentFile->is_file_ptr(data_ptr)) {
-            const uintptr_t ptr_loc = *reinterpret_cast<const uintptr_t*>(data_ptr);
+            const p64 ptr_loc = *std::bit_cast<const p64*>(data_ptr);
             if (ptr_loc >= this->m_currentFile->m_stringsPtr) {
                 this->insert_span("string: ", {.m_color = MainWindow::TYPE_COLOR}, indent);
-                this->insert_span_fmt("%s\n", {.m_color = MainWindow::STRING_COLOR}, reinterpret_cast<const char*>(ptr_loc));
+                this->insert_span_fmt("%s\n", {.m_color = MainWindow::STRING_COLOR}, std::bit_cast<const char*>(ptr_loc));
             } else {
-                const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(ptr_loc - 8);
-                this->insert_span_fmt("%*s%s* -> [0x%05X] {\n", {.m_color = MainWindow::TYPE_COLOR}, indent, "", this->lookup(_struct->m_typeID), this->get_offset(_struct) + 8);
-                this->insert_struct(_struct, indent + 2);
-                this->insert_span("}\n", {.m_color = MainWindow::TYPE_COLOR}, indent);
+                const DC_Struct *_struct = std::bit_cast<const DC_Struct*>(ptr_loc - 8);
+                //this->insert_span_fmt("%*s%s* -> [0x%05X] {\n", {.m_color = MainWindow::TYPE_COLOR}, indent, "", this->lookup(_struct->m_typeID), this->get_offset(_struct) + 8);
+                this->insert_struct(_struct, indent + m_indentPerLevel);
+                //this->insert_span("}\n", {.m_color = MainWindow::TYPE_COLOR}, indent);
             }
             move = 8;
         }
-        else if ((str_ptr = this->m_sidbase->search(*reinterpret_cast<const stringid_64*>(data_ptr))) != nullptr) {
+        else if ((str_ptr = this->m_sidbase->search(*std::bit_cast<const sid64*>(data_ptr))) != nullptr) {
             this->insert_span_fmt("%*ssid: %s\n", {.m_color = MainWindow::HASH_COLOR}, indent, "", str_ptr);
             move = 8;
         }
-        else if (this->is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
-            this->insert_span_fmt("%*sfloat: %.4f\n", {.m_color = MainWindow::NUM_COLOR}, indent, "", *reinterpret_cast<const f32*>(data_ptr));
+        else if (this->is_possible_float(std::bit_cast<const f32*>(data_ptr))) {
+            this->insert_span_fmt("%*sfloat: %.4f\n", {.m_color = MainWindow::NUM_COLOR}, indent, "", *std::bit_cast<const f32*>(data_ptr));
             move = 4;
         }
         else {
-            this->insert_span_fmt("%*sint: %d\n", {.m_color = MainWindow::NUM_COLOR}, indent, "", *reinterpret_cast<const i32*>(data_ptr));
+            this->insert_span_fmt("%*sint: %d\n", {.m_color = MainWindow::NUM_COLOR}, indent, "", *std::bit_cast<const i32*>(data_ptr));
             move = 4;
         }
         offset_gets_pointed_at = this->m_currentFile->location_gets_pointed_at((void*)(data_ptr + move + 8));
@@ -102,7 +103,7 @@ void ListingViewController::insert_unmapped_struct(const DC_Struct *struct_ptr, 
 void ListingViewController::create_listing_view() {
     this->insert_header_line();
     const std::string sep = std::string(100, '#') + "\n";
-    for (std::size_t i = 0; i < this->m_currentFile->m_dcheader->m_numEntries; ++i) {
+    for (i32 i = 0; i < this->m_currentFile->m_dcheader->m_numEntries; ++i) {
         this->insert_entry(this->m_currentFile->m_dcheader->m_pStartOfData + i);
         this->insert_span(sep.c_str(), {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14});
     }
@@ -111,97 +112,95 @@ void ListingViewController::create_listing_view() {
         this->m_mainWindow->get_listing_view()->moveCursor(QTextCursor::Start);
         this->m_mainWindow->get_listing_view()->ensureCursorVisible();
     }
-
-    fwrite(this->m_outbuf.c_str(), sizeof(char), this->m_outbuf.size(), this->m_outfptr);
+    else {
+        fwrite(this->m_outbuf.c_str(), sizeof(char), this->m_outbuf.size(), this->m_outfptr);
+    }
 }
 
 void ListingViewController::insert_entry(const Entry *entry) {
-    const DC_Struct *_struct = reinterpret_cast<const DC_Struct*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-    this->insert_span_fmt("%*s[0x%06X] ", TextFormat{MainWindow::NUM_COLOR, 16}, 2, "", this->get_offset(_struct));
-    this->insert_span_fmt("%s: ", this->ENTRY_HEADER_FMT, this->lookup(entry->m_scriptId));
-    this->insert_span_fmt("%s \n", this->ENTRY_TYPE_FMT, this->lookup(entry->m_typeId));
-    this->insert_span("{\n", {MainWindow::OPCODE_COLOR, 14}, 2);
-    this->insert_struct(_struct, 0);
-    this->insert_span("}\n", {MainWindow::OPCODE_COLOR, 14}, 2);
+    const DC_Struct *_struct = std::bit_cast<const DC_Struct*>(std::bit_cast<const u64*>(entry->m_entryPtr) - 1);
+    this->insert_span_fmt("%s = ", this->ENTRY_HEADER_FMT, this->lookup(entry->m_scriptId));
+    this->insert_struct(_struct);
 }
 
 void ListingViewController::insert_struct(const DC_Struct *entry, const u64 indent) {
     const u64 offset = this->get_offset((void*)entry);
     TextFormat opcode_format = TextFormat{MainWindow::OPCODE_COLOR, 14};
+    this->insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", this->lookup(entry->m_typeID), offset);
     
 
     switch (entry->m_typeID)
     {
         case SID("boolean"):
         {
-            this->insert_span_fmt("%*sbool %s: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(entry->m_data) ? "true" : "false");
+            this->insert_span_fmt("%*sbool %s: <%s>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data) ? "true" : "false");
             break;
         }
         case SID("int"):
         {
-            this->insert_span_fmt("%*sint %s: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(entry->m_data));
+            this->insert_span_fmt("%*sint %s: <%d>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data));
             break;
         }
         case SID("float"):
         {
-            this->insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(entry->m_data));
+            this->insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data));
             break;
         }
         case SID("sid"):
         {
-            this->insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", this->lookup(*reinterpret_cast<const stringid_64*>(entry->m_data)));
+            this->insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", this->lookup(*std::bit_cast<const sid64*>(entry->m_data)));
             break;
         }
         case SID("state-script"):
         {
-            this->disassemble_state_script(reinterpret_cast<const StateScript*>(&entry->m_data));
+            this->insert_state_script(std::bit_cast<const StateScript*>(&entry->m_data), indent + m_indentPerLevel);
             break;
         }
         case SID("script-lambda"):
         {
-            this->insert_span("LAMBDA", TextFormat{.m_fontSize = 20}, indent);
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
-            this->insert_function_disassembly_text(*function);
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(std::bit_cast<const ScriptLambda*>(&entry->m_data))));
+            this->insert_function_disassembly_text(*function, indent + m_indentPerLevel);
             this->m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
         case SID("symbol-array"): {
-            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&entry->m_data);
+            const dc_structs::symbol_array *array = std::bit_cast<const dc_structs::symbol_array*>(&entry->m_data);
             for (u64 i = 0; i < array->contents.size; ++i) {
-                this->insert_span_fmt("%*s%d. %s\n", {MainWindow::OPCODE_COLOR, 14}, indent + 6, "", i + 1, this->lookup(array->contents.keys[i]));
+                this->insert_span_fmt("%*s%d. %s\n", {MainWindow::OPCODE_COLOR, 14}, indent + m_indentPerLevel, "", i + 1, this->lookup(array->contents.keys[i]));
             }
             break;
         }
         case SID("map"): {
-            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&entry->m_data);
-            this->insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16}, indent, "", this->get_offset(map->keys.data), this->get_offset(map->values.data));
+            const dc_structs::map *map = std::bit_cast<const dc_structs::map*>(&entry->m_data);
+            this->insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {MainWindow::HASH_COLOR, 16}, indent + m_indentPerLevel, "", this->get_offset(map->keys.data), this->get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = this->lookup(map->keys[i]);
-                this->insert_span_fmt("%*s%s:\n", opcode_format, indent, "", key_hash);
-                const DC_Struct *struct_ptr = reinterpret_cast<const DC_Struct*>(map->values[i] - 8);
-                this->insert_struct(struct_ptr, indent + 4);
+                this->insert_span_fmt("%*s%s {\n", opcode_format, indent + m_indentPerLevel, "", key_hash);
+                const DC_Struct *struct_ptr = std::bit_cast<const DC_Struct*>(map->values[i] - 8);
+                this->insert_struct(struct_ptr, indent + m_indentPerLevel * 2);
+                this->insert_span("}\n", {MainWindow::CONTROL_COLOR, 16}, indent + m_indentPerLevel);
             }
             break;
         }
         default:
         {
-            // if (this->m_currentFile->m_emittedStructs.find(reinterpret_cast<uintptr_t>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
+            // if (this->m_currentFile->m_emittedStructs.find(std::bit_cast<p64>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
             //     this->insert_span("ALREADY_EMITTED\n", {.m_color = MainWindow::COMMENT_COLOR}, indent);
             //     return;
             // }
-            this->insert_unmapped_struct(entry, indent + 4);
+            this->insert_unmapped_struct(entry, indent + m_indentPerLevel);
             break;
         }
     }
-    this->m_currentFile->m_emittedStructs.insert(reinterpret_cast<uintptr_t>(entry));
+    this->insert_span("}\n", ENTRY_TYPE_FMT, indent);
+    this->m_currentFile->m_emittedStructs.insert(std::bit_cast<p64>(entry));
 }
 
 u32 ListingViewController::get_offset(const void *symbol) {
-    return reinterpret_cast<uintptr_t>(symbol) - reinterpret_cast<uintptr_t>(this->m_currentFile->m_dcheader);
+    return std::bit_cast<p64>(symbol) - std::bit_cast<p64>(this->m_currentFile->m_dcheader);
 }
 
-void ListingViewController::insert_variable(const SsDeclaration *var) {
-    char buffer[128] = {0};
+void ListingViewController::insert_variable(const SsDeclaration *var, const u32 indent) {
     char var_contents[36] = {0};
 
     b8 is_nullptr = var->m_pDeclValue == nullptr;
@@ -216,69 +215,69 @@ void ListingViewController::insert_variable(const SsDeclaration *var) {
     switch (var->m_declTypeId) {
         case SID("boolean"): {
             if (!is_nullptr) 
-                this->insert_span(*reinterpret_cast<b8*>(var->m_pDeclValue) == 1 ? "TRUE" : "FALSE", TextFormat{.m_color = MainWindow::HASH_COLOR});
+                this->insert_span(*std::bit_cast<b8*>(var->m_pDeclValue) == 1 ? "TRUE" : "FALSE", TextFormat{.m_color = MainWindow::HASH_COLOR}, indent);
             break;
         }
         case SID("vector"): {
             if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                f32 *val = std::bit_cast<f32*>(var->m_pDeclValue);
                 sprintf(var_contents, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("quat"): {
             if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                f32 *val = std::bit_cast<f32*>(var->m_pDeclValue);
                 sprintf(var_contents, "(%.4f, %.4f, %.4f, %.4f)", val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("float"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%.4f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%.4f", *std::bit_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("string"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%s", *reinterpret_cast<const char**>(var->m_pDeclValue));
+                sprintf(var_contents, "%s", *std::bit_cast<const char**>(var->m_pDeclValue));
             }
             break;
         }
         case SID("symbol"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%s", this->lookup(*reinterpret_cast<stringid_64*>(var->m_pDeclValue)));
+                sprintf(var_contents, "%s", this->lookup(*std::bit_cast<sid64*>(var->m_pDeclValue)));
             }
             break;
         }
         case SID("int32"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%d", *reinterpret_cast<i32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%d", *std::bit_cast<i32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("uint64"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%llX", *reinterpret_cast<u64*>(var->m_pDeclValue));
+                sprintf(var_contents, "%llX", *std::bit_cast<u64*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("timer"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%f", *std::bit_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("point"): {
             if (!is_nullptr) {
-                f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
+                f32 *val = std::bit_cast<f32*>(var->m_pDeclValue);
                 sprintf(var_contents, "(%.2f, %.2f, %.2f)", val[0], val[1], val[2]);
             }
             break;
         }
         case SID("bound-frame"): {
             if (!is_nullptr) {
-                sprintf(var_contents, "%f", *reinterpret_cast<f32*>(var->m_pDeclValue));
+                sprintf(var_contents, "%f", *std::bit_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
@@ -293,73 +292,73 @@ void ListingViewController::insert_variable(const SsDeclaration *var) {
     this->insert_span_fmt("%*s<%s>\n", TextFormat{MainWindow::OPCODE_COLOR, 12}, 8, "", var_contents);
 }
 
-void ListingViewController::insert_on_block(const SsOnBlock *block) {
+void ListingViewController::insert_on_block(const SsOnBlock *block, const u32 indent) {
     TextFormat block_format{MainWindow::COMMENT_COLOR, 12};
     switch (block->m_blockType) {
         case 0: {
-            this->insert_span("ON start\n", block_format, 9);
+            this->insert_span("ON start\n", block_format, indent);
             break;
         }
         case 1: {
-            this->insert_span("ON end\n", block_format, 9);
+            this->insert_span("ON end\n", block_format, indent);
             break;
         }
         case 2: {
-            this->insert_span_fmt("%*sON event %s\n", block_format, 9, "", this->lookup(block->m_blockEventId));
+            this->insert_span_fmt("%*sON event %s\n", block_format, indent, "", this->lookup(block->m_blockEventId));
             break;
         }
         case 3: {
-            this->insert_span("ON update\n", block_format, 9);
+            this->insert_span("ON update\n", block_format, indent);
             break;
         }
         case 4: {
-            this->insert_span("ON virtual\n", block_format, 9);
+            this->insert_span("ON virtual\n", block_format, indent);
             break;
         }
         default: {
-            this->insert_span_fmt("%*sON UNKNOWN [%d]\n", block_format, 9, "", block->m_blockType);
+            this->insert_span_fmt("%*sON UNKNOWN [%d]\n", block_format, indent, "", block->m_blockType);
             break;
         }
     }
 
-    for (u64 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
+    for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        this->insert_span_fmt("%*sTRACK %s:\n", {MainWindow::COMMENT_COLOR, 12}, 10, "", this->lookup(track_ptr->m_trackId));
-        for (u64 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
+        this->insert_span_fmt("%*sTRACK %s:\n", {MainWindow::COMMENT_COLOR, 12}, indent + m_indentPerLevel, "", this->lookup(track_ptr->m_trackId));
+        for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
-            this->insert_function_disassembly_text(*function);
+            this->insert_function_disassembly_text(*function, indent + m_indentPerLevel * 2);
             this->m_currentFile->m_functions.push_back(std::move(function));
         }
     }
 }
 
-void ListingViewController::disassemble_state_script(const StateScript *stateScript) {
+void ListingViewController::insert_state_script(const StateScript *stateScript, const u32 indent) {
     TextFormat header_format{MainWindow::COMMENT_COLOR, 14};
 
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
-        this->insert_span("OPTIONS: ", header_format, 6);
-        for (u64 i = 0; i < s_array->m_numEntries; ++i) {
-            this->insert_span(this->lookup(s_array->m_pSymbols[i]));
+        this->insert_span("OPTIONS: ", header_format, indent);
+        for (i32 i = 0; i < s_array->m_numEntries; ++i) {
+            this->insert_span(this->lookup(s_array->m_pSymbols[i]), header_format, indent + m_indentPerLevel);
             this->insert_span("\n");
         }
     }
 
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
     if (decl_table != nullptr) {
-        this->insert_span("DECLARATIONS: \n", header_format);
-        for (u64 i = 0; i < decl_table->m_numDeclarations; ++i) {
+        this->insert_span("DECLARATIONS: \n", header_format, indent);
+        for (i32 i = 0; i < decl_table->m_numDeclarations; ++i) {
             SsDeclaration *decl = decl_table->m_pDeclarations + i;
             if (decl->m_isVar) {
-                this->insert_variable(decl);
+                this->insert_variable(decl, indent + m_indentPerLevel);
             }
         }
     }
-    for (u64 i = 0; i < stateScript->m_stateCount; ++i) {
+    for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        this->insert_span_fmt("%*sSTATE %s:\n", header_format, 6, "", this->lookup(state_ptr->m_stateId));
-        for (u64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
-            this->insert_on_block(state_ptr->m_pSsOnBlocks + j);
+        this->insert_span_fmt("%*sSTATE %s:\n", header_format, indent + m_indentPerLevel, "", this->lookup(state_ptr->m_stateId));
+        for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
+            this->insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_indentPerLevel * 2);
         }
     }
 }
@@ -368,8 +367,8 @@ FunctionDisassembly ListingViewController::create_function_disassembly(const Scr
     // this->insert_span("INSTRUCTION POINTER: " + MainWindow::offset_to_string(this->get_offset(lambda->m_pOpcode)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
     // this->insert_span("SYMBOL TABLE POINTER: " + MainWindow::offset_to_string(this->get_offset(lambda->m_pSymbols)) + "\n", MainWindow::COMMENT_COLOR, 14, 20);
 
-    Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
-    u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
+    Instruction *instructionPtr = std::bit_cast<Instruction*>(lambda->m_pOpcode);
+    u64 instructionCount = std::bit_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
     std::vector<FunctionDisassemblyLine> lines;
     lines.reserve(instructionCount);
@@ -397,7 +396,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
     const Instruction istr = line.m_instruction;
     SymbolTableEntry table_entry;
     table_entry.m_type = NONE;
-    sprintf(disassembly_text, "%04X   0x%06X   %02X %02X %02X %02X   %-20s",
+    sprintf(disassembly_text, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
             this->get_offset((void*)(line.m_globalPointer + line.m_location)),
             istr.opcode,
@@ -507,7 +506,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             break;
         }
         case LoadStaticInt: {
-            const i64 table_value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            const i64 table_value = std::bit_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
@@ -518,7 +517,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             break;
         }
         case LoadStaticFloat: {
-            const f32 table_value = reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            const f32 table_value = std::bit_cast<f32*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             table_entry.m_type = SymbolTableEntryType::FLOAT;
             table_entry.m_f32 = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
@@ -529,7 +528,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             break;
         }
         case LoadStaticPointer: {
-            const uintptr_t table_value = reinterpret_cast<uintptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            const p64 table_value = std::bit_cast<p64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = table_value;
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
@@ -550,35 +549,35 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_I32;
             dest.m_I32 = 0;
-            sprintf(interpreted, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(interpreted, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadFloat: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = 0.f;
-            sprintf(interpreted, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(interpreted, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadPointer: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_POINTER;
             dest.m_PTR = {0, 0};
-            sprintf(interpreted, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(interpreted, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadI64: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = 0;
-            sprintf(interpreted, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(interpreted, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case LoadU64: {
             sprintf(varying, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_U64;
             dest.m_U64 = 0;
-            sprintf(interpreted, "r%d = [0x%x + 0x%x]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            sprintf(interpreted, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
         }
         case StoreInt: {
@@ -587,7 +586,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LookupInt: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            i64 value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
+            i64 value = std::bit_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::POINTER;
@@ -597,7 +596,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LookupFloat: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            f32 value = *reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
+            f32 value = *std::bit_cast<f32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = value;
             table_entry.m_type = SymbolTableEntryType::FLOAT;
@@ -607,28 +606,31 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LookupPointer: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            const uintptr_t value = reinterpret_cast<uintptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            const p64 value = std::bit_cast<p64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             dest.m_type = RegisterValueType::R_POINTER;
             dest.m_PTR.m_base = value;
             dest.m_PTR.m_offset = 0;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
-            sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value));
-            //this->insert_span_fmt("r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value), MainWindow::COMMENT_COLOR, 12, 12);
+            if (this->m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
+               sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
+            } else {
+                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value));
+            }
             break;
         }
         case MoveInt: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
             dest.m_type = R_I64;
             dest.m_I64 = op1.m_I64;
-            sprintf(interpreted, "r%d = r%d <%d>", istr.destination, istr.operand1, op1.m_I64);
+            sprintf(interpreted, "r%d = r%d <%lli>", istr.destination, istr.operand1, op1.m_I64);
             break;
         }
         case MoveFloat: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
             dest.m_type = R_F32;
             dest.m_F32 = op1.m_F32;
-            sprintf(interpreted, "r%d = r%d <%f>", istr.destination, istr.operand1, op1.m_I64);
+            sprintf(interpreted, "r%d = r%d <%f>", istr.destination, istr.operand1, op1.m_F32);
             break;
         }
         case MovePointer: {
@@ -688,7 +690,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_I64 == op2.m_I64;
-            sprintf(interpreted, "r%d = r%d [%d] == r%d [%d]", 
+            sprintf(interpreted, "r%d = r%d [%lli] == r%d [%lli]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -701,7 +703,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_I64 > op2.m_I64;
-            sprintf(interpreted, "r%d = r%d [%d] > r%d [%d]", 
+            sprintf(interpreted, "r%d = r%d [%lld] > r%d [%lld]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -714,7 +716,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_I64 >= op2.m_I64;
-            sprintf(interpreted, "r%d = r%d [%d] >= r%d [%d]", 
+            sprintf(interpreted, "r%d = r%d [%lli] >= r%d [%lli]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -727,7 +729,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_I64 < op2.m_I64;
-            sprintf(interpreted, "r%d = r%d [%d] < r%d [%d]", 
+            sprintf(interpreted, "r%d = r%d [%lli] < r%d [%lli]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -740,7 +742,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_I64 <= op2.m_I64;
-            sprintf(interpreted, "r%d = r%d [%d] <= r%d [%d]", 
+            sprintf(interpreted, "r%d = r%d [%lli] <= r%d [%lli]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -809,7 +811,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             } else {
                 dest.m_I32 = op1.m_I64 % op2.m_I64;
             }
-            sprintf(interpreted, "r%d = r%d [%d] % r%d [%d] -> <%d>", 
+            sprintf(interpreted, "r%d = r%d [%lli] %% r%d [%lli] -> <%d>", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64, 
@@ -827,7 +829,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             } else {
                 dest.m_F32 = fmodf(op1.m_F32, op2.m_F32);
             }
-            sprintf(interpreted, "r%d = r%d [%f] % r%d [%f] -> <%f>", 
+            sprintf(interpreted, "r%d = r%d [%f] %% r%d [%f] -> <%f>", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_F32, 
@@ -841,7 +843,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = R_I32;
             dest.m_I64 = abs(op1.m_I64);
-            sprintf(interpreted, "r%d = ABS(r%d) [%d] -> <%d>", 
+            sprintf(interpreted, "r%d = ABS(r%d) [%lli] -> <%lli>", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_I64,
@@ -864,14 +866,14 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         case Branch: {
             u32 target = istr.destination | (istr.operand2 << 8);
             sprintf(varying, "%04X", target);
-            u32 label_name = stackFrame.get_label_index(target);
+            //u32 label_name = stackFrame.get_label_index(target);
             line.m_label = target;
             break;
         }
         case BranchIf: {
             u32 target = istr.destination | (istr.operand2 << 8);
             sprintf(varying, "r%d, %04X", istr.operand1, target);
-            u32 label_name = stackFrame.get_label_index(target);
+            //u32 label_name = stackFrame.get_label_index(target);
             sprintf(interpreted, "IF r%d [%s] ", istr.operand1, op1_str);
             line.m_label = target;
             break;
@@ -879,7 +881,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         case BranchIfNot: {
             u32 target = istr.destination | (istr.operand2 << 8);
             sprintf(varying, "r%d, %04X", istr.operand1, target);
-            u32 label_name = stackFrame.get_label_index(target);
+            //u32 label_name = stackFrame.get_label_index(target);
             sprintf(interpreted, "IF NOT r%d [%s] ", istr.operand1, op1_str);
             line.m_label = target;
             break;
@@ -944,7 +946,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d", istr.destination, istr.operand1);
             dest.m_type = R_I64;
             dest.m_I64 = -op1.m_I64;
-            sprintf(interpreted, "r%d = -r%d [%d] -> <%d>", istr.destination, istr.operand1, op1.m_I64, dest.m_I64);
+            sprintf(interpreted, "r%d = -r%d [%lli] -> <%lli>", istr.destination, istr.operand1, op1.m_I64, dest.m_I64);
             break;
         }
         case FNeg: {
@@ -956,27 +958,31 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LoadParamCnt: {
             // wat
+            break;
         }
         case IAddImm: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value = op1.m_I64 + istr.operand2;
             dest.m_type = R_I64;
             dest.m_I64 = value;
-            sprintf(interpreted, "r%d = r%d [%d] + %d -> <%d>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            sprintf(interpreted, "r%d = r%d [%lli] + %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            break;
         }
         case ISubImm: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value = op1.m_I64 - istr.operand2;
             dest.m_type = R_I64;
             dest.m_I64 = value;
-            sprintf(interpreted, "r%d = r%d [%d] - %d -> <%d>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            sprintf(interpreted, "r%d = r%d [%lli] - %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            break;
         }
         case IMulImm: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value = op1.m_I64 * istr.operand2;
             dest.m_type = R_I64;
             dest.m_I64 = value;
-            sprintf(interpreted, "r%d = r%d [%d] * %d -> <%d>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            sprintf(interpreted, "r%d = r%d [%lli] * %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            break;
         }
         case IDivImm: {
             sprintf(varying, "r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
@@ -988,12 +994,12 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             }
             dest.m_type = R_I64;
             dest.m_I64 = value;
-            sprintf(interpreted, "r%d = r%d [%d] / %d -> <%d>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
+            sprintf(interpreted, "r%d = r%d [%lli] / %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
             break;
         }
         case LoadStaticI32Imm: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            i32 value = *reinterpret_cast<i32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
+            i32 value = *std::bit_cast<i32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
             dest.m_type = RegisterValueType::R_I32;
             dest.m_I32 = value;
             table_entry.m_type = SymbolTableEntryType::INT;
@@ -1003,7 +1009,7 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LoadStaticFloatImm: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            f32 value = *reinterpret_cast<f32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
+            f32 value = *std::bit_cast<f32*>(stackFrame.m_symbolTablePtr + istr.operand1); 
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = value;
             table_entry.m_type = SymbolTableEntryType::FLOAT;
@@ -1013,41 +1019,41 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
         }
         case LoadStaticPointerImm: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            uintptr_t value = reinterpret_cast<uintptr_t*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
+            p64 value = std::bit_cast<p64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
             dest.m_type = RegisterValueType::R_POINTER;
             dest.m_PTR = {value, 0};
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
-            sprintf(interpreted, "r%d = ST[%d] -> <0x%X>", istr.destination, istr.operand1, value);
+            if (value >= this->m_currentFile->m_stringsPtr) {
+                sprintf(interpreted, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
+            } else {
+                sprintf(interpreted, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, this->get_offset((void*)value));
+            }
             break;
         }
         case LoadStaticI64Imm: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
-            i64 value = reinterpret_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
+            i64 value = std::bit_cast<i64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = value;
-            sprintf(interpreted, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
+            sprintf(interpreted, "r%d = ST[%d] -> <%llu>", istr.destination, istr.operand1, value);
             break;
         }
         case LoadStaticU64Imm: {
             sprintf(varying, "r%d, %d", istr.destination, istr.operand1);
             u64 value = reinterpret_cast<u64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             if (value >= 0x000FFFFFFFFFFFFF) {
+                const char *hash_str = this->lookup(value);
                 dest.m_type = RegisterValueType::R_HASH;
                 dest.m_SID = value;
                 table_entry.m_type = SymbolTableEntryType::STRINGID_64;
                 table_entry.m_hash = value;
-                const char* test = this->lookup(value);
-                stackFrame.to_string(dst_str, istr.destination, test);
+                stackFrame.to_string(dst_str, istr.destination, hash_str);
                 sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, dst_str);
-            } else if (value % 8 == 0 && value < this->m_currentFile->m_size) {
-                dest.m_type = RegisterValueType::R_POINTER;
-                dest.m_PTR = {value, 0};
-                table_entry.m_type = SymbolTableEntryType::POINTER;
-                table_entry.m_pointer = value;
-                sprintf(interpreted, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->m_currentFile->m_bytes[value]);
+            } else if (this->m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
+                printf("here");
             }
             break;
         }
@@ -1055,6 +1061,11 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
             sprintf(varying, "r%d, r%d", istr.destination, istr.operand1);
             dest = op1;
             sprintf(interpreted, "r%d = r%d [%s]", istr.destination, istr.operand1, op1_str);
+            break;
+        }
+        case AssertPointer: {
+            sprintf(varying, "r%d", istr.destination);
+            sprintf(interpreted, "r%d?", istr.destination);
             break;
         }
         default: {
@@ -1070,30 +1081,30 @@ void ListingViewController::process_instruction(StackFrame &stackFrame, Function
     line.m_comment = std::string(interpreted);
 }
 
-void ListingViewController::insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly) {
+void ListingViewController::insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent) {
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[128] = {0};
-    TextFormat label_format = {MainWindow::COMMENT_COLOR, 14};
-    TextFormat text_format = {MainWindow::OPCODE_COLOR, 12};
-    TextFormat comment_format = {MainWindow::COMMENT_COLOR, 12};
+    constexpr TextFormat label_format = {MainWindow::COMMENT_COLOR, 14};
+    constexpr TextFormat text_format = {MainWindow::OPCODE_COLOR, 12};
+    constexpr TextFormat comment_format = {MainWindow::COMMENT_COLOR, 12};
     for (const auto &line : functionDisassembly.m_lines) {
         u32 line_offset = std::max(67ull - line.m_text.length(), 0ull);
         auto label_loc = std::find(labels.begin(), labels.end(), line.m_location);
         if (label_loc != labels.end()) {
             const u32 label_idx = std::distance(labels.begin(), label_loc);
             if (line.m_location == functionDisassembly.m_lines.size() - 1) {
-                this->insert_span("L_RETURN:\n", label_format);
+                this->insert_span("L_RETURN:\n", label_format, indent);
             } else {
                 sprintf(buffer, "L_%d:\n", label_idx);
-                this->insert_span(buffer, label_format);  
+                this->insert_span(buffer, label_format, indent);  
             }
         }
-        this->insert_span(line.m_text.c_str(), text_format);
+        this->insert_span(line.m_text.c_str(), text_format, indent);
         std::string comment = std::string(line_offset, ' ') + line.m_comment;
         this->insert_span(comment.c_str(), {MainWindow::STRING_COLOR, 12});
         if (line.m_label != -1) {
             u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_label));
-            if (line.m_label == functionDisassembly.m_lines.size() - 1) {
+            if (line.m_label == (functionDisassembly.m_lines.size() - 1)) {
                 this->insert_span("=> L_RETURN", comment_format);
             } else {
                 sprintf(buffer, "=> L_%d", target);
@@ -1102,7 +1113,7 @@ void ListingViewController::insert_function_disassembly_text(const FunctionDisas
         }
         this->insert_span("\n");
     }
-    this->insert_span("SYMBOL TABLE: \n", {MainWindow::COMMENT_COLOR, 12});
+    this->insert_span("SYMBOL TABLE: \n", {MainWindow::COMMENT_COLOR, 12}, indent);
 
     char line_start[64] = {0};
     char type[128] = {0};
@@ -1118,20 +1129,29 @@ void ListingViewController::insert_function_disassembly_text(const FunctionDisas
                 break;
             }
             case SymbolTableEntryType::INT: {
-                sprintf(type, "INT <%d>\n", entry.m_i64);
+                sprintf(type, "INT <%lli>\n", entry.m_i64);
                 break;
             }
             case SymbolTableEntryType::POINTER:{
-                sprintf(type, "POINTER <%s>\n", this->lookup(entry.m_hash));
+                if (false) {
+                    sprintf(type, "POINTER \"%s\"\n", reinterpret_cast<const char*>(entry.m_pointer));
+                } else {
+                    sprintf(type, "POINTER <%s>\n", this->lookup(entry.m_pointer));
+                }
                 break;
             }
             case SymbolTableEntryType::STRINGID_64: {
                 sprintf(type, "SID <%s>\n", this->lookup(entry.m_hash));
                 break;
             }
+            case SymbolTableEntryType::NONE:
+            case SymbolTableEntryType::UNKNOWN_TYPE: {
+                sprintf(type, "UNKNOWN: <%llX>", entry.m_i64);
+                break;
+            } 
         }
         sprintf(buffer, "%s %s", line_start, type);
-        this->insert_span(buffer, {MainWindow::COMMENT_COLOR, 12});
+        this->insert_span(buffer, {MainWindow::COMMENT_COLOR, 12}, indent);
     }
 }
 

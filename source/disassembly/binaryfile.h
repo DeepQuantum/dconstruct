@@ -26,7 +26,7 @@ enum SymbolType {
 
 struct Symbol {
     SymbolType type;
-    stringid_64 id;
+    sid64 id;
     union {
         i32 *i32_ptr;
         f32 *f32_ptr;
@@ -50,12 +50,12 @@ public:
     std::size_t m_size;
     std::unique_ptr<u8[]> m_bytes;
     std::unique_ptr<u8[]> m_pointedAtTable;
-    uintptr_t m_stringsPtr;
-    i32 disassemble_file(const SIDBase &sidbase);
-    std::map<stringid_64, const std::string> sid_cache;
-    std::set<uintptr_t> m_emittedStructs{};
+    p64 m_stringsPtr;
+    i32 disassemble_file();
+    std::map<sid64, const std::string> sid_cache;
+    std::set<p64> m_emittedStructs{};
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
-    [[nodiscard]] b8 is_file_ptr(const uintptr_t ptr) const noexcept;
+    [[nodiscard]] b8 is_file_ptr(const p64 ptr) const noexcept;
     [[nodiscard]] b8 location_gets_pointed_at(const void *ptr) const noexcept;
 
 

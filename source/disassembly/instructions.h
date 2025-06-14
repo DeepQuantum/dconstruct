@@ -129,10 +129,10 @@ enum SymbolTableEntryType {
 struct SymbolTableEntry {
     SymbolTableEntryType m_type;
     union {
-        stringid_64 m_hash;
+        sid64 m_hash;
         f32 m_f32;
         i64 m_i64;
-        uintptr_t m_pointer;
+        p64 m_pointer;
     };
 };
 
@@ -157,10 +157,10 @@ struct FunctionDisassemblyLine {
 
 
 struct RegisterPointer {
-    uintptr_t m_base;
+    p64 m_base;
     u64 m_offset;
 
-    uintptr_t get() {
+    p64 get() {
         return m_base + m_offset;
     }
 };
@@ -197,7 +197,7 @@ struct Register {
         f64		           m_F64;
         int64_t		       m_I64;
         uint64_t	       m_U64;
-        stringid_64        m_SID;
+        sid64        m_SID;
         RegisterPointer    m_PTR;
     };
     b8 isReturn;

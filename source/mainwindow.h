@@ -10,7 +10,6 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <execution>
 
 class MainWindow : public QMainWindow
 {

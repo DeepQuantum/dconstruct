@@ -4,6 +4,7 @@
         "${workspaceFolder}/**",
         "C:/Qt/6.9.0/mingw_64/include/**",
     ],
+    "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.compilerPath": "C:/Qt/Tools/mingw1310_64/bin/gcc.exe",
     "files.associations": {
         "*.hexpat": "cpp",
