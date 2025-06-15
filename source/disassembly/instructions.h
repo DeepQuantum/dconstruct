@@ -111,7 +111,6 @@ struct Instruction {
     u8 operand1;
     u8 operand2;
     u32 padding;
-
     const char *opcode_to_string() const noexcept;
     b8 isSymbolLoadInstruction() const noexcept;
     b8 isBranchInstruction() const noexcept;
@@ -152,7 +151,8 @@ struct FunctionDisassemblyLine {
     FunctionDisassemblyLine(u64 idx, Instruction *ptr) :
         m_instruction(ptr[idx]),
         m_location(idx),
-        m_globalPointer(ptr)
+        m_globalPointer(ptr),
+        m_isArgMove(false)
     {}
 };
 
@@ -224,7 +224,7 @@ struct StackFrame {
 
     Register& operator[](const u64 idx) noexcept;
 
-    void to_string(char *buffer, const u64 idx, const char *resolved = "") const noexcept;
+    void to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved = "") const noexcept;
 
     void add_target_label(const u32 target) noexcept {
         auto res = std::find(this->m_labels.begin(), this->m_labels.end(), target);

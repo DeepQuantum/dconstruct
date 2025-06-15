@@ -51,6 +51,7 @@ target_compile_options(tlou2_disasm_gui PRIVATE
     $<$<CONFIG:Release>:-Ofast -mavx512f -march=native>
     $<$<CONFIG:RelWithDebInfo>:-Og -g -mavx512f -march=znver4 -DNDEBUG>
     $<$<CONFIG:Debug>:-Og -g -Wall -Wextra>
+    $<$<CONFIG:Profile>:-Ofast -g -Wall -Wextra -pg>
 )
 
 set_target_properties(tlou2_disasm_gui PROPERTIES

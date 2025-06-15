@@ -114,50 +114,50 @@ b8 Instruction::isBranchInstruction() const noexcept {
     return this->opcode == Branch || this->opcode == BranchIf || this->opcode == BranchIfNot;
 }
 
-void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) const noexcept {
+void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved) const noexcept {
     const Register reg = this->registers[idx];
     if (reg.isArg) {
-        sprintf(buffer, "arg_%i", reg.argNum);
+        snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
         return;
     }
     switch (reg.m_type) {
         case RegisterValueType::R_HASH: {
-            strcpy(buffer, resolved);
+            strncpy(buffer, resolved, buffer_size);
             break;
         }
         case RegisterValueType::R_U16:
         case RegisterValueType::R_U32: 
         case RegisterValueType::R_U64: {
-            sprintf(buffer, "%llu", reg.m_U64);
+            snprintf(buffer, buffer_size, "%llu", reg.m_U64);
             break;
         }
         case RegisterValueType::R_I16:
         case RegisterValueType::R_I32: {
-            sprintf(buffer, "%i", reg.m_I32);
+            snprintf(buffer, buffer_size, "%i", reg.m_I32);
             break;
         }
         case RegisterValueType::R_I64: {
-            sprintf(buffer, "%lli", reg.m_I64);
+            snprintf(buffer, buffer_size, "%lli", reg.m_I64);
             break;
         }
         case RegisterValueType::R_F16:
         case RegisterValueType::R_F32:
         case RegisterValueType::R_F64:
-            sprintf(buffer, "%f", reg.m_F32);
+            snprintf(buffer, buffer_size, "%f", reg.m_F32);
             break;
         case RegisterValueType::R_STRING:
-            sprintf(buffer, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
+            snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
             break;
         // case RegisterValueType::R_POINTER: {
         //     sprintf(buffer, "[%s]")
         // }
         default: {
-            sprintf(buffer, "0x%llX", reg.m_U64);
+            snprintf(buffer,buffer_size, "0x%llX", reg.m_U64);
             break;
         } 
     }
     if (reg.isReturn) {
-        strcat(buffer, "()");
+        snprintf(buffer, buffer_size, "%s", "()");
     }
 }
 

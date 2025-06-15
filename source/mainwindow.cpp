@@ -9,8 +9,8 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     this->ui.setupUi(this);
     QPalette p = this->get_listing_view()->palette();
-    p.setColor(QPalette::Base, MainWindow::BACKGROUND_COLOR);
-    p.setColor(QPalette::Text, MainWindow::COMMENT_COLOR);
+    //p.setColor(QPalette::Base);
+    //p.setColor(QPalette::Text);
     this->get_listing_view()->setPalette(p);
     this->get_graphics_view()->setRenderHint(QPainter::Antialiasing);  // Optional for better visuals
     this->get_graphics_view()->setWindowTitle("CFG Element Example");

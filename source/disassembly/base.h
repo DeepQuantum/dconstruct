@@ -33,12 +33,12 @@ constexpr sid64 ToStringId64(const char* str) {
 
 inline const std::string int_to_string_id(sid64 sid) {
 	char buffer[20] = {0};
-    sprintf(buffer, "#%016llX", sid);
+    snprintf(buffer, sizeof(buffer), "#%016llX", sid);
     return buffer;
 }
 
 inline const std::string offset_to_string(u32 offset) {
     char buffer[20] = {0};
-    sprintf(buffer, "0x%06X", offset);
+    snprintf(buffer, sizeof(buffer), "0x%06X", offset);
     return buffer;
 }

@@ -42,6 +42,8 @@ CMakeLists.txt.user*
 *.txt
 # xemacs temporary files
 *.flc
+vs_proj
+.vs
 
 # Vim temporary files
 .*.swp
