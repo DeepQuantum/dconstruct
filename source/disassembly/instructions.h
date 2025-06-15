@@ -121,6 +121,7 @@ enum SymbolTableEntryType {
     STRINGID_64,
     FLOAT,
     INT,
+    STRING,
     POINTER,
     UNKNOWN_TYPE,
     NONE
@@ -142,6 +143,7 @@ struct FunctionDisassemblyLine {
     std::string m_text;
     Instruction *m_globalPointer;
     std::string m_comment;
+    b8 m_isArgMove;
     i64 m_label = -1;
     std::vector<u64> m_locationsPointedFrom;
 
@@ -160,7 +162,7 @@ struct RegisterPointer {
     p64 m_base;
     u64 m_offset;
 
-    p64 get() {
+    p64 get() const noexcept {
         return m_base + m_offset;
     }
 };
@@ -179,7 +181,8 @@ enum RegisterValueType {
     R_I64,
     R_U64,
     R_HASH,
-    R_POINTER
+    R_POINTER,
+    R_STRING
 };
 
 struct Register {
@@ -197,37 +200,42 @@ struct Register {
         f64		           m_F64;
         int64_t		       m_I64;
         uint64_t	       m_U64;
-        sid64        m_SID;
+        sid64              m_SID;
         RegisterPointer    m_PTR;
     };
-    b8 isReturn;
+    b8 isReturn = false;
+    b8 isArg = false;
+    b8 argNum;
 };
 
 struct StackFrame {
     Register registers[128];
-    u64 *m_symbolTablePtr;
+    u64 *m_symbolTablePtr = nullptr;
     std::map<u32, SymbolTableEntry> m_symbolTable;
     std::vector<u32> m_labels;
+    u32 m_argCount = 0;
+
+    StackFrame() : registers{}, m_symbolTable{}, m_labels{} {
+        for (i32 i = 49; i < 70; ++i) {
+            this->registers[i].isArg = true;
+            this->registers[i].argNum = i - 49;
+        }
+    }
 
     Register& operator[](const u64 idx) noexcept;
 
     void to_string(char *buffer, const u64 idx, const char *resolved = "") const noexcept;
 
-    u32 get_label_index(const u32 target) noexcept {
-        u32 label_name;
+    void add_target_label(const u32 target) noexcept {
         auto res = std::find(this->m_labels.begin(), this->m_labels.end(), target);
-        if (res != this->m_labels.end()) {
-            label_name = std::distance(this->m_labels.begin(), res);
-        } else {
-            label_name = this->m_labels.size();
+        if (res == this->m_labels.end()) {
             this->m_labels.push_back(target);
         }
-        return label_name;
-    } 
+    }
 };
+
 
 struct FunctionDisassembly {
     std::vector<FunctionDisassemblyLine> m_lines;
     StackFrame m_stackFrame;
 };
-

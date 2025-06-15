@@ -116,6 +116,10 @@ b8 Instruction::isBranchInstruction() const noexcept {
 
 void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) const noexcept {
     const Register reg = this->registers[idx];
+    if (reg.isArg) {
+        sprintf(buffer, "arg_%i", reg.argNum);
+        return;
+    }
     switch (reg.m_type) {
         case RegisterValueType::R_HASH: {
             strcpy(buffer, resolved);
@@ -129,7 +133,7 @@ void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) co
         }
         case RegisterValueType::R_I16:
         case RegisterValueType::R_I32: {
-            sprintf(buffer, "%li", reg.m_I32);
+            sprintf(buffer, "%i", reg.m_I32);
             break;
         }
         case RegisterValueType::R_I64: {
@@ -141,6 +145,12 @@ void StackFrame::to_string(char *buffer, const u64 idx, const char *resolved) co
         case RegisterValueType::R_F64:
             sprintf(buffer, "%f", reg.m_F32);
             break;
+        case RegisterValueType::R_STRING:
+            sprintf(buffer, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
+            break;
+        // case RegisterValueType::R_POINTER: {
+        //     sprintf(buffer, "[%s]")
+        // }
         default: {
             sprintf(buffer, "0x%llX", reg.m_U64);
             break;

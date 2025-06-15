@@ -11,12 +11,12 @@ void GraphicsViewController::create_cfg() noexcept {
     u32 i = 0;
     const u32 x_start = 500;
     const u32 y_start = 20;
-    const u32 line_height = 20;
+    //const u32 line_height = 20;
     const u32 node_width = 500;
-    const u32 node_margin = 50;
+    //const u32 node_margin = 50;
     const u32 node_padding = 50;
     const u32 node_x_middle = x_start + node_width / 2;
-    u32 node_height, y_node_offset = 0;
+    u32 node_height = 0, y_node_offset = 0;
     const QPen pen{Qt::red};
     for (const auto &line : this->m_currentFunction->m_lines) {
         if (line.m_label == -1) {

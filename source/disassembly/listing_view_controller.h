@@ -21,10 +21,7 @@ class ListingViewController {
 public:
     ListingViewController(BinaryFile *file, MainWindow *mainWindow, const SIDBase *sidbase, FILE *outfptr = nullptr);
     void create_listing_view();
-    void insert_entry(const Entry *entry);
-    void insert_struct(const DC_Struct *entry, const u64 indent = 0);
-    void insert_span(const char *text, const TextFormat &text_format = TextFormat{}, const u64 indent = 0);
-    template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
+    
 
 private:
     BinaryFile *m_currentFile = nullptr;
@@ -38,12 +35,17 @@ private:
     constexpr static TextFormat ENTRY_HEADER_FMT = {.m_color = MainWindow::VAR_COLOR, .m_fontSize = 20};
     constexpr static TextFormat ENTRY_TYPE_FMT   = {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 20};
     constexpr static TextFormat STRUCT_TYPE_FMT  = {.m_color = MainWindow::TYPE_COLOR, .m_fontSize = 14};
+    constexpr static TextFormat COMMENT_FMT      = {.m_color = MainWindow::COMMENT_COLOR, .m_fontSize = 14};
 
     constexpr static u32 m_indentPerLevel = 2;
-
+    
+    void insert_entry(const Entry *entry);
+    void insert_struct(const DC_Struct *entry, const u64 indent = 0);
+    void insert_span(const char *text, const TextFormat &text_format = TextFormat{}, const u64 indent = 0);
+    template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
     [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
     void insert_header_line();
-    b8 is_possible_float(const f32 *ptr);
+    [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
     void insert_state_script(const StateScript *stateScript, const u32 indent);
     void insert_unmapped_struct(const DC_Struct *_struct, const u64 indent);
     void insert_variable(const SsDeclaration *var, const u32 indent);
@@ -51,5 +53,7 @@ private:
     FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);
     void process_instruction(StackFrame &stackFrame, FunctionDisassemblyLine &functionLine);
     void insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent);
-    u32 get_offset(const void *symbol);
+    void insert_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const u32 indent) noexcept;
+    void insert_goto_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size) noexcept;
+    [[nodiscard]] u32 get_offset(const void *symbol) const noexcept;
 };
