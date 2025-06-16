@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     // SIDBase base = SIDBase();
     // base.load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
     // BinaryFile test("C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/ss-wave-manager.bin");
-    // test.disassemble_file();
+    // test.dc_setup();
 
     // //Disassembler *lvc = new Disassembler(&test, &w, &base);
 

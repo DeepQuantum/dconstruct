@@ -21,7 +21,7 @@
 
 template<typename... Args>
 void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_format, Args ...args) {
-    char buffer[256] = {0};
+    char buffer[512] = {0};
     snprintf(buffer, sizeof(buffer), format, args...);
     this->insert_span(buffer, text_format);
 }
@@ -33,6 +33,7 @@ void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_fo
 
 void Disassembler::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64 indent) {
     u64 offset = 0;
+    printf("%s\n", this->lookup(struct_ptr->m_typeID));
     b8 offset_gets_pointed_at = false;
     u64 move = 0;
     const char *str_ptr = nullptr;
@@ -90,36 +91,41 @@ void Disassembler::insert_struct(const DC_Struct *entry, const u64 indent) {
 
     switch (entry->m_typeID)
     {
-        case SID("boolean"):
-        {
-            this->insert_span_fmt("%*sbool %s: <%s>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data) ? "true" : "false");
+        case SID("boolean"): {
+            this->insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(&entry->m_data) ? "true" : "false");
             break;
         }
-        case SID("int"):
-        {
-            this->insert_span_fmt("%*sint %s: <%d>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data));
+        case SID("int"): {
+            this->insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(&entry->m_data));
             break;
         }
-        case SID("float"):
-        {
-            this->insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *std::bit_cast<const i32*>(entry->m_data));
+        case SID("float"): {
+            this->insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *std::bit_cast<const f32*>(&entry->m_data));
             break;
         }
-        case SID("sid"):
-        {
-            this->insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", this->lookup(*std::bit_cast<const sid64*>(entry->m_data)));
+        case SID("sid"): {
+            this->insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", this->lookup(*std::bit_cast<const sid64*>(&entry->m_data)));
             break;
         }
-        case SID("state-script"):
-        {
+        case SID("state-script"): {
             this->insert_state_script(std::bit_cast<const StateScript*>(&entry->m_data), indent + m_indentPerLevel);
             break;
         }
-        case SID("script-lambda"):
-        {
+        case SID("script-lambda"): {
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(std::bit_cast<const ScriptLambda*>(&entry->m_data))));
             this->insert_function_disassembly_text(*function, indent + m_indentPerLevel);
             this->m_currentFile->m_functions.push_back(std::move(function));
+            break;
+        }
+        /*case SID("level-set"): {
+            break;
+        }*/
+        case SID("level-set-arrays"): {
+            const dc_structs::level_set_arrays *level_sets = std::bit_cast<const dc_structs::level_set_arrays*>(&entry->m_data);
+            for (u64 i = 0; i < 7; ++i) {
+                const DC_Struct* _struct = std::bit_cast<const DC_Struct*>(level_sets->entries[i].arrays);
+                this->insert_unmapped_struct(_struct, indent + m_indentPerLevel);
+            }
             break;
         }
         case SID("symbol-array"): {
@@ -1124,8 +1130,7 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
 
     u64 *table_ptr = functionDisassembly.m_stackFrame.m_symbolTablePtr;
 
-    for (u32 i = 0; i < functionDisassembly.m_stackFrame.m_symbolTable.size(); ++i) {
-        const SymbolTableEntry &entry = functionDisassembly.m_stackFrame.m_symbolTable.at(i);
+    for (const auto &[i, entry] : functionDisassembly.m_stackFrame.m_symbolTable) {
         snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, this->get_offset(table_ptr + i));
         switch (entry.m_type) {
             case SymbolTableEntryType::FLOAT: {

@@ -9,11 +9,11 @@
 
 BinaryFile::BinaryFile() {}
 
-BinaryFile::BinaryFile(const std::string &path) {
+BinaryFile::BinaryFile(const char *path) {
     std::ifstream scriptstream(path, std::ios::binary);
 
     if (!scriptstream.is_open()) {
-        throw std::runtime_error("Coudln't open " + path);
+        throw std::runtime_error("Coudln't open " + std::string(path));
     }
 
     m_size = std::filesystem::file_size(path);
@@ -23,7 +23,7 @@ BinaryFile::BinaryFile(const std::string &path) {
     this->m_bytes = std::unique_ptr<u8[]>(temp_buffer);
 }
 
-i32 BinaryFile::disassemble_file() {
+i32 BinaryFile::dc_setup() {
     constexpr u32 magic = 0x44433030;
     constexpr u32 version = 0x1;
 

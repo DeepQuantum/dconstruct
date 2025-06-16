@@ -43,7 +43,7 @@ class BinaryFile
 public:
     BinaryFile();
 
-    BinaryFile(const std::string &path);
+    BinaryFile(const char *path);
 
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;
@@ -51,7 +51,7 @@ public:
     std::unique_ptr<u8[]> m_bytes;
     std::unique_ptr<u8[]> m_pointedAtTable;
     p64 m_stringsPtr;
-    i32 disassemble_file();
+    i32 dc_setup();
     std::map<sid64, const std::string> sid_cache;
     std::set<p64> m_emittedStructs{};
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
