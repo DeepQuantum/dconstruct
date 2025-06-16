@@ -27,14 +27,14 @@ int main(int argc, char *argv[]) {
 
     const std::string base_path = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1";
 
-    //disasm_file(filepath, &base, "test.txt");
+    disasm_file(filepath, &base, "test.txt");
 
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(base_path)) {
-        if (entry.path().extension() != ".bin") {
-            continue;
-        }
-        disasm_file(entry.path().string().c_str(), &base, entry.path().filename().string().c_str());
-    }
+    // for (const auto& entry : std::filesystem::recursive_directory_iterator(base_path)) {
+    //     if (entry.path().extension() != ".bin") {
+    //         continue;
+    //     }
+    //     disasm_file(entry.path().string().c_str(), &base, entry.path().filename().string().c_str());
+    // }
     
     auto time_taken = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
 

@@ -3,6 +3,7 @@
 #include "base.h"
 #include "binaryfile.h"
 #include "instructions.h"
+#include "custom_structs.h"
 #include <vector>
 
 struct Color {
@@ -25,11 +26,6 @@ struct TextFormat {
     u64 m_fontSize = 14;
 };
 
-struct DC_Struct {
-    sid64 m_typeID;
-    const void *m_data;
-};
-
 class Disassembler {
 public:
     void disassemble();
@@ -43,7 +39,7 @@ protected:
     BinaryFile *m_currentFile = nullptr;
     const SIDBase *m_sidbase = nullptr;
 
-    std::map<sid64, std::vector<const DC_Struct*>> m_unmappedEntries;
+    std::map<sid64, std::vector<const dc_structs::unmapped*>> m_unmappedEntries;
 
     constexpr static TextFormat ENTRY_HEADER_FMT = {VAR_COLOR, 20};
     constexpr static TextFormat ENTRY_TYPE_FMT   = {TYPE_COLOR, 20};
@@ -51,15 +47,17 @@ protected:
     constexpr static TextFormat COMMENT_FMT      = {COMMENT_COLOR, 14};
 
     constexpr static u32 m_indentPerLevel = 2;
+
+    FILE *m_perfFile = nullptr;
     
     void insert_entry(const Entry *entry);
-    void insert_struct(const DC_Struct *entry, const u64 indent = 0);
+    void insert_struct(const dc_structs::unmapped *entry, const u64 indent = 0);
     template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
     [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
     void insert_header_line();
     [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
     void insert_state_script(const StateScript *stateScript, const u32 indent);
-    void insert_unmapped_struct(const DC_Struct *_struct, const u64 indent);
+    void insert_unmapped_struct(const dc_structs::unmapped *_struct, const u64 indent);
     void insert_variable(const SsDeclaration *var, const u32 indent);
     void insert_on_block(const SsOnBlock *block, const u32 indent);
     FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);

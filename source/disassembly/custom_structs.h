@@ -2,6 +2,11 @@
 #include "base.h"
 
 namespace dc_structs {
+    struct unmapped {
+        sid64 m_typeID;
+        const void *m_data;
+    };
+    
     struct array {
         const u64* data;
         const u64 &operator[](const u64 idx) const noexcept {
@@ -32,5 +37,12 @@ namespace dc_structs {
 
     struct level_set_arrays {
         const level_set_array_entry entries[7];
+    };
+
+    struct point_curve {
+        const u32 int1;
+        const f32 floats[33];
+
+        //constexpr static char *fmt = "";
     };
 }

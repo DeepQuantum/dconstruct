@@ -1,8 +1,9 @@
 #include "custom_structs.h"
 #include <cmath>
-#include <sstream>
+#include <chrono>
 #include "disassembler.h"
 #include <string.h>
+
 
 [[nodiscard]] const char *Disassembler::lookup(const sid64 sid) noexcept {
     auto res = this->m_currentFile->sid_cache.find(sid);
@@ -21,7 +22,7 @@
 
 template<typename... Args>
 void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_format, Args ...args) {
-    char buffer[512] = {0};
+    char buffer[512] = { 0 };
     snprintf(buffer, sizeof(buffer), format, args...);
     this->insert_span(buffer, text_format);
 }
@@ -31,9 +32,8 @@ void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_fo
     return fabsf(*val - rounded) < 1e-5f && *val > -1e5f && *val < 1e5f && rounded != 0.f;
 }
 
-void Disassembler::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64 indent) {
+void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr, const u64 indent) {
     u64 offset = 0;
-    printf("%s\n", this->lookup(struct_ptr->m_typeID));
     b8 offset_gets_pointed_at = false;
     u64 move = 0;
     const char *str_ptr = nullptr;
@@ -41,12 +41,12 @@ void Disassembler::insert_unmapped_struct(const DC_Struct *struct_ptr, const u64
         offset += move;
         const p64 data_ptr = std::bit_cast<p64>(&struct_ptr->m_data) + offset;
         if (this->m_currentFile->is_file_ptr(data_ptr)) {
-            const p64 ptr_loc = *std::bit_cast<const p64*>(data_ptr);
-            if (ptr_loc >= this->m_currentFile->m_stringsPtr) {
+            const p64 ptr_value = *std::bit_cast<const p64*>(data_ptr);
+            if (ptr_value >= this->m_currentFile->m_stringsPtr) {
                 this->insert_span("string: ", {.m_color = TYPE_COLOR}, indent);
-                this->insert_span_fmt("%s\n", {.m_color = STRING_COLOR}, std::bit_cast<const char*>(ptr_loc));
+                this->insert_span_fmt("\"%s\n", {.m_color = STRING_COLOR}, std::bit_cast<const char*>(ptr_value));
             } else {
-                const DC_Struct *_struct = std::bit_cast<const DC_Struct*>(ptr_loc - 8);
+                const dc_structs::unmapped *_struct = std::bit_cast<const dc_structs::unmapped*>(ptr_value - 8);
                 this->insert_struct(_struct, indent + m_indentPerLevel);
             }
             move = 8;
@@ -78,17 +78,17 @@ void Disassembler::disassemble() {
 }
 
 void Disassembler::insert_entry(const Entry *entry) {
-    const DC_Struct *_struct = std::bit_cast<const DC_Struct*>(std::bit_cast<const u64*>(entry->m_entryPtr) - 1);
+    const dc_structs::unmapped *_struct = std::bit_cast<const dc_structs::unmapped*>(std::bit_cast<const u64*>(entry->m_entryPtr) - 1);
     this->insert_span_fmt("%s = ", this->ENTRY_HEADER_FMT, this->lookup(entry->m_scriptId));
     this->insert_struct(_struct);
 }
 
-void Disassembler::insert_struct(const DC_Struct *entry, const u64 indent) {
+
+void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 indent) {
     const u64 offset = this->get_offset((void*)entry);
     TextFormat opcode_format = TextFormat{OPCODE_COLOR, 14};
     this->insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", this->lookup(entry->m_typeID), offset);
     
-
     switch (entry->m_typeID)
     {
         case SID("boolean"): {
@@ -123,7 +123,7 @@ void Disassembler::insert_struct(const DC_Struct *entry, const u64 indent) {
         case SID("level-set-arrays"): {
             const dc_structs::level_set_arrays *level_sets = std::bit_cast<const dc_structs::level_set_arrays*>(&entry->m_data);
             for (u64 i = 0; i < 7; ++i) {
-                const DC_Struct* _struct = std::bit_cast<const DC_Struct*>(level_sets->entries[i].arrays);
+                const dc_structs::unmapped* _struct = std::bit_cast<const dc_structs::unmapped*>(level_sets->entries[i].arrays);
                 this->insert_unmapped_struct(_struct, indent + m_indentPerLevel);
             }
             break;
@@ -141,9 +141,17 @@ void Disassembler::insert_struct(const DC_Struct *entry, const u64 indent) {
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = this->lookup(map->keys[i]);
                 this->insert_span_fmt("%*s%s {\n", opcode_format, indent + m_indentPerLevel, "", key_hash);
-                const DC_Struct *struct_ptr = std::bit_cast<const DC_Struct*>(map->values[i] - 8);
+                const dc_structs::unmapped *struct_ptr = std::bit_cast<const dc_structs::unmapped*>(map->values[i] - 8);
                 this->insert_struct(struct_ptr, indent + m_indentPerLevel * 2);
                 this->insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_indentPerLevel);
+            }
+            break;
+        }
+        case SID("point-curve"): {
+            const dc_structs::point_curve *curve = std::bit_cast<const dc_structs::point_curve*>(&entry->m_data);
+            this->insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
+            for (u64 i = 0; i < 33; ++i) {
+                this->insert_span_fmt("%*sf32_%u: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", i, curve->floats[i]);
             }
             break;
         }
@@ -157,8 +165,9 @@ void Disassembler::insert_struct(const DC_Struct *entry, const u64 indent) {
             break;
         }
     }
+
     this->insert_span("}\n", ENTRY_TYPE_FMT, indent);
-    this->m_currentFile->m_emittedStructs.insert(std::bit_cast<p64>(entry));
+    //this->m_currentFile->m_emittedStructs.insert(std::bit_cast<p64>(entry));
 }
 
 [[nodiscard]] u32 Disassembler::get_offset(const void *symbol) const noexcept {

@@ -9,6 +9,7 @@ public:
         this->m_sidbase = sidbase;
         this->m_outbuf.reserve(0x2FFFFFULL);
         this->m_outfptr = fopen(out_file.c_str(), "wb");
+        this->m_perfFile = fopen("./perffile.txt", "w");
     }
 
 private:

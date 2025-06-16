@@ -44,7 +44,7 @@ CMakeLists.txt.user*
 *.flc
 vs_proj
 .vs
-
+.mypy_cache
 # Vim temporary files
 .*.swp
 
