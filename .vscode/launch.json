@@ -5,7 +5,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/tlou2_disasm_cli.exe",
-        "args": ["C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/ss-wave-manager.bin"],
+        "args": ["C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/weapon-gameplay.bin"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",
         "preLaunchTask": "build",

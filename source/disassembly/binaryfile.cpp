@@ -27,7 +27,7 @@ i32 BinaryFile::dc_setup() {
     constexpr u32 magic = 0x44433030;
     constexpr u32 version = 0x1;
 
-    this->m_dcheader = std::bit_cast<DC_Header*>(this->m_bytes.get());
+    this->m_dcheader = reinterpret_cast<DC_Header*>(this->m_bytes.get());
 
     if (this->m_dcheader->m_magic != magic) {
         throw std::runtime_error("Magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)this->m_bytes.get()));
@@ -45,8 +45,8 @@ i32 BinaryFile::dc_setup() {
 }
 
 void BinaryFile::replace_newlines_in_stringtable() noexcept {
-    const u64 table_size = std::bit_cast<p64>(this->m_relocTable) - 4 - this->m_stringsPtr;
-    char *string_table = std::bit_cast<char*>(this->m_stringsPtr);
+    const u64 table_size = reinterpret_cast<p64>(this->m_relocTable) - 4 - this->m_stringsPtr;
+    char *string_table = reinterpret_cast<char*>(this->m_stringsPtr);
     for (u64 i = 0; i < table_size; ++i) {
         if (string_table[i] == '\n') {
             string_table[i] = ' ';
@@ -56,12 +56,12 @@ void BinaryFile::replace_newlines_in_stringtable() noexcept {
 
 
 [[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const void *ptr) const noexcept {
-    p64 proper_offset = (std::bit_cast<p64>(ptr) - std::bit_cast<p64>(this->m_bytes.get())) / 8;
+    p64 proper_offset = (reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(this->m_bytes.get())) / 8;
     return this->m_pointedAtTable[proper_offset / 8] & (1 << (proper_offset % 8));
 }
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const p64 ptr) const noexcept {
-    p64 offset = (ptr - std::bit_cast<p64>(this->m_bytes.get())) / 8;
+    p64 offset = (ptr - reinterpret_cast<p64>(this->m_bytes.get())) / 8;
     const u8* table = this->m_bytes.get() + this->m_dcheader->m_textSize + 4;
     return table[offset / 8] & (1 << (offset % 8));
 }
@@ -80,7 +80,7 @@ void BinaryFile::read_reloc_table() {
 
     u8 *reloc_data = this->m_bytes.get() + this->m_dcheader->m_textSize;
 
-    const u32 table_size = *std::bit_cast<u32*>(reloc_data);
+    const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
     this->m_pointedAtTable = std::make_unique<u8[]>(table_size);
     
     this->m_relocTable = reloc_data + 4;
@@ -90,7 +90,7 @@ void BinaryFile::read_reloc_table() {
     const __m512i _1 = _mm512_set1_epi64(0x1);
     const __m512i _7 = _mm512_set1_epi64(0x7);
     const __m512i _3 = _mm512_set1_epi64(0x3);
-    const __m512i _base = _mm512_set1_epi64(std::bit_cast<p64>(this->m_bytes.get()));
+    const __m512i _base = _mm512_set1_epi64(reinterpret_cast<p64>(this->m_bytes.get()));
 
     for (u64 i = 0; i < table_size; ++i) {
         const u8 *data_segment_ptr = this->m_bytes.get() + i * 64;
@@ -106,12 +106,12 @@ void BinaryFile::read_reloc_table() {
 #else
     for (u64 i = 0; i < table_size * 8; ++i) {
         if (this->m_relocTable[i / 8] & (1 << (i % 8))) {
-            u64* entry = std::bit_cast<u64*>(this->m_bytes.get() + i * 8);
+            u64* entry = reinterpret_cast<u64*>(this->m_bytes.get() + i * 8);
             u64 offset = *entry;
-            *entry = std::bit_cast<u64>(this->m_bytes.get() + offset);
+            *entry = reinterpret_cast<u64>(this->m_bytes.get() + offset);
             this->m_pointedAtTable[offset / 64] |= (1 << ((offset / 8) % 8));
         }
     }
 #endif
-    this->m_stringsPtr = std::bit_cast<p64>(this->m_bytes.get() + this->m_dcheader->m_stringsOffset);
+    this->m_stringsPtr = reinterpret_cast<p64>(this->m_bytes.get() + this->m_dcheader->m_stringsOffset);
 }
