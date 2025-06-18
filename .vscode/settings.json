@@ -34,6 +34,11 @@
                     "short": "CreateProfile",
                     "long": "Let CMake pick the default build type.",
                     "buildType": "CreateProfile"
+                },
+                "release_profile": {
+                    "short": "ReleaseProfile",
+                    "long": "Let CMake pick the default build type.",
+                    "buildType": "ReleaseProfile"
                 }
             }
         }

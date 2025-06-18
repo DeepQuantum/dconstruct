@@ -39,7 +39,19 @@ i32 BinaryFile::dc_setup() {
 
     this->read_reloc_table();
     
+    this->replace_newlines_in_stringtable();
+    
     return 1;
+}
+
+void BinaryFile::replace_newlines_in_stringtable() noexcept {
+    const u64 table_size = std::bit_cast<p64>(this->m_relocTable) - 4 - this->m_stringsPtr;
+    char *string_table = std::bit_cast<char*>(this->m_stringsPtr);
+    for (u64 i = 0; i < table_size; ++i) {
+        if (string_table[i] == '\n') {
+            string_table[i] = ' ';
+        }
+    }
 }
 
 
@@ -71,7 +83,7 @@ void BinaryFile::read_reloc_table() {
     const u32 table_size = *std::bit_cast<u32*>(reloc_data);
     this->m_pointedAtTable = std::make_unique<u8[]>(table_size);
     
-    const u8 *bitmap = reloc_data + 4;
+    this->m_relocTable = reloc_data + 4;
 
 #ifdef DERANGED
     const __m512i _indices = _mm512_set_epi64(7,6,5,4,3,2,1,0);
@@ -93,7 +105,7 @@ void BinaryFile::read_reloc_table() {
     }
 #else
     for (u64 i = 0; i < table_size * 8; ++i) {
-        if (bitmap[i / 8] & (1 << (i % 8))) {
+        if (this->m_relocTable[i / 8] & (1 << (i % 8))) {
             u64* entry = std::bit_cast<u64*>(this->m_bytes.get() + i * 8);
             u64 offset = *entry;
             *entry = std::bit_cast<u64>(this->m_bytes.get() + offset);

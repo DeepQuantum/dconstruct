@@ -41,6 +41,8 @@ struct Symbol {
 class BinaryFile
 {
 public:
+
+    i32 dc_setup();
     BinaryFile();
 
     BinaryFile(const char *path);
@@ -51,7 +53,7 @@ public:
     std::unique_ptr<u8[]> m_bytes;
     std::unique_ptr<u8[]> m_pointedAtTable;
     p64 m_stringsPtr;
-    i32 dc_setup();
+    u8 *m_relocTable;
     std::map<sid64, const std::string> sid_cache;
     std::set<p64> m_emittedStructs{};
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
@@ -61,6 +63,7 @@ public:
 
 private:
     void read_reloc_table();
+    void replace_newlines_in_stringtable() noexcept;
 };
 
 #endif // BINARYFILE_H

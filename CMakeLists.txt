@@ -80,7 +80,8 @@ endif()
 add_executable(tlou2_disasm_cli ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
 target_compile_options(tlou2_disasm_cli PRIVATE
-    $<$<CONFIG:Release>:-O2 -fprofile-use -march=znver4 -mavx512f>
+    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f>
+    $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG>
     $<$<CONFIG:Debug>:-Og -g>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f>

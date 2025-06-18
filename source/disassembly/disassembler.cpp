@@ -151,7 +151,7 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             const dc_structs::point_curve *curve = std::bit_cast<const dc_structs::point_curve*>(&entry->m_data);
             this->insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
             for (u64 i = 0; i < 33; ++i) {
-                this->insert_span_fmt("%*sf32_%u: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", i, curve->floats[i]);
+                this->insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", i, curve->floats[i]);
             }
             break;
         }
@@ -537,7 +537,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         }
         case LoadU32: {
             snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I32;
+            dest.m_type = RegisterValueType::R_U32;
             dest.m_I32 = 0;
             snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
             break;
@@ -1055,6 +1055,18 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             }
             break;
         }
+        case IntAsh: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+
+            u64 hash = op1.m_I64 >> -(char)op2.m_I8;
+            if (op2.m_I64 = 0) {
+                hash = op1.m_I64 << op2.m_I8;
+            }
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = hash;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = %d <<>> %d", istr.destination, op1_str, op2_str);
+            break;
+        }
         case Move: {
             snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
 
@@ -1066,6 +1078,140 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             
             snprintf(interpreted, interpreted_buffer_size, "r%d = %s", istr.destination, op1_str);
             break;
+        }
+        case LoadStaticU32Imm: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            const u32 value = reinterpret_cast<u32*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            dest.m_type = RegisterValueType::R_U32;
+            dest.m_U32 = value;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
+            break;
+        }
+        case LoadStaticI8Imm: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            const i8 value = reinterpret_cast<i8*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            dest.m_type = RegisterValueType::R_I8;
+            dest.m_I8 = value;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
+            break;
+        }
+        case LoadStaticI16Imm: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            const i16 value = reinterpret_cast<i16*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            dest.m_type = RegisterValueType::R_I16;
+            dest.m_I16 = value;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
+            break;
+        }
+        case LoadStaticU16Imm: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            const u16 value = reinterpret_cast<u16*>(stackFrame.m_symbolTablePtr)[istr.operand1];
+            dest.m_type = RegisterValueType::R_U16;
+            dest.m_U16 = value;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
+            break;
+        }
+        case LoadI8: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_I8;
+            dest.m_I8 = 0;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(i8*)%s", istr.destination, op1_str);
+            break;
+        }
+        case LoadU8: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_U8;
+            dest.m_U8 = 0;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u8*)%s", istr.destination, op1_str);
+            break;
+        }
+        case LoadI16: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_I16;
+            dest.m_I16 = 0;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(i16*)%s", istr.destination, op1_str);
+            break;
+        }
+        case LoadU16: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_U16;
+            dest.m_U16 = 0;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", istr.destination, op1_str);
+            break;
+        }
+        case LoadI32: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_I32;
+            dest.m_I32 = 0;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", istr.destination, op1_str);
+            break;
+        }
+        case StoreI8: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i8*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_I8;
+            dest.m_I8 = 0;
+            break;
+        }
+        case StoreU8: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u8*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_U8;
+            dest.m_U8 = 0;
+            break;
+        }
+        case StoreI16: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i16*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_I16;
+            dest.m_I16 = 0;
+            break;
+        }
+        case StoreU16: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u16*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_U16;
+            dest.m_U16 = 0;
+            break;
+        }
+        case StoreI32: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i32*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_I32;
+            dest.m_I32 = 0;
+            break;
+        }
+        case StoreU32: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u32*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_U32;
+            dest.m_U32 = 0;
+            break;
+        }
+        case StoreI64: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i64*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_I64;
+            dest.m_I64 = 0;
+            break;
+        }
+        case StoreU64: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u64*)%s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_U64;
+            dest.m_U64 = 0;
+            break;
+        }
+        case INotEqual:
+        case FNotEqual: {
+            snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1);
+            dest.m_type = RegisterValueType::R_BOOL;
+            dest.m_BOOL = op1.m_U64 != op2.m_U64;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = %s != %s", istr.destination, op1_str, op2_str);
+            break;
+        }
+        case StoreArray: {
+            // Not used.
         }
         case AssertPointer: {
             snprintf(varying, disassembly_text_size,"r%d", istr.destination);
