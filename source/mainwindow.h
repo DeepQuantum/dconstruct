@@ -22,11 +22,11 @@ public:
     
 
     QTextEdit *get_listing_view() const noexcept {
-        return this->ui.ListingView;
+        return ui.ListingView;
     }
 
     QGraphicsView *get_graphics_view() const noexcept {
-        return this->ui.graphicsView;
+        return ui.graphicsView;
     }
 
     std::vector<BinaryFile> m_scripts;

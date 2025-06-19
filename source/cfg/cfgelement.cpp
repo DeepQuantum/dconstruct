@@ -12,12 +12,12 @@ void CFGElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
     painter->setPen(Qt::black);
     const QFont font("Consolas", 10);
     painter->setFont(font);
-    painter->drawText(this->m_rect, Qt::AlignLeft | Qt::AlignVCenter, m_text);
+    painter->drawText(m_rect, Qt::AlignLeft | Qt::AlignVCenter, m_text);
 }
 
 void CFGElement::update_rect(const QRectF &rect) {
     prepareGeometryChange();
-    this->m_rect = rect;
+    m_rect = rect;
     update();
 }
 

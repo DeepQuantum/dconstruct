@@ -205,20 +205,20 @@ struct Register {
     };
     b8 isReturn = false;
     b8 isArg = false;
-    b8 argNum;
+    u8 argNum;
 };
 
 struct StackFrame {
-    Register registers[128];
+    Register m_registers[128];
     u64 *m_symbolTablePtr = nullptr;
     std::map<u32, SymbolTableEntry> m_symbolTable;
     std::vector<u32> m_labels;
     u32 m_argCount = 0;
 
-    StackFrame() : registers{}, m_symbolTable{}, m_labels{} {
+    StackFrame() : m_registers{}, m_symbolTable{}, m_labels{} {
         for (i32 i = 49; i < 70; ++i) {
-            this->registers[i].isArg = true;
-            this->registers[i].argNum = i - 49;
+            m_registers[i].isArg = true;
+            m_registers[i].argNum = i - 49;
         }
     }
 
@@ -227,9 +227,9 @@ struct StackFrame {
     void to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved = "") const noexcept;
 
     void add_target_label(const u32 target) noexcept {
-        auto res = std::find(this->m_labels.begin(), this->m_labels.end(), target);
-        if (res == this->m_labels.end()) {
-            this->m_labels.push_back(target);
+        auto res = std::find(m_labels.begin(), m_labels.end(), target);
+        if (res == m_labels.end()) {
+            m_labels.push_back(target);
         }
     }
 };

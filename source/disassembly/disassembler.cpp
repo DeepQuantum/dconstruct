@@ -6,15 +6,15 @@
 
 
 [[nodiscard]] const char *Disassembler::lookup(const sid64 sid) noexcept {
-    auto res = this->m_currentFile->sid_cache.find(sid);
-    if (res != this->m_currentFile->sid_cache.end()) {
+    auto res = m_currentFile->m_sidCache.find(sid);
+    if (res != m_currentFile->m_sidCache.end()) {
         return res->second.c_str();
     }
 
-    const char *hash_string = this->m_sidbase->search(sid);
+    const char *hash_string = m_sidbase->search(sid);
     if (hash_string == nullptr) {
         const std::string new_hash_string = int_to_string_id(sid);
-        auto [iter, inserted] = this->m_currentFile->sid_cache.emplace(sid, new_hash_string);
+        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, new_hash_string);
         hash_string = iter->second.c_str();
     }
     return hash_string;
@@ -24,7 +24,7 @@ template<typename... Args>
 void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_format, Args ...args) {
     char buffer[512] = { 0 };
     snprintf(buffer, sizeof(buffer), format, args...);
-    this->insert_span(buffer, text_format);
+    insert_span(buffer, text_format);
 }
 
 [[nodiscard]] b8 Disassembler::is_possible_float(const f32 *val) const noexcept {
@@ -40,118 +40,120 @@ void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr
     while (!offset_gets_pointed_at) {
         offset += move;
         const p64 data_ptr = reinterpret_cast<p64>(&struct_ptr->m_data) + offset;
-        if (this->m_currentFile->is_file_ptr(data_ptr)) {
+        if (m_currentFile->is_file_ptr(data_ptr)) {
             const p64 ptr_value = *reinterpret_cast<const p64*>(data_ptr);
-            if (ptr_value >= this->m_currentFile->m_stringsPtr) {
-                this->insert_span("string: ", {.m_color = TYPE_COLOR}, indent);
-                this->insert_span_fmt("\"%s\n", {.m_color = STRING_COLOR}, reinterpret_cast<const char*>(ptr_value));
+            if (ptr_value >= m_currentFile->m_stringsPtr) {
+                insert_span("string: ", {.m_color = TYPE_COLOR}, indent);
+                insert_span_fmt("\"%s", {.m_color = STRING_COLOR}, reinterpret_cast<const char*>(ptr_value));
+                insert_span("\"\n", {.m_color = STRING_COLOR});
             } else {
                 const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(ptr_value - 8);
-                this->insert_struct(_struct, indent);
+                insert_struct(_struct, indent);
             }
             move = 8;
         }
-        else if ((str_ptr = this->m_sidbase->search(*reinterpret_cast<const sid64*>(data_ptr))) != nullptr) {
-            this->insert_span_fmt("%*ssid: %s\n", {.m_color = HASH_COLOR}, indent, "", str_ptr);
+        else if ((str_ptr = m_sidbase->search(*reinterpret_cast<const sid64*>(data_ptr))) != nullptr) {
+            insert_span_fmt("%*ssid: %s\n", {.m_color = HASH_COLOR}, indent, "", str_ptr);
             move = 8;
         }
-        else if (this->is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
-            this->insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const f32*>(data_ptr));
+        else if (is_possible_float(reinterpret_cast<const f32*>(data_ptr))) {
+            insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const f32*>(data_ptr));
             move = 4;
         }
         else {
-            this->insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32*>(data_ptr));
+            insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32*>(data_ptr));
             move = 4;
         }
-        offset_gets_pointed_at = this->m_currentFile->location_gets_pointed_at((void*)(data_ptr + move + 8));
+        offset_gets_pointed_at = m_currentFile->location_gets_pointed_at((void*)(data_ptr + move + 8));
     }
 }
 
 void Disassembler::disassemble() {
-    this->insert_header_line();
+    insert_header_line();
     const std::string sep = std::string(100, '#') + "\n";
-    for (i32 i = 0; i < this->m_currentFile->m_dcheader->m_numEntries; ++i) {
-        this->insert_entry(this->m_currentFile->m_dcheader->m_pStartOfData + i);
-        this->insert_span(sep.c_str(), {.m_color = COMMENT_COLOR, .m_fontSize = 14});
+    for (i32 i = 0; i < m_currentFile->m_dcheader->m_numEntries; ++i) {
+        insert_entry(m_currentFile->m_dcheader->m_pStartOfData + i);
+        insert_span(sep.c_str(), {.m_color = COMMENT_COLOR, .m_fontSize = 14});
     }
-    this->complete();
+    complete();
 }
 
 void Disassembler::insert_entry(const Entry *entry) {
     const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-    this->insert_span_fmt("%s = ", this->ENTRY_HEADER_FMT, this->lookup(entry->m_scriptId));
-    this->insert_struct(_struct);
+    insert_span_fmt("%s = ", ENTRY_HEADER_FMT, lookup(entry->m_scriptId));
+    insert_struct(_struct);
 }
 
 
 void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 indent) {
-    const u64 offset = this->get_offset((void*)entry);
-    TextFormat opcode_format = TextFormat{OPCODE_COLOR, 14};
-    this->insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", this->lookup(entry->m_typeID), offset);
+    const u64 offset = get_offset((void*)entry);
+    TextFormat opcode_format = {OPCODE_COLOR, 14};
+
+    insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", lookup(entry->m_typeID), offset);
     
-    switch (entry->m_typeID)
-    {
+    switch (entry->m_typeID) {
         case SID("boolean"): {
-            this->insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data) ? "true" : "false");
+            insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data) ? "true" : "false");
             break;
         }
         case SID("int"): {
-            this->insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data));
+            insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data));
             break;
         }
         case SID("float"): {
-            this->insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&entry->m_data));
+            insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&entry->m_data));
             break;
         }
         case SID("sid"): {
-            this->insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", this->lookup(*reinterpret_cast<const sid64*>(&entry->m_data)));
+            insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", lookup(*reinterpret_cast<const sid64*>(&entry->m_data)));
             break;
         }
         case SID("state-script"): {
-            this->insert_state_script(reinterpret_cast<const StateScript*>(&entry->m_data), indent + m_indentPerLevel);
+            insert_state_script(reinterpret_cast<const StateScript*>(&entry->m_data), indent + m_indentPerLevel);
             break;
         }
         case SID("script-lambda"): {
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
-            this->insert_function_disassembly_text(*function, indent + m_indentPerLevel);
-            this->m_currentFile->m_functions.push_back(std::move(function));
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
+            insert_function_disassembly_text(*function, indent + m_indentPerLevel);
+            m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
-        /*case SID("level-set"): {
-            break;
-        }*/
-        case SID("level-set-arrays"): {
-            const dc_structs::level_set_arrays *level_sets = reinterpret_cast<const dc_structs::level_set_arrays*>(&entry->m_data);
-            for (u64 i = 0; i < 7; ++i) {
-                const dc_structs::unmapped* _struct = reinterpret_cast<const dc_structs::unmapped*>(level_sets->entries[i].arrays);
-                this->insert_unmapped_struct(_struct, indent + m_indentPerLevel);
+        case SID("level-set"): {
+            const dc_structs::level_set *level_set = reinterpret_cast<const dc_structs::level_set*>(&entry->m_data);
+            insert_span_fmt("%*slevel_set_name: %s\n", COMMENT_FMT, indent, "", level_set->set_id);
+            insert_span_fmt("%*slevel_set_id: %s\n", COMMENT_FMT, indent, "", lookup(level_set->set_id_sid));
+            if (level_set->int0 > 0) {
+                auto test = *level_set->level_scripted_set;
+                FunctionDisassembly fd = create_function_disassembly(test->lambda);
+                insert_function_disassembly_text(fd, indent + m_indentPerLevel);
+                return;
             }
             break;
         }
         case SID("symbol-array"): {
             const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&entry->m_data);
             for (u64 i = 0; i < array->contents.size; ++i) {
-                this->insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_indentPerLevel, "", i + 1, this->lookup(array->contents.keys[i]));
+                insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_indentPerLevel, "", i + 1, lookup(array->contents.keys[i]));
             }
             break;
         }
         case SID("map"): {
             const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&entry->m_data);
-            this->insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_indentPerLevel, "", this->get_offset(map->keys.data), this->get_offset(map->values.data));
+            insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_indentPerLevel, "", get_offset(map->keys.data), get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
-                const char *key_hash = this->lookup(map->keys[i]);
-                this->insert_span_fmt("%*s%s {\n", opcode_format, indent + m_indentPerLevel, "", key_hash);
+                const char *key_hash = lookup(map->keys[i]);
+                insert_span_fmt("%*s%s {\n", opcode_format, indent + m_indentPerLevel, "", key_hash);
                 const dc_structs::unmapped *struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(map->values[i] - 8);
-                this->insert_struct(struct_ptr, indent + m_indentPerLevel * 2);
-                this->insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_indentPerLevel);
+                insert_struct(struct_ptr, indent + m_indentPerLevel * 2);
+                insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_indentPerLevel);
             }
             break;
         }
         case SID("point-curve"): {
             const dc_structs::point_curve *curve = reinterpret_cast<const dc_structs::point_curve*>(&entry->m_data);
-            this->insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
+            insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
             for (u64 i = 0; i < 33; ++i) {
-                this->insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->floats[i]);
+                insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->floats[i]);
             }
             break;
         }
@@ -160,162 +162,161 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             const p64 *array_entries_start = reinterpret_cast<const u64*>(entry->m_data);
             for (u64 i = 0; i < num_elements; ++i) {
                 const dc_structs::unmapped *array_entry_struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(array_entries_start[i] - 8);
-                this->insert_struct(array_entry_struct_ptr, indent + m_indentPerLevel);
+                insert_struct(array_entry_struct_ptr, indent + m_indentPerLevel);
             }
             break;
         }
         default:
         {
-            // if (this->m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != this->m_currentFile->m_emittedStructs.end()) {
-            //     this->insert_span("ALREADY_EMITTED\n", {.m_color = COMMENT_COLOR}, indent);
-            //     return;
-            // }
-            this->insert_unmapped_struct(entry, indent + m_indentPerLevel);
+            if (m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
+                insert_span("ALREADY_EMITTED\n", {.m_color = COMMENT_COLOR}, indent);
+                return;
+            }
+            insert_unmapped_struct(entry, indent + m_indentPerLevel);
             break;
         }
     }
-
-    this->insert_span("}\n", ENTRY_TYPE_FMT, indent);
-    //this->m_currentFile->m_emittedStructs.insert(reinterpret_cast<p64>(entry));
+    insert_span("}\n", ENTRY_TYPE_FMT, indent);
+    m_currentFile->m_emittedStructs.insert(reinterpret_cast<p64>(entry));
 }
 
 [[nodiscard]] u32 Disassembler::get_offset(const void *symbol) const noexcept {
-    return reinterpret_cast<p64>(symbol) - reinterpret_cast<p64>(this->m_currentFile->m_dcheader);
+    return reinterpret_cast<p64>(symbol) - reinterpret_cast<p64>(m_currentFile->m_dcheader);
 }
 
 void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
     b8 is_nullptr = var->m_pDeclValue == nullptr;
 
-    constexpr TextFormat var_format = TextFormat{.m_color = VAR_COLOR, .m_fontSize = 14};
+    constexpr TextFormat var_format = {.m_color = VAR_COLOR, .m_fontSize = 14};
 
-    this->insert_span_fmt("%*s[0x%06X] ", TextFormat{.m_color = NUM_COLOR}, indent, "", this->get_offset(var));
-    this->insert_span_fmt("%-8s ", TextFormat{.m_color = TYPE_COLOR, .m_fontSize = 14}, this->lookup(var->m_declTypeId));
-    this->insert_span_fmt("%-20s = ", TextFormat{.m_color = VAR_COLOR, .m_fontSize = 14},  this->lookup(var->m_declId));
+    insert_span_fmt("%*s[0x%06X] ", {.m_color = NUM_COLOR}, indent, "", get_offset(var));
+    insert_span_fmt("%-8s ", {.m_color = TYPE_COLOR, .m_fontSize = 14}, lookup(var->m_declTypeId));
+    insert_span_fmt("%-20s = ", {.m_color = VAR_COLOR, .m_fontSize = 14},  lookup(var->m_declId));
 
     switch (var->m_declTypeId) {
         case SID("boolean"): {
             if (!is_nullptr) 
-                this->insert_span(*reinterpret_cast<b8*>(var->m_pDeclValue) ? "true" : "false", TextFormat{.m_color = HASH_COLOR});
+                insert_span(*reinterpret_cast<b8*>(var->m_pDeclValue) ? "true" : "false", TextFormat{.m_color = HASH_COLOR});
             break;
         }
         case SID("vector"): {
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                this->insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
+                insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("quat"): {
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                this->insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
+                insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("float"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%.4f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
+                insert_span_fmt("%.4f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("string"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%s", var_format, *reinterpret_cast<const char**>(var->m_pDeclValue));
+                insert_span_fmt("%s", var_format, *reinterpret_cast<const char**>(var->m_pDeclValue));
             }
             break;
         }
         case SID("symbol"): {
             if (!is_nullptr) {
-                this->insert_span(this->lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue)), var_format);
+                insert_span(lookup(*reinterpret_cast<sid64*>(var->m_pDeclValue)), var_format);
             }
             break;
         }
         case SID("int32"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%i", var_format, *reinterpret_cast<i32*>(var->m_pDeclValue));
+                insert_span_fmt("%i", var_format, *reinterpret_cast<i32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("uint64"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%llx", var_format, *reinterpret_cast<u64*>(var->m_pDeclValue));
+                insert_span_fmt("%llx", var_format, *reinterpret_cast<u64*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("timer"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
+                insert_span_fmt("%f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         case SID("point"): {
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                this->insert_span_fmt("(%.2f, %.2f, %.2f)", var_format, val[0], val[1], val[2]);
+                insert_span_fmt("(%.2f, %.2f, %.2f)", var_format, val[0], val[1], val[2]);
             }
             break;
         }
         case SID("bound-frame"): {
             if (!is_nullptr) {
-                this->insert_span_fmt("%f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
+                insert_span_fmt("%f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
         default: {
-            this->insert_span("???", var_format);
+            insert_span("???", var_format);
             break;
         }
     }
     if (is_nullptr) {
-        this->insert_span("uninitialized");
+        insert_span("uninitialized");
     }
-    this->insert_span("\n");
-   // this->insert_span_fmt("%*s<%s>\n", TextFormat{OPCODE_COLOR, 12}, 8, "", var_contents);
+    insert_span("\n");
+   // insert_span_fmt("%*s<%s>\n", TextFormat{OPCODE_COLOR, 12}, 8, "", var_contents);
 }
 
 void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
     TextFormat block_format{COMMENT_COLOR, 12};
     switch (block->m_blockType) {
         case 0: {
-            this->insert_span("ON start {\n", block_format, indent);
+            insert_span("ON start {\n", block_format, indent);
             break;
         }
         case 1: {
-            this->insert_span("ON end {\n", block_format, indent);
+            insert_span("ON end {\n", block_format, indent);
             break;
         }
         case 2: {
-            this->insert_span_fmt("%*sON event %s {\n", block_format, indent, "", this->lookup(block->m_blockEventId));
+            insert_span_fmt("%*sON event %s {\n", block_format, indent, "", lookup(block->m_blockEventId));
             break;
         }
         case 3: {
-            this->insert_span("ON update {\n", block_format, indent);
+            insert_span("ON update {\n", block_format, indent);
             break;
         }
         case 4: {
-            this->insert_span("ON virtual {\n", block_format, indent);
+            insert_span("ON virtual {\n", block_format, indent);
             break;
         }
         default: {
-            this->insert_span_fmt("%*sON UNKNOWN [%d] {\n", block_format, indent, "", block->m_blockType);
+            insert_span_fmt("%*sON UNKNOWN [%d] {\n", block_format, indent, "", block->m_blockType);
             break;
         }
     }
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        this->insert_span_fmt("%*sTRACK %s {\n", {COMMENT_COLOR, 12}, indent + m_indentPerLevel, "", this->lookup(track_ptr->m_trackId));
+        insert_span_fmt("%*sTRACK %s {\n", {COMMENT_COLOR, 12}, indent + m_indentPerLevel, "", lookup(track_ptr->m_trackId));
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
-            this->insert_span("{\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(this->create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
-            this->insert_function_disassembly_text(*function, indent + m_indentPerLevel * 3);
-            this->m_currentFile->m_functions.push_back(std::move(function));
-            this->insert_span("}\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
+            insert_span("{\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
+            insert_function_disassembly_text(*function, indent + m_indentPerLevel * 3);
+            m_currentFile->m_functions.push_back(std::move(function));
+            insert_span("}\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
         }
-        this->insert_span("}\n\n", COMMENT_FMT, indent + m_indentPerLevel);
+        insert_span("}\n\n", COMMENT_FMT, indent + m_indentPerLevel);
     }
 
-    this->insert_span("}\n", COMMENT_FMT, indent);
+    insert_span("}\n", COMMENT_FMT, indent);
 }
 
 void Disassembler::insert_state_script(const StateScript *stateScript, const u32 indent) {
@@ -323,37 +324,37 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
-        this->insert_span("OPTIONS: ", header_format, indent);
+        insert_span("OPTIONS: ", header_format, indent);
         for (i32 i = 0; i < s_array->m_numEntries; ++i) {
-            this->insert_span(this->lookup(s_array->m_pSymbols[i]), header_format, indent + m_indentPerLevel);
-            this->insert_span("\n");
+            insert_span(lookup(s_array->m_pSymbols[i]), header_format, indent + m_indentPerLevel);
+            insert_span("\n");
         }
     }
 
     SsDeclarationList *decl_table = stateScript->m_pSsDeclList;
     if (decl_table != nullptr) {
-        this->insert_span("DECLARATIONS: \n", header_format, indent);
+        insert_span("DECLARATIONS: \n", header_format, indent);
         for (i32 i = 0; i < decl_table->m_numDeclarations; ++i) {
             SsDeclaration *decl = decl_table->m_pDeclarations + i;
             if (decl->m_isVar) {
-                this->insert_variable(decl, indent + m_indentPerLevel);
+                insert_variable(decl, indent + m_indentPerLevel);
             }
         }
     }
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        const char *state_name = this->lookup(state_ptr->m_stateId);
-        this->insert_span_fmt("%*sSTATE %s {\n", header_format, indent + m_indentPerLevel, "", state_name);
+        const char *state_name = lookup(state_ptr->m_stateId);
+        insert_span_fmt("%*sSTATE %s {\n", header_format, indent + m_indentPerLevel, "", state_name);
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
-            this->insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_indentPerLevel * 2);
+            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_indentPerLevel * 2);
         }
-        this->insert_span_fmt("%*s} END STATE %s\n\n", COMMENT_FMT, indent + m_indentPerLevel, "", state_name);
+        insert_span_fmt("%*s} END STATE %s\n\n", COMMENT_FMT, indent + m_indentPerLevel, "", state_name);
     }
 }
 
-FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda) {
+[[nodiscard]] FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
-    u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
+    const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
     std::vector<FunctionDisassemblyLine> lines;
     lines.reserve(instructionCount);
@@ -372,7 +373,7 @@ FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda
     b8 counting_args = true;
 
     for (u64 i = 0; i < instructionCount; ++i) {
-        this->process_instruction(functionDisassembly.m_stackFrame, functionDisassembly.m_lines[i]);
+        process_instruction(functionDisassembly.m_stackFrame, functionDisassembly.m_lines[i]);
         if (counting_args) {
             if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
                 functionDisassembly.m_stackFrame.m_argCount++;
@@ -395,7 +396,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
     table_entry.m_type = NONE;
     snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
-            this->get_offset((void*)(line.m_globalPointer + line.m_location)),
+            get_offset((void*)(line.m_globalPointer + line.m_location)),
             istr.opcode,
             istr.destination,
             istr.operand1,
@@ -413,9 +414,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
     char op1_str[interpreted_buffer_size] = {0}; 
     char op2_str[interpreted_buffer_size] = {0}; 
 
-    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, this->lookup(dest.m_SID));
-    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, this->lookup(op1.m_SID));
-    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, this->lookup(op2.m_SID));
+    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_SID));
+    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_SID));
+    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_SID));
 
     dest.isReturn = false;
     dest.isArg = false;
@@ -590,7 +591,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_i64 = value;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value));
+            snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, lookup(value));
             break;
         }
         case LookupFloat: {
@@ -611,10 +612,10 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             dest.m_PTR.m_offset = 0;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
-            if (this->m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
+            if (m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
                snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
             } else {
-                snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, this->lookup(value));
+                snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, lookup(value));
             }
             break;
         }
@@ -636,7 +637,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             dest.m_type = R_POINTER;
             dest.m_PTR = op1.m_PTR;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", istr.destination, istr.operand1, this->lookup(op1.m_PTR.get()));
+            snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", istr.destination, istr.operand1, lookup(op1.m_PTR.get()));
             break;
         }
         case CastInteger: {
@@ -656,12 +657,12 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         case Call: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[200] = {0};
-            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, this->lookup(op1.m_PTR.get()));
+            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.get()));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     strncat(comment_str, ", ", sizeof(comment_str) - strlen(comment_str));
                 }
-                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, this->lookup(stackFrame[i + 49].m_SID));
+                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_SID));
                 strncat(comment_str, dst_str, sizeof(comment_str) - strlen(comment_str));
             }
             dest.m_type = R_HASH;
@@ -672,12 +673,12 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         case CallFf: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[200] = {0};
-            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, this->lookup(op1.m_PTR.get()));
+            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.get()));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     strncat(comment_str, ", ", sizeof(comment_str) - strlen(comment_str));
                 }
-                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, this->lookup(stackFrame[i + 49].m_SID));
+                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_SID));
                 strncat(comment_str, dst_str, sizeof(comment_str) - strlen(comment_str));
             }
             dest.m_type = R_HASH;
@@ -1023,14 +1024,14 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         case LoadStaticPointerImm: {
             snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             p64 value = reinterpret_cast<p64*>(stackFrame.m_symbolTablePtr)[istr.operand1]; 
-            if (value >= this->m_currentFile->m_stringsPtr) {
+            if (value >= m_currentFile->m_stringsPtr) {
                 snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
                 dest.m_type = RegisterValueType::R_STRING;
                 dest.m_PTR = {value, 0};
                 table_entry.m_type = SymbolTableEntryType::STRING;
                 table_entry.m_pointer = value;
             } else {
-                snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, this->get_offset((void*)value));
+                snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, get_offset((void*)value));
                 dest.m_type = RegisterValueType::R_POINTER;
                 dest.m_PTR = {value, 0};
                 table_entry.m_type = SymbolTableEntryType::POINTER;
@@ -1052,14 +1053,14 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             u64 value = reinterpret_cast<u64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             if (value >= 0x000FFFFFFFFFFFFF) {
-                const char *hash_str = this->lookup(value);
+                const char *hash_str = lookup(value);
                 dest.m_type = RegisterValueType::R_HASH;
                 dest.m_SID = value;
                 table_entry.m_type = SymbolTableEntryType::STRINGID_64;
                 table_entry.m_hash = value;
                 stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination, hash_str);
                 snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, dst_str);
-            } else if (this->m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
+            } else if (m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
                 printf("here");
             }
             break;
@@ -1152,61 +1153,61 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_I32;
             dest.m_I32 = 0;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", istr.destination, op1_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(i32*)%s", istr.destination, op1_str);
             break;
         }
         case StoreI8: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i8*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(i8*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_I8;
             dest.m_I8 = 0;
             break;
         }
         case StoreU8: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u8*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(u8*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_U8;
             dest.m_U8 = 0;
             break;
         }
         case StoreI16: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i16*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(i16*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_I16;
             dest.m_I16 = 0;
             break;
         }
         case StoreU16: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u16*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(u16*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_U16;
             dest.m_U16 = 0;
             break;
         }
         case StoreI32: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i32*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_I32;
             dest.m_I32 = 0;
             break;
         }
         case StoreU32: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u32*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(u32*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_U32;
             dest.m_U32 = 0;
             break;
         }
         case StoreI64: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(i64*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(i64*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = 0;
             break;
         }
         case StoreU64: {
             snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            snprintf(interpreted, interpreted_buffer_size, "r%d, %s = *(u64*)%s", istr.destination, op1_str, op2_str);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(u64*)%s = %s", istr.destination, op1_str, op2_str);
             dest.m_type = RegisterValueType::R_U64;
             dest.m_U64 = 0;
             break;
@@ -1233,6 +1234,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             break;
         }
     }
+    
     if (table_entry.m_type != NONE) {
         stackFrame.m_symbolTable.emplace(istr.operand1, table_entry);
     }
@@ -1246,11 +1248,11 @@ void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDi
     if (label_location != labels.end()) {
         const u32 label_index = std::distance(labels.begin(), label_location);
         if (line.m_location == func_size) {
-            this->insert_span("L_RETURN:\n", label_format, indent - 2);
+            insert_span("L_RETURN:\n", label_format, indent - 2);
         } else if (line.m_location == func_size - 1 && line.m_instruction.opcode == Opcode::LoadU16Imm) {
-            this->insert_span_fmt("%*sL_RETURN_%d:\n", label_format, indent - 2, "", line.m_instruction.operand1);  
+            insert_span_fmt("%*sL_RETURN_%d:\n", label_format, indent - 2, "", line.m_instruction.operand1);  
         } else {
-            this->insert_span_fmt("%*sL_%d:\n", label_format, indent - 2, "", label_index);  
+            insert_span_fmt("%*sL_%d:\n", label_format, indent - 2, "", label_index);  
         }
     }
 }
@@ -1259,11 +1261,11 @@ void Disassembler::insert_goto_label(const std::vector<u32> &labels, const Funct
     if (line.m_label != -1) {
         u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_label));
         if (line.m_label == func_size) {
-            this->insert_span("=> L_RETURN", COMMENT_FMT);
+            insert_span("=> L_RETURN", COMMENT_FMT);
         } else if (line.m_label == func_size - 1 && lines[line.m_label].m_instruction.opcode == Opcode::LoadU16Imm) {
-            this->insert_span_fmt("=> L_RETURN_%d", COMMENT_FMT, lines[line.m_label].m_instruction.operand1);
+            insert_span_fmt("=> L_RETURN_%d", COMMENT_FMT, lines[line.m_label].m_instruction.operand1);
         } else {
-            this->insert_span_fmt("=> L_%d", COMMENT_FMT, target);
+            insert_span_fmt("=> L_%d", COMMENT_FMT, target);
         }
     }
 }
@@ -1274,20 +1276,21 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
     constexpr TextFormat text_format = {OPCODE_COLOR, 12};
     
     if (functionDisassembly.m_stackFrame.m_argCount > 0) {
-        this->insert_span_fmt("%*s[%d args]\n", COMMENT_FMT, indent, "", functionDisassembly.m_stackFrame.m_argCount);
+        insert_span_fmt("%*s[%d args]\n", COMMENT_FMT, indent, "", functionDisassembly.m_stackFrame.m_argCount);
     }
     
     for (const auto &line : functionDisassembly.m_lines) {
+        printf("%s\n", line.m_comment.c_str());
         u32 line_offset = std::max(67ull - line.m_text.length(), 0ull);
-        this->insert_label(labels, line, functionDisassembly.m_lines.size() - 1, indent);
-        this->insert_span(line.m_text.c_str(), text_format, indent);
+        insert_label(labels, line, functionDisassembly.m_lines.size() - 1, indent);
+        insert_span(line.m_text.c_str(), text_format, indent);
         const std::string comment = std::string(line_offset, ' ') + line.m_comment;
-        this->insert_span(comment.c_str(), {STRING_COLOR, 12});
-        this->insert_goto_label(labels, line, functionDisassembly.m_lines.size() - 1, functionDisassembly.m_lines);
-        this->insert_span("\n");
+        insert_span(comment.c_str(), {STRING_COLOR, 12});
+        insert_goto_label(labels, line, functionDisassembly.m_lines.size() - 1, functionDisassembly.m_lines);
+        insert_span("\n");
     }
-    this->insert_span("\n");
-    this->insert_span("SYMBOL TABLE: \n", {COMMENT_COLOR, 12}, indent);
+    insert_span("\n");
+    insert_span("SYMBOL TABLE: \n", {COMMENT_COLOR, 12}, indent);
 
     char line_start[64] = {0};
     char type[512] = {0};
@@ -1295,7 +1298,7 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
     u64 *table_ptr = functionDisassembly.m_stackFrame.m_symbolTablePtr;
 
     for (const auto &[i, entry] : functionDisassembly.m_stackFrame.m_symbolTable) {
-        snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, this->get_offset(table_ptr + i));
+        snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(table_ptr + i));
         switch (entry.m_type) {
             case SymbolTableEntryType::FLOAT: {
                 snprintf(type, sizeof(type), "float: <%f>\n", entry.m_f32);
@@ -1310,11 +1313,11 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
                 break;
             }
             case SymbolTableEntryType::POINTER:{
-                snprintf(type, sizeof(type), "pointer: <%s>\n", this->lookup(entry.m_pointer));
+                snprintf(type, sizeof(type), "pointer: <%s>\n", lookup(entry.m_pointer));
                 break;
             }
             case SymbolTableEntryType::STRINGID_64: {
-                snprintf(type, sizeof(type), "sid: <%s>\n", this->lookup(entry.m_hash));
+                snprintf(type, sizeof(type), "sid: <%s>\n", lookup(entry.m_hash));
                 break;
             }
             case SymbolTableEntryType::NONE:
@@ -1324,7 +1327,7 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
             } 
         }
         snprintf(buffer, sizeof(buffer), "%s %s", line_start, type);
-        this->insert_span(buffer, {COMMENT_COLOR, 12}, indent);
+        insert_span(buffer, {COMMENT_COLOR, 12}, indent);
     }
 }
 
@@ -1332,17 +1335,17 @@ void Disassembler::insert_header_line() {
     const char* current_script_name;
     const char* current_script_id;
     const TextFormat header_format = {STRING_COLOR, 14};
-    if (this->m_currentFile->m_dcscript != nullptr) {
-        current_script_name = this->lookup(this->m_currentFile->m_dcscript->m_stateScriptId);
-        current_script_id = int_to_string_id(this->m_currentFile->m_dcscript->m_stateScriptId).c_str();
+    if (m_currentFile->m_dcscript != nullptr) {
+        current_script_name = lookup(m_currentFile->m_dcscript->m_stateScriptId);
+        current_script_id = int_to_string_id(m_currentFile->m_dcscript->m_stateScriptId).c_str();
     } else {
         current_script_name = "UNKNOWN SCRIPT";
         current_script_id = "UNKNOWN SCRIPT ID";
     }
-    this->insert_span_fmt("%*sDeepQuantum's DC Disassembler ver. %d\n", header_format, 14, "", m_versionNumber);
-    this->insert_span_fmt("%*sListing for script: %s\n", header_format, 14, "", current_script_name);
-    this->insert_span_fmt("%*sScript ID: %s\n", header_format, 14, "", current_script_id);
-    this->insert_span_fmt("%*sFilesize: %d bytes\n", header_format, 14, "", this->m_currentFile->m_size);
-    this->insert_span("START OF DISASSEMBLY\n", header_format, 14);
-    this->insert_span("--------------------------------------------------\n", header_format, 14);
+    insert_span_fmt("%*sDeepQuantum's DC Disassembler ver. %d\n", header_format, 14, "", m_versionNumber);
+    insert_span_fmt("%*sListing for script: %s\n", header_format, 14, "", current_script_name);
+    insert_span_fmt("%*sScript ID: %s\n", header_format, 14, "", current_script_id);
+    insert_span_fmt("%*sFilesize: %d bytes\n", header_format, 14, "", m_currentFile->m_size);
+    insert_span("START OF DISASSEMBLY\n", header_format, 14);
+    insert_span("--------------------------------------------------\n", header_format, 14);
 }

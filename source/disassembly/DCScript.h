@@ -118,7 +118,7 @@ struct ScriptLambda //0x40 || 0x48 unsure
 {
     uint8_t*				m_pOpcode;				///< <c>0x00</c>: ptr to the first opcode of the script
     uint64_t*				m_pSymbols;				///< <c>0x08</c>: ptr to the symbol table
-    sid64				m_typeId;				///< <c>0x10</c>: usually SID("function")
+    sid64				    m_typeId;				///< <c>0x10</c>: usually SID("function")
     uint64_t				m_unkNumber;			///< <c>0x18</c>: no idea what this is used for
     uint64_t				m_unk;					///< <c>0x20</c>: always 0?
     uint64_t				m_instructionFlag;		///< <c>0x28</c>: 0xDEADBEEF1337F00D

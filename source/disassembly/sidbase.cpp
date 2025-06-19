@@ -13,14 +13,14 @@ void SIDBase::load(const char *path) noexcept {
     if (!sidfile.is_open()) {
         exit(-1);
     }
-    sidfile.read(reinterpret_cast<char*>(&this->m_num_entries), 8);
+    sidfile.read(reinterpret_cast<char*>(&m_num_entries), 8);
     sidfile.seekg(0);
 
     sidfile.read(reinterpret_cast<char*>(temp_buffer), fsize);
 
-    this->m_num_entries = m_num_entries;
-    this->m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
-    this->m_sidbytes = std::unique_ptr<u8[]>(temp_buffer);
+    m_num_entries = m_num_entries;
+    m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
+    m_sidbytes = std::unique_ptr<u8[]>(temp_buffer);
 }
 
 [[nodiscard]] const char *SIDBase::search(const sid64 hash) const noexcept {
@@ -31,7 +31,7 @@ void SIDBase::load(const char *path) noexcept {
         mid = low + (high - low) / 2;
         const SIDBaseEntry* current = m_entries + mid;
         if (current->hash == hash) [[unlikely]]
-            return reinterpret_cast<const char*>(this->m_sidbytes.get() + current->offset);
+            return reinterpret_cast<const char*>(m_sidbytes.get() + current->offset);
         if (current->hash < hash) {
             low = mid + 1;
         } else {
@@ -43,5 +43,5 @@ void SIDBase::load(const char *path) noexcept {
 }
 
 [[nodiscard]] b8 SIDBase::sid_exists(const sid64 hash) const noexcept {
-    return this->search(hash) != nullptr;
+    return search(hash) != nullptr;
 }

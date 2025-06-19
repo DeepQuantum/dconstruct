@@ -2,7 +2,7 @@
 #include "string.h"
 
 const char *Instruction::opcode_to_string() const noexcept {
-    switch (this->opcode) {
+    switch (opcode) {
         case Opcode::Return: return "Return";
         case Opcode::IAdd: return "IAdd";
         case Opcode::ISub: return "ISub";
@@ -104,18 +104,18 @@ const char *Instruction::opcode_to_string() const noexcept {
 }
 
 b8 Instruction::isSymbolLoadInstruction() const noexcept {
-    Opcode op = this->opcode;
+    Opcode op = opcode;
     return (op > LoadStaticU32Imm && op < LoadU64) || 
     op == LoadStaticI32Imm || op == LoadStaticFloatImm || op == LoadStaticPointerImm || 
     op == LookupInt ||op == LookupFloat || op == LookupPointer;
 }
 
 b8 Instruction::isBranchInstruction() const noexcept {
-    return this->opcode == Branch || this->opcode == BranchIf || this->opcode == BranchIfNot;
+    return opcode == Branch || opcode == BranchIf || opcode == BranchIfNot;
 }
 
 void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved) const noexcept {
-    const Register reg = this->registers[idx];
+    const Register reg = m_registers[idx];
     if (reg.isArg) {
         snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
         return;
@@ -157,10 +157,10 @@ void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, c
         } 
     }
     if (reg.isReturn) {
-        snprintf(buffer, buffer_size, "%s", "()");
+        strncat(buffer, "()", buffer_size - strlen(buffer));
     }
 }
 
 Register& StackFrame::operator[](const u64 idx) noexcept {
-    return this->registers[idx];
+    return m_registers[idx];
 }

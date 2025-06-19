@@ -54,7 +54,7 @@ public:
     std::unique_ptr<u8[]> m_pointedAtTable;
     p64 m_stringsPtr;
     u8 *m_relocTable;
-    std::map<sid64, const std::string> sid_cache;
+    std::map<sid64, const std::string> m_sidCache;
     std::set<p64> m_emittedStructs{};
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
     [[nodiscard]] b8 is_file_ptr(const p64 ptr) const noexcept;

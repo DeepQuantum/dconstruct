@@ -7,15 +7,15 @@ class ListingViewDisassembler : public Disassembler {
     
 
     ListingViewDisassembler(BinaryFile *file, const SIDBase *sidbase, MainWindow *window) {
-        this->m_currentFile = file;
-        this->m_sidbase = sidbase;
-        this->m_mainWindow = window;
-        this->m_mainWindow->get_listing_view()->clear();
-        this->m_mainWindow->get_listing_view()->setReadOnly(true);
+        m_currentFile = file;
+        m_sidbase = sidbase;
+        m_mainWindow = window;
+        m_mainWindow->get_listing_view()->clear();
+        m_mainWindow->get_listing_view()->setReadOnly(true);
     }
     
     void insert_span(const char *line, const TextFormat &text_format, const u64 indent) override {
-        auto* view = this->m_mainWindow->get_listing_view();
+        auto* view = m_mainWindow->get_listing_view();
         QTextCursor cursor = view->textCursor();
         cursor.movePosition(QTextCursor::End);
         view->setTextCursor(cursor);
@@ -31,7 +31,7 @@ class ListingViewDisassembler : public Disassembler {
     }
 
     void complete() override {
-        this->m_mainWindow->get_listing_view()->moveCursor(QTextCursor::Start);
-        this->m_mainWindow->get_listing_view()->ensureCursorVisible();
+        m_mainWindow->get_listing_view()->moveCursor(QTextCursor::Start);
+        m_mainWindow->get_listing_view()->ensureCursorVisible();
     }
 };
