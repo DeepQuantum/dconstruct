@@ -9,7 +9,6 @@ public:
         m_sidbase = sidbase;
         m_outbuf.reserve(0x2FFFFFULL);
         m_outfptr = fopen(out_file.c_str(), "wb");
-        m_perfFile = fopen("./perffile.txt", "w");
     }
 
 private:

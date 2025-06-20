@@ -27,9 +27,27 @@ void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_fo
     insert_span(buffer, text_format);
 }
 
+[[nodiscard]] b8 Disassembler::is_sid(const sid64 value) const noexcept {
+    const b8 in_ptr_range = value >= reinterpret_cast<p64>(m_currentFile->m_bytes.get()) 
+        && value < reinterpret_cast<p64>(m_currentFile->m_bytes.get()) + m_currentFile->m_size;
+    b8 val = !(in_ptr_range && m_currentFile->is_file_ptr(value)) && value > m_sidbase->m_lowestSid;
+    return val;
+} 
+
+[[nodiscard]] b8 Disassembler::is_empty_array_ptr(const p64 data_ptr) const noexcept {
+    const b8 last_int_zero = *(reinterpret_cast<const i32*>(&data_ptr - 1)) == 0;
+    const b8 next_loc_sid = is_sid(*reinterpret_cast<const sid64*>(data_ptr));
+    const b8 value_after_sid_pointed_at = m_currentFile->location_gets_pointed_at((void*)(data_ptr  + 8));
+    return last_int_zero && next_loc_sid && value_after_sid_pointed_at;
+}
+
 [[nodiscard]] b8 Disassembler::is_possible_float(const f32 *val) const noexcept {
     f32 rounded = roundf(*val * 1e5f) / 1e5f;
     return fabsf(*val - rounded) < 1e-5f && *val > -1e5f && *val < 1e5f && rounded != 0.f;
+}
+
+[[nodiscard]] b8 Disassembler::is_possible_i32(const i32 *val) const noexcept {
+    return abs(*val) < 50000;
 }
 
 void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr, const u64 indent) {
@@ -60,6 +78,15 @@ void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr
             insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const f32*>(data_ptr));
             move = 4;
         }
+        else if (is_possible_i32(reinterpret_cast<const i32*>(data_ptr))) {
+            insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32*>(data_ptr));
+            move = 4;
+        }
+        else if (data_ptr % 8 == 0 && *reinterpret_cast<const sid64*>(data_ptr) > m_sidbase->m_lowestSid && *reinterpret_cast<const sid64*>(data_ptr)) {
+            str_ptr = lookup(*reinterpret_cast<const sid64*>(data_ptr));
+            insert_span_fmt("%*ssid: %s\n", {.m_color = HASH_COLOR}, indent, "", str_ptr);
+            move = 8;
+        }
         else {
             insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32*>(data_ptr));
             move = 4;
@@ -86,6 +113,7 @@ void Disassembler::insert_entry(const Entry *entry) {
 
 
 void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 indent) {
+    //printf("%*s%s %d\n", indent, "", lookup(entry->m_typeID), get_offset(entry));
     const u64 offset = get_offset((void*)entry);
     TextFormat opcode_format = {OPCODE_COLOR, 14};
 
@@ -152,8 +180,14 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
         case SID("point-curve"): {
             const dc_structs::point_curve *curve = reinterpret_cast<const dc_structs::point_curve*>(&entry->m_data);
             insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
-            for (u64 i = 0; i < 33; ++i) {
-                insert_span_fmt("%*sfloat: %.4f\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->floats[i]);
+            for (u64 i = 0; i < 3; ++i) {
+                insert_span_fmt("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
+                    {.m_color = NUM_COLOR}, indent + m_indentPerLevel,"",
+                    curve->floats[i + 0], curve->floats[i + 1], curve->floats[i + 2],
+                    curve->floats[i + 3], curve->floats[i + 4], curve->floats[i + 5],
+                    curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
+                    curve->floats[i + 9], curve->floats[i + 10]
+                );
             }
             break;
         }
@@ -168,16 +202,16 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
         }
         default:
         {
-            if (m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
-                insert_span("ALREADY_EMITTED\n", {.m_color = COMMENT_COLOR}, indent);
-                return;
-            }
+            // if (m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
+            //     insert_span("ALREADY_EMITTED\n", {.m_color = COMMENT_COLOR}, indent);
+            //     return;
+            // }
             insert_unmapped_struct(entry, indent + m_indentPerLevel);
             break;
         }
     }
     insert_span("}\n", ENTRY_TYPE_FMT, indent);
-    m_currentFile->m_emittedStructs.insert(reinterpret_cast<p64>(entry));
+   // m_currentFile->m_emittedStructs.insert(reinterpret_cast<p64>(entry));
 }
 
 [[nodiscard]] u32 Disassembler::get_offset(const void *symbol) const noexcept {
@@ -202,20 +236,20 @@ void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
         case SID("vector"): {
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
+                insert_span_fmt("(%.2f, %.2f, %.2f, %.2f)", var_format, val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("quat"): {
             if (!is_nullptr) {
                 f32 *val = reinterpret_cast<f32*>(var->m_pDeclValue);
-                insert_span_fmt("(%.4f, %.4f, %.4f, %.4f)", var_format, val[0], val[1], val[2], val[3]);
+                insert_span_fmt("(%.2f, %.2f, %.2f, %.2f)", var_format, val[0], val[1], val[2], val[3]);
             }
             break;
         }
         case SID("float"): {
             if (!is_nullptr) {
-                insert_span_fmt("%.4f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
+                insert_span_fmt("%.2f", var_format, *reinterpret_cast<f32*>(var->m_pDeclValue));
             }
             break;
         }
@@ -414,9 +448,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
     char op1_str[interpreted_buffer_size] = {0}; 
     char op2_str[interpreted_buffer_size] = {0}; 
 
-    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_SID));
-    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_SID));
-    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_SID));
+    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_type == R_POINTER ? dest.m_PTR.m_sid : dest.m_SID));
+    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_type == R_POINTER ? op1.m_PTR.m_sid : op1.m_SID));
+    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_type == R_POINTER ? op2.m_PTR.m_sid : op2.m_SID));
 
     dest.isReturn = false;
     dest.isArg = false;
@@ -549,35 +583,36 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_U32;
             dest.m_I32 = 0;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u32*)%s", istr.destination, op1_str);
             break;
         }
         case LoadFloat: {
             snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_F32;
             dest.m_F32 = 0.f;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(f32*)%s", istr.destination, op1_str);
             break;
         }
         case LoadPointer: {
-            snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
+            snprintf(varying, disassembly_text_size, "r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_POINTER;
-            dest.m_PTR = {0, 0};
-            snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            dest.m_PTR = RegisterPointer{op1.m_PTR.m_base, op1.m_PTR.m_offset, op1.m_PTR.m_sid};
+            stackFrame.to_string(dst_str, interpreted_buffer_size, istr.operand1, lookup(op1.m_PTR.m_sid));
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(p64*)%s", istr.destination, dst_str);
             break;
         }
         case LoadI64: {
             snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_I64;
             dest.m_I64 = 0;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(i64*)%s", istr.destination, op1_str);
             break;
         }
         case LoadU64: {
             snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::R_U64;
             dest.m_U64 = 0;
-            snprintf(interpreted, interpreted_buffer_size, "r%d = [0x%llx + 0x%llx]", istr.destination, op1.m_PTR.m_base, op1.m_PTR.m_offset);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = *(u64*)%s", istr.destination, op1_str);
             break;
         }
         case StoreInt: {
@@ -608,8 +643,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             const p64 value = reinterpret_cast<p64*>(stackFrame.m_symbolTablePtr)[istr.operand1];
             dest.m_type = RegisterValueType::R_POINTER;
-            dest.m_PTR.m_base = value;
+            dest.m_PTR.m_base = 0;
             dest.m_PTR.m_offset = 0;
+            dest.m_PTR.m_sid = value;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
             if (m_currentFile->is_file_ptr(reinterpret_cast<p64>(stackFrame.m_symbolTablePtr + istr.operand1))) {
@@ -657,7 +693,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         case Call: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[200] = {0};
-            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.get()));
+            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     strncat(comment_str, ", ", sizeof(comment_str) - strlen(comment_str));
@@ -665,23 +701,24 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
                 stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_SID));
                 strncat(comment_str, dst_str, sizeof(comment_str) - strlen(comment_str));
             }
-            dest.m_type = R_HASH;
+            dest.m_type = R_POINTER;
             dest.isReturn = true;
+            dest.m_PTR = {0, 0, op1.m_PTR.m_sid};
             snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
             break;
         }
         case CallFf: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[200] = {0};
-            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.get()));
+            snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     strncat(comment_str, ", ", sizeof(comment_str) - strlen(comment_str));
                 }
-                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_SID));
+                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_type == R_POINTER ? stackFrame[i + 49].m_PTR.m_sid : stackFrame[i + 49].m_SID));
                 strncat(comment_str, dst_str, sizeof(comment_str) - strlen(comment_str));
             }
-            dest.m_type = R_HASH;
+            dest.m_type = R_POINTER;
             dest.isReturn = true;
             snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
             break;
@@ -754,6 +791,19 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             dest.m_type = R_BOOL;
             dest.m_BOOL = op1.m_F32 == op2.m_F32;
             snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] == r%d [%f]", 
+                istr.destination, 
+                istr.operand1, 
+                stackFrame[istr.operand1].m_F32, 
+                istr.operand2, 
+                stackFrame[istr.operand2].m_F32
+            );
+            break;
+        }
+        case FGreaterThan: {
+            snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
+            dest.m_type = R_BOOL;
+            dest.m_BOOL = op1.m_F32 > op2.m_F32;
+            snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] > r%d [%f]", 
                 istr.destination, 
                 istr.operand1, 
                 stackFrame[istr.operand1].m_F32, 
@@ -961,15 +1011,17 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         }
         case IAddImm: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
+            const char* resolved = nullptr;
             if (op1.m_type == R_POINTER) {
                 dest.m_type = R_POINTER;
-                dest.m_PTR = {op1.m_PTR.m_base, istr.operand2};
+                dest.m_PTR = {op1.m_PTR.m_base, op1.m_PTR.m_offset + istr.operand2, op1.m_PTR.m_sid};
+                resolved = lookup(dest.m_PTR.m_sid);
             } else {
                 dest.m_type = R_I64;
                 dest.m_I64 = op1.m_I64 + istr.operand2;
             }
-            stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1);
-            snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%s] + %d -> <%s>", istr.destination, istr.operand1, op1_str, istr.operand2, op1_str);
+            stackFrame.to_string(dst_str, interpreted_buffer_size, istr.operand1, resolved);
+            snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %d -> <%s>", istr.destination, op1_str, istr.operand2, dst_str);
             break;
         }
         case ISubImm: {
@@ -1027,13 +1079,13 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             if (value >= m_currentFile->m_stringsPtr) {
                 snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
                 dest.m_type = RegisterValueType::R_STRING;
-                dest.m_PTR = {value, 0};
+                dest.m_PTR = {value, 0, 0};
                 table_entry.m_type = SymbolTableEntryType::STRING;
                 table_entry.m_pointer = value;
             } else {
                 snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, get_offset((void*)value));
                 dest.m_type = RegisterValueType::R_POINTER;
-                dest.m_PTR = {value, 0};
+                dest.m_PTR = {0, 0, value};
                 table_entry.m_type = SymbolTableEntryType::POINTER;
                 table_entry.m_pointer = value;
             }
@@ -1081,10 +1133,6 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
 
             dest = op1;
-            
-            if (op1.isArg) {
-                dest.argNum = op1.argNum;
-            }
             
             snprintf(interpreted, interpreted_buffer_size, "r%d = %s", istr.destination, op1_str);
             break;
@@ -1280,7 +1328,6 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
     }
     
     for (const auto &line : functionDisassembly.m_lines) {
-        printf("%s\n", line.m_comment.c_str());
         u32 line_offset = std::max(67ull - line.m_text.length(), 0ull);
         insert_label(labels, line, functionDisassembly.m_lines.size() - 1, indent);
         insert_span(line.m_text.c_str(), text_format, indent);

@@ -1,4 +1,5 @@
 #include "disassembly/file_disassembler.h"
+#include "cxxopts.hpp"
 #include <chrono>
 #include <iostream>
 #include <filesystem>
@@ -6,22 +7,29 @@
 void disasm_file(const char *inpath, const SIDBase *base, const char *out_filename) {
     BinaryFile file(inpath);
     file.dc_setup();
-    const std::string out_file_path = "C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/" + std::string(out_filename) + ".txt";
+    printf("Disassembling %s\n", out_filename);
+    const std::string out_file_path = "C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/output/" + std::string(out_filename) + ".txt";
     FileDisassembler disassembler(&file, base, out_file_path);
     disassembler.disassemble();
 }
 
 int main(int argc, char *argv[]) {
+
+    cxxopts::Options options("DC Disaassembler");
+
+    options.add_options()
+        ("i,input", "input DC file", cxxopts::value<std::string>())
+    ;
     
+    auto result = options.parse(argc, argv);
     
-    if (argc != 2) {
-        std::cout << "Usage: tlou_disasm_cli <dc_file.bin>" << "\n";
-        exit(1);
+    if (result.count("i") == 0) {
+        std::cout << options.help() << std::endl;
+        exit(0);
     }
-    
-    const char* filepath = argv[1];
-    
-    std::cout << "Disassembling " << filepath << "\n";
+    const char *filepath = result["i"].as<const char*>();
+
+    std::cout << "disassembling " << filepath << "\n";
     
     SIDBase base{};
     base.load("C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_sorted.bin");
@@ -32,8 +40,8 @@ int main(int argc, char *argv[]) {
 
     disasm_file(filepath, &base, "test.txt");
 
-    // for (const auto& entry : std::filesystem::recursive_directory_iterator(base_path)) {
-    //     if (entry.path().extension() != ".bin") {
+    // for (const auto& entry : std::filesystem::directory_iterator(base_path)) {
+    //     if (entry.path().extension() != ".bin" || entry.path().filename().string()[0] != 'w') {
     //         continue;
     //     }
     //     disasm_file(entry.path().string().c_str(), &base, entry.path().filename().string().c_str());

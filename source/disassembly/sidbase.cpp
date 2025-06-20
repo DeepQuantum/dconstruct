@@ -21,6 +21,7 @@ void SIDBase::load(const char *path) noexcept {
     m_num_entries = m_num_entries;
     m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
     m_sidbytes = std::unique_ptr<u8[]>(temp_buffer);
+    m_lowestSid = m_entries[0].hash;
 }
 
 [[nodiscard]] const char *SIDBase::search(const sid64 hash) const noexcept {

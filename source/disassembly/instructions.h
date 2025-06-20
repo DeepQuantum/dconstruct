@@ -161,6 +161,15 @@ struct FunctionDisassemblyLine {
 struct RegisterPointer {
     p64 m_base;
     u64 m_offset;
+    sid64 m_sid;
+
+    RegisterPointer() {
+        m_base = 0;
+        m_offset = 0;
+        m_sid = 0;
+    }
+
+    RegisterPointer(p64 base, u64 offset, sid64 sid): m_base{base}, m_offset{offset}, m_sid{sid}{};
 
     p64 get() const noexcept {
         return m_base + m_offset;

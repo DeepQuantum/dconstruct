@@ -143,21 +143,23 @@ void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, c
         case RegisterValueType::R_F16:
         case RegisterValueType::R_F32:
         case RegisterValueType::R_F64:
-            snprintf(buffer, buffer_size, "%f", reg.m_F32);
+            snprintf(buffer, buffer_size, "%.2f", reg.m_F32);
             break;
         case RegisterValueType::R_STRING:
             snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
             break;
-        // case RegisterValueType::R_POINTER: {
-        //     sprintf(buffer, "[%s]")
-        // }
+        case RegisterValueType::R_POINTER: {
+            if (reg.m_PTR.m_offset > 0) {
+                snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.isReturn ? "RET_" : "", reg.m_PTR.m_offset);
+            } else {
+                snprintf(buffer, buffer_size, "%s%s", reg.isReturn ? "RET_" : "", resolved);
+            }
+            break;
+        }
         default: {
             snprintf(buffer,buffer_size, "0x%llX", reg.m_U64);
             break;
         } 
-    }
-    if (reg.isReturn) {
-        strncat(buffer, "()", buffer_size - strlen(buffer));
     }
 }
 

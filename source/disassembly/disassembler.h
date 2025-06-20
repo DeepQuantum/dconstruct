@@ -54,8 +54,11 @@ protected:
     void insert_struct(const dc_structs::unmapped *entry, const u64 indent = 0);
     template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
     [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
+    [[nodiscard]] b8 is_sid(const sid64 hash) const noexcept;
     void insert_header_line();
+    [[nodiscard]] b8 is_empty_array_ptr(const p64 data_ptr) const noexcept;
     [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
+    [[nodiscard]] b8 is_possible_i32(const i32 *ptr) const noexcept;
     void insert_state_script(const StateScript *stateScript, const u32 indent);
     void insert_unmapped_struct(const dc_structs::unmapped *_struct, const u64 indent);
     void insert_variable(const SsDeclaration *var, const u32 indent);

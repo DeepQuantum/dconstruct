@@ -9,6 +9,6 @@
       "CXX": "C:/Qt/Tools/mingw1310_64/bin/g++.exe"
     },
     "environmentVariables": {
-      "PATH": "C:/Qt/Tools/mingw1310_64/bin;C:/Qt/Tools/Ninja;C:/Qt/6.9.0/mingw_64/bin;${env:PATH}"
+      "PATH": "C:/Qt/Tools/mingw1310_64/bin;C:/Qt/Tools/Ninja;C:/Qt/6.9.0/mingw_64/bin;C:/Qt/Tools/mingw1310_64/libexec/gcc/x86_64-w64-mingw32/13.1.0;${env:PATH}"
     }
 }
