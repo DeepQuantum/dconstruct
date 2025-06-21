@@ -26,6 +26,11 @@ struct TextFormat {
     u64 m_fontSize = 14;
 };
 
+struct DisassemblerOptions {
+    u8 m_indentPerLevel;
+    b8 m_emitOnce;
+};
+
 class Disassembler {
 public:
     void disassemble();
@@ -38,6 +43,7 @@ protected:
 
     BinaryFile *m_currentFile = nullptr;
     const SIDBase *m_sidbase = nullptr;
+    DisassemblerOptions m_options;
 
     std::map<sid64, std::vector<const dc_structs::unmapped*>> m_unmappedEntries;
 
@@ -45,8 +51,6 @@ protected:
     constexpr static TextFormat ENTRY_TYPE_FMT   = {TYPE_COLOR, 20};
     constexpr static TextFormat STRUCT_TYPE_FMT  = {TYPE_COLOR, 14};
     constexpr static TextFormat COMMENT_FMT      = {COMMENT_COLOR, 14};
-
-    constexpr static u32 m_indentPerLevel = 2;
 
     FILE *m_perfFile = nullptr;
     

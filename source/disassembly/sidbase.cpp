@@ -11,6 +11,7 @@ void SIDBase::load(const char *path) noexcept {
     u8 *temp_buffer = new u8[fsize];
     
     if (!sidfile.is_open()) {
+        std::cout << "couldn't open sidbase at path " << path << '\n';
         exit(-1);
     }
     sidfile.read(reinterpret_cast<char*>(&m_num_entries), 8);

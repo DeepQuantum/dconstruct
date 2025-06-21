@@ -137,12 +137,12 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             break;
         }
         case SID("state-script"): {
-            insert_state_script(reinterpret_cast<const StateScript*>(&entry->m_data), indent + m_indentPerLevel);
+            insert_state_script(reinterpret_cast<const StateScript*>(&entry->m_data), indent + m_options.m_indentPerLevel);
             break;
         }
         case SID("script-lambda"): {
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
-            insert_function_disassembly_text(*function, indent + m_indentPerLevel);
+            insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel);
             m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
@@ -153,7 +153,7 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             if (level_set->int0 > 0) {
                 auto test = *level_set->level_scripted_set;
                 FunctionDisassembly fd = create_function_disassembly(test->lambda);
-                insert_function_disassembly_text(fd, indent + m_indentPerLevel);
+                insert_function_disassembly_text(fd, indent + m_options.m_indentPerLevel);
                 return;
             }
             break;
@@ -161,28 +161,28 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
         case SID("symbol-array"): {
             const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&entry->m_data);
             for (u64 i = 0; i < array->contents.size; ++i) {
-                insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_indentPerLevel, "", i + 1, lookup(array->contents.keys[i]));
+                insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_options.m_indentPerLevel, "", i + 1, lookup(array->contents.keys[i]));
             }
             break;
         }
         case SID("map"): {
             const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&entry->m_data);
-            insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_indentPerLevel, "", get_offset(map->keys.data), get_offset(map->values.data));
+            insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_options.m_indentPerLevel, "", get_offset(map->keys.data), get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = lookup(map->keys[i]);
-                insert_span_fmt("%*s%s {\n", opcode_format, indent + m_indentPerLevel, "", key_hash);
+                insert_span_fmt("%*s%s {\n", opcode_format, indent + m_options.m_indentPerLevel, "", key_hash);
                 const dc_structs::unmapped *struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(map->values[i] - 8);
-                insert_struct(struct_ptr, indent + m_indentPerLevel * 2);
-                insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_indentPerLevel);
+                insert_struct(struct_ptr, indent + m_options.m_indentPerLevel * 2);
+                insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_options.m_indentPerLevel);
             }
             break;
         }
         case SID("point-curve"): {
             const dc_structs::point_curve *curve = reinterpret_cast<const dc_structs::point_curve*>(&entry->m_data);
-            insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_indentPerLevel, "", curve->int1);
+            insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_options.m_indentPerLevel, "", curve->int1);
             for (u64 i = 0; i < 3; ++i) {
                 insert_span_fmt("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
-                    {.m_color = NUM_COLOR}, indent + m_indentPerLevel,"",
+                    {.m_color = NUM_COLOR}, indent + m_options.m_indentPerLevel,"",
                     curve->floats[i + 0], curve->floats[i + 1], curve->floats[i + 2],
                     curve->floats[i + 3], curve->floats[i + 4], curve->floats[i + 5],
                     curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
@@ -196,22 +196,23 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             const p64 *array_entries_start = reinterpret_cast<const u64*>(entry->m_data);
             for (u64 i = 0; i < num_elements; ++i) {
                 const dc_structs::unmapped *array_entry_struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(array_entries_start[i] - 8);
-                insert_struct(array_entry_struct_ptr, indent + m_indentPerLevel);
+                insert_struct(array_entry_struct_ptr, indent + m_options.m_indentPerLevel);
             }
             break;
         }
-        default:
-        {
-            // if (m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
-            //     insert_span("ALREADY_EMITTED\n", {.m_color = COMMENT_COLOR}, indent);
-            //     return;
-            // }
-            insert_unmapped_struct(entry, indent + m_indentPerLevel);
+        default: {
+            if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
+                insert_span_fmt("%*sALREADY_EMITTED\n%*s}", {.m_color = COMMENT_COLOR}, indent + m_options.m_indentPerLevel, "", indent, "");
+                return;
+            }
+            insert_unmapped_struct(entry, indent + m_options.m_indentPerLevel);
             break;
         }
     }
     insert_span("}\n", ENTRY_TYPE_FMT, indent);
-   // m_currentFile->m_emittedStructs.insert(reinterpret_cast<p64>(entry));
+    if (m_options.m_emitOnce) {
+        m_currentFile->m_emittedStructs.emplace(reinterpret_cast<p64>(entry));
+    }
 }
 
 [[nodiscard]] u32 Disassembler::get_offset(const void *symbol) const noexcept {
@@ -339,15 +340,15 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        insert_span_fmt("%*sTRACK %s {\n", {COMMENT_COLOR, 12}, indent + m_indentPerLevel, "", lookup(track_ptr->m_trackId));
+        insert_span_fmt("%*sTRACK %s {\n", {COMMENT_COLOR, 12}, indent + m_options.m_indentPerLevel, "", lookup(track_ptr->m_trackId));
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
-            insert_span("{\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
+            insert_span("{\n", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2);
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
-            insert_function_disassembly_text(*function, indent + m_indentPerLevel * 3);
+            insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 3);
             m_currentFile->m_functions.push_back(std::move(function));
-            insert_span("}\n", COMMENT_FMT, indent + m_indentPerLevel * 2);
+            insert_span("}\n", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2);
         }
-        insert_span("}\n\n", COMMENT_FMT, indent + m_indentPerLevel);
+        insert_span("}\n\n", COMMENT_FMT, indent + m_options.m_indentPerLevel);
     }
 
     insert_span("}\n", COMMENT_FMT, indent);
@@ -360,7 +361,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
         insert_span("OPTIONS: ", header_format, indent);
         for (i32 i = 0; i < s_array->m_numEntries; ++i) {
-            insert_span(lookup(s_array->m_pSymbols[i]), header_format, indent + m_indentPerLevel);
+            insert_span(lookup(s_array->m_pSymbols[i]), header_format, indent + m_options.m_indentPerLevel);
             insert_span("\n");
         }
     }
@@ -371,18 +372,18 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         for (i32 i = 0; i < decl_table->m_numDeclarations; ++i) {
             SsDeclaration *decl = decl_table->m_pDeclarations + i;
             if (decl->m_isVar) {
-                insert_variable(decl, indent + m_indentPerLevel);
+                insert_variable(decl, indent + m_options.m_indentPerLevel);
             }
         }
     }
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
         const char *state_name = lookup(state_ptr->m_stateId);
-        insert_span_fmt("%*sSTATE %s {\n", header_format, indent + m_indentPerLevel, "", state_name);
+        insert_span_fmt("%*sSTATE %s {\n", header_format, indent + m_options.m_indentPerLevel, "", state_name);
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
-            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_indentPerLevel * 2);
+            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_options.m_indentPerLevel * 2);
         }
-        insert_span_fmt("%*s} END STATE %s\n\n", COMMENT_FMT, indent + m_indentPerLevel, "", state_name);
+        insert_span_fmt("%*s} END STATE %s\n\n", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", state_name);
     }
 }
 

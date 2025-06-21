@@ -59,6 +59,7 @@ public:
     std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
     [[nodiscard]] b8 is_file_ptr(const p64 ptr) const noexcept;
     [[nodiscard]] b8 location_gets_pointed_at(const void *ptr) const noexcept;
+    //void apply_edit()
 
 
 private:

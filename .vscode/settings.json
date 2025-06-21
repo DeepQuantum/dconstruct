@@ -142,6 +142,8 @@
         "string_view": "cpp",
         "numbers": "cpp",
         "semaphore": "cpp",
-        "qapplication": "cpp"
+        "qapplication": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     },
 }
