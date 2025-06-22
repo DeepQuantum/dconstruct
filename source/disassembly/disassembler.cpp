@@ -66,7 +66,7 @@ void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr
                 insert_span("\"\n", {.m_color = STRING_COLOR});
             } else {
                 const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(ptr_value - 8);
-                insert_struct(_struct, indent);
+                insert_struct(&_struct, indent);
             }
             move = 8;
         }
@@ -106,48 +106,59 @@ void Disassembler::disassemble() {
 }
 
 void Disassembler::insert_entry(const Entry *entry) {
-    const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
+    const dc_structs::unmapped *struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
     insert_span_fmt("%s = ", ENTRY_HEADER_FMT, lookup(entry->m_scriptId));
-    insert_struct(_struct);
+    insert_struct(&struct_ptr);
 }
 
 
-void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 indent) {
-    //printf("%*s%s %d\n", indent, "", lookup(entry->m_typeID), get_offset(entry));
-    const u64 offset = get_offset((void*)entry);
+void Disassembler::insert_struct(const dc_structs::unmapped **struct_ptr_loc, const u64 indent) {
+    //printf("\n%*s%s %x\n", indent, "", lookup(entry->m_typeID), get_offset(entry));
+
+    const dc_structs::unmapped* struct_ptr = *struct_ptr_loc;
+
+    if (indent > m_options.m_indentPerLevel * 20) {
+        printf("wups");
+    }
+    const u64 offset = get_offset((void*)struct_ptr);
     TextFormat opcode_format = {OPCODE_COLOR, 14};
 
-    insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", lookup(entry->m_typeID), offset);
+    if (!m_sidbase->sid_exists(struct_ptr->m_header.typeID)) {
+        const u32 array_size = *reinterpret_cast<const u32*>(struct_ptr_loc + 2);
+    }
+
+    insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", lookup(struct_ptr->m_header.typeID), offset);
     
-    switch (entry->m_typeID) {
+
+    switch (struct_ptr->m_header.typeID) {
         case SID("boolean"): {
-            insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data) ? "true" : "false");
+            insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data) ? "true" : "false");
             break;
         }
         case SID("int"): {
-            insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&entry->m_data));
+            insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data));
             break;
         }
         case SID("float"): {
-            insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&entry->m_data));
+            insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&struct_ptr->m_data));
             break;
         }
         case SID("sid"): {
-            insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", lookup(*reinterpret_cast<const sid64*>(&entry->m_data)));
+            insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", lookup(*reinterpret_cast<const sid64*>(&struct_ptr->m_data)));
             break;
         }
         case SID("state-script"): {
-            insert_state_script(reinterpret_cast<const StateScript*>(&entry->m_data), indent + m_options.m_indentPerLevel);
+            insert_state_script(reinterpret_cast<const StateScript*>(&struct_ptr->m_data), indent + m_options.m_indentPerLevel);
             break;
         }
         case SID("script-lambda"): {
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&entry->m_data))));
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data))));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel);
             m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
         case SID("level-set"): {
-            const dc_structs::level_set *level_set = reinterpret_cast<const dc_structs::level_set*>(&entry->m_data);
+            const dc_structs::level_set *level_set = reinterpret_cast<const dc_structs::level_set*>(&struct_ptr->m_data);
             insert_span_fmt("%*slevel_set_name: %s\n", COMMENT_FMT, indent, "", level_set->set_id);
             insert_span_fmt("%*slevel_set_id: %s\n", COMMENT_FMT, indent, "", lookup(level_set->set_id_sid));
             if (level_set->int0 > 0) {
@@ -159,26 +170,26 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             break;
         }
         case SID("symbol-array"): {
-            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&entry->m_data);
+            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&struct_ptr->m_data);
             for (u64 i = 0; i < array->contents.size; ++i) {
                 insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_options.m_indentPerLevel, "", i + 1, lookup(array->contents.keys[i]));
             }
             break;
         }
         case SID("map"): {
-            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&entry->m_data);
+            const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&struct_ptr->m_data);
             insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_options.m_indentPerLevel, "", get_offset(map->keys.data), get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = lookup(map->keys[i]);
                 insert_span_fmt("%*s%s {\n", opcode_format, indent + m_options.m_indentPerLevel, "", key_hash);
                 const dc_structs::unmapped *struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(map->values[i] - 8);
-                insert_struct(struct_ptr, indent + m_options.m_indentPerLevel * 2);
+                insert_struct(&struct_ptr, indent + m_options.m_indentPerLevel * 2);
                 insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_options.m_indentPerLevel);
             }
             break;
         }
         case SID("point-curve"): {
-            const dc_structs::point_curve *curve = reinterpret_cast<const dc_structs::point_curve*>(&entry->m_data);
+            const dc_structs::point_curve *curve = reinterpret_cast<const dc_structs::point_curve*>(&struct_ptr->m_data);
             insert_span_fmt("%*sint: %u\n", {.m_color = NUM_COLOR}, indent + m_options.m_indentPerLevel, "", curve->int1);
             for (u64 i = 0; i < 3; ++i) {
                 insert_span_fmt("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
@@ -192,26 +203,36 @@ void Disassembler::insert_struct(const dc_structs::unmapped *entry, const u64 in
             break;
         }
         case SID("array*"): {
-            const u32 num_elements = *(reinterpret_cast<const u32*>(&entry->m_data) + 2);
-            const p64 *array_entries_start = reinterpret_cast<const u64*>(entry->m_data);
+            const u32 num_elements = *(reinterpret_cast<const u32*>(&struct_ptr->m_data) + 2);
+            const p64 *array_entries_start = reinterpret_cast<const u64*>(struct_ptr->m_data);
             for (u64 i = 0; i < num_elements; ++i) {
                 const dc_structs::unmapped *array_entry_struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(array_entries_start[i] - 8);
-                insert_struct(array_entry_struct_ptr, indent + m_options.m_indentPerLevel);
+                insert_struct(&array_entry_struct_ptr, indent + m_options.m_indentPerLevel);
+            }
+            break;
+        }
+        case SID("string-array"): {
+            const dc_structs::string_array* str_a = reinterpret_cast<const dc_structs::string_array*>(&struct_ptr->m_data);
+            u64 str_offset = 0;
+            for (u64 i = 0; i < str_a->size; ++i) {
+                const char* text = reinterpret_cast<const char*>(str_a->contents.data[0] + str_offset);
+                printf("%s\n", text);
+                str_offset += strlen(text) + 1;
             }
             break;
         }
         default: {
-            if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(entry)) != m_currentFile->m_emittedStructs.end()) {
+            if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(struct_ptr)) != m_currentFile->m_emittedStructs.end()) {
                 insert_span_fmt("%*sALREADY_EMITTED\n%*s}", {.m_color = COMMENT_COLOR}, indent + m_options.m_indentPerLevel, "", indent, "");
                 return;
             }
-            insert_unmapped_struct(entry, indent + m_options.m_indentPerLevel);
+            insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel);
             break;
         }
     }
     insert_span("}\n", ENTRY_TYPE_FMT, indent);
     if (m_options.m_emitOnce) {
-        m_currentFile->m_emittedStructs.emplace(reinterpret_cast<p64>(entry));
+        m_currentFile->m_emittedStructs.emplace(reinterpret_cast<p64>(struct_ptr));
     }
 }
 
@@ -1297,11 +1318,11 @@ void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDi
     if (label_location != labels.end()) {
         const u32 label_index = std::distance(labels.begin(), label_location);
         if (line.m_location == func_size) {
-            insert_span("L_RETURN:\n", label_format, indent - 2);
+            insert_span("L_RETURN:\n", label_format, indent - m_options.m_indentPerLevel);
         } else if (line.m_location == func_size - 1 && line.m_instruction.opcode == Opcode::LoadU16Imm) {
-            insert_span_fmt("%*sL_RETURN_%d:\n", label_format, indent - 2, "", line.m_instruction.operand1);  
+            insert_span_fmt("%*sL_RETURN_%d:\n", label_format, indent - m_options.m_indentPerLevel, "", line.m_instruction.operand1);  
         } else {
-            insert_span_fmt("%*sL_%d:\n", label_format, indent - 2, "", label_index);  
+            insert_span_fmt("%*sL_%d:\n", label_format, indent - m_options.m_indentPerLevel, "", label_index);  
         }
     }
 }

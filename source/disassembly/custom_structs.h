@@ -4,7 +4,10 @@
 
 namespace dc_structs {
     struct unmapped {
-        sid64 m_typeID;
+        union {
+            const p64 pointer;
+            const sid64 typeID;
+        } m_header;
         const void *m_data;
     };
     
@@ -73,5 +76,10 @@ namespace dc_structs {
     struct point_curve {
         const u32 int1;
         const f32 floats[33];
+    };
+
+    struct string_array {
+        const u64 size;
+        const array contents;
     };
 }

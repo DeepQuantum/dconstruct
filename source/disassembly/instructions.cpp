@@ -103,17 +103,6 @@ const char *Instruction::opcode_to_string() const noexcept {
     }
 }
 
-b8 Instruction::isSymbolLoadInstruction() const noexcept {
-    Opcode op = opcode;
-    return (op > LoadStaticU32Imm && op < LoadU64) || 
-    op == LoadStaticI32Imm || op == LoadStaticFloatImm || op == LoadStaticPointerImm || 
-    op == LookupInt ||op == LookupFloat || op == LookupPointer;
-}
-
-b8 Instruction::isBranchInstruction() const noexcept {
-    return opcode == Branch || opcode == BranchIf || opcode == BranchIfNot;
-}
-
 void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved) const noexcept {
     const Register reg = m_registers[idx];
     if (reg.isArg) {

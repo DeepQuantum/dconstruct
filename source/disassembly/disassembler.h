@@ -55,7 +55,7 @@ protected:
     FILE *m_perfFile = nullptr;
     
     void insert_entry(const Entry *entry);
-    void insert_struct(const dc_structs::unmapped *entry, const u64 indent = 0);
+    void insert_struct(const dc_structs::unmapped **entry, const u64 indent = 0);
     template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
     [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
     [[nodiscard]] b8 is_sid(const sid64 hash) const noexcept;

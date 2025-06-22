@@ -5,7 +5,14 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/tlou2_disasm_cli.exe",
-        "args": ["C:/Users/damix/Documents/GitHub/TLOU2Modding/tlou2_disasm/test/workbench-settings.bin"],
+        "args": [
+            "-s", 
+            "C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_new_sorted.bin",
+            "-i", 
+            "C:/Users/damix/Documents/GitHub/TLOU2Modding/bacups/dc1/ss-rogue",
+            "-o",
+            "../output/"
+        ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",
         "preLaunchTask": "build",

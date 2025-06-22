@@ -21,8 +21,10 @@ private:
     void insert_span(const char *text, const TextFormat &text_format = TextFormat{}, const u64 indent = 0) override {
         if (indent > 0) {
             m_outbuf += std::string(indent, ' ');
+            printf("%*s", indent, "");
         }
         m_outbuf += text;
+        printf(text);
         return;
     }
 

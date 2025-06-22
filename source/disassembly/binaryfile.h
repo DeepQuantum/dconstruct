@@ -42,10 +42,10 @@ class BinaryFile
 {
 public:
 
-    i32 dc_setup();
+    b8 dc_setup();
     BinaryFile();
 
-    BinaryFile(const char *path);
+    BinaryFile(const std::string &path);
 
     DC_Header *m_dcheader = nullptr;
     StateScript *m_dcscript = nullptr;

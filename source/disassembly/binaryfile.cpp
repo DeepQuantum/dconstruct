@@ -9,11 +9,12 @@
 
 BinaryFile::BinaryFile() {}
 
-BinaryFile::BinaryFile(const char *path) {
+BinaryFile::BinaryFile(const std::string &path) {
     std::ifstream scriptstream(path, std::ios::binary);
 
     if (!scriptstream.is_open()) {
-        throw std::runtime_error("Coudln't open " + std::string(path));
+        std::cout << "error: coudln't open " << path << '\n';
+        exit(-1);
     }
 
     m_size = std::filesystem::file_size(path);
@@ -23,29 +24,38 @@ BinaryFile::BinaryFile(const char *path) {
     m_bytes = std::unique_ptr<u8[]>(temp_buffer);
 }
 
-i32 BinaryFile::dc_setup() {
+b8 BinaryFile::dc_setup() {
     constexpr u32 magic = 0x44433030;
     constexpr u32 version = 0x1;
+    
+    if (m_size == 0) {
+        std::cerr << "error: file is empty." << '\n';
+        return false;
+    }
 
     m_dcheader = reinterpret_cast<DC_Header*>(m_bytes.get());
 
+
     if (m_dcheader->m_magic != magic) {
-        throw std::runtime_error("Magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)m_bytes.get()));
+        std::cerr << "magic number doesn't equal 0x44433030: " << *(uint32_t*)m_bytes.get() << '\n';
+        return false;
     }
 
     if (m_dcheader->m_versionNumber != version) {
-        throw std::runtime_error("Version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(m_bytes.get() + 8)));
+        std::cerr << "version number doesn't equal 0x00000001: " << *(uint32_t*)(m_bytes.get() + 8) << '\n';
+        return false;
     }
 
     read_reloc_table();
     
     replace_newlines_in_stringtable();
     
-    return 1;
+    return true;
 }
 
 void BinaryFile::replace_newlines_in_stringtable() noexcept {
-    const u64 table_size = reinterpret_cast<p64>(m_relocTable) - 4 - m_stringsPtr;
+    constexpr u8 table_size_offset = 4;
+    const u64 table_size = reinterpret_cast<p64>(m_relocTable) - table_size_offset - m_stringsPtr;
     char *string_table = reinterpret_cast<char*>(m_stringsPtr);
     for (u64 i = 0; i < table_size; ++i) {
         if (string_table[i] == '\n') {
@@ -56,12 +66,16 @@ void BinaryFile::replace_newlines_in_stringtable() noexcept {
 
 
 [[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const void *ptr) const noexcept {
-    const p64 proper_offset = (reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(m_bytes.get())) / 8;
-    return m_pointedAtTable[proper_offset / 8] & (1 << (proper_offset % 8));
+    const p64 offset = (reinterpret_cast<p64>(ptr) - reinterpret_cast<p64>(m_bytes.get())) / 8;
+    return m_pointedAtTable[offset / 8] & (1 << (offset % 8));
 }
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const p64 ptr) const noexcept {
-    const p64 offset = (ptr - reinterpret_cast<p64>(m_bytes.get())) / 8;
+    p64 offset = (ptr - reinterpret_cast<p64>(m_bytes.get()));
+    if (offset > m_size) {
+        return false;
+    }
+    offset /= 8;
     const u8* table = m_bytes.get() + m_dcheader->m_textSize + 4;
     return table[offset / 8] & (1 << (offset % 8));
 }
