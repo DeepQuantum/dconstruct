@@ -72,12 +72,11 @@ void BinaryFile::replace_newlines_in_stringtable() noexcept {
 
 [[nodiscard]] b8 BinaryFile::is_file_ptr(const p64 ptr) const noexcept {
     p64 offset = (ptr - reinterpret_cast<p64>(m_bytes.get()));
-    if (offset > m_size) {
+    if (offset >= m_size) {
         return false;
     }
     offset /= 8;
-    const u8* table = m_bytes.get() + m_dcheader->m_textSize + 4;
-    return table[offset / 8] & (1 << (offset % 8));
+    return m_relocTable[offset / 8] & (1 << (offset % 8));
 }
 
 

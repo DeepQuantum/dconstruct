@@ -4,10 +4,7 @@
 
 namespace dc_structs {
     struct unmapped {
-        union {
-            const p64 pointer;
-            const sid64 typeID;
-        } m_header;
+        const sid64 typeID;
         const void *m_data;
     };
     
