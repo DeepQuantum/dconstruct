@@ -63,9 +63,10 @@ protected:
     [[nodiscard]] b8 is_empty_array_ptr(const p64 data_ptr) const noexcept;
     [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
     [[nodiscard]] b8 is_possible_i32(const i32 *ptr) const noexcept;
-    void insert_struct_or_arraylike(const p64 *data_ptr, const u64 indent) noexcept;
+    u32 insert_struct_or_arraylike(const p64 *data_ptr, const u64 indent) noexcept;
     void insert_state_script(const StateScript *stateScript, const u32 indent);
     void insert_unmapped_struct(const dc_structs::unmapped *_struct, const u64 indent);
+    u32 insert_next_struct_member(const p64 data_ptr, const u64 indent);
     void insert_variable(const SsDeclaration *var, const u32 indent);
     void insert_on_block(const SsOnBlock *block, const u32 indent);
     [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);
