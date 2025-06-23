@@ -64,6 +64,7 @@ protected:
     [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
     [[nodiscard]] b8 is_possible_i32(const i32 *ptr) const noexcept;
     u32 insert_struct_or_arraylike(const p64 *data_ptr, const u64 indent) noexcept;
+    void insert_array(const p64 *struct_location, const u64 indent);
     void insert_state_script(const StateScript *stateScript, const u32 indent);
     void insert_unmapped_struct(const dc_structs::unmapped *_struct, const u64 indent);
     u32 insert_next_struct_member(const p64 data_ptr, const u64 indent);

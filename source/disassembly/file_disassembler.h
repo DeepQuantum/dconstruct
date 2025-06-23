@@ -23,8 +23,8 @@ private:
             m_outbuf += std::string(indent, ' ');
             printf("%*s", indent, "");
         }
+        printf("%s", text);
         m_outbuf += text;
-        printf(text);
         return;
     }
 
