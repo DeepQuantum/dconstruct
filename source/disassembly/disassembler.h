@@ -60,7 +60,6 @@ protected:
     [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
     [[nodiscard]] b8 is_sid(const sid64 hash) const noexcept;
     void insert_header_line();
-    [[nodiscard]] b8 is_empty_array_ptr(const p64 data_ptr) const noexcept;
     [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
     [[nodiscard]] b8 is_possible_i32(const i32 *ptr) const noexcept;
     u32 insert_struct_or_arraylike(const p64 *data_ptr, const u64 indent) noexcept;

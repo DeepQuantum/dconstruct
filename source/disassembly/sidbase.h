@@ -12,7 +12,7 @@ struct SIDBaseEntry {
 class SIDBase {
 
 public:
-    void load(const std::filesystem::path &path = "./sidbase.bin") noexcept;
+    void load(const std::filesystem::path &path) noexcept;
     [[nodiscard]] const char *search(const sid64 hash) const noexcept;
     [[nodiscard]] b8 sid_exists(const sid64 hash) const noexcept;
     sid64 m_lowestSid;
@@ -20,7 +20,7 @@ public:
     
 private:
     u64 m_numEntries = 0;
-    std::unique_ptr<u8[]> m_sidbytes;
+    std::unique_ptr<std::byte[]> m_sidbytes;
     SIDBaseEntry *m_entries = nullptr;
 };
 

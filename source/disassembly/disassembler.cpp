@@ -32,13 +32,6 @@ void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_fo
         && value < reinterpret_cast<p64>(m_currentFile->m_bytes.get()) + m_currentFile->m_size;
     b8 val = !(in_ptr_range && m_currentFile->is_file_ptr(value)) && value > m_sidbase->m_lowestSid;
     return val;
-} 
-
-[[nodiscard]] b8 Disassembler::is_empty_array_ptr(const p64 data_ptr) const noexcept {
-    const b8 last_int_zero = *(reinterpret_cast<const i32*>(&data_ptr - 1)) == 0;
-    const b8 next_loc_sid = is_sid(*reinterpret_cast<const sid64*>(data_ptr));
-    const b8 value_after_sid_pointed_at = m_currentFile->location_gets_pointed_at((void*)(data_ptr + 8));
-    return last_int_zero && next_loc_sid && value_after_sid_pointed_at;
 }
 
 [[nodiscard]] b8 Disassembler::is_possible_float(const f32 *val) const noexcept {
@@ -59,34 +52,33 @@ void Disassembler::insert_span_fmt(const char *format, const TextFormat &text_fo
 
 */  
 u32 Disassembler::insert_struct_or_arraylike(const p64 *struct_location, const u64 indent) noexcept {
-    const p64 struct_data_start = *struct_location;
-    if (m_currentFile->is_file_ptr(reinterpret_cast<p64>(struct_location)) && reinterpret_cast<p64>(struct_data_start) > m_currentFile->m_stringsPtr) {
-        insert_span_fmt("%*sstring: \"%s\"\n", {.m_color = TYPE_COLOR}, indent, "", reinterpret_cast<const char*>(struct_data_start));
+    const p64 struct_member_start = *struct_location;
+    if (m_currentFile->is_file_ptr(reinterpret_cast<p64>(struct_location)) && struct_member_start > m_currentFile->m_stringsPtr) {
+        insert_span_fmt("%*sstring: \"%s\"\n", {.m_color = TYPE_COLOR}, indent, "", reinterpret_cast<const char*>(struct_member_start));
         return 0;
     }
     if (!m_currentFile->is_file_ptr(reinterpret_cast<p64>(struct_location))) {
         if (reinterpret_cast<p64>(struct_location) > m_currentFile->m_stringsPtr) {
             insert_span_fmt("%*sstring: \"%s\"\n", COMMENT_FMT, indent, "", reinterpret_cast<const char*>(struct_location));
         } else {
-            //insert_span_fmt("%*sinserting primitive\n", COMMENT_FMT, indent, "");
             return insert_next_struct_member(reinterpret_cast<p64>(struct_location), indent);
         }
         return 0;
     }
-    const u64 next_struct_header = *reinterpret_cast<const u64*>(struct_data_start - 8);
+    const u64 next_struct_header = *reinterpret_cast<const u64*>(struct_member_start - 8);
     if (next_struct_header == SID("array")) {
         insert_array(struct_location, indent);
     } else {
         if (!m_sidbase->sid_exists(next_struct_header)) {
             const u32 anonymous_array_size = *reinterpret_cast<const u32*>(struct_location + 1);
-            insert_span_fmt("%*sanonymous array [0x%x] {size: %d} {\n", COMMENT_FMT, indent, "", get_offset((void*)struct_location), anonymous_array_size);
+            insert_span_fmt("anonymous array [0x%x] {size: %d} {\n", COMMENT_FMT, get_offset((void*)struct_location), anonymous_array_size);
             for (u64 i = 0; i < anonymous_array_size; ++i) {
-                insert_span_fmt("%*s[%d]\n", COMMENT_FMT, indent, "", i);
-                insert_struct_or_arraylike(reinterpret_cast<const p64*>(struct_data_start + i * 8), indent + m_options.m_indentPerLevel);
+                // assuming anonymous arrays only contain pointers.
+                insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", i);
+                insert_struct_or_arraylike(reinterpret_cast<const p64*>(struct_member_start + i * 8), indent + m_options.m_indentPerLevel);
             }
         } else {
-            //insert_span_fmt("%*sinserting struct\n", COMMENT_FMT, indent, "");
-            const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(struct_data_start - 8);
+            const dc_structs::unmapped *_struct = reinterpret_cast<const dc_structs::unmapped*>(struct_member_start - 8);
             insert_struct(_struct, indent);
         }
     }
@@ -94,34 +86,33 @@ u32 Disassembler::insert_struct_or_arraylike(const p64 *struct_location, const u
 }
 
 void Disassembler::insert_array(const p64 *struct_location, const u64 indent) {
-    const p64 struct_data_start = *struct_location;
+    const p64 struct_member_start = *struct_location;
     u32 size_array = *(struct_location - 1);
-    insert_span_fmt("%*sarray [0x%x] {size: %d} {\n", COMMENT_FMT, indent, "", get_offset((void *)struct_location), size_array);
+    insert_span_fmt("array [0x%x] {size: %d} {\n", COMMENT_FMT, get_offset((void *)struct_location), size_array);
     if (size_array == 0) {
         insert_span("}\n", COMMENT_FMT, indent);
         return;
     }
     u32 member_offset = 0;
-    u32 var_count = 0;
+    u32 member_count = 0;
     b8 struct_size_determined = false;
-    insert_span_fmt("%*sarray entry {0} anonymous struct [0x%x] {\n", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", get_offset((void *)struct_data_start));
+    insert_span_fmt("%*sarray entry {0} anonymous struct [0x%x] {\n", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", get_offset((void *)struct_member_start));
     while (!struct_size_determined) {
-        insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2, "", var_count++);
-        u32 moved = insert_struct_or_arraylike(reinterpret_cast<const p64 *>(struct_data_start + member_offset), 0);
-        member_offset += moved ? moved : 8;
-        struct_size_determined = m_currentFile->location_gets_pointed_at((void *)(struct_data_start + member_offset * size_array + 8));
+        insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2, "", member_count++);
+        u32 last_member_size = insert_struct_or_arraylike(reinterpret_cast<const p64 *>(struct_member_start + member_offset), 0);
+        member_offset += last_member_size ? last_member_size : 8;
+        struct_size_determined = m_currentFile->location_gets_pointed_at((void *)(struct_member_start + member_offset * size_array + 8));
     }
     insert_span("}\n", COMMENT_FMT, indent + m_options.m_indentPerLevel);
     u32 struct_size = member_offset;
     for (u32 array_entry_count = 1; array_entry_count < size_array; ++array_entry_count) {
-        member_offset = 0;
-        insert_span_fmt("%*sarray entry {%d} anonymous struct [0x%x] {\n", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", array_entry_count, get_offset((void *)(struct_data_start + array_entry_count * struct_size)));
-        var_count = 0;
+        member_offset = member_count = 0;
+        insert_span_fmt("%*sarray entry {%d} anonymous struct [0x%x] {\n", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", array_entry_count, get_offset((void *)(struct_member_start + array_entry_count * struct_size)));
         while (member_offset < struct_size) {
-            insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2, "", var_count++);
-            const p64 current_member_location = struct_data_start + array_entry_count * struct_size + member_offset;
-            u32 moved = insert_struct_or_arraylike(reinterpret_cast<const p64 *>(current_member_location), 0);
-            member_offset += moved ? moved : 8;
+            insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel * 2, "", member_count++);
+            const p64 current_member_location = struct_member_start + array_entry_count * struct_size + member_offset;
+            u32 last_member_size = insert_struct_or_arraylike(reinterpret_cast<const p64 *>(current_member_location), 0);
+            member_offset += last_member_size ? last_member_size : 8;
         }
         insert_span("}\n", COMMENT_FMT, indent + m_options.m_indentPerLevel);
     }
@@ -129,56 +120,54 @@ void Disassembler::insert_array(const p64 *struct_location, const u64 indent) {
 }
 
 void Disassembler::insert_unmapped_struct(const dc_structs::unmapped *struct_ptr, const u64 indent) {
-    u64 offset = 0;
+    u64 member_offset = 0;
     b8 offset_gets_pointed_at = false;
-    u64 move = 0;
-    u32 entry_count = 0;
+    u64 last_member_size = 0;
+    u32 member_count = 0;
     while (!offset_gets_pointed_at) {
-        offset += move;
-        const p64 data_ptr = reinterpret_cast<p64>(&struct_ptr->m_data) + offset;
-        move = insert_next_struct_member(data_ptr, indent);
-        entry_count++;
-        offset_gets_pointed_at = m_currentFile->location_gets_pointed_at((void*)(data_ptr + move + 8));
+        member_offset += last_member_size;
+        const p64 struct_member_location = reinterpret_cast<p64>(&struct_ptr->m_data) + member_offset;
+        insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent, "", member_count++);
+        last_member_size = insert_next_struct_member(struct_member_location, indent);
+        offset_gets_pointed_at = m_currentFile->location_gets_pointed_at((void*)(struct_member_location + last_member_size + 8));
     }
 }
 
-u32 Disassembler::insert_next_struct_member(const p64 data_ptr, const u64 indent) {
-    u32 move;
+u32 Disassembler::insert_next_struct_member(const p64 struct_member_location, const u64 indent) {
+    u32 member_size;
     const char *str_ptr = nullptr;
-    if (m_currentFile->is_file_ptr(data_ptr)) {
-        const p64 ptr_value = *reinterpret_cast<const p64 *>(data_ptr);
-        if (ptr_value >= m_currentFile->m_stringsPtr) {
-            insert_span("string: ", {.m_color = TYPE_COLOR}, indent);
-            insert_span_fmt("\"%s", {.m_color = STRING_COLOR}, reinterpret_cast<const char *>(ptr_value));
-            insert_span("\"\n", {.m_color = STRING_COLOR});
+    if (m_currentFile->is_file_ptr(struct_member_location)) {
+        const p64 member_value = *reinterpret_cast<const p64 *>(struct_member_location);
+        if (member_value >= m_currentFile->m_stringsPtr) {
+            insert_span_fmt("string: \"%s\"\n", {.m_color = TYPE_COLOR}, reinterpret_cast<const char *>(member_value));
         }
         else {
-            insert_struct_or_arraylike(reinterpret_cast<p64 *>(data_ptr), indent);
+            insert_struct_or_arraylike(reinterpret_cast<p64*>(struct_member_location), indent);
         }
-        move = 8;
+        member_size = 8;
     }
-    else if ((str_ptr = m_sidbase->search(*reinterpret_cast<const sid64*>(data_ptr))) != nullptr) {
-        insert_span_fmt("%*ssid: %s\n", {.m_color = HASH_COLOR}, indent, "", str_ptr);
-        move = 8;
+    else if ((str_ptr = m_sidbase->search(*reinterpret_cast<const sid64*>(struct_member_location))) != nullptr) {
+        insert_span_fmt("sid: %s\n", {.m_color = HASH_COLOR}, str_ptr);
+        member_size = 8;
     }
-    else if (is_possible_float(reinterpret_cast<const f32 *>(data_ptr))) {
-        insert_span_fmt("%*sfloat: %.2f\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const f32 *>(data_ptr));
-        move = 4;
+    else if (is_possible_float(reinterpret_cast<const f32*>(struct_member_location))) {
+        insert_span_fmt("float: %.2f\n", {.m_color = NUM_COLOR}, *reinterpret_cast<const f32*>(struct_member_location));
+        member_size = 4;
     }
-    else if (is_possible_i32(reinterpret_cast<const i32 *>(data_ptr))) {
-        insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32 *>(data_ptr));
-        move = 4;
+    else if (is_possible_i32(reinterpret_cast<const i32*>(struct_member_location))) {
+        insert_span_fmt("int: %d\n", {.m_color = NUM_COLOR}, *reinterpret_cast<const i32*>(struct_member_location));
+        member_size = 4;
     }
-    else if (data_ptr % 8 == 0 && *reinterpret_cast<const sid64 *>(data_ptr) > m_sidbase->m_lowestSid && *reinterpret_cast<const sid64 *>(data_ptr)) {
-        str_ptr = lookup(*reinterpret_cast<const sid64 *>(data_ptr));
-        insert_span_fmt("%*ssid: %s\n", {.m_color = HASH_COLOR}, indent, "", str_ptr);
-        move = 8;
+    else if (struct_member_location % 8 == 0 && *reinterpret_cast<const sid64*>(struct_member_location) > m_sidbase->m_lowestSid && *reinterpret_cast<const sid64 *>(struct_member_location)) {
+        str_ptr = lookup(*reinterpret_cast<const sid64*>(struct_member_location));
+        insert_span_fmt("sid: %s\n", {.m_color = HASH_COLOR}, str_ptr);
+        member_size = 8;
     }
     else {
-        insert_span_fmt("%*sint: %d\n", {.m_color = NUM_COLOR}, indent, "", *reinterpret_cast<const i32 *>(data_ptr));
-        move = 4;
+        insert_span_fmt("int: %d\n", {.m_color = NUM_COLOR}, *reinterpret_cast<const i32*>(struct_member_location));
+        member_size = 4;
     }
-    return move;
+    return member_size;
 }
 
 void Disassembler::disassemble() {
@@ -207,25 +196,25 @@ void Disassembler::insert_struct(const dc_structs::unmapped *struct_ptr, const u
     const u64 offset = get_offset((void*)struct_ptr);
     TextFormat opcode_format = {OPCODE_COLOR, 14};
 
-    insert_span_fmt("%*s%s [0x%05X] {\n", ENTRY_TYPE_FMT, indent, "", lookup(struct_ptr->typeID), offset);
+    insert_span_fmt("%s [0x%05X] {\n", ENTRY_TYPE_FMT, lookup(struct_ptr->typeID), offset);
 
     switch (struct_ptr->typeID) {
-        case SID("boolean"): {
-            insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data) ? "true" : "false");
-            break;
-        }
-        case SID("int"): {
-            insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data));
-            break;
-        }
-        case SID("float"): {
-            insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&struct_ptr->m_data));
-            break;
-        }
-        case SID("sid"): {
-            insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", lookup(*reinterpret_cast<const sid64*>(&struct_ptr->m_data)));
-            break;
-        }
+        // case SID("boolean"): {
+        //     insert_span_fmt("%*sbool: <%s>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data) ? "true" : "false");
+        //     break;
+        // }
+        // case SID("int"): {
+        //     insert_span_fmt("%*sint: <%d>\n", opcode_format, indent, "", *reinterpret_cast<const i32*>(&struct_ptr->m_data));
+        //     break;
+        // }
+        // case SID("float"): {
+        //     insert_span_fmt("%*sfloat: <%.2f>\n", opcode_format, indent, "", *reinterpret_cast<const f32*>(&struct_ptr->m_data));
+        //     break;
+        // }
+        // case SID("sid"): {
+        //     insert_span_fmt("%*ssid: <%s>\n", opcode_format, indent, "", lookup(*reinterpret_cast<const sid64*>(&struct_ptr->m_data)));
+        //     break;
+        // }
         case SID("state-script"): {
             insert_state_script(reinterpret_cast<const StateScript*>(&struct_ptr->m_data), indent + m_options.m_indentPerLevel);
             break;
@@ -236,20 +225,13 @@ void Disassembler::insert_struct(const dc_structs::unmapped *struct_ptr, const u
             m_currentFile->m_functions.push_back(std::move(function));
             break;
         }
-        case SID("symbol-array"): {
-            const dc_structs::symbol_array *array = reinterpret_cast<const dc_structs::symbol_array*>(&struct_ptr->m_data);
-            for (u64 i = 0; i < array->contents.size; ++i) {
-                insert_span_fmt("%*s%d. %s\n", {OPCODE_COLOR, 14}, indent + m_options.m_indentPerLevel, "", i + 1, lookup(array->contents.keys[i]));
-            }
-            break;
-        }
         case SID("map"):
         case SID("map-32"): {
             const dc_structs::map *map = reinterpret_cast<const dc_structs::map*>(&struct_ptr->m_data);
             insert_span_fmt("%*skeys: [0x%05X], values: [0x%05X]\n\n", {HASH_COLOR, 16}, indent + m_options.m_indentPerLevel, "", get_offset(map->keys.data), get_offset(map->values.data));
             for (u64 i = 0; i < map->size; ++i) {
                 const char *key_hash = lookup(map->keys[i]);
-                insert_span_fmt("%*s%s {\n", opcode_format, indent + m_options.m_indentPerLevel, "", key_hash);
+                insert_span_fmt("%*s%s {\n%*s", opcode_format, indent + m_options.m_indentPerLevel, "", key_hash, indent + m_options.m_indentPerLevel * 2, "");
                 const dc_structs::unmapped *struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(map->values[i] - 8);
                 insert_struct(struct_ptr, indent + m_options.m_indentPerLevel * 2);
                 insert_span("}\n", {CONTROL_COLOR, 16}, indent + m_options.m_indentPerLevel);
@@ -267,25 +249,6 @@ void Disassembler::insert_struct(const dc_structs::unmapped *struct_ptr, const u
                     curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
                     curve->floats[i + 9], curve->floats[i + 10]
                 );
-            }
-            break;
-        }
-        // case SID("array*"): {
-        //     const u32 num_elements = *(reinterpret_cast<const u32*>(&struct_ptr->m_data) + 2);
-        //     const p64 *array_entries_start = reinterpret_cast<const u64*>(struct_ptr->m_data);
-        //     for (u64 i = 0; i < num_elements; ++i) {
-        //         //const dc_structs::unmapped *array_entry_struct_ptr = reinterpret_cast<const dc_structs::unmapped*>(array_entries_start[i] - 8);
-        //         insert_struct_or_arraylike(reinterpret_cast<p64*>(array_entries_start[i] - 8), indent + m_options.m_indentPerLevel);
-        //     }
-        //     break;
-        // }
-        case SID("string-array"): {
-            const dc_structs::string_array* str_a = reinterpret_cast<const dc_structs::string_array*>(&struct_ptr->m_data);
-            u64 str_offset = 0;
-            for (u64 i = 0; i < str_a->size; ++i) {
-                const char* text = reinterpret_cast<const char*>(str_a->contents.data[0] + str_offset);
-                printf("%s\n", text);
-                str_offset += strlen(text) + 1;
             }
             break;
         }
