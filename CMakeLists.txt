@@ -80,13 +80,13 @@ file(GLOB BASE_SOURCE_FILES
 add_executable(tlou2_disasm_cli ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
 target_compile_options(tlou2_disasm_cli PRIVATE
-    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -fopenmp -fno-exceptions -flto>
+    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -fopenmp -fno-exceptions -flto -Wall>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g -fopenmp -flto>
+    $<$<CONFIG:Debug>:-O0 -g -fopenmp -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
-
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 target_compile_definitions(tlou2_disasm_cli PRIVATE
     CXXOPTS_NO_EXCEPTIONS=1
 )
@@ -95,3 +95,18 @@ target_link_libraries(tlou2_disasm_cli PRIVATE
     stdc++fs
     $<$<CONFIG:CreateProfile>: gcov>
 )
+
+# --- BUILDINFO TARGET ----
+set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
+add_custom_command(
+    OUTPUT ${BUILDINFO_H}
+    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}"
+    DEPENDS
+    ${BASE_SOURCE_FILES}
+    "${SOURCE_DIR}/main_cli.cpp"
+    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+)
+
+add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
+
+add_dependencies(tlou2_disasm_cli generate_buildinfo)

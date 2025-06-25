@@ -1,6 +1,7 @@
 #include "disassembly/file_disassembler.h"
 #include "disassembly/edit_disassembler.h"
 #include "cxxopts.hpp"
+#include "about.h"
 #include <chrono>
 #include <iostream>
 #include <filesystem>
@@ -73,23 +74,33 @@ static void disassemble_multiple(
 
 int main(int argc, char *argv[]) {
 
-    cxxopts::Options options("tlou2_disasm_cli", "a program for disassembling and editing tlouii dc files.");
+    cxxopts::Options options("tlou2_disasm_cli", "\na program for disassembling and editing tlouii dc files. use --about for a more detailed description.\n");
 
     options.add_options()
+        ("a,about", "print about")
         ("i,input",  "input DC file or folder", cxxopts::value<std::string>(), "<path>")
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), "<path>")
         ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value("sidbase.bin"), "<path>")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<address>@<variable>=<new_value>")
-        ("indent", "number of spaces per indentation level", cxxopts::value<u8>()->default_value("2"), "n")
-        ("eo,emit_once", "emit structs only once, regardless if they appear in multiple locations. the repeating instance will be replaced by a reference to the first emittance.", 
-            cxxopts::value<b8>()->default_value("false")->implicit_value("true"))
+        ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
+        ("eo,emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
+            cxxopts::value<b8>()->default_value("false"))
     ;
+
+    options.parse_positional({"i"});
+
     auto result = options.parse(argc, argv);
+
+    if (result.count("a") > 0) {
+        print_about();
+        return -1;
+    }
     
     if (result.count("i") == 0) {
         std::cout << options.help() << '\n';
         return -1;
     }
+
     
     const std::filesystem::path filepath = result["i"].as<std::string>();
     const std::filesystem::path output = result["o"].as<std::string>();

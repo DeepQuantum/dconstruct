@@ -72,7 +72,7 @@ u32 Disassembler::insert_struct_or_arraylike(const p64 *struct_location, const u
         if (!m_sidbase->sid_exists(next_struct_header)) {
             const u32 anonymous_array_size = *reinterpret_cast<const u32*>(struct_location + 1);
             insert_span_fmt("anonymous array [0x%x] {size: %d} {\n", COMMENT_FMT, get_offset((void*)struct_location), anonymous_array_size);
-            for (u64 i = 0; i < anonymous_array_size; ++i) {
+            for (u32 i = 0; i < anonymous_array_size; ++i) {
                 // assuming anonymous arrays only contain pointers.
                 insert_span_fmt("%*s[%d] ", COMMENT_FMT, indent + m_options.m_indentPerLevel, "", i);
                 insert_struct_or_arraylike(reinterpret_cast<const p64*>(struct_member_start + i * 8), indent + m_options.m_indentPerLevel);
