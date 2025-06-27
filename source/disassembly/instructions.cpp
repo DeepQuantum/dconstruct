@@ -1,8 +1,9 @@
 #include "instructions.h"
 #include "string.h"
 
-const char *Instruction::opcode_to_string() const noexcept {
-    switch (opcode) {
+namespace dconstruct {
+    const char* Instruction::opcode_to_string() const noexcept {
+        switch (opcode) {
         case Opcode::Return: return "Return";
         case Opcode::IAdd: return "IAdd";
         case Opcode::ISub: return "ISub";
@@ -100,22 +101,22 @@ const char *Instruction::opcode_to_string() const noexcept {
         case Opcode::BreakFlag: return "BreakFlag";
         case Opcode::Breakpoint: return "Breakpoint";
         default: return "Unknown Opcode";
+        }
     }
-}
 
-void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved) const noexcept {
-    const Register reg = m_registers[idx];
-    if (reg.isArg) {
-        snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
-        return;
-    }
-    switch (reg.m_type) {
+    void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
+        const Register reg = m_registers[idx];
+        if (reg.isArg) {
+            snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
+            return;
+        }
+        switch (reg.m_type) {
         case RegisterValueType::R_HASH: {
             strncpy(buffer, resolved, buffer_size);
             break;
         }
         case RegisterValueType::R_U16:
-        case RegisterValueType::R_U32: 
+        case RegisterValueType::R_U32:
         case RegisterValueType::R_U64: {
             snprintf(buffer, buffer_size, "%llu", reg.m_U64);
             break;
@@ -140,18 +141,20 @@ void StackFrame::to_string(char *buffer, const u64 buffer_size, const u64 idx, c
         case RegisterValueType::R_POINTER: {
             if (reg.m_PTR.m_offset > 0) {
                 snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.isReturn ? "RET_" : "", reg.m_PTR.m_offset);
-            } else {
+            }
+            else {
                 snprintf(buffer, buffer_size, "%s%s", reg.isReturn ? "RET_" : "", resolved);
             }
             break;
         }
         default: {
-            snprintf(buffer,buffer_size, "0x%llX", reg.m_U64);
+            snprintf(buffer, buffer_size, "0x%llX", reg.m_U64);
             break;
-        } 
+        }
+        }
     }
-}
 
-Register& StackFrame::operator[](const u64 idx) noexcept {
-    return m_registers[idx];
+    Register& StackFrame::operator[](const u64 idx) noexcept {
+        return m_registers[idx];
+    }
 }

@@ -6,73 +6,78 @@
 #include "custom_structs.h"
 #include <vector>
 
-struct Color {
-    u8 r, g, b;
-};
+namespace dconstruct {
+    struct Color {
+        u8 r, g, b;
+    };
 
-constexpr static Color TYPE_COLOR = Color{78, 201, 176};
-constexpr static Color VAR_COLOR = Color{156, 220, 254};
-constexpr static Color CONTROL_COLOR = Color{197, 134, 192};
-constexpr static Color NUM_COLOR = Color{181, 206, 163};
-constexpr static Color OPCODE_COLOR = Color{84, 179, 183};
-constexpr static Color STRING_COLOR = Color{174, 51, 68};
-constexpr static Color FUNCTION_COLOR = Color{220, 220, 155};
-constexpr static Color COMMENT_COLOR = Color{204, 204, 204};
-constexpr static Color BACKGROUND_COLOR = Color{28, 29, 30};
-constexpr static Color HASH_COLOR = Color{86, 156, 214};
+    constexpr static Color TYPE_COLOR = Color{ 78, 201, 176 };
+    constexpr static Color VAR_COLOR = Color{ 156, 220, 254 };
+    constexpr static Color CONTROL_COLOR = Color{ 197, 134, 192 };
+    constexpr static Color NUM_COLOR = Color{ 181, 206, 163 };
+    constexpr static Color OPCODE_COLOR = Color{ 84, 179, 183 };
+    constexpr static Color STRING_COLOR = Color{ 174, 51, 68 };
+    constexpr static Color FUNCTION_COLOR = Color{ 220, 220, 155 };
+    constexpr static Color COMMENT_COLOR = Color{ 204, 204, 204 };
+    constexpr static Color BACKGROUND_COLOR = Color{ 28, 29, 30 };
+    constexpr static Color HASH_COLOR = Color{ 86, 156, 214 };
 
-struct TextFormat {
-    Color m_color = COMMENT_COLOR;
-    u64 m_fontSize = 14;
-};
+    struct TextFormat {
+        Color m_color = COMMENT_COLOR;
+        u64 m_fontSize = 14;
+    };
 
-struct DisassemblerOptions {
-    u8 m_indentPerLevel;
-    b8 m_emitOnce;
-};
+    struct DisassemblerOptions {
+        u8 m_indentPerLevel;
+        b8 m_emitOnce;
+    };
 
-class Disassembler {
-public:
-    void disassemble();
-    u64 m_versionNumber = 0x1;
+    class Disassembler {
+    public:
+        void disassemble();
+        u64 m_versionNumber = 0x1;
 
-protected:
-    Disassembler() = default;
-    virtual void insert_span(const char *text, const TextFormat &text_format = TextFormat{}, const u64 indent = 0) = 0;
-    virtual void complete() = 0;
+    protected:
+        Disassembler() = default;
+        virtual void insert_span(const char* text, const TextFormat& text_format = TextFormat{}, const u64 indent = 0) = 0;
+        virtual void complete() = 0;
 
-    BinaryFile *m_currentFile = nullptr;
-    const SIDBase *m_sidbase = nullptr;
-    DisassemblerOptions m_options;
+        BinaryFile* m_currentFile = nullptr;
+        const SIDBase* m_sidbase = nullptr;
+        DisassemblerOptions m_options;
 
-    std::map<sid64, std::vector<const dc_structs::unmapped*>> m_unmappedEntries;
+        std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
 
-    constexpr static TextFormat ENTRY_HEADER_FMT = {VAR_COLOR, 20};
-    constexpr static TextFormat ENTRY_TYPE_FMT   = {TYPE_COLOR, 20};
-    constexpr static TextFormat STRUCT_TYPE_FMT  = {TYPE_COLOR, 14};
-    constexpr static TextFormat COMMENT_FMT      = {COMMENT_COLOR, 14};
+        constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };
+        constexpr static TextFormat ENTRY_TYPE_FMT = { TYPE_COLOR, 20 };
+        constexpr static TextFormat STRUCT_TYPE_FMT = { TYPE_COLOR, 14 };
+        constexpr static TextFormat COMMENT_FMT = { COMMENT_COLOR, 14 };
 
-    FILE *m_perfFile = nullptr;
-    
-    void insert_entry(const Entry *entry);
-    void insert_struct(const dc_structs::unmapped *entry, const u64 indent = 0);
-    template<typename... Args> void insert_span_fmt(const char *format, const TextFormat &text_format = TextFormat{}, Args ...args);
-    [[nodiscard]] const char *lookup(const sid64 hash) noexcept;
-    [[nodiscard]] b8 is_sid(const sid64 hash) const noexcept;
-    void insert_header_line();
-    [[nodiscard]] b8 is_possible_float(const f32 *ptr) const noexcept;
-    [[nodiscard]] b8 is_possible_i32(const i32 *ptr) const noexcept;
-    u32 insert_struct_or_arraylike(const p64 *data_ptr, const u64 indent) noexcept;
-    void insert_array(const p64 *struct_location, const u64 indent);
-    void insert_state_script(const StateScript *stateScript, const u32 indent);
-    void insert_unmapped_struct(const dc_structs::unmapped *_struct, const u64 indent);
-    u32 insert_next_struct_member(const p64 data_ptr, const u64 indent);
-    void insert_variable(const SsDeclaration *var, const u32 indent);
-    void insert_on_block(const SsOnBlock *block, const u32 indent);
-    [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda *lambda);
-    void process_instruction(StackFrame &stackFrame, FunctionDisassemblyLine &functionLine);
-    void insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent);
-    void insert_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const u32 indent) noexcept;
-    void insert_goto_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const std::vector<FunctionDisassemblyLine> &lines) noexcept;
-    [[nodiscard]] u32 get_offset(const void *symbol) const noexcept;
-};
+        FILE* m_perfFile = nullptr;
+
+        void insert_entry(const Entry* entry);
+        void insert_struct(const structs::unmapped* entry, const u64 indent = 0);
+        template<typename... Args> void insert_span_fmt(const char* format, const TextFormat& text_format = TextFormat{}, Args ...args);
+        [[nodiscard]] const char* lookup(const sid64 hash) noexcept;
+        [[nodiscard]] b8 is_sid(const location) const noexcept;
+        void insert_header_line();
+        [[nodiscard]] b8 is_possible_float(const f32* ptr) const noexcept;
+        [[nodiscard]] b8 is_possible_i32(const i32* ptr) const noexcept;
+        u8 insert_struct_or_arraylike(const location, const u32) noexcept;
+        [[nodiscard]] u32 get_size_array(const location, const u32) noexcept;
+        void insert_anonymous_array(const location, const u32) noexcept;
+        void insert_array(const location, const u32);
+        void insert_state_script(const StateScript* stateScript, const u32 indent);
+        void insert_unmapped_struct(const structs::unmapped* _struct, const u32 indent);
+        u8 insert_next_struct_member(const location, const u32);
+        void insert_variable(const SsDeclaration* var, const u32);
+        void insert_on_block(const SsOnBlock* block, const u32);
+        [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda* lambda);
+        void process_instruction(StackFrame& stackFrame, FunctionDisassemblyLine& functionLine);
+        void insert_function_disassembly_text(const FunctionDisassembly& functionDisassembly, const u32 indent);
+        void insert_label(const std::vector<u32>& labels, const FunctionDisassemblyLine& line, const u32 func_size, const u32 indent) noexcept;
+        void insert_goto_label(const std::vector<u32>& labels, const FunctionDisassemblyLine& line, const u32 func_size, const std::vector<FunctionDisassemblyLine>& lines) noexcept;
+        [[nodiscard]] u32 get_offset(const location) const noexcept;
+        [[nodiscard]] u32 get_offset(const void*) const noexcept;
+    };
+}

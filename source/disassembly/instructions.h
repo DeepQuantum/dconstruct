@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <map>
 
-enum Opcode : u8 {
+namespace dconstruct {
+    enum Opcode : u8 {
     Return,
     IAdd,
     ISub,
@@ -111,10 +112,10 @@ struct Instruction {
     u8 operand1;
     u8 operand2;
     u32 padding;
-    const char *opcode_to_string() const noexcept;
+    const char* opcode_to_string() const noexcept;
 };
 
-enum SymbolTableEntryType { 
+enum SymbolTableEntryType {
     STRINGID_64,
     FLOAT,
     INT,
@@ -138,7 +139,7 @@ struct FunctionDisassemblyLine {
     Instruction m_instruction;
     u64 m_location;
     std::string m_text;
-    Instruction *m_globalPointer;
+    Instruction* m_globalPointer;
     std::string m_comment;
     b8 m_isArgMove;
     i64 m_label = -1;
@@ -146,12 +147,13 @@ struct FunctionDisassemblyLine {
 
     FunctionDisassemblyLine() = default;
 
-    FunctionDisassemblyLine(u64 idx, Instruction *ptr) :
+    FunctionDisassemblyLine(u64 idx, Instruction* ptr) :
         m_instruction(ptr[idx]),
         m_location(idx),
         m_globalPointer(ptr),
         m_isArgMove(false)
-    {}
+    {
+}
 };
 
 
@@ -167,7 +169,7 @@ struct RegisterPointer {
         m_sid = 0;
     }
 
-    RegisterPointer(p64 base, u64 offset, sid64 sid): m_base{base}, m_offset{offset}, m_sid{sid}{};
+    RegisterPointer(p64 base, u64 offset, sid64 sid) : m_base{base}, m_offset{offset}, m_sid{sid} {};
 
     p64 get() const noexcept {
         return m_base + m_offset;
@@ -176,15 +178,15 @@ struct RegisterPointer {
 
 enum RegisterValueType {
     R_I8,
-	R_U8,
+    R_U8,
     R_BOOL,
-	R_I16,
-	R_U16,
-	R_F16,
-	R_I32,
-	R_U32,
-	R_F32,
-	R_F64,
+    R_I16,
+    R_U16,
+    R_F16,
+    R_I32,
+    R_U32,
+    R_F32,
+    R_F64,
     R_I64,
     R_U64,
     R_HASH,
@@ -217,12 +219,12 @@ struct Register {
 
 struct StackFrame {
     Register m_registers[128];
-    u64 *m_symbolTablePtr = nullptr;
-    std::map<u32, SymbolTableEntry> m_symbolTable;
+    location m_symbolTable;
+    std::map<u32, SymbolTableEntry> symbolTableEntries;
     std::vector<u32> m_labels;
     u32 m_argCount = 0;
 
-    StackFrame() : m_registers{}, m_symbolTable{}, m_labels{} {
+    StackFrame() : m_registers{}, symbolTableEntries{}, m_labels{} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
@@ -231,7 +233,7 @@ struct StackFrame {
 
     Register& operator[](const u64 idx) noexcept;
 
-    void to_string(char *buffer, const u64 buffer_size, const u64 idx, const char *resolved = "") const noexcept;
+    void to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved = "") const noexcept;
 
     void add_target_label(const u32 target) noexcept {
         auto res = std::find(m_labels.begin(), m_labels.end(), target);
@@ -246,3 +248,4 @@ struct FunctionDisassembly {
     std::vector<FunctionDisassemblyLine> m_lines;
     StackFrame m_stackFrame;
 };
+}

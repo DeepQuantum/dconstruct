@@ -6,14 +6,10 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/tlou2_disasm_cli.exe",
         "args": [
-            "-s", 
-            "C:/Users/damix/Documents/GitHub/TLOU2Modding/TLOU_DC_Tool_v1.01/sid1/sidbase_new_sorted.bin",
-            "-e",
-            "0x02CE0[4]=0x094A0",
             "-i", 
-            "C:/Users/damix/Documents/GitHub/TLOU2Modding/bacups/dc1/weapon-gameplay.bin",
+            "C:/Users/damix/Documents/GitHub/TLOU2Modding/bacups/dc1/",
             "-o",
-            "../output/weapon-gameplay.txt"
+            "./ai.txt"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

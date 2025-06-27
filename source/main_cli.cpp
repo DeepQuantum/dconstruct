@@ -10,31 +10,31 @@
 static void disasm_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_filename, 
-    const SIDBase &base, 
-    const DisassemblerOptions &options,
+    const dconstruct::SIDBase &base,
+    const dconstruct::DisassemblerOptions &options,
     const std::vector<std::string> &edits = {}) {
     
     const auto start = std::chrono::high_resolution_clock::now();
-    std::cout << "disassembling " << inpath << "... ";
-    BinaryFile file(inpath.string());
+    std::cout << "disassembling " << inpath << "... \n";
+    dconstruct::BinaryFile file(inpath.string());
     if (!file.dc_setup()) {
         return;
     }
 
     if (!edits.empty()) {
-        EditDisassembler ed(&file, &base, options, edits);
+        dconstruct::EditDisassembler ed(&file, &base, options, edits);
         ed.apply_file_edits();
     }
 
-    std::string output_location;
+    std::filesystem::path output_location;
     if (out_filename.empty()) {
         auto cwd = std::filesystem::current_path();
-        const std::string infile = inpath.filename().string();
-        output_location = cwd.concat("\\" + infile + ".txt").string();
+        output_location = (cwd / inpath).concat(".txt");
     } else {
-        output_location = out_filename.string();
+        output_location = out_filename;
     }
-    FileDisassembler disassembler(&file, &base, output_location, options);
+    std::cout << output_location << '\n';
+    dconstruct::FileDisassembler disassembler(&file, &base, output_location.string(), options);
     disassembler.disassemble();
 
     const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
@@ -45,8 +45,8 @@ static void disasm_file(
 static void disassemble_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
-    const SIDBase &sidbase, 
-    const DisassemblerOptions &options) {
+    const dconstruct::SIDBase &sidbase, 
+    const dconstruct::DisassemblerOptions &options) {
 
     std::vector<std::filesystem::path> filepaths;
         
@@ -55,7 +55,7 @@ static void disassemble_multiple(
             continue;
         }
         std::filesystem::path output_file_path = out;
-        output_file_path.concat(entry.path().filename().string() + ".txt");
+        //output_file_path /= entry.path().filename().concat(".txt");
         filepaths.emplace_back(entry.path());
         //disasm_file(entry.path().string(), output_file_path, sidbase, options);
     }
@@ -65,9 +65,9 @@ static void disassemble_multiple(
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
-            std::filesystem::path output_file_path = out;
-            output_file_path.concat(std::filesystem::relative(entry, in).string() + ".txt");
-            disasm_file(entry.string(), output_file_path, sidbase, options);
+            const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".txt");
+            std::filesystem::create_directories(outpath.parent_path());
+            disasm_file(entry.string(), outpath, sidbase, options);
         }
     );
 }
@@ -105,6 +105,13 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path filepath = result["i"].as<std::string>();
     const std::filesystem::path output = result["o"].as<std::string>();
 
+    if (!std::filesystem::exists(filepath)) {
+        std::cout << "error: input filepath " << filepath << " doesn't exist\n";
+    }
+    if (!std::filesystem::exists(output)) {
+        std::cout << "error: output filepath " << filepath << " doesn't exist\n";
+    }
+
     const b8 output_is_folder = std::filesystem::is_directory(output);
 
     const std::filesystem::path sidbase_path = result["s"].as<std::string>();
@@ -115,12 +122,12 @@ int main(int argc, char *argv[]) {
     if (result.count("e") > 0) {
         edits = result["e"].as<std::vector<std::string>>();
     }
-    const DisassemblerOptions disassember_options {
+    const dconstruct::DisassemblerOptions disassember_options {
         indent_per_level,
         emit_once,
     };
 
-    SIDBase base{};
+    dconstruct::SIDBase base{};
     base.load(sidbase_path);
 
     if (std::filesystem::is_directory(filepath)) {
