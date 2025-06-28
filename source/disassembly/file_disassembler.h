@@ -18,13 +18,13 @@ namespace dconstruct {
         std::string m_outbuf;
         FILE* m_outfptr;
 
-        void insert_span(const char* text, const TextFormat& text_format = TextFormat{}, const u64 indent = 0) override {
+        void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {
             if (indent > 0) {
                 m_outbuf += std::string(indent, ' ');
-                printf("%*s", (i32)indent, "");
+                //printf("%*s", (i32)indent, "");
             }
             m_outbuf += text;
-            printf("%s", text);
+            //printf("%s", text);
             return;
         }
 

@@ -30,8 +30,11 @@ namespace dconstruct {
 
 		location() {};
 		location(const void* ptr) : m_ptr(reinterpret_cast<const std::byte*>(ptr)) {};
-		//location(const location &rhs, const i32 offset = 0) : m_ptr(rhs.get<std::byte*>() + offset) {};
 
+		[[nodiscard]] location &from(const location& rhs, const i32 offset = 0) noexcept {
+			m_ptr = rhs.get<std::byte*>() + offset;
+			return *this;
+		}
 
 		// cast the location pointer to T
 		template<typename T>
@@ -59,7 +62,7 @@ namespace dconstruct {
 		}
 
 		[[nodiscard]] location operator-(const u64 rhs) const noexcept {
-			return location(m_ptr + rhs);
+			return location(m_ptr - rhs);
 		}
 
 		[[nodiscard]] b8 operator>(const location &rhs) const noexcept {
@@ -69,8 +72,6 @@ namespace dconstruct {
 		[[nodiscard]] b8 operator>=(const location &rhs) const noexcept {
 			return reinterpret_cast<p64>(m_ptr) >= reinterpret_cast<p64>(rhs.m_ptr);
 		}
-
-		
 
 		[[nodiscard]] b8 is_aligned() const noexcept {
 			return reinterpret_cast<p64>(m_ptr) % 8 == 0;

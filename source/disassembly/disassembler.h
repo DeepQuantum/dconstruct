@@ -28,8 +28,8 @@ namespace dconstruct {
     };
 
     struct DisassemblerOptions {
-        u8 m_indentPerLevel;
-        b8 m_emitOnce;
+        u8 m_indentPerLevel = 2;
+        b8 m_emitOnce = false;
     };
 
     class Disassembler {
@@ -39,7 +39,7 @@ namespace dconstruct {
 
     protected:
         Disassembler() = default;
-        virtual void insert_span(const char* text, const TextFormat& text_format = TextFormat{}, const u64 indent = 0) = 0;
+        virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) = 0;
         virtual void complete() = 0;
 
         BinaryFile* m_currentFile = nullptr;
@@ -56,8 +56,11 @@ namespace dconstruct {
         FILE* m_perfFile = nullptr;
 
         void insert_entry(const Entry* entry);
-        void insert_struct(const structs::unmapped* entry, const u64 indent = 0);
-        template<typename... Args> void insert_span_fmt(const char* format, const TextFormat& text_format = TextFormat{}, Args ...args);
+        void insert_struct(const structs::unmapped* entry, const u32 indent = 0);
+        template<TextFormat text_format = TextFormat{}, typename... Args> 
+        void insert_span_fmt(const char* format, Args ...args);
+        template<TextFormat text_format = TextFormat{}, typename... Args> 
+        void insert_span_indent(const char* format, const u32 indent, Args ...args);
         [[nodiscard]] const char* lookup(const sid64 hash) noexcept;
         [[nodiscard]] b8 is_sid(const location) const noexcept;
         void insert_header_line();
@@ -66,7 +69,7 @@ namespace dconstruct {
         u8 insert_struct_or_arraylike(const location, const u32) noexcept;
         [[nodiscard]] u32 get_size_array(const location, const u32) noexcept;
         void insert_anonymous_array(const location, const u32) noexcept;
-        void insert_array(const location, const u32);
+        void insert_array(const location, const u32, const u32);
         void insert_state_script(const StateScript* stateScript, const u32 indent);
         void insert_unmapped_struct(const structs::unmapped* _struct, const u32 indent);
         u8 insert_next_struct_member(const location, const u32);

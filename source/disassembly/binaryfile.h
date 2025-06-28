@@ -59,8 +59,8 @@ namespace dconstruct {
         std::set<p64> m_emittedStructs{};
         std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
         [[nodiscard]] b8 is_file_ptr(const location) const noexcept;
-        [[nodiscard]] b8 location_gets_pointed_at(const location) const noexcept;
-
+        [[nodiscard]] b8 gets_pointed_at(const location) const noexcept;
+        [[nodiscard]] b8 is_string(const location) const noexcept;
 
     private:
         void read_reloc_table();

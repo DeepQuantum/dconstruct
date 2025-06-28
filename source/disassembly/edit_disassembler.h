@@ -39,7 +39,7 @@ namespace dconstruct {
     private:
         std::vector<std::string> m_edits;
 
-        void insert_span(const char*, const TextFormat& = TextFormat{}, const u64 = 0) override {};
+        void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {};
         void complete() override {};
     };
 }

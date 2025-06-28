@@ -66,7 +66,7 @@ namespace dconstruct {
     }
 
 
-    [[nodiscard]] b8 BinaryFile::location_gets_pointed_at(const location loc) const noexcept {
+    [[nodiscard]] b8 BinaryFile::gets_pointed_at(const location loc) const noexcept {
         const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get())) / 8;
         return (u8)m_pointedAtTable[offset / 8] & (1 << (offset % 8));
     }
@@ -78,6 +78,10 @@ namespace dconstruct {
         }
         offset /= 8;
         return m_relocTable.get<u8>(offset / 8) & (1 << (offset % 8));
+    }
+
+    [[nodiscard]] b8 BinaryFile::is_string(const location loc) const noexcept {
+        return loc >= m_strings;
     }
 
 
@@ -97,7 +101,7 @@ namespace dconstruct {
         const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
         m_pointedAtTable = std::make_unique<std::byte[]>(table_size);
 
-        m_relocTable = reloc_data + 4;
+        m_relocTable = location(reloc_data + 4);
 
 #ifdef DERANGED
         const __m512i _indices = _mm512_set_epi64(7, 6, 5, 4, 3, 2, 1, 0);

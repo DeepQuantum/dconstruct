@@ -15,7 +15,7 @@ static void disasm_file(
     const std::vector<std::string> &edits = {}) {
     
     const auto start = std::chrono::high_resolution_clock::now();
-    std::cout << "disassembling " << inpath << "... \n";
+    //std::cout << "disassembling " << inpath << "... \n";
     dconstruct::BinaryFile file(inpath.string());
     if (!file.dc_setup()) {
         return;
@@ -33,13 +33,13 @@ static void disasm_file(
     } else {
         output_location = out_filename;
     }
-    std::cout << output_location << '\n';
+    //std::cout << output_location << '\n';
     dconstruct::FileDisassembler disassembler(&file, &base, output_location.string(), options);
     disassembler.disassemble();
 
     const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
     
-    std::cout << "took " << time_taken.count() << "ms\n";
+    //std::cout << "took " << time_taken.count() << "ms\n";
 }
 
 static void disassemble_multiple(
@@ -60,8 +60,12 @@ static void disassemble_multiple(
         //disasm_file(entry.path().string(), output_file_path, sidbase, options);
     }
 
+    const auto start = std::chrono::high_resolution_clock::now();
+
+    std::cout << "disassembling " << filepaths.size() << " files...";
+
     std::for_each(
-        std::execution::seq,
+        std::execution::par_unseq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
@@ -70,6 +74,11 @@ static void disassemble_multiple(
             disasm_file(entry.string(), outpath, sidbase, options);
         }
     );
+
+    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+
+
+    std::cout << "took " << time_taken.count() << "ms\n";
 }
 
 int main(int argc, char *argv[]) {
