@@ -25,7 +25,6 @@ namespace dconstruct {
             }
             m_outbuf += text;
             //printf("%s", text);
-            return;
         }
 
         void complete() override {

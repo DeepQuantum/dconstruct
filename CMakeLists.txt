@@ -77,22 +77,21 @@ file(GLOB BASE_SOURCE_FILES
 # endif()
 
 # --- CLI TARGET ---
-add_executable(tlou2_disasm_cli ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
+add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
-target_compile_options(tlou2_disasm_cli PRIVATE
-    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -fopenmp -fno-exceptions -flto -Wall>
+target_compile_options(dconstruct PRIVATE
+    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -fopenmp -flto -Wall -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
     $<$<CONFIG:Debug>:-O0 -g -fopenmp -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-target_compile_definitions(tlou2_disasm_cli PRIVATE
+target_compile_definitions(dconstruct PRIVATE
     CXXOPTS_NO_EXCEPTIONS=1
 )
 
-target_link_libraries(tlou2_disasm_cli PRIVATE
-    stdc++fs
+target_link_libraries(dconstruct PRIVATE
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
@@ -109,4 +108,4 @@ add_custom_command(
 
 add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
-add_dependencies(tlou2_disasm_cli generate_buildinfo)
+add_dependencies(dconstruct generate_buildinfo)

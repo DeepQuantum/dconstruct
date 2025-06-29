@@ -38,12 +38,12 @@ namespace dconstruct {
 
 
         if (m_dcheader->m_magic != magic) {
-            std::cerr << "magic number doesn't equal 0x44433030: " << *(uint32_t*)m_bytes.get() << '\n';
+            std::cerr << "error: not a DC-file. magic number doesn't equal 0x44433030: " << *(uint32_t*)m_bytes.get() << '\n';
             return false;
         }
 
         if (m_dcheader->m_versionNumber != version) {
-            std::cerr << "version number doesn't equal 0x00000001: " << *(uint32_t*)(m_bytes.get() + 8) << '\n';
+            std::cerr << "error: not a DC-file. version number doesn't equal 0x00000001: " << *(uint32_t*)(m_bytes.get() + 8) << '\n';
             return false;
         }
 

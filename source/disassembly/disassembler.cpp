@@ -131,7 +131,6 @@ void Disassembler::insert_array(const location array, const u32 array_size, cons
 
     u32 member_offset = 8;
     u32 member_count = 0;
-    b8 struct_size_determined = false;
     const location member = location().from(array);
 
     while (!m_currentFile->is_string(member + member_offset) && !m_currentFile->gets_pointed_at(member + member_offset)) {
@@ -152,7 +151,7 @@ void Disassembler::insert_array(const location array, const u32 array_size, cons
         while (member_offset < struct_size) {
             insert_span_indent("%*s[%d] ", indent + m_options.m_indentPerLevel * 2, member_count++);
             const location current_member_location = member + (array_entry_count * struct_size + member_offset);
-            const u32 last_member_size = insert_struct_or_arraylike(current_member_location.aligned(), indent + m_options.m_indentPerLevel);
+            const u32 last_member_size = insert_struct_or_arraylike(current_member_location.aligned(), indent + m_options.m_indentPerLevel * 2);
             member_offset += last_member_size ? last_member_size : 8;
         }
 
@@ -178,14 +177,14 @@ void Disassembler::insert_unmapped_struct(const structs::unmapped *struct_ptr, c
 }
 
 u8 Disassembler::insert_next_struct_member(const location member, const u32 indent) {
-    u32 member_size;
+    u8 member_size;
     const char *str_ptr = nullptr;
     if (m_currentFile->is_file_ptr(member)) {
         if (member >= m_currentFile->m_strings) {
             insert_span_fmt("string: \"%s\"\n", member.as<char>());
         }
         else {
-            insert_struct_or_arraylike(member, indent + m_options.m_indentPerLevel);
+            insert_struct_or_arraylike(member, indent);
         }
         member_size = 8;
     }
@@ -231,13 +230,8 @@ void Disassembler::insert_entry(const Entry *entry) {
 
 
 void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent) {
-    //printf("\n%*s%s %x\n", indent, "", lookup(entry->m_typeID), get_offset(entry));
 
-    //if (indent > m_options.m_indentPerLevel * 20) {
-    //    //printf("wups");
-    //}
     const u64 offset = get_offset((void*)struct_ptr);
-    //TextFormat opcode_format = {OPCODE_COLOR, 14};
 
     insert_span_fmt("%s [0x%05X] {\n", lookup(struct_ptr->typeID), offset);
 
@@ -284,11 +278,11 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
                 insert_span_indent("%*sALREADY_EMITTED\n%*s}", indent + m_options.m_indentPerLevel, indent, "");
                 return;
             }
-            insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel * 2);
+            insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel);
             break;
         }
     }
-    insert_span("}\n", indent + m_options.m_indentPerLevel);
+    insert_span("}\n", indent);
     if (m_options.m_emitOnce) {
         m_currentFile->m_emittedStructs.emplace(reinterpret_cast<p64>(struct_ptr));
     }
@@ -305,7 +299,6 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
     b8 is_nullptr = var->m_pDeclValue == nullptr;
 
-    constexpr TextFormat var_format = {.m_color = VAR_COLOR, .m_fontSize = 14};
 
     insert_span_indent("%*s[0x%06X] ",  indent, get_offset(var));
     insert_span_fmt("%-8s ", lookup(var->m_declTypeId));
@@ -392,7 +385,6 @@ void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
 }
 
 void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
-    TextFormat block_format{COMMENT_COLOR, 12};
     switch (block->m_blockType) {
         case 0: {
             insert_span("ON start {\n", indent);
@@ -437,7 +429,6 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
 }
 
 void Disassembler::insert_state_script(const StateScript *stateScript, const u32 indent) {
-    TextFormat header_format{COMMENT_COLOR, 14};
 
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
@@ -1374,7 +1365,6 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
 }
 
 void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const u32 indent) noexcept {
-    constexpr TextFormat label_format = {COMMENT_COLOR, 14};
     auto label_location = std::find(labels.begin(), labels.end(), line.m_location);
     if (label_location != labels.end()) {
         const u32 label_index = std::distance(labels.begin(), label_location);
@@ -1404,7 +1394,6 @@ void Disassembler::insert_goto_label(const std::vector<u32> &labels, const Funct
 void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent) {
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[512] = {0};
-    constexpr TextFormat text_format = {OPCODE_COLOR, 12};
     
     if (functionDisassembly.m_stackFrame.m_argCount > 0) {
         insert_span_indent("%*s[%d args]\n", indent, functionDisassembly.m_stackFrame.m_argCount);
@@ -1463,7 +1452,6 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
 void Disassembler::insert_header_line() {
     const char* current_script_name;
     const char* current_script_id;
-    const TextFormat header_format = {STRING_COLOR, 14};
     if (m_currentFile->m_dcscript != nullptr) {
         current_script_name = lookup(m_currentFile->m_dcscript->m_stateScriptId);
         current_script_id = int_to_string_id(m_currentFile->m_dcscript->m_stateScriptId).c_str();

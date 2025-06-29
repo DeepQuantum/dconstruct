@@ -31,7 +31,7 @@ namespace dconstruct {
         else if (str_value[0] == '0' && str_value[1] == 'x') {
             return {
                 .m_editType = EditType::PTR,
-                .u64 = std::stoull(str_value, nullptr, 0) + 8 + reinterpret_cast<p64>(this->m_currentFile->m_bytes.get())
+                .u64 = std::stoull(str_value, nullptr, 0) + 8 + reinterpret_cast<p64>(m_currentFile->m_bytes.get())
             };
         }
         else {
@@ -84,7 +84,6 @@ namespace dconstruct {
                 const u64 new_sid = SID(value.string->c_str());
                 if (m_sidbase->search(new_sid) != nullptr) {
                     std::cout << old_sid << '=' << value.string << '\n';
-
                 }
                 else {
                     std::cout << "warning: the sid '" << value.string << "' does not exist within the sidbase, so the edit will not be applied. " \

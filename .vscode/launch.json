@@ -4,12 +4,11 @@
         "name": "Launch cli",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/tlou2_disasm_cli.exe",
+        "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
-            "-i", 
-            "C:/Users/damix/Documents/GitHub/TLOU2Modding/bacups/dc1/",
-            "-o",
-            "./ai.txt"
+            "../test/weapon-gameplay.bin",
+            "--indent",
+            "4"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",
