@@ -10,7 +10,8 @@
 namespace dconstruct {
     BinaryFile::BinaryFile() {}
 
-    BinaryFile::BinaryFile(const std::string& path) {
+    BinaryFile::BinaryFile(const std::filesystem::path &path) {
+        m_path = path;
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {
@@ -133,5 +134,25 @@ namespace dconstruct {
 #endif
         m_strings = location(m_bytes.get() + m_dcheader->m_stringsOffset);
     }
-}
 
+    
+    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const noexcept { 
+        std::byte *unmapped_bytes = new std::byte[m_size];
+
+        std::memcpy(unmapped_bytes, m_bytes.get(), m_size);
+
+        std::byte *reloc_data = unmapped_bytes + m_dcheader->m_textSize;
+
+        const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
+
+        for (u64 i = 0; i < table_size * 8; ++i) {
+            if (m_relocTable.get<u8>(i / 8) & (1 << (i % 8))) {
+                p64 *entry = reinterpret_cast<p64*>(unmapped_bytes + i * 8);
+                p64 offset = *entry;
+                *entry = reinterpret_cast<u64>(offset - reinterpret_cast<p64>(m_bytes.get()));
+            }
+        }
+
+        return std::unique_ptr<std::byte[]>(unmapped_bytes);
+    }
+}

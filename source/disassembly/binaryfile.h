@@ -46,8 +46,9 @@ namespace dconstruct {
         b8 dc_setup();
         BinaryFile();
 
-        BinaryFile(const std::string& path);
+        BinaryFile(const std::filesystem::path &path);
 
+        std::filesystem::path m_path;
         DC_Header* m_dcheader = nullptr;
         StateScript* m_dcscript = nullptr;
         std::size_t m_size;
@@ -61,6 +62,7 @@ namespace dconstruct {
         [[nodiscard]] b8 is_file_ptr(const location) const noexcept;
         [[nodiscard]] b8 gets_pointed_at(const location) const noexcept;
         [[nodiscard]] b8 is_string(const location) const noexcept;
+        [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const noexcept;
 
     private:
         void read_reloc_table();

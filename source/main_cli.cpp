@@ -122,7 +122,13 @@ int main(int argc, char *argv[]) {
 
     std::filesystem::path output;
     if (result.count("o") == 0) {
-        output = filepath.string() + ".txt";
+        if (!std::filesystem::is_directory(filepath)) {
+            output = filepath.string() + ".txt";
+        } else {
+            constexpr char default_out_folder_path[] = "./disassembled";
+            std::filesystem::create_directory(default_out_folder_path);
+            output = default_out_folder_path;
+        }
     } else {
         output = result["o"].as<std::string>();
         if (!std::filesystem::exists(output)) {

@@ -7,8 +7,8 @@
         "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
             "../test/weapon-gameplay.bin",
-            "--indent",
-            "4"
+            "-e",
+            "0x035C8[#a"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

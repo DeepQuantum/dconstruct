@@ -25,7 +25,7 @@ namespace dconstruct {
     class EditDisassembler : public Disassembler {
 
     public:
-        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string>& edits) {
+        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits) {
             m_currentFile = file;
             m_sidbase = sidbase;
             m_options = options;
@@ -40,6 +40,6 @@ namespace dconstruct {
         std::vector<std::string> m_edits;
 
         void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {};
-        void complete() override {};
+        void complete() override;
     };
 }
