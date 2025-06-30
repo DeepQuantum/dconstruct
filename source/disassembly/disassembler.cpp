@@ -4,6 +4,9 @@
 #include "disassembler.h"
 #include <string.h>
 
+static constexpr char ENTRY_SEP[] = "##############################";
+
+
 namespace dconstruct {
 [[nodiscard]] const char *Disassembler::lookup(const sid64 sid) noexcept {
     auto res = m_currentFile->m_sidCache.find(sid);
@@ -214,10 +217,13 @@ u8 Disassembler::insert_next_struct_member(const location member, const u32 inde
 
 void Disassembler::disassemble() {
     insert_header_line();
-    const std::string sep = std::string(100, '#') + "\n";
     for (i32 i = 0; i < m_currentFile->m_dcheader->m_numEntries; ++i) {
+        insert_span("\n\n");
+        insert_span_fmt(ENTRY_SEP);
+        insert_span_fmt("  ENTRY %u  ", i);
+        insert_span(ENTRY_SEP);
+        insert_span("\n\n");
         insert_entry(m_currentFile->m_dcheader->m_pStartOfData + i);
-        insert_span(sep.c_str());
     }
     complete();
 }
@@ -691,6 +697,23 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         }
         case StoreInt: {
             snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_I32;
+            dest.m_I8 = 0;
+            break;
+        }
+        case StoreFloat: {
+            snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(f32*)%s = %s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_F32;
+            dest.m_I8 = 0;
+            break;
+        }
+        case StorePointer: {
+            snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
+            snprintf(interpreted, interpreted_buffer_size, "r%d, *(p64*)%s = %s", istr.destination, op1_str, op2_str);
+            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_PTR = {0, 0, 0};
             break;
         }
         case LookupInt: {
