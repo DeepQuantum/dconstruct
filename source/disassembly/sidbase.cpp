@@ -25,6 +25,7 @@ namespace dconstruct {
         m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
         m_sidbytes = std::unique_ptr<std::byte[]>(temp_buffer);
         m_lowestSid = m_entries[0].hash;
+        m_highestSid = m_entries[m_numEntries - 1].hash;
     }
 
     [[nodiscard]] const char* SIDBase::search(const sid64 hash) const noexcept {

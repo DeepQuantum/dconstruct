@@ -143,7 +143,11 @@ namespace dconstruct {
                 snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.isReturn ? "RET_" : "", reg.m_PTR.m_offset);
             }
             else {
-                snprintf(buffer, buffer_size, "%s%s", reg.isReturn ? "RET_" : "", resolved);
+                if (reg.isReturn) {
+                    snprintf(buffer, buffer_size, "RET_%s", resolved);
+                } else {
+                    snprintf(buffer, buffer_size, "%s", resolved);
+                }
             }
             break;
         }

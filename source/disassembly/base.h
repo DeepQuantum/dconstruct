@@ -36,19 +36,16 @@ namespace dconstruct {
 			return *this;
 		}
 
-		// cast the location pointer to T
 		template<typename T>
 		[[nodiscard]] const T* as(const i32 offset = 0) const noexcept {
 			return reinterpret_cast<const T*>(m_ptr + offset);
 		}
 
-		// T reference to the value the location is pointing at 
 		template<typename T>
 		[[nodiscard]] const T& get(const i32 offset = 0) const noexcept {
 			return *reinterpret_cast<const T*>(m_ptr + offset);
 		}
 
-		// numerical value of pointer
 		[[nodiscard]] p64 num() const noexcept {
 			return reinterpret_cast<p64>(m_ptr);
 		}

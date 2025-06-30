@@ -6,9 +6,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
-            "../test/weapon-gameplay.bin",
-            "-e",
-            "0x035C8[#a"
+            "../test/ss-assault-manager.bin",
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

@@ -38,7 +38,7 @@ void Disassembler::insert_span_indent(const char* format, const u32 indent, Args
 }
 
 [[nodiscard]] b8 Disassembler::is_sid(const location loc) const noexcept {
-    const b8 in_range = loc.get<sid64>() > m_sidbase->m_lowestSid;
+    const b8 in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
     const b8 is_fileptr = m_currentFile->is_file_ptr(loc);
     return loc.is_aligned() && in_range && !is_fileptr;
 }
@@ -99,7 +99,6 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
 
     insert_span_fmt("anonymous array [0x%x] {size: %u} {\n", get_offset(anon_array), anonymous_array_size);
     insert_array(anon_array, anonymous_array_size, indent);
-    insert_span("}\n", indent);
 }
 
 [[nodiscard]] u32 Disassembler::get_size_array(const location array, const u32 indent) noexcept {
@@ -128,7 +127,7 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
 void Disassembler::insert_array(const location array, const u32 array_size, const u32 indent) {
     
     if (array_size == 0) {
-        insert_span_indent("%*s}\n", indent);
+        insert_span("}\n", indent);
         return;
     }
 
@@ -237,7 +236,7 @@ void Disassembler::insert_entry(const Entry *entry) {
 
 void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent) {
 
-    const u64 offset = get_offset((void*)struct_ptr);
+    const u64 offset = get_offset(&struct_ptr->m_data);
 
     insert_span_fmt("%s [0x%05X] {\n", lookup(struct_ptr->typeID), offset);
 
@@ -265,20 +264,20 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             }
             break;
         }
-        case SID("point-curve"): {
-            const structs::point_curve *curve = reinterpret_cast<const structs::point_curve*>(&struct_ptr->m_data);
-            insert_span_indent("%*sint: %u\n", indent + m_options.m_indentPerLevel, curve->int1);
-            for (u64 i = 0; i < 3; ++i) {
-                insert_span_indent("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
-                    indent + m_options.m_indentPerLevel,
-                    curve->floats[i + 0], curve->floats[i + 1], curve->floats[i + 2],
-                    curve->floats[i + 3], curve->floats[i + 4], curve->floats[i + 5],
-                    curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
-                    curve->floats[i + 9], curve->floats[i + 10]
-                );
-            }
-            break;
-        }
+        // case SID("point-curve"): {
+        //     const structs::point_curve *curve = reinterpret_cast<const structs::point_curve*>(&struct_ptr->m_data);
+        //     insert_span_indent("%*sint: %u\n", indent + m_options.m_indentPerLevel, curve->int1);
+        //     for (u64 i = 0; i < 3; ++i) {
+        //         insert_span_indent("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
+        //             indent + m_options.m_indentPerLevel,
+        //             curve->floats[i + 0], curve->floats[i + 1], curve->floats[i + 2],
+        //             curve->floats[i + 3], curve->floats[i + 4], curve->floats[i + 5],
+        //             curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
+        //             curve->floats[i + 9], curve->floats[i + 10]
+        //         );
+        //     }
+        //     break;
+        // }
         default: {
             if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(struct_ptr)) != m_currentFile->m_emittedStructs.end()) {
                 insert_span_indent("%*sALREADY_EMITTED\n%*s}", indent + m_options.m_indentPerLevel, indent, "");
@@ -546,12 +545,13 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             if (op1.m_type == RegisterValueType::R_POINTER) {
                 dest.m_type = RegisterValueType::R_POINTER;
                 dest.m_PTR = op1.m_PTR;
+                dest.m_PTR.m_offset += op2.m_U64;
             } else {
                 dest.m_type = RegisterValueType::R_I64;
                 dest.m_I64 = op1.m_I64 + op2.m_I64;
             }
-            stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
-            snprintf(interpreted, interpreted_buffer_size, "%s = %s + %s", dst_str, op1_str, op2_str);
+            stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination, lookup(dest.m_PTR.m_sid));
+            snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", istr.destination, op1_str, op2_str);
             break;
         }
         case ISub: {
@@ -789,7 +789,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         }
         case Call: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
-            char comment_str[300] = {0};
+            char comment_str[300];
             u8 offset = snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
@@ -806,14 +806,14 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
         }
         case CallFf: {
             snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
-            char comment_str[300] = {0};
+            char comment_str[300];
             u8 offset = snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
             for (u64 i = 0; i < istr.operand2; ++i) {
                 if (i != 0) {
                     offset += snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
                 stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_type == R_POINTER ? stackFrame[i + 49].m_PTR.m_sid : stackFrame[i + 49].m_SID));
-                offset += offset += snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
+                offset += snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
             dest.m_type = R_POINTER;
             dest.isReturn = true;
@@ -1431,7 +1431,7 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
         insert_goto_label(labels, line, functionDisassembly.m_lines.size() - 1, functionDisassembly.m_lines);
         insert_span("\n");
     }
-    insert_span("\nSYMBOL TABLE: \n", indent);
+    insert_span_indent("\n%*sSYMBOL TABLE: \n", indent);
 
     char line_start[64] = {0};
     char type[512] = {0};
@@ -1439,7 +1439,7 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
     location table = functionDisassembly.m_stackFrame.m_symbolTable;
 
     for (const auto &[i, entry] : functionDisassembly.m_stackFrame.symbolTableEntries) {
-        snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(table + i));
+        snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(table + i * 8));
         switch (entry.m_type) {
             case SymbolTableEntryType::FLOAT: {
                 snprintf(type, sizeof(type), "float: <%f>\n", entry.m_f32);

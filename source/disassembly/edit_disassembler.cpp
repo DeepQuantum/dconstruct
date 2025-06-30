@@ -31,7 +31,7 @@ namespace dconstruct {
         else if (str_value[0] == '0' && str_value[1] == 'x') {
             return {
                 .m_editType = EditType::PTR,
-                .u64 = std::stoull(str_value, nullptr, 0) + 8 + reinterpret_cast<p64>(m_currentFile->m_bytes.get())
+                .u64 = std::stoull(str_value, nullptr, 0) + reinterpret_cast<p64>(m_currentFile->m_bytes.get())
             };
         }
         else {
@@ -119,7 +119,7 @@ namespace dconstruct {
                 continue;
             }
 
-            const u64 struct_location = std::stoi(edit_str.substr(0, left_sqbr_offset), nullptr, 0) + 8;
+            const u64 struct_location = std::stoi(edit_str.substr(0, left_sqbr_offset), nullptr, 0);
             const u32 right_sqbr_offset = edit_str.find(']', left_sqbr_offset);
             if (right_sqbr_offset == std::string::npos) {
                 std::cout << "error: malformed input in edit " << edit_index << ", not applying\n";
