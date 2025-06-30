@@ -1,10 +1,5 @@
 #pragma once
-
-#pragma once
-#define COMPILER_VERSION "GNU 14.2.0"
-#define BUILD_DATE "Sat Jun 28 15:56:41 2025"
-
-
+#include "buildinfo.h"
 #include <cstdio>
 
 static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to dc files that are then put into a new copy of the original file.\n" 
@@ -29,9 +24,8 @@ static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to 
     "         [7] firearm-gameplay-def [0x11C28] {\n"
     "         ...\n\n"
     "and you'd like to use a different firearm-gameplay-def for this weapon. you can then simply find the location of the firearm-gameplay-definition that you'd like to replace and put it as the replacement value: \n"
-    "    0x11C28=0x0ABC\n\n"
+    "    0x0C523[7]=0x0ABC\n\n"
     "0x0ABC here being the address of another firearm-gameplay-def.\n"
-
 ; 
 
 static void print_about() noexcept {
@@ -42,7 +36,8 @@ static void print_about() noexcept {
         "It also allows you to make edits to files via the command line, including replacing entire structures with little effort.\n"
         "Use --help to find all the options available. This is a beta version, so there might be bugs, incorrect data or" 
         " unexpected crashes. If you encounter any of these, please let me know, and include the command" 
-        " you were running. There will be many more features in future updates.\n\n"
+        " you were running. There will be many more features in future updates.\n"
+        "you can always find tons of more info in the README.md file.\n\n"
         "SPECIAL THANKS: \n\n"
         "* icemesh for providing the underlying structures for the DC-files. (https://github.com/icemesh/dc/tree/main/t2), and his disassembler, which largely served as an inspiration for this program\n" 
         "* Specilizer for his DC-Tool, which was also used as inspiration for this program\n" 

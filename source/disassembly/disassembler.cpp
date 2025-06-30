@@ -2,6 +2,7 @@
 #include <cmath>
 #include <chrono>
 #include "disassembler.h"
+#include "buildinfo.h"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";
@@ -264,23 +265,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             }
             break;
         }
-        // case SID("point-curve"): {
-        //     const structs::point_curve *curve = reinterpret_cast<const structs::point_curve*>(&struct_ptr->m_data);
-        //     insert_span_indent("%*sint: %u\n", indent + m_options.m_indentPerLevel, curve->int1);
-        //     for (u64 i = 0; i < 3; ++i) {
-        //         insert_span_indent("%*s%.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
-        //             indent + m_options.m_indentPerLevel,
-        //             curve->floats[i + 0], curve->floats[i + 1], curve->floats[i + 2],
-        //             curve->floats[i + 3], curve->floats[i + 4], curve->floats[i + 5],
-        //             curve->floats[i + 6], curve->floats[i + 7], curve->floats[i + 8],
-        //             curve->floats[i + 9], curve->floats[i + 10]
-        //         );
-        //     }
-        //     break;
-        // }
         default: {
             if (m_options.m_emitOnce && m_currentFile->m_emittedStructs.find(reinterpret_cast<p64>(struct_ptr)) != m_currentFile->m_emittedStructs.end()) {
-                insert_span_indent("%*sALREADY_EMITTED\n%*s}", indent + m_options.m_indentPerLevel, indent, "");
+                insert_span_indent("%*sALREADY EMITTED\n%*s}\n", indent + m_options.m_indentPerLevel, indent, "");
                 return;
             }
             insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel);
@@ -1473,20 +1460,15 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
 }
 
 void Disassembler::insert_header_line() {
-    const char* current_script_name;
-    const char* current_script_id;
-    if (m_currentFile->m_dcscript != nullptr) {
-        current_script_name = lookup(m_currentFile->m_dcscript->m_stateScriptId);
-        current_script_id = int_to_string_id(m_currentFile->m_dcscript->m_stateScriptId).c_str();
-    } else {
-        current_script_name = "UNKNOWN SCRIPT";
-        current_script_id = "UNKNOWN SCRIPT ID";
-    }
-    insert_span_indent("%*sDeepQuantum's DC Disassembler ver. %d\n", 14, m_versionNumber);
-    insert_span_indent("%*sListing for script: %s\n",14, current_script_name);
-    insert_span_indent("%*sScript ID: %s\n", 14, current_script_id);
-    insert_span_indent("%*sFilesize: %d bytes\n", 14, m_currentFile->m_size);
-    insert_span("START OF DISASSEMBLY\n", 14);
-    insert_span("--------------------------------------------------\n", 14);
+    constexpr int BOX_WIDTH = 60;
+    insert_span_fmt("%.*s\n", BOX_WIDTH, "############################################################");
+    insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
+    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, VERSION);
+    insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.string().c_str());
+    int num_digits = std::to_string(m_currentFile->m_size).size();
+    int padding = BOX_WIDTH - (16 + num_digits + 5);
+    insert_span_fmt("#   Filesize: %d bytes%-*s#\n", m_currentFile->m_size, padding, " ");
+    insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
+    insert_span_fmt("%.*s\n\n", BOX_WIDTH, "############################################################");
 }
 }

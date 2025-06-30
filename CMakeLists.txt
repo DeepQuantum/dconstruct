@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(tlou2_disasm VERSION 0.1 LANGUAGES CXX)
+project(tlou2_disasm LANGUAGES CXX)
+
+set(VERSION_NUMBER "beta_1")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -99,7 +101,7 @@ target_link_libraries(dconstruct PRIVATE
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}
-    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}"
+    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
     DEPENDS
     ${BASE_SOURCE_FILES}
     "${SOURCE_DIR}/main_cli.cpp"
