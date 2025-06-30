@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-%s-blue.svg)](https://github.com/yourusername/dconstruct/releases)
+[![Version](https://img.shields.io/badge/version-%s-blue.svg)](https://github.com/deepquantum/dconstruct/releases)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC--BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 # What is this?
