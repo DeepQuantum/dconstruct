@@ -1,5 +1,8 @@
 #pragma once
-#include "buildinfo.h"
+#pragma once
+#define COMPILER_VERSION "GNU 14.2.0"
+#define BUILD_DATE "Mon Jun 30 17:05:35 2025"
+#define VERSION "beta_1"
 #include <cstdio>
 
 static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to dc files that are then put into a new copy of the original file.\n" 

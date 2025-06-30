@@ -149,7 +149,7 @@ namespace dconstruct {
             if (m_relocTable.get<u8>(i / 8) & (1 << (i % 8))) {
                 p64 *entry = reinterpret_cast<p64*>(unmapped_bytes + i * 8);
                 p64 offset = *entry;
-                *entry = reinterpret_cast<u64>(offset - reinterpret_cast<p64>(m_bytes.get()));
+                *entry = offset - reinterpret_cast<p64>(m_bytes.get());
             }
         }
 

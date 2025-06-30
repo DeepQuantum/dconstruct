@@ -43,14 +43,12 @@ static void disassemble_multiple(
             continue;
         }
         std::filesystem::path output_file_path = out;
-        //output_file_path /= entry.path().filename().concat(".txt");
         filepaths.emplace_back(entry.path());
-        //disasm_file(entry.path().string(), output_file_path, sidbase, options);
     }
 
     const auto start = std::chrono::high_resolution_clock::now();
 
-    std::cout << "disassembling " << filepaths.size() << " files...";
+    std::cout << "disassembling " << filepaths.size() << " files into " << out << "...\n";
 
     std::for_each(
         std::execution::par_unseq,
@@ -135,6 +133,9 @@ int main(int argc, char *argv[]) {
             std::cout << "error: output filepath " << output << " doesn't exist\n";
             return -1;
         }
+        if (std::filesystem::is_directory(output) && !std::filesystem::is_directory(filepath)) {
+            output /= filepath.filename().string() + ".txt";
+        }
     }
 
     const b8 output_is_folder = std::filesystem::is_directory(output);
@@ -165,15 +166,15 @@ int main(int argc, char *argv[]) {
             return -1;
         }
         if (!edits.empty()) {
-            std::cout << "warning: edits ignored as input/output path is a directory. edits currently only work in single file disassembly.\n";
+            std::cout << "warning: edits ignored as input path is a directory. edits only work in single file disassembly.\n";
         }
         disassemble_multiple(filepath, output, base, disassember_options);
     } else {
-        if (output_is_folder) {
-            std::cout << "error: the input " << filepath << " is a file, but output " << output << " is a folder.\n";
-            return -1;
-        }
+        std::cout << "disassembling " << filepath.filename() << " to " << output << "...\n";
+        const auto start = std::chrono::high_resolution_clock::now();
         disasm_file(filepath, output, base, disassember_options, edits);
+        const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+        std::cout << "took " << time_taken.count() << "ms\n";
     }
     return 0;
 }

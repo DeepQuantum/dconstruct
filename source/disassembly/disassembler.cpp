@@ -2,7 +2,9 @@
 #include <cmath>
 #include <chrono>
 #include "disassembler.h"
-#include "buildinfo.h"
+#define COMPILER_VERSION "GNU 14.2.0"
+#define BUILD_DATE "Mon Jun 30 17:05:35 2025"
+#define VERSION "beta_1"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";
@@ -1460,15 +1462,15 @@ void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &f
 }
 
 void Disassembler::insert_header_line() {
-    constexpr int BOX_WIDTH = 60;
-    insert_span_fmt("%.*s\n", BOX_WIDTH, "############################################################");
+    constexpr int BOX_WIDTH = 100;
+    insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
     insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, VERSION);
-    insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.string().c_str());
+    insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.filename().string().c_str());
     int num_digits = std::to_string(m_currentFile->m_size).size();
     int padding = BOX_WIDTH - (16 + num_digits + 5);
     insert_span_fmt("#   Filesize: %d bytes%-*s#\n", m_currentFile->m_size, padding, " ");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
-    insert_span_fmt("%.*s\n\n", BOX_WIDTH, "############################################################");
+    insert_span_fmt("%.*s\n\n", BOX_WIDTH, "####################################################################################################");
 }
 }

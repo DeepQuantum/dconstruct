@@ -82,7 +82,7 @@ file(GLOB BASE_SOURCE_FILES
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
 target_compile_options(dconstruct PRIVATE
-    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -fopenmp -flto -Wall -g0>
+    $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -flto -Wall -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
     $<$<CONFIG:Debug>:-O0 -g3 -fopenmp -flto -Wall>
@@ -94,6 +94,7 @@ target_compile_definitions(dconstruct PRIVATE
 )
 
 target_link_libraries(dconstruct PRIVATE
+    tbb12
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
