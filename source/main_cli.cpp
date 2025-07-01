@@ -67,6 +67,21 @@ static void disassemble_multiple(
     std::cout << "took " << time_taken.count() << "ms\n";
 }
 
+static std::vector<std::string> edits_from_file(const std::filesystem::path &path) {
+    std::ifstream edit_in(path);
+    std::vector<std::string> result;
+
+    if (!edit_in.is_open()) {
+        std::cout << "warning: couldn't open " << path << '\n'; 
+    }
+    std::string edit_str;
+    while (edit_in >> edit_str) {
+        result.emplace_back(std::move(edit_str));
+    }
+
+    return result;
+}
+
 int main(int argc, char *argv[]) {
 
     cxxopts::Options options("dconstruct", "\na program for disassembling and editing tlouii dc files. use --about for a more detailed description.\n");
@@ -85,41 +100,48 @@ int main(int argc, char *argv[]) {
             cxxopts::value<b8>()->default_value("false"));
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
+        ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>())
     ;
 
     options.parse_positional({"i"});
 
-    auto result = options.parse(argc, argv);
+    auto opts = options.parse(argc, argv);
 
-    if (result.count("h") > 0) {
+    if (opts.count("h") > 0) {
         std::cout << options.help({"", "information", "input/output", "configuration", "edit"}) << '\n';
         return -1;
     }
 
-    if (result.count("help_edit") > 0) {
+    if (opts.count("help_edit") > 0) {
         std::cout << HELP_EDIT;
         return -1;
     }
 
-    if (result.count("a") > 0) {
+    if (opts.count("a") > 0) {
         print_about();
         return -1;
     }
     
     std::filesystem::path filepath;
-    if (result.count("i") == 0) {
+    if (opts.count("i") == 0) {
         std::cout << "error: no input specified\n";
         return -1;
     } else {
-        filepath = result["i"].as<std::string>();
+        filepath = opts["i"].as<std::string>();
         if (!std::filesystem::exists(filepath)) {
             std::cout << "error: input filepath " << filepath << " doesn't exist\n";
             return -1;
         }
     }
 
+    std::vector<std::string> edits{};
+    if (opts.count("edit_file") > 0) {
+        std::string test = opts["edit_file"].as<std::string>();
+        edits = edits_from_file(test);
+    }
+
     std::filesystem::path output;
-    if (result.count("o") == 0) {
+    if (opts.count("o") == 0) {
         if (!std::filesystem::is_directory(filepath)) {
             output = filepath.string() + ".txt";
         } else {
@@ -128,7 +150,7 @@ int main(int argc, char *argv[]) {
             output = default_out_folder_path;
         }
     } else {
-        output = result["o"].as<std::string>();
+        output = opts["o"].as<std::string>();
         if (!std::filesystem::exists(output)) {
             std::cout << "error: output filepath " << output << " doesn't exist\n";
             return -1;
@@ -140,17 +162,17 @@ int main(int argc, char *argv[]) {
 
     const b8 output_is_folder = std::filesystem::is_directory(output);
 
-    const std::filesystem::path sidbase_path = result["s"].as<std::string>();
+    const std::filesystem::path sidbase_path = opts["s"].as<std::string>();
     if (!std::filesystem::exists(sidbase_path)) {
         std::cout << "error: sidbase path " << sidbase_path << " doesn't exist\n";
         return -1;
     }
 
-    const u8 indent_per_level = result["indent"].as<u8>();
-    const b8 emit_once = result["emit_once"].as<b8>();
-    std::vector<std::string> edits;
-    if (result.count("e") > 0) {
-        edits = result["e"].as<std::vector<std::string>>();
+    const u8 indent_per_level = opts["indent"].as<u8>();
+    const b8 emit_once = opts["emit_once"].as<b8>();
+    if (opts.count("e") > 0) {
+        std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
+        edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());
     }
     const dconstruct::DisassemblerOptions disassember_options {
         indent_per_level,

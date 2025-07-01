@@ -6,7 +6,11 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
-            "../test/",
+            "../test/ss-assault-manager.bin",
+            "--edit_file",
+            "edits.txt",
+            "-e",
+            "0x53[2]=ellie"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

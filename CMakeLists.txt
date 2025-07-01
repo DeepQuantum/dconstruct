@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(tlou2_disasm LANGUAGES CXX)
+project(dconstruct LANGUAGES CXX)
 
 set(VERSION_NUMBER "beta_1")
 
@@ -85,7 +85,7 @@ target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Release>:-O2 -march=znver4 -mavx512f -flto -Wall -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g3 -fopenmp -flto -Wall>
+    $<$<CONFIG:Debug>:-O0 -g -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -94,7 +94,7 @@ target_compile_definitions(dconstruct PRIVATE
 )
 
 target_link_libraries(dconstruct PRIVATE
-    tbb12
+    $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
