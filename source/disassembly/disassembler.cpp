@@ -1002,23 +1002,25 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(varying, disassembly_text_size,"0x%X", target);
             snprintf(interpreted, interpreted_buffer_size, "GOTO ");
             stackFrame.add_target_label(target);
-            line.m_label = target;
+            line.m_target = target;
             break;
         }
         case BranchIf: {
             u32 target = istr.destination | (istr.operand2 << 8);
             snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
-            line.m_label = target;
+            line.m_target = target;
             stackFrame.add_target_label(target);
+            stackFrame.add_virtual_label(line.m_location + 1);
             break;
         }
         case BranchIfNot: {
             u32 target = istr.destination | (istr.operand2 << 8);
             snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
-            line.m_label = target;
+            line.m_target = target;
             stackFrame.add_target_label(target);
+            stackFrame.add_virtual_label(line.m_location + 1);
             break;
         }
         case OpLogNot: {
@@ -1391,12 +1393,12 @@ void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDi
 }
 
 void Disassembler::insert_goto_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const std::vector<FunctionDisassemblyLine> &lines) noexcept {
-    if (line.m_label != -1) {
-        u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_label));
-        if (line.m_label == func_size) {
+    if (line.m_target != -1) {
+        u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target));
+        if (line.m_target == func_size) {
             insert_span("=> L_RETURN");
-        } else if (line.m_label == func_size - 1 && lines[line.m_label].m_instruction.opcode == Opcode::LoadU16Imm) {
-            insert_span_fmt("=> L_RETURN_%d", lines[line.m_label].m_instruction.operand1);
+        } else if (line.m_target == func_size - 1 && lines[line.m_target].m_instruction.opcode == Opcode::LoadU16Imm) {
+            insert_span_fmt("=> L_RETURN_%d", lines[line.m_target].m_instruction.operand1);
         } else {
             insert_span_fmt("=> L_%d", target);
         }
