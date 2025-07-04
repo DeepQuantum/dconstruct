@@ -54,11 +54,16 @@ This will then output a file called `my_bin_file.bin.txt` in the same directory 
 
 - `-e` - make an edit. More info in the section below.
 
+- `--edit_file` - provide an edit file. an edit file contains one edit per line. it uses the same syntax as the -e flag.
+
 # Editing
 
 Editing DC Files Using the -e Flag
 
 You can use the -e flag to apply edits to DC files. These edits are saved into a new copy of the original file, leaving the original untouched. Multiple -e flags can be specified at the same time to make several edits at once.
+
+Alternatively, you can provide the program with a path to an edit file. An edit file contains one edit per line. It uses the same syntax as
+the -e flag, but should be a bit easier to use if you want to apply multiple edits at once.
 
 ## Syntax for Edits
 
