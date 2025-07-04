@@ -19,13 +19,14 @@ public:
 
     DecompiledFunction decompile() noexcept;
     void parse_control_flow_graph() noexcept;
-    void insert_new_node(const ControlFlowNode &) noexcept;
+    void insert_new_node(u32, const ControlFlowNode &) noexcept;
+    void output_cfg_file(const std::string &path = "graph.txt") const noexcept;
 
 
 private:
     FunctionDisassembly *m_functionDisassembly = nullptr;
-    std::map<u32, ControlFlowNode> m_nodes;
-    ControlFlowNode m_controlFlowHead;
+    std::map<u32, std::unique_ptr<ControlFlowNode>> m_nodes;
+    ControlFlowNode *m_controlFlowHead;
 };
 
 }

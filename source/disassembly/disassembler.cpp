@@ -2,9 +2,7 @@
 #include <cmath>
 #include <chrono>
 #include "disassembler.h"
-#define COMPILER_VERSION "GNU 14.2.0"
-#define BUILD_DATE "Mon Jun 30 17:05:35 2025"
-#define VERSION "beta_1"
+#include "decompiler.h"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";
@@ -249,7 +247,15 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data))));
+            auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data));
+            static b8 emitted = false;
+            if (!emitted) {
+                auto dcompiler = Decompiler(&afunction);
+                dcompiler.parse_control_flow_graph();
+                dcompiler.output_cfg_file();
+                emitted = true;
+            }
+            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
             break;
@@ -1467,7 +1473,7 @@ void Disassembler::insert_header_line() {
     constexpr int BOX_WIDTH = 100;
     insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
-    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, VERSION);
+    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_1");
     insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.filename().string().c_str());
     int num_digits = std::to_string(m_currentFile->m_size).size();
     int padding = BOX_WIDTH - (16 + num_digits + 5);
