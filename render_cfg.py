@@ -4,7 +4,7 @@ from networkx.drawing.nx_agraph import graphviz_layout
 
 G: nx.MultiDiGraph = nx.MultiDiGraph()
 
-with open("manual_graph.txt") as f:
+with open("build/graph.txt") as f:
     mode = None
     for line in f:
         line = line.strip()

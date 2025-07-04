@@ -248,13 +248,13 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data));
-            static b8 emitted = false;
-            if (!emitted) {
-                auto dcompiler = Decompiler(&afunction);
-                dcompiler.parse_control_flow_graph();
-                dcompiler.output_cfg_file();
-                emitted = true;
-            }
+            // static b8 emitted = false;
+            // if (!emitted) {
+            //     auto dcompiler = Decompiler(&afunction);
+            //     dcompiler.parse_control_flow_graph();
+            //     dcompiler.output_cfg_file();
+            //     emitted = true;
+            // }
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
