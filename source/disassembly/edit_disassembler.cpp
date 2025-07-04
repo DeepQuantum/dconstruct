@@ -75,7 +75,7 @@ namespace dconstruct {
                 break;
             }
             case EditType::F4: {
-                std::cout << edit_location.get<f32>() << "->" << value.i32 << '\n';
+                std::cout << edit_location.get<f32>() << "->" << value.f32 << '\n';
                 *reinterpret_cast<f32*>(const_cast<std::byte*>(edit_location.m_ptr)) = value.f32;
                 break;
             }

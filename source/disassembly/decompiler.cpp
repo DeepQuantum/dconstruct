@@ -84,6 +84,4 @@ void Decompiler::parse_control_flow_graph() noexcept {
     }
     m_controlFlowHead = m_nodes[0].get();
 }
-
-
 }
