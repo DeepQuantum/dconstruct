@@ -248,13 +248,14 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data));
-            // static b8 emitted = false;
-            // if (!emitted) {
-            //     auto dcompiler = Decompiler(&afunction);
-            //     dcompiler.parse_control_flow_graph();
-            //     dcompiler.output_cfg_file();
-            //     emitted = true;
-            // }
+            auto dcompiler = Decompiler(&afunction);
+            static b8 first = true;
+            if (first) {
+                dcompiler.parse_control_flow_graph();
+                dcompiler.write_control_flow_graph_txt_file("graphs/" + std::to_string(get_offset(&struct_ptr->m_data)) + ".txt");
+                dcompiler.write_control_flow_graph_image("images/" + std::to_string(get_offset(&struct_ptr->m_data)) + ".svg");
+               // first = false;
+            }
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
@@ -1017,7 +1018,6 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
             stackFrame.add_target_label(target);
-            stackFrame.add_virtual_label(line.m_location + 1);
             break;
         }
         case BranchIfNot: {
@@ -1026,7 +1026,6 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
             stackFrame.add_target_label(target);
-            stackFrame.add_virtual_label(line.m_location + 1);
             break;
         }
         case OpLogNot: {
@@ -1473,7 +1472,7 @@ void Disassembler::insert_header_line() {
     constexpr int BOX_WIDTH = 100;
     insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
-    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_1");
+    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_2");
     insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.filename().string().c_str());
     int num_digits = std::to_string(m_currentFile->m_size).size();
     int padding = BOX_WIDTH - (16 + num_digits + 5);

@@ -88,17 +88,22 @@ target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Debug>:-O0 -g -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+)
 target_compile_definitions(dconstruct PRIVATE
     CXXOPTS_NO_EXCEPTIONS=1
 )
 
 target_link_libraries(dconstruct PRIVATE
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
-# --- BUILDINFO TARGET ----
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}

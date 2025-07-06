@@ -220,7 +220,6 @@ struct StackFrame {
     location m_symbolTable;
     std::map<u32, SymbolTableEntry> symbolTableEntries;
     std::vector<u32> m_labels;
-    std::vector<u32> m_virtualLabels;
     u32 m_argCount = 0;
 
     StackFrame() : m_registers{}, symbolTableEntries{}, m_labels{} {
@@ -238,13 +237,6 @@ struct StackFrame {
         auto res = std::find(m_labels.begin(), m_labels.end(), target);
         if (res == m_labels.end()) {
             m_labels.push_back(target);
-        }
-    }
-
-    void add_virtual_label(const u32 target) noexcept {
-        auto res = std::find(m_virtualLabels.begin(), m_virtualLabels.end(), target);
-        if (res == m_virtualLabels.end()) {
-            m_virtualLabels.push_back(target);
         }
     }
 };

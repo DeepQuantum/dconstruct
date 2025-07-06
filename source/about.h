@@ -1,8 +1,8 @@
 #pragma once
 #pragma once
-#define COMPILER_VERSION "GNU 14.2.0"
-#define BUILD_DATE "Mon Jun 30 17:05:35 2025"
-#define VERSION "beta_1"
+#define COMPILER_VERSION "MSVC"
+#define BUILD_DATE "5.7.2025"
+#define VERSION "beta_2"
 #include <cstdio>
 
 static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to dc files that are then put into a new copy of the original file.\n" 
@@ -49,7 +49,7 @@ static void print_about() noexcept {
         
         "All my tools/mods will always be 100%% free, but programs like this take a lot of work. If you'd like to support me, you can visit my ko-fi.\n"\
         "https://ko-fi.com/deepquantum",
-        "beta_1", 
+        VERSION, 
         COMPILER_VERSION, 
         BUILD_DATE
     );
