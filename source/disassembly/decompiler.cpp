@@ -1,17 +1,14 @@
 #include "decompiler.h"
 #include <fstream>
 #include <iostream>
+#include <graphviz/gvc.h>
+#include <graphviz/cgraph.h>
+#include <sstream>
+#include <set>
 
 namespace dconstruct {
 
-// void Decompiler::insert_new_node(const u32 target, const ControlFlowNode &node) noexcept {
-//     if (!m_nodes.contains(node.m_startLine)) {
-//         m_nodes[node.m_startLine] = node;
-//     }
-//     m_nodes[node.m_startLine].m_incoming
-// }
-
-void Decompiler::output_cfg_file(const std::string &path) const noexcept {
+void Decompiler::write_control_flow_graph_txt_file(const std::string &path) const noexcept {
     std::ofstream graph_file(path);
 
     if (!graph_file.is_open()) {
@@ -20,65 +17,123 @@ void Decompiler::output_cfg_file(const std::string &path) const noexcept {
     graph_file << "#nodes\n";
     for (const auto& [loc, node] : m_nodes) {
         graph_file << loc << ' ';
-        // for (const auto& line : node->m_lines) {
-        //     graph_file << line.m_text << ';';
-        // }
+        for (const auto& line : node->m_lines) {
+            graph_file << line.m_text << ';';
+        }
         graph_file << '\n';
     }
 
     graph_file << "#edges\n";
     for (const auto& [loc, node] : m_nodes) {
-        for (const auto &in : node->m_incoming) {
-            graph_file << in->m_startLine << ' ' << loc << '\n';
-        }
-        for (const auto &out : node->m_outgoing) {
+        for (const auto &out : node->m_next) {
             graph_file << loc << ' ' << out->m_startLine << '\n';
         }
     }
 }
 
+[[nodiscard]] std::string Decompiler::create_node_text(const ControlFlowNode *node) const noexcept {
+    std::stringstream ss;
+
+    ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="10">"
+    "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
+
+    for (const auto &line : node->m_lines) {
+        ss << line.m_text << "<BR/>"; 
+    } 
+
+    ss << "</FONT></TD></TR></TABLE>";
+
+    return ss.str();
+}
+
+void Decompiler::write_control_flow_graph_image(const std::string &path) const noexcept {
+    GVC_t *gvc = gvContext();
+    Agraph_t *g = agopen((char *)"G", Agdirected, nullptr);
+    Agnode_t *current_node;
+    u32 max_node;
+    std::map<ControlFlowNode*, Agnode_t*> node_map{};
+    for (const auto &[start_line, node] : m_nodes) {
+        char *name = const_cast<char*>(std::to_string(start_line).c_str());
+        current_node = agnode(g, name, 1);
+        node_map[node.get()] = current_node;
+        if (start_line > max_node) {
+            max_node = start_line;
+        }
+        std::string node_html_label = create_node_text(node.get());
+        agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
+        agsafeset(current_node, const_cast<char*>("fontcolor"), "#8ADCFE", "");
+        agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
+        agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
+    }
+    for (const auto &[start_line, node] : m_nodes) {
+        for (const auto &next : node->m_next) {
+            Agedge_t *edge = agedge(g, node_map[node.get()], node_map[next], const_cast<char*>(""), 1);
+            if (node->m_endLine + 1 == next->m_startLine) {
+                agsafeset(edge, const_cast<char*>("color"), "purple", "");
+            } else if (next->m_startLine < node->m_startLine) {
+                agsafeset(edge, const_cast<char*>("color"), "red", "");
+            } else if (node->m_lines.back().m_instruction.opcode == Opcode::Branch) {
+                agsafeset(edge, const_cast<char*>("color"), "blue", "");
+            } else {
+                agsafeset(edge, const_cast<char*>("color"), "#8ADCFE", "");
+            }
+        }
+    }
+    Agraph_t *returng = agsubg(g, const_cast<char*>("return"), 1);
+    Agnode_t *return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
+    agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
+    agsafeset(returng, const_cast<char*>("rank"), "max", "");
+    agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
+    agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
+    gvLayout(gvc, g, "dot");
+    gvRenderFilename(gvc, g, "svg", path.c_str());
+    agclose(g);
+}
+
 void Decompiler::parse_control_flow_graph() noexcept {
     const std::vector<u32> &labels = m_functionDisassembly->m_stackFrame.m_labels;
-    const std::vector<u32> &vlabels = m_functionDisassembly->m_stackFrame.m_virtualLabels;
 
     m_nodes[0] = std::make_unique<ControlFlowNode>(0);
     ControlFlowNode *current_node = m_nodes[0].get();
     ControlFlowNode *target_node, *following_node;
 
-    for (const auto &line : m_functionDisassembly->m_lines) {
-        current_node->m_lines.push_back(line);
+    for (u32 i = 0; i < m_functionDisassembly->m_lines.size(); ++i) {
+        const FunctionDisassemblyLine &current_line = m_functionDisassembly->m_lines[i];
+        const FunctionDisassemblyLine &next_line = m_functionDisassembly->m_lines[i + 1];
+        current_node->m_lines.push_back(current_line);
 
-        b8 gets_pointed_at = std::find(labels.begin(), labels.end(), line.m_location) != labels.end() || 
-            std::find(vlabels.begin(), vlabels.end(), line.m_location) != vlabels.end();
+        b8 next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
-        if (line.m_target != -1) {
-            if (!m_nodes.contains(line.m_target)) {
-                m_nodes[line.m_target] = std::make_unique<ControlFlowNode>(line.m_target);
+        if (current_line.m_target != -1) {
+            if (!m_nodes.contains(current_line.m_target)) {
+                m_nodes[current_line.m_target] = std::make_unique<ControlFlowNode>(current_line.m_target);
             }
 
-            target_node = m_nodes[line.m_target].get();
-            target_node->m_incoming.push_back(current_node);
-            current_node->m_outgoing.push_back(target_node);
+            target_node = m_nodes[current_line.m_target].get();
+            current_node->m_next.push_back(target_node);
 
-            if (!m_nodes.contains(line.m_location + 1)) {
-                m_nodes[line.m_location + 1] = std::make_unique<ControlFlowNode>(line.m_location + 1);
-            }
-            following_node = m_nodes[line.m_location + 1].get();
-            if (line.m_instruction.opcode != Opcode::Branch) {
-                following_node->m_incoming.push_back(current_node);
-                current_node->m_outgoing.push_back(following_node);
+            if (!m_nodes.contains(next_line.m_location)) {
+                m_nodes[next_line.m_location] = std::make_unique<ControlFlowNode>(next_line.m_location);
             }
 
-            current_node->m_endLine = line.m_location;
+            following_node = m_nodes[next_line.m_location].get();
+
+            if (current_line.m_instruction.opcode != Opcode::Branch) {
+                current_node->m_next.push_back(following_node);
+            }
+
+            current_node->m_endLine = current_line.m_location;
             current_node = following_node;
         }
-        if (current_node->m_lines.size() > 1 && gets_pointed_at) {
-            if (!m_nodes.contains(line.m_location + 1)) {
-                m_nodes[line.m_location + 1] = std::make_unique<ControlFlowNode>(line.m_location + 1);
+        else if (next_line_is_target) {
+            if (!m_nodes.contains(next_line.m_location)) {
+                m_nodes[next_line.m_location] = std::make_unique<ControlFlowNode>(next_line.m_location);
             }
-            following_node = m_nodes[line.m_location + 1].get();
-            current_node->m_endLine = line.m_location;
 
+            following_node = m_nodes[next_line.m_location].get();
+            current_node->m_next.push_back(following_node);
+
+            current_node->m_endLine = current_line.m_location;
             current_node = following_node;
         } 
     }

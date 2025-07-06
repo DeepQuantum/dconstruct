@@ -94,6 +94,16 @@ To replace the first member variable (index 0) with the float value 0.5, the edi
 
 The structure we want to edit is at `0x11C28`, and we want the first member variable (the 0 to the left of the float). We then put the new value after the `=`, 0.5 in this case. If the edit was successfull, the program will show a message indicating that the value was changed from `0.7->0.5`.
 
+For an edit file, simply drop the `-e` and put one edit per line:
+
+### edit_file.txt
+
+0x11C28[0]=0.5
+
+0x11C28[1]=0.2
+
+...
+
 ## Types of Member Variables
 
 Structures can have different types of member variables:

@@ -45,6 +45,7 @@
     },
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/**",
+        "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/source/Graphviz-13.1.0-win64/include"
         //"C:/Qt/6.9.0/mingw_64/include/**",
     ],
     "C_Cpp.default.cppStandard": "c++20",
