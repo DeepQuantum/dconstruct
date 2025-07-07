@@ -3,6 +3,7 @@
 #include <chrono>
 #include "disassembler.h"
 #include "decompiler.h"
+#include "decompiler.h"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";
@@ -1472,6 +1473,7 @@ void Disassembler::insert_header_line() {
     constexpr int BOX_WIDTH = 100;
     insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
+    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_2");
     insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_2");
     insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.filename().string().c_str());
     int num_digits = std::to_string(m_currentFile->m_size).size();
