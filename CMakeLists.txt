@@ -107,6 +107,13 @@ target_link_libraries(dconstruct PRIVATE
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
+add_custom_command(
+    TARGET dconstruct POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin"
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}
