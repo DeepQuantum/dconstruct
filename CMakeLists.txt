@@ -92,6 +92,10 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
 )
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+)
 target_compile_definitions(dconstruct PRIVATE
     CXXOPTS_NO_EXCEPTIONS=1
 )
