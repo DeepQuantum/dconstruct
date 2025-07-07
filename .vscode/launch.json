@@ -6,7 +6,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
-            "../test/workbench-script-funcs-impl.bin",
+            "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue",
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

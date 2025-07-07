@@ -230,7 +230,7 @@ void Disassembler::disassemble() {
 
 void Disassembler::insert_entry(const Entry *entry) {
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-    insert_span_fmt("%s = ", lookup(entry->m_scriptId));
+    insert_span_fmt("%s = ", lookup(entry->m_nameID));
     insert_struct(struct_ptr);
 }
 
@@ -252,9 +252,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             static b8 first = true;
             if (first) {
                 dcompiler.parse_control_flow_graph();
-                dcompiler.write_control_flow_graph_txt_file("graphs/" + std::to_string(get_offset(&struct_ptr->m_data)) + ".txt");
-                dcompiler.write_control_flow_graph_image("images/" + std::to_string(get_offset(&struct_ptr->m_data)) + ".svg");
-               // first = false;
+                dcompiler.write_control_flow_graph_txt_file("graphs/" + m_currentFile->m_path.filename().string() + std::to_string(get_offset(&struct_ptr->m_data)) + ".txt");
+                dcompiler.write_control_flow_graph_image("images/" + m_currentFile->m_path.filename().string() + std::to_string(get_offset(&struct_ptr->m_data)) + ".svg");
+                //first = false;
             }
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);

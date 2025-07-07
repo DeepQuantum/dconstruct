@@ -1,0 +1,3 @@
+[submodule "source/graphviz"]
+	path = source/graphviz
+	url = https://gitlab.com/graphviz/graphviz

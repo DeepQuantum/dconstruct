@@ -1,3 +1,5 @@
+#define GVDLL
+
 #include "decompiler.h"
 #include <fstream>
 #include <iostream>
@@ -5,6 +7,9 @@
 #include <graphviz/cgraph.h>
 #include <sstream>
 #include <set>
+#include <mutex>
+#include <chrono>
+
 
 namespace dconstruct {
 
@@ -43,51 +48,60 @@ void Decompiler::write_control_flow_graph_txt_file(const std::string &path) cons
 
     ss << "</FONT></TD></TR></TABLE>";
 
+
     return ss.str();
 }
 
+static std::mutex g_graphviz_mutex;
+
 void Decompiler::write_control_flow_graph_image(const std::string &path) const noexcept {
-    GVC_t *gvc = gvContext();
-    Agraph_t *g = agopen((char *)"G", Agdirected, nullptr);
-    Agnode_t *current_node;
-    u32 max_node;
-    std::map<ControlFlowNode*, Agnode_t*> node_map{};
-    for (const auto &[start_line, node] : m_nodes) {
-        char *name = const_cast<char*>(std::to_string(start_line).c_str());
-        current_node = agnode(g, name, 1);
-        node_map[node.get()] = current_node;
-        if (start_line > max_node) {
-            max_node = start_line;
-        }
-        std::string node_html_label = create_node_text(node.get());
-        agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
-        agsafeset(current_node, const_cast<char*>("fontcolor"), "#8ADCFE", "");
-        agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
-        agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
-    }
-    for (const auto &[start_line, node] : m_nodes) {
-        for (const auto &next : node->m_next) {
-            Agedge_t *edge = agedge(g, node_map[node.get()], node_map[next], const_cast<char*>(""), 1);
-            if (node->m_endLine + 1 == next->m_startLine) {
-                agsafeset(edge, const_cast<char*>("color"), "purple", "");
-            } else if (next->m_startLine < node->m_startLine) {
-                agsafeset(edge, const_cast<char*>("color"), "red", "");
-            } else if (node->m_lines.back().m_instruction.opcode == Opcode::Branch) {
-                agsafeset(edge, const_cast<char*>("color"), "blue", "");
-            } else {
-                agsafeset(edge, const_cast<char*>("color"), "#8ADCFE", "");
-            }
-        }
-    }
-    Agraph_t *returng = agsubg(g, const_cast<char*>("return"), 1);
-    Agnode_t *return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
-    agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
-    agsafeset(returng, const_cast<char*>("rank"), "max", "");
-    agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
-    agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
-    gvLayout(gvc, g, "dot");
-    gvRenderFilename(gvc, g, "svg", path.c_str());
-    agclose(g);
+//    GVC_t *gvc = gvContext();
+//    Agraph_t *g = agopen((char *)"G", Agdirected, nullptr);
+//    Agnode_t *current_node;
+//    std::lock_guard<std::mutex> lock(g_graphviz_mutex);
+//    u32 max_node = 0;
+//    std::map<ControlFlowNode*, Agnode_t*> node_map{};
+//    for (const auto &[start_line, node] : m_nodes) {
+//        std::string name = std::to_string(start_line);
+//        current_node = agnode(g, name.data(), 1);
+//        node_map[node.get()] = current_node;
+//        if (start_line > max_node) {
+//            max_node = start_line;
+//        }
+//        const std::string node_html_label = create_node_text(node.get());
+//
+//        agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
+//
+//        agsafeset(current_node, const_cast<char*>("fontcolor"), "#8ADCFE", "");
+//        agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
+//        agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
+//    }
+//    
+//    for (const auto &[start_line, node] : m_nodes) {
+//        for (const auto &next : node->m_next) {
+//            Agedge_t *edge = agedge(g, node_map[node.get()], node_map[next], const_cast<char*>(""), 1);
+//            if (node->m_endLine + 1 == next->m_startLine) {
+//                agsafeset(edge, const_cast<char*>("color"), "purple", "");
+//            } else if (next->m_startLine < node->m_startLine) {
+//                agsafeset(edge, const_cast<char*>("color"), "red", "");
+//            } else if (node->m_lines.back().m_instruction.opcode == Opcode::Branch) {
+//                agsafeset(edge, const_cast<char*>("color"), "blue", "");
+//            } else {
+//                agsafeset(edge, const_cast<char*>("color"), "#8ADCFE", "");
+//            }
+//        }
+//    }
+//    Agraph_t *returng = agsubg(g, const_cast<char*>("return"), 1);
+//    Agnode_t *return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
+//    agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
+//    agsafeset(returng, const_cast<char*>("rank"), "max", "");
+//    agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
+//    agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
+//    gvLayout(gvc, g, "dot");
+//    gvRenderFilename(gvc, g, "svg", path.c_str());
+//    gvFreeLayout(gvc, g);
+//    agclose(g);
+//    gvFreeContext(gvc);
 }
 
 void Decompiler::parse_control_flow_graph() noexcept {
@@ -99,8 +113,11 @@ void Decompiler::parse_control_flow_graph() noexcept {
 
     for (u32 i = 0; i < m_functionDisassembly->m_lines.size(); ++i) {
         const FunctionDisassemblyLine &current_line = m_functionDisassembly->m_lines[i];
-        const FunctionDisassemblyLine &next_line = m_functionDisassembly->m_lines[i + 1];
         current_node->m_lines.push_back(current_line);
+        if (current_line.m_instruction.opcode == Opcode::Return) {
+            return;
+        }
+        const FunctionDisassemblyLine &next_line = m_functionDisassembly->m_lines[i + 1];
 
         b8 next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
