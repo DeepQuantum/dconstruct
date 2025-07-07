@@ -74,7 +74,7 @@ static std::vector<std::string> edits_from_file(const std::filesystem::path &pat
     if (!edit_in.is_open()) {
         std::cout << "warning: couldn't open " << path << '\n'; 
     }
-    std::string edit_str;
+    std::string edit_str;           
     while (edit_in >> edit_str) {
         result.emplace_back(std::move(edit_str));
     }

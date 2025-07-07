@@ -4,7 +4,7 @@ G: nx.MultiDiGraph = nx.MultiDiGraph()
 
 return_node_idx = ""
 
-with open("build/graph.txt") as f:
+with open("build/graphs/aef-hunt-funcs.bin432.txt") as f:
     mode = None
     for line in f:
         line = line.strip()
