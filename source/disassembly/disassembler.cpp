@@ -55,10 +55,10 @@ void Disassembler::insert_span_indent(const char* format, const u32 indent, Args
 }
 
 /*
-    a "struct" is a piece of data that has a type ID and some data following it.
+    a "struct" is a piece of data that has a type ID and members following it.
     an "array-like" is essentially just a size + pointer. the thing being pointed at can be anything, either proper structs
     or more array-likes. array-likes may also point at array-structs, which are just blocks of data with the type ID "array"
-    followed by some data. array structs don't provide their own size, so the array-like must provide the size.
+    followed by structs of undertermined size. array structs don't provide their own size, so the array-like must provide the size.
     array structs may contain arbitrarily sized members though, so we must check each member individually.
 
 */  
