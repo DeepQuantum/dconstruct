@@ -52,6 +52,7 @@
     //"C_Cpp.default.compilerPath": "C:/Qt/Tools/mingw1310_64/bin/gcc.exe",
     "files.associations": {
         "*.hexpat": "cpp",
+        "*.frm": "vb",
         "array": "cpp",
         "charconv": "cpp",
         "chrono": "cpp",
@@ -145,6 +146,8 @@
         "semaphore": "cpp",
         "qapplication": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "*.rh": "cpp",
+        "any": "cpp"
     },
 }
