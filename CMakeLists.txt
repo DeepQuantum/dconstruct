@@ -85,7 +85,7 @@ target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Release>:-O3 -flto -Wall -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g -flto -Wall>
+    $<$<CONFIG:Debug>:-O0 -g3 -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 include_directories(
@@ -111,13 +111,12 @@ target_link_libraries(dconstruct PRIVATE
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
-add_custom_command(
-    TARGET dconstruct POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin"
-    ${CMAKE_CURRENT_BINARY_DIR}
-)
-
+# add_custom_command(
+# TARGET dconstruct POST_BUILD
+# COMMAND ${CMAKE_COMMAND} -E copy_directory
+# "${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin"
+# ${CMAKE_CURRENT_BINARY_DIR}
+# )
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
     OUTPUT ${BUILDINFO_H}
