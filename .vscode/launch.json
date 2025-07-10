@@ -6,7 +6,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/dconstruct.exe",
         "args": [
-            "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue",
+            "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-wave-manager.bin",
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build",

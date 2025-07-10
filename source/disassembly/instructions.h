@@ -220,6 +220,7 @@ struct StackFrame {
     location m_symbolTable;
     std::map<u32, SymbolTableEntry> symbolTableEntries;
     std::vector<u32> m_labels;
+    std::vector<FunctionDisassemblyLine> m_backwardsJumpLocs;
     u32 m_argCount = 0;
 
     StackFrame() : m_registers{}, symbolTableEntries{}, m_labels{} {
