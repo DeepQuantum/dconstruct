@@ -3,7 +3,6 @@
 #include <chrono>
 #include "disassembler.h"
 #include "decompiler.h"
-#include "decompiler.h"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";
@@ -252,10 +251,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             auto dcompiler = Decompiler(&afunction);
             static b8 first = true;
             if (first) {
-                dcompiler.parse_control_flow_graph();
-                dcompiler.write_control_flow_graph_txt_file("graphs/" + m_currentFile->m_path.filename().string() + std::to_string(get_offset(&struct_ptr->m_data)) + ".txt");
-                dcompiler.write_control_flow_graph_image("images/" + m_currentFile->m_path.filename().string() + std::to_string(get_offset(&struct_ptr->m_data)) + ".svg");
-                //first = false;
+                dcompiler.decompile();
             }
             std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
@@ -1011,6 +1007,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(interpreted, interpreted_buffer_size, "GOTO ");
             stackFrame.add_target_label(target);
             line.m_target = target;
+            if (target < line.m_location) {
+                stackFrame.m_backwardsJumpLocs.push_back(line);
+            }
             break;
         }
         case BranchIf: {
@@ -1019,6 +1018,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
             stackFrame.add_target_label(target);
+            if (target < line.m_location) {
+                stackFrame.m_backwardsJumpLocs.push_back(line);
+            }
             break;
         }
         case BranchIfNot: {
@@ -1027,6 +1029,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
             snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
             stackFrame.add_target_label(target);
+            if (target < line.m_location) {
+                stackFrame.m_backwardsJumpLocs.push_back(line);
+            }
             break;
         }
         case OpLogNot: {
