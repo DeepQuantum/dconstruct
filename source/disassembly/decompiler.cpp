@@ -16,10 +16,11 @@ namespace dconstruct {
 std::vector<DecompiledFunction> Decompiler::decompile() noexcept {
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg = ControlFlowGraph(func);
-        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + std::to_string((p64)func->m_lines[0].m_globalPointer) + ".svg");
-        const std::vector<ControlFlowLoop> loops = cfg.find_loops();
+        if (func->m_id == "#9C4AEABD1EFF8F0F") {
+            const std::vector<ControlFlowLoop> loops = cfg.find_loops();
+            cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
+        }
     }
-    std::cout << "done";
     return{};
 }
 }

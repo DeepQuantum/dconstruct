@@ -141,8 +141,8 @@ struct FunctionDisassemblyLine {
     std::string m_text;
     Instruction* m_globalPointer;
     std::string m_comment;
-    b8 m_isArgMove;
     i64 m_target = -1;
+    b8 m_isArgMove;
 
     FunctionDisassemblyLine() = default;
 
@@ -246,5 +246,6 @@ struct StackFrame {
 struct FunctionDisassembly {
     std::vector<FunctionDisassemblyLine> m_lines;
     StackFrame m_stackFrame;
-};
+    std::string m_id;
+}; 
 }
