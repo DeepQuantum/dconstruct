@@ -7,7 +7,6 @@
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 #include <sstream>
-#include <set>
 #include <mutex>
 
 namespace dconstruct {
@@ -31,8 +30,8 @@ namespace dconstruct {
     ControlFlowGraph::ControlFlowGraph(const FunctionDisassembly *func) noexcept {
         m_func = func;
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
-        m_nodes.push_back(std::make_unique<ControlFlowNode>(0));
-        ControlFlowNode *current_node = m_nodes[0].get();
+        m_nodes[0] = ControlFlowNode(0);
+        ControlFlowNode *current_node = &m_nodes[0];
         ControlFlowNode *target_node, *following_node;
 
         for (u32 i = 0; i < func->m_lines.size(); ++i) {
@@ -69,31 +68,20 @@ namespace dconstruct {
         }
     }
 
-    const ControlFlowNode* ControlFlowGraph::get_node_at_line(const u32 start_line) const noexcept {
-        for (const auto& node : m_nodes) {
-            if (node->m_startLine == start_line) {
-                return node.get();
+    [[nodiscard]] const ControlFlowNode* ControlFlowGraph::get_node_containing_line(const u32 line) const noexcept {
+        for (const auto& [node_start, node] : m_nodes) {
+            if (line >= node_start && line <= node.m_endLine) {
+                return &node;
             }
         }
         return nullptr;
     }
 
-    const ControlFlowNode* ControlFlowGraph::get_node_containing_line(const u32 line) const noexcept {
-        for (const auto& node : m_nodes) {
-            if (line >= node->m_startLine && line <= node->m_endLine) {
-                return node.get();
-            }
+    [[nodiscard]] ControlFlowNode* ControlFlowGraph::insert_node_at_line(const u32 start_line) noexcept {
+        if (!m_nodes.contains(start_line)) {
+            return &(m_nodes[start_line] = ControlFlowNode(start_line));
         }
-        return nullptr;
-    }
-
-    ControlFlowNode* ControlFlowGraph::insert_node_at_line(const u32 start_line) noexcept {
-        ControlFlowNode *existing = const_cast<ControlFlowNode*>(get_node_at_line(start_line));
-        if (existing == nullptr) {
-            m_nodes.emplace_back(std::make_unique<ControlFlowNode>(start_line));
-            return m_nodes.back().get();
-        }
-        return existing;
+        return &m_nodes.at(start_line);
     }
 
     void ControlFlowGraph::write_to_txt_file(const std::string& path) const noexcept {
@@ -103,18 +91,18 @@ namespace dconstruct {
             std::cerr << "couldn't open out graph file " << path << '\n';
         }
         graph_file << "#nodes\n";
-        for (const auto& node : m_nodes) {
-            graph_file << node->m_startLine << ' ';
-            for (const auto& line : node->m_lines) {
+        for (const auto& [node_start, node] : m_nodes) {
+            graph_file << node_start << ' ';
+            for (const auto& line : node.m_lines) {
                 graph_file << line.m_text << ';';
             }
             graph_file << '\n';
         }
 
         graph_file << "#edges\n";
-        for (const auto& node : m_nodes) {
-            for (const auto& out : node->m_successors) {
-                graph_file << node->m_startLine << ' ' << out->m_startLine << '\n';
+        for (const auto& [node_start, node] : m_nodes) {
+            for (const auto& out : node.m_successors) {
+                graph_file << node_start << ' ' << out->m_startLine << '\n';
             }
         }
     }
@@ -126,15 +114,15 @@ namespace dconstruct {
         Agnode_t* current_node;
         std::lock_guard<std::mutex> lock(g_graphviz_mutex);
         u32 max_node = 0;
-        std::map<const ControlFlowNode*, Agnode_t*> node_map{};
-        for (const auto& node : m_nodes) {
-            std::string name = std::to_string(node->m_startLine);
+        std::map<u32, Agnode_t*> node_map{};
+        for (const auto& [node_start, node] : m_nodes) {
+            std::string name = std::to_string(node_start);
             current_node = agnode(g, name.data(), 1);
-            node_map[node.get()] = current_node;
-            if (node->m_startLine > max_node) {
-                max_node = node->m_startLine;
+            node_map[node_start] = current_node;
+            if (node_start > max_node) {
+                max_node = node_start;
             }
-            const std::string node_html_label = node->get_label_html();
+            const std::string node_html_label = node.get_label_html();
 
             agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
 
@@ -143,22 +131,33 @@ namespace dconstruct {
             agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
         }
 
-        for (const auto& node : m_nodes) {
-            for (const auto& next : node->m_successors) {
-                auto test1 = node_map[node.get()];
-                auto test2 = node_map[next];
-                Agedge_t* edge = agedge(g, test1, test2, const_cast<char*>(""), 1);
-                if (node->m_endLine + 1 == next->m_startLine) {
-                    agsafeset(edge, const_cast<char*>("color"), "red", "");
+        for (const auto& [node_start, node] : m_nodes) {
+
+            const b8 is_conditional = node.m_lines.back().m_instruction.opcode == BranchIf || node.m_lines.back().m_instruction.opcode == BranchIfNot;
+
+            for (const auto& next : node.m_successors) {
+                Agedge_t* edge = agedge(g, node_map.at(node_start), node_map.at(next->m_startLine), const_cast<char*>(""), 1);
+                constexpr const char* conditional_true_color = "green";
+                constexpr const char* conditional_false_color = "red";
+                constexpr const char* fallthrough_color = "#8ADCFE";
+                constexpr const char* branch_color = "blue";
+                constexpr const char* loop_upwards_color = "purple";
+
+                if (node.m_endLine + 1 == next->m_startLine) {
+                    if (is_conditional) {
+                        agsafeset(edge, const_cast<char*>("color"), conditional_false_color, "");
+                    } else {
+                        agsafeset(edge, const_cast<char*>("color"), fallthrough_color, "");
+                    }
                 }
-                else if (next->m_startLine < node->m_startLine) {
-                    agsafeset(edge, const_cast<char*>("color"), "purple", "");
+                else if (next->m_startLine < node_start) {
+                    agsafeset(edge, const_cast<char*>("color"), loop_upwards_color, "");
                 }
-                else if (node->m_lines.back().m_instruction.opcode == Opcode::Branch) {
-                    agsafeset(edge, const_cast<char*>("color"), "red", "");
+                else if (node.m_lines.back().m_instruction.opcode == Opcode::Branch) {
+                    agsafeset(edge, const_cast<char*>("color"), branch_color, "");
                 }
                 else {
-                    agsafeset(edge, const_cast<char*>("color"), "green", "");
+                    agsafeset(edge, const_cast<char*>("color"), conditional_true_color, "");
                 }
             }
         }
@@ -176,99 +175,71 @@ namespace dconstruct {
     }
 
     [[nodiscard]] std::vector<ControlFlowLoop> ControlFlowGraph::find_loops() noexcept {
+        std::vector<ControlFlowLoop> loops{};
         for (const auto& loc : m_func->m_stackFrame.m_backwardsJumpLocs) {
-            const ControlFlowNode *loop_latch = get_node_containing_line(loc.m_location);
-            const ControlFlowNode *potential_loop_head = get_node_at_line(loc.m_target);
-            if (dominates(potential_loop_head, loop_latch)) {
-                std::cout << "yippie\n";
+            const ControlFlowNode* loop_latch = get_node_containing_line(loc.m_location);
+            const ControlFlowNode* loop_head = &m_nodes.at(loc.m_target);
+            if (!dominates(loop_head, loop_latch)) {
+                std::cout << "backwards jump is not loop\n";
             }
+            loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
-
-        return {};
+        return loops;
     }
 
     [[nodiscard]] std::map<const ControlFlowNode*, std::vector<const ControlFlowNode*>> ControlFlowGraph::compute_predecessors() const noexcept {
         std::map<const ControlFlowNode*, std::vector<const ControlFlowNode*>> predecessors{};
-        for (const auto &node : m_nodes) {
-            for (const auto &successor : node->m_successors) {
-                predecessors[successor].push_back(node.get());
+        for (const auto & [node_start, node] : m_nodes) {
+            for (const auto &successor : node.m_successors) {
+                predecessors[successor].push_back(&node);
             }
         }
         return predecessors;
     }
 
-    b8 dfs(const ControlFlowNode *node, const ControlFlowNode *n, const ControlFlowNode *m, std::set<const ControlFlowNode*> &visited) {
-        if (node == m) {
+
+    [[nodiscard]] b8 ControlFlowGraph::dominee_not_found_outside_dominator_path(const ControlFlowNode *current_head, const ControlFlowNode *dominator, const ControlFlowNode *dominee, std::set<const ControlFlowNode*> &visited) noexcept {
+        std::cout << " checking node " << current_head->m_startLine << '\n';
+        if (current_head == dominator) {
             return true;
-        }
-        if (node == n) {
+        } 
+        if (current_head == dominee) {
             return false;
         }
-        if (visited.contains(node)) {
-            return false;
-        }
-        visited.insert(node);
-        for (const auto &successor : node->m_successors) {
-            if (dfs(successor, n, m, visited)) {
-                return true;
+        visited.insert(current_head);
+        for (const auto& successor : current_head->m_successors) {
+            if (!dominee_not_found_outside_dominator_path(successor, dominator, dominee, visited)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::dominates(const ControlFlowNode *n, const ControlFlowNode *m) const noexcept {
-        if (n == m) {
+    [[nodiscard]] b8 ControlFlowGraph::dominates(const ControlFlowNode *dominator, const ControlFlowNode *dominee) const noexcept {
+        if (dominator == dominee) {
             return true;
         }
         std::set<const ControlFlowNode*> visited;
-        return dfs(m_nodes[0].get(), n, m, visited);
+        return dominee_not_found_outside_dominator_path(&m_nodes.at(0), dominator, dominee, visited);
     }
-    // [[nodiscard]] std::vector<u32> ControlFlowGraph::get_idom_predecessors(const u32 n) noexcept {
-    //     std::vector<u32> res{};
-    //     for (const auto &p : m_predecessors[n]) {
-    //         if (m_immediateDominators.contains(p)) {
-    //             res.push_back(p);
-    //         }
-    //     }
-    //     return res;
-    // }
 
-    // void ControlFlowGraph::find_immediate_dominators() noexcept {
-    //     compute_predecessors();
-    //     m_immediateDominators[0] = 0;
+    static void add_successors(std::vector<const ControlFlowNode*> &nodes, const ControlFlowNode *node, const ControlFlowNode *stop) {
+        if (node == stop) {
+            return;
+        }
+        nodes.insert(nodes.end(), node->m_successors.begin(), node->m_successors.end());
+        for (const auto& successor : node->m_successors) {
+            add_successors(nodes, successor, stop);
+        }
+    }
 
-    //     b8 changed = true;
-    //     while (changed) {
-    //         changed = false;
-    //         for (const auto &[n, node] : m_nodes) { 
-    //             if (n == 0) continue;
-    //             const std::vector<u32> &idom_preds = get_idom_predecessors(n);
-    //             if (idom_preds.empty()) {
-    //                 continue;
-    //             }
-    //             u32 new_idom = idom_preds[0];
-    //             for (u32 p = 1; p < idom_preds.size(); ++p) {
-    //                 new_idom = intersect(new_idom, idom_preds[p]);
-    //             }
-    //             if (m_immediateDominators[n] != new_idom) {
-    //                 m_immediateDominators[n] = new_idom;
-    //                 changed = true;
-    //             }
-    //         }
-    //     }
-    // }
+    [[nodiscard]] std::vector<const ControlFlowNode*> ControlFlowGraph::collect_loop_body(const ControlFlowNode* head, const ControlFlowNode* latch) const noexcept {
+        std::vector<const ControlFlowNode*> body = {head, latch};
 
-    // [[nodiscard]] u32 ControlFlowGraph::intersect(const u32 node1, const u32 node2) const noexcept {
-    //     u32 finger1 = node1;
-    //     u32 finger2 = node2;
-    //     while (finger1 != finger2) {
-    //         while (finger1 < finger2) {
-    //             finger1 = m_immediateDominators.at(finger1);
-    //         }
-    //         while (finger2 < finger1) {
-    //             finger2 = m_immediateDominators.at(finger2);
-    //         }
-    //     }
-    //     return finger1;
-    // }
+        for (const auto& successor : head->m_successors) {
+            add_successors(body, successor, latch);
+        }
+
+        return body;
+    }
 }
