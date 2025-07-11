@@ -231,11 +231,11 @@ void Disassembler::disassemble() {
 void Disassembler::insert_entry(const Entry *entry) {
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
     insert_span_fmt("%s = ", lookup(entry->m_nameID));
-    insert_struct(struct_ptr);
+    insert_struct(struct_ptr, 0, entry->m_nameID);
 }
 
 
-void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent) {
+void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id) {
 
     const u64 offset = get_offset(&struct_ptr->m_data);
 
@@ -247,7 +247,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
-            auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data));
+            auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
             auto dcompiler = Decompiler(&afunction);
             static b8 first = true;
             if (first) {
@@ -458,16 +458,19 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     }
 }
 
-[[nodiscard]] FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda) {
+[[nodiscard]] FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const sid64 name_id) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
     std::vector<FunctionDisassemblyLine> lines;
     lines.reserve(instructionCount);
+    
+    const std::string name = name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode));
 
     FunctionDisassembly functionDisassembly {
         std::move(lines),
         StackFrame(),
+        name
     };
 
     functionDisassembly.m_stackFrame.m_symbolTable = location(lambda->m_pSymbols);

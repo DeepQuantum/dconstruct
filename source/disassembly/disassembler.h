@@ -56,7 +56,7 @@ namespace dconstruct {
         FILE* m_perfFile = nullptr;
 
         void insert_entry(const Entry* entry);
-        void insert_struct(const structs::unmapped* entry, const u32 indent = 0);
+        void insert_struct(const structs::unmapped* entry, const u32 indent = 0, const sid64 name_id = 0);
         template<TextFormat text_format = TextFormat{}, typename... Args> 
         void insert_span_fmt(const char* format, Args ...args);
         template<TextFormat text_format = TextFormat{}, typename... Args> 
@@ -75,7 +75,7 @@ namespace dconstruct {
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);
         void insert_on_block(const SsOnBlock* block, const u32);
-        [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda* lambda);
+        [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
         void process_instruction(StackFrame& stackFrame, FunctionDisassemblyLine& functionLine);
         void insert_function_disassembly_text(const FunctionDisassembly& functionDisassembly, const u32 indent);
         void insert_label(const std::vector<u32>& labels, const FunctionDisassemblyLine& line, const u32 func_size, const u32 indent) noexcept;
