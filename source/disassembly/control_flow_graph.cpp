@@ -68,9 +68,9 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] const ControlFlowNode* ControlFlowGraph::get_node_containing_line(const u32 line) const noexcept {
+    [[nodiscard]] const ControlFlowNode* ControlFlowGraph::get_node_with_last_line(const u32 line) const noexcept {
         for (const auto& [node_start, node] : m_nodes) {
-            if (line >= node_start && line <= node.m_endLine) {
+            if (node.m_endLine == line) {
                 return &node;
             }
         }
@@ -111,13 +111,50 @@ namespace dconstruct {
     void ControlFlowGraph::write_image(const std::string& path) const noexcept {
         GVC_t* gvc = gvContext();
         Agraph_t* g = agopen((char*)"G", Agdirected, nullptr);
-        Agnode_t* current_node;
         std::lock_guard<std::mutex> lock(g_graphviz_mutex);
+        
+        auto [node_map, max_node] = insert_graphviz_nodes(g);
+
+        insert_graphviz_edges(g, node_map);
+
+        Agraph_t* returng = agsubg(g, const_cast<char*>("return"), 1);
+        Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
+
+        insert_loop_subgraphs(g);
+
+        agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
+        agsafeset(returng, const_cast<char*>("rank"), "max", "");
+        agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
+        agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
+        gvLayout(gvc, g, "dot");
+        gvRenderFilename(gvc, g, "svg", path.c_str());
+        gvFreeLayout(gvc, g);
+        agclose(g);
+        gvFreeContext(gvc);
+    }
+
+    void ControlFlowGraph::insert_loop_subgraphs(Agraph_t *g) const {
+        for (u32 i = 0; i < m_loops.size(); ++i) {
+            const std::string loop_name = "cluster_loop_" + std::to_string(i);
+            Agraph_t *loopg = agsubg(g, const_cast<char *>(loop_name.c_str()), 1);
+            for (const auto &loop_node : m_loops[i].m_body) {
+                std::string name = std::to_string(loop_node->m_startLine);
+                agnode(loopg, name.data(), 1);
+            }
+            agsafeset(loopg, const_cast<char*>("label"), loop_name.c_str(), const_cast<char *>(""));
+            agsafeset(loopg, const_cast<char*>("fontcolor"), "#8ADCFE", const_cast<char *>(""));
+            agsafeset(loopg, const_cast<char*>("fontname"), "Consolas", const_cast<char *>(""));
+            agsafeset(loopg, const_cast<char*>("style"), "box", const_cast<char *>(""));
+            agsafeset(loopg, const_cast<char*>("color"), "purple", const_cast<char *>(""));
+        }
+    }
+
+    [[nodiscard]] std::pair<std::unordered_map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const noexcept {
+        std::unordered_map<u32, Agnode_t*> node_map{};
         u32 max_node = 0;
-        std::map<u32, Agnode_t*> node_map{};
         for (const auto& [node_start, node] : m_nodes) {
             std::string name = std::to_string(node_start);
-            current_node = agnode(g, name.data(), 1);
+            Agnode_t* current_node = agnode(g, name.data(), 1);
             node_map[node_start] = current_node;
             if (node_start > max_node) {
                 max_node = node_start;
@@ -130,27 +167,33 @@ namespace dconstruct {
             agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
             agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
         }
+        return { node_map, max_node };
+    }
+
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<u32, Agnode_t*>& node_map) const noexcept {
+
+        constexpr const char* conditional_true_color = "green";
+        constexpr const char* conditional_false_color = "red";
+        constexpr const char* fallthrough_color = "#8ADCFE";
+        constexpr const char* branch_color = "blue";
+        constexpr const char* loop_upwards_color = "purple";
+
 
         for (const auto& [node_start, node] : m_nodes) {
-
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == BranchIf || node.m_lines.back().m_instruction.opcode == BranchIfNot;
 
             for (const auto& next : node.m_successors) {
                 Agedge_t* edge = agedge(g, node_map.at(node_start), node_map.at(next->m_startLine), const_cast<char*>(""), 1);
-                constexpr const char* conditional_true_color = "green";
-                constexpr const char* conditional_false_color = "red";
-                constexpr const char* fallthrough_color = "#8ADCFE";
-                constexpr const char* branch_color = "blue";
-                constexpr const char* loop_upwards_color = "purple";
-
+                
                 if (node.m_endLine + 1 == next->m_startLine) {
                     if (is_conditional) {
                         agsafeset(edge, const_cast<char*>("color"), conditional_false_color, "");
-                    } else {
+                    }
+                    else {
                         agsafeset(edge, const_cast<char*>("color"), fallthrough_color, "");
                     }
                 }
-                else if (next->m_startLine < node_start) {
+                else if (next->m_startLine < node.m_startLine) {
                     agsafeset(edge, const_cast<char*>("color"), loop_upwards_color, "");
                 }
                 else if (node.m_lines.back().m_instruction.opcode == Opcode::Branch) {
@@ -161,30 +204,17 @@ namespace dconstruct {
                 }
             }
         }
-        Agraph_t* returng = agsubg(g, const_cast<char*>("return"), 1);
-        Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
-        agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
-        agsafeset(returng, const_cast<char*>("rank"), "max", "");
-        agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
-        agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
-        gvLayout(gvc, g, "dot");
-        gvRenderFilename(gvc, g, "svg", path.c_str());
-        gvFreeLayout(gvc, g);
-        agclose(g);
-        gvFreeContext(gvc);
     }
 
-    [[nodiscard]] std::vector<ControlFlowLoop> ControlFlowGraph::find_loops() noexcept {
-        std::vector<ControlFlowLoop> loops{};
+    void ControlFlowGraph::find_loops() noexcept {
         for (const auto& loc : m_func->m_stackFrame.m_backwardsJumpLocs) {
-            const ControlFlowNode* loop_latch = get_node_containing_line(loc.m_location);
+            const ControlFlowNode* loop_latch = get_node_with_last_line(loc.m_location);
             const ControlFlowNode* loop_head = &m_nodes.at(loc.m_target);
             if (!dominates(loop_head, loop_latch)) {
                 std::cout << "backwards jump is not loop\n";
             }
-            loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
+            m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
-        return loops;
     }
 
     [[nodiscard]] std::map<const ControlFlowNode*, std::vector<const ControlFlowNode*>> ControlFlowGraph::compute_predecessors() const noexcept {
@@ -198,8 +228,12 @@ namespace dconstruct {
     }
 
 
-    [[nodiscard]] b8 ControlFlowGraph::dominee_not_found_outside_dominator_path(const ControlFlowNode *current_head, const ControlFlowNode *dominator, const ControlFlowNode *dominee, std::set<const ControlFlowNode*> &visited) noexcept {
-        std::cout << " checking node " << current_head->m_startLine << '\n';
+    [[nodiscard]] b8 ControlFlowGraph::dominee_not_found_outside_dominator_path(
+        const ControlFlowNode *current_head, 
+        const ControlFlowNode *dominator, 
+        const ControlFlowNode *dominee, 
+        std::unordered_set<const ControlFlowNode*> &visited
+    ) noexcept {
         if (current_head == dominator) {
             return true;
         } 
@@ -219,7 +253,7 @@ namespace dconstruct {
         if (dominator == dominee) {
             return true;
         }
-        std::set<const ControlFlowNode*> visited;
+        std::unordered_set<const ControlFlowNode*> visited;
         return dominee_not_found_outside_dominator_path(&m_nodes.at(0), dominator, dominee, visited);
     }
 
