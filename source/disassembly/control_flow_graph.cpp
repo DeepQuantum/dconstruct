@@ -137,20 +137,28 @@ namespace dconstruct {
         for (u32 i = 0; i < m_loops.size(); ++i) {
             const std::string loop_name = "cluster_loop_" + std::to_string(i);
             Agraph_t *loopg = agsubg(g, const_cast<char *>(loop_name.c_str()), 1);
+
+            Agraph_t* loopheadg = agsubg(loopg, const_cast<char*>("head"), 1);
+            agnode(loopheadg, const_cast<char*>(std::to_string(m_loops[i].m_headNode->m_startLine).c_str()), 1);
+
+            Agraph_t* looplatchg = agsubg(loopg, const_cast<char*>("latch"), 1);
+            agnode(looplatchg, const_cast<char*>(std::to_string(m_loops[i].m_latchNode->m_startLine).c_str()), 1);
+
             for (const auto &loop_node : m_loops[i].m_body) {
                 std::string name = std::to_string(loop_node->m_startLine);
                 agnode(loopg, name.data(), 1);
             }
+            agsafeset(loopheadg, const_cast<char*>("rank"), "source", "");
+            agsafeset(looplatchg, const_cast<char*>("rank"), "max", "");
             agsafeset(loopg, const_cast<char*>("label"), loop_name.c_str(), const_cast<char *>(""));
             agsafeset(loopg, const_cast<char*>("fontcolor"), "#8ADCFE", const_cast<char *>(""));
             agsafeset(loopg, const_cast<char*>("fontname"), "Consolas", const_cast<char *>(""));
-            agsafeset(loopg, const_cast<char*>("style"), "box", const_cast<char *>(""));
             agsafeset(loopg, const_cast<char*>("color"), "purple", const_cast<char *>(""));
         }
     }
 
-    [[nodiscard]] std::pair<std::unordered_map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const noexcept {
-        std::unordered_map<u32, Agnode_t*> node_map{};
+    [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const noexcept {
+        std::map<u32, Agnode_t*> node_map{};
         u32 max_node = 0;
         for (const auto& [node_start, node] : m_nodes) {
             std::string name = std::to_string(node_start);
@@ -170,7 +178,7 @@ namespace dconstruct {
         return { node_map, max_node };
     }
 
-    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<u32, Agnode_t*>& node_map) const noexcept {
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const noexcept {
 
         constexpr const char* conditional_true_color = "green";
         constexpr const char* conditional_false_color = "red";
@@ -268,12 +276,10 @@ namespace dconstruct {
     }
 
     [[nodiscard]] std::vector<const ControlFlowNode*> ControlFlowGraph::collect_loop_body(const ControlFlowNode* head, const ControlFlowNode* latch) const noexcept {
-        std::vector<const ControlFlowNode*> body = {head, latch};
+        std::vector<const ControlFlowNode*> body{};
 
-        for (const auto& successor : head->m_successors) {
-            add_successors(body, successor, latch);
-        }
-
+        add_successors(body, head, latch);
+        
         return body;
     }
 }
