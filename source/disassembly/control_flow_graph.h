@@ -1,9 +1,13 @@
 #pragma once
+#define GVDLL
 
 #include "base.h"
 #include "instructions.h"
 #include <vector>
-#include <set>
+#include <unordered_set>
+#include <unordered_map>
+#include <graphviz/gvc.h>
+#include <graphviz/cgraph.h>
 
 namespace dconstruct {
 
@@ -30,22 +34,27 @@ namespace dconstruct {
     public:
         explicit ControlFlowGraph() = delete;
         explicit ControlFlowGraph(const FunctionDisassembly *) noexcept;
-        [[nodiscard]] std::vector<ControlFlowLoop> find_loops() noexcept;
+        void find_loops() noexcept;
         void write_to_txt_file(const std::string& path = "graph.txt") const noexcept;
         void write_image(const std::string &path = "graph.svg") const noexcept;
 
+void insert_loop_subgraphs(Agraph_t * g) const;
+
     private:
-        std::map<u32, ControlFlowNode> m_nodes{};
+        std::unordered_map<u32, ControlFlowNode> m_nodes{};
         std::vector<ControlFlowLoop> m_loops{};
         std::map<ControlFlowNode*, std::vector<ControlFlowNode*>> m_predecessors{};
         std::map<u32, u32> m_immediateDominators{};
         const FunctionDisassembly *m_func;
 
         [[nodiscard]] ControlFlowNode* insert_node_at_line(const u32 start_line) noexcept;
-        [[nodiscard]] const ControlFlowNode* get_node_containing_line(const u32 line) const noexcept;
+        [[nodiscard]] const ControlFlowNode* get_node_with_last_line(const u32 line) const noexcept;
+
+        [[nodiscard]] std::pair<std::unordered_map<u32, Agnode_t*>, u32> insert_graphviz_nodes(Agraph_t* g) const noexcept;
+        void insert_graphviz_edges(Agraph_t* g, const std::unordered_map<u32, Agnode_t*>& node_map) const noexcept;
 
         [[nodiscard]] b8 dominates(const ControlFlowNode*, const ControlFlowNode*) const noexcept;
-        [[nodiscard]] static b8 dominee_not_found_outside_dominator_path(const ControlFlowNode* current_head, const ControlFlowNode* dominator, const ControlFlowNode* dominee, std::set<const ControlFlowNode*>& visited) noexcept;
+        [[nodiscard]] static b8 dominee_not_found_outside_dominator_path(const ControlFlowNode* current_head, const ControlFlowNode* dominator, const ControlFlowNode* dominee, std::unordered_set<const ControlFlowNode*>& visited) noexcept;
         [[nodiscard]] std::vector<const ControlFlowNode*> collect_loop_body(const ControlFlowNode*, const ControlFlowNode*) const noexcept;
         
         [[nodiscard]] std::map<const ControlFlowNode*, std::vector<const ControlFlowNode*>> compute_predecessors() const noexcept;
