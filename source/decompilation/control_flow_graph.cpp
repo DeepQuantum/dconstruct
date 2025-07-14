@@ -220,6 +220,7 @@ namespace dconstruct {
             const ControlFlowNode* loop_head = &m_nodes.at(loc.m_target);
             if (!dominates(loop_head, loop_latch)) {
                 std::cout << "backwards jump is not loop\n";
+                continue;
             }
             m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
