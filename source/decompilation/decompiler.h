@@ -1,14 +1,11 @@
 #include "base.h"
 #include "instructions.h"
 #include "control_flow_graph.h"
+#include <sstream>
 
 namespace dconstruct {
 
-struct DecompiledFunction {
-
-
-
-};
+struct DecompiledFunction {};
 
 class Decompiler { 
 
