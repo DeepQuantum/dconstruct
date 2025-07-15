@@ -1,3 +1,5 @@
+#pragma once
+
 #include "base.h"
 #include <vector>
 #include <ostream>
@@ -63,8 +65,7 @@ namespace dconstruct::dcompiler {
             m_callee->ast(os);
             os << ", arguments={";
             for (const auto& arg : m_arguments) {
-                arg->ast(os);
-                os << ',';
+                arg->ast(os) << ',';
             }
             return os << "}]";
         }

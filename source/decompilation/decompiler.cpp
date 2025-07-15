@@ -11,7 +11,7 @@
 #include <chrono>
 
 
-namespace dconstruct {
+namespace dconstruct::dcompiler {
 
 std::vector<DecompiledFunction> Decompiler::decompile() noexcept {
     for (const auto &func : m_functions) {
