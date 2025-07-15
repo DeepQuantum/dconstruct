@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
-set(VERSION_NUMBER "beta_1")
+set(VERSION_NUMBER "beta_3")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,25 +12,27 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 file(GLOB BASE_SOURCE_FILES
     "${SOURCE_DIR}/disassembly/*.cpp"
     "${SOURCE_DIR}/disassembly/*.h"
+    "${SOURCE_DIR}/decompilation/*.h"
+    "${SOURCE_DIR}/decompilation/*.cpp"
 )
 
 # set(CMAKE_AUTOUIC ON)
 # set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
-# set(CMAKE_AUTOUIC_SEARCH_PATHS "${SOURCE_DIR}/ui")
+# set(CMAKE_AUTOUIC_SEARCH_PATHS " ${SOURCE_DIR}/ui ")
 
 # find_package(QT NAMES Qt6 COMPONENTS Widgets)
 # find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets)
 
 # file(GLOB UI_SOURCE_FILES
 # ${BASE_SOURCE_FILES}
-# "${SOURCE_DIR}/main_gui.cpp"
-# "${SOURCE_DIR}/mainwindow.cpp"
-# "${SOURCE_DIR}/mainwindow.h"
-# "${SOURCE_DIR}/cfg/*.cpp"
-# "${SOURCE_DIR}/cfg/*.h"
-# "${SOURCE_DIR}/ui/*.ui"
+# " ${SOURCE_DIR}/main_gui.cpp "
+# " ${SOURCE_DIR}/mainwindow.cpp "
+# " ${SOURCE_DIR}/mainwindow.h "
+# " ${SOURCE_DIR}/cfg/*.cpp "
+# " ${SOURCE_DIR}/cfg/*.h "
+# " ${SOURCE_DIR}/ui/*.ui "
 # )
 
 # # --- GUI TARGET ---
@@ -114,7 +116,7 @@ target_link_libraries(dconstruct PRIVATE
 # add_custom_command(
 # TARGET dconstruct POST_BUILD
 # COMMAND ${CMAKE_COMMAND} -E copy_directory
-# "${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin"
+# " ${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin "
 # ${CMAKE_CURRENT_BINARY_DIR}
 # )
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")

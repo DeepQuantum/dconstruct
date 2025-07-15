@@ -112,13 +112,14 @@ namespace dconstruct {
         const __m512i _base = _mm512_set1_epi64(reinterpret_cast<p64>(m_bytes.get()));
 
         for (u64 i = 0; i < table_size; ++i) {
-            const u8* data_segment_ptr = m_bytes.get() + i * 64;
-            __m512i _data_segment = _mm512_loadu_epi64((void*)data_segment_ptr);
-            __m512i _reloc_bits = _mm512_set1_epi64(bitmap[i]);
-            _reloc_bits = _mm512_srlv_epi64(_reloc_bits, _indices);
-            __m512i _bit_mask = _mm512_and_epi64(_reloc_bits, _1);
+            const u8* data_segment_ptr   = m_bytes.get() + i * 64;
+            __m512i _data_segment        = _mm512_loadu_epi64((void*)data_segment_ptr);
+            __m512i _reloc_bits          = _mm512_set1_epi64(bitmap[i]);
+            _reloc_bits                  = _mm512_srlv_epi64(_reloc_bits, _indices);
+            __m512i _bit_mask            = _mm512_and_epi64(_reloc_bits, _1);
             __m512i _data_segment_masked = _mm512_mullo_epi64(_bit_mask, _base);
-            _data_segment_masked = _mm512_add_epi64(_data_segment_masked, _data_segment);
+            _data_segment_masked         = _mm512_add_epi64(_data_segment_masked, _data_segment);
+
             _mm512_storeu_epi64((void*)data_segment_ptr, _data_segment_masked);
             _mm512_mask_i64scatter_epi64((void*)m_pointedAtTable.get(), (__mmask8)bitmap[i], _data_segment, _bit_mask, 0x1);
         }

@@ -27,7 +27,7 @@ namespace dconstruct {
             //printf("%s", text);
         }
 
-        void complete() override {
+        ~FileDisassembler() override {
             fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
             fclose(m_outfptr);
         }

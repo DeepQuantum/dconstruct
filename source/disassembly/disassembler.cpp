@@ -38,7 +38,7 @@ void Disassembler::insert_span_indent(const char* format, const u32 indent, Args
     insert_span(buffer, 0, text_format);
 }
 
-[[nodiscard]] b8 Disassembler::is_sid(const location loc) const noexcept {
+[[nodiscard]] b8 Disassembler::is_unmapped_sid(const location loc) const noexcept {
     const b8 in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
     const b8 is_fileptr = m_currentFile->is_file_ptr(loc);
     return loc.is_aligned() && in_range && !is_fileptr;
@@ -70,7 +70,7 @@ u8 Disassembler::insert_struct_or_arraylike(const location struct_location, cons
             return bytes_inserted;
         }
         const location next_struct_header = location().from(struct_location, -8);
-        if (!next_struct_header.is_aligned() || !is_sid(next_struct_header)) {
+        if (!next_struct_header.is_aligned() || !is_unmapped_sid(next_struct_header)) {
             insert_anonymous_array(struct_location, indent);
         } else if (next_struct_header.get<sid64>() == SID("array")) {
             insert_array(struct_location, get_size_array(struct_location, indent), indent);
@@ -203,7 +203,7 @@ u8 Disassembler::insert_next_struct_member(const location member, const u32 inde
         insert_span_fmt("int: %d\n", member.get<i32>());
         member_size = 4;
     }
-    else if (is_sid(member)) {
+    else if (is_unmapped_sid(member)) {
         str_ptr = lookup(member.get<sid64>());
         insert_span_fmt("sid: %s\n", str_ptr);
         member_size = 8;
@@ -470,7 +470,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     FunctionDisassembly functionDisassembly {
         std::move(lines),
         StackFrame(),
-        name
+        std::move(name)
     };
 
     functionDisassembly.m_stackFrame.m_symbolTable = location(lambda->m_pSymbols);

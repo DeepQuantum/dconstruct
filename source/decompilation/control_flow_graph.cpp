@@ -11,6 +11,14 @@
 
 namespace dconstruct {
 
+    constexpr const char* background_color = "#0F0F0F";
+    constexpr const char* accent_color = "#8ab4feff";
+    constexpr const char* conditional_true_color = "green";
+    constexpr const char* conditional_false_color = "red";
+    constexpr const char* fallthrough_color = accent_color;
+    constexpr const char* branch_color = "blue";
+    constexpr const char* loop_upwards_color = "purple";
+
     [[nodiscard]] std::string ControlFlowNode::get_label_html() const noexcept {
         std::stringstream ss;
 
@@ -27,10 +35,9 @@ namespace dconstruct {
         return ss.str();
     } 
 
-    ControlFlowGraph::ControlFlowGraph(const FunctionDisassembly *func) noexcept {
-        m_func = func;
+    ControlFlowGraph::ControlFlowGraph(const FunctionDisassembly *func) noexcept : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
-        m_nodes[0] = ControlFlowNode(0);
+        m_nodes.emplace(0, 0);
         ControlFlowNode *current_node = &m_nodes[0];
         ControlFlowNode *target_node, *following_node;
 
@@ -69,7 +76,7 @@ namespace dconstruct {
     }
 
     [[nodiscard]] const ControlFlowNode* ControlFlowGraph::get_node_with_last_line(const u32 line) const noexcept {
-        for (const auto& [node_start, node] : m_nodes) {
+        for (const auto& [_, node] : m_nodes) {
             if (node.m_endLine == line) {
                 return &node;
             }
@@ -79,7 +86,7 @@ namespace dconstruct {
 
     [[nodiscard]] ControlFlowNode* ControlFlowGraph::insert_node_at_line(const u32 start_line) noexcept {
         if (!m_nodes.contains(start_line)) {
-            return &(m_nodes[start_line] = ControlFlowNode(start_line));
+            m_nodes.emplace(start_line, start_line);
         }
         return &m_nodes.at(start_line);
     }
@@ -124,7 +131,7 @@ namespace dconstruct {
 
         agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
         agsafeset(returng, const_cast<char*>("rank"), "max", "");
-        agsafeset(g, const_cast<char*>("bgcolor"), "#0F0F0F", const_cast<char*>(""));
+        agsafeset(g, const_cast<char*>("bgcolor"), background_color, const_cast<char*>(""));
         agsafeset(g, const_cast<char*>("splines"), "ortho", const_cast<char*>(""));
         gvLayout(gvc, g, "dot");
         gvRenderFilename(gvc, g, "svg", path.c_str());
@@ -151,7 +158,7 @@ namespace dconstruct {
             agsafeset(loopheadg, const_cast<char*>("rank"), "source", "");
             agsafeset(looplatchg, const_cast<char*>("rank"), "max", "");
             agsafeset(loopg, const_cast<char*>("label"), loop_name.c_str(), const_cast<char *>(""));
-            agsafeset(loopg, const_cast<char*>("fontcolor"), "#8ADCFE", const_cast<char *>(""));
+            agsafeset(loopg, const_cast<char*>("fontcolor"), accent_color, const_cast<char *>(""));
             agsafeset(loopg, const_cast<char*>("fontname"), "Consolas", const_cast<char *>(""));
             agsafeset(loopg, const_cast<char*>("color"), "purple", const_cast<char *>(""));
         }
@@ -171,20 +178,16 @@ namespace dconstruct {
 
             agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
 
-            agsafeset(current_node, const_cast<char*>("fontcolor"), "#8ADCFE", "");
+            agsafeset(current_node, const_cast<char*>("fontcolor"), accent_color, "");
             agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
-            agsafeset(current_node, const_cast<char*>("color"), "#8ADCFE", "");
+            agsafeset(current_node, const_cast<char*>("color"), accent_color, "");
         }
         return { node_map, max_node };
     }
 
     void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const noexcept {
 
-        constexpr const char* conditional_true_color = "green";
-        constexpr const char* conditional_false_color = "red";
-        constexpr const char* fallthrough_color = "#8ADCFE";
-        constexpr const char* branch_color = "blue";
-        constexpr const char* loop_upwards_color = "purple";
+        
 
 
         for (const auto& [node_start, node] : m_nodes) {
