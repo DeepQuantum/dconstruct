@@ -1,9 +1,11 @@
+#pragma once
+
 #include "base.h"
 #include "instructions.h"
 #include "control_flow_graph.h"
-#include <sstream>
+#include "expressions.h"
 
-namespace dconstruct {
+namespace dconstruct::dcompiler {
 
 struct DecompiledFunction {};
 
@@ -11,7 +13,7 @@ class Decompiler {
 
 public:
 
-    explicit Decompiler() = delete;
+    Decompiler() = delete;
 
     explicit Decompiler(const FunctionDisassembly *func) {
         m_functions.push_back(func);
@@ -25,6 +27,7 @@ public:
 
 private:
     std::vector<const FunctionDisassembly*> m_functions{};
+    std::map<u32, expression*> m_expressionFrame;
 };
 
 }

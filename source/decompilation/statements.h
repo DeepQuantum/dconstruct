@@ -1,3 +1,5 @@
+#pragma once
+
 #include "base.h"
 #include "expressions.h"
 #include <vector>

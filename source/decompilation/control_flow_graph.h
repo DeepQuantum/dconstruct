@@ -32,7 +32,7 @@ namespace dconstruct {
 
     class ControlFlowGraph {
     public:
-        explicit ControlFlowGraph() = delete;
+        ControlFlowGraph() = delete;
         explicit ControlFlowGraph(const FunctionDisassembly *) noexcept;
         void find_loops() noexcept;
         void write_to_txt_file(const std::string& path = "graph.txt") const noexcept;

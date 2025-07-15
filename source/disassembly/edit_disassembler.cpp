@@ -137,16 +137,17 @@ namespace dconstruct {
             applied_at_least_one = true;
         }
         if (applied_at_least_one) {
-            complete();
+            output_edit_file();
         }
     }
 
-    void EditDisassembler::complete() {
+    void EditDisassembler::output_edit_file() {
         const std::filesystem::path edited_file_path = m_currentFile->m_path.parent_path() / (m_currentFile->m_path.stem().string() + "_edited.bin");
         std::cout << "creating edited file: " << edited_file_path << '\n';
         std::unique_ptr<std::byte[]> unmapped_bytes = m_currentFile->get_unmapped();
         FILE *out = fopen(edited_file_path.string().c_str(), "wb");
         fwrite(unmapped_bytes.get(), sizeof(unmapped_bytes[0]), m_currentFile->m_size, out);
+        fclose(out);
     }
 }
 
