@@ -462,7 +462,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
-    std::vector<FunctionDisassemblyLine> lines;
+    std::vector<function_disassembly_line> lines;
     lines.reserve(instructionCount);
     
     const std::string name = name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode));
@@ -494,7 +494,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return functionDisassembly;
 }
 
-void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemblyLine &line) {
+void Disassembler::process_instruction(StackFrame &stackFrame, function_disassembly_line &line) {
     constexpr u32 interpreted_buffer_size = 512;
     constexpr u32 disassembly_buffer_size = 256;
 
@@ -1392,7 +1392,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, FunctionDisassemb
     line.m_comment = std::string(interpreted);
 }
 
-void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const u32 indent) noexcept {
+void Disassembler::insert_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const u32 indent) noexcept {
     auto label_location = std::find(labels.begin(), labels.end(), line.m_location);
     if (label_location != labels.end()) {
         const u32 label_index = std::distance(labels.begin(), label_location);
@@ -1406,7 +1406,7 @@ void Disassembler::insert_label(const std::vector<u32> &labels, const FunctionDi
     }
 }
 
-void Disassembler::insert_goto_label(const std::vector<u32> &labels, const FunctionDisassemblyLine &line, const u32 func_size, const std::vector<FunctionDisassemblyLine> &lines) noexcept {
+void Disassembler::insert_goto_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const std::vector<function_disassembly_line> &lines) noexcept {
     if (line.m_target != -1) {
         u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target));
         if (line.m_target == func_size) {
