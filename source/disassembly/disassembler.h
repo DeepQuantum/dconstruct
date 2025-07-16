@@ -76,10 +76,10 @@ namespace dconstruct {
         void insert_variable(const SsDeclaration* var, const u32);
         void insert_on_block(const SsOnBlock* block, const u32);
         [[nodiscard]] FunctionDisassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
-        void process_instruction(StackFrame& stackFrame, FunctionDisassemblyLine& functionLine);
+        void process_instruction(StackFrame& stackFrame, function_disassembly_line& functionLine);
         void insert_function_disassembly_text(const FunctionDisassembly& functionDisassembly, const u32 indent);
-        void insert_label(const std::vector<u32>& labels, const FunctionDisassemblyLine& line, const u32 func_size, const u32 indent) noexcept;
-        void insert_goto_label(const std::vector<u32>& labels, const FunctionDisassemblyLine& line, const u32 func_size, const std::vector<FunctionDisassemblyLine>& lines) noexcept;
+        void insert_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent) noexcept;
+        void insert_goto_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines) noexcept;
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
     };

@@ -8,11 +8,12 @@ namespace dconstruct::dcompiler {
 
     struct expression {
     public:
-        virtual std::ostream& pseudo(std::ostream&) const noexcept = 0;
-        virtual std::ostream& ast(std::ostream&) const noexcept = 0;
+        virtual void pseudo(std::ostream&) const noexcept = 0;
+        virtual void ast(std::ostream&) const noexcept = 0;
+        virtual std::unique_ptr<expression> eval() const noexcept = 0;
     };
 
-    struct binary_expr: public expression {
+    struct binary_expr : public expression {
     public:
         binary_expr(const expression *lhs, const expression *rhs) : m_lhs(lhs), m_rhs(rhs) {};
 
@@ -33,59 +34,56 @@ namespace dconstruct::dcompiler {
     public:
         add_expr(const expression *lhs, const expression *rhs) : binary_expr(lhs, rhs) {};
 
-        std::ostream& pseudo(std::ostream& os) const noexcept override {
-            return m_lhs->pseudo(os) << " + ";
-            m_rhs->pseudo(os);
-        }
-
-        std::ostream& ast(std::ostream& os) const noexcept override {
-            os << "add[";
-            m_lhs->ast(os) << ", ";
-            m_rhs->ast(os) << ']';
-        }
+        void pseudo(std::ostream& os) const noexcept final;
+        void ast(std::ostream& os) const noexcept final;
+        std::unique_ptr<expression> eval() const noexcept final;
     };
 
     struct call_expr : public expression {
-
     private:
         const expression* m_callee;
         std::vector<const expression*> m_arguments;
 
-        std::ostream& pseudo(std::ostream &os) const noexcept override {
-            m_callee->pseudo(os) << "(";
-            for (const auto& arg : m_arguments) {
-                arg->pseudo(os);
-                os << ',';
-            }
-            return os << ')';
-        }
-
-        std::ostream& ast(std::ostream &os) const noexcept override {
-            os << "Call[callee=";
-            m_callee->ast(os);
-            os << ", arguments={";
-            for (const auto& arg : m_arguments) {
-                arg->ast(os) << ',';
-            }
-            return os << "}]";
-        }
+        void pseudo(std::ostream &os) const noexcept final;
+        void ast(std::ostream &os) const noexcept final;
     };
 
-    
-
-    struct literal : public unary_expr {
-    public:
-        std::ostream& ast(std::ostream& os) const noexcept override {
-            os << std::to_string(m_lhs.num);
-        };    
-    
-    private:
-        union literal_type {
-            std::string str;
-            u64 num;
-        } m_lhs;
-
+    struct assign_expr : public binary_expr {
+        void pseudo(std::ostream& os) const noexcept final;
+        void ast(std::ostream& os) const noexcept final;
     };
 
+    template<typename T>
+    struct literal : public expression {
+        std::unique_ptr<expression> eval() const noexcept final {
+            return std::make_unique<literal>(this);
+        }
 
+        const T& value() const noexcept {
+            return m_value;
+        }
+    
+    protected:
+        T m_value;
+    };
+
+    struct num_literal : public literal<u64> {
+        void pseudo(std::ostream& os) const noexcept override {
+            os << std::to_string(m_value);
+        }
+
+        void ast(std::ostream& os) const noexcept override {
+            os << "Literal[";
+            os << std::to_string(m_value);
+            os << "]";
+        }
+    };
+    
+    struct string_literal : public literal<std::string> {
+        void pseudo(std::ostream& os) const noexcept override {
+            os << m_value;
+        }
+
+        
+    };
 };

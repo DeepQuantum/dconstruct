@@ -31,6 +31,7 @@ namespace dconstruct {
             m_options = options;
             m_edits = edits;
         }
+        ~EditDisassembler() override {};
 
         void apply_file_edits() noexcept;
         void apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
@@ -41,6 +42,5 @@ namespace dconstruct {
 
         void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {};
         void output_edit_file();
-        ~EditDisassembler() override {};
     };
 }
