@@ -14,6 +14,11 @@ namespace dconstruct {
             m_options = options;
         }
 
+        ~FileDisassembler() override {
+            fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
+            fclose(m_outfptr);
+        }
+
     private:
         std::string m_outbuf;
         FILE* m_outfptr;
@@ -25,11 +30,6 @@ namespace dconstruct {
             }
             m_outbuf += text;
             //printf("%s", text);
-        }
-
-        ~FileDisassembler() override {
-            fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
-            fclose(m_outfptr);
         }
     };
 }

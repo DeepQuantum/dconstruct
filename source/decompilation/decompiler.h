@@ -7,7 +7,7 @@
 
 namespace dconstruct::dcompiler {
 
-struct DecompiledFunction {};
+struct decompiled_function {};
 
 class Decompiler { 
 
@@ -23,11 +23,12 @@ public:
         m_functions = funcs;
     };
 
-    std::vector<DecompiledFunction> decompile() noexcept;
+    std::vector<decompiled_function> decompile() noexcept;
 
 private:
     std::vector<const FunctionDisassembly*> m_functions{};
-    std::map<u32, expression*> m_expressionFrame;
+
+    void parse_basic_block(const control_flow_node&, expression_frame &) noexcept;
 };
 
 }

@@ -135,7 +135,7 @@ struct SymbolTableEntry {
     };
 };
 
-struct FunctionDisassemblyLine {
+struct function_disassembly_line {
     Instruction m_instruction;
     u64 m_location;
     std::string m_text;
@@ -144,9 +144,9 @@ struct FunctionDisassemblyLine {
     i64 m_target = -1;
     b8 m_isArgMove;
 
-    FunctionDisassemblyLine() = default;
+    function_disassembly_line() = default;
 
-    FunctionDisassemblyLine(u64 idx, Instruction* ptr) :
+    function_disassembly_line(u64 idx, Instruction* ptr) :
         m_instruction(ptr[idx]),
         m_location(idx),
         m_globalPointer(ptr),
@@ -220,7 +220,7 @@ struct StackFrame {
     location m_symbolTable;
     std::map<u32, SymbolTableEntry> symbolTableEntries;
     std::vector<u32> m_labels;
-    std::vector<FunctionDisassemblyLine> m_backwardsJumpLocs;
+    std::vector<function_disassembly_line> m_backwardsJumpLocs;
     u32 m_argCount = 0;
 
     StackFrame() : m_registers{}, symbolTableEntries{}, m_labels{} {
@@ -244,7 +244,7 @@ struct StackFrame {
 
 
 struct FunctionDisassembly {
-    std::vector<FunctionDisassemblyLine> m_lines;
+    std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;
 }; 

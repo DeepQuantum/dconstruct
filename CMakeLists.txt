@@ -16,69 +16,17 @@ file(GLOB BASE_SOURCE_FILES
     "${SOURCE_DIR}/decompilation/*.cpp"
 )
 
-# set(CMAKE_AUTOUIC ON)
-# set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
+include(FetchContent)
 
-# set(CMAKE_AUTOUIC_SEARCH_PATHS " ${SOURCE_DIR}/ui ")
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/v1.17.0.zip
+)
 
-# find_package(QT NAMES Qt6 COMPONENTS Widgets)
-# find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets)
+# Prevent GTest from overriding your compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-# file(GLOB UI_SOURCE_FILES
-# ${BASE_SOURCE_FILES}
-# " ${SOURCE_DIR}/main_gui.cpp "
-# " ${SOURCE_DIR}/mainwindow.cpp "
-# " ${SOURCE_DIR}/mainwindow.h "
-# " ${SOURCE_DIR}/cfg/*.cpp "
-# " ${SOURCE_DIR}/cfg/*.h "
-# " ${SOURCE_DIR}/ui/*.ui "
-# )
-
-# # --- GUI TARGET ---
-# if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-# qt_add_executable(tlou2_disasm_gui
-# MANUAL_FINALIZATION
-# ${UI_SOURCE_FILES}
-# )
-# else()
-# add_executable(tlou2_disasm_gui
-# ${GUI_MAIN}
-# ${UI_SOURCE_FILES}
-# )
-# endif()
-
-# target_link_libraries(tlou2_disasm_gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets stdc++fs)
-
-# target_compile_options(tlou2_disasm_gui PRIVATE
-# $<$<CONFIG:Release>:-Ofast>
-# $<$<CONFIG:Debug>:-Og -g -Wall -Wextra>
-# $<$<CONFIG:Profile>:-Ofast -g -Wall -Wextra -pg>
-# )
-
-# set_target_properties(tlou2_disasm_gui PROPERTIES
-# MACOSX_BUNDLE TRUE
-# WIN32_EXECUTABLE TRUE
-# MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-# MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-# )
-
-# # Optional bundle ID
-# if(${QT_VERSION} VERSION_LESS 6.1.0)
-# set_target_properties(tlou2_disasm_gui PROPERTIES
-# MACOSX_BUNDLE_GUI_IDENTIFIER com.example.tlou2_disasm
-# )
-# endif()
-
-# install(TARGETS tlou2_disasm_gui
-# BUNDLE DESTINATION .
-# LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-# RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-# )
-
-# if(QT_VERSION_MAJOR EQUAL 6)
-# qt_finalize_executable(tlou2_disasm_gui)
-# endif()
+FetchContent_MakeAvailable(googletest)
 
 # --- CLI TARGET ---
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
@@ -132,3 +80,20 @@ add_custom_command(
 add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
 add_dependencies(dconstruct generate_buildinfo)
+
+set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
+
+enable_testing()
+
+add_executable(
+    disassembler_test
+    ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
+)
+
+target_link_libraries(
+    disassembler_test
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(disassembler_test)
