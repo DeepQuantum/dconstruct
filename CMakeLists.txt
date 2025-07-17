@@ -61,6 +61,11 @@ target_link_libraries(dconstruct PRIVATE
     $<$<CONFIG:CreateProfile>: gcov>
 )
 
+target_include_directories(dconstruct PRIVATE
+    "${SOURCE_DIR}/disassembly"
+    "${SOURCE_DIR}/decompilation"
+)
+
 # add_custom_command(
 # TARGET dconstruct POST_BUILD
 # COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -88,6 +93,11 @@ enable_testing()
 add_executable(
     disassembler_test
     ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
+)
+
+target_include_directories(disassembler_test PRIVATE
+    "${SOURCE_DIR}/disassembly"
+    "${SOURCE_DIR}/decompilation"
 )
 
 target_link_libraries(

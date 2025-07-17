@@ -24,6 +24,8 @@ namespace dconstruct {
     return hash_string;
 }
 
+Disassembler::~Disassembler() = default;
+
 template<TextFormat text_format, typename... Args>
 void Disassembler::insert_span_fmt(const char *format, Args ...args) {
     char buffer[512];
@@ -225,7 +227,6 @@ void Disassembler::disassemble() {
         insert_span("\n\n");
         insert_entry(m_currentFile->m_dcheader->m_pStartOfData + i);
     }
-    complete();
 }
 
 void Disassembler::insert_entry(const Entry *entry) {
@@ -248,7 +249,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            auto dcompiler = Decompiler(&afunction);
+            auto dcompiler = dcompiler::Decompiler(&afunction);
             static b8 first = true;
             if (first) {
                 dcompiler.decompile();

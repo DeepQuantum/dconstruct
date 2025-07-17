@@ -31,7 +31,7 @@ namespace dconstruct {
             m_options = options;
             m_edits = edits;
         }
-        ~EditDisassembler() override {};
+        ~EditDisassembler() override = default;
 
         void apply_file_edits() noexcept;
         void apply_edit(const u64 offset, const u32 member_index, const BinaryFileEdit& value) noexcept;
