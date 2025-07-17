@@ -3,7 +3,7 @@
 #include "base.h"
 #include "instructions.h"
 #include "control_flow_graph.h"
-#include "expressions.h"
+#include "expression_frame.h"
 
 namespace dconstruct::dcompiler {
 

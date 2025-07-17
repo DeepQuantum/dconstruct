@@ -1,3 +1,5 @@
+#pragma once
+
 #include "expressions.h"
 #include <unordered_map>
 

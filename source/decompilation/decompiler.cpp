@@ -31,9 +31,12 @@ std::vector<decompiled_function> Decompiler::decompile() noexcept {
 void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame) noexcept {
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
-        switch(line.m_instruction.opcode) {
+        switch(istr.opcode) {
             case Move: {
-                expression_frame.move(line.m_instruction.destination, line.m_instruction.operand1);
+                expression_frame.move(istr.destination, istr.operand1);
+            }
+            default: {
+                return;
             }
         }
     }

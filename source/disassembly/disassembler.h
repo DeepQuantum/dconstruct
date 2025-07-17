@@ -36,12 +36,11 @@ namespace dconstruct {
     public:
         void disassemble();
         u64 m_versionNumber = 0x1;
-
+        virtual ~Disassembler() = 0;
     protected:
         Disassembler() = default;
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) = 0;
-        virtual ~Disassembler() = 0;
-
+        
         BinaryFile* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
         DisassemblerOptions m_options;
