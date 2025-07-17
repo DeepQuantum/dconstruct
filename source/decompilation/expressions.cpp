@@ -3,7 +3,7 @@
 namespace dconstruct::dcompiler {
 
 void add_expr::pseudo(std::ostream& os) const noexcept {
-    return m_lhs->pseudo(os);
+    m_lhs->pseudo(os);
     os << " + ";
     m_rhs->pseudo(os);
 }
@@ -22,6 +22,7 @@ void add_expr::ast(std::ostream& os) const noexcept {
         const u64 right_num = static_cast<const num_literal*>(m_rhs)->value();
         return std::make_unique<num_literal>(left_num + right_num);
     }
+    return nullptr;
 }
 
 void call_expr::pseudo(std::ostream &os) const noexcept {
@@ -35,7 +36,7 @@ void call_expr::pseudo(std::ostream &os) const noexcept {
 }
 
 void call_expr::ast(std::ostream &os) const noexcept {
-    os << "Call[callee=";
+    os << "call[callee=";
     m_callee->ast(os);
     os << ", arguments={";
     for (const auto& arg : m_arguments) {
@@ -56,6 +57,39 @@ void assign_expr::ast(std::ostream& os) const noexcept {
     m_lhs->ast(os);
     os << ", ";
     m_rhs->ast(os);
+}
+
+std::unique_ptr<expression> num_literal::eval() const noexcept {
+    return std::make_unique<num_literal>(*this);
+}
+
+std::unique_ptr<expression> string_literal::eval() const noexcept {
+    return std::make_unique<string_literal>(*this);
+}
+
+template<typename T>
+const T& literal<T>::value() const noexcept {
+    return m_value;
+}
+
+void num_literal::pseudo(std::ostream& os) const noexcept {
+    os << std::to_string(m_value);
+}
+
+void num_literal::ast(std::ostream& os) const noexcept {
+    os << "num_literal[";
+    os << std::to_string(m_value);
+    os << "]";
+}
+
+void string_literal::pseudo(std::ostream& os) const noexcept {
+    os << m_value;
+}
+
+void string_literal::ast(std::ostream& os) const noexcept {
+    os << "string_literal[";
+    os << m_value;
+    os << "]";
 }
 
 }

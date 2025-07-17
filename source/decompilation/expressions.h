@@ -53,37 +53,38 @@ namespace dconstruct::dcompiler {
         void ast(std::ostream& os) const noexcept final;
     };
 
+    struct compare_expr : public binary_expr {
+
+    private:
+        enum comp_type {
+            LT,
+            LET,
+            GT,
+            GET,
+            EQ
+        } m_compType;
+    };
+
     template<typename T>
     struct literal : public expression {
-        std::unique_ptr<expression> eval() const noexcept final {
-            return std::make_unique<literal>(this);
-        }
-
-        const T& value() const noexcept {
-            return m_value;
-        }
-    
+        const T& value() const noexcept;
     protected:
         T m_value;
     };
 
     struct num_literal : public literal<u64> {
-        void pseudo(std::ostream& os) const noexcept override {
-            os << std::to_string(m_value);
+        num_literal(const u64 num)  {
+            m_value = num;
         }
 
-        void ast(std::ostream& os) const noexcept override {
-            os << "Literal[";
-            os << std::to_string(m_value);
-            os << "]";
-        }
+        void pseudo(std::ostream& os) const noexcept final;
+        void ast(std::ostream& os) const noexcept final;
+        std::unique_ptr<expression> eval() const noexcept final;
     };
     
     struct string_literal : public literal<std::string> {
-        void pseudo(std::ostream& os) const noexcept override {
-            os << m_value;
-        }
-
-        
+        void pseudo(std::ostream& os) const noexcept final;
+        void ast(std::ostream& os) const noexcept final;
+        std::unique_ptr<expression> eval() const noexcept final;
     };
 };
