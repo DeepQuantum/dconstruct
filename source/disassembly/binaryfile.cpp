@@ -15,7 +15,7 @@ namespace dconstruct {
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {
-            std::cout << "error: coudln't open " << path << '\n';
+            std::cerr << "error: coudln't open " << path << '\n';
             exit(-1);
         }
 
@@ -31,7 +31,7 @@ namespace dconstruct {
         constexpr u32 version = 0x1;
 
         if (m_size == 0) {
-            std::cerr << "error: file is empty.\n";
+            std::cerr << "error: " << m_path.string() << " is empty.\n";
             return false;
         }
 

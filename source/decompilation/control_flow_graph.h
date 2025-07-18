@@ -33,7 +33,7 @@ namespace dconstruct {
     class ControlFlowGraph {
     public:
         ControlFlowGraph() = delete;
-        explicit ControlFlowGraph(const FunctionDisassembly *) noexcept;
+        explicit ControlFlowGraph(const function_disassembly *) noexcept;
         void find_loops() noexcept;
         void write_to_txt_file(const std::string& path = "graph.txt") const noexcept;
         void write_image(const std::string &path = "graph.svg") const noexcept;
@@ -49,7 +49,7 @@ namespace dconstruct {
         std::vector<control_flow_loop> m_loops{};
         std::map<control_flow_node*, std::vector<control_flow_node*>> m_predecessors{};
         std::map<u32, u32> m_immediateDominators{};
-        const FunctionDisassembly *m_func;
+        const function_disassembly *m_func;
 
         [[nodiscard]] control_flow_node* insert_node_at_line(const u32 start_line) noexcept;
         [[nodiscard]] const control_flow_node* get_node_with_last_line(const u32 line) const noexcept;

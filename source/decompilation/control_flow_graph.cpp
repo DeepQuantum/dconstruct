@@ -35,7 +35,7 @@ namespace dconstruct {
         return ss.str();
     } 
 
-    ControlFlowGraph::ControlFlowGraph(const FunctionDisassembly *func) noexcept : m_func(func)  {
+    ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) noexcept : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
         m_nodes.emplace(0, 0);
         control_flow_node *current_node = &m_nodes[0];

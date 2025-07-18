@@ -254,7 +254,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             if (first) {
                 dcompiler.decompile();
             }
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(afunction));
+            std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
             break;
@@ -416,7 +416,7 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
         insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, lookup(track_ptr->m_trackId));
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
-            std::unique_ptr<FunctionDisassembly> function = std::make_unique<FunctionDisassembly>(std::move(create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
+            std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 3);
             m_currentFile->m_functions.push_back(std::move(function));
             insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
@@ -459,7 +459,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     }
 }
 
-[[nodiscard]] FunctionDisassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const sid64 name_id) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const sid64 name_id) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -468,7 +468,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     
     const std::string name = name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode));
 
-    FunctionDisassembly functionDisassembly {
+    function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(),
         std::move(name)
@@ -1420,7 +1420,7 @@ void Disassembler::insert_goto_label(const std::vector<u32> &labels, const funct
     }
 }
 
-void Disassembler::insert_function_disassembly_text(const FunctionDisassembly &functionDisassembly, const u32 indent) {
+void Disassembler::insert_function_disassembly_text(const function_disassembly &functionDisassembly, const u32 indent) {
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[512] = {0};
     

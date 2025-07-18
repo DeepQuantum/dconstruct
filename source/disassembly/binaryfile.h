@@ -58,7 +58,7 @@ namespace dconstruct {
         location m_relocTable;
         std::map<sid64, const std::string> m_sidCache;
         std::set<p64> m_emittedStructs{};
-        std::vector<std::unique_ptr<FunctionDisassembly>> m_functions;
+        std::vector<std::unique_ptr<function_disassembly>> m_functions;
         [[nodiscard]] b8 is_file_ptr(const location) const noexcept;
         [[nodiscard]] b8 gets_pointed_at(const location) const noexcept;
         [[nodiscard]] b8 is_string(const location) const noexcept;
