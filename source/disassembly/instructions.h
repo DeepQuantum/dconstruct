@@ -243,7 +243,7 @@ struct StackFrame {
 };
 
 
-struct FunctionDisassembly {
+struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;

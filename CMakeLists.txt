@@ -38,10 +38,7 @@ target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Debug>:-O0 -g3 -flto -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
-)
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
@@ -92,17 +89,23 @@ enable_testing()
 
 add_executable(
     disassembler_test
+    ${BASE_SOURCE_FILES}
     ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
+)
+target_link_libraries(
+    disassembler_test
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    $<$<CXX_COMPILER_ID:GNU>: tbb12>
+    $<$<CONFIG:CreateProfile>: gcov>
+    GTest::gtest_main
 )
 
 target_include_directories(disassembler_test PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
-)
-
-target_link_libraries(
-    disassembler_test
-    GTest::gtest_main
 )
 
 include(GoogleTest)

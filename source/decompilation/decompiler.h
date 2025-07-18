@@ -15,18 +15,18 @@ public:
 
     Decompiler() = delete;
 
-    explicit Decompiler(const FunctionDisassembly *func) {
+    explicit Decompiler(const function_disassembly *func) {
         m_functions.push_back(func);
     };
 
-    explicit Decompiler(const std::vector<const FunctionDisassembly*> &funcs) {
+    explicit Decompiler(const std::vector<const function_disassembly*> &funcs) {
         m_functions = funcs;
     };
 
     std::vector<decompiled_function> decompile() noexcept;
 
 private:
-    std::vector<const FunctionDisassembly*> m_functions{};
+    std::vector<const function_disassembly*> m_functions{};
 
     void parse_basic_block(const control_flow_node&, expression_frame &) noexcept;
 };
