@@ -1,0 +1,21 @@
+
+ellie = #12312312312;
+
+ellie - get - skeleton()
+{
+    return 0;
+}
+
+0x123(sid char_name, u64 count)
+{
+    if (count < 5)
+    {
+        return;
+    }
+    u16 i = 0;
+    while (i < 10)
+    {
+        characters[char_name] = count;
+    }
+    return 0;
+}
