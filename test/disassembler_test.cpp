@@ -49,7 +49,7 @@ TEST(DISASSEMBLER, NonDCFileVersion) {
 
     testing::internal::CaptureStderr();
 
-    b8 is_dc_file = random.dc_setup();
+    const b8 is_dc_file = random.dc_setup();
 
     const std::string output = testing::internal::GetCapturedStderr().substr(0, crash_msg.size());
     
