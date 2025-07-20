@@ -7,24 +7,6 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    void print_tokens(const std::vector<compiler::token> &tokens) {
-        for (const auto& token : tokens) {
-            std::string literal;
-            switch(token.m_type) {
-                case compiler::token_type::STRING: literal = std::get<std::string>(token.m_literal); break;
-                case compiler::token_type::INT:
-                case compiler::token_type::HEX: literal = std::to_string(std::get<u64>(token.m_literal)); break;
-                case compiler::token_type::DOUBLE: literal = std::to_string(std::get<f64>(token.m_literal)); break;
-            }
-            std::cout 
-                << "type: " << token.m_type
-                << " lexeme: " << token.m_lexeme
-                << " literal: " << literal
-                << " line: " << token.m_line
-                << '\n';
-        }
-    }
-
     TEST(COMPILER, LexerEmpty) {
         const std::string empty = "";
         const auto [tokens, errors] = get_tokens(empty);
@@ -75,7 +57,7 @@ namespace dconstruct::testing {
         };
 
         const std::vector<compiler::lexing_error> expected_errors = {
-            compiler::lexing_error(1, "invalid token @")
+            compiler::lexing_error(1, "invalid token '@'")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -87,8 +69,7 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::SLASH, "/", 0ULL, 1),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 1),
+            compiler::token(compiler::token_type::SLASH_EQUAL, "/=", 0ULL, 1),
             compiler::token(compiler::token_type::DOT, ".", 0ULL, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0ULL, 2),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
@@ -102,11 +83,9 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0ULL, 1),
             compiler::token(compiler::token_type::STRING, "\"blackeyeGalaxy_abc\"", "blackeyeGalaxy_abc", 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
         };
 
@@ -168,6 +147,21 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::IDENTIFIER, "abc", 0ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
         };
+        
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerSimpleSID) {
+        const std::string chars = "1.3-=#ellie";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::DOUBLE, "1.3", 1.3, 1),
+            compiler::token(compiler::token_type::MINUS_EQUAL, "-=", 0ULL, 1),
+            compiler::token(compiler::token_type::SID, "#ellie", "ellie", 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+        };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
     }
@@ -182,6 +176,19 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::IDENTIFIER, "def", 0ULL, 2),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 2),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
+        };
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerSimpleKeywords) {
+        const std::string chars = "return;";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::RETURN, "return", 0ULL, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
