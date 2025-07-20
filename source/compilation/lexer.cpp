@@ -3,7 +3,7 @@
 
 namespace dconstruct::compiler {
 
-const std::vector<token>& Lexer::scan_tokens() noexcept {
+[[nodiscard]] const std::vector<token>& Lexer::scan_tokens() noexcept {
     while (!reached_eof()) {
         m_start = m_current;
         token t = scan_token();
@@ -17,24 +17,28 @@ const std::vector<token>& Lexer::scan_tokens() noexcept {
     return m_tokens;
 }
 
-const std::vector<lexing_error>& Lexer::get_errors() const noexcept {
+[[nodiscard]] const std::vector<lexing_error>& Lexer::get_errors() const noexcept {
     return m_errors;
 }
 
-b8 Lexer::reached_eof() const noexcept {
+[[nodiscard]] b8 Lexer::reached_eof() const noexcept {
     return m_current >= m_source.size();
 }
 
-token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const noexcept {
-    const std::string text = m_source.substr(m_start, m_current - m_start);
+[[nodiscard]] token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const noexcept {
+    const std::string text = make_current_lexeme();
     return token(type, text, literal, m_line);
+}
+
+[[nodiscard]] std::string Lexer::make_current_lexeme() const noexcept {
+    return m_source.substr(m_start, m_current - m_start);
 }
 
 char Lexer::advance() noexcept {
     return m_source.at(m_current++);
 }
 
-b8 Lexer::match(const char expected) noexcept {
+[[nodiscard]] b8 Lexer::match(const char expected) noexcept {
     if (reached_eof()) {
         return false;
     }
@@ -45,21 +49,21 @@ b8 Lexer::match(const char expected) noexcept {
     return true;
 }
 
-char Lexer::peek() const noexcept {
+[[nodiscard]] char Lexer::peek() const noexcept {
     if (reached_eof()) {
         return '\0';
     }
     return m_source.at(m_current);
 }
 
-char Lexer::peek_next() const noexcept {
+[[nodiscard]] char Lexer::peek_next() const noexcept {
     if (m_current + 1 >= m_source.size()) {
         return '\0';
     }
     return m_source.at(m_current + 1);
 }
 
-token Lexer::make_string() noexcept {
+[[nodiscard]] token Lexer::make_string() noexcept {
     while (peek() != '"' && !reached_eof()) {
         if (peek() == '\n') {
             m_line++;
@@ -71,12 +75,28 @@ token Lexer::make_string() noexcept {
         return token(EMPTY, "");
     }
     advance();
-    const std::string lexeme = m_source.substr(m_start, m_current - m_start);
+    const std::string lexeme = make_current_lexeme();
     const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 2);
     return token(STRING, lexeme, literal, m_line);
 }
 
-token Lexer::make_number() noexcept {
+[[nodiscard]] b8 Lexer::is_sid_char(const char c) const noexcept {
+    return std::isdigit(c) || std::isalpha(c) || c == '-';
+}
+
+
+
+[[nodiscard]] token Lexer::make_sid() noexcept {
+    char current = peek();
+    while (is_sid_char(current)) {
+        advance();
+        current = peek();
+    }
+    const std::string literal = m_source.substr(m_start + 1, m_current - m_start);
+    return make_current_token(SID, literal);
+}
+
+[[nodiscard]] token Lexer::make_number() noexcept {
     b8 is_double = false;
     b8 is_hex = false;
     if (peek() == 'x' || peek() == 'X') {
@@ -94,25 +114,30 @@ token Lexer::make_number() noexcept {
         }
     }
     if (is_hex) {
-        const u64 literal = std::stoull(m_source.substr(m_start, m_current - m_start), 0, 16);
+        const u64 literal = std::stoull(make_current_lexeme(), 0, 16);
         return make_current_token(HEX, literal);
     }
     if (is_double) {
-        return make_current_token(DOUBLE, std::stod(m_source.substr(m_start, m_current - m_start)));
+        return make_current_token(DOUBLE, std::stod(make_current_lexeme()));
     }
-    return make_current_token(INT, std::stoull(m_source.substr(m_start, m_current - m_start)));
+    return make_current_token(INT, std::stoull(make_current_lexeme()));
 }
 
-token Lexer::make_identifier() noexcept {
+[[nodiscard]] token Lexer::make_identifier() noexcept {
     char current = peek();
-    while (std::isalpha(current) || std::isdigit(current)) {
+    while (std::isalpha(current) || std::isdigit(current) || current == '_') {
         advance();
         current = peek();
+    }
+    const std::string identifier = make_current_lexeme();
+    if (m_keywords.contains(identifier.c_str())) {
+        const token_type keyword_token_type = m_keywords.at(identifier.c_str());
+        return make_current_token(keyword_token_type);
     }
     return make_current_token(IDENTIFIER);
 }
 
-token Lexer::scan_token() noexcept {
+[[nodiscard]] token Lexer::scan_token() noexcept {
     const char c = advance();
     switch(c) {
         case '(': return make_current_token(LEFT_PAREN); 
@@ -123,20 +148,25 @@ token Lexer::scan_token() noexcept {
         case ']': return make_current_token(RIGHT_SQUARE); 
         case ',': return make_current_token(COMMA); 
         case '.': return make_current_token(DOT); 
-        case '-': return make_current_token(MINUS); 
-        case '+': return make_current_token(PLUS); 
         case ';': return make_current_token(SEMICOLON); 
-        case '*': return make_current_token(STAR);
+        case '+': return make_current_token(match('=') ? PLUS_EQUAL : match('+') ? PLUS_PLUS : PLUS); 
+        case '-': return make_current_token(match('=') ? MINUS_EQUAL :  match('-') ? MINUS_MINUS : MINUS); 
+        case '*': return make_current_token(match('=') ? STAR_EQUAL : STAR);
         case '!': return make_current_token(match('=') ? BANG_EQUAL : BANG);
         case '=': return make_current_token(match('=') ? EQUAL_EQUAL : EQUAL);
         case '<': return make_current_token(match('=') ? LESS_EQUAL : LESS);
         case '>': return make_current_token(match('=') ? GREATER_EQUAL : GREATER);
+        case '|': return make_current_token(match('|') ? PIPE_PIPE : PIPE);
+        case '^': return make_current_token(match('^') ? CARET_CARET : CARET);
+        case '&': return make_current_token(match('&') ? AMPERSAND_AMPERSAND : AMPERSAND);
         case '/': {
             if (match('/')) {
                 while (peek() != '\n' && !reached_eof()) {
                     advance();
                 }
                 break;
+            } else if (match('=')) {
+                return make_current_token(SLASH_EQUAL);
             } else {
                 return make_current_token(SLASH);
             }
@@ -150,14 +180,15 @@ token Lexer::scan_token() noexcept {
             m_line++;
             break;
         }
+        case '#': return make_sid();
         case '"': return make_string();
         default: {
             if (std::isdigit(c)) {
                 return make_number();
-            } else if (std::isalpha(c)) {
+            } else if (std::isalpha(c) || c == '_') {
                 return make_identifier();
             }
-            m_errors.emplace_back(m_line, std::string("invalid token ") + c);
+            m_errors.emplace_back(m_line, std::string("invalid token '") + c + '\'');
             break;
         }
     }
