@@ -1,6 +1,7 @@
 #include "base.h"
-#include <vector>
 #include "tokens.h"
+#include <vector>
+#include <ostream>
 
 namespace dconstruct::compiler {
 
@@ -14,10 +15,14 @@ struct lexing_error {
 };
 
 
+inline std::ostream& operator<<(std::ostream& os, const lexing_error &l) {
+    return os << "line: " << l.m_line << " message: " << l.m_message;
+}
+
 class Lexer {
 public:
     Lexer(const std::string &source) : m_source(source) {};
-    std::vector<token>& scan_tokens() noexcept;
+    const std::vector<token>& scan_tokens() noexcept;
     const std::vector<lexing_error>& get_errors() const noexcept;
 
 private:
@@ -36,6 +41,7 @@ private:
     token make_current_token(const token_type, const token::t_literal& = 0ULL) const noexcept;
     token make_string() noexcept;
     token make_number() noexcept;
+    token make_identifier() noexcept;
     char advance() noexcept;
     b8 match(const char) noexcept;
     char peek() const noexcept;

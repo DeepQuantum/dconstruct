@@ -11,7 +11,7 @@ namespace dconstruct::compiler {
         GREATER, GREATER_EQUAL,
         LESS, LESS_EQUAL,
 
-        IDENTIFIER, STRING, INT, DOUBLE, SID,
+        IDENTIFIER, STRING, INT, DOUBLE, HEX, SID,
 
         ELSE, FALSE, IF, _NULL, RETURN, TRUE, WHILE,
         

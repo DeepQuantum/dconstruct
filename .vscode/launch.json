@@ -28,6 +28,32 @@
         ]
     },
     {
+        "name": "Debug Tests cli",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/dconstruct_test.exe",
+        "args": [
+        ],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/build",
+        "preLaunchTask": "build",
+        "environment": [],
+        "externalConsole": true,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
+    {
         "name": "Launch gui",
         "type": "cppdbg",
         "request": "launch",
