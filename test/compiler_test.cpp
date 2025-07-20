@@ -12,7 +12,8 @@ namespace dconstruct::testing {
             std::string literal;
             switch(token.m_type) {
                 case compiler::token_type::STRING: literal = std::get<std::string>(token.m_literal); break;
-                case compiler::token_type::INT: literal = std::to_string(std::get<u64>(token.m_literal)); break;
+                case compiler::token_type::INT:
+                case compiler::token_type::HEX: literal = std::to_string(std::get<u64>(token.m_literal)); break;
                 case compiler::token_type::DOUBLE: literal = std::to_string(std::get<f64>(token.m_literal)); break;
             }
             std::cout 
@@ -63,6 +64,22 @@ namespace dconstruct::testing {
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerInvalidCharacter) {
+        const std::string chars = "@";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+        };
+
+        const std::vector<compiler::lexing_error> expected_errors = {
+            compiler::lexing_error(1, "invalid token @")
+        };
+
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors, expected_errors);
     }
 
     TEST(COMPILER, LexerComment) {
@@ -136,6 +153,35 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::DOUBLE, "123.45", 123.45, 1),
             compiler::token(compiler::token_type::STRING, "\"a\"", "a", 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+        };
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexerSimpleHex) {
+        const std::string chars = "0x123.abc";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::HEX, "0x123", 0x123ULL, 1),
+            compiler::token(compiler::token_type::DOT, ".", 0ULL, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+        };
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
+
+    TEST(COMPILER, LexerSimpleIdentifier) {
+        const std::string chars = "abc\ndef;";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0ULL, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "def", 0ULL, 2),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 2),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);

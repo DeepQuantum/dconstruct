@@ -3,7 +3,7 @@
 
 namespace dconstruct::compiler {
 
-std::vector<token>& Lexer::scan_tokens() noexcept {
+const std::vector<token>& Lexer::scan_tokens() noexcept {
     while (!reached_eof()) {
         m_start = m_current;
         token t = scan_token();
@@ -27,7 +27,6 @@ b8 Lexer::reached_eof() const noexcept {
 
 token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const noexcept {
     const std::string text = m_source.substr(m_start, m_current - m_start);
-    std::string message = "hello";
     return token(type, text, literal, m_line);
 }
 
@@ -79,20 +78,38 @@ token Lexer::make_string() noexcept {
 
 token Lexer::make_number() noexcept {
     b8 is_double = false;
+    b8 is_hex = false;
+    if (peek() == 'x' || peek() == 'X') {
+        is_hex = true;
+        advance();
+    }
     while (std::isdigit(peek())) {
         advance();
     }
-    if (peek() == '.' && std::isdigit(peek_next())) {
+    if (peek() == '.' && std::isdigit(peek_next()) && !is_hex) {
         is_double = true;
         advance();
         while (std::isdigit(peek())) {
             advance();
         }
     }
+    if (is_hex) {
+        const u64 literal = std::stoull(m_source.substr(m_start, m_current - m_start), 0, 16);
+        return make_current_token(HEX, literal);
+    }
     if (is_double) {
         return make_current_token(DOUBLE, std::stod(m_source.substr(m_start, m_current - m_start)));
     }
     return make_current_token(INT, std::stoull(m_source.substr(m_start, m_current - m_start)));
+}
+
+token Lexer::make_identifier() noexcept {
+    char current = peek();
+    while (std::isalpha(current) || std::isdigit(current)) {
+        advance();
+        current = peek();
+    }
+    return make_current_token(IDENTIFIER);
 }
 
 token Lexer::scan_token() noexcept {
@@ -137,8 +154,10 @@ token Lexer::scan_token() noexcept {
         default: {
             if (std::isdigit(c)) {
                 return make_number();
+            } else if (std::isalpha(c)) {
+                return make_identifier();
             }
-            m_errors.emplace_back(m_line, "invalid token " + c);
+            m_errors.emplace_back(m_line, std::string("invalid token ") + c);
             break;
         }
     }
