@@ -14,6 +14,8 @@ file(GLOB BASE_SOURCE_FILES
     "${SOURCE_DIR}/disassembly/*.h"
     "${SOURCE_DIR}/decompilation/*.h"
     "${SOURCE_DIR}/decompilation/*.cpp"
+    "${SOURCE_DIR}/compilation/*.cpp"
+    "${SOURCE_DIR}/compilation/*.h"
 )
 
 include(FetchContent)
@@ -88,12 +90,14 @@ set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 enable_testing()
 
 add_executable(
-    disassembler_test
+    dconstruct_test
     ${BASE_SOURCE_FILES}
     ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
 )
+
 target_link_libraries(
-    disassembler_test
+    dconstruct_test
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
@@ -103,10 +107,11 @@ target_link_libraries(
     GTest::gtest_main
 )
 
-target_include_directories(disassembler_test PRIVATE
+target_include_directories(dconstruct_test PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
+    "${SOURCE_DIR}/compilation"
 )
 
 include(GoogleTest)
-gtest_discover_tests(disassembler_test)
+gtest_discover_tests(dconstruct_test)
