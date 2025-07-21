@@ -1,7 +1,8 @@
 #pragma once
 
-#include "expressions.h"
+#include "binary_expressions.h"
 #include <unordered_map>
+#include <type_traits>
 
 namespace dconstruct::dcompiler {
 
@@ -37,12 +38,13 @@ namespace dconstruct::dcompiler {
             m_expressions[dst] = m_expressions[src]->eval();
         }
 
-        template<typename T>
-        std::unique_ptr<const expression> binary_op(const Instruction& istr) {
+        template<requires_binary_expr binary_expr_t>
+        void apply_binary_op(const Instruction& istr) {
             finalize_expression(istr.destination);
-            const std::unique_ptr<const expression> &lhs = m_expressions[istr.operand1];
-            const std::unique_ptr<const expression> &rhs = m_expressions[istr.operand2];
-            m_expressions[istr.destination] = std::make_unique<T>(lhs, rhs);
+            m_expressions[istr.destination] = std::make_unique<binary_expr_t>(
+                std::move(m_expressions[istr.operand1]), 
+                std::move(m_expressions[istr.operand2])
+            );
         }
     };
 }

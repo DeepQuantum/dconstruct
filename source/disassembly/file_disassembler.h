@@ -19,6 +19,11 @@ namespace dconstruct {
             fclose(m_outfptr);
         }
 
+        template<typename T>
+        const T* get_value_ptr_at(const u64 offset) const noexcept {
+            return reinterpret_cast<const T*>(&m_currentFile->m_bytes[offset]);
+        }
+
     private:
         std::string m_outbuf;
         FILE* m_outfptr;
