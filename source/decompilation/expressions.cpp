@@ -1,15 +1,16 @@
 #include "expressions.h"
+#include "binary_expressions.h"
 
 namespace dconstruct::dcompiler {
 
-void add_expr::pseudo(std::ostream& os) const noexcept {
+void binary_expr::pseudo(std::ostream& os) const noexcept {
     m_lhs->pseudo(os);
-    os << " + ";
+    os << ' ' << get_op_char() << ' ';
     m_rhs->pseudo(os);
 }
 
-void add_expr::ast(std::ostream& os) const noexcept {
-    os << "add[";
+void binary_expr::ast(std::ostream& os) const noexcept {
+    os << get_op_name() << '[';
     m_lhs->ast(os);
     os << ", ";
     m_rhs->ast(os);
@@ -24,6 +25,19 @@ void add_expr::ast(std::ostream& os) const noexcept {
     }
     return nullptr;
 }
+
+[[nodiscard]] std::unique_ptr<const expression> mul_expr::eval() const noexcept{ 
+    return nullptr;
+}
+
+[[nodiscard]] std::unique_ptr<const expression> sub_expr::eval() const noexcept{ 
+    return nullptr;
+}
+
+[[nodiscard]] std::unique_ptr<const expression> div_expr::eval() const noexcept{ 
+    return nullptr;
+}
+
 
 void call_expr::pseudo(std::ostream &os) const noexcept {
     m_callee->pseudo(os);

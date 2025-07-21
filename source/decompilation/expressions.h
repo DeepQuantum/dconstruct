@@ -6,6 +6,8 @@
 
 namespace dconstruct::dcompiler {
 
+    
+
     struct expression {
     public:
         virtual void pseudo(std::ostream&) const noexcept = 0;
@@ -13,15 +15,7 @@ namespace dconstruct::dcompiler {
         virtual std::unique_ptr<const expression> eval() const noexcept = 0;
     };
 
-    struct binary_expr : public expression {
-    public:
-        binary_expr(std::unique_ptr<const expression> lhs, std::unique_ptr<const expression> rhs)
-            : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
-
-    protected:
-        std::unique_ptr<const expression> m_lhs;
-        std::unique_ptr<const expression> m_rhs;
-    };
+    
 
     struct unary_expr : public expression {
     public:
@@ -31,42 +25,6 @@ namespace dconstruct::dcompiler {
         std::unique_ptr<const expression>m_lhs;
     };
 
-    struct add_expr : public binary_expr {
-    public:
-        add_expr(std::unique_ptr<const expression> lhs, std::unique_ptr<const expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
-
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-        std::unique_ptr<const expression> eval() const noexcept final;
-    };
-
-    struct sub_expr : public binary_expr {
-    public:
-        sub_expr(std::unique_ptr<const expression> lhs, std::unique_ptr<const expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
-
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-        std::unique_ptr<const expression> eval() const noexcept final;
-    };
-
-    struct mul_expr : public binary_expr {
-    public:
-        mul_expr(std::unique_ptr<const expression> lhs, std::unique_ptr<const expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
-
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-        std::unique_ptr<const expression> eval() const noexcept final;
-    };
-
-    struct div_expr : public binary_expr {
-    public:
-        div_expr(std::unique_ptr<const expression> lhs, std::unique_ptr<const expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
-
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-        std::unique_ptr<const expression> eval() const noexcept final;
-    };
-
     struct call_expr : public expression {
     private:
         const expression* m_callee;
@@ -74,23 +32,6 @@ namespace dconstruct::dcompiler {
 
         void pseudo(std::ostream &os) const noexcept final;
         void ast(std::ostream &os) const noexcept final;
-    };
-
-    struct assign_expr : public binary_expr {
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-    };
-
-    struct compare_expr : public binary_expr {
-
-    private:
-        enum comp_type {
-            LT,
-            LET,
-            GT,
-            GET,
-            EQ
-        } m_compType;
     };
 
     template<typename T>
