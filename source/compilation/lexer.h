@@ -67,14 +67,16 @@ private:
 
     [[nodiscard]] token scan_token() noexcept;
     [[nodiscard]] b8 reached_eof() const noexcept;
+    char advance() noexcept;
     [[nodiscard]] std::string make_current_lexeme() const noexcept;
     [[nodiscard]] token make_current_token(const token_type, const token::t_literal& = 0ULL) const noexcept;
     [[nodiscard]] token make_string() noexcept;
     [[nodiscard]] token make_number() noexcept;
+    [[nodiscard]] token make_hex() noexcept;
     [[nodiscard]] token make_identifier() noexcept;
     [[nodiscard]] token make_sid() noexcept;
     [[nodiscard]] b8 is_sid_char(const char) const noexcept;
-    char advance() noexcept;
+    [[nodiscard]] b8 is_hex_char(const char) const noexcept;
     [[nodiscard]] b8 match(const char) noexcept;
     [[nodiscard]] char peek() const noexcept;
     [[nodiscard]] char peek_next() const noexcept;

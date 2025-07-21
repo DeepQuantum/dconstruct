@@ -32,9 +32,12 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
         switch(istr.opcode) {
-            case Move: {
-                expression_frame.move(istr.destination, istr.operand1);
-            }
+            case Opcode::Move: expression_frame.move(istr.destination, istr.operand1); break;
+            case Opcode::IAdd: expression_frame.binary_op<add_expr>(istr); break;
+            case Opcode::ISub: expression_frame.binary_op<sub_expr>(istr); break;
+            case Opcode::IMul: expression_frame.binary_op<mul_expr>(istr); break;
+            case Opcode::IDiv: expression_frame.binary_op<div_expr>(istr); break;
+            
             default: {
                 return;
             }
