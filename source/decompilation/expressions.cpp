@@ -16,10 +16,10 @@ void add_expr::ast(std::ostream& os) const noexcept {
     os << ']';
 }
 
-[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 
-    if (dynamic_cast<const num_literal*>(m_lhs) && dynamic_cast<const num_literal*>(m_rhs)) {
-        const u64 left_num = static_cast<const num_literal*>(m_lhs)->value();
-        const u64 right_num = static_cast<const num_literal*>(m_rhs)->value();
+[[nodiscard]] std::unique_ptr<const expression> add_expr::eval() const noexcept{ 
+    if (dynamic_cast<const num_literal*>(m_lhs.get()) && dynamic_cast<const num_literal*>(m_rhs.get())) {
+        const u64 left_num = static_cast<const num_literal*>(m_lhs.get())->value();
+        const u64 right_num = static_cast<const num_literal*>(m_rhs.get())->value();
         return std::make_unique<num_literal>(left_num + right_num);
     }
     return nullptr;
@@ -59,11 +59,11 @@ void assign_expr::ast(std::ostream& os) const noexcept {
     m_rhs->ast(os);
 }
 
-std::unique_ptr<expression> num_literal::eval() const noexcept {
+std::unique_ptr<const expression> num_literal::eval() const noexcept {
     return std::make_unique<num_literal>(*this);
 }
 
-std::unique_ptr<expression> string_literal::eval() const noexcept {
+std::unique_ptr<const expression> string_literal::eval() const noexcept {
     return std::make_unique<string_literal>(*this);
 }
 
