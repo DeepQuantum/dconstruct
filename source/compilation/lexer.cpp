@@ -81,46 +81,47 @@ char Lexer::advance() noexcept {
 }
 
 [[nodiscard]] b8 Lexer::is_sid_char(const char c) const noexcept {
-    return std::isdigit(c) || std::isalpha(c) || c == '-';
+    return std::isdigit(c) || std::isalpha(c) || c == '-' || c == '_';
 }
 
 
 
 [[nodiscard]] token Lexer::make_sid() noexcept {
-    char current = peek();
-    while (is_sid_char(current)) {
+    while (is_sid_char(peek())) {
         advance();
-        current = peek();
     }
-    const std::string literal = m_source.substr(m_start + 1, m_current - m_start);
+    const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 1);
     return make_current_token(SID, literal);
 }
 
 [[nodiscard]] token Lexer::make_number() noexcept {
     b8 is_double = false;
-    b8 is_hex = false;
-    if (peek() == 'x' || peek() == 'X') {
-        is_hex = true;
-        advance();
-    }
     while (std::isdigit(peek())) {
         advance();
     }
-    if (peek() == '.' && std::isdigit(peek_next()) && !is_hex) {
+    if (peek() == '.' && std::isdigit(peek_next())) {
         is_double = true;
         advance();
         while (std::isdigit(peek())) {
             advance();
         }
     }
-    if (is_hex) {
-        const u64 literal = std::stoull(make_current_lexeme(), 0, 16);
-        return make_current_token(HEX, literal);
-    }
     if (is_double) {
         return make_current_token(DOUBLE, std::stod(make_current_lexeme()));
     }
     return make_current_token(INT, std::stoull(make_current_lexeme()));
+}
+
+[[nodiscard]] b8 Lexer::is_hex_char(const char c) const noexcept {
+    return std::isdigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
+[[nodiscard]] token Lexer::make_hex() noexcept {
+    while (is_hex_char(peek())) {
+        advance();
+    }
+    const u64 literal = std::stoull(make_current_lexeme(), 0, 16);
+    return make_current_token(HEX, literal);
 }
 
 [[nodiscard]] token Lexer::make_identifier() noexcept {
@@ -184,6 +185,9 @@ char Lexer::advance() noexcept {
         case '"': return make_string();
         default: {
             if (std::isdigit(c)) {
+                if (match('X') || match('x')) {
+                    return make_hex();
+                }
                 return make_number();
             } else if (std::isalpha(c) || c == '_') {
                 return make_identifier();
