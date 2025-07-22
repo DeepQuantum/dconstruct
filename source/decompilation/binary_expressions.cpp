@@ -16,38 +16,47 @@ void binary_expr::ast(std::ostream& os) const noexcept {
     os << ']';
 }
 
-[[nodiscard]] b8 add_expr::operator==(const expression& rhs) const noexcept {
-    if (const add_expr* rhs_add = dynamic_cast<const add_expr*>(&rhs)) {
-        return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
+[[nodiscard]] b8 binary_expr::operator==(const expression& rhs) const noexcept {
+    if (typeid(*this) == typeid(rhs)) {
+        if (const binary_expr* rhs_add = dynamic_cast<const binary_expr*>(&rhs)) {
+            return *m_lhs == *rhs_add->m_lhs && *m_rhs == *rhs_add->m_rhs;
+        }
     }
     return false;
 }
 
-[[nodiscard]] b8 sub_expr::operator==(const expression& rhs) const noexcept {
-    if (const sub_expr* rhs_add = dynamic_cast<const sub_expr*>(&rhs)) {
-        return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-    }
-    return false;
-}
-[[nodiscard]] b8 mul_expr::operator==(const expression& rhs) const noexcept {
-    if (const mul_expr* rhs_add = dynamic_cast<const mul_expr*>(&rhs)) {
-        return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-    }
-    return false;
-}
-[[nodiscard]] b8 div_expr::operator==(const expression& rhs) const noexcept {
-    if (const div_expr* rhs_add = dynamic_cast<const div_expr*>(&rhs)) {
-        return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-    }
-    return false;
-}
+// [[nodiscard]] b8 add_expr::operator==(const expression& rhs) const noexcept {
+//     if (const add_expr* rhs_add = dynamic_cast<const add_expr*>(&rhs)) {
+//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
+//     }
+//     return false;
+// }
 
-[[nodiscard]] b8 assign_expr::operator==(const expression& rhs) const noexcept {
-    if (const assign_expr* rhs_add = dynamic_cast<const assign_expr*>(&rhs)) {
-        return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-    }
-    return false;
-}
+// [[nodiscard]] b8 sub_expr::operator==(const expression& rhs) const noexcept {
+//     if (const sub_expr* rhs_add = dynamic_cast<const sub_expr*>(&rhs)) {
+//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
+//     }
+//     return false;
+// }
+// [[nodiscard]] b8 mul_expr::operator==(const expression& rhs) const noexcept {
+//     if (const mul_expr* rhs_add = dynamic_cast<const mul_expr*>(&rhs)) {
+//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
+//     }
+//     return false;
+// }
+// [[nodiscard]] b8 div_expr::operator==(const expression& rhs) const noexcept {
+//     if (const div_expr* rhs_add = dynamic_cast<const div_expr*>(&rhs)) {
+//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
+//     }
+//     return false;
+// }
+
+// [[nodiscard]] b8 assign_expr::operator==(const expression& rhs) const noexcept {
+//     if (const assign_expr* rhs_add = dynamic_cast<const assign_expr*>(&rhs)) {
+//         return *m_lhs == *rhs_add->m_lhs && *m_rhs == *rhs_add->m_rhs;
+//     }
+//     return false;
+// }
 
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 

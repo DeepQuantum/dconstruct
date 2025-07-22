@@ -26,7 +26,7 @@ std::vector<decompiled_function> Decompiler::decompile() noexcept {
         for (const auto& [_, node] : cfg.get_nodes()) {
             parse_basic_block(node, frame);
         }
-        funcs.push_back({std::move(frame)});
+        funcs.emplace_back(std::move(frame));
     }
     return funcs;
 }
