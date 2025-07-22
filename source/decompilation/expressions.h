@@ -6,28 +6,32 @@
 
 namespace dconstruct::dcompiler {
 
+    
     struct expression {
     public:
         virtual void pseudo(std::ostream&) const noexcept = 0;
         virtual void ast(std::ostream&) const noexcept = 0;
-        [[nodiscard]] virtual std::unique_ptr<const expression> eval() const noexcept = 0;
+        [[nodiscard]] virtual std::unique_ptr<expression> eval() const noexcept = 0;
         [[nodiscard]] virtual b8 operator==(const expression &rhs) const noexcept = 0;
     };
 
-    using expression_uptr = std::unique_ptr<const expression>;
+    std::ostream& operator<<(std::ostream& os, const expression &expr) {
+        expr.ast(os);
+        return os;
+    }
 
     struct unary_expr : public expression {
     public:
-        unary_expr(expression_uptr lhs) : m_lhs(std::move(lhs)) {};
+        unary_expr(std::unique_ptr<expression> lhs) : m_lhs(std::move(lhs)) {};
 
     protected:
-        expression_uptr m_lhs;
+        std::unique_ptr<expression> m_lhs;
     };
 
     struct call_expr : public expression {
     private:
-        expression_uptr m_callee;
-        std::vector<expression_uptr> m_arguments;
+        std::unique_ptr<expression> m_callee;
+        std::vector<std::unique_ptr<expression>> m_arguments;
 
         void pseudo(std::ostream &os) const noexcept final;
         void ast(std::ostream &os) const noexcept final;
@@ -42,26 +46,27 @@ namespace dconstruct::dcompiler {
     };
 
     struct num_literal : public literal<u64> {
-        num_literal(const u64 num)  {
+        num_literal(const u64 num) {
             m_value = num;
         }
 
         void pseudo(std::ostream& os) const noexcept final;
         void ast(std::ostream& os) const noexcept final;
-        [[nodiscard]] expression_uptr eval() const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
     };
     
     struct string_literal : public literal<std::string> {
         void pseudo(std::ostream& os) const noexcept final;
         void ast(std::ostream& os) const noexcept final;
-        [[nodiscard]] expression_uptr eval() const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
     };
 
     struct identifier : public expression {
         identifier(const std::string &name, const u8 idx) : m_name(name), m_idx(idx) {};
+        identifier(const u8 idx) : m_name("var_" + std::to_string(idx)), m_idx(idx) {};
         void pseudo(std::ostream& os) const noexcept final;
         void ast(std::ostream& os) const noexcept final;
-        [[nodiscard]] expression_uptr eval() const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
         [[nodiscard]] b8 operator==(const expression &rhs) const noexcept override;
 
 
