@@ -40,9 +40,9 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::ISub: expression_frame.apply_binary_op<sub_expr>(istr); break;
             case Opcode::IMul: expression_frame.apply_binary_op<mul_expr>(istr); break;
             case Opcode::IDiv: expression_frame.apply_binary_op<div_expr>(istr); break;
-            
+            case Opcode::LoadU16Imm: expression_frame.load_immediate(istr.destination, istr.operand1 | (istr.operand2 << 8)); break;
             default: {
-                return;
+                std::cerr << "Not implemented\n";
             }
         }
     }
