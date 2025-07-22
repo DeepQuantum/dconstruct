@@ -15,24 +15,27 @@
 namespace dconstruct::dcompiler {
 
 std::vector<decompiled_function> Decompiler::decompile() noexcept {
+    std::vector<decompiled_function> funcs;
+    funcs.reserve(m_functions.size());
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg{func};
         cfg.find_loops();
-        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
+        //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
 
         expression_frame frame;
         for (const auto& [_, node] : cfg.get_nodes()) {
             parse_basic_block(node, frame);
         }
+        funcs.push_back({std::move(frame)});
     }
-    return{};
+    return funcs;
 }
 
 void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame) noexcept {
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
         switch(istr.opcode) {
-            case Opcode::Move: expression_frame.move(istr.destination, istr.operand1); break;
+            case Opcode::Move: expression_frame.apply_binary_op<assign_expr>(istr); break;
             case Opcode::IAdd: expression_frame.apply_binary_op<add_expr>(istr); break;
             case Opcode::ISub: expression_frame.apply_binary_op<sub_expr>(istr); break;
             case Opcode::IMul: expression_frame.apply_binary_op<mul_expr>(istr); break;

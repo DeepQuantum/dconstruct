@@ -186,10 +186,6 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const noexcept {
-
-        
-
-
         for (const auto& [node_start, node] : m_nodes) {
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == BranchIf || node.m_lines.back().m_instruction.opcode == BranchIfNot;
 
