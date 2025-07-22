@@ -7,7 +7,9 @@
 
 namespace dconstruct::dcompiler {
 
-struct decompiled_function {};
+struct decompiled_function {
+    expression_frame m_frame;
+};
 
 class Decompiler { 
 
