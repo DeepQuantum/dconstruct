@@ -25,22 +25,25 @@ namespace dconstruct::dcompiler {
     // every expression type implements a way to evaluate it to the "lowest" level.
 
     struct expression_frame {
-        std::unordered_map<u32, std::unique_ptr<const expression>> m_expressions;
-        std::vector<std::unique_ptr<const expression>> m_finalized;
+        std::unordered_map<u32, expression_uptr> m_expressions;
+        std::vector<expression_uptr> m_finalized;
+
+        explicit expression_frame() {
+            for (u32 i = 0; i < 128; ++i) {
+                m_expressions[i] = nullptr;
+            }
+        }
 
         void finalize_expression(const u32 dst) {
             m_finalized.push_back(m_expressions[dst]->eval());
             m_expressions[dst] = nullptr;
         }
 
-        void move(const u32 dst, const u32 src) noexcept {
-            finalize_expression(dst);
-            m_expressions[dst] = m_expressions[src]->eval();
-        }
-
         template<requires_binary_expr binary_expr_t>
         void apply_binary_op(const Instruction& istr) {
-            finalize_expression(istr.destination);
+            if (istr.destination != istr.operand1) {
+                finalize_expression(istr.destination);
+            }
             m_expressions[istr.destination] = std::make_unique<binary_expr_t>(
                 std::move(m_expressions[istr.operand1]), 
                 std::move(m_expressions[istr.operand2])

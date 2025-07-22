@@ -3,41 +3,35 @@
 
 namespace dconstruct::dcompiler {
 
-void binary_expr::pseudo(std::ostream& os) const noexcept {
-    m_lhs->pseudo(os);
-    os << ' ' << get_op_char() << ' ';
-    m_rhs->pseudo(os);
+
+expression_uptr string_literal::eval() const noexcept {
+    return std::make_unique<string_literal>(*this);
 }
 
-void binary_expr::ast(std::ostream& os) const noexcept {
-    os << get_op_name() << '[';
-    m_lhs->ast(os);
-    os << ", ";
-    m_rhs->ast(os);
-    os << ']';
+expression_uptr num_literal::eval() const noexcept {
+    return std::make_unique<num_literal>(*this);
 }
 
-[[nodiscard]] std::unique_ptr<const expression> add_expr::eval() const noexcept{ 
-    if (dynamic_cast<const num_literal*>(m_lhs.get()) && dynamic_cast<const num_literal*>(m_rhs.get())) {
-        const u64 left_num = static_cast<const num_literal*>(m_lhs.get())->value();
-        const u64 right_num = static_cast<const num_literal*>(m_rhs.get())->value();
-        return std::make_unique<num_literal>(left_num + right_num);
+template<typename T>
+[[nodiscard]] b8 literal<T>::operator==(const expression &rhs) const noexcept {
+    const literal<T>* rhs_lit = dynamic_cast<const literal<T>*>(&rhs);
+    if (rhs_lit == nullptr) {
+        return false;
     }
-    return nullptr;
+    return m_value == rhs_lit->m_value;
 }
 
-[[nodiscard]] std::unique_ptr<const expression> mul_expr::eval() const noexcept{ 
-    return nullptr;
+[[nodiscard]] b8 identifier::operator==(const expression &rhs) const noexcept {
+    const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
+    if (rhs_id == nullptr) {
+        return false;
+    }
+    return m_name == rhs_id->m_name && m_idx == rhs_id->m_idx;
 }
 
-[[nodiscard]] std::unique_ptr<const expression> sub_expr::eval() const noexcept{ 
-    return nullptr;
+[[nodiscard]] expression_uptr identifier::eval() const noexcept {
+    return std::make_unique<identifier>(*this);
 }
-
-[[nodiscard]] std::unique_ptr<const expression> div_expr::eval() const noexcept{ 
-    return nullptr;
-}
-
 
 void call_expr::pseudo(std::ostream &os) const noexcept {
     m_callee->pseudo(os);
@@ -60,32 +54,6 @@ void call_expr::ast(std::ostream &os) const noexcept {
     os << "}]";
 }
 
-void assign_expr::pseudo(std::ostream& os) const noexcept {
-    m_lhs->pseudo(os);
-    os << " = ";
-    m_rhs->pseudo(os);
-}
-
-void assign_expr::ast(std::ostream& os) const noexcept {
-    os << "assign[";
-    m_lhs->ast(os);
-    os << ", ";
-    m_rhs->ast(os);
-}
-
-std::unique_ptr<const expression> num_literal::eval() const noexcept {
-    return std::make_unique<num_literal>(*this);
-}
-
-std::unique_ptr<const expression> string_literal::eval() const noexcept {
-    return std::make_unique<string_literal>(*this);
-}
-
-template<typename T>
-const T& literal<T>::value() const noexcept {
-    return m_value;
-}
-
 void num_literal::pseudo(std::ostream& os) const noexcept {
     os << std::to_string(m_value);
 }
@@ -97,13 +65,27 @@ void num_literal::ast(std::ostream& os) const noexcept {
 }
 
 void string_literal::pseudo(std::ostream& os) const noexcept {
+    os << '"';
     os << m_value;
+    os << '"';
 }
 
 void string_literal::ast(std::ostream& os) const noexcept {
     os << "string_literal[";
     os << m_value;
     os << "]";
+}
+
+void identifier::ast(std::ostream& os) const noexcept {
+    os << "identifier[";
+    os << m_idx;
+    os << ", ";
+    os << m_name;
+    os << "]";
+}
+
+void identifier::pseudo(std::ostream& os) const noexcept {
+    os << m_name;
 }
 
 }
