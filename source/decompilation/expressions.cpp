@@ -3,6 +3,7 @@
 
 namespace dconstruct::dcompiler {
 
+expression::~expression() = default;
 
 std::unique_ptr<expression> string_literal::eval() const noexcept {
     return std::make_unique<string_literal>(*this);
@@ -33,26 +34,26 @@ template<typename T>
     return std::make_unique<identifier>(*this);
 }
 
-void call_expr::pseudo(std::ostream &os) const noexcept {
-    m_callee->pseudo(os);
-    os << '(';
-    for (const auto& arg : m_arguments) {
-        arg->pseudo(os);
-        os << ", ";
-    }
-    os << ')';
-}
-
-void call_expr::ast(std::ostream &os) const noexcept {
-    os << "call[callee=";
-    m_callee->ast(os);
-    os << ", arguments={";
-    for (const auto& arg : m_arguments) {
-        arg->ast(os);
-        os << ',';
-    }
-    os << "}]";
-}
+//void call_expr::pseudo(std::ostream &os) const noexcept {
+//    m_callee->pseudo(os);
+//    os << '(';
+//    for (const auto& arg : m_arguments) {
+//        arg->pseudo(os);
+//        os << ", ";
+//    }
+//    os << ')';
+//}
+//
+//void call_expr::ast(std::ostream &os) const noexcept {
+//    os << "call[callee=";
+//    m_callee->ast(os);
+//    os << ", arguments={";
+//    for (const auto& arg : m_arguments) {
+//        arg->ast(os);
+//        os << ',';
+//    }
+//    os << "}]";
+//}
 
 void num_literal::pseudo(std::ostream& os) const noexcept {
     os << std::to_string(m_value);
@@ -78,7 +79,7 @@ void string_literal::ast(std::ostream& os) const noexcept {
 
 void identifier::ast(std::ostream& os) const noexcept {
     os << "identifier[";
-    os << m_idx;
+    os << std::to_string(m_idx);
     os << ", ";
     os << m_name;
     os << "]";

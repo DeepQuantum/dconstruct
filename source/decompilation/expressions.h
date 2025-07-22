@@ -8,14 +8,14 @@ namespace dconstruct::dcompiler {
 
     
     struct expression {
-    public:
+        virtual ~expression() = 0;
         virtual void pseudo(std::ostream&) const noexcept = 0;
         virtual void ast(std::ostream&) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> eval() const noexcept = 0;
         [[nodiscard]] virtual b8 operator==(const expression &rhs) const noexcept = 0;
     };
 
-    std::ostream& operator<<(std::ostream& os, const expression &expr) {
+    inline std::ostream& operator<<(std::ostream& os, const expression &expr) {
         expr.ast(os);
         return os;
     }
@@ -28,14 +28,14 @@ namespace dconstruct::dcompiler {
         std::unique_ptr<expression> m_lhs;
     };
 
-    struct call_expr : public expression {
+    /*struct call_expr : public expression {
     private:
         std::unique_ptr<expression> m_callee;
         std::vector<std::unique_ptr<expression>> m_arguments;
 
         void pseudo(std::ostream &os) const noexcept final;
         void ast(std::ostream &os) const noexcept final;
-    };
+    };*/
 
     template<typename T>
     struct literal : public expression {
