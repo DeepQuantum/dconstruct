@@ -4,11 +4,11 @@
 namespace dconstruct::dcompiler {
 
 
-expression_uptr string_literal::eval() const noexcept {
+std::unique_ptr<expression> string_literal::eval() const noexcept {
     return std::make_unique<string_literal>(*this);
 }
 
-expression_uptr num_literal::eval() const noexcept {
+std::unique_ptr<expression> num_literal::eval() const noexcept {
     return std::make_unique<num_literal>(*this);
 }
 
@@ -29,7 +29,7 @@ template<typename T>
     return m_name == rhs_id->m_name && m_idx == rhs_id->m_idx;
 }
 
-[[nodiscard]] expression_uptr identifier::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> identifier::eval() const noexcept {
     return std::make_unique<identifier>(*this);
 }
 
