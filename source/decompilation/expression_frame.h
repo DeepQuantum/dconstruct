@@ -27,7 +27,7 @@ namespace dconstruct::dcompiler {
     struct expression_frame {
         std::unordered_map<u32, std::unique_ptr<expression>> m_expressions;
         std::vector<std::unique_ptr<expression>> m_finalized;
-        u32 m_varCount;
+        u32 m_varCount = 0;
 
         explicit expression_frame() {
             for (u32 i = 0; i < 128; ++i) {
@@ -35,13 +35,15 @@ namespace dconstruct::dcompiler {
             }
         }
 
+        expression_frame(expression_frame&& rhs) noexcept = default;
+
         u32 get_next_var_idx() {
             return m_varCount++;
         }
 
         void finalize_expression(const u32 dst) {
             if (m_expressions.at(dst) != nullptr) {
-                m_finalized.push_back(m_expressions[dst]->eval());
+                m_finalized.emplace_back(std::move(m_expressions[dst]->eval()));
                 m_expressions[dst] = nullptr;
             }
         }

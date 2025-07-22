@@ -9,6 +9,7 @@ namespace dconstruct::dcompiler {
 
         void pseudo(std::ostream&) const noexcept override;
         void ast(std::ostream&) const noexcept override;
+        [[nodiscard]] virtual b8 operator==(const expression &rhs) const noexcept override;
 
     protected:
         [[nodiscard]] virtual char get_op_char() const noexcept = 0;
@@ -22,7 +23,6 @@ namespace dconstruct::dcompiler {
     public:
         add_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
         [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
     private:
         [[nodiscard]] char get_op_char() const noexcept final { return '+'; }
@@ -33,7 +33,6 @@ namespace dconstruct::dcompiler {
     public:
         sub_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
         std::unique_ptr<expression> eval() const noexcept final;
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
 
     private:
@@ -45,7 +44,6 @@ namespace dconstruct::dcompiler {
     public:
         mul_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
         std::unique_ptr<expression> eval() const noexcept final;
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
 
     private:
@@ -57,7 +55,6 @@ namespace dconstruct::dcompiler {
     public:
         div_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
         std::unique_ptr<expression> eval() const noexcept final;
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
     private:
         [[nodiscard]] char get_op_char() const noexcept final { return '*'; }
@@ -68,7 +65,6 @@ namespace dconstruct::dcompiler {
     public:
         assign_expr(std::unique_ptr<expression> id, std::unique_ptr<expression> rhs) : binary_expr(std::move(id), std::move(rhs)) {};
         std::unique_ptr<expression> eval() const noexcept final;
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
     private:
         [[nodiscard]] char get_op_char() const noexcept final { return '='; }
@@ -76,7 +72,6 @@ namespace dconstruct::dcompiler {
     };
 
     struct compare_expr : public binary_expr {
-        [[nodiscard]] b8 operator==(const expression& rhs) const noexcept override;
 
     private:
         enum comp_type {
