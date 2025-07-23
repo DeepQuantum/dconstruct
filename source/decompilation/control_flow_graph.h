@@ -1,5 +1,4 @@
 #pragma once
-#define GVDLL
 
 #include "base.h"
 #include "instructions.h"
