@@ -25,22 +25,42 @@ namespace dconstruct::dcompiler {
     // every expression type implements a way to evaluate it to the "lowest" level.
 
     struct expression_frame {
-        std::unordered_map<u32, std::unique_ptr<const expression>> m_expressions;
-        std::vector<std::unique_ptr<const expression>> m_finalized;
+        std::unordered_map<u32, std::unique_ptr<expression>> m_expressions;
+        std::vector<std::unique_ptr<expression>> m_finalized;
+        u32 m_varCount = 0;
 
-        void finalize_expression(const u32 dst) {
-            m_finalized.push_back(m_expressions[dst]->eval());
-            m_expressions[dst] = nullptr;
+        explicit expression_frame() {
+            for (u32 i = 0; i < 128; ++i) {
+                m_expressions[i] = nullptr;
+            }
         }
 
-        void move(const u32 dst, const u32 src) noexcept {
+        expression_frame(expression_frame&& rhs) noexcept = default;
+
+        u32 get_next_var_idx() {
+            return m_varCount++;
+        }
+
+        void finalize_expression(const u32 dst) {
+            if (m_expressions.at(dst) != nullptr) {
+                m_finalized.emplace_back(std::move(m_expressions[dst]->eval()));
+                m_expressions[dst] = nullptr;
+            }
+        }
+
+        void load_immediate(const u32 dst, const u64 num) {
             finalize_expression(dst);
-            m_expressions[dst] = m_expressions[src]->eval();
+            m_expressions[dst] = std::make_unique<assign_expr>(
+                std::move(std::make_unique<identifier>(get_next_var_idx())),
+                std::move(std::make_unique<num_literal>(num))
+            );
         }
 
         template<requires_binary_expr binary_expr_t>
         void apply_binary_op(const Instruction& istr) {
-            finalize_expression(istr.destination);
+            if (istr.destination != istr.operand1) {
+                finalize_expression(istr.destination);
+            }
             m_expressions[istr.destination] = std::make_unique<binary_expr_t>(
                 std::move(m_expressions[istr.operand1]), 
                 std::move(m_expressions[istr.operand2])
