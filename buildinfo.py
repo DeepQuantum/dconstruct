@@ -4,6 +4,7 @@ import sys
 
 
 def main():
+    print(sys.argv[1])
     compiler, version = sys.argv[1].split(";")
     with open("buildinfo.h", "w+") as f:
         f.write("#pragma once\n")
@@ -13,4 +14,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #    main()
+    pass
