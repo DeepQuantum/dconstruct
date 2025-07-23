@@ -43,19 +43,22 @@ target_compile_options(dconstruct PRIVATE
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+ #   ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
 )
 target_compile_definitions(dconstruct PRIVATE
     CXXOPTS_NO_EXCEPTIONS=1
 )
 
-link_directories("${SOURCE_DIR}/Graphviz-13.1.0-win64/lib")
+#link_directories("${SOURCE_DIR}/Graphviz-13.1.0-win64/lib")
 
 target_link_libraries(dconstruct PRIVATE
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    gvc
+    cgraph
+    cdt
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
 )
@@ -98,10 +101,13 @@ add_executable(
 
 target_link_libraries(
     dconstruct_test
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+    # ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    gvc
+    cgraph
+    cdt
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
     GTest::gtest_main
