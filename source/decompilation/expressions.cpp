@@ -3,7 +3,6 @@
 
 namespace dconstruct::dcompiler {
 
-expression::~expression() = default;
 
 std::unique_ptr<expression> string_literal::eval() const noexcept {
     return std::make_unique<string_literal>(*this);

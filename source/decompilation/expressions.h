@@ -8,7 +8,7 @@ namespace dconstruct::dcompiler {
 
     
     struct expression {
-        virtual ~expression() = 0;
+        virtual ~expression() = default;
         virtual void pseudo(std::ostream&) const noexcept = 0;
         virtual void ast(std::ostream&) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> eval() const noexcept = 0;
