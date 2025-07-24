@@ -5,7 +5,7 @@
 #include <vector>
 #include <ostream>
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::ast {
 
     struct statement {
         virtual void pseudo(std::ostream&) const noexcept = 0;
