@@ -35,11 +35,11 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
         switch(istr.opcode) {
-            case Opcode::Move: expression_frame.apply_binary_op<assign_expr>(istr); break;
-            case Opcode::IAdd: expression_frame.apply_binary_op<add_expr>(istr); break;
-            case Opcode::ISub: expression_frame.apply_binary_op<sub_expr>(istr); break;
-            case Opcode::IMul: expression_frame.apply_binary_op<mul_expr>(istr); break;
-            case Opcode::IDiv: expression_frame.apply_binary_op<div_expr>(istr); break;
+            case Opcode::Move: expression_frame.apply_binary_op<ast::assign_expr>(istr); break;
+            case Opcode::IAdd: expression_frame.apply_binary_op<ast::add_expr>(istr); break;
+            case Opcode::ISub: expression_frame.apply_binary_op<ast::sub_expr>(istr); break;
+            case Opcode::IMul: expression_frame.apply_binary_op<ast::mul_expr>(istr); break;
+            case Opcode::IDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
             case Opcode::LoadU16Imm: expression_frame.load_immediate(istr.destination, istr.operand1 | (istr.operand2 << 8)); break;
             default: {
                 std::cerr << "Not implemented\n";

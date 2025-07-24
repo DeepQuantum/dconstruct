@@ -4,9 +4,8 @@
 #include <vector>
 #include <ostream>
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::ast {
 
-    
     struct expression {
         virtual ~expression() = default;
         virtual void pseudo(std::ostream&) const noexcept = 0;

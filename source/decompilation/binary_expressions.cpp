@@ -1,6 +1,6 @@
 #include "binary_expressions.h"
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::ast {
 
 void binary_expr::pseudo(std::ostream& os) const noexcept {
     m_lhs->pseudo(os);
@@ -24,39 +24,6 @@ void binary_expr::ast(std::ostream& os) const noexcept {
     }
     return false;
 }
-
-// [[nodiscard]] b8 add_expr::operator==(const expression& rhs) const noexcept {
-//     if (const add_expr* rhs_add = dynamic_cast<const add_expr*>(&rhs)) {
-//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-//     }
-//     return false;
-// }
-
-// [[nodiscard]] b8 sub_expr::operator==(const expression& rhs) const noexcept {
-//     if (const sub_expr* rhs_add = dynamic_cast<const sub_expr*>(&rhs)) {
-//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-//     }
-//     return false;
-// }
-// [[nodiscard]] b8 mul_expr::operator==(const expression& rhs) const noexcept {
-//     if (const mul_expr* rhs_add = dynamic_cast<const mul_expr*>(&rhs)) {
-//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-//     }
-//     return false;
-// }
-// [[nodiscard]] b8 div_expr::operator==(const expression& rhs) const noexcept {
-//     if (const div_expr* rhs_add = dynamic_cast<const div_expr*>(&rhs)) {
-//         return m_lhs == rhs_add->m_lhs && m_rhs == rhs_add->m_rhs;
-//     }
-//     return false;
-// }
-
-// [[nodiscard]] b8 assign_expr::operator==(const expression& rhs) const noexcept {
-//     if (const assign_expr* rhs_add = dynamic_cast<const assign_expr*>(&rhs)) {
-//         return *m_lhs == *rhs_add->m_lhs && *m_rhs == *rhs_add->m_rhs;
-//     }
-//     return false;
-// }
 
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 
@@ -83,6 +50,10 @@ void binary_expr::ast(std::ostream& os) const noexcept {
 }
 
 [[nodiscard]] std::unique_ptr<expression> assign_expr::eval() const noexcept {
+    return nullptr;
+}
+
+[[nodiscard]] std::unique_ptr<expression> compare_expr::eval() const noexcept {
     return nullptr;
 }
 }
