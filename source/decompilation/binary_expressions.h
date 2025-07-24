@@ -1,7 +1,7 @@
 #pragma once
 #include "expressions.h"
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::ast {
     struct binary_expr : public expression {
     public:
         binary_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs)
@@ -12,7 +12,7 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] virtual b8 operator==(const expression &rhs) const noexcept override;
 
     protected:
-        [[nodiscard]] virtual char get_op_char() const noexcept = 0;
+        [[nodiscard]] virtual std::string get_op_char() const noexcept = 0;
         [[nodiscard]] virtual std::string get_op_name() const noexcept = 0;
 
         std::unique_ptr<expression> m_lhs;
@@ -25,7 +25,7 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
 
     private:
-        [[nodiscard]] char get_op_char() const noexcept final { return '+'; }
+        [[nodiscard]] std::string get_op_char() const noexcept final { return "+"; }
         [[nodiscard]] std::string get_op_name() const noexcept final { return "add"; }
     };
 
@@ -36,7 +36,7 @@ namespace dconstruct::dcompiler {
 
 
     private:
-        [[nodiscard]] char get_op_char() const noexcept final { return '-'; }
+        [[nodiscard]] std::string get_op_char() const noexcept final { return "-"; }
         [[nodiscard]] std::string get_op_name() const noexcept final { return "sub"; }
     };
 
@@ -47,7 +47,7 @@ namespace dconstruct::dcompiler {
 
 
     private:
-        [[nodiscard]] char get_op_char() const noexcept final { return '*'; }
+        [[nodiscard]] std::string get_op_char() const noexcept final { return "*"; }
         [[nodiscard]] std::string get_op_name() const noexcept final { return "mul"; }
     };
 
@@ -57,8 +57,8 @@ namespace dconstruct::dcompiler {
         std::unique_ptr<expression> eval() const noexcept final;
 
     private:
-        [[nodiscard]] char get_op_char() const noexcept final { return '*'; }
-        [[nodiscard]] std::string get_op_name() const noexcept final { return "mul"; }
+        [[nodiscard]] std::string get_op_char() const noexcept final { return "/"; }
+        [[nodiscard]] std::string get_op_name() const noexcept final { return "div"; }
     };
 
     struct assign_expr : public binary_expr {
@@ -67,20 +67,36 @@ namespace dconstruct::dcompiler {
         std::unique_ptr<expression> eval() const noexcept final;
 
     private:
-        [[nodiscard]] char get_op_char() const noexcept final { return '='; }
+        [[nodiscard]] std::string get_op_char() const noexcept final { return "="; }
         [[nodiscard]] std::string get_op_name() const noexcept final { return "assign"; }
     };
 
     struct compare_expr : public binary_expr {
 
-    private:
         enum comp_type {
             LT,
             LET,
             GT,
             GET,
-            EQ
+            EQ,
+            NEQ
         } m_compType;
+
+        compare_expr(const comp_type type, std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) 
+            : binary_expr(std::move(lhs), std::move(rhs)), m_compType(type) {};
+        std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] std::string get_op_char() const noexcept final { 
+            switch (m_compType) {
+                case LT: return "<";
+                case LET: return "<=";
+                case GT: return ">";
+                case GET: return ">=";
+                case EQ: return "==";
+                case NEQ: return "!=";
+                default: return "==";
+            }
+        }
+        [[nodiscard]] std::string get_op_name() const noexcept final { return "comp" + get_op_char(); }
     };
 
     template<typename expr_t>

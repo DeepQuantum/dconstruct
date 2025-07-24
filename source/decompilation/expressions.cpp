@@ -1,7 +1,7 @@
 #include "expressions.h"
 #include "binary_expressions.h"
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::ast {
 
 
 std::unique_ptr<expression> string_literal::eval() const noexcept {

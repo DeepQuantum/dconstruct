@@ -40,11 +40,11 @@ namespace dconstruct::testing {
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
-        const auto& actual = *dynamic_cast<const dcompiler::assign_expr*>(frame.m_expressions.at(0).get());
-        const auto& expected = dcompiler::assign_expr
+        const auto& actual = *dynamic_cast<const ast::assign_expr*>(frame.m_expressions.at(0).get());
+        const auto& expected = ast::assign_expr
         (
-            std::move(std::make_unique<dcompiler::identifier>("var_0", 0)),
-            std::move(std::unique_ptr<dcompiler::num_literal>(new dcompiler::num_literal(1)))
+            std::move(std::make_unique<ast::identifier>("var_0", 0)),
+            std::move(std::unique_ptr<ast::num_literal>(new ast::num_literal(1)))
         );
         ASSERT_EQ(actual, expected);
     }
