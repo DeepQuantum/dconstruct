@@ -20,8 +20,7 @@ namespace dconstruct::ast {
     };
 
     struct add_expr : public binary_expr {
-    public:
-        add_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
+        using binary_expr::binary_expr;
         [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
 
     private:
@@ -30,10 +29,8 @@ namespace dconstruct::ast {
     };
 
     struct sub_expr : public binary_expr {
-    public:
-        sub_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
+        using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
-
 
     private:
         [[nodiscard]] std::string get_op_char() const noexcept final { return "-"; }
@@ -41,8 +38,7 @@ namespace dconstruct::ast {
     };
 
     struct mul_expr : public binary_expr {
-    public:
-        mul_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
+        using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
 
 
@@ -52,9 +48,9 @@ namespace dconstruct::ast {
     };
 
     struct div_expr : public binary_expr {
-    public:
-        div_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) : binary_expr(std::move(lhs), std::move(rhs)) {};
+        using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
+
 
     private:
         [[nodiscard]] std::string get_op_char() const noexcept final { return "/"; }
@@ -62,8 +58,8 @@ namespace dconstruct::ast {
     };
 
     struct assign_expr : public binary_expr {
-    public:
-        assign_expr(std::unique_ptr<expression> id, std::unique_ptr<expression> rhs) : binary_expr(std::move(id), std::move(rhs)) {};
+        using binary_expr::binary_expr;
+
         std::unique_ptr<expression> eval() const noexcept final;
 
     private:
@@ -84,7 +80,9 @@ namespace dconstruct::ast {
 
         compare_expr(const comp_type type, std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) 
             : binary_expr(std::move(lhs), std::move(rhs)), m_compType(type) {};
+
         std::unique_ptr<expression> eval() const noexcept final;
+        
         [[nodiscard]] std::string get_op_char() const noexcept final { 
             switch (m_compType) {
                 case LT: return "<";

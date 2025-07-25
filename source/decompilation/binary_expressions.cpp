@@ -1,4 +1,5 @@
 #include "binary_expressions.h"
+#include "literal.h"
 
 namespace dconstruct::ast {
 
@@ -27,11 +28,11 @@ void binary_expr::ast(std::ostream& os) const noexcept {
 
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 
-    if (const num_literal* lhs_num_lit = dynamic_cast<const num_literal*>(m_lhs.get())) {
-        if (const num_literal* rhs_num_lit = dynamic_cast<const num_literal*>(m_rhs.get())) {
+    if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(m_lhs.get())) {
+        if (const literal<u64>* rhs_num_lit = dynamic_cast<const literal<u64>*>(m_rhs.get())) {
             const u64 left_num = lhs_num_lit->get_value();
             const u64 right_num = rhs_num_lit->get_value();
-            return std::make_unique<num_literal>(left_num + right_num);
+            return std::make_unique<literal<u64>>(left_num + right_num);
         }
     }
     return nullptr;
