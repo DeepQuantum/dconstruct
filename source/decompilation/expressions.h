@@ -20,11 +20,19 @@ namespace dconstruct::ast {
     }
 
     struct unary_expr : public expression {
-    public:
         unary_expr(std::unique_ptr<expression> lhs) : m_lhs(std::move(lhs)) {};
+        [[nodiscard]] b8 operator==(const expression &rhs) const noexcept override;
 
     protected:
         std::unique_ptr<expression> m_lhs;
+    };
+
+    struct logical_not_expr : public unary_expr {
+        using unary_expr::unary_expr;
+        
+        void pseudo(std::ostream& os) const noexcept final;
+        void ast(std::ostream& os) const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;       
     };
 
     /*struct call_expr : public expression {
@@ -36,29 +44,17 @@ namespace dconstruct::ast {
         void ast(std::ostream &os) const noexcept final;
     };*/
 
-    template<typename T>
-    struct literal : public expression {
-        const T& get_value() const noexcept { return m_value; }
-        [[nodiscard]] b8 operator==(const expression &rhs) const noexcept override;
-    protected:
-        T m_value;
-    };
-
-    struct num_literal : public literal<u64> {
-        num_literal(const u64 num) {
-            m_value = num;
-        }
-
+    struct grouping : public expression {
+        grouping(std::unique_ptr<expression> expr) : m_expr(std::move(expr)) {};
         void pseudo(std::ostream& os) const noexcept final;
         void ast(std::ostream& os) const noexcept final;
         [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] b8 operator==(const expression &rhs) const noexcept final;
+    private:
+        mutable std::unique_ptr<expression> m_expr;
     };
+
     
-    struct string_literal : public literal<std::string> {
-        void pseudo(std::ostream& os) const noexcept final;
-        void ast(std::ostream& os) const noexcept final;
-        [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
-    };
 
     struct identifier : public expression {
         identifier(const std::string &name, const u8 idx) : m_name(name), m_idx(idx) {};

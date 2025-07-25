@@ -2,6 +2,7 @@
 #include "binaryfile.h"
 #include "file_disassembler.h"
 #include "binary_expressions.h"
+#include "literal.h"
 #include <array>
 #include <gtest/gtest.h>
 #include <filesystem>
@@ -44,7 +45,7 @@ namespace dconstruct::testing {
         const auto& expected = ast::assign_expr
         (
             std::move(std::make_unique<ast::identifier>("var_0", 0)),
-            std::move(std::unique_ptr<ast::num_literal>(new ast::num_literal(1)))
+            std::move(std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)))
         );
         ASSERT_EQ(actual, expected);
     }
