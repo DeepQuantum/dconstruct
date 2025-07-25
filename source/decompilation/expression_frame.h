@@ -1,6 +1,7 @@
 #pragma once
 
 #include "binary_expressions.h"
+#include "literal.h"
 #include <unordered_map>
 #include <type_traits>
 
@@ -52,7 +53,7 @@ namespace dconstruct::dcompiler {
             finalize_expression(dst);
             m_expressions[dst] = std::make_unique<ast::assign_expr>(
                 std::move(std::make_unique<ast::identifier>(get_next_var_idx())),
-                std::move(std::make_unique<ast::num_literal>(num))
+                std::move(std::make_unique<ast::literal<u64>>(num))
             );
         }
 

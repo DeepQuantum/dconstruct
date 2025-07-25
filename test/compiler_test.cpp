@@ -1,11 +1,18 @@
 #include <gtest/gtest.h>
 #include "lexer.h"
+#include "dc_parser.h"
+#include "literal.h"
 
 namespace dconstruct::testing {
     static std::pair<std::vector<compiler::token>, std::vector<compiler::lexing_error>> get_tokens(const std::string &string) {
         dconstruct::compiler::Lexer lexer = dconstruct::compiler::Lexer(string);
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
+
+    static std::pair<std::unique_ptr<ast::expression>, std::vector<compiler::parsing_error>> get_expression(const std::vector<compiler::token> &tokens) {
+        compiler::Parser parser = dconstruct::compiler::Parser(tokens);
+        return { parser.parse(), parser.get_errors() };
+    }
 
     TEST(COMPILER, LexerEmpty) {
         const std::string empty = "";
@@ -302,5 +309,34 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, SimpleNumParse1) {
+        const std::vector<compiler::token> tokens = {compiler::token(compiler::token_type::INT, "1", 1ULL, 1)};
+        const auto [expression, errors] = get_expression(tokens);
+        
+        const std::unique_ptr<ast::expression> expected = std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1));
+
+        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(*expression, *expected);
+    }
+
+    TEST(COMPILER, SimpleNumParse2) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+        };
+        const auto [expression, errors] = get_expression(tokens);
+        
+        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2))
+        );
+
+        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(*expression, *expected);
     }
 }
