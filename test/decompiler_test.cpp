@@ -35,7 +35,7 @@ namespace dconstruct::testing {
         return std::move(funcs[0].m_frame);
     }
 
-    TEST(DECOMPILER, BasicAdd) {
+    TEST(DECOMPILER, BasicLoadImmediate) {
         const std::array<Instruction, 1> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
         };

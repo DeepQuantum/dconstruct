@@ -16,7 +16,7 @@ namespace dconstruct::ast {
     if (rhs_group == nullptr) {
         return false;
     }
-    return rhs_group->m_expr == m_expr;
+    return *m_expr == *rhs_group->m_expr;
 }
 
 [[nodiscard]] b8 unary_expr::operator==(const expression &rhs) const noexcept {

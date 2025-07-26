@@ -16,6 +16,8 @@ file(GLOB BASE_SOURCE_FILES
     "${SOURCE_DIR}/decompilation/*.cpp"
     "${SOURCE_DIR}/compilation/*.cpp"
     "${SOURCE_DIR}/compilation/*.h"
+    "${SOURCE_DIR}/ast/*.h"
+    "${SOURCE_DIR}/ast/*.cpp"
 )
 
 include(FetchContent)
@@ -62,6 +64,7 @@ target_link_libraries(dconstruct PRIVATE
 target_include_directories(dconstruct PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
+    "${SOURCE_DIR}/ast"
 )
 
 # add_custom_command(
@@ -111,6 +114,7 @@ target_include_directories(dconstruct_test PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
     "${SOURCE_DIR}/compilation"
+    "${SOURCE_DIR}/ast"
 )
 
 include(GoogleTest)

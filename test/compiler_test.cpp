@@ -339,4 +339,73 @@ namespace dconstruct::testing {
         EXPECT_EQ(errors.size(), 0);
         EXPECT_EQ(*expression, *expected);
     }
+
+    TEST(COMPILER, SimpleNumParse3) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+        };
+
+        const auto [expression, errors] = get_expression(tokens);
+        
+        std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(5))
+        );
+
+        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
+            std::move(left)
+        );
+
+        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(*expression, *expected);
+    }
+
+    TEST(COMPILER, SimpleNumParseError1) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+            compiler::token(compiler::token_type::MINUS, "-", 0ULL, 1),
+        };
+
+        const auto [expression, errors] = get_expression(tokens);
+        EXPECT_EQ(expression, nullptr);
+        EXPECT_EQ(errors[0].m_message, "error: expected expression after '-'");
+    }
+
+    TEST(COMPILER, GroupNumParse) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 1ULL, 1),
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 1ULL, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
+            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+        };
+
+        const auto [expression, errors] = get_expression(tokens);
+        
+        std::unique_ptr<ast::expression> left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2))
+        ));
+
+        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::mul_expr>(
+            std::move(left),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(5))
+        );
+
+        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(*expression, *expected);
+    }
 }

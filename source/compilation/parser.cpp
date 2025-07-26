@@ -222,7 +222,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::grouping>(std::move(expr));
     }
 
-    m_errors.emplace_back(peek(), "error: expected expression.");
+    m_errors.emplace_back(previous(), "error: expected expression after '" + previous().m_lexeme + "'");
     return nullptr;
 }
 
