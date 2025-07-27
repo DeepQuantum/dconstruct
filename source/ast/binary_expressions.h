@@ -9,7 +9,6 @@ namespace dconstruct::ast {
 
         void pseudo(std::ostream&) const noexcept override;
         void ast(std::ostream&) const noexcept override;
-        [[nodiscard]] virtual b8 operator==(const expression &rhs) const noexcept override;
 
     protected:
         [[nodiscard]] virtual std::string get_op_char() const noexcept = 0;
@@ -22,6 +21,7 @@ namespace dconstruct::ast {
     struct add_expr : public binary_expr {
         using binary_expr::binary_expr;
         [[nodiscard]] std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
     private:
         [[nodiscard]] std::string get_op_char() const noexcept final { return "+"; }
@@ -31,6 +31,7 @@ namespace dconstruct::ast {
     struct sub_expr : public binary_expr {
         using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
     private:
         [[nodiscard]] std::string get_op_char() const noexcept final { return "-"; }
@@ -40,6 +41,7 @@ namespace dconstruct::ast {
     struct mul_expr : public binary_expr {
         using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
 
     private:
@@ -50,6 +52,7 @@ namespace dconstruct::ast {
     struct div_expr : public binary_expr {
         using binary_expr::binary_expr;
         std::unique_ptr<expression> eval() const noexcept final;
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
 
     private:
@@ -59,7 +62,7 @@ namespace dconstruct::ast {
 
     struct assign_expr : public binary_expr {
         using binary_expr::binary_expr;
-
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
         std::unique_ptr<expression> eval() const noexcept final;
 
     private:
@@ -68,6 +71,7 @@ namespace dconstruct::ast {
     };
 
     struct compare_expr : public binary_expr {
+        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
         enum comp_type {
             LT,

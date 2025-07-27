@@ -14,16 +14,14 @@ struct literal : public expression {
     }
 
     void ast(std::ostream& os) const noexcept override {
-        os << "literal[";
-        os << m_value;
-        os << "]";
+        os << "literal[" << m_value << ']';
     }
     
     [[nodiscard]] std::unique_ptr<expression> eval() const noexcept override {
         return std::make_unique<literal<T>>(*this);
     }
 
-    [[nodiscard]] b8 operator==(const expression &rhs) const noexcept override {
+    [[nodiscard]] b8 equals(const expression &rhs) const noexcept override {
         const literal<T>* rhs_lit = dynamic_cast<const literal<T>*>(&rhs);
         if (rhs_lit == nullptr) {
             return false;
