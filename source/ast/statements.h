@@ -2,58 +2,88 @@
 
 #include "base.h"
 #include "expressions.h"
+#include "binary_expressions.h"
 #include <vector>
-#include <ostream>
 
 namespace dconstruct::ast {
 
     struct statement {
+        virtual ~statement() = default;
         virtual void pseudo(std::ostream&) const noexcept = 0;
         virtual void ast(std::ostream&) const noexcept = 0;
+        [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept = 0;
     };
 
-    struct block_stmt : public statement {
-        void pseudo(std::ostream& os) const noexcept override {
-            os << '{';
-            for (const auto& stmt : m_statements) {
-                stmt->pseudo(os);
-                os << '\n';
-            }
-            os << '}';
-        }
+    [[nodiscard]] inline b8 operator==(const statement& lhs, const statement& rhs) noexcept {
+        return lhs.equals(rhs);
+    }
 
-        void ast(std::ostream& os) const noexcept override {
-            os << "block[";
-            for (const auto& stmt : m_statements) {
-                stmt->ast(os);
-                os << ',';
-            }
-            os << ']';
-        }
-        
-    private:
-        std::vector<statement*> m_statements;
-    };
+    [[nodiscard]] inline b8 operator==(const std::unique_ptr<statement>& lhs, const std::unique_ptr<statement>& rhs) noexcept {
+        return *lhs == *rhs;
+    }
 
-    struct if_stmt : public statement {
-        
-        void pseudo(std::ostream& os) const noexcept override {
-            os << "if (";
-            m_condition->pseudo(os);
-            os << ") ";
-            m_body->pseudo(os);
+    inline std::ostream& operator<<(std::ostream& os, const statement &expr) noexcept {
+        os << set_ast;
+        if (os.iword(get_flag_index()) & AST) {
+            expr.ast(os);
+        } else {
+            expr.pseudo(os);
         }
+        return os;
+    }
 
-        void ast(std::ostream& os) const noexcept override {
-            os << "if[cond=";
-            m_condition->pseudo(os);
-            os << ", body=";
-            m_body->pseudo(os);
-            os << ']';
-        }
+    struct assign_statement : public statement {
+        assign_statement(const assign_expr* expr) : m_expr(expr) {}; 
+        void pseudo(std::ostream&) const noexcept final;
+        void ast(std::ostream&) const noexcept final;
+        [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept override;
 
     private:
-        expression* m_condition;
-        block_stmt* m_body;
+        const assign_expr* m_expr;
     };
+
+    // struct block_stmt : public statement {
+    //     void pseudo(pseudo_stream& os) const noexcept override {
+    //         os << '{';
+    //         for (const auto& stmt : m_statements) {
+    //             stmt->pseudo(os);
+    //             os << '\n';
+    //         }
+    //         os << '}';
+    //     }
+
+    //     void ast(ast_stream& os) const noexcept override {
+    //         os << "block[";
+    //         for (const auto& stmt : m_statements) {
+    //             stmt->ast(os);
+    //             os << ',';
+    //         }
+    //         os << ']';
+    //     }
+        
+    // private:
+    //     std::vector<const statement*> m_statements;
+    // };
+
+    // struct if_stmt : public statement {
+        
+    //     void pseudo(pseudo_stream& os) const noexcept override {
+    //         os << "if (";
+    //         m_condition->pseudo(os);
+    //         os << ") ";
+    //         m_body->pseudo(os);
+    //     }
+
+    //     void ast(ast_stream& os) const noexcept override {
+    //         os << "if[cond=";
+    //         m_condition->pseudo(os);
+    //         os << ", body=";
+    //         m_body->pseudo(os);
+    //         os << ']';
+    //     }
+
+    // private:
+    //     const expression* m_condition;
+    //     const block_stmt* m_body;
+    // };
 }

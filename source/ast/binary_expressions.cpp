@@ -4,28 +4,60 @@
 namespace dconstruct::ast {
 
 void binary_expr::pseudo(std::ostream& os) const noexcept {
-    m_lhs->pseudo(os);
-    os << ' ' << get_op_char() << ' ';
-    m_rhs->pseudo(os);
+    os << *m_lhs << ' ' << get_op_char() << ' ' << *m_rhs;
 }
 
 void binary_expr::ast(std::ostream& os) const noexcept {
-    os << get_op_name() << '[';
-    m_lhs->ast(os);
-    os << ", ";
-    m_rhs->ast(os);
-    os << ']';
+    os << get_op_name() << '[' << *m_lhs << ", " << *m_rhs << ']';
 }
 
-[[nodiscard]] b8 binary_expr::operator==(const expression& rhs) const noexcept {
-    if (typeid(*this) == typeid(rhs)) {
-        if (const binary_expr* rhs_add = dynamic_cast<const binary_expr*>(&rhs)) {
-            return *m_lhs == *rhs_add->m_lhs && *m_rhs == *rhs_add->m_rhs;
-        }
+[[nodiscard]] b8 add_expr::equals(const expression& rhs) const noexcept {
+    const add_expr* rhs_ptr = dynamic_cast<const add_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
     }
-    return false;
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
 }
 
+[[nodiscard]] b8 sub_expr::equals(const expression& rhs) const noexcept {
+    const sub_expr* rhs_ptr = dynamic_cast<const sub_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
+    }
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
+}
+
+[[nodiscard]] b8 mul_expr::equals(const expression& rhs) const noexcept {
+    const mul_expr* rhs_ptr = dynamic_cast<const mul_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
+    }
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
+}
+
+[[nodiscard]] b8 div_expr::equals(const expression& rhs) const noexcept {
+    const div_expr* rhs_ptr = dynamic_cast<const div_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
+    }
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
+}
+
+[[nodiscard]] b8 assign_expr::equals(const expression& rhs) const noexcept {
+    const assign_expr* rhs_ptr = dynamic_cast<const assign_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
+    }
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
+}
+
+[[nodiscard]] b8 compare_expr::equals(const expression& rhs) const noexcept {
+    const compare_expr* rhs_ptr = dynamic_cast<const compare_expr*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
+    }
+    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs && m_compType == rhs_ptr->m_compType;
+}
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 
     if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(m_lhs.get())) {

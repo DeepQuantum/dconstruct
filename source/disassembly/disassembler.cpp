@@ -1387,7 +1387,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
     }
     
     if (table_entry.m_type != NONE) {
-        stackFrame.symbolTableEntries.emplace(istr.operand1, table_entry);
+        stackFrame.m_symbolTableEntries.emplace(istr.operand1, table_entry);
     }
     line.m_text = std::string(disassembly_text);
     line.m_comment = std::string(interpreted);
@@ -1444,7 +1444,7 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
 
     location table = functionDisassembly.m_stackFrame.m_symbolTable;
 
-    for (const auto &[i, entry] : functionDisassembly.m_stackFrame.symbolTableEntries) {
+    for (const auto &[i, entry] : functionDisassembly.m_stackFrame.m_symbolTableEntries) {
         snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(table + i * 8));
         switch (entry.m_type) {
             case SymbolTableEntryType::FLOAT: {

@@ -2,7 +2,9 @@
 
 #include "binary_expressions.h"
 #include "literal.h"
-#include <unordered_map>
+#include "statements.h"
+#include "instructions.h"
+#include <map>
 #include <type_traits>
 
 namespace dconstruct::dcompiler {
@@ -26,13 +28,17 @@ namespace dconstruct::dcompiler {
     // every expression type implements a way to evaluate it to the "lowest" level.
 
     struct expression_frame {
-        std::unordered_map<u32, std::unique_ptr<ast::expression>> m_expressions;
-        std::vector<std::unique_ptr<ast::expression>> m_finalized;
+        std::map<u32, std::unique_ptr<ast::expression>> m_expressions;
+        std::vector<std::unique_ptr<ast::statement>> m_statements;
+        std::map<u32, SymbolTableEntry> m_symbolTable;
         u32 m_varCount = 0;
 
-        explicit expression_frame() {
-            for (u32 i = 0; i < 128; ++i) {
+        explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
+            for (u32 i = 0; i < 49; ++i) {
                 m_expressions[i] = nullptr;
+            }
+            for (u32 i = 49; i < 128; ++i) {
+                m_expressions[i] = std::make_unique<ast::identifier>("arg_" + std::to_string(i), i - 49);
             }
         }
 
@@ -42,30 +48,26 @@ namespace dconstruct::dcompiler {
             return m_varCount++;
         }
 
-        void finalize_expression(const u32 dst) {
-            if (m_expressions.at(dst) != nullptr) {
-                m_finalized.emplace_back(std::move(m_expressions[dst]->eval()));
-                m_expressions[dst] = nullptr;
-            }
-        }
+        void move(const u32, const u32) noexcept;
 
-        void load_immediate(const u32 dst, const u64 num) {
-            finalize_expression(dst);
-            m_expressions[dst] = std::make_unique<ast::assign_expr>(
-                std::move(std::make_unique<ast::identifier>(get_next_var_idx())),
-                std::move(std::make_unique<ast::literal<u64>>(num))
-            );
+
+        template<typename T>
+        inline void load_literal(const u32 dst, const T value) noexcept {
+            std::unique_ptr<ast::literal<T>> literal = std::make_unique<ast::literal<T>>(value);
+            std::unique_ptr<ast::identifier> id = std::make_unique<ast::identifier>(get_next_var_idx());
+            std::unique_ptr<ast::assign_expr> assign = std::make_unique<ast::assign_expr>(std::move(id), std::move(literal));
+            m_statements.emplace_back(std::make_unique<ast::assign_statement>(assign.get()));
+            m_expressions[dst] = std::move(assign);
         }
 
         template<ast::requires_binary_expr binary_expr_t>
-        void apply_binary_op(const Instruction& istr) {
-            if (istr.destination != istr.operand1) {
-                finalize_expression(istr.destination);
-            }
-            m_expressions[istr.destination] = std::make_unique<binary_expr_t>(
-                std::move(m_expressions[istr.operand1]), 
-                std::move(m_expressions[istr.operand2])
-            );
+        inline void apply_binary_op(const Instruction& istr) noexcept {
+            m_expressions[istr.destination] = std::make_unique<ast::grouping>(
+                std::move(std::make_unique<binary_expr_t>(
+                    std::move(m_expressions[istr.operand1]), 
+                    std::move(m_expressions[istr.operand2])
+                )
+            ));
         }
     };
 }
