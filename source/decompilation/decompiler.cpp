@@ -22,7 +22,7 @@ std::vector<decompiled_function> Decompiler::decompile() noexcept {
         cfg.find_loops();
         //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
 
-        expression_frame frame;
+        expression_frame frame(func->m_stackFrame.m_symbolTableEntries);
         for (const auto& [_, node] : cfg.get_nodes()) {
             parse_basic_block(node, frame);
         }
@@ -35,14 +35,26 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
         switch(istr.opcode) {
-            case Opcode::Move: expression_frame.apply_binary_op<ast::assign_expr>(istr); break;
-            case Opcode::IAdd: expression_frame.apply_binary_op<ast::add_expr>(istr); break;
-            case Opcode::ISub: expression_frame.apply_binary_op<ast::sub_expr>(istr); break;
-            case Opcode::IMul: expression_frame.apply_binary_op<ast::mul_expr>(istr); break;
-            case Opcode::IDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
-            case Opcode::LoadU16Imm: expression_frame.load_immediate(istr.destination, istr.operand1 | (istr.operand2 << 8)); break;
+            case Opcode::IAdd: 
+            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr); break;
+            case Opcode::ISub:
+            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr); break;
+            case Opcode::IMul:
+            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr); break;
+            case Opcode::IDiv:
+            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
+
+            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, u64(istr.operand1 | (istr.operand2 << 8))); break;
+            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64);
+            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32);
+            case Opcode::LoadStaticPointer: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_hash);
+
+
+            case Opcode::Move: {
+                expression_frame.move(istr.destination, istr.operand1);
+            }
             default: {
-                std::cerr << "Not implemented\n";
+                return;
             }
         }
     }

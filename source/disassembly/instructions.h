@@ -218,12 +218,12 @@ struct Register {
 struct StackFrame {
     Register m_registers[128];
     location m_symbolTable;
-    std::map<u32, SymbolTableEntry> symbolTableEntries;
+    std::map<u32, SymbolTableEntry> m_symbolTableEntries;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     u32 m_argCount = 0;
 
-    StackFrame() : m_registers{}, symbolTableEntries{}, m_labels{} {
+    StackFrame() : m_registers{}, m_symbolTableEntries{}, m_labels{} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
