@@ -5,10 +5,10 @@
 #include "statements.h"
 #include "assign_statement.h"
 #include "instructions.h"
+#include "type.h"
 #include <map>
 #include <type_traits>
 #include <vector>
-#include "tokens.h"
 #include <iostream>
 
 
@@ -32,22 +32,15 @@ namespace dconstruct::dcompiler {
     // so you might have if (*x == y)... without being able to evaluate the comparison any further.
     // every expression type implements a way to evaluate it to the "lowest" level.
 
-    enum expression_type {
-        E_UNKNOWN,
-        E_INT,
-        E_FLOAT,
-        E_STRING,
-        E_PTR,
-        E_HASH,
-    };
+    
 
     struct typed_expression {
-        typed_expression() : m_expr(nullptr), m_type(E_UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type{E_UNKNOWN} {};
-        typed_expression(std::unique_ptr<ast::expression> expr, expression_type type) : m_expr(std::move(expr)), m_type{type} {};
+        typed_expression() : m_expr(nullptr), m_type(ast::E_UNKNOWN) {};
+        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::E_UNKNOWN) {};
+        typed_expression(std::unique_ptr<ast::expression> expr, ast::type type) : m_expr(std::move(expr)), m_type(type) {};
 
         std::unique_ptr<ast::expression> m_expr;
-        expression_type m_type;
+        ast::type m_type;
     };
 
     struct expression_frame {
@@ -75,7 +68,7 @@ namespace dconstruct::dcompiler {
 
 
         template<typename T>
-        inline void load_literal(const u32 dst, const expression_type type, const T value) {
+        inline void load_literal(const u32 dst, const ast::type type, const T value) {
             std::unique_ptr<ast::literal<T>> literal = std::make_unique<ast::literal<T>>(value);
             std::unique_ptr<ast::identifier> id = std::make_unique<ast::identifier>(get_next_var_idx());
             std::unique_ptr<ast::assign_expr> assign = std::make_unique<ast::assign_expr>(std::move(id), std::move(literal));
