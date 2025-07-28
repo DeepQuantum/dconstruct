@@ -27,11 +27,11 @@ namespace dconstruct::ast {
     return m_lhs == rhs_ptr->m_lhs;
 }
 
-[[nodiscard]] std::unique_ptr<expression> identifier::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> identifier::eval() const {
     return std::make_unique<identifier>(*this);
 }
 
-[[nodiscard]] std::unique_ptr<expression> grouping::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> grouping::eval() const {
     return std::make_unique<grouping>(std::move(m_expr));
 }
 
@@ -56,31 +56,31 @@ namespace dconstruct::ast {
 //    os << "}]";
 //}
 
-void logical_not_expr::pseudo(std::ostream &os) const noexcept {
+void logical_not_expr::pseudo(std::ostream &os) const {
     os << '!' << m_lhs;
 }
 
-void logical_not_expr::ast(std::ostream &os) const noexcept {
+void logical_not_expr::ast(std::ostream &os) const {
     os << "logica_not[" << m_lhs << ']'; 
 }
 
-[[nodiscard]] std::unique_ptr<expression> logical_not_expr::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> logical_not_expr::eval() const {
     return nullptr;
 }
 
-void identifier::ast(std::ostream& os) const noexcept {
+void identifier::ast(std::ostream& os) const {
     os << "identifier[" << m_idx << ", " << m_name << ']';
 }
 
-void identifier::pseudo(std::ostream& os) const noexcept {
+void identifier::pseudo(std::ostream& os) const {
     os << m_name;
 }
 
-void grouping::ast(std::ostream& os) const noexcept {
+void grouping::ast(std::ostream& os) const {
     os << "grouping[" << m_expr << ']';
 }
 
-void grouping::pseudo(std::ostream& os) const noexcept {
+void grouping::pseudo(std::ostream& os) const {
     os << '(' << m_expr << ')';
 }
 

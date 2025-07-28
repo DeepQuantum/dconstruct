@@ -312,7 +312,10 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleNumParse1) {
-        const std::vector<compiler::token> tokens = {compiler::token(compiler::token_type::INT, "1", 1ULL, 1)};
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1), 
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1) 
+        };
         const auto [expression, errors] = get_expression(tokens);
         
         const std::unique_ptr<ast::expression> expected = std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1));
@@ -327,6 +330,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
         const auto [expression, errors] = get_expression(tokens);
         
@@ -347,6 +351,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
         const auto [expression, errors] = get_expression(tokens);
@@ -374,6 +379,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
             compiler::token(compiler::token_type::MINUS, "-", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
         const auto [expression, errors] = get_expression(tokens);
@@ -390,6 +396,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::RIGHT_PAREN, ")", 1ULL, 1),
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
         const auto [expression, errors] = get_expression(tokens);

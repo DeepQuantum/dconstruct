@@ -9,15 +9,15 @@ struct literal : public expression {
 
     const T& get_value() const noexcept { return m_value; }
 
-    void pseudo(std::ostream& os) const noexcept override {
+    void pseudo(std::ostream& os) const override {
         os << m_value;
     }
 
-    void ast(std::ostream& os) const noexcept override {
+    void ast(std::ostream& os) const override {
         os << "literal[" << m_value << ']';
     }
     
-    [[nodiscard]] std::unique_ptr<expression> eval() const noexcept override {
+    [[nodiscard]] std::unique_ptr<expression> eval() const override {
         return std::make_unique<literal<T>>(*this);
     }
 

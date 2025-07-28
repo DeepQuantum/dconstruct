@@ -3,26 +3,26 @@
 
 namespace dconstruct::compiler {
 
-[[nodiscard]] const token& Parser::peek() const noexcept {
+[[nodiscard]] const token& Parser::peek() const {
     return m_tokens[m_current];
 }
 
-[[nodiscard]] const token& Parser::previous() const noexcept {
+[[nodiscard]] const token& Parser::previous() const {
     return m_tokens[m_current - 1];
 }
 
-[[nodiscard]] b8 Parser::is_at_end() const noexcept {
+[[nodiscard]] b8 Parser::is_at_end() const {
     return peek().m_type == token_type::_EOF;
 }
 
-const token& Parser::advance() noexcept {
+const token& Parser::advance() {
     if (!is_at_end()) {
         m_current++;
     }
     return previous();
 }
 
-const token* Parser::consume(const token_type type, const std::string& message) noexcept {
+const token* Parser::consume(const token_type type, const std::string& message) {
     if (check(type)) {
         return &advance();
     }
@@ -30,14 +30,14 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return nullptr;
 }
 
-[[nodiscard]] b8 Parser::check(const token_type type) const noexcept {
+[[nodiscard]] b8 Parser::check(const token_type type) const {
     if (is_at_end()) {
         return false;
     }
     return peek().m_type == type;
 }
 
-[[nodiscard]] b8 Parser::match(const std::initializer_list<token_type>& types) noexcept {
+[[nodiscard]] b8 Parser::match(const std::initializer_list<token_type>& types) {
     for (const token_type tt : types) {
         if (check(tt)) {
             advance();
@@ -47,15 +47,15 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return false;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::parse() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::parse() {
     return make_expression();
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_expression() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_expression() {
     return make_equality();
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_equality() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_equality() {
     std::unique_ptr<ast::expression> expr = make_comparison();
     if (expr == nullptr) {
         return nullptr;
@@ -84,7 +84,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return expr;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_comparison() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_comparison() {
     std::unique_ptr<ast::expression> expr = make_term();
     if (expr == nullptr) {
         return nullptr;
@@ -121,7 +121,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return expr;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_term() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_term() {
     std::unique_ptr<ast::expression> expr = make_factor();
     if (expr == nullptr) {
         return nullptr;
@@ -150,7 +150,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return expr;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_factor() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_factor() {
     std::unique_ptr<ast::expression> expr = make_unary();
     while (match({SLASH, STAR})) {
         const token& op = previous();
@@ -176,7 +176,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return expr;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_unary() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_unary() {
     if (match({BANG, MINUS})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_unary();
@@ -196,7 +196,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return make_primary();
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_primary() noexcept {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_primary() {
     if (match({TRUE})) {
         return std::make_unique<ast::literal<b8>>(true);
     } else if (match({FALSE})) {

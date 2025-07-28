@@ -14,7 +14,7 @@ namespace dconstruct {
             m_options = options;
         }
 
-        ~FileDisassembler() override {
+        ~FileDisassembler() noexcept override {
             fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
             fclose(m_outfptr);
         }

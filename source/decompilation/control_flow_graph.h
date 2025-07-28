@@ -16,11 +16,11 @@ namespace dconstruct {
         u32 m_startLine = 0;
         u32 m_endLine = 0;
 
-        explicit control_flow_node() noexcept = default;
+        explicit control_flow_node() = default;
 
-        explicit control_flow_node(const u32 line) noexcept : m_startLine(line) {}
+        explicit control_flow_node(const u32 line) : m_startLine(line) {}
 
-        [[nodiscard]] std::string get_label_html() const noexcept;
+        [[nodiscard]] std::string get_label_html() const;
     };
 
     struct control_flow_loop {
@@ -32,10 +32,10 @@ namespace dconstruct {
     class ControlFlowGraph {
     public:
         ControlFlowGraph() = delete;
-        explicit ControlFlowGraph(const function_disassembly *) noexcept;
-        void find_loops() noexcept;
-        void write_to_txt_file(const std::string& path = "graph.txt") const noexcept;
-        void write_image(const std::string &path = "graph.svg") const noexcept;
+        explicit ControlFlowGraph(const function_disassembly *);
+        void find_loops();
+        void write_to_txt_file(const std::string& path = "graph.txt") const;
+        void write_image(const std::string &path = "graph.svg") const;
 
         void insert_loop_subgraphs(Agraph_t *g) const;
 
@@ -50,17 +50,17 @@ namespace dconstruct {
         std::map<u32, u32> m_immediateDominators{};
         const function_disassembly *m_func;
 
-        [[nodiscard]] control_flow_node* insert_node_at_line(const u32 start_line) noexcept;
-        [[nodiscard]] const control_flow_node* get_node_with_last_line(const u32 line) const noexcept;
+        [[nodiscard]] control_flow_node* insert_node_at_line(const u32 start_line);
+        [[nodiscard]] const control_flow_node* get_node_with_last_line(const u32 line) const;
 
-        [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> insert_graphviz_nodes(Agraph_t* g) const noexcept;
-        void insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const noexcept;
+        [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> insert_graphviz_nodes(Agraph_t* g) const;
+        void insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const;
 
-        [[nodiscard]] b8 dominates(const control_flow_node*, const control_flow_node*) const noexcept;
-        [[nodiscard]] static b8 dominee_not_found_outside_dominator_path(const control_flow_node* current_head, const control_flow_node* dominator, const control_flow_node* dominee, std::unordered_set<const control_flow_node*>& visited) noexcept;
-        [[nodiscard]] std::vector<const control_flow_node*> collect_loop_body(const control_flow_node*, const control_flow_node*) const noexcept;
+        [[nodiscard]] b8 dominates(const control_flow_node*, const control_flow_node*) const;
+        [[nodiscard]] static b8 dominee_not_found_outside_dominator_path(const control_flow_node* current_head, const control_flow_node* dominator, const control_flow_node* dominee, std::unordered_set<const control_flow_node*>& visited);
+        [[nodiscard]] std::vector<const control_flow_node*> collect_loop_body(const control_flow_node*, const control_flow_node*) const;
         
-        [[nodiscard]] std::map<const control_flow_node*, std::vector<const control_flow_node*>> compute_predecessors() const noexcept;
+        [[nodiscard]] std::map<const control_flow_node*, std::vector<const control_flow_node*>> compute_predecessors() const;
         /*void find_immediate_dominators() noexcept;
         [[nodiscard]] std::vector<u32> get_idom_predecessors(const u32 n) noexcept;
         [[nodiscard]] u32 intersect(const u32 n1, const u32 n2) const noexcept;*/

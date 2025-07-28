@@ -19,7 +19,7 @@ namespace dconstruct {
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
 
-    [[nodiscard]] std::string control_flow_node::get_label_html() const noexcept {
+    [[nodiscard]] std::string control_flow_node::get_label_html() const {
         std::stringstream ss;
 
         ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="10">"
@@ -35,7 +35,7 @@ namespace dconstruct {
         return ss.str();
     } 
 
-    ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) noexcept : m_func(func)  {
+    ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
         m_nodes.emplace(0, 0);
         control_flow_node *current_node = &m_nodes[0];
@@ -44,7 +44,7 @@ namespace dconstruct {
         for (u32 i = 0; i < func->m_lines.size(); ++i) {
             const function_disassembly_line &current_line = func->m_lines[i];
             current_node->m_lines.push_back(current_line);
-            if (current_line.m_instruction.opcode == Opcode::Return) {
+            if (i == func->m_lines.size() - 1) {
                 current_node->m_endLine = current_line.m_location;
                 return;
             }
@@ -75,7 +75,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] const control_flow_node* ControlFlowGraph::get_node_with_last_line(const u32 line) const noexcept {
+    [[nodiscard]] const control_flow_node* ControlFlowGraph::get_node_with_last_line(const u32 line) const {
         for (const auto& [_, node] : m_nodes) {
             if (node.m_endLine == line) {
                 return &node;
@@ -84,14 +84,14 @@ namespace dconstruct {
         return nullptr;
     }
 
-    [[nodiscard]] control_flow_node* ControlFlowGraph::insert_node_at_line(const u32 start_line) noexcept {
+    [[nodiscard]] control_flow_node* ControlFlowGraph::insert_node_at_line(const u32 start_line) {
         if (!m_nodes.contains(start_line)) {
             m_nodes.emplace(start_line, start_line);
         }
         return &m_nodes.at(start_line);
     }
 
-    void ControlFlowGraph::write_to_txt_file(const std::string& path) const noexcept {
+    void ControlFlowGraph::write_to_txt_file(const std::string& path) const {
         std::ofstream graph_file(path);
 
         if (!graph_file.is_open()) {
@@ -115,7 +115,7 @@ namespace dconstruct {
     }
     static std::mutex g_graphviz_mutex;
 
-    void ControlFlowGraph::write_image(const std::string& path) const noexcept {
+    void ControlFlowGraph::write_image(const std::string& path) const {
         GVC_t* gvc = gvContext();
         Agraph_t* g = agopen((char*)"G", Agdirected, nullptr);
         std::lock_guard<std::mutex> lock(g_graphviz_mutex);
@@ -164,7 +164,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const noexcept {
+    [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
         std::map<u32, Agnode_t*> node_map{};
         u32 max_node = 0;
         for (const auto& [node_start, node] : m_nodes) {
@@ -185,7 +185,7 @@ namespace dconstruct {
         return { node_map, max_node };
     }
 
-    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const noexcept {
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const {
         for (const auto& [node_start, node] : m_nodes) {
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == BranchIf || node.m_lines.back().m_instruction.opcode == BranchIfNot;
 
@@ -213,7 +213,7 @@ namespace dconstruct {
         }
     }
 
-    void ControlFlowGraph::find_loops() noexcept {
+    void ControlFlowGraph::find_loops() {
         for (const auto& loc : m_func->m_stackFrame.m_backwardsJumpLocs) {
             const control_flow_node* loop_latch = get_node_with_last_line(loc.m_location);
             const control_flow_node* loop_head = &m_nodes.at(loc.m_target);
@@ -225,7 +225,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::map<const control_flow_node*, std::vector<const control_flow_node*>> ControlFlowGraph::compute_predecessors() const noexcept {
+    [[nodiscard]] std::map<const control_flow_node*, std::vector<const control_flow_node*>> ControlFlowGraph::compute_predecessors() const {
         std::map<const control_flow_node*, std::vector<const control_flow_node*>> predecessors{};
         for (const auto & [node_start, node] : m_nodes) {
             for (const auto &successor : node.m_successors) {
@@ -241,7 +241,7 @@ namespace dconstruct {
         const control_flow_node *dominator, 
         const control_flow_node *dominee, 
         std::unordered_set<const control_flow_node*> &visited
-    ) noexcept {
+    ) {
         if (current_head == dominator) {
             return true;
         } 
@@ -257,7 +257,7 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::dominates(const control_flow_node *dominator, const control_flow_node *dominee) const noexcept {
+    [[nodiscard]] b8 ControlFlowGraph::dominates(const control_flow_node *dominator, const control_flow_node *dominee) const {
         if (dominator == dominee) {
             return true;
         }
@@ -275,7 +275,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::vector<const control_flow_node*> ControlFlowGraph::collect_loop_body(const control_flow_node* head, const control_flow_node* latch) const noexcept {
+    [[nodiscard]] std::vector<const control_flow_node*> ControlFlowGraph::collect_loop_body(const control_flow_node* head, const control_flow_node* latch) const {
         std::vector<const control_flow_node*> body{};
 
         add_successors(body, head, latch);

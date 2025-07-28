@@ -62,14 +62,14 @@ namespace dconstruct {
         void insert_span_fmt(const char* format, Args ...args);
         template<TextFormat text_format = TextFormat{}, typename... Args> 
         void insert_span_indent(const char*, const u32, Args ...);
-        [[nodiscard]] const char* lookup(const sid64 hash) noexcept;
+        [[nodiscard]] const char* lookup(const sid64 hash);
         [[nodiscard]] b8 is_unmapped_sid(const location) const noexcept;
         void insert_header_line();
         [[nodiscard]] b8 is_possible_float(const f32* ptr) const noexcept;
         [[nodiscard]] b8 is_possible_i32(const i32* ptr) const noexcept;
-        u8 insert_struct_or_arraylike(const location, const u32) noexcept;
-        [[nodiscard]] u32 get_size_array(const location, const u32) noexcept;
-        void insert_anonymous_array(const location, const u32) noexcept;
+        u8 insert_struct_or_arraylike(const location, const u32);
+        [[nodiscard]] u32 get_size_array(const location, const u32);
+        void insert_anonymous_array(const location, const u32);
         void insert_array(const location, const u32, const u32);
         void insert_state_script(const StateScript*, const u32);
         void insert_unmapped_struct(const structs::unmapped*, const u32);
@@ -78,8 +78,8 @@ namespace dconstruct {
         void insert_on_block(const SsOnBlock* block, const u32);
         void process_instruction(StackFrame& stackFrame, function_disassembly_line& functionLine);
         void insert_function_disassembly_text(const function_disassembly& functionDisassembly, const u32 indent);
-        void insert_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent) noexcept;
-        void insert_goto_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines) noexcept;
+        void insert_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent);
+        void insert_goto_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
 
