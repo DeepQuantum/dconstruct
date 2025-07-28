@@ -5,12 +5,12 @@
 
 namespace dconstruct {
 
-    void SIDBase::load(const std::filesystem::path& path) noexcept {
+    void SIDBase::load(const std::filesystem::path& path) {
 
         std::ifstream sidfile(path, std::ios::binary);
 
         if (!sidfile.is_open()) {
-            std::cout << "couldn't open sidbase at path \'" << path << "'\n";
+            std::cerr << "couldn't open sidbase at path \'" << path << "'\n";
             exit(-1);
         }
 

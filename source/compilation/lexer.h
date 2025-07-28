@@ -43,8 +43,11 @@ inline std::ostream& operator<<(std::ostream& os, const token &t) {
 class Lexer {
 public:
     Lexer(const std::string &source) : m_source(source) {};
-    const std::vector<token>& scan_tokens() noexcept;
-    const std::vector<lexing_error>& get_errors() const noexcept;
+    const std::vector<token>& scan_tokens();
+
+    [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept {
+        return m_errors;
+    }
 
 private:
     const std::unordered_map<std::string, token_type> m_keywords {
@@ -67,21 +70,21 @@ private:
 
     b8 m_hadError = false;
 
-    [[nodiscard]] token scan_token() noexcept;
+    [[nodiscard]] token scan_token();
     [[nodiscard]] b8 reached_eof() const noexcept;
-    char advance() noexcept;
-    [[nodiscard]] std::string make_current_lexeme() const noexcept;
-    [[nodiscard]] token make_current_token(const token_type, const token::t_literal& = 0ULL) const noexcept;
-    [[nodiscard]] token make_string() noexcept;
-    [[nodiscard]] token make_number() noexcept;
-    [[nodiscard]] token make_hex() noexcept;
-    [[nodiscard]] token make_identifier() noexcept;
-    [[nodiscard]] token make_sid() noexcept;
+    char advance();
+    [[nodiscard]] std::string make_current_lexeme() const;
+    [[nodiscard]] token make_current_token(const token_type, const token::t_literal& = 0ULL) const;
+    [[nodiscard]] token make_string();
+    [[nodiscard]] token make_number();
+    [[nodiscard]] token make_hex();
+    [[nodiscard]] token make_identifier();
+    [[nodiscard]] token make_sid();
     [[nodiscard]] b8 is_sid_char(const char) const noexcept;
     [[nodiscard]] b8 is_hex_char(const char) const noexcept;
-    [[nodiscard]] b8 match(const char) noexcept;
-    [[nodiscard]] char peek() const noexcept;
-    [[nodiscard]] char peek_next() const noexcept;
+    [[nodiscard]] b8 match(const char);
+    [[nodiscard]] char peek() const;
+    [[nodiscard]] char peek_next() const;
 };
 
 }

@@ -3,7 +3,7 @@
 
 namespace dconstruct::compiler {
 
-[[nodiscard]] const std::vector<token>& Lexer::scan_tokens() noexcept {
+[[nodiscard]] const std::vector<token>& Lexer::scan_tokens() {
     while (!reached_eof()) {
         m_start = m_current;
         token t = scan_token();
@@ -17,28 +17,26 @@ namespace dconstruct::compiler {
     return m_tokens;
 }
 
-[[nodiscard]] const std::vector<lexing_error>& Lexer::get_errors() const noexcept {
-    return m_errors;
-}
+
 
 [[nodiscard]] b8 Lexer::reached_eof() const noexcept {
     return m_current >= m_source.size();
 }
 
-[[nodiscard]] token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const noexcept {
+[[nodiscard]] token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const {
     const std::string text = make_current_lexeme();
     return token(type, text, literal, m_line);
 }
 
-[[nodiscard]] std::string Lexer::make_current_lexeme() const noexcept {
+[[nodiscard]] std::string Lexer::make_current_lexeme() const {
     return m_source.substr(m_start, m_current - m_start);
 }
 
-char Lexer::advance() noexcept {
+char Lexer::advance() {
     return m_source.at(m_current++);
 }
 
-[[nodiscard]] b8 Lexer::match(const char expected) noexcept {
+[[nodiscard]] b8 Lexer::match(const char expected) {
     if (reached_eof()) {
         return false;
     }
@@ -49,21 +47,21 @@ char Lexer::advance() noexcept {
     return true;
 }
 
-[[nodiscard]] char Lexer::peek() const noexcept {
+[[nodiscard]] char Lexer::peek() const {
     if (reached_eof()) {
         return '\0';
     }
     return m_source.at(m_current);
 }
 
-[[nodiscard]] char Lexer::peek_next() const noexcept {
+[[nodiscard]] char Lexer::peek_next() const {
     if (m_current + 1 >= m_source.size()) {
         return '\0';
     }
     return m_source.at(m_current + 1);
 }
 
-[[nodiscard]] token Lexer::make_string() noexcept {
+[[nodiscard]] token Lexer::make_string() {
     while (peek() != '"' && !reached_eof()) {
         if (peek() == '\n') {
             m_line++;
@@ -86,7 +84,7 @@ char Lexer::advance() noexcept {
 
 
 
-[[nodiscard]] token Lexer::make_sid() noexcept {
+[[nodiscard]] token Lexer::make_sid() {
     while (is_sid_char(peek())) {
         advance();
     }
@@ -94,7 +92,7 @@ char Lexer::advance() noexcept {
     return make_current_token(SID, literal);
 }
 
-[[nodiscard]] token Lexer::make_number() noexcept {
+[[nodiscard]] token Lexer::make_number() {
     b8 is_double = false;
     while (std::isdigit(peek())) {
         advance();
@@ -116,7 +114,7 @@ char Lexer::advance() noexcept {
     return std::isdigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
 
-[[nodiscard]] token Lexer::make_hex() noexcept {
+[[nodiscard]] token Lexer::make_hex() {
     while (is_hex_char(peek())) {
         advance();
     }
@@ -124,7 +122,7 @@ char Lexer::advance() noexcept {
     return make_current_token(HEX, literal);
 }
 
-[[nodiscard]] token Lexer::make_identifier() noexcept {
+[[nodiscard]] token Lexer::make_identifier() {
     char current = peek();
     while (std::isalpha(current) || std::isdigit(current) || current == '_') {
         advance();
@@ -138,7 +136,7 @@ char Lexer::advance() noexcept {
     return make_current_token(IDENTIFIER);
 }
 
-[[nodiscard]] token Lexer::scan_token() noexcept {
+[[nodiscard]] token Lexer::scan_token() {
     const char c = advance();
     switch(c) {
         case '(': return make_current_token(LEFT_PAREN); 

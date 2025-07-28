@@ -4,13 +4,14 @@
 #include "expressions.h"
 #include "binary_expressions.h"
 #include <vector>
+#include "tokens.h"
 
 namespace dconstruct::ast {
 
     struct statement {
         virtual ~statement() = default;
-        virtual void pseudo(std::ostream&) const noexcept = 0;
-        virtual void ast(std::ostream&) const noexcept = 0;
+        virtual void pseudo(std::ostream&) const = 0;
+        virtual void ast(std::ostream&) const = 0;
         [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept = 0;
     };
 
@@ -22,7 +23,7 @@ namespace dconstruct::ast {
         return *lhs == *rhs;
     }
 
-    inline std::ostream& operator<<(std::ostream& os, const statement &expr) noexcept {
+    inline std::ostream& operator<<(std::ostream& os, const statement &expr) {
         os << set_ast;
         if (os.iword(get_flag_index()) & AST) {
             expr.ast(os);
@@ -32,15 +33,7 @@ namespace dconstruct::ast {
         return os;
     }
 
-    struct assign_statement : public statement {
-        assign_statement(const assign_expr* expr) : m_expr(expr) {}; 
-        void pseudo(std::ostream&) const noexcept final;
-        void ast(std::ostream&) const noexcept final;
-        [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept override;
-
-    private:
-        const assign_expr* m_expr;
-    };
+    
 
     // struct block_stmt : public statement {
     //     void pseudo(pseudo_stream& os) const noexcept override {

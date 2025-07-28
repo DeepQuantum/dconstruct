@@ -27,8 +27,8 @@ namespace dconstruct {
 	struct location {
 		const std::byte* m_ptr = nullptr;
 
-		location() {};
-		location(const void* ptr) : m_ptr(reinterpret_cast<const std::byte*>(ptr)) {};
+		location() noexcept {};
+		location(const void* ptr) noexcept : m_ptr(reinterpret_cast<const std::byte*>(ptr)) {};
 
 		[[nodiscard]] location &from(const location& rhs, const i32 offset = 0) noexcept {
 			m_ptr = rhs.get<std::byte*>() + offset;
@@ -75,7 +75,7 @@ namespace dconstruct {
 	};
 
 
-	constexpr sid64 ToStringId64(const char* str) {
+	constexpr sid64 ToStringId64(const char* str) noexcept {
 		u64 base = 0xCBF29CE484222325;
 		if (*str) {
 			do {
@@ -85,15 +85,15 @@ namespace dconstruct {
 		return base;
 	}
 
-	inline const std::string int_to_string_id(sid64 sid) {
+	inline const std::string int_to_string_id(sid64 sid) noexcept {
 		char buffer[20] = { 0 };
-		snprintf(buffer, sizeof(buffer), "#%016llX", sid);
+		std::snprintf(buffer, sizeof(buffer), "#%016llX", sid);
 		return buffer;
 	}
 
-	inline const std::string offset_to_string(u32 offset) {
+	inline const std::string offset_to_string(u32 offset) noexcept {
 		char buffer[20] = { 0 };
-		snprintf(buffer, sizeof(buffer), "0x%06X", offset);
+		std::snprintf(buffer, sizeof(buffer), "0x%06X", offset);
 		return buffer;
 	}
 };

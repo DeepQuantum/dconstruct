@@ -137,7 +137,7 @@ namespace dconstruct {
     }
 
     
-    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const noexcept { 
+    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const { 
         std::byte *unmapped_bytes = new std::byte[m_size];
 
         std::memcpy(unmapped_bytes, m_bytes.get(), m_size);

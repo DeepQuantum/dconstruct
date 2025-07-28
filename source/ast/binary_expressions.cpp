@@ -3,11 +3,11 @@
 
 namespace dconstruct::ast {
 
-void binary_expr::pseudo(std::ostream& os) const noexcept {
+void binary_expr::pseudo(std::ostream& os) const {
     os << *m_lhs << ' ' << get_op_char() << ' ' << *m_rhs;
 }
 
-void binary_expr::ast(std::ostream& os) const noexcept {
+void binary_expr::ast(std::ostream& os) const {
     os << get_op_name() << '[' << *m_lhs << ", " << *m_rhs << ']';
 }
 
@@ -59,7 +59,7 @@ void binary_expr::ast(std::ostream& os) const noexcept {
     return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs && m_compType == rhs_ptr->m_compType;
 }
 
-[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const noexcept{ 
+[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const { 
     if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(m_lhs.get())) {
         if (const literal<u64>* rhs_num_lit = dynamic_cast<const literal<u64>*>(m_rhs.get())) {
             const u64 left_num = lhs_num_lit->get_value();
@@ -70,23 +70,23 @@ void binary_expr::ast(std::ostream& os) const noexcept {
     return nullptr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> mul_expr::eval() const noexcept{ 
+[[nodiscard]] std::unique_ptr<expression> mul_expr::eval() const{ 
     return nullptr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> sub_expr::eval() const noexcept{ 
+[[nodiscard]] std::unique_ptr<expression> sub_expr::eval() const{ 
     return nullptr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> div_expr::eval() const noexcept{ 
+[[nodiscard]] std::unique_ptr<expression> div_expr::eval() const { 
     return nullptr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> assign_expr::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> assign_expr::eval() const {
     return nullptr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> compare_expr::eval() const noexcept {
+[[nodiscard]] std::unique_ptr<expression> compare_expr::eval() const {
     return nullptr;
 }
 }
