@@ -18,6 +18,8 @@ file(GLOB BASE_SOURCE_FILES
     "${SOURCE_DIR}/compilation/*.h"
     "${SOURCE_DIR}/ast/*.h"
     "${SOURCE_DIR}/ast/*.cpp"
+    "${SOURCE_DIR}/ast/statements/*.cpp"
+    "${SOURCE_DIR}/ast/statements/*.h"
 )
 
 include(FetchContent)
@@ -47,9 +49,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
 )
-target_compile_definitions(dconstruct PRIVATE
-    CXXOPTS_NO_EXCEPTIONS=1
-)
 
 # link_directories("${SOURCE_DIR}/Graphviz-13.1.0-win64/lib")
 target_link_libraries(dconstruct PRIVATE
@@ -65,6 +64,7 @@ target_include_directories(dconstruct PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
     "${SOURCE_DIR}/ast"
+    "${SOURCE_DIR}/ast/statements/"
 )
 
 # add_custom_command(
@@ -115,6 +115,7 @@ target_include_directories(dconstruct_test PRIVATE
     "${SOURCE_DIR}/decompilation"
     "${SOURCE_DIR}/compilation"
     "${SOURCE_DIR}/ast"
+    "${SOURCE_DIR}/ast/statements/"
 )
 
 include(GoogleTest)

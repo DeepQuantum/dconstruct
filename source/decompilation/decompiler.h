@@ -25,12 +25,12 @@ public:
         m_functions = funcs;
     };
 
-    std::vector<decompiled_function> decompile() noexcept;
+    std::vector<decompiled_function> decompile();
 
 private:
     std::vector<const function_disassembly*> m_functions{};
 
-    void parse_basic_block(const control_flow_node&, expression_frame &) noexcept;
+    void parse_basic_block(const control_flow_node&, expression_frame &);
 };
 
 }

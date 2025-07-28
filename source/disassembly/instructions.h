@@ -139,14 +139,14 @@ struct function_disassembly_line {
     Instruction m_instruction;
     u64 m_location;
     std::string m_text;
-    Instruction* m_globalPointer;
+    const Instruction* m_globalPointer;
     std::string m_comment;
     i64 m_target = -1;
     b8 m_isArgMove;
 
-    function_disassembly_line() = default;
+    function_disassembly_line() noexcept = default;
 
-    function_disassembly_line(u64 idx, Instruction* ptr) :
+    function_disassembly_line(u64 idx, const Instruction* ptr) noexcept :
         m_instruction(ptr[idx]),
         m_location(idx),
         m_globalPointer(ptr),
@@ -161,13 +161,9 @@ struct RegisterPointer {
     u64 m_offset;
     sid64 m_sid;
 
-    RegisterPointer() {
-        m_base = 0;
-        m_offset = 0;
-        m_sid = 0;
-    }
+    RegisterPointer() noexcept : m_base(0), m_offset(0), m_sid(0) {};
 
-    RegisterPointer(p64 base, u64 offset, sid64 sid) : m_base{base}, m_offset{offset}, m_sid{sid} {};
+    RegisterPointer(p64 base, u64 offset, sid64 sid) : m_base(base), m_offset(offset), m_sid(sid) {};
 
     p64 get() const noexcept {
         return m_base + m_offset;
@@ -223,7 +219,7 @@ struct StackFrame {
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     u32 m_argCount = 0;
 
-    StackFrame() : m_registers{}, m_symbolTableEntries{}, m_labels{} {
+    StackFrame() noexcept : m_registers{}, m_symbolTableEntries{}, m_labels{} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
@@ -234,7 +230,7 @@ struct StackFrame {
 
     void to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved = "") const noexcept;
 
-    void add_target_label(const u32 target) noexcept {
+    void add_target_label(const u32 target) {
         auto res = std::find(m_labels.begin(), m_labels.end(), target);
         if (res == m_labels.end()) {
             m_labels.push_back(target);

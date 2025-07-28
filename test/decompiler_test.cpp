@@ -3,6 +3,8 @@
 #include "file_disassembler.h"
 #include "binary_expressions.h"
 #include "literal.h"
+#include "statements.h"
+#include "assign_statement.h"
 #include <array>
 #include <gtest/gtest.h>
 #include <filesystem>
@@ -22,11 +24,10 @@ namespace dconstruct::testing {
         return fd;
     }
 
-    template<std::size_t array_size>
-    dcompiler::expression_frame make_expression_frame(std::array<Instruction, array_size> istrs) {
+    dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs) {
         const StackFrame sf{};
         std::vector<function_disassembly_line> lines{};
-        for (u32 i = 0; i < array_size; ++i) {
+        for (u64 i = 0; i < istrs.size(); ++i) {
             lines.emplace_back(i, &istrs[i]);
         }
         function_disassembly fd{std::move(lines), std::move(sf), "Test"};
@@ -35,9 +36,10 @@ namespace dconstruct::testing {
         return std::move(funcs[0].m_frame);
     }
 
-    TEST(DECOMPILER, BasicLoadImmediate) {
-        const std::array<Instruction, 1> istrs = {
+    TEST(DECOMPILER, BasicLoadImmediates) {
+        const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::LoadU16Imm, 0, 5, 5},
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
@@ -48,5 +50,6 @@ namespace dconstruct::testing {
         );
         const auto& expected = ast::assign_statement(expression.get());
         ASSERT_EQ(actual, expected);
+        ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, dcompiler::expression_type::E_INT);
     }
 }

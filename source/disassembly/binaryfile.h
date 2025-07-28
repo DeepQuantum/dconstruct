@@ -62,7 +62,7 @@ namespace dconstruct {
         [[nodiscard]] b8 is_file_ptr(const location) const noexcept;
         [[nodiscard]] b8 gets_pointed_at(const location) const noexcept;
         [[nodiscard]] b8 is_string(const location) const noexcept;
-        [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const noexcept;
+        [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const;
 
     private:
         void read_reloc_table();
