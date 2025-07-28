@@ -37,10 +37,10 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::IDiv:
             case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
 
-            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, E_INT, u64(istr.operand1 | (istr.operand2 << 8))); break;
-            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, E_INT, expression_frame.m_symbolTable[istr.operand1].m_i64);
-            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, E_FLOAT, expression_frame.m_symbolTable[istr.operand1].m_f32);
-            case Opcode::LoadStaticPointer: expression_frame.load_literal(istr.destination, E_HASH, expression_frame.m_symbolTable[istr.operand1].m_hash);
+            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, ast::E_INT, u64(istr.operand1 | (istr.operand2 << 8))); break;
+            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, ast::E_INT, expression_frame.m_symbolTable[istr.operand1].m_i64);
+            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, ast::E_FLOAT, expression_frame.m_symbolTable[istr.operand1].m_f32);
+            case Opcode::LoadStaticPointer: expression_frame.load_literal(istr.destination, ast::E_HASH, expression_frame.m_symbolTable[istr.operand1].m_hash);
 
 
             case Opcode::Move: {

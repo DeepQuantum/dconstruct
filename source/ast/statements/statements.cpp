@@ -4,11 +4,11 @@
 namespace dconstruct::ast {
 
 void assign_statement::pseudo(std::ostream& os) const {
-    os << *m_expr << ';';
+    os << m_type.to_string() << ' ' << *m_expr << ";\n";
 }
 
 void assign_statement::ast(std::ostream& os) const {
-    os << "assign_stmt[" << *m_expr << ']';
+    os << "assign_stmt[" << m_type.to_string() << *m_expr << ']';
 }
 
 [[nodiscard]] b8 assign_statement::equals(const statement& rhs) const noexcept {
