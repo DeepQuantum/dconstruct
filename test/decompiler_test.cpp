@@ -50,6 +50,26 @@ namespace dconstruct::testing {
         );
         const auto& expected = ast::assign_statement(expression.get());
         ASSERT_EQ(actual, expected);
-        ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, dcompiler::expression_type::E_INT);
+        ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type), ast::E_INT);
+    }
+
+    TEST(DECOMPILER, BasicLoadImmediatesString) {
+        const std::vector<Instruction> istrs = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::LoadU16Imm, 0, 5, 5},
+        };
+        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+
+        const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
+        const auto& expression = std::make_unique<ast::assign_expr>(
+            std::move(std::make_unique<ast::identifier>("var_0", 0)),
+            std::move(std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)))
+        );
+        std::ostringstream actual_os, expected_os;
+        actual.pseudo(actual_os);
+        const auto expected = ast::assign_statement(ast::E_INT, expression.get());
+        expected.pseudo(expected_os);
+        ASSERT_EQ(actual_os.str(), expected_os.str());
+        ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type.m_value), ast::E_INT);
     }
 }
