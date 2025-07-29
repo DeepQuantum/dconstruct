@@ -16,7 +16,7 @@ namespace dconstruct::ast {
     };
 
 
-    struct type : std::variant<std::string, primitive> {
+    struct type {
         type(const compiler::token& type) : m_value(type.m_lexeme) {};
         type(const primitive &type) : m_value(type) {};
 
