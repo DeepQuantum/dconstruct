@@ -28,42 +28,39 @@ namespace dconstruct::testing {
         const StackFrame sf{};
         std::vector<function_disassembly_line> lines{};
         for (u64 i = 0; i < istrs.size(); ++i) {
-            lines.emplace_back(i, &istrs[i]);
+            lines.push_back(function_disassembly_line(i, istrs.data()));
         }
-        function_disassembly fd{std::move(lines), std::move(sf), "Test"};
+        function_disassembly fd{lines, std::move(sf), "Test"};
         dcompiler::Decompiler dc(&fd);
         std::vector<dcompiler::decompiled_function> funcs = dc.decompile();
         return std::move(funcs[0].m_frame);
     }
 
-    TEST(DECOMPILER, BasicLoadImmediates) {
-        const std::vector<Instruction> istrs = {
+    // TEST(DECOMPILER, BasicLoadImmediate) {
+    //     const std::vector<Instruction> istrs = {
+    //         {Opcode::LoadU16Imm, 0, 1, 0},
+    //     };
+    //     const dcompiler::expression_frame frame = make_expression_frame(istrs);
+
+    //     const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
+    //     const auto& expression = std::make_unique<ast::assign_expr>(
+    //         std::make_unique<ast::identifier>("var_0", 0),
+    //         std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1))
+    //     );
+    //     const auto& expected = ast::assign_statement(expression.get());
+    //     ASSERT_EQ(actual, expected);
+    //     ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type.m_value), ast::E_INT);
+    // }
+
+    TEST(DECOMPILER, BasicLoadImmediateString) {
+        const dcompiler::expression_frame frame = make_expression_frame({
             {Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::LoadU16Imm, 0, 5, 5},
-        };
-        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+        });
 
         const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
         const auto& expression = std::make_unique<ast::assign_expr>(
-            std::move(std::make_unique<ast::identifier>("var_0", 0)),
-            std::move(std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)))
-        );
-        const auto& expected = ast::assign_statement(expression.get());
-        ASSERT_EQ(actual, expected);
-        ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type), ast::E_INT);
-    }
-
-    TEST(DECOMPILER, BasicLoadImmediatesString) {
-        const std::vector<Instruction> istrs = {
-            {Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::LoadU16Imm, 0, 5, 5},
-        };
-        const dcompiler::expression_frame frame = make_expression_frame(istrs);
-
-        const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
-        const auto& expression = std::make_unique<ast::assign_expr>(
-            std::move(std::make_unique<ast::identifier>("var_0", 0)),
-            std::move(std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)))
+            std::unique_ptr<ast::identifier>(new ast::identifier(0)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1))
         );
         std::ostringstream actual_os, expected_os;
         actual.pseudo(actual_os);
@@ -71,5 +68,31 @@ namespace dconstruct::testing {
         expected.pseudo(expected_os);
         ASSERT_EQ(actual_os.str(), expected_os.str());
         ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type.m_value), ast::E_INT);
+    }
+
+
+    TEST(DECOMPILER, BasicLoadImmediates) {
+        const std::vector<Instruction> istrs = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::LoadU16Imm, 2, 5, 5},
+        };
+        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+
+        const auto& actual = frame.m_statements;
+        const auto first = std::make_unique<ast::assign_expr>(
+            std::unique_ptr<ast::identifier>(new ast::identifier(0)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1))
+        );
+        const auto second = std::make_unique<ast::assign_expr>(
+            std::unique_ptr<ast::identifier>(new ast::identifier(1)),
+            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1285))
+        );
+        std::vector<std::unique_ptr<ast::statement>> expected{};
+        expected.push_back(std::make_unique<ast::assign_statement>(ast::E_INT, first.get()));
+        expected.push_back(std::make_unique<ast::assign_statement>(ast::E_INT, second.get()));
+        ASSERT_EQ(expected.size(), actual.size());
+        for (u32 i = 0; i< expected.size(); ++i) {
+            ASSERT_EQ(expected[i], actual[i]); 
+        }
     }
 }

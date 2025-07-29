@@ -72,13 +72,13 @@ namespace dconstruct::dcompiler {
             std::unique_ptr<ast::literal<T>> literal = std::make_unique<ast::literal<T>>(value);
             std::unique_ptr<ast::identifier> id = std::make_unique<ast::identifier>(get_next_var_idx());
             std::unique_ptr<ast::assign_expr> assign = std::make_unique<ast::assign_expr>(std::move(id), std::move(literal));
-            m_statements.emplace_back(std::make_unique<ast::assign_statement>(assign.get()));
+            m_statements.emplace_back(std::make_unique<ast::assign_statement>(type, assign.get()));
             m_typedExpressions[dst] = { std::move(assign), type };
         }
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {
-            if (m_typedExpressions[istr.operand1].m_type != m_typedExpressions[istr.operand2].m_type) {
+            if (m_typedExpressions[istr.operand1].m_type.m_value != m_typedExpressions[istr.operand2].m_type.m_value) {
                 std::cerr << "warning: types don't match for operation on instruction" << istr.opcode_to_string() << '\n';
             }
             m_typedExpressions[istr.destination] = { std::make_unique<ast::grouping>(
