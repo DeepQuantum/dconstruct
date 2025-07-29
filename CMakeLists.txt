@@ -38,10 +38,10 @@ FetchContent_MakeAvailable(googletest)
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
 target_compile_options(dconstruct PRIVATE
-    $<$<CONFIG:Release>:-O3 -flto -Wall -g0>
+    $<$<CONFIG:Release>:-O3 -Wall -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g3 -flto -Wall>
+    $<$<CONFIG:Debug>:-O0 -g3 -Wall>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 
@@ -63,6 +63,7 @@ target_link_libraries(dconstruct PRIVATE
 target_include_directories(dconstruct PRIVATE
     "${SOURCE_DIR}/disassembly"
     "${SOURCE_DIR}/decompilation"
+    "${SOURCE_DIR}/compilation"
     "${SOURCE_DIR}/ast"
     "${SOURCE_DIR}/ast/statements/"
 )
