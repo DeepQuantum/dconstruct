@@ -1,5 +1,6 @@
 #include "binary_expressions.h"
 #include "literal.h"
+#include <iostream>
 
 namespace dconstruct::ast {
 
@@ -60,17 +61,21 @@ void binary_expr::ast(std::ostream& os) const {
 }
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const {
-    const std::unique_ptr<expression> lhs_ptr = m_lhs->eval();
-    const std::unique_ptr<expression> rhs_ptr = m_rhs->eval();
+    std::unique_ptr<expression> lhs_ptr = m_lhs->eval();
+    std::unique_ptr<expression> rhs_ptr = m_rhs->eval();
 
-    if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(lhs_ptr.get())) {
-        if (const literal<u64>* rhs_num_lit = dynamic_cast<const literal<u64>*>(rhs_ptr.get())) {
-            const u64 left_num = lhs_num_lit->get_value();
-            const u64 right_num = rhs_num_lit->get_value();
-            return std::make_unique<literal<u64>>(left_num + right_num);
+    if (const literal* lhs_num_lit = dynamic_cast<const literal*>(lhs_ptr.get())) {
+        if (const literal* rhs_num_lit = dynamic_cast<const literal*>(rhs_ptr.get())) {
+            // int a = 0;
+            // sid b = #ellie;
+            if (*lhs_num_lit != *rhs_num_lit) {
+                std::cerr << "literal types don't match";
+                return nullptr;
+            }
+            //if (lhs_num_lit)
         }
     }
-    return std::make_unique<add_expr>(*this);
+    return std::make_unique<add_expr>(std::move(lhs_ptr), std::move(rhs_ptr));
 }
 
 [[nodiscard]] std::unique_ptr<expression> mul_expr::eval() const{ 

@@ -1,4 +1,7 @@
+#pragma once
+
 #include "base.h"
+#include <ostream>
 
 namespace dconstruct {
     struct Iprintable {
