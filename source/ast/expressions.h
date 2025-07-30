@@ -1,15 +1,15 @@
 #pragma once
 
 #include "base.h"
+#include "printable.h"
 #include <ostream>
 #include <vector>
+
 namespace dconstruct::ast {
 
 
-    struct expression {
+    struct expression : public Iprintable {
         virtual ~expression() = default;
-        virtual void pseudo(std::ostream&) const = 0;
-        virtual void ast(std::ostream&) const = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> eval() const = 0;
         [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
     };
@@ -23,29 +23,6 @@ namespace dconstruct::ast {
             return lhs == rhs;
         }
         return *lhs == *rhs;
-    }
-
-    enum Flags {
-        AST = 0x1,
-    };
-
-    inline i32 get_flag_index() {
-        static i32 index = std::ios_base::xalloc();
-        return index;
-    }
-
-    inline std::ostream& set_ast(std::ostream& os) {
-        os.iword(get_flag_index()) |= AST;
-        return os;
-    }
-
-    inline std::ostream& operator<<(std::ostream& os, const expression &expr) {
-        if (os.iword(get_flag_index()) & AST) {
-            expr.ast(os);
-        } else {
-            expr.pseudo(os);
-        }
-        return os;
     }
 
     struct unary_expr : public expression {

@@ -8,10 +8,8 @@
 
 namespace dconstruct::ast {
 
-    struct statement {
+    struct statement : public Iprintable {
         virtual ~statement() = default;
-        virtual void pseudo(std::ostream&) const = 0;
-        virtual void ast(std::ostream&) const = 0;
         [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept = 0;
     };
 
@@ -22,18 +20,6 @@ namespace dconstruct::ast {
     [[nodiscard]] inline b8 operator==(const std::unique_ptr<statement>& lhs, const std::unique_ptr<statement>& rhs) noexcept {
         return *lhs == *rhs;
     }
-
-    inline std::ostream& operator<<(std::ostream& os, const statement &expr) {
-        os << set_ast;
-        if (os.iword(get_flag_index()) & AST) {
-            expr.ast(os);
-        } else {
-            expr.pseudo(os);
-        }
-        return os;
-    }
-
-    
 
     // struct block_stmt : public statement {
     //     void pseudo(pseudo_stream& os) const noexcept override {
