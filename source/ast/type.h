@@ -6,22 +6,66 @@
 
 namespace dconstruct::ast {
 
-    enum primitive : u8 {
-        E_UNKNOWN,
-        E_INT,
-        E_FLOAT,
-        E_STRING,
-        E_PTR,
-        E_HASH,
+    using type_id = u32;
+
+    enum type_kind : u8 {
+        TK_UNKNOWN,
+        TK_PRIMITIVE,
+        TK_STRUCT,
+        TK_ENUM,
     };
 
+    struct primitive_type { 
+        enum tag : u8 {
+            PRIM_U8,
+            PRIM_U16,
+            PRIM_U32,
+            PRIM_U64,
+            PRIM_I8,
+            PRIM_I16,
+            PRIM_I32,
+            PRIM_I64,
+            PRIM_F32,
+            PRIM_F64,
+            PRIM_CHAR,
+            PRIM_BOOL,
+            PRIM_STRING,
+            PRIM_SID
+        } tag;
+    };
+
+    struct field {
+        std::string m_name;
+        type_id m_type;
+    };
+
+    struct struct_type {
+        std::string m_name;
+        std::vector<field> m_fields;
+    };
+    
+    struct enum_type {
+        std::string m_name;
+        std::vector<std::string> m_enumerators;
+    };
+
+    using type = std::variant<primitive_type, struct_type, enum_type>;
+
+
+
+    struct custom_type;
+
+    struct type : public std::variant<primitive, custom_type> {
+        using base = std::variant<primitive, custom_type>;
+    };
+
+    struct custom_type : public Iprintable {
+        std::string m_name;
+        u32 m_size;
+        std::vector<type> m_members;
+    };
 
     struct type {
-        type(const compiler::token& type) : m_value(type.m_lexeme) {};
-        type(const primitive &type) : m_value(type) {};
-
-        std::variant<std::string, primitive> m_value;
-
         std::string to_string() const noexcept {
             if (m_value.index() == 0) {
                 return std::get<std::string>(m_value);

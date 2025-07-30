@@ -59,15 +59,18 @@ void binary_expr::ast(std::ostream& os) const {
     return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs && m_compType == rhs_ptr->m_compType;
 }
 
-[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const { 
-    if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(m_lhs.get())) {
-        if (const literal<u64>* rhs_num_lit = dynamic_cast<const literal<u64>*>(m_rhs.get())) {
+[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const {
+    const std::unique_ptr<expression> lhs_ptr = m_lhs->eval();
+    const std::unique_ptr<expression> rhs_ptr = m_rhs->eval();
+
+    if (const literal<u64>* lhs_num_lit = dynamic_cast<const literal<u64>*>(lhs_ptr.get())) {
+        if (const literal<u64>* rhs_num_lit = dynamic_cast<const literal<u64>*>(rhs_ptr.get())) {
             const u64 left_num = lhs_num_lit->get_value();
             const u64 right_num = rhs_num_lit->get_value();
             return std::make_unique<literal<u64>>(left_num + right_num);
         }
     }
-    return nullptr;
+    return std::make_unique<add_expr>(*this);
 }
 
 [[nodiscard]] std::unique_ptr<expression> mul_expr::eval() const{ 
@@ -83,7 +86,7 @@ void binary_expr::ast(std::ostream& os) const {
 }
 
 [[nodiscard]] std::unique_ptr<expression> assign_expr::eval() const {
-    return nullptr;
+    return m_rhs->eval();
 }
 
 [[nodiscard]] std::unique_ptr<expression> compare_expr::eval() const {
