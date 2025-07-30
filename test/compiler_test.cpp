@@ -318,7 +318,7 @@ namespace dconstruct::testing {
         };
         const auto [expression, errors] = get_expression(tokens);
         
-        const std::unique_ptr<ast::expression> expected = std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1));
+        const std::unique_ptr<ast::expression> expected = std::unique_ptr<ast::literal>(new ast::literal(1ULL));
 
         EXPECT_TRUE(expression != nullptr);
         EXPECT_EQ(errors.size(), 0);
@@ -335,8 +335,8 @@ namespace dconstruct::testing {
         const auto [expression, errors] = get_expression(tokens);
         
         const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2))
+            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
+            std::unique_ptr<ast::literal>(new ast::literal(2ULL))
         );
 
         EXPECT_TRUE(expression != nullptr);
@@ -357,12 +357,12 @@ namespace dconstruct::testing {
         const auto [expression, errors] = get_expression(tokens);
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2)),
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(5))
+            std::unique_ptr<ast::literal>(new ast::literal(2ULL)),
+            std::unique_ptr<ast::literal>(new ast::literal(5ULL))
         );
 
         const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
+            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
             std::move(left)
         );
 
@@ -402,13 +402,13 @@ namespace dconstruct::testing {
         const auto [expression, errors] = get_expression(tokens);
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1)),
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(2))
+            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
+            std::unique_ptr<ast::literal>(new ast::literal(2ULL))
         ));
 
         const std::unique_ptr<ast::expression> expected = std::make_unique<ast::mul_expr>(
             std::move(left),
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(5))
+            std::unique_ptr<ast::literal>(new ast::literal(5ULL))
         );
 
         EXPECT_TRUE(expression != nullptr);

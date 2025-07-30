@@ -45,11 +45,11 @@ namespace dconstruct::testing {
          const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
          const auto& expression = std::make_unique<ast::assign_expr>(
              std::make_unique<ast::identifier>("var_0", 0),
-             std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1))
+             std::unique_ptr<ast::literal>(new ast::literal(1ULL))
          );
-         const auto& expected = ast::assign_statement(expression.get());
+         const auto& expected = ast::assign_statement(ast::TK_U64, expression.get());
          ASSERT_EQ(actual, expected);
-         ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type.m_value), ast::E_INT);
+         ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, ast::TK_U64);
      }
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
@@ -60,14 +60,14 @@ namespace dconstruct::testing {
         const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
         const auto& expression = std::make_unique<ast::assign_expr>(
             std::unique_ptr<ast::identifier>(new ast::identifier(0)),
-            std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(1))
+            std::unique_ptr<ast::literal>(new ast::literal(1ULL))
         );
         std::ostringstream actual_os, expected_os;
         actual.pseudo(actual_os);
-        const auto expected = ast::assign_statement(ast::E_INT, expression.get());
+        const auto expected = ast::assign_statement(ast::TK_U64, expression.get());
         expected.pseudo(expected_os);
         ASSERT_EQ(actual_os.str(), expected_os.str());
-        ASSERT_EQ(std::get<ast::primitive>(frame.m_typedExpressions.at(0).m_type.m_value), ast::E_INT);
+        ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, ast::TK_U64);
     }
 
 

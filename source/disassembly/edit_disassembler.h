@@ -1,3 +1,4 @@
+#pragma once
 #include "disassembler.h"
 
 namespace dconstruct {

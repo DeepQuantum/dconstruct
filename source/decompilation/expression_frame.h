@@ -35,12 +35,12 @@ namespace dconstruct::dcompiler {
     
 
     struct typed_expression {
-        typed_expression() : m_expr(nullptr), m_type(ast::E_UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::E_UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr, ast::type type) : m_expr(std::move(expr)), m_type(type) {};
+        typed_expression() : m_expr(nullptr), m_type(ast::TK_UNKNOWN) {};
+        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::TK_UNKNOWN) {};
+        typed_expression(std::unique_ptr<ast::expression> expr, ast::type_kind type) : m_expr(std::move(expr)), m_type(type) {};
 
         std::unique_ptr<ast::expression> m_expr;
-        ast::type m_type;
+        ast::type_kind m_type;
     };
 
     struct expression_frame {
@@ -67,18 +67,11 @@ namespace dconstruct::dcompiler {
         void move(const u32, const u32);
 
 
-        template<typename T>
-        inline void load_literal(const u32 dst, const ast::type type, const T value) {
-            std::unique_ptr<ast::literal<T>> literal = std::make_unique<ast::literal<T>>(value);
-            std::unique_ptr<ast::identifier> id = std::make_unique<ast::identifier>(get_next_var_idx());
-            std::unique_ptr<ast::assign_expr> assign = std::make_unique<ast::assign_expr>(std::move(id), std::move(literal));
-            m_statements.emplace_back(std::make_unique<ast::assign_statement>(type, assign.get()));
-            m_typedExpressions[dst] = { std::move(assign), type };
-        }
+        void load_literal(const u8 dst, const ast::primitive_value_type& value);
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {
-            if (m_typedExpressions[istr.operand1].m_type.m_value != m_typedExpressions[istr.operand2].m_type.m_value) {
+            if (m_typedExpressions[istr.operand1].m_type != m_typedExpressions[istr.operand2].m_type) {
                 std::cerr << "warning: types don't match for operation on instruction" << istr.opcode_to_string() << '\n';
             }
             m_typedExpressions[istr.destination] = { std::make_unique<ast::grouping>(

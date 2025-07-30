@@ -198,20 +198,22 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_primary() {
     if (match({TRUE})) {
-        return std::make_unique<ast::literal<b8>>(true);
+        return std::make_unique<ast::literal>(true);
     } else if (match({FALSE})) {
-        return std::make_unique<ast::literal<b8>>(false);
+        return std::make_unique<ast::literal>(false);
     } else if (match({_NULL})) {
-        return std::make_unique<ast::literal<std::nullptr_t>>(nullptr);
+        return std::make_unique<ast::literal>(nullptr);
     } else if (match({INT})) {
         const u64 num = std::get<u64>(previous().m_literal);
-        return std::unique_ptr<ast::literal<u64>>(new ast::literal<u64>(num));
+        return std::unique_ptr<ast::literal>(new ast::literal(num));
     } else if (match({DOUBLE})) {
         const f64 num = std::get<f64>(previous().m_literal);
-        return std::make_unique<ast::literal<f64>>(num);
+        return std::make_unique<ast::literal>(num);
     } else if (match({STRING})) {
         const std::string str = std::get<std::string>(previous().m_literal);
-        return std::make_unique<ast::literal<std::string>>(str);
+        return std::make_unique<ast::literal>(str);
+    } else if (match({SID})) {
+        
     }
 
     if (match({LEFT_PAREN})) {
