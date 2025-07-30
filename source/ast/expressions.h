@@ -7,7 +7,6 @@
 
 namespace dconstruct::ast {
 
-
     struct expression : public Iprintable {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> eval() const = 0;
