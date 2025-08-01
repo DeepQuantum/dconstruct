@@ -1,4 +1,6 @@
+#ifdef WIN32
 #define GVDLL
+#endif
 
 #include "control_flow_graph.h"
 
