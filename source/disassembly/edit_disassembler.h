@@ -14,10 +14,10 @@ namespace dconstruct {
     struct BinaryFileEdit {
         const EditType m_editType;
         union {
-            i32 i32;
-            u32 u32;
-            u64 u64;
-            f32 f32;
+            i32 I32;
+            u32 U32;
+            u64 U64;
+            f32 F32;
             void* ptr;
             const std::string* string = nullptr;
         };
