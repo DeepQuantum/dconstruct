@@ -1,7 +1,7 @@
 #include "decompiler.h"
 #include "binaryfile.h"
 #include "file_disassembler.h"
-#include "binary_expressions.h"
+#include "binary_expression.h"
 #include "literal.h"
 #include "statements.h"
 #include "assign_statement.h"
