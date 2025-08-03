@@ -50,22 +50,22 @@ include_directories(
 )
 
 if(win32)
-target_link_libraries(
-    dconstruct
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-)
-include_directories(
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
-)
+    target_link_libraries(
+        dconstruct
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    )
+    include_directories(
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+    )
 else()
-target_link_libraries(
-    dconstruct
-    gvc
-    cgraph
-)
+    target_link_libraries(
+        dconstruct
+        gvc
+        cgraph
+    )
 endif()
 
 target_link_libraries(dconstruct
@@ -114,19 +114,19 @@ add_executable(
 )
 
 if(win32)
-target_link_libraries(
-    dconstruct_test
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-    ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-)
+    target_link_libraries(
+        dconstruct_test
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    )
 else()
-target_link_libraries(
-    dconstruct_test
-    gvc
-    cgraph
-)
+    target_link_libraries(
+        dconstruct_test
+        gvc
+        cgraph
+    )
 endif()
 
 target_link_libraries(

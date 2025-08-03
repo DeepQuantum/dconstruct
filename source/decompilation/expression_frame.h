@@ -1,6 +1,6 @@
 #pragma once
 
-#include "binary_expressions.h"
+#include "binary_expression.h"
 #include "literal.h"
 #include "statements.h"
 #include "assign_statement.h"
@@ -75,11 +75,11 @@ namespace dconstruct::dcompiler {
                 std::cerr << "warning: types don't match for operation on instruction" << istr.opcode_to_string() << '\n';
             }
             m_typedExpressions[istr.destination] = { std::make_unique<ast::grouping>(
-                std::move(std::make_unique<binary_expr_t>(
+                std::make_unique<binary_expr_t>(
                     std::move(m_typedExpressions[istr.operand1].m_expr), 
                     std::move(m_typedExpressions[istr.operand2].m_expr)
                 )
-            )), m_typedExpressions[istr.operand1].m_type };
+            ), m_typedExpressions[istr.operand1].m_type };
         }
     };
 }
