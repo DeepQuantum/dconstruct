@@ -3,11 +3,13 @@
 #include "base.h"
 #include "tokens.h"
 #include <map>
+#include <optional>
 
 namespace dconstruct::ast {
 
     using sid_literal_type = std::pair<sid64, std::string>;
     using primitive_value_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal_type, nullptr_t>;
+    using primitive_number_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
     enum type_kind {
         TK_U8,
@@ -35,6 +37,15 @@ namespace dconstruct::ast {
         return static_cast<type_kind>(prim.index());
     }
 
+    [[nodiscard]] inline std::optional<primitive_number_type> get_number(const primitive_value_type& prim) noexcept {
+        return std::visit([](auto&& arg) -> std::optional<primitive_number_type> {
+            if constexpr (std::is_arithmetic_v<std::decay_t<decltype(arg)>>) {
+                return static_cast<primitive_number_type>(arg);
+            } else {
+                return std::nullopt;
+            }
+        }, prim);
+    }
 
     inline b8 is_primitive(const type_kind kind) noexcept {
         return kind >= TK_U8 && kind <= TK_SID;

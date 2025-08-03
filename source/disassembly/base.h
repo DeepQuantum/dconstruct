@@ -22,7 +22,6 @@ typedef uintptr_t p64;
 
 #define SID(str) (dconstruct::ToStringId64(str))
 
-
 namespace dconstruct {
 	struct location {
 		const std::byte* m_ptr = nullptr;
