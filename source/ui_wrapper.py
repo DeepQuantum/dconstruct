@@ -6,7 +6,7 @@ class CLIWrapperApp:
     def __init__(self, root):
         self.root = root
         root.title("CLI Wrapper")
-        root.geometry("500x400")
+        root.geometry("900x600")
 
         self.input_is_dir = tk.BooleanVar(value=False)
         self.emit_once = tk.BooleanVar(value=False)
@@ -16,32 +16,41 @@ class CLIWrapperApp:
         self.s_file = tk.StringVar()
         self.output_path = tk.StringVar()
         self.edit_types = tk.StringVar()
-        self.indent_level = tk.StringVar()
+        self.indent_level = tk.IntVar()
 
         self.create_widgets()
 
     def create_widgets(self):
         row = 0
 
-        tk.Label(self.root, text="Input (-i):").grid(row=row, column=0, sticky="w", padx=5, pady=5)
-        tk.Button(self.root, text="Choose...", command=self.choose_input).grid(row=row, column=1, padx=5, pady=5)
-        ttk.Checkbutton(self.root, text="Is Directory?", variable=self.input_is_dir).grid(row=row, column=2, padx=5)
+        tk.Label(self.root, text=".bin File(s) to disassemble (choose a file or directory):").grid(row=row, column=0, sticky="w", padx=5, pady=20)
+        self.input_path_var = tk.StringVar()
+        tk.Entry(self.root, textvariable=self.input_path_var, width=60).grid(row=row, column=1, padx=5)
+        tk.Button(self.root, text="📁", command=self.choose_input_files).grid(row=row, column=2, padx=5)
+        tk.Button(self.root, text="📂", command=self.choose_input_dir).grid(row=row, column=3, padx=5)
+        row += 1
+
+        tk.Label(self.root, text="Output directory: ").grid(row=row, column=0, sticky="w", padx=5)
+        self.output_path_var = tk.StringVar()
+        tk.Entry(self.root, textvariable=self.output_path_var, width=60).grid(row=row, column=1, padx=5)
+        tk.Button(self.root, text="📁", command=self.choose_output).grid(row=row, column=2, padx=5)
+        row += 1
+
+        tk.Label(self.root, text="Sidbase path (default is 'sidbase.bin' in the current directory):").grid(row=row, column=0, sticky="w", padx=5)
+        self.sidbase_path_var = tk.StringVar()
+        tk.Entry(self.root, textvariable=self.sidbase_path_var, width=60).grid(row=row, column=1, padx=5)
+        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.sidbase_path_var)).grid(row=row, column=2, padx=5)
         row += 1
 
         tk.Label(self.root, text="Edit file:").grid(row=row, column=0, sticky="w", padx=5)
-        tk.Button(self.root, text="Choose File", command=lambda: self.pick_file(self.edit_file)).grid(row=row, column=1, padx=5)
+        self.edit_file_path_var = tk.StringVar()
+        tk.Entry(self.root, textvariable=self.edit_file_path_var, width=60).grid(row=row, column=1, padx=5)
+        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.edit_file_path_var)).grid(row=row, column=2, padx=5)
         row += 1
 
-        tk.Label(self.root, text="-s:").grid(row=row, column=0, sticky="w", padx=5)
-        tk.Button(self.root, text="Choose File", command=lambda: self.pick_file(self.s_file)).grid(row=row, column=1, padx=5)
-        row += 1
-
-        tk.Label(self.root, text="-o Output:").grid(row=row, column=0, sticky="w", padx=5)
-        tk.Button(self.root, text="Choose...", command=self.choose_output).grid(row=row, column=1, padx=5)
-        row += 1
-
-        tk.Label(self.root, text="-e (comma-separated):").grid(row=row, column=0, sticky="w", padx=5)
-        tk.Text(self.root).grid(row=row, column=1, columnspan=2, padx=5, sticky="ew")
+        tk.Label(self.root, text="Add any additional edits (optional):").grid(row=row, column=0, sticky="w", padx=5)
+        self.additional_edits_text = tk.Text(self.root, height=4, width=60)
+        self.additional_edits_text.grid(row=row, column=1, columnspan=2, padx=5, sticky="ew")
         row += 1
 
         tk.Label(self.root, text="--indent:").grid(row=row, column=0, sticky="w", padx=5)
@@ -53,11 +62,13 @@ class CLIWrapperApp:
 
         tk.Button(self.root, text="Run", command=self.run_command).grid(row=row, column=0, columnspan=3, pady=20)
 
-    def choose_input(self):
-        if self.input_is_dir.get():
-            path = filedialog.askdirectory()
-        else:
-            path = filedialog.askopenfilename()
+    def choose_input_files(self):
+        path = filedialog.askopenfilenames()
+        if path:
+            self.input_path.set(path)
+
+    def choose_input_dir(self):
+        path = filedialog.askdirectory()
         if path:
             self.input_path.set(path)
 

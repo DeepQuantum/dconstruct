@@ -2,7 +2,6 @@
 
 #include "base.h"
 #include "expression.h"
-#include "binary_expression.h"
 #include <vector>
 #include "tokens.h"
 

@@ -2,7 +2,6 @@
 
 #include "base.h"
 #include "tokens.h"
-#include "binary_expression.h"
 
 #include <vector>
 
@@ -18,10 +17,9 @@ namespace dconstruct::compiler {
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
         [[nodiscard]] std::unique_ptr<ast::expression> parse();
         
-        const std::vector<parsing_error>& get_errors() const noexcept {
+        inline const std::vector<parsing_error>& get_errors() const noexcept {
             return m_errors;
         }
-    
     
     private:
         std::vector<token> m_tokens;
