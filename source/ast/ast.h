@@ -7,6 +7,8 @@
 #include "div.h"
 #include "assign.h"
 #include "compare.h"
+#include "logical_not_expression.h"
+#include "negate_expression.h"
 #include "call.h"
 #include "grouping.h"
 #include "literal.h"
