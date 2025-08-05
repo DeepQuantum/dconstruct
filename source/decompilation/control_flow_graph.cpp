@@ -2,7 +2,7 @@
 #define GVDLL
 #endif
 
-#include "control_flow_graph.h"
+#include "decompilation/control_flow_graph.h"
 
 #include <fstream>
 #include <iostream>
@@ -189,7 +189,7 @@ namespace dconstruct {
 
     void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const {
         for (const auto& [node_start, node] : m_nodes) {
-            const b8 is_conditional = node.m_lines.back().m_instruction.opcode == BranchIf || node.m_lines.back().m_instruction.opcode == BranchIfNot;
+            const b8 is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
             for (const auto& next : node.m_successors) {
                 Agedge_t* edge = agedge(g, node_map.at(node_start), node_map.at(next->m_startLine), const_cast<char*>(""), 1);

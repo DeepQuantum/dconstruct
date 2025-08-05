@@ -9,18 +9,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-file(GLOB BASE_SOURCE_FILES
+file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/disassembly/*.cpp"
-    "${SOURCE_DIR}/disassembly/*.h"
-    "${SOURCE_DIR}/decompilation/*.h"
     "${SOURCE_DIR}/decompilation/*.cpp"
     "${SOURCE_DIR}/compilation/*.cpp"
-    "${SOURCE_DIR}/compilation/*.h"
-    "${SOURCE_DIR}/ast/*.h"
     "${SOURCE_DIR}/ast/*.cpp"
-    "${SOURCE_DIR}/ast/statements/*.cpp"
-    "${SOURCE_DIR}/ast/statements/*.h"
 )
+
 
 include(FetchContent)
 
@@ -49,6 +44,8 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+target_include_directories(dconstruct PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
 if(win32)
     target_link_libraries(
         dconstruct
@@ -71,14 +68,6 @@ endif()
 target_link_libraries(dconstruct
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
-)
-
-target_include_directories(dconstruct PRIVATE
-    "${SOURCE_DIR}/disassembly"
-    "${SOURCE_DIR}/decompilation"
-    "${SOURCE_DIR}/compilation"
-    "${SOURCE_DIR}/ast"
-    "${SOURCE_DIR}/ast/statements/"
 )
 
 # add_custom_command(
@@ -136,13 +125,7 @@ target_link_libraries(
     GTest::gtest_main
 )
 
-target_include_directories(dconstruct_test PRIVATE
-    "${SOURCE_DIR}/disassembly"
-    "${SOURCE_DIR}/decompilation"
-    "${SOURCE_DIR}/compilation"
-    "${SOURCE_DIR}/ast"
-    "${SOURCE_DIR}/ast/statements/"
-)
+target_include_directories(dconstruct_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test)

@@ -1,4 +1,5 @@
-#include "literal.h"
+#include "ast/primary_expressions/literal.h"
+
 
 namespace dconstruct::ast {
 
@@ -27,11 +28,8 @@ void literal::pseudo(std::ostream& os) const {
 }
 
 void literal::ast(std::ostream& os) const {
-    os << "literal[";
-    std::visit([&](auto&& arg) -> void {
-        os << kind_to_string(static_cast<type_kind>(m_value.index())) << ": ";
-        pseudo(os);
-    }, m_value);
+    os << "literal[" << kind_to_string(static_cast<type_kind>(m_value.index()));
+    pseudo(os);
     os << "]";
 }
 

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "compilation/lexer.h"
 #include <iostream>
 
 namespace dconstruct::compiler {
@@ -70,12 +70,12 @@ char Lexer::advance() {
     }
     if (reached_eof()) {
         m_errors.emplace_back(m_line, "unterminated string literal");
-        return token(EMPTY, "");
+        return token(token_type::EMPTY, "");
     }
     advance();
     const std::string lexeme = make_current_lexeme();
     const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 2);
-    return token(STRING, lexeme, literal, m_line);
+    return token(token_type::STRING, lexeme, literal, m_line);
 }
 
 [[nodiscard]] b8 Lexer::is_sid_char(const char c) const noexcept {
@@ -89,7 +89,7 @@ char Lexer::advance() {
         advance();
     }
     const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 1);
-    return make_current_token(SID, literal);
+    return make_current_token(token_type::SID, literal);
 }
 
 [[nodiscard]] token Lexer::make_number() {
@@ -105,9 +105,9 @@ char Lexer::advance() {
         }
     }
     if (is_double) {
-        return make_current_token(DOUBLE, std::stod(make_current_lexeme()));
+        return make_current_token(token_type::DOUBLE, std::stod(make_current_lexeme()));
     }
-    return make_current_token(INT, std::stoull(make_current_lexeme()));
+    return make_current_token(token_type::INT, std::stoull(make_current_lexeme()));
 }
 
 [[nodiscard]] b8 Lexer::is_hex_char(const char c) const noexcept {
@@ -119,7 +119,7 @@ char Lexer::advance() {
         advance();
     }
     const u64 literal = std::stoull(make_current_lexeme(), 0, 16);
-    return make_current_token(HEX, literal);
+    return make_current_token(token_type::HEX, literal);
 }
 
 [[nodiscard]] token Lexer::make_identifier() {
@@ -133,31 +133,31 @@ char Lexer::advance() {
         const token_type keyword_token_type = m_keywords.at(identifier.c_str());
         return make_current_token(keyword_token_type);
     }
-    return make_current_token(IDENTIFIER);
+    return make_current_token(token_type::IDENTIFIER);
 }
 
 [[nodiscard]] token Lexer::scan_token() {
     const char c = advance();
     switch(c) {
-        case '(': return make_current_token(LEFT_PAREN); 
-        case ')': return make_current_token(RIGHT_PAREN); 
-        case '{': return make_current_token(LEFT_BRACE); 
-        case '}': return make_current_token(RIGHT_BRACE); 
-        case '[': return make_current_token(LEFT_SQUARE); 
-        case ']': return make_current_token(RIGHT_SQUARE); 
-        case ',': return make_current_token(COMMA); 
-        case '.': return make_current_token(DOT); 
-        case ';': return make_current_token(SEMICOLON); 
-        case '+': return make_current_token(match('=') ? PLUS_EQUAL : match('+') ? PLUS_PLUS : PLUS); 
-        case '-': return make_current_token(match('=') ? MINUS_EQUAL :  match('-') ? MINUS_MINUS : MINUS); 
-        case '*': return make_current_token(match('=') ? STAR_EQUAL : STAR);
-        case '!': return make_current_token(match('=') ? BANG_EQUAL : BANG);
-        case '=': return make_current_token(match('=') ? EQUAL_EQUAL : EQUAL);
-        case '<': return make_current_token(match('=') ? LESS_EQUAL : LESS);
-        case '>': return make_current_token(match('=') ? GREATER_EQUAL : GREATER);
-        case '|': return make_current_token(match('|') ? PIPE_PIPE : PIPE);
-        case '^': return make_current_token(match('^') ? CARET_CARET : CARET);
-        case '&': return make_current_token(match('&') ? AMPERSAND_AMPERSAND : AMPERSAND);
+        case '(': return make_current_token(token_type::LEFT_PAREN); 
+        case ')': return make_current_token(token_type::RIGHT_PAREN); 
+        case '{': return make_current_token(token_type::LEFT_BRACE); 
+        case '}': return make_current_token(token_type::RIGHT_BRACE); 
+        case '[': return make_current_token(token_type::LEFT_SQUARE); 
+        case ']': return make_current_token(token_type::RIGHT_SQUARE); 
+        case ',': return make_current_token(token_type::COMMA); 
+        case '.': return make_current_token(token_type::DOT); 
+        case ';': return make_current_token(token_type::SEMICOLON); 
+        case '+': return make_current_token(match('=') ? token_type::PLUS_EQUAL : match('+') ? token_type::PLUS_PLUS : token_type::PLUS); 
+        case '-': return make_current_token(match('=') ? token_type::MINUS_EQUAL :  match('-') ? token_type::MINUS_MINUS : token_type::MINUS); 
+        case '*': return make_current_token(match('=') ? token_type::STAR_EQUAL : token_type::STAR);
+        case '!': return make_current_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG);
+        case '=': return make_current_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL);
+        case '<': return make_current_token(match('=') ? token_type::LESS_EQUAL : token_type::LESS);
+        case '>': return make_current_token(match('=') ? token_type::GREATER_EQUAL : token_type::GREATER);
+        case '|': return make_current_token(match('|') ? token_type::PIPE_PIPE : token_type::PIPE);
+        case '^': return make_current_token(match('^') ? token_type::CARET_CARET : token_type::CARET);
+        case '&': return make_current_token(match('&') ? token_type::AMPERSAND_AMPERSAND : token_type::AMPERSAND);
         case '/': {
             if (match('/')) {
                 while (peek() != '\n' && !reached_eof()) {
@@ -165,9 +165,9 @@ char Lexer::advance() {
                 }
                 break;
             } else if (match('=')) {
-                return make_current_token(SLASH_EQUAL);
+                return make_current_token(token_type::SLASH_EQUAL);
             } else {
-                return make_current_token(SLASH);
+                return make_current_token(token_type::SLASH);
             }
         }
         case ' ':
@@ -194,7 +194,7 @@ char Lexer::advance() {
             break;
         }
     }
-    return token(EMPTY, "");
+    return token(token_type::EMPTY, "");
 }
 
 }

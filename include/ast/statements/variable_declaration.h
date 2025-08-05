@@ -1,8 +1,9 @@
-#include "base.h"
-#include "expression.h"
-#include "type.h"
-#include "statements.h"
+#pragma once
 
+#include "base.h"
+#include "ast/expression.h"
+#include "ast/type.h"
+#include "ast/statement.h"
 
 namespace dconstruct::ast {
     struct variable_declaration : public statement {
