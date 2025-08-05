@@ -2,10 +2,10 @@
 #include "disassembler.h"
 
 namespace dconstruct {
-    enum EditType {
-        INT4,
-        INT8,
-        F4,
+    enum class EditType {
+        INT32,
+        INT64,
+        F32,
         SID_STR,
         SID_HASH,
         PTR

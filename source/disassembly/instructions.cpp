@@ -111,34 +111,34 @@ namespace dconstruct {
             return;
         }
         switch (reg.m_type) {
-        case RegisterValueType::R_HASH: {
+        case RegisterValueType::HASH: {
             strncpy(buffer, resolved, buffer_size);
             break;
         }
-        case RegisterValueType::R_U16:
-        case RegisterValueType::R_U32:
-        case RegisterValueType::R_U64: {
+        case RegisterValueType::U16:
+        case RegisterValueType::U32:
+        case RegisterValueType::U64: {
             std::snprintf(buffer, buffer_size, "%llu", reg.m_U64);
             break;
         }
-        case RegisterValueType::R_I16:
-        case RegisterValueType::R_I32: {
+        case RegisterValueType::I16:
+        case RegisterValueType::I32: {
             std::snprintf(buffer, buffer_size, "%i", reg.m_I32);
             break;
         }
-        case RegisterValueType::R_I64: {
+        case RegisterValueType::I64: {
             std::snprintf(buffer, buffer_size, "%lli", reg.m_I64);
             break;
         }
-        case RegisterValueType::R_F16:
-        case RegisterValueType::R_F32:
-        case RegisterValueType::R_F64:
+        case RegisterValueType::F16:
+        case RegisterValueType::F32:
+        case RegisterValueType::F64:
             std::snprintf(buffer, buffer_size, "%.2f", reg.m_F32);
             break;
-        case RegisterValueType::R_STRING:
+        case RegisterValueType::STRING:
             std::snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
             break;
-        case RegisterValueType::R_POINTER: {
+        case RegisterValueType::POINTER: {
             if (reg.m_PTR.m_offset > 0) {
                 std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.isReturn ? "RET_" : "", reg.m_PTR.m_offset);
             }

@@ -4,7 +4,7 @@
 #include <variant>
 
 namespace dconstruct::compiler {
-    enum token_type {
+    enum class token_type {
         LEFT_PAREN, RIGHT_PAREN, 
         LEFT_BRACE, RIGHT_BRACE, 
         LEFT_SQUARE, RIGHT_SQUARE,

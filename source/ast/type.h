@@ -11,26 +11,26 @@ namespace dconstruct::ast {
     using primitive_value_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal_type, nullptr_t>;
     using primitive_number_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
-    enum type_kind {
-        TK_U8,
-        TK_U16,
-        TK_U32,
-        TK_U64,
-        TK_I8,
-        TK_I16,
-        TK_I32,
-        TK_I64,
-        TK_F32,
-        TK_F64,
-        TK_CHAR,
-        TK_BOOL,
-        TK_STRING,
-        TK_SID,
-        TK_ENUM,
-        TK_STRUCT,
-        TK_PTR,
-        TK_NULL,
-        TK_UNKNOWN,
+    enum class type_kind {
+        U8,
+        U16,
+        U32,
+        U64,
+        I8,
+        I16,
+        I32,
+        I64,
+        F32,
+        F64,
+        CHAR,
+        BOOL,
+        STRING,
+        SID,
+        ENUM,
+        STRUCT,
+        PTR,
+        _NULL,
+        UNKNOWN,
     };
 
     inline type_kind kind_from_primitive_value(const primitive_value_type& prim) noexcept {
@@ -48,7 +48,7 @@ namespace dconstruct::ast {
     }
 
     inline b8 is_primitive(const type_kind kind) noexcept {
-        return kind >= TK_U8 && kind <= TK_SID;
+        return kind >= type_kind::U8 && kind <= type_kind::SID;
     }
 
     struct type {
@@ -71,22 +71,22 @@ namespace dconstruct::ast {
 
     inline std::string kind_to_string(const type_kind kind) noexcept {
         switch(kind) {
-            case TK_U8:     return "u8";
-            case TK_U16:    return "u16";
-            case TK_U32:    return "u32";
-            case TK_U64:    return "u64";
-            case TK_I8:     return "i8";
-            case TK_I16:    return "i16";
-            case TK_I32:    return "i32";
-            case TK_I64:    return "i64";
-            case TK_F32:    return "f32";
-            case TK_F64:    return "f64";
-            case TK_CHAR:   return "char";
-            case TK_BOOL:   return "bool";
-            case TK_STRING: return "string";
-            case TK_SID:    return "sid";
-            case TK_NULL:   return "null";
-            default:        return "non-primitive";
+            case type_kind::U8:     return "u8";
+            case type_kind::U16:    return "u16";
+            case type_kind::U32:    return "u32";
+            case type_kind::U64:    return "u64";
+            case type_kind::I8:     return "i8";
+            case type_kind::I16:    return "i16";
+            case type_kind::I32:    return "i32";
+            case type_kind::I64:    return "i64";
+            case type_kind::F32:    return "f32";
+            case type_kind::F64:    return "f64";
+            case type_kind::CHAR:   return "char";
+            case type_kind::BOOL:   return "bool";
+            case type_kind::STRING: return "string";
+            case type_kind::SID:    return "sid";
+            case type_kind::_NULL:  return "null";
+            default:                return "non-primitive";
         }
     }
 

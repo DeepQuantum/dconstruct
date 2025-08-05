@@ -7,7 +7,7 @@
 #include <map>
 
 namespace dconstruct {
-    enum Opcode : u8 {
+    enum class Opcode : u8 {
     Return,
     IAdd,
     ISub,
@@ -115,7 +115,7 @@ struct Instruction {
     const char* opcode_to_string() const noexcept;
 };
 
-enum SymbolTableEntryType {
+enum class SymbolTableEntryType {
     STRINGID_64,
     FLOAT,
     INT,
@@ -170,22 +170,22 @@ struct RegisterPointer {
     }
 };
 
-enum RegisterValueType {
-    R_I8,
-    R_U8,
-    R_BOOL,
-    R_I16,
-    R_U16,
-    R_F16,
-    R_I32,
-    R_U32,
-    R_F32,
-    R_F64,
-    R_I64,
-    R_U64,
-    R_HASH,
-    R_POINTER,
-    R_STRING
+enum class RegisterValueType {
+    I8,
+    U8,
+    BOOL,
+    I16,
+    U16,
+    F16,
+    I32,
+    U32,
+    F32,
+    F64,
+    I64,
+    U64,
+    HASH,
+    POINTER,
+    STRING
 };
 
 struct Register {
