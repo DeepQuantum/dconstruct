@@ -54,6 +54,7 @@
   "files.associations": {
     "*.hexpat": "cpp",
     "*.frm": "vb",
+    "*.dc": "c",
     "array": "cpp",
     "charconv": "cpp",
     "chrono": "cpp",
@@ -151,6 +152,10 @@
     "*.rh": "cpp",
     "any": "cpp",
     "source_location": "cpp",
-    "csignal": "cpp"
+    "csignal": "cpp",
+    "stack": "cpp",
+    "ranges": "cpp",
+    "text_encoding": "cpp",
+    "cinttypes": "cpp"
   }
 }

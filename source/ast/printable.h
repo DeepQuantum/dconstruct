@@ -5,6 +5,7 @@
 
 namespace dconstruct {
     struct Iprintable {
+        virtual ~Iprintable() = default;
         virtual void pseudo(std::ostream&) const = 0;
         virtual void ast(std::ostream&) const = 0;
     };

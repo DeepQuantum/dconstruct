@@ -2,6 +2,7 @@
 
 #include "base.h"
 #include "tokens.h"
+#include "ast.h"
 
 #include <vector>
 
@@ -15,7 +16,7 @@ namespace dconstruct::compiler {
     class Parser {
     public:
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
-        [[nodiscard]] std::unique_ptr<ast::expression> parse();
+        [[nodiscard]] std::vector<std::unique_ptr<ast::statement>> parse();
         
         inline const std::vector<parsing_error>& get_errors() const noexcept {
             return m_errors;
@@ -34,6 +35,8 @@ namespace dconstruct::compiler {
         [[nodiscard]] b8 check(const token_type) const;
         [[nodiscard]] b8 match(const std::initializer_list<token_type>& types);
 
+        [[nodiscard]] std::unique_ptr<ast::statement> make_statement();
+        [[nodiscard]] std::unique_ptr<ast::statement> make_expression_statement();
         [[nodiscard]] std::unique_ptr<ast::expression> make_expression();
         [[nodiscard]] std::unique_ptr<ast::expression> make_equality();
         [[nodiscard]] std::unique_ptr<ast::expression> make_comparison();
