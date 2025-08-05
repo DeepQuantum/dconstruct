@@ -1,5 +1,5 @@
-#include "logical_not_expression.h"
-#include "literal.h"
+#include "ast/unary_expressions/logical_not_expression.h"
+#include "ast/primary_expressions/literal.h"
 
 namespace dconstruct::ast {
 void logical_not_expr::pseudo(std::ostream &os) const {
@@ -43,6 +43,6 @@ void logical_not_expr::ast(std::ostream &os) const {
             }
         }
     }
-    return std::make_unique<logical_not_expr>(*this);
+    return std::make_unique<logical_not_expr>(std::move(rhs));
 }
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "expression.h"
-#include "type.h"
+#include "ast/expression.h"
+#include "ast/type.h"
 
 namespace dconstruct::ast {
 

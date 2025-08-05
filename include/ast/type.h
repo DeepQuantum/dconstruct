@@ -1,9 +1,10 @@
 #pragma once
 
 #include "base.h"
-#include "tokens.h"
+#include "compilation/tokens.h"
 #include <map>
 #include <optional>
+#include <vector>
 
 namespace dconstruct::ast {
 

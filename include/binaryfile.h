@@ -6,7 +6,7 @@
 #include "DCHeader.h"
 #include "DCScript.h"
 #include "sidbase.h"
-#include "instructions.h"
+#include "disassembly/instructions.h"
 
 #include <memory>
 #include <string>

@@ -33,7 +33,6 @@ inline std::ostream& operator<<(std::ostream& os, const token &t) {
         literal_value = oss.str();
     }, t.m_literal);
     return os
-        << "type: " << t.m_type
         << " lexeme: " << t.m_lexeme
         << " literal: " << literal_type << ' ' << literal_value
         << " line: " << t.m_line;

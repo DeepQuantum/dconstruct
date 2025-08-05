@@ -1,6 +1,6 @@
-#include "dc_parser.h"
-#include "literal.h"
-#include "expression_statement.h"
+#include "compilation/dc_parser.h"
+#include "ast/primary_expressions/literal.h"
+#include "ast/statements/expression_statement.h"
 
 namespace dconstruct::compiler {
 
@@ -62,8 +62,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_expression_statement() {
     std::unique_ptr<ast::expression> expr = make_expression();
-    consume(SEMICOLON, "error: expected ';' after expression.");
-    return std::make_unique<ast::expression_stmnt>(expr);
+    consume(token_type::SEMICOLON, "error: expected ';' after expression.");
+    return std::make_unique<ast::expression_stmt>(std::move(expr));
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_expression() {
@@ -75,7 +75,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (expr == nullptr) {
         return nullptr;
     }
-    while (match({BANG_EQUAL, EQUAL_EQUAL})) {
+    while (match({token_type::BANG_EQUAL, token_type::EQUAL_EQUAL})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_comparison();
         if (right == nullptr) {
@@ -104,26 +104,26 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (expr == nullptr) {
         return nullptr;
     }
-    while (match({GREATER, GREATER_EQUAL, LESS, LESS_EQUAL})) {
+    while (match({token_type::GREATER, token_type::GREATER_EQUAL, token_type::LESS, token_type::LESS_EQUAL})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_term();
         if (right == nullptr) {
             return nullptr;
         }
         switch (op.m_type) {
-            case GREATER: {
+            case token_type::GREATER: {
                 expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::GT, std::move(expr), std::move(right));
                 break;
             }
-            case GREATER_EQUAL: {
+            case token_type::GREATER_EQUAL: {
                 expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::GET, std::move(expr), std::move(right));
                 break;
             }
-            case LESS: {
+            case token_type::LESS: {
                 expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::LT, std::move(expr), std::move(right));
                 break;
             }
-            case LESS_EQUAL: {
+            case token_type::LESS_EQUAL: {
                 expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::LET, std::move(expr), std::move(right));
                 break;
             }
@@ -141,18 +141,18 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (expr == nullptr) {
         return nullptr;
     }
-    while (match({MINUS, PLUS})) {
+    while (match({token_type::MINUS, token_type::PLUS})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_factor();
         if (right == nullptr) {
             return nullptr;
         }
         switch (op.m_type) {
-            case PLUS: {
+            case token_type::PLUS: {
                 expr = std::make_unique<ast::add_expr>(std::move(expr), std::move(right));
                 break;
             }
-            case MINUS: {
+            case token_type::MINUS: {
                 expr = std::make_unique<ast::sub_expr>(std::move(expr), std::move(right));
                 break;
             }
@@ -167,18 +167,18 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_factor() {
     std::unique_ptr<ast::expression> expr = make_unary();
-    while (match({SLASH, STAR})) {
+    while (match({token_type::SLASH, token_type::STAR})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_unary();
         if (right == nullptr) {
             return nullptr;
         }
         switch (op.m_type) {
-            case SLASH: {
+            case token_type::SLASH: {
                 expr = std::make_unique<ast::div_expr>(std::move(expr), std::move(right));
                 break;
             }
-            case STAR: {
+            case token_type::STAR: {
                 expr = std::make_unique<ast::mul_expr>(std::move(expr), std::move(right));
                 break;
             }
@@ -192,14 +192,14 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_unary() {
-    if (match({BANG, MINUS})) {
+    if (match({token_type::BANG, token_type::MINUS})) {
         const token& op = previous();
         std::unique_ptr<ast::expression> right = make_unary();
         if (right == nullptr) {
             return nullptr;
         }
         switch (op.m_type) {
-            case BANG: {
+            case token_type::BANG: {
                 return std::make_unique<ast::logical_not_expr>(std::move(right));
             }
             default: {
@@ -212,28 +212,28 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_primary() {
-    if (match({TRUE})) {
+    if (match({token_type::TRUE})) {
         return std::make_unique<ast::literal>(true);
-    } else if (match({FALSE})) {
+    } else if (match({token_type::FALSE})) {
         return std::make_unique<ast::literal>(false);
-    } else if (match({_NULL})) {
+    } else if (match({token_type::_NULL})) {
         return std::make_unique<ast::literal>(nullptr);
-    } else if (match({INT})) {
+    } else if (match({token_type::INT})) {
         const u64 num = std::get<u64>(previous().m_literal);
         return std::unique_ptr<ast::literal>(new ast::literal(num));
-    } else if (match({DOUBLE})) {
+    } else if (match({token_type::DOUBLE})) {
         const f64 num = std::get<f64>(previous().m_literal);
         return std::make_unique<ast::literal>(num);
-    } else if (match({STRING})) {
+    } else if (match({token_type::STRING})) {
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
-    } else if (match({SID})) {
+    } else if (match({token_type::SID})) {
         
     }
 
-    if (match({LEFT_PAREN})) {
+    if (match({token_type::LEFT_PAREN})) {
         std::unique_ptr expr = make_expression();
-        if(consume(RIGHT_PAREN, "error: expected ')' after expression") == nullptr) {
+        if(consume(token_type::RIGHT_PAREN, "error: expected ')' after expression") == nullptr) {
             return nullptr;
         }
         return std::make_unique<ast::grouping>(std::move(expr));

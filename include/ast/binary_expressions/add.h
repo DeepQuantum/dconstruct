@@ -1,12 +1,11 @@
 #pragma once
 
-#include "expression.h"
+#include "ast/expression.h"
 
 
 namespace dconstruct::ast {
-    struct add_expr : public binary_expr {
+    struct add_expr : public clonable_binary_expr<add_expr> {
         using binary_expr::binary_expr;
-        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
         [[nodiscard]] std::unique_ptr<expression> eval() const final;
 
     private:

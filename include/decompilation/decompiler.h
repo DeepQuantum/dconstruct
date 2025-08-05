@@ -1,9 +1,9 @@
 #pragma once
 
 #include "base.h"
-#include "instructions.h"
+#include "disassembly/instructions.h"
 #include "control_flow_graph.h"
-#include "expression_frame.h"
+#include "decompilation/expression_frame.h"
 
 namespace dconstruct::dcompiler {
 

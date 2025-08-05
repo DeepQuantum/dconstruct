@@ -2,7 +2,7 @@
 
 #include "base.h"
 #include "tokens.h"
-#include "ast.h"
+#include "ast/ast.h"
 
 #include <vector>
 

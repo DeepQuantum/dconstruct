@@ -1,4 +1,4 @@
-#include "instructions.h"
+#include "disassembly/instructions.h"
 #include "string.h"
 
 namespace dconstruct {

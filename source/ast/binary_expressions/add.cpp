@@ -1,15 +1,7 @@
-#include "add.h"
-#include "literal.h"
+#include "ast/binary_expressions/add.h"
+#include "ast/primary_expressions/literal.h"
 
 namespace dconstruct::ast {
-
-[[nodiscard]] b8 add_expr::equals(const expression& rhs) const noexcept {
-    const add_expr* rhs_ptr = dynamic_cast<const add_expr*>(&rhs);
-    if (rhs_ptr == nullptr) {
-        return false;
-    }
-    return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
-}
 
 [[nodiscard]] std::unique_ptr<expression> add_expr::eval() const {
     std::unique_ptr<expression> lhs_ptr = m_lhs->eval();

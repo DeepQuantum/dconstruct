@@ -1,5 +1,5 @@
-#include "negate_expression.h"
-#include "literal.h"
+#include "ast/unary_expressions/negate_expression.h"
+#include "ast/primary_expressions/literal.h"
 
 namespace dconstruct::ast {
 
@@ -11,7 +11,7 @@ void negate_expression::ast(std::ostream& os) const {
     os << "negate[" << m_rhs << ']';
 }
 
-[[nodiscard]] b8 negate_expression::equals(const expression& rhs) const  {
+[[nodiscard]] b8 negate_expression::equals(const expression& rhs) const noexcept {
     const negate_expression* rhs_ptr = dynamic_cast<const negate_expression*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;
@@ -26,13 +26,13 @@ void negate_expression::ast(std::ostream& os) const {
         const primitive_value_type prim = rhs_ptr->get_value();
         const std::optional<primitive_number_type> option = get_number(prim);
         if (option.has_value()) {
-            return std::make_unique<literal>(std::visit([](auto&& arg) {
-                return -arg;
+            return std::make_unique<literal>(std::visit([](auto&& arg) -> primitive_value_type {
+                return -static_cast<std::decay_t<decltype(arg)>>(arg);
             }, option.value()));
         }
         return nullptr;
     }
-    return std::make_unique<negate_expression>(*this);
+    return std::make_unique<negate_expression>(std::move(rhs));
 }
 
 }

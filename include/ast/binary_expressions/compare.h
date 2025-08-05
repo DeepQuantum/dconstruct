@@ -1,6 +1,6 @@
 #pragma once
 
-#include "expression.h"
+#include "ast/expression.h"
 
 namespace dconstruct::ast {
     struct compare_expr : public binary_expr {

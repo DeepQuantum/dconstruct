@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base.h"
-#include "instructions.h"
+#include "disassembly/instructions.h"
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
