@@ -12,7 +12,7 @@ namespace dconstruct {
     [[nodiscard]] BinaryFileEdit EditDisassembler::get_edit_value_from_string(const std::string& str_value) const noexcept {
         if (str_value.find(".") != std::string::npos) {
             return {
-                .m_editType = EditType::F4,
+                .m_editType = EditType::F32,
                 .F32 = std::stof(str_value.c_str())
             };
         }
@@ -36,7 +36,7 @@ namespace dconstruct {
         }
         else {
             return {
-                .m_editType = EditType::INT4,
+                .m_editType = EditType::INT32,
                 .I32 = std::stol(str_value)
             };
         }
@@ -64,17 +64,17 @@ namespace dconstruct {
         const location edit_location = struct_member_start + member_location;
         std::cout << "applying change at location 0x" << std::hex << struct_offset << "[0x" << member_index << "]: " << std::dec;
         switch (value.m_editType) {
-            case EditType::INT4: {
+            case EditType::INT32: {
                 std::cout << edit_location.get<i32>() << "->" << value.I32 << '\n';
                 *reinterpret_cast<i32*>(const_cast<std::byte*>(edit_location.m_ptr)) = value.I32;
                 break;
             }
-            case EditType::INT8: {
+            case EditType::INT64: {
                 std::cout << edit_location.get<u64>() << "->" << value.U64 << '\n';
                 *reinterpret_cast<u64*>(const_cast<std::byte*>(edit_location.m_ptr)) = value.U64;
                 break;
             }
-            case EditType::F4: {
+            case EditType::F32: {
                 std::cout << edit_location.get<f32>() << "->" << value.F32 << '\n';
                 *reinterpret_cast<f32*>(const_cast<std::byte*>(edit_location.m_ptr)) = value.F32;
                 break;

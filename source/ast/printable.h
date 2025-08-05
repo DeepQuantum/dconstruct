@@ -9,7 +9,7 @@ namespace dconstruct {
         virtual void ast(std::ostream&) const = 0;
     };
 
-    enum Flags {
+    enum class Flags {
         AST = 0x1,
     };
 
@@ -19,12 +19,12 @@ namespace dconstruct {
     }
     
     inline std::ostream& set_ast(std::ostream& os) {
-        os.iword(get_flag_index()) |= AST;
+        os.iword(get_flag_index()) |= static_cast<i32>(Flags::AST);
         return os;
     }
 
     inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
-        if (os.iword(get_flag_index()) & AST) {
+        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::AST)) {
             expr.ast(os);
         } else {
             expr.pseudo(os);

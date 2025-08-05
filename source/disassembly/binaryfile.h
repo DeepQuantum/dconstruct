@@ -15,7 +15,7 @@
 #include <set>
 
 namespace dconstruct {
-    enum SymbolType {
+    enum class symbol_type {
         B8,
         I32,
         F32,
@@ -25,8 +25,8 @@ namespace dconstruct {
         UNKNOWN
     };
 
-    struct Symbol {
-        SymbolType type;
+    struct symbol {
+        symbol_type type;
         sid64 id;
         union {
             i32* i32_ptr;
