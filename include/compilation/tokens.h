@@ -38,7 +38,7 @@ namespace dconstruct::compiler {
         m_literal(literal),
         m_line(line) {}
 
-        [[nodiscard]] b8 operator==(const token &rhs) const {
+        [[nodiscard]] inline b8 operator==(const token &rhs) const {
             const b8 result = m_type == rhs.m_type && m_lexeme == rhs.m_lexeme && m_literal == rhs.m_literal && m_line == rhs.m_line;
             return result;
         }

@@ -1,8 +1,8 @@
-#include "custom_structs.h"
+#include "disassembly/custom_structs.h"
 #include <cmath>
 #include <chrono>
-#include "disassembler.h"
-#include "decompiler.h"
+#include "disassembly/disassembler.h"
+#include "decompilation/decompiler.h"
 #include <string.h>
 
 static constexpr char ENTRY_SEP[] = "##############################";

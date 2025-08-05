@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ast.h"
-#include "instructions.h"
-#include "type.h"
+#include "ast/ast.h"
+#include "ast/type.h"
+#include "disassembly/instructions.h"
 #include <map>
 #include <type_traits>
 #include <vector>
@@ -41,17 +41,21 @@ namespace dconstruct::dcompiler {
     };
 
     struct expression_frame {
-        std::map<u32, typed_expression> m_typedExpressions;
+        std::map<u32, typed_expression> m_transformableExpressions;
         std::vector<std::unique_ptr<ast::statement>> m_statements;
         std::map<u32, SymbolTableEntry> m_symbolTable;
         u32 m_varCount = 0;
 
         explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
-                m_typedExpressions[i] = typed_expression();
+                m_transformableExpressions[i] = typed_expression();
             }
             for (u32 i = 49; i < 128; ++i) {
-                m_typedExpressions[i] = { std::make_unique<ast::identifier>("arg_" + std::to_string(i), i - 49) };
+                // std::unique_ptr<ast::expression_stmt> temp = std::make_unique<ast::expression_stmt>(
+                    
+                // );
+                m_transformableExpressions[i] = { std::make_unique<ast::identifier>("arg_" + std::to_string(i), i), ast::type_kind::UNKNOWN };
+                //m_statements.emplace_back(std::move(temp));
             }
         }
 
@@ -63,20 +67,19 @@ namespace dconstruct::dcompiler {
 
         void move(const u32, const u32);
 
-
         void load_literal(const u8 dst, const ast::primitive_value_type& value);
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {
-            if (m_typedExpressions[istr.operand1].m_type != m_typedExpressions[istr.operand2].m_type) {
+            if (m_transformableExpressions[istr.operand1].m_type != m_transformableExpressions[istr.operand2].m_type) {
                 std::cerr << "warning: types don't match for operation on instruction" << istr.opcode_to_string() << '\n';
             }
-            m_typedExpressions[istr.destination] = { std::make_unique<ast::grouping>(
+            m_transformableExpressions[istr.destination] = { std::make_unique<ast::grouping>(
                 std::make_unique<binary_expr_t>(
-                    std::move(m_typedExpressions[istr.operand1].m_expr), 
-                    std::move(m_typedExpressions[istr.operand2].m_expr)
+                    std::move(m_transformableExpressions[istr.operand1].m_expr), 
+                    std::move(m_transformableExpressions[istr.operand2].m_expr)
                 )
-            ), m_typedExpressions[istr.operand1].m_type };
+            ), m_transformableExpressions[istr.operand1].m_type };
         }
     };
 }

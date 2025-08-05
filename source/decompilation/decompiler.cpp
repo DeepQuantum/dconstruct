@@ -1,6 +1,6 @@
-#include "decompiler.h"
-#include "tokens.h"
-#include "expression_frame.h"
+#include "decompilation/decompiler.h"
+#include "compilation/tokens.h"
+#include "decompilation/expression_frame.h"
 #include <fstream>
 #include <iostream>
 
@@ -15,7 +15,7 @@ std::vector<decompiled_function> Decompiler::decompile() {
         cfg.find_loops();
         //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
 
-        expression_frame frame(func->m_stackFrame.m_symbolTableEntries);
+        expression_frame frame{func->m_stackFrame.m_symbolTableEntries};
         for (const auto& [_, node] : cfg.get_nodes()) {
             parse_basic_block(node, frame);
         }

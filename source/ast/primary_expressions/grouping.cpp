@@ -1,4 +1,4 @@
-#include "grouping.h"
+#include "ast/primary_expressions/grouping.h"
 
 namespace dconstruct::ast {
 
