@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+import tkinter.font as tkFont
 
 
 class CLIWrapperApp:
     def __init__(self, root):
         self.root = root
         root.title("CLI Wrapper")
-        root.geometry("900x600")
+        root.geometry("1200x600")
 
         self.input_is_dir = tk.BooleanVar(value=False)
         self.emit_once = tk.BooleanVar(value=False)
@@ -22,35 +23,40 @@ class CLIWrapperApp:
 
     def create_widgets(self):
         row = 0
-
-        tk.Label(self.root, text=".bin File(s) to disassemble (choose a file or directory):").grid(row=row, column=0, sticky="w", padx=5, pady=20)
+        font = tkFont.Font(family="Arial", size=16)
         self.input_path_var = tk.StringVar()
-        tk.Entry(self.root, textvariable=self.input_path_var, width=60).grid(row=row, column=1, padx=5)
-        tk.Button(self.root, text="📁", command=self.choose_input_files).grid(row=row, column=2, padx=5)
-        tk.Button(self.root, text="📂", command=self.choose_input_dir).grid(row=row, column=3, padx=5)
+
+        tk.Label(self.root, text="Choose a .bin file:", font=font).grid(row=row, column=1, sticky="w", pady=20)
+        tk.Entry(self.root, textvariable=self.input_path_var, width=60).grid(row=row, column=2)
+        tk.Button(self.root, text="📁", command=self.choose_input_files, font=font).grid(row=row, column=3)
         row += 1
 
-        tk.Label(self.root, text="Output directory: ").grid(row=row, column=0, sticky="w", padx=5)
+        tk.Label(self.root, text="Choose a directory:", font=font).grid(row=row, column=1, sticky="w", pady=20)
+        tk.Entry(self.root, textvariable=self.input_path_var, width=60).grid(row=row, column=2)
+        tk.Button(self.root, text="📂", font=font, command=self.choose_input_dir).grid(row=row, column=3)
+        row += 1
+
+        tk.Label(self.root, text="Output directory: ", font=font).grid(row=row, column=1, sticky="w")
         self.output_path_var = tk.StringVar()
-        tk.Entry(self.root, textvariable=self.output_path_var, width=60).grid(row=row, column=1, padx=5)
-        tk.Button(self.root, text="📁", command=self.choose_output).grid(row=row, column=2, padx=5)
+        tk.Entry(self.root, textvariable=self.output_path_var, width=60).grid(row=row, column=2)
+        tk.Button(self.root, text="📁", command=self.choose_output, font=font).grid(row=row, column=3)
         row += 1
 
-        tk.Label(self.root, text="Sidbase path (default is 'sidbase.bin' in the current directory):").grid(row=row, column=0, sticky="w", padx=5)
+        tk.Label(self.root, text="Sidbase path", font=font).grid(row=row, column=1, sticky="w")
         self.sidbase_path_var = tk.StringVar()
-        tk.Entry(self.root, textvariable=self.sidbase_path_var, width=60).grid(row=row, column=1, padx=5)
-        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.sidbase_path_var)).grid(row=row, column=2, padx=5)
+        tk.Entry(self.root, textvariable=self.sidbase_path_var, width=60).grid(row=row, column=2)
+        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.sidbase_path_var), font=font).grid(row=row, column=3)
         row += 1
 
-        tk.Label(self.root, text="Edit file:").grid(row=row, column=0, sticky="w", padx=5)
+        tk.Label(self.root, text="Edit file:", font=font).grid(row=row, column=1, sticky="w")
         self.edit_file_path_var = tk.StringVar()
-        tk.Entry(self.root, textvariable=self.edit_file_path_var, width=60).grid(row=row, column=1, padx=5)
-        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.edit_file_path_var)).grid(row=row, column=2, padx=5)
+        tk.Entry(self.root, textvariable=self.edit_file_path_var, width=60).grid(row=row, column=2)
+        tk.Button(self.root, text="📁", command=lambda: self.pick_file(self.edit_file_path_var), font=font).grid(row=row, column=3)
         row += 1
 
-        tk.Label(self.root, text="Add any additional edits (optional):").grid(row=row, column=0, sticky="w", padx=5)
-        self.additional_edits_text = tk.Text(self.root, height=4, width=60)
-        self.additional_edits_text.grid(row=row, column=1, columnspan=2, padx=5, sticky="ew")
+        tk.Label(self.root, text="Add any additional edits (optional):", font=font).grid(row=row, column=1, sticky="w")
+        self.additional_edits_text = tk.Text(self.root, height=4, width=1, font=font)
+        self.additional_edits_text.grid(row=row, column=2, columnspan=1, padx=5, sticky="ew")
         row += 1
 
         tk.Label(self.root, text="--indent:").grid(row=row, column=0, sticky="w", padx=5)
