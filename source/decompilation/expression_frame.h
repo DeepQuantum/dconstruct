@@ -1,9 +1,6 @@
 #pragma once
 
-#include "binary_expression.h"
-#include "literal.h"
-#include "statements.h"
-#include "assign_statement.h"
+#include "ast.h"
 #include "instructions.h"
 #include "type.h"
 #include <map>
@@ -35,8 +32,8 @@ namespace dconstruct::dcompiler {
     
 
     struct typed_expression {
-        typed_expression() : m_expr(nullptr), m_type(ast::TK_UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::TK_UNKNOWN) {};
+        typed_expression() : m_expr(nullptr), m_type(ast::type_kind::UNKNOWN) {};
+        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::type_kind::UNKNOWN) {};
         typed_expression(std::unique_ptr<ast::expression> expr, ast::type_kind type) : m_expr(std::move(expr)), m_type(type) {};
 
         std::unique_ptr<ast::expression> m_expr;

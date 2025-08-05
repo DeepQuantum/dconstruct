@@ -6,7 +6,7 @@ namespace dconstruct::ast {
     struct compare_expr : public binary_expr {
         [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
-        enum comp_type {
+        enum class comp_type {
             LT,
             LET,
             GT,
@@ -22,12 +22,12 @@ namespace dconstruct::ast {
         
         [[nodiscard]] std::string get_op_char() const noexcept final { 
             switch (m_compType) {
-                case LT: return "<";
-                case LET: return "<=";
-                case GT: return ">";
-                case GET: return ">=";
-                case EQ: return "==";
-                case NEQ: return "!=";
+                case comp_type::LT: return "<";
+                case comp_type::LET: return "<=";
+                case comp_type::GT: return ">";
+                case comp_type::GET: return ">=";
+                case comp_type::EQ: return "==";
+                case comp_type::NEQ: return "!=";
                 default: return "==";
             }
         }

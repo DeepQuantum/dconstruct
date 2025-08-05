@@ -24,14 +24,14 @@ void logical_not_expr::ast(std::ostream &os) const {
     if (rhs_ptr != nullptr) {
         const primitive_value_type value = rhs_ptr->get_value();
         switch(rhs_ptr->get_type()) {
-            case TK_STRUCT:
-            case TK_ENUM:
-            case TK_SID:
-            case TK_PTR:
-            case TK_UNKNOWN: return nullptr;
-            case TK_BOOL: return std::make_unique<literal>(!std::get<b8>(value));
-            case TK_STRING: return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
-            case TK_NULL: return std::make_unique<literal>(true);
+            case type_kind::STRUCT:
+            case type_kind::ENUM:
+            case type_kind::SID:
+            case type_kind::PTR:
+            case type_kind::UNKNOWN: return nullptr;
+            case type_kind::BOOL:    return std::make_unique<literal>(!std::get<b8>(value));
+            case type_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
+            case type_kind::_NULL:   return std::make_unique<literal>(true);
             default: {
                 const std::optional<primitive_number_type> num_opt = get_number(value);
                 if (num_opt.has_value()) {

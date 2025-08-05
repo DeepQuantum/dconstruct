@@ -503,7 +503,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
     char interpreted[interpreted_buffer_size] = {0};
     const Instruction istr = line.m_instruction;
     SymbolTableEntry table_entry;
-    table_entry.m_type = NONE;
+    table_entry.m_type = SymbolTableEntryType::NONE;
     std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
             get_offset((void*)(line.m_globalPointer + line.m_location)),
@@ -524,52 +524,52 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
     char op1_str[interpreted_buffer_size] = {0}; 
     char op2_str[interpreted_buffer_size] = {0}; 
 
-    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_type == R_POINTER ? dest.m_PTR.m_sid : dest.m_SID));
-    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_type == R_POINTER ? op1.m_PTR.m_sid : op1.m_SID));
-    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_type == R_POINTER ? op2.m_PTR.m_sid : op2.m_SID));
+    stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_type == RegisterValueType::POINTER ? dest.m_PTR.m_sid : dest.m_SID));
+    stackFrame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_type == RegisterValueType::POINTER ? op1.m_PTR.m_sid : op1.m_SID));
+    stackFrame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_type == RegisterValueType::POINTER ? op2.m_PTR.m_sid : op2.m_SID));
 
     dest.isReturn = false;
     dest.isArg = false;
 
     switch (istr.opcode) {
-        case Return: {
+        case Opcode::Return: {
             std::snprintf(varying, disassembly_text_size,"r%d", istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
             break;
         }
-        case IAdd: {
+        case Opcode::IAdd: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            if (op1.m_type == RegisterValueType::R_POINTER) {
-                dest.m_type = RegisterValueType::R_POINTER;
+            if (op1.m_type == RegisterValueType::POINTER) {
+                dest.m_type = RegisterValueType::POINTER;
                 dest.m_PTR = op1.m_PTR;
                 dest.m_PTR.m_offset += op2.m_U64;
             } else {
-                dest.m_type = RegisterValueType::R_I64;
+                dest.m_type = RegisterValueType::I64;
                 dest.m_I64 = op1.m_I64 + op2.m_I64;
             }
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination, lookup(dest.m_PTR.m_sid));
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", istr.destination, op1_str, op2_str);
             break;
         }
-        case ISub: {
+        case Opcode::ISub: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = op1.m_I64 - op2.m_I64;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s - %s", dst_str, op1_str, op2_str);
             break;
         }
-        case IMul: {
+        case Opcode::IMul: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = op1.m_I64 * op2.m_I64;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s * %s", dst_str, op1_str, op2_str);
             break;
         }
-        case IDiv: {
+        case Opcode::IDiv: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             if (op2.m_I64 == 0) {
                 dest.m_I64 = op1.m_I64 / 1;
             } else {
@@ -579,33 +579,33 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s / %s", dst_str, op1_str, op2_str);
             break;
         }
-        case FAdd: {
+        case Opcode::FAdd: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_I64 = op1.m_F32 + op2.m_F32;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s + %s", dst_str, op1_str, op2_str);
             break;
         }
-        case FSub: {
+        case Opcode::FSub: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_I64 = op1.m_F32 - op2.m_F32;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s - %s", dst_str, op1_str, op2_str);
             break;
         }
-        case FMul: {
+        case Opcode::FMul: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_I64 = op1.m_F32 * op2.m_F32;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s * %s", dst_str, op1_str, op2_str);
             break;
         }
-        case FDiv: {
+        case Opcode::FDiv: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             if (op2.m_F32 == 0) {
                 dest.m_F32 = op1.m_F32 / 1;
                // std::snprintf(interpreted + 13, interpreted_buffer_size, "%s", " divide by 0");
@@ -616,127 +616,127 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s / %s", dst_str, op1_str, op2_str);
             break;
         }
-        case LoadStaticInt: {
+        case Opcode::LoadStaticInt: {
             const i64 table_value = stackFrame.m_symbolTable.get<i64>(istr.operand1 * 8);
             table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = table_value;
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = table_value;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, istr.operand1, op1_str); 
             break;
         }
-        case LoadStaticFloat: {
+        case Opcode::LoadStaticFloat: {
             const f32 table_value = stackFrame.m_symbolTable.get<f32>(istr.operand1 * 8);
             table_entry.m_type = SymbolTableEntryType::FLOAT;
             table_entry.m_f32 = table_value;
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = table_value;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, istr.operand1, op1_str); 
             break;
         }
-        case LoadStaticPointer: {
+        case Opcode::LoadStaticPointer: {
             const p64 table_value = stackFrame.m_symbolTable.get<p64>(istr.operand1 * 8);
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = table_value;
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = ST[%d] -> <%s>", dst_str, istr.operand1, op1_str); 
             break;
         }
-        case LoadU16Imm: {
+        case Opcode::LoadU16Imm: {
             const u16 value = istr.operand1 | (istr.operand2 << 8);
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, value);
-            dest.m_type = RegisterValueType::R_U16;
+            dest.m_type = RegisterValueType::U16;
             dest.m_U64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %d", istr.destination, value);
             break;
         }
-        case LoadU32: {
+        case Opcode::LoadU32: {
             std::snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_U32;
+            dest.m_type = RegisterValueType::U32;
             dest.m_I32 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u32*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadFloat: {
+        case Opcode::LoadFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = 0.f;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(f32*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadPointer: {
+        case Opcode::LoadPointer: {
             std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.m_PTR = RegisterPointer{op1.m_PTR.m_base, op1.m_PTR.m_offset, op1.m_PTR.m_sid};
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.operand1, lookup(op1.m_PTR.m_sid));
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(p64*)%s", istr.destination, dst_str);
             break;
         }
-        case LoadI64: {
+        case Opcode::LoadI64: {
             std::snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i64*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadU64: {
+        case Opcode::LoadU64: {
             std::snprintf(varying, disassembly_text_size,"r%d, [r%d]", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_U64;
+            dest.m_type = RegisterValueType::U64;
             dest.m_U64 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u64*)%s", istr.destination, op1_str);
             break;
         }
-        case StoreInt: {
+        case Opcode::StoreInt: {
             std::snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I8 = 0;
             break;
         }
-        case StoreFloat: {
+        case Opcode::StoreFloat: {
             std::snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(f32*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_I8 = 0;
             break;
         }
-        case StorePointer: {
+        case Opcode::StorePointer: {
             std::snprintf(varying, disassembly_text_size,"[r%d], r%d", istr.destination, istr.operand1);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(p64*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.m_PTR = {0, 0, 0};
             break;
         }
-        case LookupInt: {
+        case Opcode::LookupInt: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             const i64 value = stackFrame.m_symbolTable.get<i64>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_i64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, lookup(value));
             break;
         }
-        case LookupFloat: {
+        case Opcode::LookupFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             f32 value = stackFrame.m_symbolTable.get<f32>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = value;
             table_entry.m_type = SymbolTableEntryType::FLOAT;
             table_entry.m_f32 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%.2f>", istr.destination, istr.operand1, value);
             break;
         }
-        case LookupPointer: {
+        case Opcode::LookupPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             const p64 value = stackFrame.m_symbolTable.get<p64>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.m_PTR.m_base = 0;
             dest.m_PTR.m_offset = 0;
             dest.m_PTR.m_sid = value;
@@ -749,42 +749,42 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             }
             break;
         }
-        case MoveInt: {
+        case Opcode::MoveInt: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = op1.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%lli>", istr.destination, istr.operand1, op1.m_I64);
             break;
         }
-        case MoveFloat: {
+        case Opcode::MoveFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = op1.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%f>", istr.destination, istr.operand1, op1.m_F32);
             break;
         }
-        case MovePointer: {
+        case Opcode::MovePointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
-            dest.m_type = R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.m_PTR = op1.m_PTR;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", istr.destination, istr.operand1, lookup(op1.m_PTR.get()));
             break;
         }
-        case CastInteger: {
+        case Opcode::CastInteger: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I32 = (i32)op1.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%f> => <%d>", istr.destination, istr.operand1, op1.m_F32, dest.m_I32);
             break;
         }
-        case CastFloat: {
+        case Opcode::CastFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = (f32)op1.m_I32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%d> => <%f>", istr.destination, istr.operand1, op1.m_I32, dest.m_F32);
             break;
         }
-        case Call: {
+        case Opcode::Call: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[300];
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
@@ -795,13 +795,13 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
                 stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_SID));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            dest.m_type = R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.isReturn = true;
             dest.m_PTR = {0, 0, op1.m_PTR.m_sid};
             std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
             break;
         }
-        case CallFf: {
+        case Opcode::CallFf: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             char comment_str[300];
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", istr.destination, lookup(op1.m_PTR.m_sid));
@@ -809,17 +809,17 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
-                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_type == R_POINTER ? stackFrame[i + 49].m_PTR.m_sid : stackFrame[i + 49].m_SID));
+                stackFrame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stackFrame[i + 49].m_type == RegisterValueType::POINTER ? stackFrame[i + 49].m_PTR.m_sid : stackFrame[i + 49].m_SID));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            dest.m_type = R_POINTER;
+            dest.m_type = RegisterValueType::POINTER;
             dest.isReturn = true;
             std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
             break;
         }
-        case IEqual: {
+        case Opcode::IEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_I64 == op2.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s == %s", 
                 istr.destination, 
@@ -828,9 +828,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case IGreaterThan: {
+        case Opcode::IGreaterThan: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_I64 > op2.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lld] > r%d [%lld]", 
                 istr.destination, 
@@ -841,9 +841,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case IGreaterThanEqual: {
+        case Opcode::IGreaterThanEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_I64 >= op2.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lli] >= r%d [%lli]", 
                 istr.destination, 
@@ -854,9 +854,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case ILessThan: {
+        case Opcode::ILessThan: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_I64 < op2.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%s] < r%d [%s]", 
                 istr.destination, 
@@ -867,9 +867,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case ILessThanEqual: {
+        case Opcode::ILessThanEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_I64 <= op2.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lli] <= r%d [%lli]", 
                 istr.destination, 
@@ -880,9 +880,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FEqual: {
+        case Opcode::FEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_F32 == op2.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] == r%d [%f]", 
                 istr.destination, 
@@ -893,9 +893,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FGreaterThan: {
+        case Opcode::FGreaterThan: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_F32 > op2.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] > r%d [%f]", 
                 istr.destination, 
@@ -906,9 +906,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FGreaterThanEqual: {
+        case Opcode::FGreaterThanEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_F32 >= op2.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] >= r%d [%f]", 
                 istr.destination, 
@@ -919,9 +919,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FLessThan: {
+        case Opcode::FLessThan: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_F32 < op2.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] < r%d [%f]", 
                 istr.destination, 
@@ -932,9 +932,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FLessThanEqual: {
+        case Opcode::FLessThanEqual: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_F32 <= op2.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%f] <= r%d [%f]", 
                 istr.destination, 
@@ -945,9 +945,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case IMod: {
+        case Opcode::IMod: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_I32;
+            dest.m_type = RegisterValueType::I32;
             if (op2.m_I64 == 0) {
                 dest.m_I32 = op1.m_I64 % 1;
             } else {
@@ -963,9 +963,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FMod: {
+        case Opcode::FMod: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_F32;
+            dest.m_type = RegisterValueType::F32;
             if (op2.m_F32 == 0.f) {
                 dest.m_F32 = fmodf(op1.m_F32, 1.f);
             } else {
@@ -981,9 +981,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case IAbs: {
+        case Opcode::IAbs: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I64 = abs(op1.m_I64);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ABS(r%d) [%lli] -> <%lli>", 
                 istr.destination, 
@@ -993,9 +993,9 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case FAbs: {
+        case Opcode::FAbs: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_F32 = abs(op1.m_F32);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ABS(r%d) [%f] -> <%f>", 
                 istr.destination, 
@@ -1005,7 +1005,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             );
             break;
         }
-        case Branch: {
+        case Opcode::Branch: {
             u32 target = istr.destination | (istr.operand2 << 8);
             std::snprintf(varying, disassembly_text_size,"0x%X", target);
             std::snprintf(interpreted, interpreted_buffer_size, "GOTO ");
@@ -1016,7 +1016,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             }
             break;
         }
-        case BranchIf: {
+        case Opcode::BranchIf: {
             u32 target = istr.destination | (istr.operand2 << 8);
             std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             std::snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
@@ -1027,7 +1027,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             }
             break;
         }
-        case BranchIfNot: {
+        case Opcode::BranchIfNot: {
             u32 target = istr.destination | (istr.operand2 << 8);
             std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             std::snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
@@ -1038,112 +1038,112 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             }
             break;
         }
-        case OpLogNot: {
+        case Opcode::OpLogNot: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             //dest.m_BOOL = !op1.m_BOOL;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = !%s", istr.destination, op1_str);
             break;
         }
-        case OpBitAnd: {
+        case Opcode::OpBitAnd: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = op1.m_type;
             dest.m_U64 = op1.m_U64 & op2.m_U64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%llu] & r%d [%llu] -> <%llu>", istr.destination, istr.operand1, op1.m_U64, istr.operand2, op2.m_U64, dest.m_U64);
             break;
         }
-        case OpBitNot: {
+        case Opcode::OpBitNot: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
             dest.m_type = op1.m_type;
             dest.m_U64 = ~op1.m_U64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ~r%d [%llu] -> <%llu>", istr.destination, istr.operand1, op1.m_U64, dest.m_U64);
             break;
         }
-        case OpBitOr: {
+        case Opcode::OpBitOr: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = op1.m_type;
             dest.m_U64 = op1.m_U64 | op2.m_U64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%llu] | r%d [%llu] -> <%llu>", istr.destination, istr.operand1, op1.m_U64, istr.operand2, op2.m_U64, dest.m_U64);
             break;
         }
-        case OpBitXor: {
+        case Opcode::OpBitXor: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = op1.m_type;
             dest.m_U64 = op1.m_U64 ^ op2.m_U64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%llu] ^ r%d [%llu] -> <%llu>", istr.destination, istr.operand1, op1.m_U64, istr.operand2, op2.m_U64, dest.m_U64);
             break;
         }
-        case OpBitNor: {
+        case Opcode::OpBitNor: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             dest.m_type = op1.m_type;
             dest.m_U64 = ~(op1.m_U64 | op2.m_U64);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ~(r%d [%llu] | r%d [%llu]) -> <%llu>", istr.destination, istr.operand1, op1.m_U64, istr.operand2, op2.m_U64, dest.m_U64);
             break;
         }
-        case OpLogAnd: {
+        case Opcode::OpLogAnd: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_BOOL && op2.m_BOOL;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%d] && r%d [%d]", istr.destination, istr.operand1, op1.m_BOOL, istr.operand2, op2.m_BOOL);
             break;
         } 
-        case OpLogOr: {
+        case Opcode::OpLogOr: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_BOOL || op2.m_BOOL;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%d] || r%d [%d]", istr.destination, istr.operand1, op1.m_BOOL, istr.operand2, op2.m_BOOL);
             break;
         }
-        case INeg: {
+        case Opcode::INeg: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = -op1.m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d [%lli] -> <%lli>", istr.destination, istr.operand1, op1.m_I64, dest.m_I64);
             break;
         }
-        case FNeg: {
+        case Opcode::FNeg: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = -op1.m_F32;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d [%f] -> <%f>", istr.destination, istr.operand1, op1.m_F32, dest.m_F32);
             break;
         }
-        case LoadParamCnt: {
+        case Opcode::LoadParamCnt: {
             // wat
             break;
         }
-        case IAddImm: {
+        case Opcode::IAddImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             const char* resolved = nullptr;
-            if (op1.m_type == R_POINTER) {
-                dest.m_type = R_POINTER;
+            if (op1.m_type == RegisterValueType::POINTER) {
+                dest.m_type = RegisterValueType::POINTER;
                 dest.m_PTR = {op1.m_PTR.m_base, op1.m_PTR.m_offset + istr.operand2, op1.m_PTR.m_sid};
                 resolved = lookup(dest.m_PTR.m_sid);
             } else {
-                dest.m_type = R_I64;
+                dest.m_type = RegisterValueType::I64;
                 dest.m_I64 = op1.m_I64 + istr.operand2;
             }
             stackFrame.to_string(dst_str, interpreted_buffer_size, istr.operand1, resolved);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %d -> <%s>", istr.destination, op1_str, istr.operand2, dst_str);
             break;
         }
-        case ISubImm: {
+        case Opcode::ISubImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value = op1.m_I64 - istr.operand2;
-            dest.m_type = R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lli] - %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
             break;
         }
-        case IMulImm: {
+        case Opcode::IMulImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value = op1.m_I64 * istr.operand2;
-            dest.m_type = R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lli] * %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
             break;
         }
-        case IDivImm: {
+        case Opcode::IDivImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", istr.destination, istr.operand1, istr.operand2);
             i64 value;
             if (istr.operand2 == 0) {
@@ -1151,65 +1151,65 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             } else {
                 value = op1.m_I64 / istr.operand2;
             }
-            dest.m_type = R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d [%lli] / %d -> <%lli>", istr.destination, istr.operand1, op1.m_I64, istr.operand2, dest.m_I64);
             break;
         }
-        case LoadStaticI32Imm: {
+        case Opcode::LoadStaticI32Imm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             const i32 value = stackFrame.m_symbolTable.get<i32>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I32 = value;
             table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticFloatImm: {
+        case Opcode::LoadStaticFloatImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             f32 value = stackFrame.m_symbolTable.get<f32>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_F32;
+            dest.m_type = RegisterValueType::F32;
             dest.m_F32 = value;
             table_entry.m_type = SymbolTableEntryType::FLOAT;
             table_entry.m_f32 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%.2f>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticPointerImm: {
+        case Opcode::LoadStaticPointerImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             p64 value = stackFrame.m_symbolTable.get<p64>(istr.operand1 * 8);
             if (value >= m_currentFile->m_strings.num()) {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
-                dest.m_type = RegisterValueType::R_STRING;
+                dest.m_type = RegisterValueType::STRING;
                 dest.m_PTR = {value, 0, 0};
                 table_entry.m_type = SymbolTableEntryType::STRING;
                 table_entry.m_pointer = value;
             } else {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, get_offset((void*)value));
-                dest.m_type = RegisterValueType::R_POINTER;
+                dest.m_type = RegisterValueType::POINTER;
                 dest.m_PTR = {0, 0, value};
                 table_entry.m_type = SymbolTableEntryType::POINTER;
                 table_entry.m_pointer = value;
             }
             break;
         }
-        case LoadStaticI64Imm: {
+        case Opcode::LoadStaticI64Imm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             i64 value = stackFrame.m_symbolTable.get<i64>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
             table_entry.m_type = SymbolTableEntryType::INT;
             table_entry.m_i64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%llu>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticU64Imm: {
+        case Opcode::LoadStaticU64Imm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             const u64 value = stackFrame.m_symbolTable.get<u64>(istr.operand1 * 8);
             if (value >= 0x000FFFFFFFFFFFFF) {
                 const char *hash_str = lookup(value);
-                dest.m_type = RegisterValueType::R_HASH;
+                dest.m_type = RegisterValueType::HASH;
                 dest.m_SID = value;
                 table_entry.m_type = SymbolTableEntryType::STRINGID_64;
                 table_entry.m_hash = value;
@@ -1220,19 +1220,19 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             }
             break;
         }
-        case IntAsh: {
+        case Opcode::IntAsh: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
 
             u64 hash = op1.m_I64 >> -(char)op2.m_I8;
             if (op2.m_I64 == 0) {
                 hash = op1.m_I64 << op2.m_I8;
             }
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = hash;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s <<>> %s", istr.destination, op1_str, op2_str);
             break;
         }
-        case Move: {
+        case Opcode::Move: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
 
             dest = op1;
@@ -1240,141 +1240,141 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s", istr.destination, op1_str);
             break;
         }
-        case LoadStaticU32Imm: {
+        case Opcode::LoadStaticU32Imm: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
             const u32 value = stackFrame.m_symbolTable.get<u32>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_U32;
+            dest.m_type = RegisterValueType::U32;
             dest.m_U32 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticI8Imm: {
+        case Opcode::LoadStaticI8Imm: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
             const i8 value = stackFrame.m_symbolTable.get<i8>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_I8;
+            dest.m_type = RegisterValueType::I8;
             dest.m_I8 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticI16Imm: {
+        case Opcode::LoadStaticI16Imm: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
             const i16 value = stackFrame.m_symbolTable.get<u16>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_I16;
+            dest.m_type = RegisterValueType::I16;
             dest.m_I16 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadStaticU16Imm: {
+        case Opcode::LoadStaticU16Imm: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
             const u16 value = stackFrame.m_symbolTable.get<u16>(istr.operand1 * 8);
-            dest.m_type = RegisterValueType::R_U16;
+            dest.m_type = RegisterValueType::U16;
             dest.m_U16 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
-        case LoadI8: {
+        case Opcode::LoadI8: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I8;
+            dest.m_type = RegisterValueType::I8;
             dest.m_I8 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i8*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadU8: {
+        case Opcode::LoadU8: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_U8;
+            dest.m_type = RegisterValueType::U8;
             dest.m_U8 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u8*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadI16: {
+        case Opcode::LoadI16: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I16;
+            dest.m_type = RegisterValueType::I16;
             dest.m_I16 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i16*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadU16: {
+        case Opcode::LoadU16: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_U16;
+            dest.m_type = RegisterValueType::U16;
             dest.m_U16 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", istr.destination, op1_str);
             break;
         }
-        case LoadI32: {
+        case Opcode::LoadI32: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", istr.destination, istr.operand1);
-            dest.m_type = RegisterValueType::R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I32 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i32*)%s", istr.destination, op1_str);
             break;
         }
-        case StoreI8: {
+        case Opcode::StoreI8: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i8*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_I8;
+            dest.m_type = RegisterValueType::I8;
             dest.m_I8 = 0;
             break;
         }
-        case StoreU8: {
+        case Opcode::StoreU8: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(u8*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_U8;
+            dest.m_type = RegisterValueType::U8;
             dest.m_U8 = 0;
             break;
         }
-        case StoreI16: {
+        case Opcode::StoreI16: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i16*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_I16;
+            dest.m_type = RegisterValueType::I16;
             dest.m_I16 = 0;
             break;
         }
-        case StoreU16: {
+        case Opcode::StoreU16: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(u16*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_U16;
+            dest.m_type = RegisterValueType::U16;
             dest.m_U16 = 0;
             break;
         }
-        case StoreI32: {
+        case Opcode::StoreI32: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_I32;
+            dest.m_type = RegisterValueType::I32;
             dest.m_I32 = 0;
             break;
         }
-        case StoreU32: {
+        case Opcode::StoreU32: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(u32*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_U32;
+            dest.m_type = RegisterValueType::U32;
             dest.m_U32 = 0;
             break;
         }
-        case StoreI64: {
+        case Opcode::StoreI64: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i64*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_I64;
+            dest.m_type = RegisterValueType::I64;
             dest.m_I64 = 0;
             break;
         }
-        case StoreU64: {
+        case Opcode::StoreU64: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(u64*)%s = %s", istr.destination, op1_str, op2_str);
-            dest.m_type = RegisterValueType::R_U64;
+            dest.m_type = RegisterValueType::U64;
             dest.m_U64 = 0;
             break;
         }
-        case INotEqual:
-        case FNotEqual: {
+        case Opcode::INotEqual:
+        case Opcode::FNotEqual: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", istr.destination, istr.operand1, istr.operand2);
-            dest.m_type = RegisterValueType::R_BOOL;
+            dest.m_type = RegisterValueType::BOOL;
             dest.m_BOOL = op1.m_U64 != op2.m_U64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s != %s", istr.destination, op1_str, op2_str);
             break;
         }
-        case StoreArray: {
+        case Opcode::StoreArray: {
             // Not used.
         }
-        case AssertPointer: {
+        case Opcode::AssertPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d", istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d?", istr.destination);
             break;
@@ -1386,7 +1386,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
         }
     }
     
-    if (table_entry.m_type != NONE) {
+    if (table_entry.m_type != SymbolTableEntryType::NONE) {
         stackFrame.m_symbolTableEntries.emplace(istr.operand1, table_entry);
     }
     line.m_text = std::string(disassembly_text);
