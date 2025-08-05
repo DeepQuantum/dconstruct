@@ -1,5 +1,6 @@
 #include "dc_parser.h"
 #include "literal.h"
+#include "expression_statement.h"
 
 namespace dconstruct::compiler {
 
@@ -47,8 +48,22 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return false;
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::parse() {
-    return make_expression();
+[[nodiscard]] std::vector<std::unique_ptr<ast::statement>> Parser::parse() {
+    std::vector<std::unique_ptr<ast::statement>> statements;
+    while (!is_at_end()) {
+        statements.push_back(make_statement());
+    }
+    return statements;
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
+    return make_expression_statement();
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_expression_statement() {
+    std::unique_ptr<ast::expression> expr = make_expression();
+    consume(SEMICOLON, "error: expected ';' after expression.");
+    return std::make_unique<ast::expression_stmnt>(expr);
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_expression() {
