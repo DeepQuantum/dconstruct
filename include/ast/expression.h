@@ -2,7 +2,6 @@
 
 #include "base.h"
 #include "printable.h"
-#include "clonable.h"
 #include <ostream>
 #include <vector>
 
@@ -73,7 +72,7 @@ namespace dconstruct::ast {
 
 
     template <typename impl_unary_expr>
-    struct clonable_unary_expr : public clonable<binary_expr, impl_binary_expr> {
+    struct clonable_unary_expr : public unary_expr {
         using unary_expr::unary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
@@ -84,7 +83,7 @@ namespace dconstruct::ast {
     };
 
     template <typename impl_binary_expr>
-    struct clonable_binary_expr : public clonable<binary_expr, impl_binary_expr> {
+    struct clonable_binary_expr : public binary_expr {
         using binary_expr::binary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
