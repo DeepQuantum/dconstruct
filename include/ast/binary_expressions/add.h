@@ -5,7 +5,7 @@
 
 namespace dconstruct::ast {
     struct add_expr : public clonable_binary_expr<add_expr> {
-        using binary_expr::binary_expr;
+        using clonable_binary_expr::clonable_binary_expr;
         [[nodiscard]] std::unique_ptr<expression> eval() const final;
 
     private:

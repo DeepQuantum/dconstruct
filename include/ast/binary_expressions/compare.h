@@ -4,7 +4,6 @@
 
 namespace dconstruct::ast {
     struct compare_expr : public binary_expr {
-        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
 
         enum class comp_type {
             LT,
