@@ -4,8 +4,8 @@
 
 
 namespace dconstruct::ast {
-    struct assign_expr : public clonable_binary_expr<assign_expr>, public comparable_binary_expr<assign_expr> {
-        using binary_expr::binary_expr;
+    struct assign_expr : public clonable_binary_expr<assign_expr> {
+        using clonable_binary_expr::clonable_binary_expr;
         [[nodiscard]] std::unique_ptr<expression> eval() const final;
 
     private:

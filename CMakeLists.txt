@@ -16,7 +16,6 @@ file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/ast/*.cpp"
 )
 
-
 include(FetchContent)
 
 FetchContent_Declare(
