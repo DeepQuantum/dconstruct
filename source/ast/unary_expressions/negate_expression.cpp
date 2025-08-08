@@ -11,13 +11,13 @@ void negate_expression::ast(std::ostream& os) const {
     os << "negate[" << m_rhs << ']';
 }
 
-[[nodiscard]] b8 negate_expression::equals(const expression& rhs) const noexcept {
-    const negate_expression* rhs_ptr = dynamic_cast<const negate_expression*>(&rhs);
-    if (rhs_ptr == nullptr) {
-        return false;
-    }
-    return m_rhs == rhs_ptr->m_rhs;
-}
+// [[nodiscard]] b8 negate_expression::equals(const expression& rhs) const noexcept {
+//     const negate_expression* rhs_ptr = dynamic_cast<const negate_expression*>(&rhs);
+//     if (rhs_ptr == nullptr) {
+//         return false;
+//     }
+//     return m_rhs == rhs_ptr->m_rhs;
+// }
 
 [[nodiscard]] std::unique_ptr<expression> negate_expression::eval() const {
     std::unique_ptr<expression> rhs = m_rhs->eval();

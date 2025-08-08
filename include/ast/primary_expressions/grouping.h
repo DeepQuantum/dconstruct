@@ -9,6 +9,7 @@ namespace dconstruct::ast {
         void ast(std::ostream& os) const final;
         [[nodiscard]] std::unique_ptr<expression> eval() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> clone() const final;
     private:
         std::unique_ptr<expression> m_expr;
     };

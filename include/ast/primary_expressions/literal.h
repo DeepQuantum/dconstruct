@@ -16,22 +16,14 @@ namespace dconstruct::ast {
             return kind_from_primitive_value(m_value);
         }
 
-        
-        void pseudo(std::ostream& os) const override;
+        void pseudo(std::ostream& os) const final;
 
-        void ast(std::ostream& os) const override;
-    
-        [[nodiscard]] std::unique_ptr<expression> eval() const override {
-            return std::make_unique<literal>(*this);
-        }
+        void ast(std::ostream& os) const final;
 
-        [[nodiscard]] b8 equals(const expression &rhs) const noexcept override {
-            const literal* rhs_lit = dynamic_cast<const literal*>(&rhs);
-            if (rhs_lit == nullptr) {
-                return false;
-            }
-            return m_value == rhs_lit->m_value;
-        }
+        [[nodiscard]] std::unique_ptr<expression> eval() const final;
+        [[nodiscard]] b8 equals(const expression& other) const noexcept final;
+        [[nodiscard]] std::unique_ptr<expression> clone() const final;
+
     protected:
         primitive_value_type m_value;
     };

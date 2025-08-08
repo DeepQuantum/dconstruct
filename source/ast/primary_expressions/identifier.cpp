@@ -23,4 +23,8 @@ void identifier::pseudo(std::ostream& os) const {
 [[nodiscard]] std::unique_ptr<expression> identifier::eval() const {
     return std::make_unique<identifier>(*this);
 }
+
+[[nodiscard]] std::unique_ptr<expression> identifier::clone() const {
+    return std::make_unique<identifier>(m_name, m_idx);
+}
 }
