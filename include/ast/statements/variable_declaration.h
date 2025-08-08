@@ -1,24 +1,29 @@
 #pragma once
 
 #include "base.h"
-#include "ast/expression.h"
-#include "ast/type.h"
-#include "ast/statement.h"
+#include "ast/ast.h"
 
 namespace dconstruct::ast {
     struct variable_declaration : public statement {
+
+        explicit variable_declaration(const type_kind type, const std::string& id_name) noexcept :
+        m_type(type), m_identifier(id_name) {}; 
+
+        explicit variable_declaration(const type_kind type, const std::string& id_name, std::unique_ptr<ast::expression> init) noexcept :
+        m_type(type), m_identifier(id_name), m_init(std::move(init)) {}; 
+
         inline void pseudo(std::ostream& os) const final {
-            os << m_typename << m_identifier;
-            if (m_rhs != nullptr) {
-                os << m_rhs;
+            os << kind_to_string(m_type) << m_identifier;
+            if (m_init != nullptr) {
+                os << m_init;
             }
             os << ';';
         }
 
         inline void ast(std::ostream& os) const final {
-            os << "variable_declaration[" << m_typename << ", " << m_identifier << ", ";
-            if (m_rhs != nullptr) {
-                os << '{' << m_rhs << '}';
+            os << "variable_declaration[" << kind_to_string(m_type) << ", " << m_identifier << ", ";
+            if (m_init != nullptr) {
+                os << '{' << m_init << '}';
             } else {
                 os << "null";
             }
@@ -30,13 +35,13 @@ namespace dconstruct::ast {
             if (rhs_ptr == nullptr) { 
                 return false; 
             }
-            return m_typename == rhs_ptr->m_typename && m_identifier == rhs_ptr->m_identifier && *m_rhs == *rhs_ptr->m_rhs;
+            return m_type == rhs_ptr->m_type && m_identifier == rhs_ptr->m_identifier && *m_init == *rhs_ptr->m_init;
         }
 
     private:
-        std::string m_typename;
+        type_kind m_type;
         std::string m_identifier;
-        const ast::expression* m_rhs;
+        std::unique_ptr<expression> m_init;
     };
 
 }
