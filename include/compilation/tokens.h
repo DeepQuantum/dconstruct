@@ -22,9 +22,11 @@ namespace dconstruct::compiler {
         CARET, CARET_CARET,
         AMPERSAND, AMPERSAND_AMPERSAND,
 
-        IDENTIFIER, STRING, INT, DOUBLE, HEX, SID,
+        IDENTIFIER, 
+        
+        STRING, INT, DOUBLE, HEX, SID, _NULL,
 
-        ELSE, FALSE, IF, _NULL, RETURN, STRUCT, TRUE, WHILE, 
+        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, 
         
         _EOF, EMPTY
     };
