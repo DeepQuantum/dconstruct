@@ -1,10 +1,7 @@
-#include "decompiler.h"
+#include "decompilation/decompiler.h"
 #include "binaryfile.h"
-#include "file_disassembler.h"
-#include "binary_expression.h"
-#include "literal.h"
-#include "statements.h"
-#include "assign_statement.h"
+#include "disassembly/file_disassembler.h"
+#include "ast/ast.h"
 #include <array>
 #include <gtest/gtest.h>
 #include <filesystem>
@@ -37,19 +34,22 @@ namespace dconstruct::testing {
     }
 
      TEST(DECOMPILER, BasicLoadImmediate) {
-         const std::vector<Instruction> istrs = {
-             {Opcode::LoadU16Imm, 0, 1, 0},
-         };
-         const dcompiler::expression_frame frame = make_expression_frame(istrs);
+        const std::vector<Instruction> istrs = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+        };
+        const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
-         const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
-         const auto& expression = std::make_unique<ast::assign_expr>(
-             std::make_unique<ast::identifier>("var_0", 0),
-             std::unique_ptr<ast::literal>(new ast::literal(1ULL))
-         );
-         const auto& expected = ast::assign_statement(ast::TK_U64, expression.get());
-         ASSERT_EQ(actual, expected);
-         ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, ast::TK_U64);
+        const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
+
+        std::unique_ptr<ast::assign_expr> expression = std::make_unique<ast::assign_expr>(
+            std::make_unique<ast::identifier>("var_0", 0),
+            std::unique_ptr<ast::literal>(new ast::literal(1ULL))
+        );
+
+        const ast::expression_stmt expected{std::move(expression)};
+
+        ASSERT_EQ(frame.m_mappedExpressions.at(&actual.get_expression()), ast::type_kind::U64);
+        ASSERT_EQ(actual, expected);
      }
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
@@ -57,17 +57,19 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
         });
 
-        const auto& actual = *dynamic_cast<const ast::assign_statement*>(frame.m_statements[0].get());
-        const auto& expression = std::make_unique<ast::assign_expr>(
+        const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
+        auto expression = std::make_unique<ast::assign_expr>(
             std::unique_ptr<ast::identifier>(new ast::identifier(0)),
             std::unique_ptr<ast::literal>(new ast::literal(1ULL))
         );
+
+        const ast::expression_stmt expected = ast::expression_stmt(std::move(expression)); 
+
         std::ostringstream actual_os, expected_os;
         actual.pseudo(actual_os);
-        const auto expected = ast::assign_statement(ast::TK_U64, expression.get());
         expected.pseudo(expected_os);
         ASSERT_EQ(actual_os.str(), expected_os.str());
-        ASSERT_EQ(frame.m_typedExpressions.at(0).m_type, ast::TK_U64);
+        ASSERT_EQ(frame.m_mappedExpressions.at(&actual.get_expression()), ast::type_kind::U64);
     }
 
 

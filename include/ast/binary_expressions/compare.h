@@ -14,12 +14,14 @@ namespace dconstruct::ast {
             NEQ
         } m_compType;
 
-        compare_expr(const comp_type type, std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) 
+        compare_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs, const comp_type type) 
             : binary_expr(std::move(lhs), std::move(rhs)), m_compType(type) {};
 
-        std::unique_ptr<expression> eval() const final;
+        [[nodiscard]] std::unique_ptr<expression> eval() const final;
+
+        [[nodiscard]] std::unique_ptr<expression> clone() const final;
         
-        [[nodiscard]] std::string get_op_char() const noexcept final { 
+        [[nodiscard]] inline std::string get_op_char() const noexcept final { 
             switch (m_compType) {
                 case comp_type::LT: return "<";
                 case comp_type::LET: return "<=";
@@ -30,6 +32,6 @@ namespace dconstruct::ast {
                 default: return "==";
             }
         }
-        [[nodiscard]] std::string get_op_name() const noexcept final { return "comp" + get_op_char(); }
+        [[nodiscard]] inline std::string get_op_name() const noexcept final { return "comp" + get_op_char(); }
     };
 }

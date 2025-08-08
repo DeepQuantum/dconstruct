@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
-#include "lexer.h"
-#include "dc_parser.h"
-#include "literal.h"
+#include "compilation/lexer.h"
+#include "compilation/dc_parser.h"
+#include "ast/ast.h"
+#include <vector>
 
 namespace dconstruct::testing {
     static std::pair<std::vector<compiler::token>, std::vector<compiler::lexing_error>> get_tokens(const std::string &string) {
@@ -9,8 +10,8 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    static std::pair<std::unique_ptr<ast::expression>, std::vector<compiler::parsing_error>> get_expression(const std::vector<compiler::token> &tokens) {
-        compiler::Parser parser = dconstruct::compiler::Parser(tokens);
+    static std::pair<std::vector<std::unique_ptr<ast::statement>>, std::vector<compiler::parsing_error>> get_statements(const std::vector<compiler::token> &tokens) {
+        compiler::Parser parser{tokens};
         return { parser.parse(), parser.get_errors() };
     }
 
@@ -316,13 +317,16 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "1", 1ULL, 1), 
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1) 
         };
-        const auto [expression, errors] = get_expression(tokens);
-        
-        const std::unique_ptr<ast::expression> expected = std::unique_ptr<ast::literal>(new ast::literal(1ULL));
 
-        EXPECT_TRUE(expression != nullptr);
+        const auto [statements, errors] = get_statements(tokens);
+        
+        const ast::literal expected = ast::literal(1ULL);
+
+        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+
+        EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
-        EXPECT_EQ(*expression, *expected);
+        EXPECT_EQ(expected, actual);
     }
 
     TEST(COMPILER, SimpleNumParse2) {
@@ -332,16 +336,19 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
-        const auto [expression, errors] = get_expression(tokens);
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
         
-        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
+        const ast::add_expr expected{
             std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
             std::unique_ptr<ast::literal>(new ast::literal(2ULL))
-        );
+        };
 
-        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
-        EXPECT_EQ(*expression, *expected);
+        EXPECT_EQ(expected, actual);
     }
 
     TEST(COMPILER, SimpleNumParse3) {
@@ -354,21 +361,23 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
-        const auto [expression, errors] = get_expression(tokens);
+        const auto [statements, errors] = get_statements(tokens);
+
+        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
             std::unique_ptr<ast::literal>(new ast::literal(2ULL)),
             std::unique_ptr<ast::literal>(new ast::literal(5ULL))
         );
 
-        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::add_expr>(
+        const ast::add_expr expected{
             std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
             std::move(left)
-        );
+        };
 
-        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
-        EXPECT_EQ(*expression, *expected);
+        EXPECT_EQ(expected, actual);
     }
 
     TEST(COMPILER, SimpleNumParseError1) {
@@ -382,8 +391,9 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
-        const auto [expression, errors] = get_expression(tokens);
-        EXPECT_EQ(expression, nullptr);
+        const auto [statements, errors] = get_statements(tokens);
+        EXPECT_EQ(statements.size(), 0);
+        EXPECT_EQ(errors.size(), 1);
         EXPECT_EQ(errors[0].m_message, "error: expected expression after '-'");
     }
 
@@ -399,20 +409,23 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
-        const auto [expression, errors] = get_expression(tokens);
+        const auto [statements, errors] = get_statements(tokens);
+
+        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
             std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
             std::unique_ptr<ast::literal>(new ast::literal(2ULL))
         ));
 
-        const std::unique_ptr<ast::expression> expected = std::make_unique<ast::mul_expr>(
+        const ast::mul_expr expected{
             std::move(left),
             std::unique_ptr<ast::literal>(new ast::literal(5ULL))
-        );
+        };
 
-        EXPECT_TRUE(expression != nullptr);
+        EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
-        EXPECT_EQ(*expression, *expected);
+        EXPECT_EQ(expected, actual);
     }
 }
