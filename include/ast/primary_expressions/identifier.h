@@ -4,6 +4,7 @@
 
 namespace dconstruct::ast {
     struct identifier : public expression {
+        identifier(const std::string &name) : m_name(name), m_idx(UINT32_MAX) {};
         identifier(const std::string &name, const u8 idx) : m_name(name), m_idx(idx) {};
         identifier(const u8 idx) : m_name("var_" + std::to_string(idx)), m_idx(idx) {};
         void pseudo(std::ostream& os) const final;
@@ -15,6 +16,6 @@ namespace dconstruct::ast {
 
     private:
         std::string m_name;
-        u8 m_idx;        
+        u32 m_idx;
     };
 }

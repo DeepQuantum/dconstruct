@@ -1,6 +1,4 @@
 #include "compilation/dc_parser.h"
-#include "ast/primary_expressions/literal.h"
-#include "ast/statements/expression_statement.h"
 
 namespace dconstruct::compiler {
 
@@ -51,9 +49,45 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 [[nodiscard]] std::vector<std::unique_ptr<ast::statement>> Parser::parse() {
     std::vector<std::unique_ptr<ast::statement>> statements;
     while (!is_at_end()) {
-        statements.push_back(make_statement());
+        statements.push_back(make_declaration());
     }
     return statements;
+}
+
+
+[[nodiscard]] b8 Parser::match_type() {
+    return m_knownTypes.contains(peek().m_lexeme);
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_var_declaration() {
+    const ast::type_kind type = m_knownTypes.at(advance().m_lexeme);
+    const token* name = consume(token_type::IDENTIFIER, "error: expected variable name.");
+
+    std::unique_ptr<ast::expression> init = nullptr;
+    if (match({token_type::EQUAL})) {
+        init = make_expression();
+    }
+    consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.");
+    if (init != nullptr) {
+        return std::make_unique<ast::variable_declaration>(type, name, init);
+    } else {
+        return std::make_unique<ast::variable_declaration>(type, name); 
+    }
+}
+
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_declaration() {
+    std::unique_ptr<ast::statement> res;
+    if (match_type()) {
+        res = make_var_declaration();
+    } else {
+        res = make_statement();
+    }
+
+
+    if (res == nullptr) {
+        return nullptr;
+    }
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
@@ -230,6 +264,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::literal>(str);
     } else if (match({token_type::SID})) {
         
+    } else if (match({token_type::IDENTIFIER})) {
+        return std::make_unique<ast::identifier>(previous());
     }
 
     if (match({token_type::LEFT_PAREN})) {
