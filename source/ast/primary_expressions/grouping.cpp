@@ -21,4 +21,8 @@ void grouping::pseudo(std::ostream& os) const {
 [[nodiscard]] std::unique_ptr<expression> grouping::eval() const {
     return m_expr->eval();
 }
+
+[[nodiscard]] std::unique_ptr<expression> grouping::clone() const {
+    return std::make_unique<grouping>(m_expr != nullptr ? m_expr->clone() : nullptr);
+}
 }

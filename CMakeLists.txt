@@ -14,6 +14,7 @@ file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/decompilation/*.cpp"
     "${SOURCE_DIR}/compilation/*.cpp"
     "${SOURCE_DIR}/ast/*.cpp"
+    "${SOURCE_DIR}/base/*.cpp"
 )
 
 include(FetchContent)
@@ -45,7 +46,7 @@ include_directories(
 
 target_include_directories(dconstruct PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-if(win32)
+if(WIN32)
     target_link_libraries(
         dconstruct
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
@@ -53,7 +54,7 @@ if(win32)
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
     )
-    include_directories(
+    target_include_directories(dconstruct PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
     )
 else()
@@ -101,13 +102,16 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
-if(win32)
+if(WIN32)
     target_link_libraries(
         dconstruct_test
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    )
+    target_include_directories(dconstruct_test PRIVATE
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
     )
 else()
     target_link_libraries(

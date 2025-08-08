@@ -11,6 +11,7 @@ namespace dconstruct::ast {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> eval() const = 0;
         [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
+        [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
     };
 
     [[nodiscard]] inline b8 operator==(const expression& lhs, const expression& rhs) noexcept {
@@ -76,8 +77,8 @@ namespace dconstruct::ast {
         using unary_expr::unary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            return std::make_unique<impl_binary_expr>(
-                m_rhs != nullptr ? m_rhs->clone() : nullptr,
+            return std::make_unique<impl_unary_expr>(
+                m_rhs != nullptr ? m_rhs->clone() : nullptr
             );
         }
     };

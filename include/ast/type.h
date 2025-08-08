@@ -9,7 +9,7 @@
 namespace dconstruct::ast {
 
     using sid_literal_type = std::pair<sid64, std::string>;
-    using primitive_value_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal_type, nullptr_t>;
+    using primitive_value_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal_type, std::nullptr_t>;
     using primitive_number_type = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
     enum class type_kind {
@@ -52,10 +52,6 @@ namespace dconstruct::ast {
         return kind >= type_kind::U8 && kind <= type_kind::SID;
     }
 
-    struct type {
-        type_kind m_kind;
-    };
-
     struct struct_type {
         std::string m_name;
         std::map<std::string, type_kind> m_members;
@@ -69,6 +65,8 @@ namespace dconstruct::ast {
     struct ptr_type {
         type_kind m_pointedAt;
     };
+
+    using full_type = std::variant<struct_type, enum_type, ptr_type, primitive_value_type>;
 
     inline std::string kind_to_string(const type_kind kind) noexcept {
         switch(kind) {

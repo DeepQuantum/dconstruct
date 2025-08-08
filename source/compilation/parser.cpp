@@ -83,11 +83,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::BANG_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::NEQ, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::NEQ);
                 break;
             }
             case token_type::EQUAL_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::EQ, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::EQ);
                 break;
             }
             default: {
@@ -112,19 +112,19 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::GREATER: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::GT, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::GT);
                 break;
             }
             case token_type::GREATER_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::GET, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::GET);
                 break;
             }
             case token_type::LESS: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::LT, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::LT);
                 break;
             }
             case token_type::LESS_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(ast::compare_expr::comp_type::LET, std::move(expr), std::move(right));
+                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::LET);
                 break;
             }
             default: {
@@ -220,6 +220,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::literal>(nullptr);
     } else if (match({token_type::INT})) {
         const u64 num = std::get<u64>(previous().m_literal);
+        ast::literal* temp = new ast::literal(num);
         return std::unique_ptr<ast::literal>(new ast::literal(num));
     } else if (match({token_type::DOUBLE})) {
         const f64 num = std::get<f64>(previous().m_literal);

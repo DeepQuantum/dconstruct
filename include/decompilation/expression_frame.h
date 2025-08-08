@@ -4,6 +4,7 @@
 #include "ast/type.h"
 #include "disassembly/instructions.h"
 #include <map>
+#include <unordered_map>
 #include <type_traits>
 #include <vector>
 #include <iostream>
@@ -29,8 +30,6 @@ namespace dconstruct::dcompiler {
     // so you might have if (*x == y)... without being able to evaluate the comparison any further.
     // every expression type implements a way to evaluate it to the "lowest" level.
 
-    
-
     struct typed_expression {
         typed_expression() : m_expr(nullptr), m_type(ast::type_kind::UNKNOWN) {};
         typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::type_kind::UNKNOWN) {};
@@ -41,8 +40,15 @@ namespace dconstruct::dcompiler {
     };
 
     struct expression_frame {
+        // stores expressions that we are currently processing
         std::map<u32, typed_expression> m_transformableExpressions;
+
+        // maps completed expressions to their types
+        std::unordered_map<const ast::expression*, ast::type_kind> m_mappedExpressions;
+
+        // stores statements & their contained expressions once they're done
         std::vector<std::unique_ptr<ast::statement>> m_statements;
+
         std::map<u32, SymbolTableEntry> m_symbolTable;
         u32 m_varCount = 0;
 
@@ -51,11 +57,7 @@ namespace dconstruct::dcompiler {
                 m_transformableExpressions[i] = typed_expression();
             }
             for (u32 i = 49; i < 128; ++i) {
-                // std::unique_ptr<ast::expression_stmt> temp = std::make_unique<ast::expression_stmt>(
-                    
-                // );
                 m_transformableExpressions[i] = { std::make_unique<ast::identifier>("arg_" + std::to_string(i), i), ast::type_kind::UNKNOWN };
-                //m_statements.emplace_back(std::move(temp));
             }
         }
 

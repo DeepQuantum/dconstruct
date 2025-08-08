@@ -10,13 +10,13 @@ void logical_not_expr::ast(std::ostream &os) const {
     os << "logical_not[" << m_rhs << ']'; 
 }
 
-[[nodiscard]] b8 logical_not_expr::equals(const expression &rhs) const noexcept {
-    const logical_not_expr* rhs_ptr = dynamic_cast<const logical_not_expr*>(&rhs);
-    if (rhs_ptr == nullptr) {
-        return false;
-    }
-    return m_rhs == rhs_ptr->m_rhs;
-}
+// [[nodiscard]] b8 logical_not_expr::equals(const expression &rhs) const noexcept {
+//     const logical_not_expr* rhs_ptr = dynamic_cast<const logical_not_expr*>(&rhs);
+//     if (rhs_ptr == nullptr) {
+//         return false;
+//     }
+//     return m_rhs == rhs_ptr->m_rhs;
+// }
 
 [[nodiscard]] std::unique_ptr<expression> logical_not_expr::eval() const {
     std::unique_ptr<expression> rhs = m_rhs->eval();

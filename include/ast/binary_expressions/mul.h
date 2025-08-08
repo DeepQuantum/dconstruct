@@ -4,9 +4,8 @@
 
 
 namespace dconstruct::ast {
-    struct mul_expr : public binary_expr {
-        using binary_expr::binary_expr;
-        [[nodiscard]] b8 equals(const expression& rhs) const noexcept override;
+    struct mul_expr : public clonable_binary_expr<mul_expr> {
+        using clonable_binary_expr::clonable_binary_expr;
         [[nodiscard]] std::unique_ptr<expression> eval() const final;
 
     private:
