@@ -2,7 +2,7 @@
 
 namespace dconstruct::ast {
 
-[[nodiscard]] std::unique_ptr<expression> sub_expr::eval() const { 
+[[nodiscard]] std::unique_ptr<expression> sub_expr::simplify() const { 
     return nullptr;
 }
 

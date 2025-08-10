@@ -20,7 +20,7 @@ void identifier::pseudo(std::ostream& os) const {
     return m_name == rhs_id->m_name && m_idx == rhs_id->m_idx;
 }
 
-[[nodiscard]] std::unique_ptr<expression> identifier::eval() const {
+[[nodiscard]] std::unique_ptr<expression> identifier::simplify() const {
     return std::make_unique<identifier>(*this);
 }
 

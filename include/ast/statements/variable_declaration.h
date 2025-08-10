@@ -7,7 +7,7 @@ namespace dconstruct::ast {
     struct variable_declaration : public statement {
 
         explicit variable_declaration(const type_kind type, const std::string& id_name) noexcept :
-        m_type(type), m_identifier(id_name) {}; 
+        m_type(type), m_identifier(id_name), m_init(nullptr) {}; 
 
         explicit variable_declaration(const type_kind type, const std::string& id_name, std::unique_ptr<ast::expression> init) noexcept :
         m_type(type), m_identifier(id_name), m_init(std::move(init)) {}; 

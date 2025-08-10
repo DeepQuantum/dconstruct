@@ -18,8 +18,8 @@ void grouping::pseudo(std::ostream& os) const {
     return m_expr == rhs_ptr->m_expr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> grouping::eval() const {
-    return m_expr->eval();
+[[nodiscard]] std::unique_ptr<expression> grouping::simplify() const {
+    return m_expr->simplify();
 }
 
 [[nodiscard]] std::unique_ptr<expression> grouping::clone() const {

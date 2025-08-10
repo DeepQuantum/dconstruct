@@ -2,6 +2,22 @@
 
 namespace dconstruct::compiler {
 
+void Parser::synchronize() {
+    advance();
+    while (!is_at_end()) {
+        if (previous().m_type == token_type::SEMICOLON) {
+            return;
+        }
+        switch (peek().m_type) {
+            case token_type::STRUCT:
+            case token_type::WHILE:
+            case token_type::IF:
+            case token_type::RETURN: return;
+        }
+        advance();
+    } 
+}
+
 [[nodiscard]] const token& Parser::peek() const {
     return m_tokens[m_current];
 }
@@ -49,7 +65,10 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 [[nodiscard]] std::vector<std::unique_ptr<ast::statement>> Parser::parse() {
     std::vector<std::unique_ptr<ast::statement>> statements;
     while (!is_at_end()) {
-        statements.push_back(make_declaration());
+        std::unique_ptr<ast::statement> declaration = make_declaration();
+        if (declaration != nullptr) {
+            statements.push_back(std::move(declaration));
+        }
     }
     return statements;
 }
@@ -69,9 +88,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
     consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.");
     if (init != nullptr) {
-        return std::make_unique<ast::variable_declaration>(type, name, init);
+        return std::make_unique<ast::variable_declaration>(type, name->m_lexeme, std::move(init));
     } else {
-        return std::make_unique<ast::variable_declaration>(type, name); 
+        return std::make_unique<ast::variable_declaration>(type, name->m_lexeme); 
     }
 }
 
@@ -84,10 +103,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         res = make_statement();
     }
 
-
     if (res == nullptr) {
+        //error
         return nullptr;
     }
+    return std::move(res);
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
@@ -254,8 +274,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::literal>(nullptr);
     } else if (match({token_type::INT})) {
         const u64 num = std::get<u64>(previous().m_literal);
-        ast::literal* temp = new ast::literal(num);
-        return std::unique_ptr<ast::literal>(new ast::literal(num));
+        return std::make_unique<ast::literal>(num);
     } else if (match({token_type::DOUBLE})) {
         const f64 num = std::get<f64>(previous().m_literal);
         return std::make_unique<ast::literal>(num);
@@ -263,11 +282,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
     } else if (match({token_type::SID})) {
-        
+        const ast::sid_literal_type sid = { 0, std::get<std::string>(previous().m_literal) };
+        return std::make_unique<ast::literal>(sid);
     } else if (match({token_type::IDENTIFIER})) {
-        return std::make_unique<ast::identifier>(previous());
+        return std::make_unique<ast::identifier>(previous().m_lexeme);
     }
-
     if (match({token_type::LEFT_PAREN})) {
         std::unique_ptr expr = make_expression();
         if(consume(token_type::RIGHT_PAREN, "error: expected ')' after expression") == nullptr) {

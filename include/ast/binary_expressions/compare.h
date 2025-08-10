@@ -17,7 +17,7 @@ namespace dconstruct::ast {
         compare_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs, const comp_type type) 
             : binary_expr(std::move(lhs), std::move(rhs)), m_compType(type) {};
 
-        [[nodiscard]] std::unique_ptr<expression> eval() const final;
+        [[nodiscard]] std::unique_ptr<expression> simplify() const final;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final;
         

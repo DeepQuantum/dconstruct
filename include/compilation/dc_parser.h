@@ -46,6 +46,8 @@ namespace dconstruct::compiler {
 
         u32 m_current = 0;
 
+        void synchronize();
+
         const token& advance();
         const token* consume(const token_type, const std::string&);
         [[nodiscard]] const token& peek() const;

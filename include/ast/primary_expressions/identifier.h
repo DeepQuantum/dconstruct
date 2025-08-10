@@ -9,7 +9,7 @@ namespace dconstruct::ast {
         identifier(const u8 idx) : m_name("var_" + std::to_string(idx)), m_idx(idx) {};
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
-        [[nodiscard]] std::unique_ptr<expression> eval() const final;
+        [[nodiscard]] std::unique_ptr<expression> simplify() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept override;
         [[nodiscard]] std::unique_ptr<expression> clone() const final;
 

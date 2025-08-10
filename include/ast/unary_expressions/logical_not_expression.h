@@ -8,6 +8,6 @@ namespace dconstruct::ast {
         
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
-        [[nodiscard]] std::unique_ptr<expression> eval() const final;       
+        [[nodiscard]] std::unique_ptr<expression> simplify() const final;       
     };
 }
