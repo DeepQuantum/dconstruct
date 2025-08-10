@@ -34,7 +34,7 @@ void literal::ast(std::ostream& os) const {
 }
 
 
-[[nodiscard]] std::unique_ptr<expression> literal::eval() const {
+[[nodiscard]] std::unique_ptr<expression> literal::simplify() const {
     return std::make_unique<literal>(m_value);
 }
 

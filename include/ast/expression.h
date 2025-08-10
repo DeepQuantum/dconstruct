@@ -2,6 +2,7 @@
 
 #include "base.h"
 #include "printable.h"
+#include "compilation/dc_register.h"
 #include <ostream>
 #include <vector>
 
@@ -9,9 +10,11 @@ namespace dconstruct::ast {
 
     struct expression : public Iprintable {
         virtual ~expression() = default;
-        [[nodiscard]] virtual std::unique_ptr<expression> eval() const = 0;
+        [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
+        //[[nodiscard]] virtual type_kind get_type() const = 0;
+        //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
     };
 
     [[nodiscard]] inline b8 operator==(const expression& lhs, const expression& rhs) noexcept {

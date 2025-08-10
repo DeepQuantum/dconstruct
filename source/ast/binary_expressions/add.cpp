@@ -3,9 +3,9 @@
 
 namespace dconstruct::ast {
 
-[[nodiscard]] std::unique_ptr<expression> add_expr::eval() const {
-    std::unique_ptr<expression> lhs_ptr = m_lhs->eval();
-    std::unique_ptr<expression> rhs_ptr = m_rhs->eval();
+[[nodiscard]] std::unique_ptr<expression> add_expr::simplify() const {
+    std::unique_ptr<expression> lhs_ptr = m_lhs->simplify();
+    std::unique_ptr<expression> rhs_ptr = m_rhs->simplify();
 
     if (const literal* lhs_num_lit = dynamic_cast<const literal*>(lhs_ptr.get())) {
         if (const literal* rhs_num_lit = dynamic_cast<const literal*>(rhs_ptr.get())) {

@@ -19,8 +19,8 @@ void negate_expression::ast(std::ostream& os) const {
 //     return m_rhs == rhs_ptr->m_rhs;
 // }
 
-[[nodiscard]] std::unique_ptr<expression> negate_expression::eval() const {
-    std::unique_ptr<expression> rhs = m_rhs->eval();
+[[nodiscard]] std::unique_ptr<expression> negate_expression::simplify() const {
+    std::unique_ptr<expression> rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
         const primitive_value_type prim = rhs_ptr->get_value();

@@ -5,11 +5,11 @@ namespace dconstruct::dcompiler {
 void expression_frame::move(const u32 dst, const u32 src) {
 
     auto id = std::make_unique<ast::identifier>(get_next_var_idx());
-    auto rhs = m_transformableExpressions[src].m_expr->eval();
+    auto rhs = m_transformableExpressions[src].m_expr->simplify();
     const ast::type_kind src_type = m_transformableExpressions[src].m_type;
 
     auto assign = std::make_unique<ast::assign_expr>(std::move(id), std::move(rhs));
-    m_statements.emplace_back(std::make_unique<ast::expression_stmt>(assign->eval()));
+    m_statements.emplace_back(std::make_unique<ast::expression_stmt>(assign->simplify()));
 
     m_transformableExpressions[dst] = { std::move(assign), src_type };
 }

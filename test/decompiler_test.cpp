@@ -21,7 +21,7 @@ namespace dconstruct::testing {
         return fd;
     }
 
-    dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs) {
+    static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs) {
         StackFrame sf{};
         std::vector<function_disassembly_line> lines{};
         for (u64 i = 0; i < istrs.size(); ++i) {
@@ -64,11 +64,12 @@ namespace dconstruct::testing {
         );
 
         const ast::expression_stmt expected = ast::expression_stmt(std::move(expression)); 
-
         std::ostringstream actual_os, expected_os;
         actual.pseudo(actual_os);
         expected.pseudo(expected_os);
-        ASSERT_EQ(actual_os.str(), expected_os.str());
+        const std::string actual_str = actual_os.str();
+        const std::string expected_str = expected_os.str();
+        ASSERT_EQ(expected_str, actual_str);
         ASSERT_EQ(frame.m_mappedExpressions.at(&actual.get_expression()), ast::type_kind::U64);
     }
 
