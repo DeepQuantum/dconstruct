@@ -6,7 +6,7 @@
 namespace dconstruct::ast {
     struct mul_expr : public clonable_binary_expr<mul_expr> {
         using clonable_binary_expr::clonable_binary_expr;
-        [[nodiscard]] std::unique_ptr<expression> eval() const final;
+        [[nodiscard]] std::unique_ptr<expression> simplify() const final;
 
     private:
         [[nodiscard]] std::string get_op_char() const noexcept final { return "*"; }

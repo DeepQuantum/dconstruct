@@ -3,11 +3,11 @@
 namespace dconstruct::ast {
 
 void expression_stmt::pseudo(std::ostream& os) const {
-    os << m_expression << ';';
+    os << *m_expression << ';';
 }
 
 void expression_stmt::ast(std::ostream& os) const {
-    os << "expression_statement[" << m_expression << ']';
+    os << "expression_statement[" << *m_expression << ']';
 }
 
 [[nodiscard]] b8 expression_stmt::equals(const statement& rhs) const noexcept {

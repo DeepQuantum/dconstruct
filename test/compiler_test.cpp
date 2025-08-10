@@ -314,7 +314,8 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, SimpleNumParse1) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1), 
+            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 1ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1) 
         };
 
@@ -334,6 +335,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 2ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
@@ -358,6 +360,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 5ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
@@ -388,6 +391,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
             compiler::token(compiler::token_type::MINUS, "-", 0ULL, 1),
+            compiler::token(compiler::token_type::MINUS, ";", 0ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
