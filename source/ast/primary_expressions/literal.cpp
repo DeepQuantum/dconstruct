@@ -18,7 +18,7 @@ void literal::pseudo(std::ostream& os) const {
         else if constexpr (std::is_same_v<T, std::nullptr_t>) {
             os << "null";
         }
-        else if constexpr (std::is_same_v<T, sid_literal_type>) {
+        else if constexpr (std::is_same_v<T, sid_literal>) {
             os << "#" + std::get<1>(arg);
         }
         else {
@@ -48,6 +48,10 @@ void literal::ast(std::ostream& os) const {
 
 [[nodiscard]] std::unique_ptr<expression> literal::clone() const {
     return std::make_unique<literal>(m_value);
+}
+
+[[nodiscard]] std::optional<full_type> literal::compute_type(const compiler::environment&) const noexcept {
+    return primitive_type { kind_from_primitive_value(m_value) };
 }
 
 }
