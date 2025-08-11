@@ -30,46 +30,42 @@ namespace dconstruct::dcompiler {
     // so you might have if (*x == y)... without being able to evaluate the comparison any further.
     // every expression type implements a way to evaluate it to the "lowest" level.
 
-    struct typed_expression {
-        typed_expression() : m_expr(nullptr), m_type(ast::type_kind::UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr) : m_expr(std::move(expr)), m_type(ast::type_kind::UNKNOWN) {};
-        typed_expression(std::unique_ptr<ast::expression> expr, ast::type_kind type) : m_expr(std::move(expr)), m_type(type) {};
-
-        std::unique_ptr<ast::expression> m_expr;
-        ast::type_kind m_type;
-    };
+    using register_index = u8;
 
     struct expression_frame {
+
         // stores expressions that we are currently processing
-        std::map<u32, typed_expression> m_transformableExpressions;
+        std::map<register_index, std::unique_ptr<ast::expression>> m_transformableExpressions;
 
-        // maps completed expressions to their types
-        std::unordered_map<const ast::expression*, ast::type_kind> m_mappedExpressions;
-
-        // stores statements & their contained expressions once they're done
+        // maps statements to a list of the indexes
         std::vector<std::unique_ptr<ast::statement>> m_statements;
 
         std::map<u32, SymbolTableEntry> m_symbolTable;
         u32 m_varCount = 0;
+        u32 m_expressionId = 0;
 
         explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
-                m_transformableExpressions[i] = typed_expression();
+                m_transformableExpressions[i] = std::make_unique<ast::literal>(nullptr);
             }
             for (u32 i = 49; i < 128; ++i) {
-                m_transformableExpressions[i] = { std::make_unique<ast::identifier>("arg_" + std::to_string(i), i), ast::type_kind::UNKNOWN };
+                m_transformableExpressions[i] = std::make_unique<ast::identifier>("arg_" + std::to_string(i), i);
             }
         }
 
         expression_frame(expression_frame&& rhs) noexcept = default;
 
-        u32 get_next_var_idx() noexcept {
+        inline u32 get_next_var_idx() noexcept {
             return m_varCount++;
+        }
+
+        inline u32 get_next_expression_id() noexcept {
+            return m_expressionId++;
         }
 
         void move(const u32, const u32);
 
-        void load_literal(const u8 dst, const ast::primitive_value_type& value);
+        void load_literal(const u8 dst, const ast::primitive_value& value);
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {

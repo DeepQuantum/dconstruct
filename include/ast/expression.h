@@ -3,6 +3,8 @@
 #include "base.h"
 #include "printable.h"
 #include "compilation/dc_register.h"
+#include "ast/type.h"
+#include "compilation/environment.h"
 #include <ostream>
 #include <vector>
 
@@ -13,8 +15,27 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
-        //[[nodiscard]] virtual type_kind get_type() const = 0;
         //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
+
+        [[nodiscard]] inline std::optional<full_type> get_type(const compiler::environment& env) {
+            if (!m_type.has_value()) {
+                auto new_type = compute_type(env);
+                if (!new_type.has_value()) {
+                    return std::nullopt;
+                }
+                m_type = new_type;
+            }
+            return m_type;
+        }
+
+        [[nodiscard]] virtual std::optional<full_type> compute_type(const compiler::environment& env) const = 0;
+
+        void set_type(const full_type& type) noexcept {
+            m_type = type;
+        }
+        
+    protected:
+        std::optional<full_type> m_type;
     };
 
     [[nodiscard]] inline b8 operator==(const expression& lhs, const expression& rhs) noexcept {
@@ -80,9 +101,11 @@ namespace dconstruct::ast {
         using unary_expr::unary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            return std::make_unique<impl_unary_expr>(
-                m_rhs != nullptr ? m_rhs->clone() : nullptr
-            );
+            return std::make_unique<impl_unary_expr>(m_rhs != nullptr ? m_rhs->clone() : nullptr);
+        }
+
+        [[nodiscard]] inline type_kind get_type() const noexcept final {
+            return type_kind::UNKNOWN;
         }
     };
 

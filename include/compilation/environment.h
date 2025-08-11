@@ -5,11 +5,11 @@
 
 namespace dconstruct::compiler {
     struct environment {
-        std::unordered_map<std::string, ast::full_type> m_values;
+        std::unordered_map<std::string, ast::typed_value> m_values;
 
-        void define(const std::string& name, const ast::full_type& value);
+        void define(const std::string& name, const ast::typed_value& value);
 
-        [[nodiscard]] std::optional<const ast::full_type&> get(const std::string& name) const;
+        [[nodiscard]] std::optional<const ast::typed_value&> get(const std::string& name) const;
     };
 
 }

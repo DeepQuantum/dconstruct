@@ -10,6 +10,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::unique_ptr<expression> simplify() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<expression> clone() const final;
+        [[nodiscard]] std::optional<full_type> compute_type(const compiler::environment& env) const final;
     private:
         std::unique_ptr<expression> m_expr;
     };

@@ -12,31 +12,19 @@ namespace dconstruct::ast {
         explicit variable_declaration(const type_kind type, const std::string& id_name, std::unique_ptr<ast::expression> init) noexcept :
         m_type(type), m_identifier(id_name), m_init(std::move(init)) {}; 
 
-        inline void pseudo(std::ostream& os) const final {
-            os << kind_to_string(m_type) << m_identifier;
-            if (m_init != nullptr) {
-                os << m_init;
-            }
-            os << ';';
-        }
+        explicit variable_declaration(const type_kind type, const std::string& id_name, const ast::primitive_value& init) noexcept :
+            m_type(type), m_identifier(id_name), m_init(std::make_unique<ast::literal>(init)) {
+        };
 
-        inline void ast(std::ostream& os) const final {
-            os << "variable_declaration[" << kind_to_string(m_type) << ", " << m_identifier << ", ";
-            if (m_init != nullptr) {
-                os << '{' << m_init << '}';
-            } else {
-                os << "null";
-            }
-            os << ';';
-        }
+        void pseudo(std::ostream& os) const final;
 
-        [[nodiscard]] inline b8 equals(const statement& rhs) const noexcept final {
-            const variable_declaration* rhs_ptr = dynamic_cast<const variable_declaration*>(&rhs); 
-            if (rhs_ptr == nullptr) { 
-                return false; 
-            }
-            return m_type == rhs_ptr->m_type && m_identifier == rhs_ptr->m_identifier && *m_init == *rhs_ptr->m_init;
-        }
+        void ast(std::ostream& os) const final;
+
+        [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
+
+        [[nodiscard]] inline const expression* get_expression_ptr() const noexcept {
+            return m_init.get();
+        } 
 
     private:
         type_kind m_type;
