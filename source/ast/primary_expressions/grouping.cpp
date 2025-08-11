@@ -25,4 +25,8 @@ void grouping::pseudo(std::ostream& os) const {
 [[nodiscard]] std::unique_ptr<expression> grouping::clone() const {
     return std::make_unique<grouping>(m_expr != nullptr ? m_expr->clone() : nullptr);
 }
+
+[[nodiscard]] std::optional<full_type> grouping::compute_type(const compiler::environment& env) const {
+    return m_expr->compute_type(env);
+}
 }

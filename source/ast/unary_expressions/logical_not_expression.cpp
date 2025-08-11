@@ -22,7 +22,7 @@ void logical_not_expr::ast(std::ostream &os) const {
     std::unique_ptr<expression> rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
-        const primitive_value_type value = rhs_ptr->get_value();
+        const primitive_value value = rhs_ptr->get_value();
         switch(rhs_ptr->get_type()) {
             case type_kind::STRUCT:
             case type_kind::ENUM:
@@ -33,7 +33,7 @@ void logical_not_expr::ast(std::ostream &os) const {
             case type_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
             case type_kind::_NULL:   return std::make_unique<literal>(true);
             default: {
-                const std::optional<primitive_number_type> num_opt = get_number(value);
+                const std::optional<primitive_number> num_opt = get_number(value);
                 if (num_opt.has_value()) {
                     return std::make_unique<literal>(std::visit([](auto&& arg) -> b8 {
                         return arg == 0;

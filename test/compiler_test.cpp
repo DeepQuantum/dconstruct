@@ -410,13 +410,13 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::RIGHT_PAREN, ")", 1ULL, 1),
             compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
             compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 5ULL, 1),
             compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
         };
 
         const auto [statements, errors] = get_statements(tokens);
 
         const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
-
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
             std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
