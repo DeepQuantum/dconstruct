@@ -9,7 +9,7 @@ namespace dconstruct::ast {
         explicit variable_declaration(const type_kind type, const std::string& id_name) noexcept :
         m_type(type), m_identifier(id_name), m_init(nullptr) {}; 
 
-        explicit variable_declaration(const type_kind type, const std::string& id_name, std::unique_ptr<ast::expression> init) noexcept :
+        explicit variable_declaration(const type_kind type, const std::string& id_name, std::unique_ptr<ast::expression>&& init) noexcept :
         m_type(type), m_identifier(id_name), m_init(std::move(init)) {}; 
 
         explicit variable_declaration(const type_kind type, const std::string& id_name, const ast::primitive_value& init) noexcept :

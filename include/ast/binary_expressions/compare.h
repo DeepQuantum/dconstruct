@@ -14,7 +14,7 @@ namespace dconstruct::ast {
             NEQ
         } m_compType;
 
-        compare_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs, const comp_type type) 
+        compare_expr(std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs, const comp_type type) 
             : binary_expr(std::move(lhs), std::move(rhs)), m_compType(type) {};
 
         [[nodiscard]] std::unique_ptr<expression> simplify() const final;
