@@ -50,7 +50,7 @@ namespace dconstruct::ast {
     }
 
     struct unary_expr : public expression {
-        unary_expr(std::unique_ptr<expression> rhs) noexcept : m_rhs(std::move(rhs)) {};
+        unary_expr(std::unique_ptr<expression>&& rhs) noexcept : m_rhs(std::move(rhs)) {};
 
         // for testing ! stupid and expensive.
         [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
@@ -67,7 +67,7 @@ namespace dconstruct::ast {
 
     struct binary_expr : public expression {
     public:
-        binary_expr(std::unique_ptr<expression> lhs, std::unique_ptr<expression> rhs) noexcept
+        binary_expr(std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
         inline void pseudo(std::ostream& os) const override {
