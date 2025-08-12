@@ -61,20 +61,24 @@ namespace dconstruct::ast {
 
     struct primitive_type {
         type_kind m_type;
+        bool operator==(const primitive_type&) const = default;
     };
 
     struct struct_type {
         std::string m_name;
         std::map<std::string, type_kind> m_members;
+        bool operator==(const struct_type&) const = default;
     };
 
     struct enum_type {
         std::string m_name;
         std::vector<std::string> m_enumerators;
+        bool operator==(const enum_type&) const = default;
     };
 
     struct ptr_type {
         type_kind m_pointedAt;
+        bool operator==(const ptr_type&) const = default;
     };
 
     struct typed_value;
@@ -88,7 +92,7 @@ namespace dconstruct::ast {
         primitive_value,
         struct_instance,
         enum_instance,
-        ptr_instance,
+        ptr_instance
     >;
 
     struct typed_value {

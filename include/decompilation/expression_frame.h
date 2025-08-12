@@ -37,6 +37,8 @@ namespace dconstruct::dcompiler {
         // stores expressions that we are currently processing
         std::map<register_index, std::unique_ptr<ast::expression>> m_transformableExpressions;
 
+        compiler::environment m_env;
+
         // maps statements to a list of the indexes
         std::vector<std::unique_ptr<ast::statement>> m_statements;
 
@@ -59,25 +61,26 @@ namespace dconstruct::dcompiler {
             return m_varCount++;
         }
 
-        inline u32 get_next_expression_id() noexcept {
-            return m_expressionId++;
-        }
-
         void move(const u32, const u32);
 
         void load_literal(const u8 dst, const ast::primitive_value& value);
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {
-            if (m_transformableExpressions[istr.operand1].m_type != m_transformableExpressions[istr.operand2].m_type) {
-                std::cerr << "warning: types don't match for operation on instruction" << istr.opcode_to_string() << '\n';
-            }
-            m_transformableExpressions[istr.destination] = { std::make_unique<ast::grouping>(
+            // auto t1 = m_transformableExpressions[istr.operand1]->get_type(m_env);
+            // auto t2 = m_transformableExpressions[istr.operand2]->get_type(m_env);
+            // if (!t1.has_value() || !t2.has_value) {
+            //     std::cerr << "warning: couldn't determine type of the binary expression " << istr.opcode_to_string() << '\n';
+            // }
+            // if (t1.value() != t2.value()) {
+            //     std::cerr << "warning: types don't match in binary expression " << istr.opcode_to_string() << '\n';
+            // }
+            m_transformableExpressions[istr.destination] = std::make_unique<ast::grouping>(
                 std::make_unique<binary_expr_t>(
-                    std::move(m_transformableExpressions[istr.operand1].m_expr), 
-                    std::move(m_transformableExpressions[istr.operand2].m_expr)
+                    std::move(m_transformableExpressions[istr.operand1]), 
+                    std::move(m_transformableExpressions[istr.operand2])
                 )
-            ), m_transformableExpressions[istr.operand1].m_type };
+            );
         }
     };
 }

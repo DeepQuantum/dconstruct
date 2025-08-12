@@ -61,6 +61,10 @@ namespace dconstruct::ast {
             return false;
         }
 
+        [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
+            return primitive_type {type_kind::UNKNOWN};
+        }
+
     protected:
         std::unique_ptr<expression> m_rhs;
     };
@@ -78,6 +82,10 @@ namespace dconstruct::ast {
             os << get_op_name() << '[' << *m_lhs << ", " << *m_rhs << ']';
         }
 
+        [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
+            return primitive_type {type_kind::UNKNOWN};
+        }
+
         // for testing ! stupid and expensive.
         [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
             const binary_expr* rhs_ptr = dynamic_cast<const binary_expr*>(&rhs);
@@ -87,12 +95,12 @@ namespace dconstruct::ast {
             return false;
         }
 
+        std::unique_ptr<expression> m_lhs;
+        std::unique_ptr<expression> m_rhs;
+
     protected:
         [[nodiscard]] virtual std::string get_op_char() const noexcept = 0;
         [[nodiscard]] virtual std::string get_op_name() const noexcept = 0;
-
-        std::unique_ptr<expression> m_lhs;
-        std::unique_ptr<expression> m_rhs;
     };
 
 
@@ -102,10 +110,6 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             return std::make_unique<impl_unary_expr>(m_rhs != nullptr ? m_rhs->clone() : nullptr);
-        }
-
-        [[nodiscard]] inline type_kind get_type() const noexcept final {
-            return type_kind::UNKNOWN;
         }
     };
 
