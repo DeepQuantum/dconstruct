@@ -3,17 +3,17 @@
 namespace dconstruct::ast {
 
 void variable_declaration::pseudo(std::ostream& os) const {
-    os << kind_to_string(m_type) << m_identifier;
+    os << m_typeName << ' ' << m_identifier;
     if (m_init != nullptr) {
-        os << m_init;
+        os << " = " << *m_init;
     }
     os << ';';
 }
 
 void variable_declaration::ast(std::ostream& os) const {
-    os << "variable_declaration[" << kind_to_string(m_type) << ", " << m_identifier << ", ";
+    os << "variable_declaration[" << m_typeName << ", " << m_identifier << ", ";
     if (m_init != nullptr) {
-        os << '{' << m_init << '}';
+        os << '{' << *m_init << '}';
     } else {
         os << "null";
     }
@@ -25,7 +25,7 @@ void variable_declaration::ast(std::ostream& os) const {
     if (rhs_ptr == nullptr) { 
         return false; 
     }
-    return m_type == rhs_ptr->m_type && m_identifier == rhs_ptr->m_identifier && *m_init == *rhs_ptr->m_init;
+    return m_typeName == rhs_ptr->m_typeName && m_identifier == rhs_ptr->m_identifier && *m_init == *rhs_ptr->m_init;
 }
 
 }

@@ -22,16 +22,13 @@ void logical_not_expr::ast(std::ostream &os) const {
     std::unique_ptr<expression> rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
-        const primitive_value value = rhs_ptr->get_value();
+        const primitive_value value = rhs_ptr->m_value;
         switch(rhs_ptr->get_type()) {
-            case type_kind::STRUCT:
-            case type_kind::ENUM:
-            case type_kind::SID:
-            case type_kind::PTR:
-            case type_kind::UNKNOWN: return nullptr;
-            case type_kind::BOOL:    return std::make_unique<literal>(!std::get<b8>(value));
-            case type_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
-            case type_kind::_NULL:   return std::make_unique<literal>(true);
+            case primitive_kind::SID:
+            case primitive_kind::UNKNOWN: return nullptr;
+            case primitive_kind::BOOL:    return std::make_unique<literal>(!std::get<b8>(value));
+            case primitive_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
+            case primitive_kind::_NULL:   return std::make_unique<literal>(true);
             default: {
                 const std::optional<primitive_number> num_opt = get_number(value);
                 if (num_opt.has_value()) {

@@ -123,7 +123,7 @@ endif()
 
 target_link_libraries(
     dconstruct_test
-    $<$<CXX_COMPILER_ID:GNU>: tbb>
+    $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
     GTest::gtest_main
 )

@@ -28,7 +28,7 @@ void literal::pseudo(std::ostream& os) const {
 }
 
 void literal::ast(std::ostream& os) const {
-    os << "literal[" << kind_to_string(static_cast<type_kind>(m_value.index()));
+    os << "literal[" << kind_to_string(static_cast<primitive_kind>(m_value.index()));
     pseudo(os);
     os << "]";
 }

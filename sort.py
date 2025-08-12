@@ -1,4 +1,4 @@
-with open("./sidbase_new.bin", "rb") as f:
+with open("./sidbase.bin", "rb") as f:
     _num_entries = int.from_bytes(f.read(8), "little")
     entries: dict[int, int] = {}
     for i in range(_num_entries):
@@ -9,7 +9,7 @@ with open("./sidbase_new.bin", "rb") as f:
     new_entries = dict([(k, v) for k, v in sorted(entries.items(), key=lambda kv: kv[0])])
 
     remainder = f.read(-1)
-    with open("./sidbase_new_sorted.bin", "wb") as sf:
+    with open("./sidbase_sorted.bin", "wb") as sf:
         sf.write(_num_entries.to_bytes(8, "little"))
         for hash, offset in new_entries.items():
             sf.write(hash.to_bytes(8, byteorder="little"))

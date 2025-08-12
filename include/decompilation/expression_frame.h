@@ -35,7 +35,7 @@ namespace dconstruct::dcompiler {
     struct expression_frame {
 
         // stores expressions that we are currently processing
-        std::map<register_index, std::unique_ptr<ast::expression>> m_transformableExpressions;
+        std::vector<std::unique_ptr<ast::expression>> m_transformableExpressions;
 
         compiler::environment m_env;
 
@@ -48,17 +48,17 @@ namespace dconstruct::dcompiler {
 
         explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
-                m_transformableExpressions[i] = std::make_unique<ast::literal>(nullptr);
+                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(0));
             }
             for (u32 i = 49; i < 128; ++i) {
-                m_transformableExpressions[i] = std::make_unique<ast::identifier>("arg_" + std::to_string(i), i);
+                m_transformableExpressions.push_back(std::make_unique<ast::identifier>("arg_", i - 49));
             }
         }
 
         expression_frame(expression_frame&& rhs) noexcept = default;
 
-        inline u32 get_next_var_idx() noexcept {
-            return m_varCount++;
+        inline std::string get_next_var() {
+            return "var_" + std::to_string(m_varCount++);
         }
 
         void move(const u32, const u32);
@@ -67,17 +67,9 @@ namespace dconstruct::dcompiler {
 
         template<ast::requires_binary_expr binary_expr_t>
         inline void apply_binary_op(const Instruction& istr) {
-            // auto t1 = m_transformableExpressions[istr.operand1]->get_type(m_env);
-            // auto t2 = m_transformableExpressions[istr.operand2]->get_type(m_env);
-            // if (!t1.has_value() || !t2.has_value) {
-            //     std::cerr << "warning: couldn't determine type of the binary expression " << istr.opcode_to_string() << '\n';
-            // }
-            // if (t1.value() != t2.value()) {
-            //     std::cerr << "warning: types don't match in binary expression " << istr.opcode_to_string() << '\n';
-            // }
             m_transformableExpressions[istr.destination] = std::make_unique<ast::grouping>(
                 std::make_unique<binary_expr_t>(
-                    std::move(m_transformableExpressions[istr.operand1]), 
+                    std::move(m_transformableExpressions[istr.operand1]),
                     std::move(m_transformableExpressions[istr.operand2])
                 )
             );
