@@ -28,9 +28,9 @@ void identifier::pseudo(std::ostream& os) const {
 }
 
 [[nodiscard]] std::optional<full_type> identifier::compute_type(const compiler::environment& env) const {
-    if (auto opt = env.get(m_name))
-        return opt->type;
-    return std::nullopt;    
+    if (auto opt = env.lookup(m_name))
+        return opt.value().get().type;
+    return std::nullopt;
 }
 
 }

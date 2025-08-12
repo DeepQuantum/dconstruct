@@ -33,34 +33,41 @@ namespace dconstruct::testing {
         return std::move(funcs[0].m_frame);
     }
 
-     TEST(DECOMPILER, BasicLoadImmediate) {
+    TEST(DECOMPILER, BasicLoadImmediate) {
+        const compiler::environment env{};
         const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
+        const auto& sub_expr = actual.get_expression();
+        const auto type = static_cast<const ast::assign_expr*>(&sub_expr)->m_rhs->compute_type(env).value();
 
-        std::unique_ptr<ast::assign_expr> expression = std::make_unique<ast::assign_expr>(
+        auto expression = std::make_unique<ast::assign_expr>(
             std::make_unique<ast::identifier>("var_0", 0),
-            std::unique_ptr<ast::literal>(new ast::literal(1ULL))
+            std::make_unique<ast::literal>(1ULL)
         );
 
         const ast::expression_stmt expected{std::move(expression)};
 
-        ASSERT_EQ(frame.m_mappedExpressions.at(&actual.get_expression()), ast::type_kind::U64);
+        ASSERT_EQ(type, ast::full_type { ast::primitive_type {ast::type_kind::U64} });
         ASSERT_EQ(actual, expected);
-     }
+    }
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
+        const compiler::environment env{};
         const dcompiler::expression_frame frame = make_expression_frame({
             {Opcode::LoadU16Imm, 0, 1, 0},
         });
 
         const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
+        const auto& sub_expr = actual.get_expression();
+        const auto type = static_cast<const ast::assign_expr*>(&sub_expr)->m_rhs->compute_type(env).value();
+
         auto expression = std::make_unique<ast::assign_expr>(
-            std::unique_ptr<ast::identifier>(new ast::identifier(0)),
-            std::unique_ptr<ast::literal>(new ast::literal(1ULL))
+            std::make_unique<ast::identifier>(0),
+            std::make_unique<ast::literal>(1ULL)
         );
 
         const ast::expression_stmt expected = ast::expression_stmt(std::move(expression)); 
@@ -70,7 +77,7 @@ namespace dconstruct::testing {
         const std::string actual_str = actual_os.str();
         const std::string expected_str = expected_os.str();
         ASSERT_EQ(expected_str, actual_str);
-        ASSERT_EQ(frame.m_mappedExpressions.at(&actual.get_expression()), ast::type_kind::U64);
+        ASSERT_EQ(type, ast::full_type { ast::primitive_type {ast::type_kind::U64} });
     }
 
 

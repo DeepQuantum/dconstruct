@@ -9,7 +9,7 @@ namespace dconstruct::compiler {
 
         void define(const std::string& name, const ast::typed_value& value);
 
-        [[nodiscard]] std::optional<const ast::typed_value&> get(const std::string& name) const;
+        [[nodiscard]] std::optional<std::reference_wrapper<const ast::typed_value>> lookup(const std::string& name) const;
     };
 
 }
