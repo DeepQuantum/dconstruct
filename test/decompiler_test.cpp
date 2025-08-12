@@ -40,18 +40,15 @@ namespace dconstruct::testing {
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
-        const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
-        const auto& sub_expr = actual.get_expression();
-        const auto type = static_cast<const ast::assign_expr*>(&sub_expr)->m_rhs->compute_type(env).value();
+        const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
+        const auto rhs = actual.get_init_ptr()->compute_type(env);
 
-        auto expression = std::make_unique<ast::assign_expr>(
-            std::make_unique<ast::identifier>("var_0", 0),
-            std::make_unique<ast::literal>(1ULL)
-        );
+        ASSERT_TRUE(rhs.has_value());
 
-        const ast::expression_stmt expected{std::move(expression)};
+        const auto& type = rhs.value();
 
-        ASSERT_EQ(type, ast::full_type { ast::primitive_type {ast::type_kind::U64} });
+        auto expected = ast::variable_declaration("u16", "var_0", u16(1));
+
         ASSERT_EQ(actual, expected);
     }
 
@@ -61,23 +58,21 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
         });
 
-        const auto& actual = *static_cast<const ast::expression_stmt*>(frame.m_statements[0].get());
-        const auto& sub_expr = actual.get_expression();
-        const auto type = static_cast<const ast::assign_expr*>(&sub_expr)->m_rhs->compute_type(env).value();
+        const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
+        const auto rhs = actual.get_init_ptr()->compute_type(env);
 
-        auto expression = std::make_unique<ast::assign_expr>(
-            std::make_unique<ast::identifier>(0),
-            std::make_unique<ast::literal>(1ULL)
-        );
+        ASSERT_TRUE(rhs.has_value());
 
-        const ast::expression_stmt expected = ast::expression_stmt(std::move(expression)); 
+        const auto& type = rhs.value();
+
+        const auto expected = ast::variable_declaration("u16", "var_0", u16(1));
+
         std::ostringstream actual_os, expected_os;
         actual.pseudo(actual_os);
         expected.pseudo(expected_os);
         const std::string actual_str = actual_os.str();
         const std::string expected_str = expected_os.str();
         ASSERT_EQ(expected_str, actual_str);
-        ASSERT_EQ(type, ast::full_type { ast::primitive_type {ast::type_kind::U64} });
     }
 
 
@@ -89,10 +84,11 @@ namespace dconstruct::testing {
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = frame.m_statements;
-        const std::string expected = "i32 var_0 = 1;\ni32 var_1 = 1285;\n";
+        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\n";
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
+            os << '\n';
         }
         EXPECT_EQ(expected, os.str());
     }
@@ -104,13 +100,15 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 1, 5, 5},
             {Opcode::IAdd, 0, 0, 1}
         };
-        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+        dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = frame.m_statements;
-        const std::string expected = "i32 var_0 = 1;\ni32 var_1 = 1285;\ni32 var_2 = var_0 + var_1;\n";
+        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[0])));
+        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = (var_0 + var_1);\n";
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
+            os << '\n';
         }
         EXPECT_EQ(expected, os.str());
     }

@@ -79,7 +79,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_var_declaration() {
-    const ast::type_kind type = m_knownTypes.at(advance().m_lexeme);
+    const std::string type_name = advance().m_lexeme;
     const token* name = consume(token_type::IDENTIFIER, "error: expected variable name.");
 
     std::unique_ptr<ast::expression> init = nullptr;
@@ -88,9 +88,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
     consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.");
     if (init != nullptr) {
-        return std::make_unique<ast::variable_declaration>(type, name->m_lexeme, std::move(init));
+        return std::make_unique<ast::variable_declaration>(type_name, name->m_lexeme, std::move(init));
     } else {
-        return std::make_unique<ast::variable_declaration>(type, name->m_lexeme); 
+        return std::make_unique<ast::variable_declaration>(type_name, name->m_lexeme); 
     }
 }
 
