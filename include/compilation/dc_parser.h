@@ -27,21 +27,21 @@ namespace dconstruct::compiler {
         std::vector<token> m_tokens;
         std::vector<parsing_error> m_errors;
 
-        std::unordered_map<std::string, ast::type_kind> m_knownTypes{
-            {"u8", ast::type_kind::U8},
-            {"u16", ast::type_kind::U16},
-            {"u32", ast::type_kind::U32},
-            {"u64", ast::type_kind::U64},
-            {"i8", ast::type_kind::I8},
-            {"i16", ast::type_kind::I16},
-            {"i32", ast::type_kind::I32},
-            {"i64", ast::type_kind::I64},
-            {"f32", ast::type_kind::F32},
-            {"f64", ast::type_kind::F64},
-            {"char", ast::type_kind::CHAR},
-            {"bool", ast::type_kind::BOOL},
-            {"string", ast::type_kind::STRING},
-            {"sid", ast::type_kind::SID}
+        std::unordered_map<std::string, ast::primitive_kind> m_knownTypes{
+            {"u8", ast::primitive_kind::U8},
+            {"u16", ast::primitive_kind::U16},
+            {"u32", ast::primitive_kind::U32},
+            {"u64", ast::primitive_kind::U64},
+            {"i8", ast::primitive_kind::I8},
+            {"i16", ast::primitive_kind::I16},
+            {"i32", ast::primitive_kind::I32},
+            {"i64", ast::primitive_kind::I64},
+            {"f32", ast::primitive_kind::F32},
+            {"f64", ast::primitive_kind::F64},
+            {"char", ast::primitive_kind::CHAR},
+            {"bool", ast::primitive_kind::BOOL},
+            {"string", ast::primitive_kind::STRING},
+            {"sid", ast::primitive_kind::SID}
         };
 
         u32 m_current = 0;

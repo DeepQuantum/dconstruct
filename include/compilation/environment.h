@@ -1,4 +1,3 @@
-#include "base.h"
 #include "ast/type.h"
 
 #include <unordered_map>

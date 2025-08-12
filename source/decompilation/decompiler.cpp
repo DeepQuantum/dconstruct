@@ -37,7 +37,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::IDiv:
             case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
 
-            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, u64(istr.operand1 | (istr.operand2 << 8))); break;
+            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, u16(istr.operand1 | u16(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;
             case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32); break;
             case Opcode::LoadStaticPointer: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_hash); break;
@@ -45,6 +45,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
 
             case Opcode::Move: {
                 expression_frame.move(istr.destination, istr.operand1);
+                break;
             }
             default: {
                 return;

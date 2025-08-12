@@ -62,11 +62,11 @@ namespace dconstruct::ast {
         }
 
         [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
-            return primitive_type {type_kind::UNKNOWN};
+            return full_type{ primitive_type { primitive_kind::UNKNOWN } };
         }
 
-    protected:
         std::unique_ptr<expression> m_rhs;
+
     };
 
     struct binary_expr : public expression {
@@ -83,7 +83,7 @@ namespace dconstruct::ast {
         }
 
         [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
-            return primitive_type {type_kind::UNKNOWN};
+            return full_type{ primitive_type {primitive_kind::UNKNOWN} };
         }
 
         // for testing ! stupid and expensive.

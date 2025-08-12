@@ -23,7 +23,7 @@ void negate_expression::ast(std::ostream& os) const {
     std::unique_ptr<expression> rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
-        const primitive_value prim = rhs_ptr->get_value();
+        const primitive_value prim = rhs_ptr->m_value;
         const std::optional<primitive_number> option = get_number(prim);
         if (option.has_value()) {
             return std::make_unique<literal>(std::visit([](auto&& arg) -> primitive_value {

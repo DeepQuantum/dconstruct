@@ -3,11 +3,11 @@
 namespace dconstruct::ast {
 
 void grouping::ast(std::ostream& os) const {
-    os << "grouping[" << m_expr << ']';
+    os << "grouping[" << *m_expr << ']';
 }
 
 void grouping::pseudo(std::ostream& os) const {
-    os << '(' << m_expr << ')';
+    os << '(' << *m_expr << ')';
 }
 
 [[nodiscard]] b8 grouping::equals(const expression &rhs) const noexcept {

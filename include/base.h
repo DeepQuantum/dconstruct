@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <memory>
+#include <optional>
 
 
 typedef uint64_t sid64;

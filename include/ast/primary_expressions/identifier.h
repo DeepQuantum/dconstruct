@@ -6,7 +6,7 @@ namespace dconstruct::ast {
     struct identifier : public expression {
         identifier(const std::string &name) : m_name(name), m_idx(UINT32_MAX) {};
         identifier(const std::string &name, const u8 idx) : m_name(name), m_idx(idx) {};
-        identifier(const u8 idx) : m_name("var_" + std::to_string(idx)), m_idx(idx) {};
+        identifier(const u32 idx) : m_name("var_" + std::to_string(idx)), m_idx(idx) {};
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
         [[nodiscard]] std::unique_ptr<expression> simplify() const final;
@@ -18,7 +18,6 @@ namespace dconstruct::ast {
             return m_name;
         }
         
-    private:
         std::string m_name;
         u32 m_idx;
     };
