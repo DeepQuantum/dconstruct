@@ -8,7 +8,6 @@ namespace dconstruct::ast {
         void pseudo(std::ostream&) const final;
         void ast(std::ostream&) const final;
         [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
-        [[nodiscard]] inline const expression& get_expression() const noexcept { return *m_expression; }
         
         std::unique_ptr<expression> m_expression;
     };

@@ -57,11 +57,12 @@ namespace dconstruct::compiler {
         [[nodiscard]] b8 match(const std::initializer_list<token_type>& types);
         [[nodiscard]] b8 match_type();
 
-        [[nodiscard]] std::unique_ptr<ast::statement> make_var_declaration();
+        [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::statement> make_declaration();
         [[nodiscard]] std::unique_ptr<ast::statement> make_statement();
-        [[nodiscard]] std::unique_ptr<ast::statement> make_block();
-        [[nodiscard]] std::unique_ptr<ast::statement> make_expression_statement();
+        [[nodiscard]] std::unique_ptr<ast::block> make_block();
+        [[nodiscard]] std::unique_ptr<ast::if_stmt> make_if();
+        [[nodiscard]] std::unique_ptr<ast::expression_stmt> make_expression_statement();
         [[nodiscard]] std::unique_ptr<ast::expression> make_assignment();
         [[nodiscard]] std::unique_ptr<ast::expression> make_expression();
         [[nodiscard]] std::unique_ptr<ast::expression> make_equality();
