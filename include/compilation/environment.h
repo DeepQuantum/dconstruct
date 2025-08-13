@@ -4,11 +4,19 @@
 
 namespace dconstruct::compiler {
     struct environment {
+        explicit environment() noexcept : m_enclosing(nullptr) {};
+
+        explicit environment(std::unique_ptr<environment>&& enclosing) noexcept : m_enclosing(std::move(enclosing)) {};
+
         std::unordered_map<std::string, ast::typed_value> m_values;
 
-        void define(const std::string& name, const ast::typed_value& value);
+        void define(const std::string& name, ast::typed_value value);
+
+        b8 assign(const std::string& name, ast::typed_value value);
 
         [[nodiscard]] std::optional<std::reference_wrapper<const ast::typed_value>> lookup(const std::string& name) const;
+
+        std::unique_ptr<environment> m_enclosing;
     };
 
 }

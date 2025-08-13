@@ -4,11 +4,11 @@
 namespace dconstruct::ast {
 
 void identifier::ast(std::ostream& os) const {
-    os << "identifier[" << m_idx << ", " << m_name << ']';
+    os << "identifier[" << m_idx << ", " << m_name.m_lexeme << ']';
 }
 
 void identifier::pseudo(std::ostream& os) const {
-    os << m_name;
+    os << m_name.m_lexeme;
 }
 
 [[nodiscard]] b8 identifier::equals(const expression &rhs) const noexcept {
@@ -28,7 +28,7 @@ void identifier::pseudo(std::ostream& os) const {
 }
 
 [[nodiscard]] std::optional<full_type> identifier::compute_type(const compiler::environment& env) const {
-    if (auto opt = env.lookup(m_name))
+    if (auto opt = env.lookup(m_name.m_lexeme))
         return opt.value().get().type;
     return std::nullopt;
 }
