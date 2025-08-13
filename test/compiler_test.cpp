@@ -323,7 +323,7 @@ namespace dconstruct::testing {
         
         const ast::literal expected = ast::literal(1);
 
-        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -341,7 +341,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         const ast::add_expr expected{
             std::unique_ptr<ast::literal>(new ast::literal(1)),
@@ -366,7 +366,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
             std::unique_ptr<ast::literal>(new ast::literal(2)),
@@ -415,7 +415,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         auto left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
             std::make_unique<ast::literal>(1),

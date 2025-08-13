@@ -78,7 +78,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return m_knownTypes.contains(peek().m_lexeme);
 }
 
-[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_var_declaration() {
+[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration() {
     if (!match_type()) {
         m_errors.emplace_back(peek(), "error: unknown type '" + peek().m_lexeme + "'");
         return nullptr;
@@ -121,11 +121,30 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
     if (match({token_type::LEFT_BRACE})) {
         return make_block();
+    } else if (match({token_type::IF})) {
+        return make_if();
     }
     return make_expression_statement();
 }
 
-[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_block() {
+[[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
+    if (consume(token_type::LEFT_PAREN, "error: expect '(' after 'if'.") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::expression> condition = make_expression();
+    if (consume(token_type::RIGHT_PAREN, "error: expect ')' after if-condition.") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::statement> then_branch = make_statement();
+    std::unique_ptr<ast::statement> else_branch = nullptr;
+    if (match({token_type::ELSE})) {
+        else_branch = make_statement();
+    }
+
+    return std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_branch), std::move(else_branch));
+}
+
+[[nodiscard]] std::unique_ptr<ast::block> Parser::make_block() {
     std::vector<std::unique_ptr<ast::statement>> statements{};
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         statements.push_back(make_declaration());
@@ -134,7 +153,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return std::make_unique<ast::block>(std::move(statements));
 }
 
-[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_expression_statement() {
+[[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
     std::unique_ptr<ast::expression> expr = make_expression();
     const token *matched = consume(token_type::SEMICOLON, "error: expected ';' after expression.");
     if (matched == nullptr) {
@@ -154,7 +173,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         const ast::identifier* value_ptr = dynamic_cast<const ast::identifier*>(value.get());
         if (value_ptr != nullptr) {
             const token name = value_ptr->m_name;
-            return std::make_unique<ast::assign_expr>(name, value);
+            return std::make_unique<ast::assign_expr>(name, std::move(value));
         }
 
         m_errors.emplace_back(equals, "error: invalid assignment target.");
@@ -327,7 +346,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         const ast::sid_literal sid = { 0, std::get<std::string>(previous().m_literal) };
         return std::make_unique<ast::literal>(sid);
     } else if (match({token_type::IDENTIFIER})) {
-        return std::make_unique<ast::identifier>(previous().m_lexeme);
+        return std::make_unique<ast::identifier>(previous());
     }
     if (match({token_type::LEFT_PAREN})) {
         std::unique_ptr expr = make_expression();

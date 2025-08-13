@@ -7,6 +7,8 @@ namespace dconstruct::ast {
     struct identifier : public expression {
         explicit identifier(compiler::token name) : m_name(std::move(name)), m_idx(UINT32_MAX) {};
 
+        explicit identifier(std::string name) : m_name(compiler::token{compiler::token_type::IDENTIFIER, std::move(name)}), m_idx(UINT32_MAX) {};
+
         explicit identifier(compiler::token name, const u8 idx) : m_name(std::move(name)), m_idx(idx) {};
 
         explicit identifier(const u32 idx) : 
