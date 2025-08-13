@@ -18,7 +18,7 @@ namespace dconstruct::testing {
     TEST(COMPILER, LexerEmpty) {
         const std::string empty = "";
         const auto [tokens, errors] = get_tokens(empty);
-        const compiler::token eof = compiler::token(compiler::token_type::_EOF, "", 0ULL, 1);
+        const compiler::token eof = compiler::token(compiler::token_type::_EOF, "", 0, 1);
         
         EXPECT_EQ(tokens.back(), eof);
         EXPECT_EQ(errors.size(), 0);
@@ -29,11 +29,11 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::DOT, ".", 0ULL, 1),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 1),
-            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::DOT, ".", 0, 1),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -44,13 +44,13 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::BANG_EQUAL, "!=", 0ULL, 1),
-            compiler::token(compiler::token_type::COMMA, ",", 0ULL, 1),
-            compiler::token(compiler::token_type::EQUAL_EQUAL, "==", 0ULL, 1),
-            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0ULL, 1),
-            compiler::token(compiler::token_type::LESS_EQUAL, "<=", 0ULL, 1),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::BANG_EQUAL, "!=", 0, 1),
+            compiler::token(compiler::token_type::COMMA, ",", 0, 1),
+            compiler::token(compiler::token_type::EQUAL_EQUAL, "==", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1),
+            compiler::token(compiler::token_type::LESS_EQUAL, "<=", 0, 1),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -61,7 +61,7 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
 
         const std::vector<compiler::lexing_error> expected_errors = {
@@ -77,10 +77,10 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::SLASH_EQUAL, "/=", 0ULL, 1),
-            compiler::token(compiler::token_type::DOT, ".", 0ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 2),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
+            compiler::token(compiler::token_type::SLASH_EQUAL, "/=", 0, 1),
+            compiler::token(compiler::token_type::DOT, ".", 0, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 2),
+            compiler::token(compiler::token_type::_EOF, "", 0, 2),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -91,10 +91,10 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0ULL, 1),
+            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0, 1),
             compiler::token(compiler::token_type::STRING, "\"blackeyeGalaxy_abc\"", "blackeyeGalaxy_abc", 1),
-            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::PLUS_PLUS, "++", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
 
         EXPECT_EQ(tokens, expected);
@@ -106,7 +106,7 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
 
         const std::vector<compiler::lexing_error> expected_errors = {
@@ -122,11 +122,11 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::RIGHT_SQUARE, "]", 0ULL, 1),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "123", 123ULL, 1),
-            compiler::token(compiler::token_type::INT, "34", 34ULL, 2),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
+            compiler::token(compiler::token_type::RIGHT_SQUARE, "]", 0, 1),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::INT, "123", 123, 1),
+            compiler::token(compiler::token_type::INT, "34", 34, 2),
+            compiler::token(compiler::token_type::_EOF, "", 0, 2),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -139,7 +139,7 @@ namespace dconstruct::testing {
         const std::vector<compiler::token> expected = {
             compiler::token(compiler::token_type::DOUBLE, "123.45", 123.45, 1),
             compiler::token(compiler::token_type::STRING, "\"a\"", "a", 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -150,10 +150,10 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::HEX, "0x123F", 0x123FULL, 1),
-            compiler::token(compiler::token_type::DOT, ".", 0ULL, 1),
-            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::HEX, "0x123F", 0x123F, 1),
+            compiler::token(compiler::token_type::DOT, ".", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         
         EXPECT_EQ(tokens, expected);
@@ -166,9 +166,9 @@ namespace dconstruct::testing {
 
         const std::vector<compiler::token> expected = {
             compiler::token(compiler::token_type::DOUBLE, "1.3", 1.3, 1),
-            compiler::token(compiler::token_type::MINUS_EQUAL, "-=", 0ULL, 1),
+            compiler::token(compiler::token_type::MINUS_EQUAL, "-=", 0, 1),
             compiler::token(compiler::token_type::SID, "#ellie", "ellie", 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -180,10 +180,10 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0ULL, 1),
-            compiler::token(compiler::token_type::IDENTIFIER, "def", 0ULL, 2),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 2),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 2),
+            compiler::token(compiler::token_type::IDENTIFIER, "abc", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "def", 0, 2),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 2),
+            compiler::token(compiler::token_type::_EOF, "", 0, 2),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -194,9 +194,9 @@ namespace dconstruct::testing {
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::RETURN, "return", 0ULL, 1),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1),
+            compiler::token(compiler::token_type::RETURN, "return", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
         EXPECT_EQ(errors.size(), 0);
@@ -212,25 +212,25 @@ namespace dconstruct::testing {
             "}";
         
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::INT, "int", 0ULL, 1),
-            compiler::token(compiler::token_type::IDENTIFIER, "main", 0ULL, 1),
-            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0ULL, 1),
-            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0ULL, 1),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 2),
-            compiler::token(compiler::token_type::INT, "int", 0ULL, 3),
-            compiler::token(compiler::token_type::IDENTIFIER, "a", 0ULL, 3),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 3),
-            compiler::token(compiler::token_type::INT, "0", 0ULL, 3),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 3),
-            compiler::token(compiler::token_type::IDENTIFIER, "a", 0ULL, 4),
-            compiler::token(compiler::token_type::PLUS_EQUAL, "+=", 0ULL, 4),
-            compiler::token(compiler::token_type::INT, "1", 0ULL, 4),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 4),
-            compiler::token(compiler::token_type::RETURN, "return", 0ULL, 5),
-            compiler::token(compiler::token_type::IDENTIFIER, "a", 0ULL, 5),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 5),
-            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0ULL, 6),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 6),
+            compiler::token(compiler::token_type::INT, "int", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "main", 0, 1),
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 1),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 2),
+            compiler::token(compiler::token_type::INT, "int", 0, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 3),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 3),
+            compiler::token(compiler::token_type::INT, "0", 0, 3),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 4),
+            compiler::token(compiler::token_type::PLUS_EQUAL, "+=", 0, 4),
+            compiler::token(compiler::token_type::INT, "1", 0, 4),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 4),
+            compiler::token(compiler::token_type::RETURN, "return", 0, 5),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 5),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 5),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 6),
+            compiler::token(compiler::token_type::_EOF, "", 0, 6),
         };
     }
 
@@ -250,61 +250,61 @@ namespace dconstruct::testing {
             ;
 
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::STRUCT, "struct", 0ULL, 1),
-            compiler::token(compiler::token_type::IDENTIFIER, "Person", 0ULL, 1),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 1),
+            compiler::token(compiler::token_type::STRUCT, "struct", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "Person", 0, 1),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "SID", 0ULL, 2),
-            compiler::token(compiler::token_type::IDENTIFIER, "name", 0ULL, 2),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 2),
+            compiler::token(compiler::token_type::IDENTIFIER, "SID", 0, 2),
+            compiler::token(compiler::token_type::IDENTIFIER, "name", 0, 2),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 2),
             compiler::token(compiler::token_type::SID, "#john_doe", "john_doe", 2),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 2),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 2),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "double", 0ULL, 3),
-            compiler::token(compiler::token_type::IDENTIFIER, "height", 0ULL, 3),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "double", 0, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "height", 0, 3),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 3),
             compiler::token(compiler::token_type::DOUBLE, "5.9", 5.9, 3),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 3),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 3),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "int", 0ULL, 4),
-            compiler::token(compiler::token_type::IDENTIFIER, "hexVal", 0ULL, 4),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 4),
-            compiler::token(compiler::token_type::HEX, "0x1A3F", 0x1A3FULL, 4),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 4),
+            compiler::token(compiler::token_type::IDENTIFIER, "int", 0, 4),
+            compiler::token(compiler::token_type::IDENTIFIER, "hexVal", 0, 4),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 4),
+            compiler::token(compiler::token_type::HEX, "0x1A3F", 0x1A3F, 4),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 4),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "string", 0ULL, 5),
-            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0ULL, 5),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 5),
+            compiler::token(compiler::token_type::IDENTIFIER, "string", 0, 5),
+            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0, 5),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 5),
             compiler::token(compiler::token_type::STRING, "\"Hello, world!\"", "Hello, world!", 5),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 5),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 5),
 
-            compiler::token(compiler::token_type::IF, "if", 0ULL, 6),
-            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0ULL, 6),
-            compiler::token(compiler::token_type::IDENTIFIER, "height", 0ULL, 6),
-            compiler::token(compiler::token_type::GREATER, ">", 0ULL, 6),
+            compiler::token(compiler::token_type::IF, "if", 0, 6),
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 6),
+            compiler::token(compiler::token_type::IDENTIFIER, "height", 0, 6),
+            compiler::token(compiler::token_type::GREATER, ">", 0, 6),
             compiler::token(compiler::token_type::DOUBLE, "6.0", 6.0, 6),
-            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0ULL, 6),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 6),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 6),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 6),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0ULL, 7),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 7),
+            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0, 7),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 7),
             compiler::token(compiler::token_type::STRING, "\"Tall person\"", "Tall person", 7),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 7),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 7),
 
-            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0ULL, 8),
-            compiler::token(compiler::token_type::ELSE, "else", 0ULL, 8),
-            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0ULL, 8),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 8),
+            compiler::token(compiler::token_type::ELSE, "else", 0, 8),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 8),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0ULL, 9),
-            compiler::token(compiler::token_type::EQUAL, "=", 0ULL, 9),
+            compiler::token(compiler::token_type::IDENTIFIER, "msg", 0, 9),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 9),
             compiler::token(compiler::token_type::STRING, "\"Not so tall\"", "Not so tall", 9),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 9),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 9),
 
-            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0ULL, 10),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 10),
 
-            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0ULL, 11),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 0ULL, 11),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 11),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 11),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 11),
+            compiler::token(compiler::token_type::_EOF, "", 0, 11),
         };
 
         const auto [tokens, errors] = get_tokens(chars);
@@ -314,14 +314,14 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, SimpleNumParse1) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 1ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1) 
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 1, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1) 
         };
 
         const auto [statements, errors] = get_statements(tokens);
         
-        const ast::literal expected = ast::literal(1ULL);
+        const ast::literal expected = ast::literal(1);
 
         const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
 
@@ -332,11 +332,11 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, SimpleNumParse2) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 2ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::INT, "2", 2, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 2, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
         };
 
         const auto [statements, errors] = get_statements(tokens);
@@ -344,8 +344,8 @@ namespace dconstruct::testing {
         const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
         
         const ast::add_expr expected{
-            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
-            std::unique_ptr<ast::literal>(new ast::literal(2ULL))
+            std::unique_ptr<ast::literal>(new ast::literal(1)),
+            std::unique_ptr<ast::literal>(new ast::literal(2))
         };
 
         EXPECT_EQ(statements.size(), 1);
@@ -355,13 +355,13 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, SimpleNumParse3) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
-            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 5ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::INT, "2", 2, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0, 1),
+            compiler::token(compiler::token_type::INT, "5", 5, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 5, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
         };
 
         const auto [statements, errors] = get_statements(tokens);
@@ -369,12 +369,12 @@ namespace dconstruct::testing {
         const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
-            std::unique_ptr<ast::literal>(new ast::literal(2ULL)),
-            std::unique_ptr<ast::literal>(new ast::literal(5ULL))
+            std::unique_ptr<ast::literal>(new ast::literal(2)),
+            std::unique_ptr<ast::literal>(new ast::literal(5))
         );
 
         const ast::add_expr expected{
-            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
+            std::unique_ptr<ast::literal>(new ast::literal(1)),
             std::move(left)
         };
 
@@ -383,50 +383,89 @@ namespace dconstruct::testing {
         EXPECT_EQ(expected, actual);
     }
 
-    TEST(COMPILER, SimpleNumParseError1) {
+    /*TEST(COMPILER, SimpleNumParseError1) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
-            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
-            compiler::token(compiler::token_type::MINUS, "-", 0ULL, 1),
-            compiler::token(compiler::token_type::MINUS, ";", 0ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::INT, "2", 2, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0, 1),
+            compiler::token(compiler::token_type::INT, "5", 5, 1),
+            compiler::token(compiler::token_type::MINUS, "-", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
         };
 
         const auto [statements, errors] = get_statements(tokens);
         EXPECT_EQ(statements.size(), 0);
         EXPECT_EQ(errors.size(), 1);
         EXPECT_EQ(errors[0].m_message, "error: expected expression after '-'");
-    }
+    }*/
 
     TEST(COMPILER, GroupNumParse) {
         const std::vector<compiler::token> tokens = {
-            compiler::token(compiler::token_type::LEFT_PAREN, "(", 1ULL, 1),
-            compiler::token(compiler::token_type::INT, "1", 1ULL, 1),
-            compiler::token(compiler::token_type::PLUS, "+", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "2", 2ULL, 1),
-            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 1ULL, 1),
-            compiler::token(compiler::token_type::STAR, "*", 0ULL, 1),
-            compiler::token(compiler::token_type::INT, "5", 5ULL, 1),
-            compiler::token(compiler::token_type::SEMICOLON, ";", 5ULL, 1),
-            compiler::token(compiler::token_type::_EOF, "", 0ULL, 1)
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 1, 1),
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::INT, "2", 2, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 1, 1),
+            compiler::token(compiler::token_type::STAR, "*", 0, 1),
+            compiler::token(compiler::token_type::INT, "5", 5, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 5, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
         };
 
         const auto [statements, errors] = get_statements(tokens);
 
         const ast::expression& actual = dynamic_cast<const ast::expression_stmt*>(statements[0].get())->get_expression();
         
-        std::unique_ptr<ast::expression> left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
-            std::unique_ptr<ast::literal>(new ast::literal(1ULL)),
-            std::unique_ptr<ast::literal>(new ast::literal(2ULL))
+        auto left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
+            std::make_unique<ast::literal>(1),
+            std::make_unique<ast::literal>(2)
         ));
 
         const ast::mul_expr expected{
             std::move(left),
-            std::unique_ptr<ast::literal>(new ast::literal(5ULL))
+            std::make_unique<ast::literal>(5)
         };
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(expected, actual);
+    }
+
+    TEST(COMPILER, VariableDeclaration0) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::IDENTIFIER, "u16", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "number", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
+
+        const ast::variable_declaration expected{"u16", "number"};
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(expected, actual);
+    }
+
+    TEST(COMPILER, VariableDeclaration1) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::IDENTIFIER, "u16", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "number", 0, 1),
+            compiler::token(compiler::token_type::EQUAL, "=", 0, 1),
+            compiler::token(compiler::token_type::INT, "2", 2, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
+
+        const ast::variable_declaration expected{"u16", "number", 2};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);

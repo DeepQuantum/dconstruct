@@ -25,13 +25,8 @@ inline std::ostream& operator<<(std::ostream& os, const lexing_error &l) {
 }
 
 inline std::ostream& operator<<(std::ostream& os, const token &t) {
-    std::string literal_type, literal_value;
-    std::visit([&](const auto& value) {
-        std::ostringstream oss;
-        literal_type = typeid(value).name(); 
-        oss << value;
-        literal_value = oss.str();
-    }, t.m_literal);
+    std::string literal_type = ast::kind_to_string(ast::kind_from_primitive_value(t.m_literal));
+    std::string literal_value = ast::primitive_to_string(t.m_literal);
     return os
         << " lexeme: " << t.m_lexeme
         << " literal: " << literal_type << ' ' << literal_value
@@ -73,7 +68,7 @@ private:
     [[nodiscard]] b8 reached_eof() const noexcept;
     char advance();
     [[nodiscard]] std::string make_current_lexeme() const;
-    [[nodiscard]] token make_current_token(const token_type, const token::t_literal& = 0ULL) const;
+    [[nodiscard]] token make_current_token(const token_type, const ast::primitive_value& = 0) const;
     [[nodiscard]] token make_string();
     [[nodiscard]] token make_number();
     [[nodiscard]] token make_hex();

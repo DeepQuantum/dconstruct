@@ -44,7 +44,7 @@ namespace dconstruct::ast {
 
     [[nodiscard]] inline b8 operator==(const std::unique_ptr<expression>& lhs, const std::unique_ptr<expression>& rhs) noexcept {
         if (lhs == nullptr || rhs == nullptr) {
-            return lhs == rhs;
+            return lhs == nullptr && rhs == nullptr;
         }
         return *lhs == *rhs;
     }

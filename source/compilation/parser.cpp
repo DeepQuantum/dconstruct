@@ -79,14 +79,23 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_var_declaration() {
+    if (!match_type()) {
+        m_errors.emplace_back(peek(), "error: unknown type '" + peek().m_lexeme + "'");
+        return nullptr;
+    }
     const std::string type_name = advance().m_lexeme;
     const token* name = consume(token_type::IDENTIFIER, "error: expected variable name.");
+    if (name == nullptr) {
+        return nullptr;
+    }
 
     std::unique_ptr<ast::expression> init = nullptr;
     if (match({token_type::EQUAL})) {
         init = make_expression();
     }
-    consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.");
+    if (consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.") == nullptr) {
+        return nullptr;
+    }
     if (init != nullptr) {
         return std::make_unique<ast::variable_declaration>(type_name, name->m_lexeme, std::move(init));
     } else {
@@ -102,9 +111,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else {
         res = make_statement();
     }
-
     if (res == nullptr) {
-        //error
+        synchronize();
         return nullptr;
     }
     return res;
@@ -116,7 +124,10 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_expression_statement() {
     std::unique_ptr<ast::expression> expr = make_expression();
-    consume(token_type::SEMICOLON, "error: expected ';' after expression.");
+    const token *matched = consume(token_type::SEMICOLON, "error: expected ';' after expression.");
+    if (matched == nullptr) {
+        return nullptr;
+    }
     return std::make_unique<ast::expression_stmt>(std::move(expr));
 }
 
@@ -273,7 +284,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (match({token_type::_NULL})) {
         return std::make_unique<ast::literal>(nullptr);
     } else if (match({token_type::INT})) {
-        const u64 num = std::get<u64>(previous().m_literal);
+        const i32 num = std::get<i32>(previous().m_literal);
         return std::make_unique<ast::literal>(num);
     } else if (match({token_type::DOUBLE})) {
         const f64 num = std::get<f64>(previous().m_literal);
