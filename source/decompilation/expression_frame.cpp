@@ -15,9 +15,9 @@ void expression_frame::move(const u32 dst, const u32 src) {
 
 void expression_frame::load_literal(const u8 dst, const ast::primitive_value& value) {
     auto literal = std::make_unique<ast::literal>(value);
-    auto id = std::make_unique<ast::identifier>(get_next_var());
+    auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var() });
 
-    const std::string name = id->get_name();
+    const std::string name = id->m_name.m_lexeme;
     const ast::primitive_kind type = literal->get_type();
 
     auto var_declaration = std::make_unique<ast::variable_declaration>(ast::kind_to_string(type), name, std::move(literal));

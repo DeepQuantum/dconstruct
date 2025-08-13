@@ -48,10 +48,10 @@ namespace dconstruct::dcompiler {
 
         explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
-                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(0));
+                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(""));
             }
             for (u32 i = 49; i < 128; ++i) {
-                m_transformableExpressions.push_back(std::make_unique<ast::identifier>("arg_", i - 49));
+                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" }, i - 49));
             }
         }
 

@@ -3,7 +3,7 @@
 #include "ast/statement.h"
 
 namespace dconstruct::ast {
-    struct block : statement {
+    struct block : public statement {
         explicit block(std::vector<std::unique_ptr<statement>>&& stmnts) noexcept : m_statements(std::move(stmnts)) {};
         void pseudo(std::ostream&) const final;
         void ast(std::ostream&) const final;
