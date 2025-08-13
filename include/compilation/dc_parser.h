@@ -60,7 +60,9 @@ namespace dconstruct::compiler {
         [[nodiscard]] std::unique_ptr<ast::statement> make_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::statement> make_declaration();
         [[nodiscard]] std::unique_ptr<ast::statement> make_statement();
+        [[nodiscard]] std::unique_ptr<ast::statement> make_block();
         [[nodiscard]] std::unique_ptr<ast::statement> make_expression_statement();
+        [[nodiscard]] std::unique_ptr<ast::expression> make_assignment();
         [[nodiscard]] std::unique_ptr<ast::expression> make_expression();
         [[nodiscard]] std::unique_ptr<ast::expression> make_equality();
         [[nodiscard]] std::unique_ptr<ast::expression> make_comparison();

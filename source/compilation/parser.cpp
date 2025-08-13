@@ -119,7 +119,19 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
+    if (match({token_type::LEFT_BRACE})) {
+        return make_block();
+    }
     return make_expression_statement();
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_block() {
+    std::vector<std::unique_ptr<ast::statement>> statements{};
+    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+        statements.push_back(make_declaration());
+    }
+    consume(token_type::RIGHT_BRACE, "error: expected '}' after block.");
+    return std::make_unique<ast::block>(std::move(statements));
 }
 
 [[nodiscard]] std::unique_ptr<ast::statement> Parser::make_expression_statement() {
@@ -129,6 +141,25 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
     return std::make_unique<ast::expression_stmt>(std::move(expr));
+}
+
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_assignment() {
+    std::unique_ptr<ast::expression> expr = make_equality();
+    if (expr == nullptr) {
+        return nullptr;
+    }
+    if (match({token_type::EQUAL})) {
+        const token equals = previous();
+        std::unique_ptr<ast::expression> value = make_assignment();
+        const ast::identifier* value_ptr = dynamic_cast<const ast::identifier*>(value.get());
+        if (value_ptr != nullptr) {
+            const token name = value_ptr->m_name;
+            return std::make_unique<ast::assign_expr>(name, value);
+        }
+
+        m_errors.emplace_back(equals, "error: invalid assignment target.");
+    }
+    return expr;
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression> Parser::make_expression() {
