@@ -21,11 +21,11 @@ void variable_declaration::ast(std::ostream& os) const {
 }
 
 [[nodiscard]] b8 variable_declaration::equals(const statement& rhs) const noexcept {
-    const variable_declaration* rhs_ptr = dynamic_cast<const variable_declaration*>(&rhs); 
-    if (rhs_ptr == nullptr) { 
-        return false; 
+    const variable_declaration* rhs_ptr = dynamic_cast<const variable_declaration*>(&rhs);
+    if (rhs_ptr == nullptr) {
+        return false;
     }
-    return m_typeName == rhs_ptr->m_typeName && m_identifier == rhs_ptr->m_identifier && *m_init == *rhs_ptr->m_init;
+    return m_typeName == rhs_ptr->m_typeName && m_identifier == rhs_ptr->m_identifier && m_init == rhs_ptr->m_init;
 }
 
 }

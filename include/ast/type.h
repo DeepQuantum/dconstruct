@@ -1,9 +1,9 @@
 #pragma once
 
 #include "base.h"
-#include "compilation/tokens.h"
 #include <map>
 #include <optional>
+#include <variant>
 #include <vector>
 
 namespace dconstruct::ast {
@@ -93,6 +93,30 @@ namespace dconstruct::ast {
         full_type type;
         value_variant value;
     };
+
+    inline std::string primitive_to_string(const primitive_value& prim) {
+        return std::visit([](auto&& arg) -> std::string {
+            using T = std::decay_t<decltype(arg)>;
+            if constexpr (std::is_same_v<T, std::string>) {
+                return arg;
+            }
+            else if constexpr (std::is_same_v<T, char>) {
+                return std::string(1, arg);
+            }
+            else if constexpr (std::is_same_v<T, b8>) {
+                return arg ? "true" : "false";
+            }
+            else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+                return "null";
+            }
+            else if constexpr (std::is_same_v<T, sid_literal>) {
+                return "#" + std::get<1>(arg);
+            }
+            else {
+                return std::to_string(arg);
+            }
+        }, prim);
+    }
 
     inline std::string kind_to_string(const primitive_kind kind) noexcept {
         switch(kind) {

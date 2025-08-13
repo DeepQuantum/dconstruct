@@ -12,7 +12,7 @@ namespace dconstruct::compiler {
         }
     }
 
-    m_tokens.emplace_back(token_type::_EOF, "", 0ULL, m_line);
+    m_tokens.emplace_back(token_type::_EOF, "", 0, m_line);
 
     return m_tokens;
 }
@@ -23,7 +23,7 @@ namespace dconstruct::compiler {
     return m_current >= m_source.size();
 }
 
-[[nodiscard]] token Lexer::make_current_token(const token_type type, const token::t_literal& literal) const {
+[[nodiscard]] token Lexer::make_current_token(const token_type type, const ast::primitive_value& literal) const {
     const std::string text = make_current_lexeme();
     return token(type, text, literal, m_line);
 }
@@ -82,8 +82,6 @@ char Lexer::advance() {
     return std::isdigit(c) || std::isalpha(c) || c == '-' || c == '_';
 }
 
-
-
 [[nodiscard]] token Lexer::make_sid() {
     while (is_sid_char(peek())) {
         advance();
@@ -107,7 +105,7 @@ char Lexer::advance() {
     if (is_double) {
         return make_current_token(token_type::DOUBLE, std::stod(make_current_lexeme()));
     }
-    return make_current_token(token_type::INT, std::stoull(make_current_lexeme()));
+    return make_current_token(token_type::INT, std::stoi(make_current_lexeme()));
 }
 
 [[nodiscard]] b8 Lexer::is_hex_char(const char c) const noexcept {
@@ -118,7 +116,7 @@ char Lexer::advance() {
     while (is_hex_char(peek())) {
         advance();
     }
-    const u64 literal = std::stoull(make_current_lexeme(), 0, 16);
+    const i32 literal = std::stoi(make_current_lexeme(), 0, 16);
     return make_current_token(token_type::HEX, literal);
 }
 

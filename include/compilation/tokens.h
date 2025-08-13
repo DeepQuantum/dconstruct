@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include "ast/type.h"
 #include <variant>
 
 namespace dconstruct::compiler {
@@ -32,9 +33,7 @@ namespace dconstruct::compiler {
     };
 
     struct token {
-        using t_literal = std::variant<std::string, u64, f64>;
-
-        token(const token_type type, const std::string &lexeme, const t_literal &literal = 0ULL, const u32 line = INT_MAX) :
+        token(const token_type type, const std::string &lexeme, const ast::primitive_value &literal = 0, const u32 line = INT_MAX) :
         m_type(type),
         m_lexeme(lexeme),
         m_literal(literal),
@@ -46,8 +45,8 @@ namespace dconstruct::compiler {
         }
 
         token_type m_type;
+        ast::primitive_value m_literal;
         std::string m_lexeme;
-        t_literal m_literal;
         u32 m_line;
     };
 }

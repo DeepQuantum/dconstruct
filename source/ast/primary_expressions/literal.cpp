@@ -4,27 +4,7 @@
 namespace dconstruct::ast {
 
 void literal::pseudo(std::ostream& os) const {
-    std::visit([&](auto&& arg) -> void {
-        using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, std::string>) {
-            os << arg;
-        }
-        else if constexpr (std::is_same_v<T, char>) {
-            os << std::string(1, arg);
-        }
-        else if constexpr (std::is_same_v<T, b8>) {
-            os << arg ? "true" : "false";
-        }
-        else if constexpr (std::is_same_v<T, std::nullptr_t>) {
-            os << "null";
-        }
-        else if constexpr (std::is_same_v<T, sid_literal>) {
-            os << "#" + std::get<1>(arg);
-        }
-        else {
-            os << std::to_string(arg);
-        }
-    }, m_value);
+    os << primitive_to_string(m_value);
 }
 
 void literal::ast(std::ostream& os) const {
