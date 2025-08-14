@@ -66,9 +66,10 @@ namespace dconstruct::dcompiler {
         void load_literal(const u8 dst, const ast::primitive_value& value);
 
         template<ast::requires_binary_expr binary_expr_t>
-        inline void apply_binary_op(const Instruction& istr) {
+        inline void apply_binary_op(const Instruction& istr, compiler::token op) {
             m_transformableExpressions[istr.destination] = std::make_unique<ast::grouping>(
                 std::make_unique<binary_expr_t>(
+                    std::move(op),
                     std::move(m_transformableExpressions[istr.operand1]),
                     std::move(m_transformableExpressions[istr.operand2])
                 )

@@ -29,13 +29,13 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
         const Instruction &istr = line.m_instruction;
         switch(istr.opcode) {
             case Opcode::IAdd: 
-            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr); break;
+            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr, compiler::token{compiler::token_type::PLUS, "+"}); break;
             case Opcode::ISub:
-            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr); break;
+            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
             case Opcode::IMul:
-            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr); break;
+            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
             case Opcode::IDiv:
-            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr); break;
+            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr, compiler::token{compiler::token_type::SLASH, "/"}); break;
 
             case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, u16(istr.operand1 | u16(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;

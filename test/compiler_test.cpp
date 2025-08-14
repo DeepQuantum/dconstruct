@@ -344,8 +344,9 @@ namespace dconstruct::testing {
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         const ast::add_expr expected{
-            std::unique_ptr<ast::literal>(new ast::literal(1)),
-            std::unique_ptr<ast::literal>(new ast::literal(2))
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            std::make_unique<ast::literal>(1),
+            std::make_unique<ast::literal>(2)
         };
 
         EXPECT_EQ(statements.size(), 1);
@@ -369,12 +370,14 @@ namespace dconstruct::testing {
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
-            std::unique_ptr<ast::literal>(new ast::literal(2)),
-            std::unique_ptr<ast::literal>(new ast::literal(5))
+            compiler::token(compiler::token_type::STAR, "*", 0, 1),
+            std::make_unique<ast::literal>(2),
+            std::make_unique<ast::literal>(5)
         );
 
         const ast::add_expr expected{
-            std::unique_ptr<ast::literal>(new ast::literal(1)),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            std::make_unique<ast::literal>(1),
             std::move(left)
         };
 
@@ -418,11 +421,13 @@ namespace dconstruct::testing {
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
         auto left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
             std::make_unique<ast::literal>(1),
             std::make_unique<ast::literal>(2)
         ));
 
         const ast::mul_expr expected{
+            compiler::token(compiler::token_type::STAR, "*", 0, 1),
             std::move(left),
             std::make_unique<ast::literal>(5)
         };
