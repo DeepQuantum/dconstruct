@@ -17,7 +17,7 @@ namespace dconstruct::ast {
             //if (lhs_num_lit)
         }
     }
-    return std::make_unique<add_expr>(std::move(lhs_ptr), std::move(rhs_ptr));
+    return std::make_unique<add_expr>(m_operator, std::move(lhs_ptr), std::move(rhs_ptr));
 }
 
 }
