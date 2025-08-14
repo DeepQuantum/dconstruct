@@ -22,6 +22,7 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     URL https://github.com/google/googletest/archive/v1.17.0.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 
 # Prevent GTest from overriding your compiler/linker settings

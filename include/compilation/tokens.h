@@ -23,30 +23,40 @@ namespace dconstruct::compiler {
         CARET, CARET_CARET,
         AMPERSAND, AMPERSAND_AMPERSAND,
 
+        AND, OR,
+
         IDENTIFIER, 
         
         STRING, INT, DOUBLE, HEX, SID, _NULL,
 
-        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, 
+        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, FOR,
         
         _EOF, EMPTY
     };
 
     struct token {
-        token(const token_type type, const std::string &lexeme, const ast::primitive_value &literal = 0, const u32 line = INT_MAX) :
-        m_type(type),
-        m_lexeme(lexeme),
-        m_literal(literal),
-        m_line(line) {}
+        token(token_type type, std::string lexeme,
+            ast::primitive_value literal = 0,
+            u32 line = INT_MAX) noexcept
+            :m_literal(std::move(literal)),
+            m_lexeme(std::move(lexeme)),
+            m_type(type),
+            m_line(line) {}
 
         [[nodiscard]] inline b8 operator==(const token &rhs) const {
             const b8 result = m_type == rhs.m_type && m_lexeme == rhs.m_lexeme && m_literal == rhs.m_literal && m_line == rhs.m_line;
             return result;
         }
 
-        token_type m_type;
         ast::primitive_value m_literal;
         std::string m_lexeme;
+        token_type m_type;
         u32 m_line;
     };
+
+    static_assert(std::is_copy_constructible_v<token>, "token must be copyable");
+    static_assert(std::is_copy_constructible_v<token_type>);
+    static_assert(std::is_copy_constructible_v<ast::primitive_value>);
+    static_assert(std::is_copy_constructible_v<std::string>);
+    static_assert(std::is_copy_constructible_v<u32>);
 }

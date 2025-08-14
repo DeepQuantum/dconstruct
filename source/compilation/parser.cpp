@@ -162,8 +162,30 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return std::make_unique<ast::expression_stmt>(std::move(expr));
 }
 
-[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_assignment() {
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_or() {
+    std::unique_ptr<ast::expression> expr = make_and();
+    
+    while (match({token_type::OR, token_type::PIPE_PIPE})) {
+        const token op = previous();
+        std::unique_ptr<ast::expression> right = make_and();
+        expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
+    }
+    return expr;
+}
+
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_and() {
     std::unique_ptr<ast::expression> expr = make_equality();
+
+    while (match({token_type::AND, token_type::AMPERSAND_AMPERSAND})) {
+        const token op = previous();
+        std::unique_ptr<ast::expression> right = make_equality();
+        expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
+    }
+    return expr;
+}
+
+[[nodiscard]] std::unique_ptr<ast::expression> Parser::make_assignment() {
+    std::unique_ptr<ast::expression> expr = make_or();
     if (expr == nullptr) {
         return nullptr;
     }
@@ -198,11 +220,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::BANG_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::NEQ);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::EQUAL_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::EQ);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             default: {
@@ -227,19 +249,19 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::GREATER: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::GT);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::GREATER_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::GET);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::LESS: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::LT);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::LESS_EQUAL: {
-                expr = std::make_unique<ast::compare_expr>(std::move(expr), std::move(right), ast::compare_expr::comp_type::LET);
+                expr = std::make_unique<ast::compare_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             default: {
@@ -264,11 +286,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::PLUS: {
-                expr = std::make_unique<ast::add_expr>(std::move(expr), std::move(right));
+                expr = std::make_unique<ast::add_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::MINUS: {
-                expr = std::make_unique<ast::sub_expr>(std::move(expr), std::move(right));
+                expr = std::make_unique<ast::sub_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             default: {
@@ -290,11 +312,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::SLASH: {
-                expr = std::make_unique<ast::div_expr>(std::move(expr), std::move(right));
+                expr = std::make_unique<ast::div_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             case token_type::STAR: {
-                expr = std::make_unique<ast::mul_expr>(std::move(expr), std::move(right));
+                expr = std::make_unique<ast::mul_expr>(op, std::move(expr), std::move(right));
                 break;
             }
             default: {

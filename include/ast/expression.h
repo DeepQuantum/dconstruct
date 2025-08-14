@@ -3,6 +3,7 @@
 #include "base.h"
 #include "printable.h"
 #include "compilation/dc_register.h"
+#include "compilation/tokens.h"
 #include "ast/type.h"
 #include "compilation/environment.h"
 #include <ostream>
@@ -71,15 +72,15 @@ namespace dconstruct::ast {
 
     struct binary_expr : public expression {
     public:
-        binary_expr(std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
-            : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
+        binary_expr(compiler::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
+            : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
         inline void pseudo(std::ostream& os) const override {
-            os << *m_lhs << ' ' << get_op_char() << ' ' << *m_rhs;
+            os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
         }
 
         inline void ast(std::ostream& os) const override {
-            os << get_op_name() << '[' << *m_lhs << ", " << *m_rhs << ']';
+            os << m_operator.m_lexeme << '[' << *m_lhs << ", " << *m_rhs << ']';
         }
 
         [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
@@ -90,17 +91,14 @@ namespace dconstruct::ast {
         [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
             const binary_expr* rhs_ptr = dynamic_cast<const binary_expr*>(&rhs);
             if (rhs_ptr != nullptr) {
-                return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs && m_lhs == rhs_ptr->m_lhs;
+                return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs && m_lhs == rhs_ptr->m_lhs && m_operator == rhs_ptr->m_operator;
             }
             return false;
         }
 
+        compiler::token m_operator;
         std::unique_ptr<expression> m_lhs;
         std::unique_ptr<expression> m_rhs;
-
-    protected:
-        [[nodiscard]] virtual std::string get_op_char() const noexcept = 0;
-        [[nodiscard]] virtual std::string get_op_name() const noexcept = 0;
     };
 
 
@@ -119,6 +117,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             return std::make_unique<impl_binary_expr>(
+                m_operator,
                 m_lhs != nullptr ? m_lhs->clone() : nullptr,
                 m_rhs != nullptr ? m_rhs->clone() : nullptr
             );
