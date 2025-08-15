@@ -62,6 +62,8 @@ namespace dconstruct::compiler {
         [[nodiscard]] std::unique_ptr<ast::statement> make_statement();
         [[nodiscard]] std::unique_ptr<ast::block> make_block();
         [[nodiscard]] std::unique_ptr<ast::if_stmt> make_if();
+        [[noidscard]] std::unique_ptr<ast::while_stmt> make_while();
+        [[noidscard]] std::unique_ptr<ast::statement> make_for();
         [[nodiscard]] std::unique_ptr<ast::expression_stmt> make_expression_statement();
         [[nodiscard]] std::unique_ptr<ast::expression> make_or();
         [[nodiscard]] std::unique_ptr<ast::expression> make_and();

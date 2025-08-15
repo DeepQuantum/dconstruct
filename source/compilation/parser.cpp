@@ -80,11 +80,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration() {
     if (!match_type()) {
-        m_errors.emplace_back(peek(), "error: unknown type '" + peek().m_lexeme + "'");
+        m_errors.emplace_back(peek(), "unknown type '" + peek().m_lexeme + "'");
         return nullptr;
     }
     const std::string type_name = advance().m_lexeme;
-    const token* name = consume(token_type::IDENTIFIER, "error: expected variable name.");
+    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
     if (name == nullptr) {
         return nullptr;
     }
@@ -93,7 +93,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (match({token_type::EQUAL})) {
         init = make_expression();
     }
-    if (consume(token_type::SEMICOLON, "error: expected ';' after variable declaration.") == nullptr) {
+    if (consume(token_type::SEMICOLON, "expected ';' after variable declaration.") == nullptr) {
         return nullptr;
     }
     if (init != nullptr) {
@@ -118,21 +118,71 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return res;
 }
 
-[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
-    if (match({token_type::LEFT_BRACE})) {
-        return make_block();
-    } else if (match({token_type::IF})) {
-        return make_if();
-    }
-    return make_expression_statement();
-}
-
-[[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
-    if (consume(token_type::LEFT_PAREN, "error: expect '(' after 'if'.") == nullptr) {
+[[nodiscard]] std::unique_ptr<ast::while_stmt> Parser::make_while() {
+    if (consume(token_type::LEFT_PAREN, "expected '(' after 'while'.") == nullptr) {
         return nullptr;
     }
     std::unique_ptr<ast::expression> condition = make_expression();
-    if (consume(token_type::RIGHT_PAREN, "error: expect ')' after if-condition.") == nullptr) {
+    if (consume(token_type::RIGHT_PAREN, "expected ')' after while-condition") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::statement> body = make_statement();
+    return std::make_unique<ast::while_stmt>(std::move(condition), std::move(body));
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_for() {
+    if (consume(token_type::LEFT_PAREN, "expected '(' after 'for'.") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::statement> initializer = nullptr;
+    if (match({token_type::SEMICOLON})) {
+        initializer = nullptr;
+    } else if (match_type()) {
+        initializer = make_var_declaration();
+    } else {
+        initializer = make_expression_statement();
+    }
+    std::unique_ptr<ast::expression> condition = nullptr;
+    if (!check(token_type::SEMICOLON)) {
+        condition = make_expression();
+    }
+    if (consume(token_type::SEMICOLON, "expected ';' after loop condition.") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::expression> increment = nullptr;
+    if (!check(token_type::RIGHT_PAREN)) {
+        increment = make_expression();
+    }
+    if (consume(token_type::RIGHT_PAREN, "expected ')' at end of for-loop header") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::statement> body = make_statement();
+
+    if ()
+
+    return body;
+}
+
+[[nodiscard]] std::unique_ptr<ast::statement> Parser::make_statement() {
+    if (match({token_type::IF})) {
+        return make_if();
+    } else if (match({token_type::WHILE})) {
+        return make_while();
+    } else if (match({token_type::FOR})) {
+        return make_for();
+    } else if (match({token_type::LEFT_BRACE})) {
+        return make_block();
+    } else {
+        return make_expression_statement();
+    }
+}
+
+[[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
+    if (consume(token_type::LEFT_PAREN, "expected '(' after 'if'.") == nullptr) {
+        return nullptr;
+    }
+    std::unique_ptr<ast::expression> condition = make_expression();
+    if (consume(token_type::RIGHT_PAREN, "expect ')' after if-condition.") == nullptr) {
         return nullptr;
     }
     std::unique_ptr<ast::statement> then_branch = make_statement();
@@ -149,13 +199,13 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         statements.push_back(make_declaration());
     }
-    consume(token_type::RIGHT_BRACE, "error: expected '}' after block.");
+    consume(token_type::RIGHT_BRACE, "expected '}' after block.");
     return std::make_unique<ast::block>(std::move(statements));
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
     std::unique_ptr<ast::expression> expr = make_expression();
-    const token *matched = consume(token_type::SEMICOLON, "error: expected ';' after expression.");
+    const token *matched = consume(token_type::SEMICOLON, "expected ';' after expression.");
     if (matched == nullptr) {
         return nullptr;
     }
@@ -198,7 +248,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
             return std::make_unique<ast::assign_expr>(name, std::move(value));
         }
 
-        m_errors.emplace_back(equals, "error: invalid assignment target.");
+        m_errors.emplace_back(equals, "invalid assignment target.");
     }
     return expr;
 }
@@ -372,13 +422,13 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
     if (match({token_type::LEFT_PAREN})) {
         std::unique_ptr expr = make_expression();
-        if(consume(token_type::RIGHT_PAREN, "error: expected ')' after expression") == nullptr) {
+        if(consume(token_type::RIGHT_PAREN, "expected ')' after expression") == nullptr) {
             return nullptr;
         }
         return std::make_unique<ast::grouping>(std::move(expr));
     }
 
-    m_errors.emplace_back(previous(), "error: expected expression after '" + previous().m_lexeme + "'");
+    m_errors.emplace_back(previous(), "expected expression after '" + previous().m_lexeme + "'");
     return nullptr;
 }
 

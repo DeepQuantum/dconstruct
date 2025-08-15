@@ -53,10 +53,4 @@ namespace dconstruct::compiler {
         token_type m_type;
         u32 m_line;
     };
-
-    static_assert(std::is_copy_constructible_v<token>, "token must be copyable");
-    static_assert(std::is_copy_constructible_v<token_type>);
-    static_assert(std::is_copy_constructible_v<ast::primitive_value>);
-    static_assert(std::is_copy_constructible_v<std::string>);
-    static_assert(std::is_copy_constructible_v<u32>);
 }
