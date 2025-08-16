@@ -3,7 +3,7 @@
 
 namespace dconstruct::ast {
 
-[[nodiscard]] std::unique_ptr<ast::expression> logical_expr::simplify() const {
+[[nodiscard]] expr_uptr logical_expr::simplify() const {
     return nullptr;
 }
 

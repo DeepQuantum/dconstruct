@@ -127,3 +127,5 @@ namespace dconstruct::ast {
     template<typename expr_t>
     concept requires_binary_expr = std::is_base_of_v<binary_expr, expr_t>;    
 };
+
+using expr_uptr = std::unique_ptr<dconstruct::ast::expression>;

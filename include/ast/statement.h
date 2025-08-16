@@ -5,6 +5,7 @@
 #include <vector>
 #include "compilation/tokens.h"
 
+
 namespace dconstruct::ast {
 
     struct statement : public Iprintable {
@@ -20,3 +21,5 @@ namespace dconstruct::ast {
         return *lhs == *rhs;
     }
 }
+
+using stmnt_uptr = std::unique_ptr<dconstruct::ast::statement>;
