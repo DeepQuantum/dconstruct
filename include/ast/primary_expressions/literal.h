@@ -18,9 +18,9 @@ namespace dconstruct::ast {
 
         void ast(std::ostream& os) const final;
 
-        [[nodiscard]] std::unique_ptr<expression> simplify() const final;
+        [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] b8 equals(const expression& other) const noexcept final;
-        [[nodiscard]] std::unique_ptr<expression> clone() const final;
+        [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] std::optional<full_type> compute_type(const compiler::environment& env) const noexcept final;
 
         primitive_value m_value;

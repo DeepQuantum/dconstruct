@@ -3,7 +3,7 @@
 namespace dconstruct::ast {
 
 void block::pseudo(std::ostream& os) const {
-    os << "{";
+    os << "{\n";
     for (const auto& stmnt : m_statements) {
         os << *stmnt << '\n';
     } 

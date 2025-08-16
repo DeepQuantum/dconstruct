@@ -9,7 +9,7 @@ namespace dconstruct::ast {
         explicit variable_declaration(std::string type, std::string id_name) noexcept :
         m_typeName(std::move(type)), m_identifier(std::move(id_name)), m_init(nullptr) {}; 
 
-        explicit variable_declaration(std::string type, std::string id_name, std::unique_ptr<ast::expression>&& init) noexcept :
+        explicit variable_declaration(std::string type, std::string id_name, expr_uptr&& init) noexcept :
         m_typeName(std::move(type)), m_identifier(std::move(id_name)), m_init(std::move(init)) {}; 
 
         explicit variable_declaration(std::string type, std::string id_name, const ast::primitive_value& init) noexcept :
@@ -27,7 +27,7 @@ namespace dconstruct::ast {
 
         std::string m_typeName;
         std::string m_identifier;
-        std::unique_ptr<expression> m_init;
+        expr_uptr m_init;
     };
 
 }
