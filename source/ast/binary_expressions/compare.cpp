@@ -2,7 +2,7 @@
 
 namespace dconstruct::ast {
 
-[[nodiscard]] std::unique_ptr<expression> compare_expr::simplify() const {
+[[nodiscard]] expr_uptr compare_expr::simplify() const {
     return nullptr;
 }
 

@@ -10,7 +10,7 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    static std::pair<std::vector<std::unique_ptr<ast::statement>>, std::vector<compiler::parsing_error>> get_statements(const std::vector<compiler::token> &tokens) {
+    static std::pair<std::vector<stmnt_uptr>, std::vector<compiler::parsing_error>> get_statements(const std::vector<compiler::token> &tokens) {
         compiler::Parser parser{tokens};
         return { parser.parse(), parser.get_errors() };
     }
@@ -369,7 +369,7 @@ namespace dconstruct::testing {
 
         const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
         
-        std::unique_ptr<ast::expression> left = std::make_unique<ast::mul_expr>(
+        expr_uptr left = std::make_unique<ast::mul_expr>(
             compiler::token(compiler::token_type::STAR, "*", 0, 1),
             std::make_unique<ast::literal>(2),
             std::make_unique<ast::literal>(5)
@@ -471,6 +471,31 @@ namespace dconstruct::testing {
         const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
 
         const ast::variable_declaration expected{"u16", "number", 2};
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_EQ(expected, actual);
+    }
+
+    TEST(COMPILER, SimpleBlock) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        const ast::block& actual = *dynamic_cast<const ast::block*>(statements[0].get());
+
+        std::vector<stmnt_uptr> expected_statements{};
+        expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::identifier>(compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1))
+        )));
+
+        const ast::block expected{std::move(expected_statements)};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);

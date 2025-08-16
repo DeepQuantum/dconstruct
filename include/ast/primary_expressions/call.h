@@ -7,7 +7,7 @@ namespace dconstruct::ast {
         void pseudo(std::ostream &os) const final;
         void ast(std::ostream &os) const final;
     private:
-        std::unique_ptr<expression> m_callee;
-        std::vector<std::unique_ptr<expression>> m_arguments;
+        expr_uptr m_callee;
+        std::vector<expr_uptr> m_arguments;
     };
 }

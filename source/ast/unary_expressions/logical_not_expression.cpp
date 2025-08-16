@@ -18,8 +18,8 @@ void logical_not_expr::ast(std::ostream &os) const {
 //     return m_rhs == rhs_ptr->m_rhs;
 // }
 
-[[nodiscard]] std::unique_ptr<expression> logical_not_expr::simplify() const {
-    std::unique_ptr<expression> rhs = m_rhs->simplify();
+[[nodiscard]] expr_uptr logical_not_expr::simplify() const {
+    expr_uptr rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
         const primitive_value value = rhs_ptr->m_value;

@@ -35,12 +35,12 @@ namespace dconstruct::dcompiler {
     struct expression_frame {
 
         // stores expressions that we are currently processing
-        std::vector<std::unique_ptr<ast::expression>> m_transformableExpressions;
+        std::vector<expr_uptr> m_transformableExpressions;
 
         compiler::environment m_env;
 
         // maps statements to a list of the indexes
-        std::vector<std::unique_ptr<ast::statement>> m_statements;
+        std::vector<stmnt_uptr> m_statements;
 
         std::map<u32, SymbolTableEntry> m_symbolTable;
         u32 m_varCount = 0;

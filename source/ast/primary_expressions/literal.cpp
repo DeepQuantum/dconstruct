@@ -14,7 +14,7 @@ void literal::ast(std::ostream& os) const {
 }
 
 
-[[nodiscard]] std::unique_ptr<expression> literal::simplify() const {
+[[nodiscard]] expr_uptr literal::simplify() const {
     return std::make_unique<literal>(m_value);
 }
 
@@ -26,7 +26,7 @@ void literal::ast(std::ostream& os) const {
     return false;
 }
 
-[[nodiscard]] std::unique_ptr<expression> literal::clone() const {
+[[nodiscard]] expr_uptr literal::clone() const {
     return std::make_unique<literal>(m_value);
 }
 

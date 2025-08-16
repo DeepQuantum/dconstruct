@@ -7,7 +7,7 @@ namespace dconstruct::ast {
     struct compare_expr : public clonable_binary_expr<compare_expr> {
         using clonable_binary_expr::clonable_binary_expr;
 
-        [[nodiscard]] std::unique_ptr<expression> simplify() const final;
+        [[nodiscard]] expr_uptr simplify() const final;
 
     };
 }

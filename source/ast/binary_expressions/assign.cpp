@@ -11,7 +11,7 @@ void assign_expr::ast(std::ostream& os) const {
     os << "assign[" << m_lhs.m_lexeme << ", " << *m_rhs << ']';
 }
 
-[[nodiscard]] std::unique_ptr<expression> assign_expr::simplify() const {
+[[nodiscard]] expr_uptr assign_expr::simplify() const {
     return m_rhs->simplify();
 }
 
@@ -29,7 +29,7 @@ void assign_expr::ast(std::ostream& os) const {
 
 }
 
-[[nodiscard]] std::unique_ptr<expression> assign_expr::clone() const {
+[[nodiscard]] expr_uptr assign_expr::clone() const {
     return std::make_unique<assign_expr>(m_lhs, m_rhs != nullptr ? m_rhs->clone() : nullptr);
 }
 

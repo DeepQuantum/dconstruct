@@ -18,11 +18,11 @@ void grouping::pseudo(std::ostream& os) const {
     return m_expr == rhs_ptr->m_expr;
 }
 
-[[nodiscard]] std::unique_ptr<expression> grouping::simplify() const {
+[[nodiscard]] expr_uptr grouping::simplify() const {
     return m_expr->simplify();
 }
 
-[[nodiscard]] std::unique_ptr<expression> grouping::clone() const {
+[[nodiscard]] expr_uptr grouping::clone() const {
     return std::make_unique<grouping>(m_expr != nullptr ? m_expr->clone() : nullptr);
 }
 
