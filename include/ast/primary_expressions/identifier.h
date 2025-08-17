@@ -5,14 +5,9 @@
 
 namespace dconstruct::ast {
     struct identifier : public expression {
-        explicit identifier(compiler::token name) : m_name(std::move(name)), m_idx(UINT32_MAX) {};
+        explicit identifier(compiler::token name) : m_name(std::move(name)){};
 
-        explicit identifier(std::string name) : m_name(compiler::token{compiler::token_type::IDENTIFIER, std::move(name)}), m_idx(UINT32_MAX) {};
-
-        explicit identifier(compiler::token name, const u8 idx) : m_name(std::move(name)), m_idx(idx) {};
-
-        explicit identifier(const u32 idx) : 
-        m_name(compiler::token(compiler::token_type::IDENTIFIER, "var_" + std::to_string(idx))), m_idx(idx) {};
+        explicit identifier(std::string name) : m_name(compiler::token{compiler::token_type::IDENTIFIER, std::move(name), 0, 1}){};
 
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
@@ -22,6 +17,5 @@ namespace dconstruct::ast {
         [[nodiscard]] std::optional<full_type> compute_type(const compiler::environment& env) const final;
         
         compiler::token m_name;
-        u32 m_idx;
     };
 }
