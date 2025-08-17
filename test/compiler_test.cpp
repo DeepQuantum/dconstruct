@@ -24,6 +24,44 @@ namespace dconstruct::testing {
         EXPECT_EQ(errors.size(), 0);
     }
 
+    TEST(COMPILER, WrongStatementCast) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+
+        const ast::variable_declaration* actual = dynamic_cast<const ast::variable_declaration*>(statements[0].get());
+        EXPECT_EQ(actual, nullptr);
+    }
+
+    TEST(COMPILER, WrongExpressionCast) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+        const ast::block* block = static_cast<const ast::block*>(statements[0].get());
+        const ast::expression_stmt* expr = static_cast<const ast::expression_stmt*>(block->m_statements[0].get());
+        const ast::binary_expr* bin_expr = dynamic_cast<const ast::binary_expr*>(expr->m_expression.get());
+
+        EXPECT_EQ(bin_expr, nullptr);
+    }
+
     TEST(COMPILER, LexerBasicChars) {
         const std::string chars = "+.{)";
         const auto [tokens, errors] = get_tokens(chars);
@@ -500,5 +538,72 @@ namespace dconstruct::testing {
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
         EXPECT_EQ(expected, actual);
+    }
+
+    TEST(COMPILER, SimpleBlockError) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "b", 0, 1),
+            compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        const ast::block& actual = *dynamic_cast<const ast::block*>(statements[0].get());
+
+        std::vector<stmnt_uptr> expected_statements{};
+        expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::identifier>(compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1))
+        )));
+
+        const ast::block expected{std::move(expected_statements)};
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(errors.size(), 0);
+        EXPECT_NE(expected, actual);
+    }
+
+    TEST(COMPILER, Program1) {
+        const std::string code = "i32 x = 0; i32 y = 1; while (x < y) { x = x + y; }";
+
+        const auto [tokens, lex_errors] = get_tokens(code);
+
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(statements.size(), 3);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+
+        std::vector<stmnt_uptr> expected;
+
+        std::vector<stmnt_uptr> block_stmnt;
+
+        block_stmnt.push_back(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::assign_expr>(
+                compiler::token(compiler::token_type::IDENTIFIER, "x", 0, 1),
+                std::make_unique<ast::add_expr>(
+                    compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+                    std::make_unique<ast::identifier>("x"),
+                    std::make_unique<ast::identifier>("y")
+                )
+            )
+        ));
+
+        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "x", 0));
+        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "y", 1));
+        expected.push_back(std::make_unique<ast::while_stmt>(
+            std::make_unique<ast::compare_expr>(
+                compiler::token(compiler::token_type::LESS, "<", 0, 1),
+                std::make_unique<ast::identifier>("x"),
+                std::make_unique<ast::identifier>("y")
+            ),
+            std::make_unique<ast::block>(
+                std::move(block_stmnt)
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
     }
 }

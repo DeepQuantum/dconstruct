@@ -5,7 +5,7 @@ namespace dconstruct::ast {
 void block::pseudo(std::ostream& os) const {
     os << "{\n";
     for (const auto& stmnt : m_statements) {
-        os << *stmnt << '\n';
+        os << "    " << * stmnt << '\n';
     } 
     os << '}';
 }

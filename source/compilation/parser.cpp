@@ -124,10 +124,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
     expr_uptr condition = make_expression();
+    if (condition == nullptr) {
+        return nullptr;
+    }
     if (consume(token_type::RIGHT_PAREN, "expected ')' after while-condition") == nullptr) {
         return nullptr;
     }
     stmnt_uptr body = make_statement();
+    if (body == nullptr) {
+        return nullptr;
+    }
     return std::make_unique<ast::while_stmt>(std::move(condition), std::move(body));
 }
 
@@ -143,9 +149,15 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else {
         initializer = make_expression_statement();
     }
+    if (initializer == nullptr) {
+        return nullptr;
+    }
     expr_uptr condition = nullptr;
     if (!check(token_type::SEMICOLON)) {
         condition = make_expression();
+    }
+    if (condition == nullptr) {
+        return nullptr;
     }
     if (consume(token_type::SEMICOLON, "expected ';' after loop condition.") == nullptr) {
         return nullptr;
@@ -154,10 +166,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (!check(token_type::RIGHT_PAREN)) {
         increment = make_expression();
     }
+    if (increment == nullptr) {
+        return nullptr;
+    }
     if (consume(token_type::RIGHT_PAREN, "expected ')' at end of for-loop header") == nullptr) {
         return nullptr;
     }
     stmnt_uptr body = make_statement();
+    if (body == nullptr) {
+        return nullptr;
+    }
     if (increment != nullptr) {
         std::vector<stmnt_uptr> statements{};  
         statements.push_back(std::move(body));
@@ -199,13 +217,22 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
     expr_uptr condition = make_expression();
+    if (condition == nullptr) {
+        return nullptr;
+    }
     if (consume(token_type::RIGHT_PAREN, "expect ')' after if-condition.") == nullptr) {
         return nullptr;
     }
     stmnt_uptr then_branch = make_statement();
+    if (then_branch == nullptr) {
+        return nullptr;
+    }
     stmnt_uptr else_branch = nullptr;
     if (match({token_type::ELSE})) {
         else_branch = make_statement();
+        if (else_branch == nullptr) {
+            return nullptr;
+        }
     }
 
     return std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_branch), std::move(else_branch));
@@ -216,12 +243,17 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         statements.push_back(make_declaration());
     }
-    consume(token_type::RIGHT_BRACE, "expected '}' after block.");
+    if (consume(token_type::RIGHT_BRACE, "expected '}' after block.") == nullptr) {
+        return nullptr;
+    }
     return std::make_unique<ast::block>(std::move(statements));
 }
 
 [[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
     expr_uptr expr = make_expression();
+    if (expr == nullptr) {
+        return nullptr;
+    }
     const token *matched = consume(token_type::SEMICOLON, "expected ';' after expression.");
     if (matched == nullptr) {
         return nullptr;
@@ -231,10 +263,15 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] expr_uptr Parser::make_or() {
     expr_uptr expr = make_and();
-    
+    if (expr == nullptr) {
+        return nullptr;
+    }
     while (match({token_type::OR, token_type::PIPE_PIPE})) {
         const token op = previous();
         expr_uptr right = make_and();
+        if (right == nullptr) {
+            return nullptr;
+        }
         expr = std::make_unique<ast::logical_expr>(op, std::move(expr), std::move(right));
     }
     return expr;
@@ -259,19 +296,20 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (match({token_type::EQUAL})) {
         const token equals = previous();
         expr_uptr value = make_assignment();
-        const ast::identifier* value_ptr = dynamic_cast<const ast::identifier*>(value.get());
-        if (value_ptr != nullptr) {
-            const token name = value_ptr->m_name;
+        const ast::identifier* expr_ptr = dynamic_cast<const ast::identifier*>(expr.get());
+        if (expr_ptr != nullptr) {
+            const token name = expr_ptr->m_name;
             return std::make_unique<ast::assign_expr>(name, std::move(value));
         }
 
         m_errors.emplace_back(equals, "invalid assignment target.");
+        return nullptr;
     }
     return expr;
 }
 
 [[nodiscard]] expr_uptr Parser::make_expression() {
-    return make_equality();
+    return make_assignment();
 }
 
 [[nodiscard]] expr_uptr Parser::make_equality() {

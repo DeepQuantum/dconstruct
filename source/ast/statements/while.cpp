@@ -4,12 +4,12 @@
 namespace dconstruct::ast {
 
 void while_stmt::pseudo(std::ostream& os) const {
-    os << "while(" << m_condition << ") " << m_body;
+    os << "while(" << *m_condition << ") " << *m_body;
 }
 
 
 void while_stmt::ast(std::ostream& os) const {
-    os << "while[condition=" << m_condition << ", body=" << m_body << "]";
+    os << "while[condition=" << *m_condition << ", body=" << *m_body << "]";
 }
 
 [[nodiscard]] b8 while_stmt::equals(const statement& rhs) const noexcept {
@@ -17,6 +17,7 @@ void while_stmt::ast(std::ostream& os) const {
     if (rhs_ptr == nullptr) {
         return false;
     }
+    b8 test = m_condition == rhs_ptr->m_condition && m_body == rhs_ptr->m_body;
     return m_condition == rhs_ptr->m_condition && m_body == rhs_ptr->m_body;
 }
 

@@ -4,7 +4,7 @@
 namespace dconstruct::ast {
 
 void identifier::ast(std::ostream& os) const {
-    os << "identifier[" << m_idx << ", " << m_name.m_lexeme << ']';
+    os << "identifier[" << m_name.m_lexeme << ']';
 }
 
 void identifier::pseudo(std::ostream& os) const {
@@ -16,7 +16,7 @@ void identifier::pseudo(std::ostream& os) const {
     if (rhs_id == nullptr) {
         return false;
     }
-    return m_name == rhs_id->m_name && m_idx == rhs_id->m_idx;
+    return m_name == rhs_id->m_name;
 }
 
 [[nodiscard]] expr_uptr identifier::simplify() const {
@@ -24,7 +24,7 @@ void identifier::pseudo(std::ostream& os) const {
 }
 
 [[nodiscard]] expr_uptr identifier::clone() const {
-    return std::make_unique<identifier>(m_name, m_idx);
+    return std::make_unique<identifier>(m_name);
 }
 
 [[nodiscard]] std::optional<full_type> identifier::compute_type(const compiler::environment& env) const {
