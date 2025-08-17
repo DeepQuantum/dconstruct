@@ -51,7 +51,7 @@ namespace dconstruct::dcompiler {
                 m_transformableExpressions.push_back(std::make_unique<ast::identifier>(""));
             }
             for (u32 i = 49; i < 128; ++i) {
-                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" }, i - 49));
+                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - 49)}));
             }
         }
 
