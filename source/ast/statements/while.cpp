@@ -17,7 +17,6 @@ void while_stmt::ast(std::ostream& os) const {
     if (rhs_ptr == nullptr) {
         return false;
     }
-    b8 test = m_condition == rhs_ptr->m_condition && m_body == rhs_ptr->m_body;
     return m_condition == rhs_ptr->m_condition && m_body == rhs_ptr->m_body;
 }
 

@@ -590,7 +590,6 @@ namespace dconstruct::testing {
                 )
             )
         ));
-
         expected.push_back(std::make_unique<ast::variable_declaration>("i32", "x", 0));
         expected.push_back(std::make_unique<ast::variable_declaration>("i32", "y", 1));
         expected.push_back(std::make_unique<ast::while_stmt>(
@@ -601,6 +600,42 @@ namespace dconstruct::testing {
             ),
             std::make_unique<ast::block>(
                 std::move(block_stmnt)
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
+    }
+
+    TEST(COMPILER, OrderOfOperationsProgram) {
+        const std::string code = "i32 x = 1 + 2 * 3 - 4 / 5;";
+
+        const auto [tokens, lex_errors] = get_tokens(code);
+
+        const auto [statements, parse_errors] = get_statements(tokens);
+
+        EXPECT_EQ(statements.size(), 1);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+
+        std::vector<stmnt_uptr> expected;
+
+        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "x",
+            std::make_unique<ast::sub_expr>(
+                compiler::token(compiler::token_type::MINUS, "-", 0, 1),
+                std::make_unique<ast::add_expr>(
+                    compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+                    std::make_unique<ast::literal>(1),
+                    std::make_unique<ast::mul_expr>(
+                        compiler::token(compiler::token_type::STAR, "*", 0, 1),
+                        std::make_unique<ast::literal>(2),
+                        std::make_unique<ast::literal>(3)
+                    )
+                ),
+                std::make_unique<ast::div_expr>(
+                    compiler::token(compiler::token_type::SLASH, "/", 0, 1),
+                    std::make_unique<ast::literal>(4),
+                    std::make_unique<ast::literal>(5)
+                )
             )
         ));
 
