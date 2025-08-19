@@ -21,6 +21,8 @@ namespace dconstruct {
         explicit control_flow_node(const u32 line) : m_startLine(line) {}
 
         [[nodiscard]] std::string get_label_html() const;
+
+        [[nodiscard]] const control_flow_node* get_direct_successor() const;
     };
 
     struct control_flow_loop {

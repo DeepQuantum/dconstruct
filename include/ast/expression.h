@@ -51,7 +51,7 @@ namespace dconstruct::ast {
     }
 
     struct unary_expr : public expression {
-        unary_expr(std::unique_ptr<expression>&& rhs) noexcept : m_rhs(std::move(rhs)) {};
+        unary_expr(compiler::token op, std::unique_ptr<expression>&& rhs) noexcept : m_operator(std::move(op)), m_rhs(std::move(rhs)) {};
 
         // for testing ! stupid and expensive.
         [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
@@ -66,8 +66,8 @@ namespace dconstruct::ast {
             return full_type{ primitive_type { primitive_kind::UNKNOWN } };
         }
 
+        compiler::token m_operator;
         std::unique_ptr<expression> m_rhs;
-
     };
 
     struct binary_expr : public expression {
@@ -107,7 +107,7 @@ namespace dconstruct::ast {
         using unary_expr::unary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            return std::make_unique<impl_unary_expr>(m_rhs != nullptr ? m_rhs->clone() : nullptr);
+            return std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
         }
     };
 

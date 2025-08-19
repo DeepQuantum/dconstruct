@@ -35,7 +35,17 @@ namespace dconstruct {
 
 
         return ss.str();
-    } 
+    }
+
+    [[nodiscard]] const control_flow_node* control_flow_node::get_direct_successor() const {
+        const control_flow_node* min = nullptr;
+        for (const auto& node : m_successors) {
+            if (min == nullptr || node->m_startLine < min->m_startLine) {
+                min = node;
+            }
+        }
+        return min;
+    }
 
     ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
@@ -239,9 +249,9 @@ namespace dconstruct {
 
 
     [[nodiscard]] b8 ControlFlowGraph::dominee_not_found_outside_dominator_path(
-        const control_flow_node *current_head, 
-        const control_flow_node *dominator, 
-        const control_flow_node *dominee, 
+        const control_flow_node *current_head,
+        const control_flow_node *dominator,
+        const control_flow_node *dominee,
         std::unordered_set<const control_flow_node*> &visited
     ) {
         if (current_head == dominator) {
@@ -249,6 +259,9 @@ namespace dconstruct {
         } 
         if (current_head == dominee) {
             return false;
+        }
+        if (visited.contains(current_head)) {
+            return true;
         }
         visited.insert(current_head);
         for (const auto& successor : current_head->m_successors) {
@@ -280,7 +293,9 @@ namespace dconstruct {
     [[nodiscard]] std::vector<const control_flow_node*> ControlFlowGraph::collect_loop_body(const control_flow_node* head, const control_flow_node* latch) const {
         std::vector<const control_flow_node*> body{};
 
-        add_successors(body, head, latch);
+        body.push_back(head->get_direct_successor());
+
+        add_successors(body, head->get_direct_successor(), latch);
         
         return body;
     }

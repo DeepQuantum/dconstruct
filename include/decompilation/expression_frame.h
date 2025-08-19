@@ -48,7 +48,7 @@ namespace dconstruct::dcompiler {
 
         explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
-                m_transformableExpressions.push_back(std::make_unique<ast::identifier>(""));
+                m_transformableExpressions.push_back(nullptr);
             }
             for (u32 i = 49; i < 128; ++i) {
                 m_transformableExpressions.push_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - 49)}));
@@ -65,14 +65,27 @@ namespace dconstruct::dcompiler {
 
         void load_literal(const u8 dst, const ast::primitive_value& value);
 
-        template<ast::requires_binary_expr binary_expr_t>
+        [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
+            return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
+        }
+
+        template <typename T>
         inline void apply_binary_op(const Instruction& istr, compiler::token op) {
-            m_transformableExpressions[istr.destination] = std::make_unique<ast::grouping>(
-                std::make_unique<binary_expr_t>(
-                    std::move(op),
-                    std::move(m_transformableExpressions[istr.operand1]),
-                    std::move(m_transformableExpressions[istr.operand2])
-                )
+            const auto& op1 = m_transformableExpressions[istr.operand1];
+            const auto& op2 = m_transformableExpressions[istr.operand2];
+            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+                std::move(op),
+                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
+                is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+            );
+        }
+
+        template <typename T>
+        inline void apply_unary_op(const Instruction& istr, compiler::token op) {
+            const auto& op1 = m_transformableExpressions[istr.operand1];
+            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+                std::move(op),
+                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone()
             );
         }
     };
