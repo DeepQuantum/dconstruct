@@ -3,23 +3,23 @@
 
 namespace dconstruct::ast {
 
-void negate_expression::pseudo(std::ostream& os) const {
+void negate_expr::pseudo(std::ostream& os) const {
     os << "-" << m_rhs;
 }
 
-void negate_expression::ast(std::ostream& os) const {
+void negate_expr::ast(std::ostream& os) const {
     os << "negate[" << m_rhs << ']';
 }
 
-// [[nodiscard]] b8 negate_expression::equals(const expression& rhs) const noexcept {
-//     const negate_expression* rhs_ptr = dynamic_cast<const negate_expression*>(&rhs);
+// [[nodiscard]] b8 negate_expr::equals(const expression& rhs) const noexcept {
+//     const negate_expr* rhs_ptr = dynamic_cast<const negate_expr*>(&rhs);
 //     if (rhs_ptr == nullptr) {
 //         return false;
 //     }
 //     return m_rhs == rhs_ptr->m_rhs;
 // }
 
-[[nodiscard]] expr_uptr negate_expression::simplify() const {
+[[nodiscard]] expr_uptr negate_expr::simplify() const {
     expr_uptr rhs = m_rhs->simplify();
     const literal* rhs_ptr = dynamic_cast<const literal*>(rhs.get());
     if (rhs_ptr != nullptr) {
@@ -32,7 +32,7 @@ void negate_expression::ast(std::ostream& os) const {
         }
         return nullptr;
     }
-    return std::make_unique<negate_expression>(std::move(rhs));
+    return std::make_unique<negate_expr>(m_operator, std::move(rhs));
 }
 
 }

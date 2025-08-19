@@ -95,16 +95,39 @@ namespace dconstruct::testing {
 
 
     TEST(DECOMPILER, BasicIdentifierAdd) {
+        const u16 dest = 2;
         const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
-            {Opcode::IAdd, 0, 0, 1}
+            {Opcode::IAdd, dest, 0, 1}
         };
         dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = frame.m_statements;
-        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[0])));
-        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = (var_0 + var_1);\n";
+        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[dest])));
+        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = var_0 + var_1;\n";
+        std::ostringstream os;
+        for (const auto& stmt : actual) {
+            stmt->pseudo(os);
+            os << '\n';
+        }
+        EXPECT_EQ(expected, os.str());
+    }
+
+    TEST(DECOMPILER, TwoAdds) {
+        const u16 dest = 2;
+        const std::vector<Instruction> istrs = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::LoadU16Imm, 1, 5, 5},
+            {Opcode::IAdd, dest, 0, 1},
+            {Opcode::IAdd, dest, 2, 2}
+        };
+        dcompiler::expression_frame frame = make_expression_frame(istrs);
+
+        const auto& actual = frame.m_statements;
+        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[dest])));
+        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = (var_0 + var_1) + (var_0 + var_1);\n";
+
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
