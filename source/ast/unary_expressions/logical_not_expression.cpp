@@ -40,6 +40,6 @@ void logical_not_expr::ast(std::ostream &os) const {
             }
         }
     }
-    return std::make_unique<logical_not_expr>(std::move(rhs));
+    return std::make_unique<logical_not_expr>(m_operator, std::move(rhs));
 }
 }

@@ -442,7 +442,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
         switch (op.m_type) {
             case token_type::BANG: {
-                return std::make_unique<ast::logical_not_expr>(std::move(right));
+                return std::make_unique<ast::logical_not_expr>(op, std::move(right));
             }
             default: {
                 m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);

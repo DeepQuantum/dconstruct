@@ -251,9 +251,10 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
             auto dcompiler = dcompiler::Decompiler(&afunction);
             static b8 first = true;
-            if (first) {
+             if (first) {
                 dcompiler.decompile();
-            }
+                first = false;
+             }
             std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
@@ -507,7 +508,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
     std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
             get_offset((void*)(line.m_globalPointer + line.m_location)),
-            istr.opcode,
+            static_cast<u32>(istr.opcode),
             istr.destination,
             istr.operand1,
             istr.operand2,
