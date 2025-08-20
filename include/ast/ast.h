@@ -9,6 +9,7 @@
 #include "binary_expressions/compare.h"
 #include "binary_expressions/logical.h"
 #include "unary_expressions/logical_not_expression.h"
+#include "unary_expressions/bitwise_not_expression.h"
 #include "unary_expressions/negate_expression.h"
 #include "primary_expressions/call.h"
 #include "primary_expressions/grouping.h"

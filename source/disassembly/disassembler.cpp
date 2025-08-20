@@ -249,7 +249,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            auto dcompiler = dcompiler::Decompiler(&afunction);
+            auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
             static b8 first = true;
              if (first) {
                 dcompiler.decompile();

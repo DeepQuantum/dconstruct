@@ -43,6 +43,8 @@ namespace dconstruct::dcompiler {
         std::vector<stmnt_uptr> m_statements;
 
         std::map<u32, SymbolTableEntry> m_symbolTable;
+
+        std::vector<std::string> m_messages;
         u32 m_varCount = 0;
         u32 m_expressionId = 0;
 
@@ -62,6 +64,8 @@ namespace dconstruct::dcompiler {
         }
 
         void move(const u32, const u32);
+
+        void call(const Instruction& istr);
 
         void load_literal(const u8 dst, const ast::primitive_value& value);
 

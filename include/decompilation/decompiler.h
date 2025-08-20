@@ -4,6 +4,7 @@
 #include "disassembly/instructions.h"
 #include "control_flow_graph.h"
 #include "decompilation/expression_frame.h"
+#include "sidbase.h"
 
 namespace dconstruct::dcompiler {
 
@@ -17,11 +18,11 @@ public:
 
     Decompiler() = delete;
 
-    explicit Decompiler(const function_disassembly *func) {
-        m_functions.push_back(func);
+    explicit Decompiler(const function_disassembly *func, const SIDBase& sidbase) : m_sidbase(sidbase) {
+        m_functions.push_back(func);  
     };
 
-    explicit Decompiler(const std::vector<const function_disassembly*> &funcs) {
+    explicit Decompiler(const std::vector<const function_disassembly*> &funcs, const SIDBase& sidbase) : m_sidbase(sidbase) {
         m_functions = funcs;
     };
 
@@ -29,6 +30,7 @@ public:
 
 private:
     std::vector<const function_disassembly*> m_functions{};
+    const SIDBase& m_sidbase;
 
     void parse_basic_block(const control_flow_node&, expression_frame &);
 };

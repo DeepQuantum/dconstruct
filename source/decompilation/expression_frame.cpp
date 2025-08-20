@@ -26,4 +26,8 @@ void expression_frame::load_literal(const u8 dst, const ast::primitive_value& va
     m_transformableExpressions[dst] = std::move(id);
 }
 
+void expression_frame::call(const Instruction& istr) {
+    
+}
+
 }

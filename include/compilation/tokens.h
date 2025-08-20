@@ -19,6 +19,7 @@ namespace dconstruct::compiler {
         EQUAL, EQUAL_EQUAL,
         GREATER, GREATER_EQUAL,
         LESS, LESS_EQUAL,
+        TILDE,
         PIPE, PIPE_PIPE,
         CARET, CARET_CARET,
         AMPERSAND, AMPERSAND_AMPERSAND,
