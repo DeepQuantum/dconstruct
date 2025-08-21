@@ -11,8 +11,7 @@ const std::string TEST_DIR = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcons
 namespace dconstruct::testing {
 
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
-        SIDBase base{}; 
-        base.load(TEST_DIR + "test_sidbase.bin"); 
+        SIDBase base{TEST_DIR + "test_sidbase.bin"}; 
         BinaryFile file(TEST_DIR + path); 
         file.dc_setup();
         FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
@@ -23,12 +22,13 @@ namespace dconstruct::testing {
 
     static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs) {
         StackFrame sf{};
+        SIDBase base{R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)"};
         std::vector<function_disassembly_line> lines{};
         for (u64 i = 0; i < istrs.size(); ++i) {
             lines.push_back(function_disassembly_line(i, istrs.data()));
         }
         function_disassembly fd{lines, std::move(sf), "Test"};
-        dcompiler::Decompiler dc(&fd);
+        dcompiler::Decompiler dc(&fd, base);
         std::vector<dcompiler::decompiled_function> funcs = dc.decompile();
         return std::move(funcs[0].m_frame);
     }
