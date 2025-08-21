@@ -5,7 +5,7 @@
 
 namespace dconstruct {
 
-    void SIDBase::load(const std::filesystem::path& path) {
+    SIDBase::SIDBase(const std::filesystem::path& path) {
 
         std::ifstream sidfile(path, std::ios::binary);
 

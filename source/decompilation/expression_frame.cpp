@@ -27,7 +27,14 @@ void expression_frame::load_literal(const u8 dst, const ast::primitive_value& va
 }
 
 void expression_frame::call(const Instruction& istr) {
-    
+    expr_uptr callee = m_transformableExpressions[istr.destination]->clone();  
+    std::vector<expr_uptr> args;
+
+    for (u8 i = 0; i < istr.operand1; ++i) {
+        args.push_back(m_transformableExpressions[49 + i]->clone()->simplify());
+    }
+
+    m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(std::move(callee), std::move(args));
 }
 
 }

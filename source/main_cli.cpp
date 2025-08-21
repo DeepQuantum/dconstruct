@@ -179,8 +179,7 @@ int main(int argc, char *argv[]) {
         emit_once,
     };
 
-    dconstruct::SIDBase base{};
-    base.load(sidbase_path);
+    dconstruct::SIDBase base{sidbase_path};
 
     if (std::filesystem::is_directory(filepath)) {
         if (!output_is_folder) {
