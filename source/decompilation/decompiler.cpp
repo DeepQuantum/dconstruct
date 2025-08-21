@@ -44,6 +44,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::FNotEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::BANG_EQUAL, "!="}); break;
             case Opcode::ILessThan:
             case Opcode::FLessThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS, "<"}); break;
+            case Opcode::ILessThanEqual:
+            case Opcode::FLessThanEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
             case Opcode::IGreaterThan:
             case Opcode::FGreaterThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
             case Opcode::IGreaterThanEqual:
