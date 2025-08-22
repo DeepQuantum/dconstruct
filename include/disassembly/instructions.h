@@ -214,7 +214,7 @@ struct Register {
 struct StackFrame {
     Register m_registers[128];
     location m_symbolTable;
-    std::map<u32, SymbolTableEntry> m_symbolTableEntries;
+    std::vector<SymbolTableEntry> m_symbolTableEntries;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     u32 m_argCount = 0;

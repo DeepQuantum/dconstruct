@@ -10,6 +10,8 @@ const std::string TEST_DIR = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcons
 
 namespace dconstruct::testing {
 
+    static SIDBase base{R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)"};
+
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
         SIDBase base{TEST_DIR + "test_sidbase.bin"}; 
         BinaryFile file(TEST_DIR + path); 
@@ -20,9 +22,9 @@ namespace dconstruct::testing {
         return fd;
     }
 
-    static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs) {
+    static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs, std::vector<SymbolTableEntry>&& symbol_table = {}) {
         StackFrame sf{};
-        SIDBase base{R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)"};
+        sf.m_symbolTableEntries = std::move(symbol_table);
         std::vector<function_disassembly_line> lines{};
         for (u64 i = 0; i < istrs.size(); ++i) {
             lines.push_back(function_disassembly_line(i, istrs.data()));
@@ -127,6 +129,29 @@ namespace dconstruct::testing {
         const auto& actual = frame.m_statements;
         frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[dest])));
         const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = (var_0 + var_1) + (var_0 + var_1);\n";
+
+        std::ostringstream os;
+        for (const auto& stmt : actual) {
+            stmt->pseudo(os);
+            os << '\n';
+        }
+        EXPECT_EQ(expected, os.str());
+    }
+
+
+    TEST(DECOMPILER, Call1) {
+        const std::vector<Instruction> istrs = {
+            {Opcode::LookupPointer, 0, 0, 0},
+            {Opcode::LoadU16Imm, 49, 5, 0},
+            {Opcode::Call, 0, 0, 1}
+        };
+        std::vector<SymbolTableEntry> symbol_table{};
+        symbol_table.push_back({.m_type = SymbolTableEntryType::POINTER, .m_hash = SID("ddict-key-count")});
+        dcompiler::expression_frame frame = make_expression_frame(istrs, std::move(symbol_table));
+
+        const auto& actual = frame.m_statements;
+        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_1", std::move(frame.m_transformableExpressions[0])));
+        const std::string expected = "u16 var_0 = 5;\nu16 var_1 = ddict-key-count(var_0);\n";
 
         std::ostringstream os;
         for (const auto& stmt : actual) {

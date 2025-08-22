@@ -4,9 +4,9 @@
 namespace dconstruct::ast {
 
 void call_expr::pseudo(std::ostream& os) const {
-    os << m_callee << '(';
+    os << *m_callee << '(';
     for (u16 i = 0; i < m_arguments.size(); ++i) {
-        os << m_arguments[i];
+        os << *m_arguments[i];
         if (i != m_arguments.size() - 1) {
             os << ",";
         }
@@ -15,9 +15,9 @@ void call_expr::pseudo(std::ostream& os) const {
 }
 
 void call_expr::ast(std::ostream& os) const {
-    os << "call[callee=" << m_callee << ";args={";
+    os << "call[callee=" << *m_callee << ";args={";
     for (u16 i = 0; i < m_arguments.size(); ++i) {
-        os << m_arguments[i];
+        os << *m_arguments[i];
         if (i != m_arguments.size() - 1) {
             os << ",";
         }
@@ -50,6 +50,10 @@ void call_expr::ast(std::ostream& os) const {
     }
     return m_callee == rhs_ptr->m_callee && m_arguments == rhs_ptr->m_arguments;
 }
+
+[[nodiscard]] std::optional<full_type> call_expr::compute_type(const compiler::environment& env) const {
+    return std::nullopt;
+};
 
 
 }

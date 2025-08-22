@@ -14,6 +14,10 @@ void expression_frame::move(const u32 dst, const u32 src) {
 }
 
 void expression_frame::load_literal(const u8 dst, const ast::primitive_value& value) {
+    m_transformableExpressions[dst] = std::make_unique<ast::literal>(value);
+}
+
+void expression_frame::load_literal_as_var(const u8 dst, const ast::primitive_value& value) {
     auto literal = std::make_unique<ast::literal>(value);
     auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var() });
 
@@ -30,11 +34,11 @@ void expression_frame::call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();  
     std::vector<expr_uptr> args;
 
-    for (u8 i = 0; i < istr.operand1; ++i) {
+    for (u8 i = 0; i < istr.operand2; ++i) {
         args.push_back(m_transformableExpressions[49 + i]->clone()->simplify());
     }
 
-    m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(std::move(callee), std::move(args));
+    m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args));
 }
 
 }

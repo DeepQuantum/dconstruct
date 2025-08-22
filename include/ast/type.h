@@ -110,7 +110,7 @@ namespace dconstruct::ast {
                 return "null";
             }
             else if constexpr (std::is_same_v<T, sid_literal>) {
-                return "#" + std::get<1>(arg);
+                return std::get<1>(arg);
             }
             else {
                 return std::to_string(arg);
