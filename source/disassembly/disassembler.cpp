@@ -249,12 +249,12 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
-            static b8 first = true;
-             if (first) {
-                dcompiler.decompile();
-                first = false;
-             }
+            // auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
+            // static b8 first = true;
+            //  if (first) {
+            //     dcompiler.decompile();
+            //     first = false;
+            //  }
             std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
@@ -744,7 +744,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
             table_entry.m_type = SymbolTableEntryType::POINTER;
             table_entry.m_pointer = value;
             if (m_currentFile->is_file_ptr(stackFrame.m_symbolTable + (istr.operand1 * 8))) {
-               std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
             } else {
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", istr.destination, istr.operand1, lookup(value));
             }
@@ -1388,7 +1388,7 @@ void Disassembler::process_instruction(StackFrame &stackFrame, function_disassem
     }
     
     if (table_entry.m_type != SymbolTableEntryType::NONE) {
-        stackFrame.m_symbolTableEntries.emplace(istr.operand1, table_entry);
+        stackFrame.m_symbolTableEntries.push_back(table_entry);
     }
     line.m_text = std::string(disassembly_text);
     line.m_comment = std::string(interpreted);
@@ -1445,7 +1445,9 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
 
     location table = functionDisassembly.m_stackFrame.m_symbolTable;
 
-    for (const auto &[i, entry] : functionDisassembly.m_stackFrame.m_symbolTableEntries) {
+
+    for (u32 i = 0; i < functionDisassembly.m_stackFrame.m_symbolTableEntries.size(); ++i) {
+        const SymbolTableEntry& entry = functionDisassembly.m_stackFrame.m_symbolTableEntries[i];
         std::snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(table + i * 8));
         switch (entry.m_type) {
             case SymbolTableEntryType::FLOAT: {

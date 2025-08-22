@@ -42,13 +42,13 @@ namespace dconstruct::dcompiler {
         // maps statements to a list of the indexes
         std::vector<stmnt_uptr> m_statements;
 
-        std::map<u32, SymbolTableEntry> m_symbolTable;
+        const std::vector<SymbolTableEntry>& m_symbolTable;
 
         std::vector<std::string> m_messages;
         u32 m_varCount = 0;
         u32 m_expressionId = 0;
 
-        explicit expression_frame(const std::map<u32, SymbolTableEntry> &table) : m_symbolTable(table) {
+        explicit expression_frame(const std::vector<SymbolTableEntry> &table) : m_symbolTable(table) {
             for (u32 i = 0; i < 49; ++i) {
                 m_transformableExpressions.push_back(nullptr);
             }
@@ -68,6 +68,8 @@ namespace dconstruct::dcompiler {
         void call(const Instruction& istr);
 
         void load_literal(const u8 dst, const ast::primitive_value& value);
+
+        void load_literal_as_var(const u8 dst, const ast::primitive_value& value);
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
