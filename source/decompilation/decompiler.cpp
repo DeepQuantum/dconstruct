@@ -14,7 +14,7 @@ std::vector<decompiled_function> Decompiler::decompile() {
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg{func};
         //cfg.find_loops();
-        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
+        //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
 
         expression_frame frame{func->m_stackFrame.m_symbolTableEntries};
         for (const auto& [_, node] : cfg.get_nodes()) {
@@ -56,9 +56,9 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::INeg:
             case Opcode::FNeg: expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
-            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, u16(istr.operand1 | u16(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;
-            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32); break;
+            case Opcode::LoadU16Imm: expression_frame.load_literal_as_var(istr.destination, u16(istr.operand1 | u16(istr.operand2) << 8)); break;
+            case Opcode::LoadStaticInt: expression_frame.load_literal_as_var(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;
+            case Opcode::LoadStaticFloat: expression_frame.load_literal_as_var(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -67,7 +67,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             }
 
             case Opcode::LoadStaticPointer:
-            case Opcode::LoadStaticU64Imm: {
+            case Opcode::LoadStaticU64Imm:
+            case Opcode::LookupPointer: {
                 const sid64 sid = expression_frame.m_symbolTable[istr.operand1].m_hash;
                 const ast::sid_literal sid_literal = {sid, m_sidbase.search(sid)};
                 expression_frame.load_literal(istr.destination, sid_literal);
