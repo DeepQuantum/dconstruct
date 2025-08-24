@@ -63,13 +63,14 @@ namespace dconstruct::dcompiler {
             return "var_" + std::to_string(m_varCount++);
         }
 
-        void move(const u32, const u32);
+        expr_uptr& load_expression_into_var(const u32 dst, expr_uptr&& expr);
 
-        void call(const Instruction& istr);
+        expr_uptr& move(const u32, const u32);
 
-        void load_literal(const u8 dst, const ast::primitive_value& value);
+        expr_uptr& call(const Instruction& istr);
 
-        void load_literal_as_var(const u8 dst, const ast::primitive_value& value);
+        expr_uptr& load_literal(const u8 dst, const ast::primitive_value& value);
+
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;

@@ -121,6 +121,7 @@ enum class SymbolTableEntryType {
     INT,
     STRING,
     POINTER,
+    FUNCTION,
     UNKNOWN_TYPE,
     NONE
 };

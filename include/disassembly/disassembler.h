@@ -76,12 +76,13 @@ namespace dconstruct {
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);
         void insert_on_block(const SsOnBlock* block, const u32);
-        void process_instruction(StackFrame& stackFrame, function_disassembly_line& functionLine);
+        void process_instruction(const u32, function_disassembly &);
         void insert_function_disassembly_text(const function_disassembly& functionDisassembly, const u32 indent);
         void insert_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent);
         void insert_goto_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
+        [[nodiscard]] b8 pointer_gets_called(const u32, const u32, const function_disassembly&) const;
 
     };
 }
