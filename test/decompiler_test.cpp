@@ -42,6 +42,8 @@ namespace dconstruct::testing {
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
+        ASSERT_EQ(frame.m_statements.size(), 1);
+
         const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
         const auto rhs = actual.get_init_ptr()->compute_type(env);
 
@@ -59,6 +61,7 @@ namespace dconstruct::testing {
         const dcompiler::expression_frame frame = make_expression_frame({
             {Opcode::LoadU16Imm, 0, 1, 0},
         });
+        ASSERT_EQ(frame.m_statements.size(), 1);
 
         const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
         const auto rhs = actual.get_init_ptr()->compute_type(env);
@@ -146,7 +149,7 @@ namespace dconstruct::testing {
             {Opcode::Call, 0, 0, 1}
         };
         std::vector<SymbolTableEntry> symbol_table{};
-        symbol_table.push_back({.m_type = SymbolTableEntryType::POINTER, .m_hash = SID("ddict-key-count")});
+        symbol_table.push_back({.m_type = SymbolTableEntryType::FUNCTION, .m_hash = SID("ddict-key-count")});
         dcompiler::expression_frame frame = make_expression_frame(istrs, std::move(symbol_table));
 
         const auto& actual = frame.m_statements;
