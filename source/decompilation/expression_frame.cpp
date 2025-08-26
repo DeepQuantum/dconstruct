@@ -33,4 +33,8 @@ expr_uptr& expression_frame::call(const Instruction& istr) {
     return m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args));
 }
 
+void expression_frame::_return(const u32 dest) {
+    m_statements.push_back(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
+}
+
 }

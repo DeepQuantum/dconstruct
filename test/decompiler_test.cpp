@@ -25,7 +25,7 @@ namespace dconstruct::testing {
     static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs, std::vector<SymbolTableEntry>&& symbol_table = {}) {
         StackFrame sf{};
         sf.m_symbolTableEntries = std::move(symbol_table);
-        std::vector<function_disassembly_line> lines{};
+        std::vector<function_disassembly_line> lines;
         for (u64 i = 0; i < istrs.size(); ++i) {
             lines.push_back(function_disassembly_line(i, istrs.data()));
         }
@@ -39,19 +39,20 @@ namespace dconstruct::testing {
         const compiler::environment env{};
         const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::Return, 0, 0, 0}
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         ASSERT_EQ(frame.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
-        const auto rhs = actual.get_init_ptr()->compute_type(env);
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
 
         const auto& type = rhs.value();
 
-        auto expected = ast::variable_declaration("u16", "var_0", u16(1));
+        auto expected = ast::return_stmt(std::make_unique<ast::literal>(static_cast<u16>(1)));
 
         ASSERT_EQ(actual, expected);
     }
@@ -60,23 +61,21 @@ namespace dconstruct::testing {
         const compiler::environment env{};
         const dcompiler::expression_frame frame = make_expression_frame({
             {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::Return, 0, 0, 0}
         });
         ASSERT_EQ(frame.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::variable_declaration*>(frame.m_statements[0].get());
-        const auto rhs = actual.get_init_ptr()->compute_type(env);
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
 
         const auto& type = rhs.value();
 
-        const auto expected = ast::variable_declaration("u16", "var_0", u16(1));
-
-        std::ostringstream actual_os, expected_os;
+        std::ostringstream actual_os;
         actual.pseudo(actual_os);
-        expected.pseudo(expected_os);
         const std::string actual_str = actual_os.str();
-        const std::string expected_str = expected_os.str();
+        const std::string expected_str = "return 1;";
         ASSERT_EQ(expected_str, actual_str);
     }
 
@@ -85,15 +84,15 @@ namespace dconstruct::testing {
         const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 2, 5, 5},
+            {Opcode::Return, 0, 0, 0}
         };
         const dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = frame.m_statements;
-        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\n";
+        const std::string expected = "return 1;";
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
-            os << '\n';
         }
         EXPECT_EQ(expected, os.str());
     }
@@ -104,18 +103,15 @@ namespace dconstruct::testing {
         const std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
-            {Opcode::IAdd, dest, 0, 1}
+            {Opcode::IAdd, dest, 0, 1},
+            {Opcode::Return, dest, 0, 0}
         };
         dcompiler::expression_frame frame = make_expression_frame(istrs);
 
-        const auto& actual = frame.m_statements;
-        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[dest])));
-        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = var_0 + var_1;\n";
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const std::string expected = "return 1 + 1285;";
         std::ostringstream os;
-        for (const auto& stmt : actual) {
-            stmt->pseudo(os);
-            os << '\n';
-        }
+        os << actual;
         EXPECT_EQ(expected, os.str());
     }
 
@@ -125,18 +121,17 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
             {Opcode::IAdd, dest, 0, 1},
-            {Opcode::IAdd, dest, 2, 2}
+            {Opcode::IAdd, dest, 2, 2}, 
+            {Opcode::Return, dest, 0, 0}
         };
         dcompiler::expression_frame frame = make_expression_frame(istrs);
 
         const auto& actual = frame.m_statements;
-        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_2", std::move(frame.m_transformableExpressions[dest])));
-        const std::string expected = "u16 var_0 = 1;\nu16 var_1 = 1285;\nu16 var_2 = (var_0 + var_1) + (var_0 + var_1);\n";
+        const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
-            os << '\n';
         }
         EXPECT_EQ(expected, os.str());
     }
@@ -146,20 +141,19 @@ namespace dconstruct::testing {
         const std::vector<Instruction> istrs = {
             {Opcode::LookupPointer, 0, 0, 0},
             {Opcode::LoadU16Imm, 49, 5, 0},
-            {Opcode::Call, 0, 0, 1}
+            {Opcode::Call, 0, 0, 1},
+            {Opcode::Return}
         };
         std::vector<SymbolTableEntry> symbol_table{};
         symbol_table.push_back({.m_type = SymbolTableEntryType::FUNCTION, .m_hash = SID("ddict-key-count")});
         dcompiler::expression_frame frame = make_expression_frame(istrs, std::move(symbol_table));
 
         const auto& actual = frame.m_statements;
-        frame.m_statements.push_back(std::make_unique<ast::variable_declaration>("u16", "var_1", std::move(frame.m_transformableExpressions[0])));
-        const std::string expected = "u16 var_0 = 5;\nu16 var_1 = ddict-key-count(var_0);\n";
+        const std::string expected = "return ddict-key-count(5);";
 
         std::ostringstream os;
         for (const auto& stmt : actual) {
             stmt->pseudo(os);
-            os << '\n';
         }
         EXPECT_EQ(expected, os.str());
     }

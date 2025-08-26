@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <array>
 
 namespace dconstruct {
     enum class Opcode : u8 {
@@ -213,14 +214,14 @@ struct Register {
 };
 
 struct StackFrame {
-    Register m_registers[128];
-    location m_symbolTable;
+    std::array<Register, 128> m_registers;
     std::vector<SymbolTableEntry> m_symbolTableEntries;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
+    location m_symbolTable;
     u32 m_argCount = 0;
 
-    StackFrame() noexcept : m_registers{}, m_symbolTableEntries{}, m_labels{} {
+    StackFrame() noexcept : m_registers{} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
