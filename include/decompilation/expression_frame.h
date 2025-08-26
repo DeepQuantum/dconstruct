@@ -71,6 +71,8 @@ namespace dconstruct::dcompiler {
 
         expr_uptr& load_literal(const u8 dst, const ast::primitive_value& value);
 
+        void _return(const u32 dest);
+
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
