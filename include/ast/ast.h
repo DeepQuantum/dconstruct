@@ -22,3 +22,4 @@
 #include "statements/while.h"
 #include "statements/expression_statement.h"
 #include "statements/variable_declaration.h"
+#include "statements/return.h"

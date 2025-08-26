@@ -82,6 +82,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 expression_frame.move(istr.destination, istr.operand1);
                 break;
             }
+
+            case Opcode::Return: expression_frame._return(istr.destination); break;
             default: {
                 return;
             }
