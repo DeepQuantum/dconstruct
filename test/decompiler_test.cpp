@@ -21,8 +21,11 @@ namespace dconstruct::testing {
         const function_disassembly fd = disassembler.create_function_disassembly(lambda_ptr);
         return fd;
     }
-
-    static dcompiler::expression_frame make_expression_frame(const std::vector<Instruction>& istrs, std::vector<SymbolTableEntry>&& symbol_table = {}) {
+    
+    static dcompiler::decompiled_function decompile_instructions_without_disassembly(
+        const std::vector<Instruction>& istrs,
+        std::vector<SymbolTableEntry>&& symbol_table = {}
+    ) {
         StackFrame sf{};
         sf.m_symbolTableEntries = std::move(symbol_table);
         std::vector<function_disassembly_line> lines;
@@ -32,7 +35,21 @@ namespace dconstruct::testing {
         function_disassembly fd{lines, std::move(sf), "Test"};
         dcompiler::Decompiler dc(&fd, base);
         std::vector<dcompiler::decompiled_function> funcs = dc.decompile();
-        return std::move(funcs[0].m_frame);
+        return std::move(funcs[0]);
+    }
+
+    static dcompiler::expression_frame make_expression_frame(
+        const std::vector<Instruction>& istrs, 
+        std::vector<SymbolTableEntry>&& symbol_table = {}
+    ) {
+        return decompile_instructions_without_disassembly(istrs, std::move(symbol_table)).m_frame;
+    }
+
+    static dcompiler::decompiled_function decompile_instructions_with_disassembly(
+        const std::vector<Instruction>& istrs, 
+        std::vector<SymbolTableEntry>&& symbol_table = {}
+    ) {
+        Disassembler da{};
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
@@ -156,5 +173,24 @@ namespace dconstruct::testing {
             stmt->pseudo(os);
         }
         EXPECT_EQ(expected, os.str());
+    }
+
+    TEST(DECOMPILER, SimpleIf1) {
+        const std::vector<Instruction> istrs = {
+            {Opcode::LoadU16Imm, 0, 1, 0},
+            {Opcode::LoadU16Imm, 1, 2, 0},
+            {Opcode::IEqual, 2, 0, 1},
+            {Opcode::BranchIf, 2, 6},
+            {Opcode::LoadU16Imm, 0, 5, 0},
+            {Opcode::Branch, 7, 0, 0},
+            {Opcode::LoadU16Imm, 0, 6, 0},
+            {Opcode::Return, 0, 0, 0}
+        };
+
+        auto fd = decompile_instructions_without_disassembly(istrs);
+
+        const std::string expected = "if (0 == 1) { return 5; } else { return 6; }";
+
+        EXPECT_EQ(fd.m_graph.get_nodes().size(), 3);
     }
 }

@@ -24,7 +24,6 @@ namespace dconstruct {
     return hash_string;
 }
 
-Disassembler::~Disassembler() = default;
 
 template<TextFormat text_format, typename... Args>
 void Disassembler::insert_span_fmt(const char *format, Args ...args) {
@@ -480,11 +479,10 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 
     function_disassembly functionDisassembly {
         std::move(lines),
-        StackFrame(),
+        StackFrame(location(lambda->m_pSymbols)),
         std::move(name)
     };
 
-    functionDisassembly.m_stackFrame.m_symbolTable = location(lambda->m_pSymbols);
 
     for (u64 i = 0; i < instructionCount; ++i) {
         functionDisassembly.m_lines.emplace_back(i, instructionPtr);
@@ -493,6 +491,31 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     b8 counting_args = true;
 
     for (u64 i = 0; i < instructionCount; ++i) {
+        process_instruction(i, functionDisassembly);
+        if (counting_args) {
+            if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
+                functionDisassembly.m_stackFrame.m_argCount++;
+            } else {
+                counting_args = false;
+            }
+        }
+    }
+    return functionDisassembly;
+}
+
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table) {
+    std::vector<function_disassembly_line> lines;
+    lines.reserve(instructions.size());
+
+    function_disassembly functionDisassembly {
+        std::move(lines),
+        StackFrame(symbol_table),
+        std::move(name)
+    };
+
+    b8 counting_args = true;
+
+    for (u64 i = 0; i < instructions.size(); ++i) {
         process_instruction(i, functionDisassembly);
         if (counting_args) {
             if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {

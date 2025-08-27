@@ -5,11 +5,13 @@
 #include "control_flow_graph.h"
 #include "decompilation/expression_frame.h"
 #include "sidbase.h"
+#include "control_flow_graph.h"
 
 namespace dconstruct::dcompiler {
 
 struct decompiled_function {
     expression_frame m_frame;
+    ControlFlowGraph m_graph;
 };
 
 class Decompiler { 
