@@ -52,7 +52,6 @@ namespace dconstruct {
         m_nodes.emplace(0, 0);
         control_flow_node *current_node = &m_nodes[0];
         control_flow_node *target_node, *following_node;
-
         for (u32 i = 0; i < func->m_lines.size(); ++i) {
             const function_disassembly_line &current_line = func->m_lines[i];
             current_node->m_lines.push_back(current_line);

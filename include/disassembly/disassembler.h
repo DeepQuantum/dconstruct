@@ -34,14 +34,16 @@ namespace dconstruct {
 
     class Disassembler {
     public:
+        Disassembler() = default;
+
         void disassemble();
         u64 m_versionNumber = 0x1;
-        virtual ~Disassembler() = 0;
+        virtual ~Disassembler() {};
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
+        [[nodiscard]] function_disassembly create_function_disassembly(const std::vector<Instruction>&&, const std::string&, const location& symbol_table);
 
     protected:
-        Disassembler() = default;
-        virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) = 0;
+        virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         
         BinaryFile* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;

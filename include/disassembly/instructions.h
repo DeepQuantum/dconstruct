@@ -221,7 +221,7 @@ struct StackFrame {
     location m_symbolTable;
     u32 m_argCount = 0;
 
-    StackFrame() noexcept : m_registers{} {
+    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
