@@ -246,6 +246,20 @@ namespace dconstruct {
         return predecessors;
     }
 
+    // a node N dominates another node M if all paths from the beginning of the graph have to pass through N to reach M
+    //      [start]                       [start]
+    //         |                         /       \
+    //        [N]                      [N]       [M]    -> N doesn't dominate M
+    //         |
+    //        [M]  -> N dominates M             
+    [[nodiscard]] b8 ControlFlowGraph::dominates(const control_flow_node *dominator, const control_flow_node *dominee) const {
+        if (dominator == dominee) {
+            return true;
+        }
+        std::unordered_set<const control_flow_node*> visited;
+        return dominee_not_found_outside_dominator_path(&m_nodes.at(0), dominator, dominee, visited);
+    }
+
 
     [[nodiscard]] b8 ControlFlowGraph::dominee_not_found_outside_dominator_path(
         const control_flow_node *current_head,
@@ -271,13 +285,7 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::dominates(const control_flow_node *dominator, const control_flow_node *dominee) const {
-        if (dominator == dominee) {
-            return true;
-        }
-        std::unordered_set<const control_flow_node*> visited;
-        return dominee_not_found_outside_dominator_path(&m_nodes.at(0), dominator, dominee, visited);
-    }
+    
 
     static void add_successors(std::vector<const control_flow_node*> &nodes, const control_flow_node *node, const control_flow_node *stop) {
         if (node == stop) {
