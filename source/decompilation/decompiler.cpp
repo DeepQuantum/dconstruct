@@ -16,11 +16,11 @@ std::vector<decompiled_function> Decompiler::decompile() {
         // cfg.find_loops();
         cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
 
-        expression_frame frame{func->m_stackFrame.m_symbolTableEntries};
+        /*expression_frame frame{func->m_stackFrame.m_symbolTableEntries};
         for (const auto& [_, node] : cfg.get_nodes()) {
             parse_basic_block(node, frame);
         }
-        funcs.emplace_back(std::move(frame), std::move(cfg));
+        funcs.emplace_back(std::move(frame), std::move(cfg));*/
     }
     return funcs;
 }

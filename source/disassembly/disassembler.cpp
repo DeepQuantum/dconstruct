@@ -248,12 +248,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            // auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
-            // static b8 first = true;
-            //  if (first) {
-            //     dcompiler.decompile();
-            //     first = false;
-            //  }
+            auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
+            static b8 first = true;
+            dcompiler.decompile();
             std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
@@ -475,12 +472,10 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructionCount);
     
-    const std::string name = name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode));
-
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
-        std::move(name)
+        name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode))
     };
 
 
@@ -510,7 +505,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(symbol_table),
-        std::move(name)
+        name
     };
 
     b8 counting_args = true;
@@ -1060,6 +1055,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::BranchIf: {
             u32 target = istr.destination | (istr.operand2 << 8);
+            if (fn.m_lines[target].m_instruction.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.operand1 == istr.operand1) {
+                target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+            }
             std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             std::snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
@@ -1067,10 +1065,14 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             if (target < line.m_location) {
                 stack_frame.m_backwardsJumpLocs.push_back(line);
             }
+            
             break;
         }
         case Opcode::BranchIfNot: {
             u32 target = istr.destination | (istr.operand2 << 8);
+            if (fn.m_lines[target].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == istr.operand1) {
+                target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+            }
             std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
             std::snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
             line.m_target = target;
