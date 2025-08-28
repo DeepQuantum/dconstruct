@@ -36,6 +36,7 @@ namespace dconstruct {
         ControlFlowGraph() = delete;
         explicit ControlFlowGraph(const function_disassembly *);
         void find_loops();
+        void remove_redundant_jumps();
         void write_to_txt_file(const std::string& path = "graph.txt") const;
         void write_image(const std::string &path = "graph.svg") const;
 

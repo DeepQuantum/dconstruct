@@ -245,5 +245,17 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;
+
+    inline void remove_redundant_check_branches() {
+        for (auto& line : m_lines) {
+            auto& istr = line.m_instruction;
+            if ((istr.opcode == Opcode::BranchIf || istr.opcode == Opcode::BranchIfNot)) {
+                const auto& target = m_lines[istr.destination].m_instruction;
+                if (istr.opcode == target.opcode && istr.operand1 == target.operand1) {
+                    istr.destination = target.destination;
+                }
+            }
+        }
+    }
 }; 
 }
