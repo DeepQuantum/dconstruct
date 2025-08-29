@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef BINARYFILE_H
-#define BINARYFILE_H
-
 #include "DCHeader.h"
 #include "DCScript.h"
 #include "sidbase.h"
@@ -51,7 +48,7 @@ namespace dconstruct {
         std::filesystem::path m_path;
         DC_Header* m_dcheader = nullptr;
         StateScript* m_dcscript = nullptr;
-        std::size_t m_size;
+        std::size_t m_size = 0;
         std::unique_ptr<std::byte[]> m_bytes;
         std::unique_ptr<std::byte[]> m_pointedAtTable;
         location m_strings;
@@ -69,4 +66,3 @@ namespace dconstruct {
         void replace_newlines_in_stringtable() noexcept;
     };
 }
-#endif // BINARYFILE_H

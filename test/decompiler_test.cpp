@@ -46,10 +46,16 @@ namespace dconstruct::testing {
     }
 
     static dcompiler::decompiled_function decompile_instructions_with_disassembly(
-        const std::vector<Instruction>& istrs, 
+        std::vector<Instruction>&& istrs, 
         std::vector<SymbolTableEntry>&& symbol_table = {}
     ) {
-        Disassembler da{};
+
+        BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
+        Disassembler da{ &file, &base };
+   
+        auto fd = da.create_function_disassembly(std::move(istrs), "Test", {});
+        dcompiler::Decompiler df{ &fd, base };
+        return std::move(df.decompile()[0]);
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
@@ -176,18 +182,18 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SimpleIf1) {
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 2, 0},
             {Opcode::IEqual, 2, 0, 1},
-            {Opcode::BranchIf, 2, 6},
+            {Opcode::BranchIf, 6, 2},
             {Opcode::LoadU16Imm, 0, 5, 0},
             {Opcode::Branch, 7, 0, 0},
             {Opcode::LoadU16Imm, 0, 6, 0},
             {Opcode::Return, 0, 0, 0}
         };
 
-        auto fd = decompile_instructions_without_disassembly(istrs);
+        auto fd = decompile_instructions_with_disassembly(std::move(istrs), {});
 
         const std::string expected = "if (0 == 1) { return 5; } else { return 6; }";
 
