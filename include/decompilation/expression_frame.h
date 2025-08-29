@@ -3,6 +3,7 @@
 #include "ast/ast.h"
 #include "ast/type.h"
 #include "disassembly/instructions.h"
+#include "decompilation/control_flow_graph.h"
 #include <map>
 #include <unordered_map>
 #include <type_traits>
@@ -71,8 +72,9 @@ namespace dconstruct::dcompiler {
 
         expr_uptr& load_literal(const u8 dst, const ast::primitive_value& value);
 
-        void _return(const u32 dest);
+        ast::return_stmt& insert_return(const u32 dest);
 
+        ast::while_stmt& insert_loop(const control_flow_loop& loop);
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;

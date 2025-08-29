@@ -4,25 +4,42 @@
 #include "ast/type.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 
 namespace dconstruct::dcompiler {
 
-std::vector<decompiled_function> Decompiler::decompile() {
+std::vector<decompiled_function> Decompiler::decompile(std::ostream& out) {
     std::vector<decompiled_function> funcs;
     funcs.reserve(m_functions.size());
+
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg{func};
-        // cfg.find_loops();
-        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/build/images/" + func->m_id + ".svg");
+        cfg.find_loops();
+        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
 
-        /*expression_frame frame{func->m_stackFrame.m_symbolTableEntries};
-        for (const auto& [_, node] : cfg.get_nodes()) {
-            parse_basic_block(node, frame);
-        }
-        funcs.emplace_back(std::move(frame), std::move(cfg));*/
+        decompiled_function fn{
+            expression_frame{func->m_stackFrame.m_symbolTableEntries},
+            std::move(cfg),
+            out
+        };
+
+        emit_node(fn.m_graph.get_nodes().at(0), fn);
+
+        funcs.emplace_back(std::move(fn));
     }
     return funcs;
+}
+
+void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
+    if (const auto loop = fn.m_graph.get_loop_with_head(node)) {
+        fn.m_frame.insert_loop(loop->get());
+    } else {
+        parse_basic_block(node, fn.m_frame);
+        for (const auto& successor : node.m_successors) {
+            emit_node(*successor, fn);
+        }
+    }
 }
 
 void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame) {
@@ -83,7 +100,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 break;
             }
 
-            case Opcode::Return: expression_frame._return(istr.destination); break;
+            case Opcode::Return: expression_frame.insert_return(istr.destination); break;
             default: {
                 return;
             }
