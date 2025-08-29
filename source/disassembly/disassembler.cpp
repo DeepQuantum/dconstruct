@@ -498,9 +498,13 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return functionDisassembly;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
+
+    for (u64 i = 0; i < instructions.size(); ++i) {
+        lines.emplace_back(i, instructions.data());
+    }
 
     function_disassembly functionDisassembly {
         std::move(lines),
@@ -535,6 +539,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     const Instruction istr = line.m_instruction;
     SymbolTableEntry table_entry;
     table_entry.m_type = SymbolTableEntryType::NONE;
+
+
     std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
             get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),

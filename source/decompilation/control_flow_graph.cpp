@@ -21,14 +21,23 @@ namespace dconstruct {
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
 
+    [[nodiscard]] std::optional<std::reference_wrapper<const control_flow_loop>> ControlFlowGraph::get_loop_with_head(const control_flow_node& node) const {
+        for (const auto& loop : m_loops) {
+            if (loop.m_headNode->m_startLine == node.m_startLine) {
+                return loop;
+            }
+        }
+        return std::nullopt;
+    }
+
     [[nodiscard]] std::string control_flow_node::get_label_html() const {
         std::stringstream ss;
 
-        ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="10">"
+        ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12">"
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
         for (const auto& line : m_lines) {
-            ss << line.m_text << "<BR/>";
+            ss << line.m_text << "&#160;&#160;" <<  "<BR/>";
         }
 
         ss << "</FONT></TD></TR></TABLE>";
@@ -283,6 +292,14 @@ namespace dconstruct {
             }
         }
         return true;
+    }
+
+    [[nodiscard]] const control_flow_node* ControlFlowGraph::get_immediate_postdominator(const control_flow_node* branch_node) {
+        if (branch_node->m_successors.size() != 2) {
+            return nullptr;
+        }
+
+
     }
 
     

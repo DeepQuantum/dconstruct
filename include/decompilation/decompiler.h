@@ -12,6 +12,7 @@ namespace dconstruct::dcompiler {
 struct decompiled_function {
     expression_frame m_frame;
     ControlFlowGraph m_graph;
+    std::ostream& m_text;
 };
 
 class Decompiler { 
@@ -28,12 +29,13 @@ public:
         m_functions = funcs;
     };
 
-    std::vector<decompiled_function> decompile();
+    std::vector<decompiled_function> decompile(std::ostream& out);
 
 private:
     std::vector<const function_disassembly*> m_functions{};
     const SIDBase& m_sidbase;
 
+    void emit_node(const control_flow_node&, decompiled_function&);
     void parse_basic_block(const control_flow_node&, expression_frame &);
 };
 
