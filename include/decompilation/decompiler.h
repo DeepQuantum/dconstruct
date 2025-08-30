@@ -10,6 +10,7 @@
 namespace dconstruct::dcompiler {
 
 struct decompiled_function {
+    std::set<u32>
     expression_frame m_frame;
     ControlFlowGraph m_graph;
     std::ostream& m_text;
