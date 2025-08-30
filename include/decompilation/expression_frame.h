@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 
 namespace dconstruct::dcompiler {
@@ -40,8 +41,9 @@ namespace dconstruct::dcompiler {
 
         compiler::environment m_env;
 
-        // maps statements to a list of the indexes
-        std::vector<stmnt_uptr> m_statements;
+        ast::block m_baseBlock;
+
+        std::stack<std::reference_wrapper<ast::block>> m_blockStack;
 
         const std::vector<SymbolTableEntry>& m_symbolTable;
 
@@ -49,7 +51,8 @@ namespace dconstruct::dcompiler {
         u32 m_varCount = 0;
         u32 m_expressionId = 0;
 
-        explicit expression_frame(const std::vector<SymbolTableEntry> &table) : m_symbolTable(table) {
+        explicit expression_frame(const std::vector<SymbolTableEntry> &table) : m_symbolTable(table), m_baseBlock{{}} {
+            m_blockStack.push(m_baseBlock);
             for (u32 i = 0; i < 49; ++i) {
                 m_transformableExpressions.push_back(nullptr);
             }
@@ -62,6 +65,10 @@ namespace dconstruct::dcompiler {
 
         inline std::string get_next_var() {
             return "var_" + std::to_string(m_varCount++);
+        }
+
+        void append_to_current_block(stmnt_uptr&& statement) {
+            m_blockStack.top().get().m_statements.push_back(std::move(statement));
         }
 
         expr_uptr& load_expression_into_var(const u32 dst, expr_uptr&& expr);

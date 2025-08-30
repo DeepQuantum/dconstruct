@@ -14,7 +14,7 @@ expr_uptr& expression_frame::load_expression_into_var(const u32 dst, expr_uptr&&
 
     auto var_declaration = std::make_unique<ast::variable_declaration>(type_name, name, std::move(expr));
 
-    m_statements.push_back(std::move(var_declaration));
+    append_to_current_block(std::move(var_declaration));
     return m_transformableExpressions[dst] = std::move(id);
 }
 
@@ -34,11 +34,17 @@ expr_uptr& expression_frame::call(const Instruction& istr) {
 }
 
 ast::return_stmt& expression_frame::insert_return(const u32 dest) {
-    m_statements.push_back(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
+    append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 
 ast::while_stmt& expression_frame::insert_loop(const control_flow_loop& loop) {
-    
+    const u32 conditional_check_location = loop.m_headNode->m_lines.back().m_instruction.destination;
+
+    std::unique_ptr<ast::while_stmt> _while = std::make_unique<ast::while_stmt>(m_transformableExpressions[conditional_check_location]->clone(), std::make_unique<ast::block>());
+
+    append_to_current_block(std::move(_while));
+
+    m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back()));
 }
 
 }

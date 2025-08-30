@@ -33,7 +33,13 @@ std::vector<decompiled_function> Decompiler::decompile(std::ostream& out) {
 
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
     if (const auto loop = fn.m_graph.get_loop_with_head(node)) {
+        parse_basic_block(node, fn.m_frame);
         fn.m_frame.insert_loop(loop->get());
+        for (const auto& successor : node.m_successors) {
+            emit_node(*successor, fn);
+        }
+    } else if (node.m_successors.empty()) {
+        fn.m_frame.insert_return(node.m_lines.back().m_instruction.destination);
     } else {
         parse_basic_block(node, fn.m_frame);
         for (const auto& successor : node.m_successors) {
