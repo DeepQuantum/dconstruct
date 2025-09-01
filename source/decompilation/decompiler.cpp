@@ -9,7 +9,15 @@
 
 namespace dconstruct::dcompiler {
 
-std::vector<decompiled_function> Decompiler::decompile(std::ostream& out) {
+[[nodiscard]] std::string decompiled_function::to_string() const {
+    std::ostringstream out;
+    for (const auto& statement : m_frame.m_baseBlock.m_statements) {
+        out << statement << "\n";
+    }
+    return out.str();
+} 
+
+std::vector<decompiled_function> Decompiler::decompile() {
     std::vector<decompiled_function> funcs;
     funcs.reserve(m_functions.size());
 
@@ -19,12 +27,12 @@ std::vector<decompiled_function> Decompiler::decompile(std::ostream& out) {
         cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
 
         decompiled_function fn{
+            std::set<node_id>{},
             expression_frame{func->m_stackFrame.m_symbolTableEntries},
-            std::move(cfg),
-            out
+            std::move(cfg)
         };
 
-        emit_node(fn.m_graph.get_nodes().at(0), fn);
+        emit_node(fn.m_graph[0], fn);
 
         funcs.emplace_back(std::move(fn));
     }
@@ -32,18 +40,23 @@ std::vector<decompiled_function> Decompiler::decompile(std::ostream& out) {
 }
 
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
-    if (const auto loop = fn.m_graph.get_loop_with_head(node)) {
-        parse_basic_block(node, fn.m_frame);
-        fn.m_frame.insert_loop(loop->get());
+    const node_id node_id = node.m_startLine;
+    if (fn.m_parsedNodes.contains(node_id)) {
+        return;
+    }
+    fn.m_parsedNodes.insert(node_id);
+    parse_basic_block(node, fn.m_frame);
+    if (node.m_successors.empty()) {
+        return;
+    } else if (const auto loop = fn.m_graph.get_loop_with_head(node_id)) {
+        fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.destination);
         for (const auto& successor : node.m_successors) {
-            emit_node(*successor, fn);
+            emit_node(fn.m_graph[successor], fn);
         }
-    } else if (node.m_successors.empty()) {
-        fn.m_frame.insert_return(node.m_lines.back().m_instruction.destination);
+        fn.m_frame.m_blockStack.pop();
     } else {
-        parse_basic_block(node, fn.m_frame);
         for (const auto& successor : node.m_successors) {
-            emit_node(*successor, fn);
+            emit_node(fn.m_graph[successor], fn);
         }
     }
 }

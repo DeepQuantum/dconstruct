@@ -35,16 +35,19 @@ expr_uptr& expression_frame::call(const Instruction& istr) {
 
 ast::return_stmt& expression_frame::insert_return(const u32 dest) {
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
+    return static_cast<ast::return_stmt&>(*m_blockStack.top().get().m_statements.back().get());
 }
 
-ast::while_stmt& expression_frame::insert_loop(const control_flow_loop& loop) {
-    const u32 conditional_check_location = loop.m_headNode->m_lines.back().m_instruction.destination;
-
+ast::while_stmt& expression_frame::insert_loop_head(const control_flow_loop& loop, const u32 conditional_check_location) {
     std::unique_ptr<ast::while_stmt> _while = std::make_unique<ast::while_stmt>(m_transformableExpressions[conditional_check_location]->clone(), std::make_unique<ast::block>());
 
     append_to_current_block(std::move(_while));
+    
+    auto& while_ref = static_cast<ast::while_stmt&>(*m_blockStack.top().get().m_statements.back().get());
 
     m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back()));
+    
+    return while_ref;
 }
 
 }

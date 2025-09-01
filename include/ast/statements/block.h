@@ -4,7 +4,8 @@
 
 namespace dconstruct::ast {
     struct block : public statement {
-        explicit block(std::vector<stmnt_uptr>&& stmnts) noexcept : m_statements(std::move(stmnts)) {};
+        explicit block() noexcept : m_statements{} {};
+        explicit block(std::vector<stmnt_uptr>&& stmnts) noexcept : m_statements{ std::move(stmnts) } {};
         void pseudo(std::ostream&) const final;
         void ast(std::ostream&) const final;
         [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
