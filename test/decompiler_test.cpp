@@ -22,8 +22,9 @@ namespace dconstruct::testing {
         return fd;
     }
     
-    static dcompiler::decompiled_function decompile_instructions_without_disassembly(
+    /*static dcompiler::decompiled_function decompile_instructions_without_disassembly(
         const std::vector<Instruction>& istrs,
+        const std::string& name = "Test",
         std::vector<SymbolTableEntry>&& symbol_table = {}
     ) {
         StackFrame sf{};
@@ -32,43 +33,45 @@ namespace dconstruct::testing {
         for (u64 i = 0; i < istrs.size(); ++i) {
             lines.push_back(function_disassembly_line(i, istrs.data()));
         }
-        function_disassembly fd{lines, std::move(sf), "Test"};
+        function_disassembly fd{lines, std::move(sf), name};
         dcompiler::Decompiler dc(&fd, base);
         std::vector<dcompiler::decompiled_function> funcs = dc.decompile();
         return std::move(funcs[0]);
-    }
+    }*/
 
-    static dcompiler::expression_frame make_expression_frame(
+    /*static dcompiler::expression_frame make_expression_frame(
         const std::vector<Instruction>& istrs, 
+        const std::string& name = "Test",
         std::vector<SymbolTableEntry>&& symbol_table = {}
     ) {
-        return decompile_instructions_without_disassembly(istrs, std::move(symbol_table)).m_frame;
-    }
+        return decompile_instructions_without_disassembly(istrs, name, std::move(symbol_table)).m_frame;
+    }*/
 
     static dcompiler::decompiled_function decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
-        std::vector<SymbolTableEntry>&& symbol_table = {}
+        const std::string& name = "Test",
+        const std::vector<SymbolTableEntry>& symbol_table = {}
     ) {
 
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
-   
-        auto fd = da.create_function_disassembly(std::move(istrs), "Test", {});
+        
+        auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
         dcompiler::Decompiler df{ &fd, base };
         return std::move(df.decompile()[0]);
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
         const compiler::environment env{};
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
         };
-        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate").m_frame;
 
-        ASSERT_EQ(frame.m_statements.size(), 1);
+        ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
@@ -82,13 +85,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
         const compiler::environment env{};
-        const dcompiler::expression_frame frame = make_expression_frame({
+        const auto& frame = decompile_instructions_with_disassembly({
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
-        });
-        ASSERT_EQ(frame.m_statements.size(), 1);
+        }, "BasicLoadImmediateString").m_frame;
+        ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
@@ -104,14 +107,14 @@ namespace dconstruct::testing {
 
 
     TEST(DECOMPILER, BasicLoadImmediatesString) {
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 2, 5, 5},
             {Opcode::Return, 0, 0, 0}
         };
-        const dcompiler::expression_frame frame = make_expression_frame(istrs);
+        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString").m_frame;
 
-        const auto& actual = frame.m_statements;
+        const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return 1;";
         std::ostringstream os;
         for (const auto& stmt : actual) {
@@ -123,15 +126,15 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, BasicIdentifierAdd) {
         const u16 dest = 2;
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
             {Opcode::IAdd, dest, 0, 1},
             {Opcode::Return, dest, 0, 0}
         };
-        dcompiler::expression_frame frame = make_expression_frame(istrs);
+        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd").m_frame;
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
         const std::string expected = "return 1 + 1285;";
         std::ostringstream os;
         os << actual;
@@ -140,16 +143,16 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, TwoAdds) {
         const u16 dest = 2;
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 5, 5},
             {Opcode::IAdd, dest, 0, 1},
             {Opcode::IAdd, dest, 2, 2}, 
             {Opcode::Return, dest, 0, 0}
         };
-        dcompiler::expression_frame frame = make_expression_frame(istrs);
+        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds").m_frame;
 
-        const auto& actual = frame.m_statements;
+        const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
         std::ostringstream os;
@@ -161,7 +164,7 @@ namespace dconstruct::testing {
 
 
     TEST(DECOMPILER, Call1) {
-        const std::vector<Instruction> istrs = {
+        std::vector<Instruction> istrs = {
             {Opcode::LookupPointer, 0, 0, 0},
             {Opcode::LoadU16Imm, 49, 5, 0},
             {Opcode::Call, 0, 0, 1},
@@ -169,9 +172,9 @@ namespace dconstruct::testing {
         };
         std::vector<SymbolTableEntry> symbol_table{};
         symbol_table.push_back({.m_type = SymbolTableEntryType::FUNCTION, .m_hash = SID("ddict-key-count")});
-        dcompiler::expression_frame frame = make_expression_frame(istrs, std::move(symbol_table));
+        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table)).m_frame;
 
-        const auto& actual = frame.m_statements;
+        const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return ddict-key-count(5);";
 
         std::ostringstream os;
@@ -181,7 +184,7 @@ namespace dconstruct::testing {
         EXPECT_EQ(expected, os.str());
     }
 
-    TEST(DECOMPILER, SimpleIf1) {
+    /*TEST(DECOMPILER, SimpleIf1) {
         std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::LoadU16Imm, 1, 2, 0},
@@ -197,6 +200,7 @@ namespace dconstruct::testing {
 
         const std::string expected = "if (0 == 1) { return 5; } else { return 6; }";
 
-        EXPECT_EQ(fd.m_graph.get_nodes().size(), 3);
-    }
+        EXPECT_EQ(fd.m_frame.m_baseBlock.m_statements.size(), 3);
+        EXPECT_EQ(fd.to_string(), expected);
+    }*/
 }

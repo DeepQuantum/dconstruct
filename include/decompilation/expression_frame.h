@@ -81,7 +81,7 @@ namespace dconstruct::dcompiler {
 
         ast::return_stmt& insert_return(const u32 dest);
 
-        ast::while_stmt& insert_loop(const control_flow_loop& loop);
+        ast::while_stmt& insert_loop_head(const control_flow_loop& loop, const u32 conditional_check_location);
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
