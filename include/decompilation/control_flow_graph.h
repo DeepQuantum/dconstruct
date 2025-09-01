@@ -44,8 +44,8 @@ namespace dconstruct {
 
         void insert_loop_subgraphs(Agraph_t *g) const;
 
-        const std::map<u32, control_flow_node>& get_nodes() const noexcept {
-            return m_nodes;
+        [[nodiscard]] const control_flow_node& operator[](const u32 at) const {
+            return m_nodes.at(at);
         }
 
         [[nodiscard]] std::optional<std::reference_wrapper<const control_flow_loop>> get_loop_with_head(const node_id node) const;
@@ -64,10 +64,12 @@ namespace dconstruct {
         [[nodiscard]] const control_flow_node* get_immediate_postdominator(const control_flow_node*);
 
         [[nodiscard]] b8 dominates(const node_id, const node_id) const;
-        [[nodiscard]] static b8 dominee_not_found_outside_dominator_path(node_id current_head, const node_id dominator, const node_id dominee, std::unordered_set<node_id>& visited);
+        [[nodiscard]] b8 dominee_not_found_outside_dominator_path(node_id current_head, const node_id dominator, const node_id dominee, std::unordered_set<node_id>& visited) const;
         [[nodiscard]] std::vector<node_id> collect_loop_body(const node_id, const node_id) const;
         
-        [[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
+        //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
+
+        void add_successors(std::vector<node_id>& nodes, const control_flow_node& node, const control_flow_node& stop) const;
     };
 
     

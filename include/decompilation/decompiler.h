@@ -6,14 +6,17 @@
 #include "decompilation/expression_frame.h"
 #include "sidbase.h"
 #include "control_flow_graph.h"
+#include <set>
+
 
 namespace dconstruct::dcompiler {
 
 struct decompiled_function {
-    std::set<u32>
+    std::set<node_id> m_parsedNodes;
     expression_frame m_frame;
     ControlFlowGraph m_graph;
-    std::ostream& m_text;
+
+    [[nodiscard]] std::string to_string() const;
 };
 
 class Decompiler { 
@@ -30,7 +33,7 @@ public:
         m_functions = funcs;
     };
 
-    std::vector<decompiled_function> decompile(std::ostream& out);
+    std::vector<decompiled_function> decompile();
 
 private:
     std::vector<const function_disassembly*> m_functions{};
