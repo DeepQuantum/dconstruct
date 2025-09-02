@@ -777,7 +777,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             dest.m_PTR.m_base = 0;
             dest.m_PTR.m_offset = 0;
             dest.m_PTR.m_sid = value;
-            const b8 is_function = pointer_gets_called(istr.destination, istr_idx, fn);
+            const b8 is_function = pointer_gets_called(istr.destination, istr_idx + 1, fn);
             table_entry.m_pointer = value;
             if (m_currentFile->is_file_ptr(stack_frame.m_symbolTable + (istr.operand1 * 8))) {
                 table_entry.m_type = SymbolTableEntryType::POINTER;
