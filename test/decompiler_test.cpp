@@ -50,12 +50,11 @@ namespace dconstruct::testing {
     static dcompiler::decompiled_function decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
         const std::string& name = "Test",
-        const std::vector<SymbolTableEntry>& symbol_table = {}
+        const std::vector<u64>& symbol_table = {}
     ) {
 
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
-        
         auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
         dcompiler::Decompiler df{ &fd, base };
         return std::move(df.decompile()[0]);
@@ -170,8 +169,8 @@ namespace dconstruct::testing {
             {Opcode::Call, 0, 0, 1},
             {Opcode::Return}
         };
-        std::vector<SymbolTableEntry> symbol_table{};
-        symbol_table.push_back({.m_type = SymbolTableEntryType::FUNCTION, .m_hash = SID("ddict-key-count")});
+        std::vector<u64> symbol_table;
+        symbol_table.push_back(SID("ddict-key-count"));
         const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table)).m_frame;
 
         const auto& actual = frame.m_baseBlock.m_statements;

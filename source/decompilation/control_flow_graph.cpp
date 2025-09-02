@@ -10,6 +10,8 @@
 #include <graphviz/cgraph.h>
 #include <sstream>
 #include <mutex>
+#include <set>
+#include <algorithm>
 
 namespace dconstruct {
 
@@ -95,6 +97,7 @@ namespace dconstruct {
                 current_node = following_node;
             } 
         }
+        m_immediatePostdominators = create_postdominator_tree();
     }
 
     [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u32 line) const {
@@ -295,12 +298,84 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] const control_flow_node* ControlFlowGraph::get_immediate_postdominator(const control_flow_node* branch_node) {
-        if (branch_node->m_successors.size() != 2) {
-            return nullptr;
+    [[nodiscard]] std::map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
+        std::map<node_id, std::set<node_id>> postdom;
+
+        std::set<node_id> N;
+
+        for (const auto& [node_id, _] : m_nodes) {
+            N.insert(node_id);
         }
 
+        node_id exit;
+        
+        for (const auto& [node_id, node] : m_nodes) {
+            if (node.m_successors.empty()) {
+                postdom[node_id].insert(node_id);
+                exit = node_id;
+            } else {
+                postdom[node_id] = N;
+            }
+        }
 
+        b8 changed = true;
+        while (changed) {
+            changed = false;
+            for (const auto& [id, node] : m_nodes) {
+                if (node.m_successors.empty()) {
+                    continue;
+                }
+                std::set<node_id> new_postdominators = {id};
+                bool first = true;
+                for (auto succ : node.m_successors) {
+                    if (first) {
+                        new_postdominators.insert(postdom[succ].begin(), postdom[succ].end());
+                        first = false;
+                    } else {
+                        std::set<node_id> temp;
+                        std::ranges::set_intersection(
+                            new_postdominators,
+                            postdom[succ],
+                            std::inserter(temp, temp.begin())
+                        );
+                        new_postdominators = std::move(temp);
+                    }
+                }
+            }
+        }
+
+        std::map<node_id, node_id> ipostdom;
+
+        for (const auto& [id, node] : m_nodes) {
+            if (id == exit) {
+                continue;
+            }
+
+            std::set<node_id> candidates = postdom[id];
+            candidates.erase(id);
+
+            std::optional<node_id> ipd;
+            for (auto c : candidates) {
+                b8 dominated_by_other = false;
+                for (auto d : candidates) {
+                    if (c == d) continue;
+                    if (postdom[c].count(d)) { 
+                        dominated_by_other = true;
+                        break;
+                    }
+                }
+                if (!dominated_by_other) {
+                    ipd = c;
+                    break;
+                }
+            }
+
+            if (ipd) {
+                ipostdom[id] = *ipd;
+            }
+        }
+
+        return ipostdom;
     }
 
     void ControlFlowGraph::add_successors(std::vector<node_id> &nodes, const control_flow_node& node, const control_flow_node& stop) const {
