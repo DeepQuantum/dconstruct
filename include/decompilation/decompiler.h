@@ -5,7 +5,6 @@
 #include "control_flow_graph.h"
 #include "decompilation/expression_frame.h"
 #include "sidbase.h"
-#include "control_flow_graph.h"
 #include <set>
 
 
@@ -33,7 +32,7 @@ public:
         m_functions = funcs;
     };
 
-    std::vector<decompiled_function> decompile();
+    [[nodiscard]] std::vector<std::pair<std::string, decompiled_function>> decompile();
 
 private:
     std::vector<const function_disassembly*> m_functions{};
