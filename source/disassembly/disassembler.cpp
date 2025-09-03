@@ -3,7 +3,8 @@
 #include <chrono>
 #include "disassembly/disassembler.h"
 #include "decompilation/decompiler.h"
-#include <string.h>
+#include <cstring>
+#include <fstream>
 
 static constexpr char ENTRY_SEP[] = "##############################";
 
@@ -248,9 +249,16 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
         }
         case SID("script-lambda"): {
             auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
-            static b8 first = true;
-            dcompiler.decompile();
+            if (afunction.m_id == "#E16F9CC43A37FADA") {
+                auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
+                static b8 first = true;
+                const auto funcs = dcompiler.decompile();
+                for (const auto& [id, decomp] : funcs) {
+                    std::string path = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl";
+                    std::ofstream os{ path };
+                    os << decomp.to_string();
+                }
+            }
             std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
             insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
             m_currentFile->m_functions.push_back(std::move(function));
@@ -655,7 +663,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadStaticInt: {
             const i64 table_value = stack_frame.m_symbolTable.get<i64>(istr.operand1 * 8);
-            table_entry.m_type = SymbolTableEntryType::INT;
+            table_entry.m_type = SymbolTableEntryType::INT64;
             table_entry.m_i64 = table_value;
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             dest.m_type = RegisterValueType::I64;
@@ -1211,8 +1219,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             const i32 value = stack_frame.m_symbolTable.get<i32>(istr.operand1 * 8);
             dest.m_type = RegisterValueType::I32;
             dest.m_I32 = value;
-            table_entry.m_type = SymbolTableEntryType::INT;
-            table_entry.m_i64 = value;
+            table_entry.m_type = SymbolTableEntryType::INT32;
+            table_entry.m_i32 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", istr.destination, istr.operand1, value);
             break;
         }
@@ -1249,7 +1257,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             i64 value = stack_frame.m_symbolTable.get<i64>(istr.operand1 * 8);
             dest.m_type = RegisterValueType::I64;
             dest.m_I64 = value;
-            table_entry.m_type = SymbolTableEntryType::INT;
+            table_entry.m_type = SymbolTableEntryType::INT64;
             table_entry.m_i64 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%llu>", istr.destination, istr.operand1, value);
             break;
@@ -1503,7 +1511,11 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
                 std::snprintf(type, sizeof(type), "float: <%f>\n", entry.m_f32);
                 break;
             }
-            case SymbolTableEntryType::INT: {
+            case SymbolTableEntryType::INT32: {
+                std::snprintf(type, sizeof(type), "int: <%i>\n", entry.m_i32);
+                break;
+            }
+            case SymbolTableEntryType::INT64: {
                 std::snprintf(type, sizeof(type), "int: <%lli>\n", entry.m_i64);
                 break;
             }

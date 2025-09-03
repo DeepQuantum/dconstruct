@@ -8,7 +8,7 @@ void call_expr::pseudo(std::ostream& os) const {
     for (u16 i = 0; i < m_arguments.size(); ++i) {
         os << *m_arguments[i];
         if (i != m_arguments.size() - 1) {
-            os << ",";
+            os << ", ";
         }
     }
     os << ')';

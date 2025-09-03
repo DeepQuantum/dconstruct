@@ -57,7 +57,7 @@ namespace dconstruct::testing {
         Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
         dcompiler::Decompiler df{ &fd, base };
-        return std::move(df.decompile()[0]);
+        return std::move(df.decompile()[0].second);
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {

@@ -12,19 +12,18 @@ namespace dconstruct::dcompiler {
 [[nodiscard]] std::string decompiled_function::to_string() const {
     std::ostringstream out;
     for (const auto& statement : m_frame.m_baseBlock.m_statements) {
-        out << statement << "\n";
+        out << *statement << "\n";
     }
     return out.str();
 } 
 
-std::vector<decompiled_function> Decompiler::decompile() {
-    std::vector<decompiled_function> funcs;
-    funcs.reserve(m_functions.size());
+[[nodiscard]] std::vector<std::pair<std::string, decompiled_function>> Decompiler::decompile() {
+    std::vector<std::pair<std::string, decompiled_function>> funcs;
 
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg{func};
         cfg.find_loops();
-        cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
+        //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
 
         decompiled_function fn{
             std::set<node_id>{},
@@ -34,7 +33,7 @@ std::vector<decompiled_function> Decompiler::decompile() {
 
         emit_node(fn.m_graph[0], fn);
 
-        funcs.emplace_back(std::move(fn));
+        funcs.emplace_back(func->m_id, std::move(fn));
     }
     return funcs;
 }
@@ -49,7 +48,8 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     if (node.m_successors.empty()) {
         return;
     } else if (const auto loop = fn.m_graph.get_loop_with_head(node_id)) {
-        fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.destination);
+        return;
+        fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.operand1);
         for (const auto& successor : node.m_successors) {
             emit_node(fn.m_graph[successor], fn);
         }
@@ -74,6 +74,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::IDiv:
             case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr, compiler::token{compiler::token_type::SLASH, "/"}); break;
 
+            case Opcode::IAddImm: expression_frame.apply_binary_op_imm<ast::add_expr>(istr, compiler::token{compiler::token_type::PLUS, "+"}); break;
+
             case Opcode::IEqual:
             case Opcode::FEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
             case Opcode::INotEqual:
@@ -95,6 +97,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;
             case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32); break;
+            case Opcode::LoadStaticI32Imm: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i32); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -106,7 +109,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
                 const sid64 sid = expression_frame.m_symbolTable[istr.operand1].m_hash;
-                const ast::sid_literal sid_literal = {sid, m_sidbase.search(sid)};
+                const char* name = m_sidbase.search(sid);
+                const ast::sid_literal sid_literal = {sid, name ? name : "test"};
                 expr_uptr& lit = expression_frame.load_literal(istr.destination, sid_literal);
                 if (expression_frame.m_symbolTable[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
                     expression_frame.load_expression_into_var(istr.destination, std::move(lit));
@@ -119,9 +123,20 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 break;
             }
 
+            // case Opcode::CastInteger: {
+            //     expression_frame.cast(RegisterValueType::I64, istr);
+            // }
+
+            case Opcode::AssertPointer:
+            case Opcode::BreakFlag:
+            case Opcode::CastInteger:
+            case Opcode::CastFloat: {
+                continue;
+            }
+
             case Opcode::Return: expression_frame.insert_return(istr.destination); break;
             default: {
-                return;
+                continue;
             }
         }
     }

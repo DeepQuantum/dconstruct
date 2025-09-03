@@ -99,6 +99,16 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
+        inline void apply_binary_op_imm(const Instruction& istr, compiler::token op) {
+            const auto& op1 = m_transformableExpressions[istr.operand1];
+            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+                std::move(op),
+                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
+                std::make_unique<ast::literal>(istr.operand2)
+            );
+        }
+
+        template <typename T>
         inline void apply_unary_op(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             m_transformableExpressions[istr.destination] = std::make_unique<T>(
