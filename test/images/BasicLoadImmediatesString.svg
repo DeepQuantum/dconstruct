@@ -14,9 +14,9 @@
 <title>0</title>
 <polygon fill="none" stroke="#8ab4fe" points="557.72,-84.4 0,-84.4 0,0 557.72,0 557.72,-84.4"/>
 <polygon fill="none" stroke="#8ab4fe" points="8,-4 8,-80.4 549.72,-80.4 549.72,-4 8,-4"/>
-<text xml:space="preserve" text-anchor="start" x="21" y="-54.8" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0000 &#160;&#160;0xA75D9980 &#160;&#160;0C 00 01 00 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, 1  </text>
-<text xml:space="preserve" text-anchor="start" x="21" y="-38" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0001 &#160;&#160;0xA75D9988 &#160;&#160;0C 02 05 05 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r2, 1285  </text>
-<text xml:space="preserve" text-anchor="start" x="21" y="-21.2" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0002 &#160;&#160;0xA75D9990 &#160;&#160;00 00 00 00 &#160;&#160;Return &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-54.8" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0000 &#160;&#160;0x826E8D80 &#160;&#160;0C 00 01 00 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, 1  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-38" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0001 &#160;&#160;0x826E8D88 &#160;&#160;0C 02 05 05 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r2, 1285  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-21.2" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0002 &#160;&#160;0x826E8D90 &#160;&#160;00 00 00 00 &#160;&#160;Return &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0  </text>
 </g>
 </g>
 </svg>

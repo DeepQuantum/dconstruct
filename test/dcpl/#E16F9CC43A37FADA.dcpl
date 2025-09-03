@@ -1,0 +1,2 @@
+unknown var_0 = player;
+return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));

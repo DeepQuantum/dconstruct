@@ -119,7 +119,8 @@ struct Instruction {
 enum class SymbolTableEntryType {
     STRINGID_64,
     FLOAT,
-    INT,
+    INT32,
+    INT64,
     STRING,
     POINTER,
     FUNCTION,
@@ -132,6 +133,7 @@ struct SymbolTableEntry {
     union {
         sid64 m_hash;
         f32 m_f32;
+        i32 m_i32;
         i64 m_i64;
         p64 m_pointer;
     };

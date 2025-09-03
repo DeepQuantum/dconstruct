@@ -14,10 +14,10 @@
 <title>0</title>
 <polygon fill="none" stroke="#8ab4fe" points="565.41,-101.2 0,-101.2 0,0 565.41,0 565.41,-101.2"/>
 <polygon fill="none" stroke="#8ab4fe" points="8,-4 8,-97.2 557.41,-97.2 557.41,-4 8,-4"/>
-<text xml:space="preserve" text-anchor="start" x="21" y="-71.6" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0000 &#160;&#160;0xA75D9860 &#160;&#160;15 00 00 00 &#160;&#160;LookupPointer &#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, 0  </text>
-<text xml:space="preserve" text-anchor="start" x="21" y="-54.8" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0001 &#160;&#160;0xA75D9868 &#160;&#160;0C 31 05 00 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r49, 5  </text>
-<text xml:space="preserve" text-anchor="start" x="21" y="-38" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0002 &#160;&#160;0xA75D9870 &#160;&#160;1B 00 00 01 &#160;&#160;Call &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, r0, 1  </text>
-<text xml:space="preserve" text-anchor="start" x="21" y="-21.2" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0003 &#160;&#160;0xA75D9878 &#160;&#160;00 00 00 00 &#160;&#160;Return &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-71.6" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0000 &#160;&#160;0x826E8C60 &#160;&#160;15 00 00 00 &#160;&#160;LookupPointer &#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, 0  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-54.8" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0001 &#160;&#160;0x826E8C68 &#160;&#160;0C 31 05 00 &#160;&#160;LoadU16Imm &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r49, 5  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-38" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0002 &#160;&#160;0x826E8C70 &#160;&#160;1B 00 00 01 &#160;&#160;Call &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0, r0, 1  </text>
+<text xml:space="preserve" text-anchor="start" x="21" y="-21.2" font-family="Consolas" font-size="14.00" fill="#8ab4fe">0003 &#160;&#160;0x826E8C78 &#160;&#160;00 00 00 00 &#160;&#160;Return &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;r0  </text>
 </g>
 </g>
 </svg>
