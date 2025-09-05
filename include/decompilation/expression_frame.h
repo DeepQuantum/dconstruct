@@ -45,14 +45,14 @@ namespace dconstruct::dcompiler {
 
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
 
-        const std::vector<SymbolTableEntry>& m_symbolTable;
+        opt_ref<const std::vector<SymbolTableEntry>> m_symbolTable;
 
         std::vector<std::string> m_messages;
         u32 m_varCount = 0;
         u32 m_expressionId = 0;
 
         explicit expression_frame(const std::vector<SymbolTableEntry> &table) : m_symbolTable(table), m_baseBlock{{}} {
-            m_blockStack.push(m_baseBlock);
+            m_blockStack.push(std::ref(m_baseBlock));
             for (u32 i = 0; i < 49; ++i) {
                 m_transformableExpressions.push_back(nullptr);
             }
@@ -61,7 +61,15 @@ namespace dconstruct::dcompiler {
             }
         }
 
-        expression_frame(expression_frame&& rhs) noexcept = default;
+        expression_frame(expression_frame&& rhs) noexcept
+            : m_symbolTable(rhs.m_symbolTable),
+            m_baseBlock(std::move(rhs.m_baseBlock)),
+            m_blockStack{},
+            m_transformableExpressions(std::move(rhs.m_transformableExpressions)),
+            m_varCount(rhs.m_varCount)
+        {
+            m_blockStack.push(std::ref(m_baseBlock));
+        }
 
         inline std::string get_next_var() {
             return "var_" + std::to_string(m_varCount++);
@@ -118,3 +126,4 @@ namespace dconstruct::dcompiler {
         }
     };
 }
+

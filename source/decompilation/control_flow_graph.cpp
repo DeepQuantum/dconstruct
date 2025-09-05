@@ -23,7 +23,7 @@ namespace dconstruct {
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
 
-    [[nodiscard]] std::optional<std::reference_wrapper<const control_flow_loop>> ControlFlowGraph::get_loop_with_head(const node_id node) const {
+    [[nodiscard]] opt_ref<const control_flow_loop> ControlFlowGraph::get_loop_with_head(const node_id node) const {
         for (const auto& loop : m_loops) {
             if (loop.m_headNode == node) {
                 return loop;
@@ -109,7 +109,7 @@ namespace dconstruct {
         return std::nullopt;
     }
 
-    [[nodiscard]] void ControlFlowGraph::insert_node_at_line(const u32 start_line) {
+    void ControlFlowGraph::insert_node_at_line(const u32 start_line) {
         if (!m_nodes.contains(start_line)) {
             m_nodes.emplace(start_line, start_line);
         }

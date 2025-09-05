@@ -17,8 +17,9 @@ namespace dconstruct::dcompiler {
     return out.str();
 } 
 
-[[nodiscard]] std::vector<std::pair<std::string, decompiled_function>> Decompiler::decompile() {
-    std::vector<std::pair<std::string, decompiled_function>> funcs;
+
+[[nodiscard]] std::unordered_map<std::string, decompiled_function> Decompiler::decompile() {
+    std::unordered_map<std::string, decompiled_function> funcs;
 
     for (const auto &func : m_functions) {
         ControlFlowGraph cfg{func};
@@ -27,15 +28,15 @@ namespace dconstruct::dcompiler {
 
         decompiled_function fn{
             std::set<node_id>{},
-            expression_frame{func->m_stackFrame.m_symbolTableEntries},
+            expression_frame{ func->m_stackFrame.m_symbolTableEntries },
             std::move(cfg)
         };
 
         emit_node(fn.m_graph[0], fn);
 
-        funcs.emplace_back(func->m_id, std::move(fn));
+        funcs.emplace(func->m_id, std::move(fn));
     }
-    return funcs;
+    return std::move(funcs);
 }
 
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
@@ -62,19 +63,28 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
 }
 
 void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame) {
+    const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
+    const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
+    const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
+    const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
+
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
+
         switch(istr.opcode) {
             case Opcode::IAdd: 
-            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr, compiler::token{compiler::token_type::PLUS, "+"}); break;
+            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr, plus); break;
             case Opcode::ISub:
-            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
+            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr, minus); break;
             case Opcode::IMul:
-            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
+            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr, multiply); break;
             case Opcode::IDiv:
-            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr, compiler::token{compiler::token_type::SLASH, "/"}); break;
+            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr, divide); break;
 
-            case Opcode::IAddImm: expression_frame.apply_binary_op_imm<ast::add_expr>(istr, compiler::token{compiler::token_type::PLUS, "+"}); break;
+            case Opcode::IAddImm: expression_frame.apply_binary_op_imm<ast::add_expr>(istr, plus); break;
+            case Opcode::IMulImm: expression_frame.apply_binary_op_imm<ast::mul_expr>(istr, multiply); break;
+            case Opcode::ISubImm: expression_frame.apply_binary_op_imm<ast::sub_expr>(istr, minus); break;
+            case Opcode::IDivImm: expression_frame.apply_binary_op_imm<ast::div_expr>(istr, divide); break;
 
             case Opcode::IEqual:
             case Opcode::FEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
@@ -95,9 +105,9 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::FNeg: expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
             case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i64); break;
-            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_f32); break;
-            case Opcode::LoadStaticI32Imm: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable[istr.operand1].m_i32); break;
+            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_i64); break;
+            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_f32); break;
+            case Opcode::LoadStaticI32Imm: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_i32); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -108,11 +118,11 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::LoadStaticPointer:
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
-                const sid64 sid = expression_frame.m_symbolTable[istr.operand1].m_hash;
-                const char* name = m_sidbase.search(sid);
-                const ast::sid_literal sid_literal = {sid, name ? name : "test"};
+                const sid64 sid = expression_frame.m_symbolTable.value().get()[istr.operand1].m_hash;
+                const std::string& name = m_currentFile.m_sidCache.at(sid);
+                const sid_literal sid_literal = {sid, name};
                 expr_uptr& lit = expression_frame.load_literal(istr.destination, sid_literal);
-                if (expression_frame.m_symbolTable[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
+                if (expression_frame.m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
                     expression_frame.load_expression_into_var(istr.destination, std::move(lit));
                 }
                 break;

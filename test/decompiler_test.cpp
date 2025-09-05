@@ -52,12 +52,23 @@ namespace dconstruct::testing {
         const std::string& name = "Test",
         const std::vector<u64>& symbol_table = {}
     ) {
-
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
-        dcompiler::Decompiler df{ &fd, base };
-        return std::move(df.decompile()[0].second);
+        dcompiler::Decompiler df{ &fd, file };
+        auto funcs = df.decompile();
+        return std::move(funcs.at(name));
+    }
+
+    static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
+        BinaryFile file{ path };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const auto& func = da.get_funtions()[0];
+        dcompiler::Decompiler dc{ &func, file };
+        const auto& funcs = dc.decompile();
+        return funcs.at(function_id).to_string();
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
@@ -66,7 +77,8 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
         };
-        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate").m_frame;
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate");
+        const auto& frame = func.m_frame;
 
         ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
 
@@ -84,10 +96,11 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
         const compiler::environment env{};
-        const auto& frame = decompile_instructions_with_disassembly({
+        const auto func = decompile_instructions_with_disassembly({
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
-        }, "BasicLoadImmediateString").m_frame;
+        }, "BasicLoadImmediateString");
+        const auto& frame = func.m_frame;
         ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
 
         const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
@@ -111,7 +124,8 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 2, 5, 5},
             {Opcode::Return, 0, 0, 0}
         };
-        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString").m_frame;
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString");
+        const auto& frame = func.m_frame;
 
         const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return 1;";
@@ -131,7 +145,8 @@ namespace dconstruct::testing {
             {Opcode::IAdd, dest, 0, 1},
             {Opcode::Return, dest, 0, 0}
         };
-        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd").m_frame;
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
+        const auto& frame = func.m_frame;
 
         const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
         const std::string expected = "return 1 + 1285;";
@@ -149,7 +164,8 @@ namespace dconstruct::testing {
             {Opcode::IAdd, dest, 2, 2}, 
             {Opcode::Return, dest, 0, 0}
         };
-        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds").m_frame;
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
+        const auto& frame = func.m_frame;
 
         const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
@@ -171,7 +187,8 @@ namespace dconstruct::testing {
         };
         std::vector<u64> symbol_table;
         symbol_table.push_back(SID("ddict-key-count"));
-        const auto& frame = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table)).m_frame;
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table));
+        const auto& frame = func.m_frame;
 
         const auto& actual = frame.m_baseBlock.m_statements;
         const std::string expected = "return ddict-key-count(5);";
@@ -181,6 +198,31 @@ namespace dconstruct::testing {
             stmt->pseudo(os);
         }
         EXPECT_EQ(expected, os.str());
+    }
+
+    TEST(DECOMPILER, FileFunction1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string expected = "return #E16F9CC43A37FADA(arg_0) * -1;\n";
+
+        const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");
+
+        ASSERT_EQ(expected, actual);
+    }
+
+    TEST(DECOMPILER, ImmediatePostdominator1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#8A8D5C923D5DDB3B";
+        const auto& funcs = da.get_funtions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_func = dc.decompile().at(id);
+        const auto& tree = dc_func.m_graph.create_postdominator_tree();
+        ASSERT_EQ(tree.at(0), 0x16);
     }
 
     /*TEST(DECOMPILER, SimpleIf1) {

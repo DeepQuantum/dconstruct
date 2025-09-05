@@ -128,6 +128,8 @@ enum class SymbolTableEntryType {
     NONE
 };
 
+//using SymbolTableEntry = std::variant<sid_literal
+
 struct SymbolTableEntry {
     SymbolTableEntryType m_type;
     union {
@@ -248,6 +250,11 @@ struct function_disassembly {
     StackFrame m_stackFrame;
     std::string m_id;
 
+   /* function_disassembly(std::vector<function_disassembly_line> lines, StackFrame frame, std::string id) noexcept :
+        m_lines(std::move(lines)), m_stackFrame(std::move(frame)), m_id(std::move(id)) {};
+    function_disassembly(function_disassembly&& rhs) noexcept = default;
+    function_disassembly(const function_disassembly& rhs) noexcept = default;*/
+
     inline void remove_redundant_check_branches() {
         for (auto& line : m_lines) {
             auto& istr = line.m_instruction;
@@ -259,5 +266,8 @@ struct function_disassembly {
             }
         }
     }
+
 }; 
+
+
 }
