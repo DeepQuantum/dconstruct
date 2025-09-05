@@ -14,7 +14,7 @@ namespace dconstruct::compiler {
 
         b8 assign(const std::string& name, ast::typed_value value);
 
-        [[nodiscard]] std::optional<std::reference_wrapper<const ast::typed_value>> lookup(const std::string& name) const;
+        [[nodiscard]] opt_ref<const ast::typed_value> lookup(const std::string& name) const;
 
         std::unique_ptr<environment> m_enclosing;
     };
