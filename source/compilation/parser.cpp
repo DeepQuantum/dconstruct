@@ -470,7 +470,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
     } else if (match({token_type::SID})) {
-        const ast::sid_literal sid = { 0, std::get<std::string>(previous().m_literal) };
+        const sid_literal sid = { 0, std::get<std::string>(previous().m_literal) };
         return std::make_unique<ast::literal>(sid);
     } else if (match({token_type::IDENTIFIER})) {
         return std::make_unique<ast::identifier>(previous());

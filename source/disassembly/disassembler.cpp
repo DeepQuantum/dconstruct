@@ -21,6 +21,8 @@ namespace dconstruct {
         const std::string new_hash_string = int_to_string_id(sid);
         auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, new_hash_string);
         hash_string = iter->second.c_str();
+    } else {
+        m_currentFile->m_sidCache.emplace(sid, hash_string);
     }
     return hash_string;
 }
@@ -248,20 +250,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
-            auto afunction = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
-            if (afunction.m_id == "#E16F9CC43A37FADA") {
-                auto dcompiler = dcompiler::Decompiler(&afunction, *m_sidbase);
-                static b8 first = true;
-                const auto funcs = dcompiler.decompile();
-                for (const auto& [id, decomp] : funcs) {
-                    std::string path = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl";
-                    std::ofstream os{ path };
-                    os << decomp.to_string();
-                }
-            }
-            std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(afunction));
-            insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 2);
-            m_currentFile->m_functions.push_back(std::move(function));
+            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
+            insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
+            m_functions.push_back(std::move(function));
             break;
         }
         case SID("map"):
@@ -418,12 +409,13 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, lookup(track_ptr->m_trackId));
+        const char* track_name = lookup(track_ptr->m_trackId);
+        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, track_name);
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
-            std::unique_ptr<function_disassembly> function = std::make_unique<function_disassembly>(std::move(create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda)));
-            insert_function_disassembly_text(*function, indent + m_options.m_indentPerLevel * 3);
-            m_currentFile->m_functions.push_back(std::move(function));
+            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
+            insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
+            m_functions.push_back(std::move(function));
             insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
         }
         insert_span("}\n\n", indent + m_options.m_indentPerLevel);

@@ -36,7 +36,7 @@ namespace dconstruct {
 
     class ControlFlowGraph {
     public:
-        ControlFlowGraph() = delete;
+        ControlFlowGraph() = default;
         explicit ControlFlowGraph(const function_disassembly *);
         void find_loops();
         void write_to_txt_file(const std::string& path = "graph.txt") const;
@@ -48,7 +48,9 @@ namespace dconstruct {
             return m_nodes.at(at);
         }
 
-        [[nodiscard]] std::optional<std::reference_wrapper<const control_flow_loop>> get_loop_with_head(const node_id node) const;
+        [[nodiscard]] opt_ref<const control_flow_loop> get_loop_with_head(const node_id node) const;
+        [[nodiscard]] std::map<node_id, node_id> create_postdominator_tree() const;
+
 
     private:
         std::map<node_id, control_flow_node> m_nodes;
@@ -56,7 +58,7 @@ namespace dconstruct {
         std::vector<control_flow_loop> m_loops;
         const function_disassembly *m_func;
 
-        [[nodiscard]] void insert_node_at_line(const node_id start_line);
+        void insert_node_at_line(const node_id start_line);
         [[nodiscard]] std::optional<node_id> get_node_with_last_line(const u32 last_line) const;
 
         [[nodiscard]] std::pair<std::map<node_id, Agnode_t*>, node_id> insert_graphviz_nodes(Agraph_t* g) const;
@@ -67,7 +69,6 @@ namespace dconstruct {
         [[nodiscard]] b8 dominee_not_found_outside_dominator_path(node_id current_head, const node_id dominator, const node_id dominee, std::unordered_set<node_id>& visited) const;
         [[nodiscard]] std::vector<node_id> collect_loop_body(const node_id, const node_id) const;
         
-        [[nodiscard]] std::map<node_id, node_id> create_postdominator_tree() const;
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
 
         void add_successors(std::vector<node_id>& nodes, const control_flow_node& node, const control_flow_node& stop) const;

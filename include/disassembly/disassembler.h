@@ -5,6 +5,7 @@
 #include "instructions.h"
 #include "custom_structs.h"
 #include <vector>
+#include <unordered_map>
 
 namespace dconstruct {
     struct Color {
@@ -42,12 +43,17 @@ namespace dconstruct {
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table);
 
+        [[nodiscard]] const std::vector<function_disassembly>& get_funtions() const noexcept {
+            return m_functions;
+        }
+
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         
         BinaryFile* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
         DisassemblerOptions m_options;
+        std::vector<function_disassembly> m_functions;
 
         std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
 

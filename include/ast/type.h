@@ -9,7 +9,6 @@
 namespace dconstruct::ast {
 
     
-    using sid_literal = std::pair<sid64, std::string>;
     using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 

@@ -18,7 +18,7 @@ b8 environment::assign(const std::string& name, ast::typed_value value) {
     return false;
 }
 
-[[nodiscard]] std::optional<std::reference_wrapper<const ast::typed_value>> environment::lookup(const std::string& name) const {
+[[nodiscard]] opt_ref<const ast::typed_value> environment::lookup(const std::string& name) const {
     if (auto it = m_values.find(name); it != m_values.end()) {
         return it->second;
     }

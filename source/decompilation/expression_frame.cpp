@@ -45,7 +45,7 @@ ast::while_stmt& expression_frame::insert_loop_head(const control_flow_loop& loo
     
     auto& while_ref = static_cast<ast::while_stmt&>(*m_blockStack.top().get().m_statements.back().get());
 
-    m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back()));
+    m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back().get()));
     
     return while_ref;
 }

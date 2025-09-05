@@ -21,6 +21,11 @@ typedef float f32;
 typedef double f64;
 typedef uintptr_t p64;
 
+using sid_literal = std::pair<sid64, std::string>;
+
+template<class T>
+using opt_ref = std::optional<std::reference_wrapper<T>>;
+
 #define SID(str) (dconstruct::ToStringId64(str))
 
 namespace dconstruct {
