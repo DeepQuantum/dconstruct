@@ -11,9 +11,11 @@ namespace dconstruct::dcompiler {
 
 [[nodiscard]] std::string decompiled_function::to_string() const {
     std::ostringstream out;
+    out << "function " << m_id << "() {\n";
     for (const auto& statement : m_frame.m_baseBlock.m_statements) {
-        out << *statement << "\n";
+        out << "    " << *statement << "\n";
     }
+    out << '}';
     return out.str();
 } 
 
@@ -27,6 +29,7 @@ namespace dconstruct::dcompiler {
         //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
 
         decompiled_function fn{
+            func->m_id,
             std::set<node_id>{},
             expression_frame{ func->m_stackFrame.m_symbolTableEntries },
             std::move(cfg)
@@ -36,7 +39,7 @@ namespace dconstruct::dcompiler {
 
         funcs.emplace(func->m_id, std::move(fn));
     }
-    return std::move(funcs);
+    return funcs;
 }
 
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {

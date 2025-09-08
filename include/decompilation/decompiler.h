@@ -11,6 +11,7 @@
 namespace dconstruct::dcompiler {
 
 struct decompiled_function {
+    std::string m_id;
     std::set<node_id> m_parsedNodes;
     expression_frame m_frame;
     ControlFlowGraph m_graph;

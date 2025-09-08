@@ -65,10 +65,14 @@ namespace dconstruct::testing {
         file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
-        const auto& func = da.get_funtions()[0];
-        dcompiler::Decompiler dc{ &func, file };
-        const auto& funcs = dc.decompile();
-        return funcs.at(function_id).to_string();
+        for (const auto& func : da.get_funtions()) {
+            if (func.m_id == function_id) {
+                dcompiler::Decompiler dc{ &func, file };
+                const auto& funcs = dc.decompile();
+                return funcs.at(function_id).to_string();
+            }
+        }
+        
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
@@ -205,6 +209,17 @@ namespace dconstruct::testing {
         const std::string expected = "return #E16F9CC43A37FADA(arg_0) * -1;\n";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");
+
+        ASSERT_EQ(expected, actual);
+    }
+
+    TEST(DECOMPILER, FileFunction2) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string expected = 
+            "sid var_0 = player;\n"
+            "return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));\n";
+
+        const std::string actual = get_decompiled_function_from_file(filepath, "#E16F9CC43A37FADA");
 
         ASSERT_EQ(expected, actual);
     }
