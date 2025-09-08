@@ -275,14 +275,14 @@ namespace dconstruct::testing {
     TEST(COMPILER, LexerProgramWithExtendedFeatures) {
         const std::string chars = 
             "struct Person {\n"
-            "\tSID name = #john_doe;\n"
-            "\tdouble height = 5.9;\n"
+            "\tSID name = #ellie;\n"
+            "\tdouble damage = 5.9;\n"
             "\tint hexVal = 0x1A3F;\n"
             "\tstring msg = \"Hello, world!\";\n"
-            "\tif (height > 6.0) {\n"
-            "\t\tmsg = \"Tall person\";\n"
+            "\tif (damage > 6.0) {\n"
+            "\t\tmsg = \"Joel Miller\";\n"
             "\t} else {\n"
-            "\t\tmsg = \"Not so tall\";\n"
+            "\t\tmsg = \"Test String\";\n"
             "\t}\n"
             "};"
             ;
@@ -295,11 +295,11 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::IDENTIFIER, "SID", 0, 2),
             compiler::token(compiler::token_type::IDENTIFIER, "name", 0, 2),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 2),
-            compiler::token(compiler::token_type::SID, "#john_doe", "john_doe", 2),
+            compiler::token(compiler::token_type::SID, "#ellie", "ellie", 2),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 2),
 
             compiler::token(compiler::token_type::IDENTIFIER, "double", 0, 3),
-            compiler::token(compiler::token_type::IDENTIFIER, "height", 0, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "damage", 0, 3),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 3),
             compiler::token(compiler::token_type::DOUBLE, "5.9", 5.9, 3),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 3),
@@ -318,7 +318,7 @@ namespace dconstruct::testing {
 
             compiler::token(compiler::token_type::IF, "if", 0, 6),
             compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 6),
-            compiler::token(compiler::token_type::IDENTIFIER, "height", 0, 6),
+            compiler::token(compiler::token_type::IDENTIFIER, "damage", 0, 6),
             compiler::token(compiler::token_type::GREATER, ">", 0, 6),
             compiler::token(compiler::token_type::DOUBLE, "6.0", 6.0, 6),
             compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 6),
@@ -326,7 +326,7 @@ namespace dconstruct::testing {
 
             compiler::token(compiler::token_type::IDENTIFIER, "msg", 0, 7),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 7),
-            compiler::token(compiler::token_type::STRING, "\"Tall person\"", "Tall person", 7),
+            compiler::token(compiler::token_type::STRING, "\"Joel Miller\"", "Joel Miller", 7),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 7),
 
             compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 8),
@@ -335,7 +335,7 @@ namespace dconstruct::testing {
 
             compiler::token(compiler::token_type::IDENTIFIER, "msg", 0, 9),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 9),
-            compiler::token(compiler::token_type::STRING, "\"Not so tall\"", "Not so tall", 9),
+            compiler::token(compiler::token_type::STRING, "\"Test String\"", "Test String", 9),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 9),
 
             compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 10),
@@ -346,7 +346,9 @@ namespace dconstruct::testing {
         };
 
         const auto [tokens, errors] = get_tokens(chars);
-        EXPECT_EQ(tokens, expected);
+        for (u32 i = 0; i < tokens.size(); ++i) {
+            ASSERT_EQ(tokens[i], expected[i]);
+        }
         EXPECT_EQ(errors.size(), 0);
     }
 
