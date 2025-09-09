@@ -68,7 +68,7 @@ namespace dconstruct {
             m_nodes[current_node].m_lines.push_back(current_line);
             if (i == func->m_lines.size() - 1) {
                 m_nodes[current_node].m_endLine = current_line.m_location;
-                return;
+                break;
             }
             const function_disassembly_line &next_line = func->m_lines[i + 1];
 
@@ -188,8 +188,8 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::pair<std::map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
-        std::map<u32, Agnode_t*> node_map{};
+    [[nodiscard]] std::pair<std::unordered_map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
+        std::unordered_map<u32, Agnode_t*> node_map{};
         u32 max_node = 0;
         for (const auto& [node_start, node] : m_nodes) {
             std::string name = std::to_string(node_start);
@@ -209,7 +209,7 @@ namespace dconstruct {
         return { node_map, max_node };
     }
 
-    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::map<u32, Agnode_t*>& node_map) const {
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<u32, Agnode_t*>& node_map) const {
         for (const auto& [node_start, node] : m_nodes) {
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
@@ -298,16 +298,16 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] std::map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
-        std::map<node_id, std::set<node_id>> postdom;
+    [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
+        std::unordered_map<node_id, std::unordered_set<node_id>> postdom;
 
-        std::set<node_id> N;
+        std::unordered_set<node_id> N;
 
         for (const auto& [node_id, _] : m_nodes) {
             N.insert(node_id);
         }
 
-        node_id exit;
+        node_id exit = UINT32_MAX;
         
         for (const auto& [node_id, node] : m_nodes) {
             if (node.m_successors.empty()) {
@@ -327,7 +327,7 @@ namespace dconstruct {
                 }
                 std::set<node_id> new_postdominators = {id};
                 bool first = true;
-                for (auto succ : node.m_successors) {
+                for (const auto succ : node.m_successors) {
                     if (first) {
                         new_postdominators.insert(postdom[succ].begin(), postdom[succ].end());
                         first = false;
@@ -344,14 +344,14 @@ namespace dconstruct {
             }
         }
 
-        std::map<node_id, node_id> ipostdom;
+        std::unordered_map<node_id, node_id> ipostdom;
 
         for (const auto& [id, node] : m_nodes) {
             if (id == exit) {
                 continue;
             }
 
-            std::set<node_id> candidates = postdom[id];
+            std::unordered_set<node_id> candidates = postdom[id];
             candidates.erase(id);
 
             std::optional<node_id> ipd;

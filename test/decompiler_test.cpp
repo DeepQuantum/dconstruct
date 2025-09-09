@@ -65,7 +65,7 @@ namespace dconstruct::testing {
         file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
-        for (const auto& func : da.get_funtions()) {
+        for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
                 dcompiler::Decompiler dc{ &func, file };
                 const auto& funcs = dc.decompile();
@@ -206,7 +206,10 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, FileFunction1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        const std::string expected = "return #E16F9CC43A37FADA(arg_0) * -1;\n";
+        const std::string expected =
+            "function #7C28D25188889230() {\n"
+            "    return #E16F9CC43A37FADA(arg_0) * -1;\n"
+            "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");
 
@@ -216,8 +219,10 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, FileFunction2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = 
-            "sid var_0 = player;\n"
-            "return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));\n";
+            "function #E16F9CC43A37FADA() {\n"
+            "    sid var_0 = player;\n"
+            "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));\n"
+            "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#E16F9CC43A37FADA");
 
@@ -231,13 +236,33 @@ namespace dconstruct::testing {
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
-        const auto& funcs = da.get_funtions();
+        const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_func = dc.decompile().at(id);
-        const auto& tree = dc_func.m_graph.create_postdominator_tree();
-        ASSERT_EQ(tree.at(0), 0x16);
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+        for (const auto& [k, v] : tree) {
+            ASSERT_EQ(v, 0x16);
+        }
+    }
+
+    TEST(DECOMPILER, ImmediatePostdominator2) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#608356039B1FD9FD";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+        ASSERT_EQ(tree.at(0xE), 0x3A);
     }
 
     /*TEST(DECOMPILER, SimpleIf1) {
