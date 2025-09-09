@@ -43,7 +43,7 @@ namespace dconstruct {
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table);
 
-        [[nodiscard]] const std::vector<function_disassembly>& get_funtions() const noexcept {
+        [[nodiscard]] const std::vector<function_disassembly>& get_functions() const noexcept {
             return m_functions;
         }
 
@@ -91,6 +91,5 @@ namespace dconstruct {
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
         [[nodiscard]] b8 pointer_gets_called(const u32, const u32, const function_disassembly&) const;
-
     };
 }

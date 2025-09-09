@@ -149,7 +149,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
 
             case Opcode::Return: expression_frame.insert_return(istr.destination); break;
             default: {
-                continue;
+                throw std::runtime_error("unknown opcode");
             }
         }
     }
