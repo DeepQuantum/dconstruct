@@ -471,6 +471,8 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructionCount);
+
+    location symbols = location(lambda->m_pSymbols);
     
     function_disassembly functionDisassembly {
         std::move(lines),
@@ -1436,7 +1438,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
     }
     
-    if (table_entry.m_type != SymbolTableEntryType::NONE) {
+    if (table_entry.m_type != SymbolTableEntryType::NONE && istr.operand1 == stack_frame.m_symbolTableEntries.size()) {
         stack_frame.m_symbolTableEntries.push_back(table_entry);
     }
     line.m_text = std::string(disassembly_text);

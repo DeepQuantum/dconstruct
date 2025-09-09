@@ -48,21 +48,26 @@ namespace dconstruct {
             return m_nodes.at(at);
         }
 
+        [[nodiscard]] const std::unordered_map<node_id, node_id>& get_immediate_postdominators() const {
+            return m_immediatePostdominators;
+        }
+
         [[nodiscard]] opt_ref<const control_flow_loop> get_loop_with_head(const node_id node) const;
-        [[nodiscard]] std::map<node_id, node_id> create_postdominator_tree() const;
 
 
     private:
-        std::map<node_id, control_flow_node> m_nodes;
-        std::map<node_id, node_id> m_immediatePostdominators;
+        std::unordered_map<node_id, control_flow_node> m_nodes;
+        std::unordered_map<node_id, node_id> m_immediatePostdominators;
         std::vector<control_flow_loop> m_loops;
         const function_disassembly *m_func;
 
         void insert_node_at_line(const node_id start_line);
         [[nodiscard]] std::optional<node_id> get_node_with_last_line(const u32 last_line) const;
 
-        [[nodiscard]] std::pair<std::map<node_id, Agnode_t*>, node_id> insert_graphviz_nodes(Agraph_t* g) const;
-        void insert_graphviz_edges(Agraph_t* g, const std::map<node_id, Agnode_t*>& node_map) const;
+        [[nodiscard]] std::pair<std::unordered_map<node_id, Agnode_t*>, node_id> insert_graphviz_nodes(Agraph_t* g) const;
+        void insert_graphviz_edges(Agraph_t* g, const std::unordered_map<node_id, Agnode_t*>& node_map) const;
+
+        [[nodiscard]] std::unordered_map<node_id, node_id> create_postdominator_tree() const;
 
 
         [[nodiscard]] b8 dominates(const node_id, const node_id) const;
