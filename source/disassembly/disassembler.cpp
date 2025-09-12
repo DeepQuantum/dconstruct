@@ -472,8 +472,6 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructionCount);
 
-    location symbols = location(lambda->m_pSymbols);
-    
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
@@ -1517,7 +1515,8 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
                 std::snprintf(type, sizeof(type), "string: \"%s\"\n", reinterpret_cast<const char*>(entry.m_pointer));
                 break;
             }
-            case SymbolTableEntryType::POINTER:{
+            case SymbolTableEntryType::POINTER: 
+            case SymbolTableEntryType::FUNCTION: {
                 std::snprintf(type, sizeof(type), "pointer: <%s>\n", lookup(entry.m_pointer));
                 break;
             }
@@ -1540,8 +1539,7 @@ void Disassembler::insert_header_line() {
     constexpr int BOX_WIDTH = 100;
     insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");
-    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_2");
-    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_2");
+    insert_span_fmt("#   DeepQuantum's DC Disassembler ver. %-*s#\n", BOX_WIDTH - 40, "beta_3");
     insert_span_fmt("#   Listing for file: %-*s#\n", BOX_WIDTH - 23, m_currentFile->m_path.filename().string().c_str());
     int num_digits = std::to_string(m_currentFile->m_size).size();
     int padding = BOX_WIDTH - (16 + num_digits + 5);
