@@ -39,6 +39,8 @@ namespace dconstruct::dcompiler {
         // stores expressions that we are currently processing
         std::vector<expr_uptr> m_transformableExpressions;
 
+        std::vector<ast::variable_declaration> m_arguments;
+
         compiler::environment m_env;
 
         ast::block m_baseBlock;

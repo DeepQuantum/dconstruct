@@ -11,9 +11,16 @@ namespace dconstruct::dcompiler {
 
 [[nodiscard]] std::string decompiled_function::to_string() const {
     std::ostringstream out;
-    out << "function " << m_id << "() {\n";
+    out << "function " << m_id << '(';
+    for (u32 i = 0; i < m_frame.m_arguments.size(); ++i) {
+        out << m_frame.m_arguments[i].m_typeName << ' ' << m_frame.m_arguments[i].m_identifier;
+        if (i != m_frame.m_arguments.size() - 1) {
+            out << ", ";
+        }
+    }
+    out << ") {\n";
     for (const auto& statement : m_frame.m_baseBlock.m_statements) {
-        out << "    " << *statement << "\n";
+        out << "    " << *statement << '\n';
     }
     out << '}';
     return out.str();
@@ -34,6 +41,12 @@ namespace dconstruct::dcompiler {
             expression_frame{ func->m_stackFrame.m_symbolTableEntries },
             std::move(cfg)
         };
+
+        std::vector<std::reference_wrapper<ast::variable_declaration>> args;
+
+        for (u32 i = 0; i < func->m_stackFrame.m_argCount; ++i) {
+            fn.m_frame.m_arguments.
+        }
 
         emit_node(fn.m_graph[0], fn);
 
