@@ -207,7 +207,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, FileFunction1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected =
-            "function #7C28D25188889230() {\n"
+            "function #7C28D25188889230(unknown arg_0) {\n"
             "    return #E16F9CC43A37FADA(arg_0) * -1;\n"
             "}";
 
@@ -219,7 +219,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, FileFunction2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = 
-            "function #E16F9CC43A37FADA() {\n"
+            "function #E16F9CC43A37FADA(unknown arg_0) {\n"
             "    sid var_0 = player;\n"
             "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));\n"
             "}";

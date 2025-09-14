@@ -24,7 +24,7 @@ namespace dconstruct::dcompiler {
     }
     out << '}';
     return out.str();
-} 
+}
 
 
 [[nodiscard]] std::unordered_map<std::string, decompiled_function> Decompiler::decompile() {
@@ -42,10 +42,10 @@ namespace dconstruct::dcompiler {
             std::move(cfg)
         };
 
-        std::vector<std::reference_wrapper<ast::variable_declaration>> args;
-
-        for (u32 i = 0; i < func->m_stackFrame.m_argCount; ++i) {
-            fn.m_frame.m_arguments.
+        for (u32 i = 0; i < func->m_stackFrame.m_args.size(); ++i) {
+            const ast::full_type arg_type = ast::register_type_to_ast_type(func->m_stackFrame.m_args.at(i));
+            const std::string type_name = ast::type_to_declaration_string(arg_type);
+            fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
 
         emit_node(fn.m_graph[0], fn);
@@ -109,7 +109,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::ILessThan:
             case Opcode::FLessThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS, "<"}); break;
             case Opcode::ILessThanEqual:
-            case Opcode::FLessThanEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
+            case Opcode::FLessThanEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS_EQUAL, "<="}); break;
             case Opcode::IGreaterThan:
             case Opcode::FGreaterThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
             case Opcode::IGreaterThanEqual:
@@ -118,7 +118,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::OpLogNot: expression_frame.apply_unary_op<ast::logical_not_expr>(istr, compiler::token{compiler::token_type::BANG, "!"}); break;
             case Opcode::OpBitNot: expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::TILDE, "~"}); break;
             case Opcode::INeg:
-            case Opcode::FNeg: expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
+            case Opcode::FNeg: expression_frame.apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
             case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_i64); break;
@@ -144,6 +144,13 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 break;
             }
 
+            case Opcode::CastInteger: {
+                expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_kind::I64, expression_frame.m_transformableExpressions[istr.operand1]));
+            }
+            case Opcode::CastFloat: {
+                expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_kind::F32, expression_frame.m_transformableExpressions[istr.operand1]));
+            }
+
             case Opcode::Move: {
                 expression_frame.move(istr.destination, istr.operand1);
                 break;
@@ -154,9 +161,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             // }
 
             case Opcode::AssertPointer:
-            case Opcode::BreakFlag:
-            case Opcode::CastInteger:
-            case Opcode::CastFloat: {
+            case Opcode::BreakFlag: {
                 continue;
             }
 

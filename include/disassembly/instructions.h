@@ -191,7 +191,17 @@ enum class RegisterValueType {
     U64,
     HASH,
     POINTER,
-    STRING
+    I8_POINTER,
+    U8_POINTER,
+    I16_POINTER,
+    U16_POINTER,
+    I32_POINTER,
+    U32_POINTER,
+    I64_POINTER,
+    U64_POINTER,
+    F32_POINTER,
+    STRING,
+    UNKNOWN
 };
 
 struct Register {
@@ -215,6 +225,13 @@ struct Register {
     b8 isReturn = false;
     b8 isArg = false;
     u8 argNum;
+
+
+    void set_first_type(RegisterValueType type) {
+        if (m_type == RegisterValueType::UNKNOWN) {
+            m_type = type;
+        }
+    }
 };
 
 struct StackFrame {
@@ -223,12 +240,13 @@ struct StackFrame {
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     location m_symbolTable;
-    u32 m_argCount = 0;
+    std::vector<RegisterValueType> m_args;
 
     StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
+            m_registers[i].m_type = RegisterValueType::UNKNOWN;
         }
     }
 
