@@ -68,7 +68,8 @@ namespace dconstruct::dcompiler {
             m_baseBlock(std::move(rhs.m_baseBlock)),
             m_blockStack{},
             m_transformableExpressions(std::move(rhs.m_transformableExpressions)),
-            m_varCount(rhs.m_varCount)
+            m_varCount(rhs.m_varCount),
+            m_arguments(std::move(rhs.m_arguments))
         {
             m_blockStack.push(std::ref(m_baseBlock));
         }

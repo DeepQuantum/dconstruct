@@ -89,4 +89,6 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;
 
+    [[nodiscard]] full_type register_type_to_ast_type(const RegisterValueType reg_type);
+
 }
