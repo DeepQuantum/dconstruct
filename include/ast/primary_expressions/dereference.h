@@ -3,10 +3,8 @@
 #include "ast/expression.h"
 
 namespace dconstruct::ast {
-    struct cast_expr : public expression {
-        cast_expr(full_type type, expr_uptr&& expr) : m_expr(std::move(expr)) {
-            m_type = type;
-        };
+    struct dereference_expr : public expression {
+        dereference_expr(expr_uptr&& expr) : m_expr(std::move(expr)) {};
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
