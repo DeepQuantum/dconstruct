@@ -265,6 +265,25 @@ namespace dconstruct::testing {
         ASSERT_EQ(tree.at(0xE), 0x3A);
     }
 
+
+    TEST(DECOMPILER, DetermineArgumentType) {
+        std::vector<Instruction> istrs = {
+            {Opcode::Move, 0, 49, 0},
+            {Opcode::LoadU16Imm, 1, 5, 0},
+            {Opcode::IEqual, 2, 0, 1},
+            {Opcode::Return, 2, 0, 0}
+        };
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "DetermineArgumentType");
+        const auto& actual = func.to_string();
+
+        const std::string expected =
+            "function DetermineArgumentType(i64 arg_0) {\n"
+            "    return arg_0 == 5;\n"
+            "}";
+
+        EXPECT_EQ(expected, actual);
+    }
+
     /*TEST(DECOMPILER, SimpleIf1) {
         std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},

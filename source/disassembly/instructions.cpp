@@ -105,7 +105,7 @@ namespace dconstruct {
     }
 
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
-        const Register reg = m_registers[idx];
+        const Register& reg = m_registers[idx];
         if (reg.isArg) {
             std::snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
             return;

@@ -239,8 +239,8 @@ struct StackFrame {
     std::vector<SymbolTableEntry> m_symbolTableEntries;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
+    std::vector<RegisterValueType> m_registerArgs;
     location m_symbolTable;
-    std::vector<RegisterValueType> m_args;
 
     StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
         for (i32 i = 49; i < 70; ++i) {

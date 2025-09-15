@@ -42,8 +42,8 @@ namespace dconstruct::dcompiler {
             std::move(cfg)
         };
 
-        for (u32 i = 0; i < func->m_stackFrame.m_args.size(); ++i) {
-            const ast::full_type arg_type = ast::register_type_to_ast_type(func->m_stackFrame.m_args.at(i));
+        for (u32 i = 0; i < func->m_stackFrame.m_registerArgs.size(); ++i) {
+            const ast::full_type arg_type = ast::register_type_to_ast_type(func->m_stackFrame.m_registerArgs.at(i));
             const std::string type_name = ast::type_to_declaration_string(arg_type);
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
@@ -145,10 +145,12 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             }
 
             case Opcode::CastInteger: {
-                expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_kind::I64, expression_frame.m_transformableExpressions[istr.operand1]));
+                //expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::I64 }, std::move(expression_frame.m_transformableExpressions[istr.operand1])));
+                break;
             }
             case Opcode::CastFloat: {
-                expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_kind::F32, expression_frame.m_transformableExpressions[istr.operand1]));
+                //expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::F32 }, std::move(expression_frame.m_transformableExpressions[istr.operand1])));
+                break;
             }
 
             case Opcode::Move: {
