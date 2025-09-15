@@ -5,6 +5,7 @@
 #include <optional>
 #include <variant>
 #include <vector>
+#include "disassembly/instructions.h"
 
 namespace dconstruct::ast {
 

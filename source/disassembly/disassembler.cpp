@@ -489,7 +489,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         process_instruction(i, functionDisassembly);
         if (counting_args) {
             if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
-                functionDisassembly.m_stackFrame.m_args.push_back(RegisterValueType::UNKNOWN);
+                functionDisassembly.m_stackFrame.m_registerArgs.push_back(RegisterValueType::UNKNOWN);
             } else {
                 counting_args = false;
             }
@@ -518,7 +518,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         process_instruction(i, functionDisassembly);
         if (counting_args) {
             if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
-                functionDisassembly.m_stackFrame.m_args.push_back(RegisterValueType::UNKNOWN);
+                functionDisassembly.m_stackFrame.m_registerArgs.push_back(RegisterValueType::UNKNOWN);
             } else {
                 counting_args = false;
             }
@@ -575,8 +575,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     stack_frame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_type == RegisterValueType::POINTER ? op1.m_PTR.m_sid : op1.m_SID));
     stack_frame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_type == RegisterValueType::POINTER ? op2.m_PTR.m_sid : op2.m_SID));
 
-    if (dest.isArg) {
-        fn.m_stackFrame.m_args[istr.destination - 49] = dest.m_type;
+    if (dest.m_type != RegisterValueType::UNKNOWN && dest.isArg) {
+        fn.m_stackFrame.m_registerArgs[dest.argNum] = dest.m_type;
     }
 
     dest.isReturn = false;
@@ -586,6 +586,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::Return: {
             std::snprintf(varying, disassembly_text_size,"r%d", istr.destination);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
+            for (const auto& reg : fn.m_stackFrame.m_registers) {
+                if (reg.isArg && reg.m_type != RegisterValueType::UNKNOWN) {
+                    fn.m_stackFrame.m_registerArgs[reg.argNum] = reg.m_type;
+                }
+            }
             break;
         }
         case Opcode::IAdd: {
@@ -1578,8 +1583,8 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[512] = {0};
     
-    if (!functionDisassembly.m_stackFrame.m_args.empty()) {
-        insert_span_indent("%*s[%d args]\n", indent, functionDisassembly.m_stackFrame.m_args.size());
+    if (!functionDisassembly.m_stackFrame.m_registerArgs.empty()) {
+        insert_span_indent("%*s[%d args]\n", indent, functionDisassembly.m_stackFrame.m_registerArgs.size());
     }
     
     for (const auto &line : functionDisassembly.m_lines) {
