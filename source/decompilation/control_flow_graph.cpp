@@ -49,13 +49,11 @@ namespace dconstruct {
     }
 
     [[nodiscard]] node_id control_flow_node::get_direct_successor() const {
-        node_id min = UINT32_MAX;
-        for (const node_id node : m_successors) {
-            if (min == UINT32_MAX || node < min) {
-                min = node;
-            }
-        }
-        return min;
+        return get_last_line().m_location + 1;
+    }
+
+    [[nodiscard]] const function_disassembly_line& control_flow_node::get_last_line() const {
+        return m_lines.back();
     }
 
     ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {

@@ -26,6 +26,8 @@ namespace dconstruct {
         [[nodiscard]] std::string get_label_html() const;
 
         [[nodiscard]] node_id get_direct_successor() const;
+        
+        [[nodiscard]] const function_disassembly_line& get_last_line() const;
     };
 
     struct control_flow_loop {
@@ -38,11 +40,18 @@ namespace dconstruct {
     public:
         ControlFlowGraph() = default;
         explicit ControlFlowGraph(const function_disassembly *);
+        ControlFlowGraph(const function_disassembly* func, std::unordered_map<node_id, control_flow_node> nodes) : ControlFlowGraph(func) {
+            m_nodes = std::move(nodes);
+        };
         void find_loops();
         void write_to_txt_file(const std::string& path = "graph.txt") const;
         void write_image(const std::string &path = "graph.svg") const;
 
         void insert_loop_subgraphs(Agraph_t *g) const;
+
+        [[nodiscard]] const std::unordered_map<node_id, control_flow_node>& get_nodes() const {
+            return m_nodes;
+        }
 
         [[nodiscard]] const control_flow_node& operator[](const u32 at) const {
             return m_nodes.at(at);
