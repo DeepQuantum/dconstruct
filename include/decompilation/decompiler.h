@@ -36,6 +36,8 @@ public:
 
     [[nodiscard]] std::unordered_map<std::string, decompiled_function> decompile();
 
+    [[nodiscard]] std::unordered_map<std::string, decompiled_function> decompile_node(const node_id node_id);
+
     [[nodiscard]] ast::full_type try_find_argument_type(const std::vector<function_disassembly_line>& lines, const u32 argument_register);
 
 private:
