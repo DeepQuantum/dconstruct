@@ -55,16 +55,45 @@ namespace dconstruct::dcompiler {
     return funcs;
 }
 
+[[nodiscard]] std::unordered_map<std::string, decompiled_function> Decompiler::decompile_node(const node_id node) {
+    std::unordered_map<std::string, decompiled_function> funcs;
+
+    for (const auto &func : m_functions) {
+        ControlFlowGraph cfg{func};
+        ControlFlowGraph single_node_cfg{func, cfg.get_nodes()};
+        cfg.find_loops();
+        //cfg.write_image("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/images/" + func->m_id + ".svg");
+
+        decompiled_function fn{
+            func->m_id,
+            std::set<node_id>{},
+            expression_frame{ func->m_stackFrame.m_symbolTableEntries },
+            std::move(single_node_cfg)
+        };
+
+        for (u32 i = 0; i < func->m_stackFrame.m_registerArgs.size(); ++i) {
+            const ast::full_type arg_type = ast::register_type_to_ast_type(func->m_stackFrame.m_registerArgs.at(i));
+            const std::string type_name = ast::type_to_declaration_string(arg_type);
+            fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
+        }
+
+        parse_basic_block(fn.m_graph[node], fn.m_frame);
+
+        funcs.emplace(func->m_id, std::move(fn));
+    }
+    return funcs;
+}
+
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
-    const node_id node_id = node.m_startLine;
-    if (fn.m_parsedNodes.contains(node_id)) {
+    const node_id current_node_id = node.m_startLine;
+    if (fn.m_parsedNodes.contains(current_node_id)) {
         return;
     }
-    fn.m_parsedNodes.insert(node_id);
+    fn.m_parsedNodes.insert(current_node_id);
     parse_basic_block(node, fn.m_frame);
     if (node.m_successors.empty()) {
         return;
-    } else if (const auto loop = fn.m_graph.get_loop_with_head(node_id)) {
+    } else if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
         return;
         fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.operand1);
         for (const auto& successor : node.m_successors) {
@@ -72,8 +101,11 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         }
         fn.m_frame.m_blockStack.pop();
     } else {
-        for (const auto& successor : node.m_successors) {
-            emit_node(fn.m_graph[successor], fn);
+        const auto& last_line = node.get_last_line();
+        node_id positive_branch_head = 0, negative_branch_head = 0;
+        if (last_line.m_instruction.opcode == Opcode::BranchIfNot) {
+            positive_branch_head = last_line.m_instruction.operand1;
+            negative_branch_head = node.get_direct_successor();
         }
     }
 }
@@ -169,7 +201,7 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
 
             case Opcode::Return: expression_frame.insert_return(istr.destination); break;
             default: {
-                throw std::runtime_error("unknown opcode");
+                continue;
             }
         }
     }

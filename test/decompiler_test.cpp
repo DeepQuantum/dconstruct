@@ -75,6 +75,20 @@ namespace dconstruct::testing {
         
     }
 
+    static std::string get_decompiled_node_from_file(const std::string& path, const std::string& function_id, const node_id node) {
+        BinaryFile file{ path };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        for (const auto& func : da.get_functions()) {
+            if (func.m_id == function_id) {
+                dcompiler::Decompiler dc{ &func, file };
+                const auto& funcs = dc.decompile_node(node);
+                return funcs.at(function_id).to_string();
+            }
+        }
+    }
+
     TEST(DECOMPILER, BasicLoadImmediate) {
         const compiler::environment env{};
         std::vector<Instruction> istrs = {
@@ -282,6 +296,14 @@ namespace dconstruct::testing {
             "}";
 
         EXPECT_EQ(expected, actual);
+    }
+
+    TEST(DECOMPILER, LongNode1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string expected = "";
+
+        const std::string actual = get_decompiled_node_from_file(filepath, "#14C6FC79122F4A87", 0x12);
+        ASSERT_EQ(expected, actual);
     }
 
     /*TEST(DECOMPILER, SimpleIf1) {
