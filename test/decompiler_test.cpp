@@ -222,7 +222,7 @@ namespace dconstruct::testing {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected =
             "function #7C28D25188889230(unknown arg_0) {\n"
-            "    return #E16F9CC43A37FADA(arg_0) * -1;\n"
+            "    return #E16F9CC43A37FADA(arg_0) * -1.00;\n"
             "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");

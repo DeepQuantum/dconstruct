@@ -177,11 +177,11 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             }
 
             case Opcode::CastInteger: {
-                //expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::I64 }, std::move(expression_frame.m_transformableExpressions[istr.operand1])));
+                expression_frame.cast_to_int(istr);
                 break;
             }
             case Opcode::CastFloat: {
-                //expression_frame.load_expression_into_var(istr.destination, std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::F32 }, std::move(expression_frame.m_transformableExpressions[istr.operand1])));
+                expression_frame.cast_to_float(istr);
                 break;
             }
 
