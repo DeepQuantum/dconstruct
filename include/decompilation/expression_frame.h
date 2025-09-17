@@ -88,6 +88,9 @@ namespace dconstruct::dcompiler {
 
         expr_uptr& call(const Instruction& istr);
 
+        expr_uptr& cast_to_int(const Instruction& istr);
+        expr_uptr& cast_to_float(const Instruction& istr);
+
         expr_uptr& load_literal(const u8 dst, const ast::primitive_value& value);
 
         ast::return_stmt& insert_return(const u32 dest);

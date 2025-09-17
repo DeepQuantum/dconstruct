@@ -63,6 +63,10 @@ namespace dconstruct::ast {
         else if constexpr (std::is_same_v<T, sid_literal>) {
             return std::get<1>(arg);
         }
+        else if constexpr (std::is_same_v<T, f32>) {
+            const std::string first = std::to_string(arg);
+            return first.substr(0, first.find(".") + 3);
+        }
         else {
             return std::to_string(arg);
         }
