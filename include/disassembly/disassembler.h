@@ -93,4 +93,10 @@ namespace dconstruct {
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
         [[nodiscard]] b8 pointer_gets_called(const u32, const u32, const function_disassembly&) const;
     };
+
+    const std::unordered_map<std::string, std::vector<RegisterValueType>> builtin_funtions = {
+        {"get-boolean", {RegisterValueType::BOOL, RegisterValueType::POINTER}},
+        {"ddict-key-count", {RegisterValueType::U32}},
+        {"ddict-create", {RegisterValueType::DDICT}}
+    };
 }
