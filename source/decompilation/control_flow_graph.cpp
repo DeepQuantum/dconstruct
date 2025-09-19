@@ -56,6 +56,22 @@ namespace dconstruct {
         return m_lines.back();
     }
 
+    [[nodiscard]] b8 control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
+        if (m_lines.size() != rhs.m_lines.size()) {
+            return false;
+        }
+        for (u32 i = 0; i < m_lines.size(); ++i) {
+            if (m_lines[i].m_instruction != rhs.m_lines[i].m_instruction) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    [[nodiscard]] b8 control_flow_node::operator!=(const control_flow_node& rhs) const noexcept {
+        return !(*this == rhs);
+    }
+
     ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
         m_nodes.emplace(0, 0);
@@ -297,83 +313,89 @@ namespace dconstruct {
     }
 
     [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
-        std::unordered_map<node_id, std::unordered_set<node_id>> postdom;
+        using node_set = std::unordered_set<node_id>;
 
-        std::unordered_set<node_id> N;
-
-        for (const auto& [node_id, _] : m_nodes) {
-            N.insert(node_id);
+        node_set allNodes;
+        for (auto const& [id, _] : m_nodes) {
+            allNodes.insert(id);
         }
 
-        node_id exit = UINT32_MAX;
-        
-        for (const auto& [node_id, node] : m_nodes) {
+        node_set exits;
+        for (auto const& [id, node] : m_nodes) {
             if (node.m_successors.empty()) {
-                postdom[node_id].insert(node_id);
-                exit = node_id;
-            } else {
-                postdom[node_id] = N;
+                exits.insert(id);
+            }
+        }
+
+        std::unordered_map<node_id, node_set> postdom;
+        for (auto n : allNodes) {
+            if (exits.contains(n)) {
+                postdom[n] = { n };
+            }
+            else {
+                postdom[n] = allNodes;
             }
         }
 
         b8 changed = true;
         while (changed) {
             changed = false;
-            for (const auto& [id, node] : m_nodes) {
-                if (node.m_successors.empty()) {
-                    continue;
-                }
-                std::set<node_id> new_postdominators = {id};
-                bool first = true;
-                for (const auto succ : node.m_successors) {
+            for (auto n : allNodes) {
+                if (exits.contains(n)) continue;
+
+                node_set newSet = { n };
+                b8 first = true;
+                node_set tmp;
+                for (auto s : m_nodes.at(n).m_successors) {
                     if (first) {
-                        new_postdominators.insert(postdom[succ].begin(), postdom[succ].end());
+                        tmp = postdom[s];
                         first = false;
-                    } else {
-                        std::set<node_id> temp;
-                        std::ranges::set_intersection(
-                            new_postdominators,
-                            postdom[succ],
-                            std::inserter(temp, temp.begin())
-                        );
-                        new_postdominators = std::move(temp);
                     }
+                    else {
+                        node_set inter;
+                        for (auto const& x : tmp) {
+                            if (postdom[s].count(x)) inter.insert(x);
+                        }
+                        tmp = std::move(inter);
+                    }
+                }
+                newSet.insert(tmp.begin(), tmp.end());
+
+                if (newSet != postdom[n]) {
+                    postdom[n] = std::move(newSet);
+                    changed = true;
                 }
             }
         }
 
-        std::unordered_map<node_id, node_id> ipostdom;
+        std::unordered_map<node_id, node_id> ipdom;
+        for (auto n : allNodes) {
+            if (exits.contains(n)) continue;
 
-        for (const auto& [id, node] : m_nodes) {
-            if (id == exit) {
-                continue;
-            }
+            node_set strict(postdom[n]);
+            strict.erase(n);
 
-            std::unordered_set<node_id> candidates = postdom[id];
-            candidates.erase(id);
-
-            std::optional<node_id> ipd;
-            for (auto c : candidates) {
-                b8 dominated_by_other = false;
-                for (auto d : candidates) {
-                    if (c == d) continue;
-                    if (postdom[c].count(d)) { 
-                        dominated_by_other = true;
+            node_id idom = 0;
+            for (auto cand : strict) {
+                bool is_immediate = true;
+                for (auto other : strict) {
+                    if (other == cand) continue;
+                    if (postdom[other].count(cand)) {
+                        is_immediate = false;
                         break;
                     }
                 }
-                if (!dominated_by_other) {
-                    ipd = c;
+                if (is_immediate) {
+                    idom = cand;
                     break;
                 }
             }
-
-            if (ipd) {
-                ipostdom[id] = *ipd;
+            if (idom != 0) {
+                ipdom[n] = idom;
             }
         }
 
-        return ipostdom;
+        return ipdom;
     }
 
     void ControlFlowGraph::add_successors(std::vector<node_id> &nodes, const control_flow_node& node, const control_flow_node& stop) const {

@@ -550,7 +550,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     SymbolTableEntry table_entry;
     table_entry.m_type = SymbolTableEntryType::NONE;
 
-
     std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
             line.m_location,
             get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),
@@ -563,24 +562,61 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     char *varying = disassembly_text + strlen(disassembly_text);
     const u32 disassembly_text_size = disassembly_buffer_size - strlen(disassembly_text);
 
-    Register &dest = stack_frame[istr.destination < 128 ? istr.destination : 0];
-    Register &op1 = stack_frame[istr.operand1 < 128 ? istr.operand1 : 0];
-    Register &op2 = stack_frame[istr.operand2 < 128 ? istr.operand2 : 0];
-
     char dst_str[interpreted_buffer_size] = {0}; 
     char op1_str[interpreted_buffer_size] = {0}; 
     char op2_str[interpreted_buffer_size] = {0}; 
 
-    stack_frame.to_string(dst_str, interpreted_buffer_size, istr.destination < 128 ? istr.destination : 0, lookup(dest.m_type == RegisterValueType::POINTER ? dest.m_PTR.m_sid : dest.m_SID));
-    stack_frame.to_string(op1_str, interpreted_buffer_size, istr.operand1 < 128 ? istr.operand1 : 0, lookup(op1.m_type == RegisterValueType::POINTER ? op1.m_PTR.m_sid : op1.m_SID));
-    stack_frame.to_string(op2_str, interpreted_buffer_size, istr.operand2 < 128 ? istr.operand2 : 0, lookup(op2.m_type == RegisterValueType::POINTER ? op2.m_PTR.m_sid : op2.m_SID));
+    if (istr.opcode == Opcode::Branch) {
+        u32 target = istr.destination | (istr.operand2 << 8);
+        std::snprintf(varying, disassembly_text_size,"0x%X", target);
+        std::snprintf(interpreted, interpreted_buffer_size, "GOTO ");
+        stack_frame.add_target_label(target);
+        line.m_target = target;
+        if (target < line.m_location) {
+            stack_frame.m_backwardsJumpLocs.push_back(line);
+        }
+        line.m_text = std::string(disassembly_text);
+        line.m_comment = std::string(interpreted);
+        return;
+    }
+
+    Register& op1 = stack_frame[istr.operand1];
+    stack_frame.to_string(op1_str, interpreted_buffer_size, istr.operand1, lookup(op1.m_type == RegisterValueType::POINTER ? op1.m_PTR.m_sid : op1.m_SID));
+
+    if (istr.opcode == Opcode::BranchIf || istr.opcode == Opcode::BranchIfNot) {
+        op1.set_first_type(RegisterValueType::BOOL);
+        u32 target = istr.destination | (istr.operand2 << 8);
+        if (fn.m_lines[target].m_instruction.opcode == istr.opcode && fn.m_lines[target].m_instruction.operand1 == istr.operand1) {
+            target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+        }
+        std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
+        const char* comment = istr.opcode == Opcode::BranchIf ? "IF r%d [%s] " : "IF NOT r%d [%s] ";
+        std::snprintf(interpreted, interpreted_buffer_size, comment, istr.operand1, op1_str);
+        line.m_target = target;
+        stack_frame.add_target_label(target);
+        if (target < line.m_location) {
+            stack_frame.m_backwardsJumpLocs.push_back(line);
+        }
+        line.m_text = std::string(disassembly_text);
+        line.m_comment = std::string(interpreted);
+        return;
+    }
+
+    Register& dest = stack_frame[istr.destination];
+    Register &op2 = stack_frame[istr.operand2];
+
+
+    stack_frame.to_string(dst_str, interpreted_buffer_size, istr.destination, lookup(dest.m_type == RegisterValueType::POINTER ? dest.m_PTR.m_sid : dest.m_SID));
+    stack_frame.to_string(op2_str, interpreted_buffer_size, istr.operand2, lookup(op2.m_type == RegisterValueType::POINTER ? op2.m_PTR.m_sid : op2.m_SID));
 
     if (dest.m_type != RegisterValueType::UNKNOWN && dest.isArg) {
         fn.m_stackFrame.m_registerArgs[dest.argNum] = dest.m_type;
     }
 
-    dest.isReturn = false;
-    dest.isArg = false;
+   if (istr.destination != istr.operand1 && istr.destination != istr.operand2) {
+       dest.isArg = false;
+       dest.isReturn = false;
+   }
 
     switch (istr.opcode) {
         case Opcode::Return: {
@@ -880,7 +916,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
-                stack_frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stack_frame[i + 49].m_SID));
+                stack_frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(stack_frame[i + 49].m_type == RegisterValueType::POINTER ? stack_frame[i + 49].m_PTR.m_sid : stack_frame[i + 49].m_SID));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
             dest.m_type = RegisterValueType::POINTER;
@@ -902,6 +938,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             }
             dest.m_type = RegisterValueType::POINTER;
             dest.isReturn = true;
+            dest.m_PTR = { 0, 0, op1.m_PTR.m_sid };
             std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
             break;
         }
@@ -1117,48 +1154,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             );
             break;
         }
-        case Opcode::Branch: {
-            u32 target = istr.destination | (istr.operand2 << 8);
-            std::snprintf(varying, disassembly_text_size,"0x%X", target);
-            std::snprintf(interpreted, interpreted_buffer_size, "GOTO ");
-            stack_frame.add_target_label(target);
-            line.m_target = target;
-            if (target < line.m_location) {
-                stack_frame.m_backwardsJumpLocs.push_back(line);
-            }
-            break;
-        }
-        case Opcode::BranchIf: {
-            op1.set_first_type(RegisterValueType::BOOL);
-            u32 target = istr.destination | (istr.operand2 << 8);
-            if (fn.m_lines[target].m_instruction.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.operand1 == istr.operand1) {
-                target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
-            }
-            std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
-            std::snprintf(interpreted, interpreted_buffer_size, "IF r%d [%s] ", istr.operand1, op1_str);
-            line.m_target = target;
-            stack_frame.add_target_label(target);
-            if (target < line.m_location) {
-                stack_frame.m_backwardsJumpLocs.push_back(line);
-            }
-            
-            break;
-        }
-        case Opcode::BranchIfNot: {
-            op1.set_first_type(RegisterValueType::BOOL);
-            u32 target = istr.destination | (istr.operand2 << 8);
-            if (fn.m_lines[target].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == istr.operand1) {
-                target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
-            }
-            std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", istr.operand1, target);
-            std::snprintf(interpreted, interpreted_buffer_size, "IF NOT r%d [%s] ", istr.operand1, op1_str);
-            line.m_target = target;
-            stack_frame.add_target_label(target);
-            if (target < line.m_location) {
-                stack_frame.m_backwardsJumpLocs.push_back(line);
-            }
-            break;
-        }
         case Opcode::OpLogNot: {
             op1.set_first_type(RegisterValueType::BOOL);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", istr.destination, istr.operand1);
@@ -1314,19 +1309,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::LoadStaticPointerImm: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", istr.destination, istr.operand1);
             p64 value = stack_frame.m_symbolTable.get<p64>(istr.operand1 * 8);
-            if (value >= m_currentFile->m_strings.num()) {
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
-                dest.m_type = RegisterValueType::STRING;
-                dest.m_PTR = {value, 0, 0};
-                table_entry.m_type = SymbolTableEntryType::STRING;
-                table_entry.m_pointer = value;
-            } else {
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <0x%d>", istr.destination, istr.operand1, get_offset((void*)value));
-                dest.m_type = RegisterValueType::POINTER;
-                dest.m_PTR = {0, 0, value};
-                table_entry.m_type = SymbolTableEntryType::POINTER;
-                table_entry.m_pointer = value;
-            }
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"", istr.destination, istr.operand1, reinterpret_cast<const char*>(value));
+            dest.m_type = RegisterValueType::STRING;
+            dest.m_PTR = { value, 0, 0 };
+            table_entry.m_type = SymbolTableEntryType::STRING;
+            table_entry.m_pointer = value;
             break;
         }
         case Opcode::LoadStaticI64Imm: {
@@ -1544,7 +1531,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
     }
-    
+
     if (table_entry.m_type != SymbolTableEntryType::NONE && istr.operand1 == stack_frame.m_symbolTableEntries.size()) {
         stack_frame.m_symbolTableEntries.push_back(table_entry);
     }

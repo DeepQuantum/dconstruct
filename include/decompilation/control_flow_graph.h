@@ -23,6 +23,9 @@ namespace dconstruct {
 
         explicit control_flow_node(const u32 line) : m_startLine(line) {}
 
+        [[nodiscard]] b8 operator==(const control_flow_node& rhs) const noexcept;
+        [[nodiscard]] b8 operator!=(const control_flow_node& rhs) const noexcept;
+
         [[nodiscard]] std::string get_label_html() const;
 
         [[nodiscard]] node_id get_direct_successor() const;

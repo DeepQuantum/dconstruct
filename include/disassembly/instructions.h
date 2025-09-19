@@ -113,6 +113,9 @@ struct Instruction {
     u8 operand1;
     u8 operand2;
     u32 padding;
+
+    [[nodiscard]] b8 operator==(const Instruction& rhs) const noexcept = default;
+
     const char* opcode_to_string() const noexcept;
 };
 
@@ -169,7 +172,7 @@ struct RegisterPointer {
 
     RegisterPointer() noexcept : m_base(0), m_offset(0), m_sid(0) {};
 
-    RegisterPointer(p64 base, u64 offset, sid64 sid) : m_base(base), m_offset(offset), m_sid(sid) {};
+    RegisterPointer(p64 base, u64 offset, sid64 sid) noexcept : m_base(base), m_offset(offset), m_sid(sid) {};
 
     p64 get() const noexcept {
         return m_base + m_offset;
@@ -201,6 +204,8 @@ enum class RegisterValueType {
     U64_POINTER,
     F32_POINTER,
     STRING,
+    DARRAY,
+    DDICT,
     UNKNOWN
 };
 
