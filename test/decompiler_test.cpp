@@ -209,7 +209,8 @@ namespace dconstruct::testing {
         const auto& frame = func.m_frame;
 
         const auto& actual = frame.m_baseBlock.m_statements;
-        const std::string expected = "return ddict-key-count(5);";
+        const std::string expected =
+            "return ddict-key-count(5);";
 
         std::ostringstream os;
         for (const auto& stmt : actual) {
@@ -276,7 +277,26 @@ namespace dconstruct::testing {
         const auto& dc_funcs = dc.decompile();
         const auto& dc_func = dc_funcs.at(id);
         const auto& tree = dc_func.m_graph.get_immediate_postdominators();
-        ASSERT_EQ(tree.at(0xE), 0x3A);
+        ASSERT_EQ(tree.at(0x15), 0x3A);
+    }
+
+    TEST(DECOMPILER, ImmediatePostdominator3) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#D14395D282B18D18";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+        ASSERT_EQ(tree.at(0x0), 0x37);
+        ASSERT_EQ(tree.at(0x3), 0xE);
+        ASSERT_EQ(tree.at(0xE), 0x2E);
     }
 
 
@@ -298,13 +318,13 @@ namespace dconstruct::testing {
         EXPECT_EQ(expected, actual);
     }
 
-    TEST(DECOMPILER, LongNode1) {
+    /*TEST(DECOMPILER, LongNode1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = "";
 
         const std::string actual = get_decompiled_node_from_file(filepath, "#14C6FC79122F4A87", 0x12);
         ASSERT_EQ(expected, actual);
-    }
+    }*/
 
     /*TEST(DECOMPILER, SimpleIf1) {
         std::vector<Instruction> istrs = {

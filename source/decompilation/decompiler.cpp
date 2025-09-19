@@ -94,7 +94,6 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     if (node.m_successors.empty()) {
         return;
     } else if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
-        return;
         fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.operand1);
         for (const auto& successor : node.m_successors) {
             emit_node(fn.m_graph[successor], fn);
@@ -175,6 +174,8 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 }
                 break;
             }
+
+            //case Opcode::Load
 
             case Opcode::CastInteger: {
                 expression_frame.cast_to_int(istr);

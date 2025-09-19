@@ -29,8 +29,10 @@ expr_uptr& expression_frame::call(const Instruction& istr) {
     for (u8 i = 0; i < istr.operand2; ++i) {
         args.push_back(m_transformableExpressions[49 + i]->clone()->simplify());
     }
+       
+    return m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
 
-    return load_expression_into_var(istr.destination, std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args)));
+    //return load_expression_into_var(istr.destination, std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args)));
 }
 
 expr_uptr& expression_frame::cast_to_int(const Instruction& istr) {
