@@ -116,6 +116,13 @@ struct Instruction {
 
     [[nodiscard]] b8 operator==(const Instruction& rhs) const noexcept = default;
 
+    [[nodiscard]] b8 destination_is_immediate() const noexcept;
+
+    [[nodiscard]] b8 operand1_is_immediate() const noexcept;
+
+    [[nodiscard]] b8 operand2_is_immediate() const noexcept;
+
+
     const char* opcode_to_string() const noexcept;
 };
 
@@ -209,28 +216,56 @@ enum class RegisterValueType {
     UNKNOWN
 };
 
+using RegisterValue = std::variant<
+    int8_t,     
+    uint8_t,    
+    b8,       
+    int16_t,    
+    uint16_t,   
+    uint16_t,   
+    int32_t,    
+    uint32_t,   
+    f32,      
+    f64,     
+    int64_t,    
+    uint64_t,   
+    std::size_t,
+    void*,      
+    int8_t*,    
+    uint8_t*,   
+    int16_t*,   
+    uint16_t*,  
+    int32_t*,   
+    uint32_t*,  
+    int64_t*,   
+    uint64_t*,  
+    f32*,     
+    std::string,
+    std::monostate 
+>;
+
 struct Register {
-    RegisterValueType m_type;
-    union {
-        i8			       m_I8;
-        i8			       m_U8;
-        b8                 m_BOOL;
-        i16			       m_I16;
-        u16		           m_U16;
-        u16		           m_F16;
-        i32			       m_I32;
-        u32		           m_U32;
-        f32		           m_F32;
-        f64		           m_F64;
-        int64_t		       m_I64;
-        uint64_t	       m_U64;
-        sid64              m_SID;
-        RegisterPointer    m_PTR;
-    };
+    // RegisterValueType m_type;
+    // union {
+    //     i8			       m_I8;
+    //     i8			       m_U8;
+    //     b8                 m_BOOL;
+    //     i16			       m_I16;
+    //     u16		           m_U16;
+    //     u16		           m_F16;
+    //     i32			       m_I32;
+    //     u32		           m_U32;
+    //     f32		           m_F32;
+    //     f64		           m_F64;
+    //     int64_t		       m_I64;
+    //     uint64_t	       m_U64;
+    //     sid64              m_SID;
+    //     RegisterPointer    m_PTR;
+    // };
+    RegisterValue m_value;
     b8 isReturn = false;
     b8 isArg = false;
     u8 argNum;
-
 
     void set_first_type(RegisterValueType type) {
         if (m_type == RegisterValueType::UNKNOWN) {
