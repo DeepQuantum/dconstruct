@@ -104,6 +104,10 @@ namespace dconstruct {
         }
     }
 
+    [[nodiscard]] b8 Instruction::destination_is_immediate() const noexcept {
+        return opcode == Opcode::Branch || opcode == Opcode::LoadU16Imm;
+    }
+
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
         const Register& reg = m_registers[idx];
         if (reg.isArg) {
