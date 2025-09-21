@@ -138,7 +138,6 @@ enum class SymbolTableEntryType {
     NONE
 };
 
-//using SymbolTableEntry = std::variant<sid_literal
 
 struct SymbolTableEntry {
     SymbolTableEntryType m_type;
@@ -216,56 +215,28 @@ enum class RegisterValueType {
     UNKNOWN
 };
 
-using RegisterValue = std::variant<
-    int8_t,     
-    uint8_t,    
-    b8,       
-    int16_t,    
-    uint16_t,   
-    uint16_t,   
-    int32_t,    
-    uint32_t,   
-    f32,      
-    f64,     
-    int64_t,    
-    uint64_t,   
-    std::size_t,
-    void*,      
-    int8_t*,    
-    uint8_t*,   
-    int16_t*,   
-    uint16_t*,  
-    int32_t*,   
-    uint32_t*,  
-    int64_t*,   
-    uint64_t*,  
-    f32*,     
-    std::string,
-    std::monostate 
->;
-
 struct Register {
-    // RegisterValueType m_type;
-    // union {
-    //     i8			       m_I8;
-    //     i8			       m_U8;
-    //     b8                 m_BOOL;
-    //     i16			       m_I16;
-    //     u16		           m_U16;
-    //     u16		           m_F16;
-    //     i32			       m_I32;
-    //     u32		           m_U32;
-    //     f32		           m_F32;
-    //     f64		           m_F64;
-    //     int64_t		       m_I64;
-    //     uint64_t	       m_U64;
-    //     sid64              m_SID;
-    //     RegisterPointer    m_PTR;
-    // };
-    RegisterValue m_value;
+    RegisterValueType m_type;
+    union {
+        b8                 m_BOOL;
+        i8			       m_I8;
+        u8			       m_U8;
+        i16			       m_I16;
+        u16		           m_U16;
+        u16		           m_F16;
+        i32			       m_I32;
+        u32		           m_U32;
+        f32		           m_F32;
+        f64		           m_F64;
+        int64_t		       m_I64;
+        uint64_t	       m_U64;
+        sid64              m_SID;
+        RegisterPointer    m_PTR;
+    };
     b8 isReturn = false;
     b8 isArg = false;
     u8 argNum;
+
 
     void set_first_type(RegisterValueType type) {
         if (m_type == RegisterValueType::UNKNOWN) {
@@ -307,11 +278,6 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;
-
-   /* function_disassembly(std::vector<function_disassembly_line> lines, StackFrame frame, std::string id) noexcept :
-        m_lines(std::move(lines)), m_stackFrame(std::move(frame)), m_id(std::move(id)) {};
-    function_disassembly(function_disassembly&& rhs) noexcept = default;
-    function_disassembly(const function_disassembly& rhs) noexcept = default;*/
 
     inline void remove_redundant_check_branches() {
         for (auto& line : m_lines) {

@@ -550,8 +550,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     char interpreted[interpreted_buffer_size] = {0};
     const Instruction istr = line.m_instruction;
     const u32 dest = istr.destination;
-    const u32 op1 = op1;
-    const u32 op2 = op2;
+    const u32 op1 = istr.operand1;
+    const u32 op2 = istr.operand2;
     SymbolTableEntry table_entry;
     table_entry.m_type = SymbolTableEntryType::NONE;
 
@@ -571,18 +571,21 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     char op1_str[interpreted_buffer_size] = {0}; 
     char op2_str[interpreted_buffer_size] = {0}; 
 
-    frame.to_string(op1_str, interpreted_buffer_size, op1, lookup(frame[op1].m_type == RegisterValueType::POINTER ? frame[op1].m_PTR.m_sid : frame[op1].m_SID));
-
-    frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_type == RegisterValueType::POINTER ? frame[dest].m_PTR.m_sid : frame[dest].m_SID));
-    frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_type == RegisterValueType::POINTER ? frame[op2].m_PTR.m_sid : frame[op2].m_SID));
-
-    if (frame[dest].m_type != RegisterValueType::UNKNOWN && frame[dest].isArg) {
-        fn.m_stackFrame.m_registerArgs[frame[dest].argNum] = frame[dest].m_type;
+    if (!istr.destination_is_immediate()) {
+        frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_type == RegisterValueType::POINTER ? frame[dest].m_PTR.m_sid : frame[dest].m_SID));
+        if (frame[dest].m_type != RegisterValueType::UNKNOWN && frame[dest].isArg) {
+            frame.m_registerArgs[frame[dest].argNum] = frame[dest].m_type;
+        }
+        if (dest != op1 && dest != op2) {
+            frame[dest].isArg = false;
+            frame[dest].isReturn = false;
+        }
     }
-
-    if (dest != op1 && dest != op2) {
-       frame[dest].isArg = false;
-       frame[dest].isReturn = false;
+    if (!istr.operand1_is_immediate()) {
+        frame.to_string(op1_str, interpreted_buffer_size, op1, lookup(frame[op1].m_type == RegisterValueType::POINTER ? frame[op1].m_PTR.m_sid : frame[op1].m_SID));
+    }
+    if (!istr.operand2_is_immediate()) {
+        frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_type == RegisterValueType::POINTER ? frame[op2].m_PTR.m_sid : frame[op2].m_SID));
     }
 
     switch (istr.opcode) {
@@ -1512,7 +1515,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::AssertPointer: {
-            frame[op1].set_first_type(RegisterValueType::POINTER);
+            frame[dest].m_type = RegisterValueType::POINTER;
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d?", dest);
             break;
