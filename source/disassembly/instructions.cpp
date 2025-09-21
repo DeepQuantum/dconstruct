@@ -105,7 +105,23 @@ namespace dconstruct {
     }
 
     [[nodiscard]] b8 Instruction::destination_is_immediate() const noexcept {
-        return opcode == Opcode::Branch || opcode == Opcode::LoadU16Imm;
+        return opcode == Opcode::Branch || opcode == Opcode::BranchIf
+            || opcode == Opcode::BranchIfNot;
+    }
+
+    [[nodiscard]] b8 Instruction::operand1_is_immediate() const noexcept {
+        return opcode == Opcode::LoadStaticI32Imm || opcode == Opcode::LoadStaticI16Imm
+            || opcode == Opcode::LoadStaticU16Imm || opcode == Opcode::LoadStaticI8Imm
+            || opcode == Opcode::LoadStaticU8Imm || opcode == Opcode::LoadStaticU32Imm
+            || opcode == Opcode::LoadStaticI64Imm || opcode == Opcode::LoadStaticU64Imm
+            || opcode == Opcode::LoadStaticFloatImm || opcode == Opcode::LoadStaticPointer
+            || opcode == Opcode::LoadU16Imm;
+    }
+
+    [[nodiscard]] b8 Instruction::operand2_is_immediate() const noexcept {
+        return opcode == Opcode::Call || opcode == Opcode::CallFf
+            || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm
+            || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm;
     }
 
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
