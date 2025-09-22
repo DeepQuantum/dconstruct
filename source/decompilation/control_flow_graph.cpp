@@ -82,6 +82,7 @@ namespace dconstruct {
             m_nodes[current_node].m_lines.push_back(current_line);
             if (i == func->m_lines.size() - 1) {
                 m_nodes[current_node].m_endLine = current_line.m_location;
+                m_returnNode = current_node;
                 break;
             }
             const function_disassembly_line &next_line = func->m_lines[i + 1];

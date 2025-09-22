@@ -66,11 +66,16 @@ namespace dconstruct {
 
         [[nodiscard]] opt_ref<const control_flow_loop> get_loop_with_head(const node_id node) const;
 
+        [[nodiscard]] const control_flow_node& get_return_node() const noexcept {
+            return m_nodes.at(m_returnNode);
+        }
+
 
     private:
         std::unordered_map<node_id, control_flow_node> m_nodes;
         std::unordered_map<node_id, node_id> m_immediatePostdominators;
         std::vector<control_flow_loop> m_loops;
+        node_id m_returnNode;
         const function_disassembly *m_func;
 
         void insert_node_at_line(const node_id start_line);

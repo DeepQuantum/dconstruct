@@ -44,7 +44,7 @@ private:
     std::vector<const function_disassembly*> m_functions{};
     const BinaryFile& m_currentFile;
 
-    void emit_node(const control_flow_node&, decompiled_function&);
+    void emit_node(const control_flow_node&, decompiled_function&, node_id);
     void parse_basic_block(const control_flow_node&, expression_frame &);
 };
 
