@@ -30,9 +30,9 @@ expr_uptr& expression_frame::call(const Instruction& istr) {
         args.push_back(m_transformableExpressions[49 + i]->clone()->simplify());
     }
        
-    return m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
+    //return m_transformableExpressions[istr.destination] = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
 
-    //return load_expression_into_var(istr.destination, std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args)));
+    return load_expression_into_var(istr.destination, std::make_unique<ast::call_expr>(compiler::token{compiler::token_type::_EOF, ""}, std::move(callee), std::move(args)));
 }
 
 expr_uptr& expression_frame::cast_to_int(const Instruction& istr) {
@@ -71,6 +71,12 @@ ast::while_stmt& expression_frame::insert_loop_head(const control_flow_loop& loo
     m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back().get()));
     
     return while_ref;
+}
+
+expr_uptr& expression_frame::emit_condition(const control_flow_node& node) {
+    const auto& last_line = node.get_last_line();
+    expr_uptr& current_condition = m_transformableExpressions[last_line.m_instruction.operand1];
+    return current_condition;
 }
 
 }

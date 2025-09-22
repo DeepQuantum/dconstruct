@@ -48,7 +48,9 @@ namespace dconstruct::dcompiler {
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
 
-        emit_node(fn.m_graph[0], fn);
+        emit_node(fn.m_graph[0], fn, fn.m_graph.get_return_node().m_startLine);
+        parse_basic_block(fn.m_graph.get_return_node(), fn.m_frame);
+
 
         funcs.emplace(func->m_id, std::move(fn));
     }
@@ -84,28 +86,44 @@ namespace dconstruct::dcompiler {
     return funcs;
 }
 
-void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn) {
+void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn, node_id stop_node) {
     const node_id current_node_id = node.m_startLine;
     if (fn.m_parsedNodes.contains(current_node_id)) {
         return;
     }
     fn.m_parsedNodes.insert(current_node_id);
-    parse_basic_block(node, fn.m_frame);
-    if (node.m_successors.empty()) {
+
+    if (current_node_id == stop_node) {
         return;
-    } else if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
+    }
+    parse_basic_block(node, fn.m_frame);
+    const auto& last_line = node.get_last_line();
+
+    if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
         fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.operand1);
         for (const auto& successor : node.m_successors) {
-            emit_node(fn.m_graph[successor], fn);
-        }
+            emit_node(fn.m_graph[successor], fn, loop->get().m_latchNode);
+        }   
         fn.m_frame.m_blockStack.pop();
-    } else {
-        const auto& last_line = node.get_last_line();
-        node_id positive_branch_head = 0, negative_branch_head = 0;
-        if (last_line.m_instruction.opcode == Opcode::BranchIfNot) {
-            positive_branch_head = last_line.m_instruction.operand1;
-            negative_branch_head = node.get_direct_successor();
-        }
+    } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
+        const node_id idom = fn.m_graph.get_immediate_postdominators().at(current_node_id);
+        expr_uptr condition = fn.m_frame.emit_condition(fn.m_graph[current_node_id])->clone();
+        auto then_block = std::make_unique<ast::block>();
+        auto else_block = std::make_unique<ast::block>();
+
+        fn.m_frame.m_blockStack.push(*then_block);
+        emit_node(fn.m_graph[node.get_direct_successor()], fn, idom);
+        fn.m_frame.m_blockStack.pop();
+
+        fn.m_frame.m_blockStack.push(*else_block);
+        emit_node(fn.m_graph[last_line.m_instruction.destination], fn, idom);
+        fn.m_frame.m_blockStack.pop();
+
+        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), std::move(else_block));
+
+        fn.m_frame.append_to_current_block(std::move(full_if));
+
+        emit_node(fn.m_graph[idom], fn, stop_node);
     }
 }
 
@@ -169,9 +187,9 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 const std::string& name = m_currentFile.m_sidCache.at(sid);
                 const sid_literal sid_literal = {sid, name};
                 expr_uptr& lit = expression_frame.load_literal(istr.destination, sid_literal);
-                if (expression_frame.m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
+                /*if (expression_frame.m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
                     expression_frame.load_expression_into_var(istr.destination, std::move(lit));
-                }
+                }*/
                 break;
             }
 

@@ -3,7 +3,7 @@
 namespace dconstruct::ast {
 
 void if_stmt::pseudo(std::ostream& os) const {
-    os << "if(" << *m_condition << ")" << *m_then;
+    os << "if(" << *m_condition << ") " << *m_then;
     if (m_else != nullptr) {
         os << " else " << *m_else;
     }
