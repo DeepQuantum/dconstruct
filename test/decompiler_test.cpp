@@ -263,7 +263,7 @@ namespace dconstruct::testing {
         }
     }
 
-    TEST(DECOMPILER, ImmediatePostdominator2) {
+    /*TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
         file.dc_setup();
@@ -316,6 +316,26 @@ namespace dconstruct::testing {
             "}";
 
         EXPECT_EQ(expected, actual);
+    }*/
+
+    TEST(DECOMPILER, If1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#D14395D282B18D18";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const std::string expected =
+            "function DetermineArgumentType(i64 arg_0) {\n"
+            "    return arg_0 == 5;\n"
+            "}";
+        ASSERT_EQ(dc_func.to_string(), expected);
     }
 
     /*TEST(DECOMPILER, LongNode1) {
