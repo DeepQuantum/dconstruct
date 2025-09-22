@@ -1380,7 +1380,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadStaticI16Imm: {
             std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
-            const i16 value = frame.m_symbolTable.get<u16>(op1 * 8);
+            const i16 value = frame.m_symbolTable.get<i16>(op1 * 8);
             frame[dest].m_type = RegisterValueType::I16;
             frame[dest].m_I16 = value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>", dest, op1, value);

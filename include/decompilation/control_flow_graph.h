@@ -70,6 +70,9 @@ namespace dconstruct {
             return m_nodes.at(m_returnNode);
         }
 
+        // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
+        [[nodiscard]] std::vector<u32> get_variant_registers(const node_id node) const noexcept;
+
 
     private:
         std::unordered_map<node_id, control_flow_node> m_nodes;

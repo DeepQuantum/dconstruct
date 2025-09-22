@@ -4,10 +4,12 @@ namespace dconstruct::ast {
 
 void block::pseudo(std::ostream& os) const {
     os << "{\n";
+    os << indent_more;
     for (const auto& stmnt : m_statements) {
-        os << "    " << * stmnt << '\n';
+        os << indent << *stmnt << '\n';
     } 
-    os << '}';
+    os << indent_less;
+    os << indent << '}';
 }
 
 

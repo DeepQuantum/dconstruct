@@ -18,11 +18,8 @@ namespace dconstruct::dcompiler {
             out << ", ";
         }
     }
-    out << ") {\n";
-    for (const auto& statement : m_frame.m_baseBlock.m_statements) {
-        out << "    " << *statement << '\n';
-    }
-    out << '}';
+    out << ") ";
+    out << m_frame.m_baseBlock;
     return out.str();
 }
 
@@ -180,7 +177,11 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 break;
             }
 
-            case Opcode::LoadStaticPointer:
+            case Opcode::LoadStaticPointerImm: {
+                const std::string string = reinterpret_cast<const char*>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_pointer);
+                expr_uptr& lit = expression_frame.load_literal(istr.destination, string);
+                break;
+            }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
                 const sid64 sid = expression_frame.m_symbolTable.value().get()[istr.operand1].m_hash;

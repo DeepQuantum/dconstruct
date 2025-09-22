@@ -3,11 +3,11 @@
 
 namespace dconstruct::ast {
 void logical_not_expr::pseudo(std::ostream &os) const {
-    os << '!' << m_rhs;
+    os << '!' << *m_rhs;
 }
 
 void logical_not_expr::ast(std::ostream &os) const {
-    os << "logical_not[" << m_rhs << ']'; 
+    os << "logical_not[" << *m_rhs << ']'; 
 }
 
 // [[nodiscard]] b8 logical_not_expr::equals(const expression &rhs) const noexcept {
