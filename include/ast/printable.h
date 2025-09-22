@@ -24,6 +24,29 @@ namespace dconstruct {
         return os;
     }
 
+    inline int indent_index() {
+        static int idx = std::ios_base::xalloc();
+        return idx;
+    }
+
+    inline std::ostream& indent_more(std::ostream& os) {
+        ++os.iword(indent_index());
+        return os;
+    }
+
+    inline std::ostream& indent_less(std::ostream& os) {
+        --os.iword(indent_index());
+        return os;
+    }
+
+    inline std::ostream& indent(std::ostream& os) {
+        int level = os.iword(indent_index());
+        for (int i = 0; i < level; ++i) {
+            os << "    ";
+        }
+        return os;
+    }
+
     inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
         if (os.iword(get_flag_index()) & static_cast<i32>(Flags::AST)) {
             expr.ast(os);

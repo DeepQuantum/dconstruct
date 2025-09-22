@@ -7,7 +7,7 @@ expr_uptr& expression_frame::move(const u32 dst, const u32 src) {
 }
 
 expr_uptr& expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr) {
-    auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var() });
+    auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "var_" + std::to_string(dst)});
     const std::string name = id->m_name.m_lexeme;
     const ast::full_type type = expr->get_type(m_env).value_or(ast::primitive_type{ast::primitive_kind::UNKNOWN});
     const std::string type_name = type_to_declaration_string(type);

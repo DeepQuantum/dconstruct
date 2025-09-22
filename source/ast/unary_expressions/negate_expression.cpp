@@ -4,11 +4,11 @@
 namespace dconstruct::ast {
 
 void negate_expr::pseudo(std::ostream& os) const {
-    os << "-" << m_rhs;
+    os << "-" << *m_rhs;
 }
 
 void negate_expr::ast(std::ostream& os) const {
-    os << "negate[" << m_rhs << ']';
+    os << "negate[" << *m_rhs << ']';
 }
 
 // [[nodiscard]] b8 negate_expr::equals(const expression& rhs) const noexcept {

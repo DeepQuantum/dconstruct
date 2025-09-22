@@ -419,4 +419,37 @@ namespace dconstruct {
         
         return body;
     }
+
+    [[nodiscard]] std::vector<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
+        std::set<u32> written_to_regs;
+        std::vector<u32> read_after_regs;
+        for (const auto& line : m_nodes.at(node).m_lines) {
+            if (!line.m_instruction.destination_is_immediate()) {
+                written_to_regs.insert(line.m_instruction.destination);
+            }
+        }
+
+        for (const auto& successor : m_nodes.at(node).m_successors) {
+            if (written_to_regs.empty()) {
+                break;
+            }
+            for (const auto& line : m_nodes.at(successor).m_lines) {
+                if (written_to_regs.empty()) {
+                    break;
+                }
+                const Instruction& istr = line.m_instruction;
+                if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate()) {
+                    written_to_regs.erase(istr.destination);
+                } else if (written_to_regs.contains(istr.operand1) && !istr.operand1_is_immediate()) {
+                    written_to_regs.erase(istr.operand1);
+                    read_after_regs.push_back(istr.operand1);
+                } else if (written_to_regs.contains(istr.operand2) && !istr.operand2_is_immediate()) {
+                    written_to_regs.erase(istr.operand2);
+                    read_after_regs.push_back(istr.operand2);
+                }
+            }
+        }
+        
+        return read_after_regs;
+    }
 }
