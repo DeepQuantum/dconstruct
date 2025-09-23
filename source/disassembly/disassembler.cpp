@@ -678,7 +678,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s * %s", dst_str, op1_str, op2_str);
             break;
-        }
+        }   
         case Opcode::FDiv: {
             frame[op1].set_first_type(RegisterValueType::F32);
             frame[op2].set_first_type(RegisterValueType::F32);
@@ -878,27 +878,12 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%d> => <%f>", dest, op1, frame[op1].m_I32, frame[dest].m_F32);
             break;
         }
-        case Opcode::Call: {
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", dest, op1, op2);
-            char comment_str[300];
-            u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, lookup(frame[op1].m_PTR.m_sid));
-            for (u64 i = 0; i < op2; ++i) {
-                if (i != 0) {
-                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
-                }
-                frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_type == RegisterValueType::POINTER ? frame[i + 49].m_PTR.m_sid : frame[i + 49].m_SID));
-                offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
-            }
-            frame[dest].m_type = RegisterValueType::POINTER;
-            frame[dest].isReturn = true;
-            frame[dest].m_PTR = {0, 0, frame[op1].m_PTR.m_sid};
-            std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);
-            break;
-        }
+        case Opcode::Call: 
         case Opcode::CallFf: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", dest, op1, op2);
             char comment_str[300];
-            u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, lookup(frame[op1].m_PTR.m_sid));
+            const char* function_name = lookup(frame[op1].m_PTR.m_sid);
+            u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
@@ -906,7 +891,16 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_type == RegisterValueType::POINTER ? frame[i + 49].m_PTR.m_sid : frame[i + 49].m_SID));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            frame[dest].m_type = RegisterValueType::POINTER;
+            if (m_builtinFuntions.contains(function_name)) {
+                const auto& builtin = m_builtinFuntions.at(function_name);
+                const RegisterValueType return_type = builtin[0];
+                frame[dest].m_type = return_type;
+                for (u32 i = 0; i < builtin.size() - 1; ++i) {
+                    frame[49 + i].m_type = builtin[i + 1];
+                }
+            } else {
+                frame[dest].m_type = RegisterValueType::POINTER;
+            }
             frame[dest].isReturn = true;
             frame[dest].m_PTR = { 0, 0, frame[op1].m_PTR.m_sid };
             std::snprintf(interpreted, interpreted_buffer_size, "%s)", comment_str);

@@ -3,7 +3,6 @@ function #C3B48D02AC9ECB46() {
     if(!var_0) {
         unknown var_1 = #5445173390656D6D("DEB-WM: %2s VOX encounter start facts are set", "");
         unknown var_0 = display(var_1, 19);
-    } else {
     }
     unknown var_3 = new-boxed-value(1, 1);
     unknown var_0 = fact-set(global, search-start-played?, var_3);

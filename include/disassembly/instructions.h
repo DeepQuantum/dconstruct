@@ -212,7 +212,8 @@ enum class RegisterValueType {
     STRING,
     DARRAY,
     DDICT,
-    UNKNOWN
+    UNKNOWN,
+    VOID
 };
 
 struct Register {
