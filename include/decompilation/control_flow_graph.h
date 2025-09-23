@@ -8,6 +8,7 @@
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 #include <optional>
+#include <set>
 
 namespace dconstruct {
 
@@ -70,8 +71,10 @@ namespace dconstruct {
             return m_nodes.at(m_returnNode);
         }
 
+        [[nodiscard]] b8 register_gets_read(const u32 start, const node_id node) const noexcept;
+
         // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
-        [[nodiscard]] std::vector<u32> get_variant_registers(const node_id node) const noexcept;
+        [[nodiscard]] std::set<u32> get_variant_registers(const node_id node) const noexcept;
 
 
     private:

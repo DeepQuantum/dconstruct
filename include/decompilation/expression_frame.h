@@ -82,32 +82,30 @@ namespace dconstruct::dcompiler {
             m_blockStack.top().get().m_statements.push_back(std::move(statement));
         }
 
-        expr_uptr& load_expression_into_var(const u32 dst, expr_uptr&& expr);
+        void load_expression_into_var(const u32 dst, expr_uptr&& expr);
 
-        expr_uptr& move(const u32, const u32);
 
-        expr_uptr& call(const Instruction& istr);
+        [[nodiscard]] expr_uptr call(const Instruction& istr);
 
-        expr_uptr& cast_to_int(const Instruction& istr);
-        expr_uptr& cast_to_float(const Instruction& istr);
-
-        expr_uptr& load_literal(const u8 dst, const ast::primitive_value& value);
+        [[nodiscard]] expr_uptr cast_to_int(const Instruction& istr);
+        [[nodiscard]] expr_uptr cast_to_float(const Instruction& istr);
+        
+        [[nodiscard]] expr_uptr emit_condition(const control_flow_node& origin);
 
         ast::return_stmt& insert_return(const u32 dest);
 
         ast::while_stmt& insert_loop_head(const control_flow_loop& loop, const u32 conditional_check_location);
 
-        expr_uptr& emit_condition(const control_flow_node& origin);
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
         }
 
         template <typename T>
-        inline void apply_binary_op(const Instruction& istr, compiler::token op) {
+        [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
-            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+            return std::make_unique<T>(
                 std::move(op),
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
@@ -115,9 +113,9 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        inline void apply_binary_op_imm(const Instruction& istr, compiler::token op) {
+        [[nodiscard]] inline expr_uptr apply_binary_op_imm(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
-            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+            return std::make_unique<T>(
                 std::move(op),
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 std::make_unique<ast::literal>(istr.operand2)
@@ -125,9 +123,9 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        inline void apply_unary_op(const Instruction& istr, compiler::token op) {
+        [[nodiscard]] inline expr_uptr apply_unary_op(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
-            m_transformableExpressions[istr.destination] = std::make_unique<T>(
+            return std::make_unique<T>(
                 std::move(op),
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone()
             );

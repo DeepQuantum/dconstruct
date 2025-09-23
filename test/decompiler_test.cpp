@@ -318,7 +318,52 @@ namespace dconstruct::testing {
         EXPECT_EQ(expected, actual);
     }*/
 
+    TEST(DECOMPILER, RegistersToEmit1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#8A8D5C923D5DDB3B";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const std::set<u32> registers_to_emit_0 = dc_func.m_graph.get_variant_registers(0);
+        const std::set<u32> registers_to_emit_1 = dc_func.m_graph.get_variant_registers(0x9);
+        const std::set<u32> registers_to_emit_2 = dc_func.m_graph.get_variant_registers(0x10);
+        ASSERT_TRUE(registers_to_emit_0.empty());
+        ASSERT_EQ(registers_to_emit_1.size(), 1);
+        ASSERT_EQ(registers_to_emit_2.size(), 1);
+        ASSERT_TRUE(registers_to_emit_1.contains(0));
+        ASSERT_TRUE(registers_to_emit_2.contains(0));
+    }
+
     TEST(DECOMPILER, If1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#8A8D5C923D5DDB3B";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const std::string expected =
+            "function DetermineArgumentType(i64 arg_0) {\n"
+            "    return arg_0 == 5;\n"
+            "}";
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        out << dc_func.to_string();
+        ASSERT_EQ(dc_func.to_string(), expected);
+    }
+
+    TEST(DECOMPILER, If2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
         file.dc_setup();
