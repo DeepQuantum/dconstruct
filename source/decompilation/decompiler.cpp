@@ -44,9 +44,10 @@ namespace dconstruct::dcompiler {
             const std::string type_name = ast::type_to_declaration_string(arg_type);
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
+        std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
 
         emit_node(fn.m_graph[0], fn, fn.m_graph.get_return_node().m_startLine);
-        parse_basic_block(fn.m_graph.get_return_node(), fn.m_frame);
+        parse_basic_block(fn.m_graph.get_return_node(), fn.m_frame, last_set);
 
 
         funcs.emplace(func->m_id, std::move(fn));
@@ -75,8 +76,8 @@ namespace dconstruct::dcompiler {
             const std::string type_name = ast::type_to_declaration_string(arg_type);
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
-
-        parse_basic_block(fn.m_graph[node], fn.m_frame);
+        std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
+        parse_basic_block(fn.m_graph[node], fn.m_frame, last_set);
 
         funcs.emplace(func->m_id, std::move(fn));
     }
@@ -93,7 +94,10 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     if (current_node_id == stop_node) {
         return;
     }
-    parse_basic_block(node, fn.m_frame);
+
+    std::set<u32> registers_to_emit = fn.m_graph.get_variant_registers(current_node_id);
+
+    parse_basic_block(node, fn.m_frame, registers_to_emit);
     const auto& last_line = node.get_last_line();
 
     if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
@@ -104,7 +108,7 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         fn.m_frame.m_blockStack.pop();
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         const node_id idom = fn.m_graph.get_immediate_postdominators().at(current_node_id);
-        expr_uptr condition = fn.m_frame.emit_condition(fn.m_graph[current_node_id])->clone();
+        expr_uptr condition = fn.m_frame.emit_condition(fn.m_graph[current_node_id]);
         auto then_block = std::make_unique<ast::block>();
         auto else_block = std::make_unique<ast::block>();
 
@@ -116,7 +120,7 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         emit_node(fn.m_graph[last_line.m_instruction.destination], fn, idom);
         fn.m_frame.m_blockStack.pop();
 
-        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), std::move(else_block));
+        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), else_block->m_statements.empty() ? nullptr : std::move(else_block));
 
         fn.m_frame.append_to_current_block(std::move(full_if));
 
@@ -124,7 +128,7 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     }
 }
 
-void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame) {
+void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame, std::set<u32>& registers_to_emit) {
     const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
     const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
     const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
@@ -133,86 +137,83 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
 
+        expr_uptr generated_expression = nullptr;
+
         switch(istr.opcode) {
             case Opcode::IAdd: 
-            case Opcode::FAdd: expression_frame.apply_binary_op<ast::add_expr>(istr, plus); break;
+            case Opcode::FAdd: generated_expression = expression_frame.apply_binary_op<ast::add_expr>(istr, plus); break;
             case Opcode::ISub:
-            case Opcode::FSub: expression_frame.apply_binary_op<ast::sub_expr>(istr, minus); break;
+            case Opcode::FSub: generated_expression = expression_frame.apply_binary_op<ast::sub_expr>(istr, minus); break;
             case Opcode::IMul:
-            case Opcode::FMul: expression_frame.apply_binary_op<ast::mul_expr>(istr, multiply); break;
+            case Opcode::FMul: generated_expression = expression_frame.apply_binary_op<ast::mul_expr>(istr, multiply); break;
             case Opcode::IDiv:
-            case Opcode::FDiv: expression_frame.apply_binary_op<ast::div_expr>(istr, divide); break;
+            case Opcode::FDiv: generated_expression = expression_frame.apply_binary_op<ast::div_expr>(istr, divide); break;
 
-            case Opcode::IAddImm: expression_frame.apply_binary_op_imm<ast::add_expr>(istr, plus); break;
-            case Opcode::IMulImm: expression_frame.apply_binary_op_imm<ast::mul_expr>(istr, multiply); break;
-            case Opcode::ISubImm: expression_frame.apply_binary_op_imm<ast::sub_expr>(istr, minus); break;
-            case Opcode::IDivImm: expression_frame.apply_binary_op_imm<ast::div_expr>(istr, divide); break;
+            case Opcode::IAddImm: generated_expression = expression_frame.apply_binary_op_imm<ast::add_expr>(istr, plus); break;
+            case Opcode::IMulImm: generated_expression = expression_frame.apply_binary_op_imm<ast::mul_expr>(istr, multiply); break;
+            case Opcode::ISubImm: generated_expression = expression_frame.apply_binary_op_imm<ast::sub_expr>(istr, minus); break;
+            case Opcode::IDivImm: generated_expression = expression_frame.apply_binary_op_imm<ast::div_expr>(istr, divide); break;
 
             case Opcode::IEqual:
-            case Opcode::FEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
+            case Opcode::FEqual: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
             case Opcode::INotEqual:
-            case Opcode::FNotEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::BANG_EQUAL, "!="}); break;
+            case Opcode::FNotEqual: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::BANG_EQUAL, "!="}); break;
             case Opcode::ILessThan:
-            case Opcode::FLessThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS, "<"}); break;
+            case Opcode::FLessThan: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS, "<"}); break;
             case Opcode::ILessThanEqual:
-            case Opcode::FLessThanEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS_EQUAL, "<="}); break;
+            case Opcode::FLessThanEqual: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS_EQUAL, "<="}); break;
             case Opcode::IGreaterThan:
-            case Opcode::FGreaterThan: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
+            case Opcode::FGreaterThan: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
             case Opcode::IGreaterThanEqual:
-            case Opcode::FGreaterThanEqual: expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
+            case Opcode::FGreaterThanEqual: generated_expression = expression_frame.apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
 
-            case Opcode::OpLogNot: expression_frame.apply_unary_op<ast::logical_not_expr>(istr, compiler::token{compiler::token_type::BANG, "!"}); break;
-            case Opcode::OpBitNot: expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::TILDE, "~"}); break;
+            case Opcode::OpLogNot: generated_expression = expression_frame.apply_unary_op<ast::logical_not_expr>(istr, compiler::token{compiler::token_type::BANG, "!"}); break;
+            case Opcode::OpBitNot: generated_expression = expression_frame.apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::TILDE, "~"}); break;
             case Opcode::INeg:
-            case Opcode::FNeg: expression_frame.apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
+            case Opcode::FNeg: generated_expression = expression_frame.apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
-            case Opcode::LoadU16Imm: expression_frame.load_literal(istr.destination, static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_i64); break;
-            case Opcode::LoadStaticFloat: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_f32); break;
-            case Opcode::LoadStaticI32Imm: expression_frame.load_literal(istr.destination, expression_frame.m_symbolTable.value().get()[istr.operand1].m_i32); break;
+            case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_i64); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_f32); break;
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_i32); break;
 
             case Opcode::Call:
-            case Opcode::CallFf: {
-                expression_frame.call(istr);
-                break;
-            }
+            case Opcode::CallFf: expression_frame.load_expression_into_var(istr.destination, expression_frame.call(istr)); break;
+            
 
             case Opcode::LoadStaticPointerImm: {
-                const std::string string = reinterpret_cast<const char*>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_pointer);
-                expr_uptr& lit = expression_frame.load_literal(istr.destination, string);
+                std::string string = reinterpret_cast<const char*>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_pointer);
+                generated_expression = std::make_unique<ast::literal>(std::move(string));
                 break;
             }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
                 const sid64 sid = expression_frame.m_symbolTable.value().get()[istr.operand1].m_hash;
                 const std::string& name = m_currentFile.m_sidCache.at(sid);
-                const sid_literal sid_literal = {sid, name};
-                expr_uptr& lit = expression_frame.load_literal(istr.destination, sid_literal);
-                /*if (expression_frame.m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
-                    expression_frame.load_expression_into_var(istr.destination, std::move(lit));
-                }*/
+                sid_literal sid_literal = {sid, name};
+                expr_uptr lit = std::make_unique<ast::literal>(std::move(sid_literal));
+                if (expression_frame.m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
+                    generated_expression = std::move(lit);
+                }
+                else {
+                    expression_frame.m_transformableExpressions[istr.destination] = std::move(lit);
+                }
                 break;
             }
 
-            //case Opcode::Load
-
             case Opcode::CastInteger: {
-                expression_frame.cast_to_int(istr);
+                generated_expression = expression_frame.cast_to_int(istr);
                 break;
             }
             case Opcode::CastFloat: {
-                expression_frame.cast_to_float(istr);
+                generated_expression = expression_frame.cast_to_float(istr);
                 break;
             }
 
             case Opcode::Move: {
-                expression_frame.move(istr.destination, istr.operand1);
+                generated_expression = expression_frame.m_transformableExpressions[istr.operand1]->clone();
                 break;
             }
-
-            // case Opcode::CastInteger: {
-            //     expression_frame.cast(RegisterValueType::I64, istr);
-            // }
 
             case Opcode::AssertPointer:
             case Opcode::BreakFlag: {
@@ -222,6 +223,15 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::Return: expression_frame.insert_return(istr.destination); break;
             default: {
                 continue;
+            }
+        }
+
+        if (generated_expression != nullptr) {
+            if (registers_to_emit.contains(istr.destination)) {
+                expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
+            }
+            else {
+                expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
             }
         }
     }
