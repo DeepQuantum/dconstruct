@@ -263,6 +263,25 @@ namespace dconstruct::testing {
         }
     }
 
+    TEST(DECOMPILER, ImmediatePostdominator2) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#8A8D5C923D5DDB3B";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+        for (const auto& [k, v] : tree) {
+            ASSERT_EQ(v, 0x16);
+        }
+    }
+
     /*TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
@@ -339,6 +358,24 @@ namespace dconstruct::testing {
         ASSERT_EQ(registers_to_emit_2.size(), 1);
         ASSERT_TRUE(registers_to_emit_1.contains(0));
         ASSERT_TRUE(registers_to_emit_2.contains(0));
+    }
+
+    TEST(DECOMPILER, RegisterReadBeforeOverwrite1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        file.dc_setup();
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#C3B48D02AC9ECB46";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        dcompiler::Decompiler dc{ &*func, file };
+        const auto& dc_funcs = dc.decompile();
+        const auto& dc_func = dc_funcs.at(id);
+        const b8 is_overwritten = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 0, 1);
+        ASSERT_FALSE(is_overwritten);
+        ASSERT_TRUE(dc_func.m_graph.register_gets_read_before_overwrite(0x4, 2, 0xB - 0x4));
     }
 
     TEST(DECOMPILER, If1) {

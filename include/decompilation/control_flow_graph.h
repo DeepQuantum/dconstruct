@@ -71,7 +71,7 @@ namespace dconstruct {
             return m_nodes.at(m_returnNode);
         }
 
-        [[nodiscard]] b8 register_gets_read(const u32 start, const node_id node) const noexcept;
+        [[nodiscard]] b8 register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line = 0) const noexcept;
 
         // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
         [[nodiscard]] std::set<u32> get_variant_registers(const node_id node) const noexcept;
