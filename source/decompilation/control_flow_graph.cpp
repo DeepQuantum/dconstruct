@@ -452,4 +452,28 @@ namespace dconstruct {
         
         return read_after_regs;
     }
+
+    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line) const noexcept {
+        const control_flow_node& node = m_nodes.at(node_id);
+        for (u32 i = start_line + 1; i < node.m_lines.size(); ++i) {
+            const Instruction& istr = node.m_lines[i].m_instruction;
+            if (istr.destination == istr.operand1) {
+                continue;
+            }
+            if (!istr.operand1_is_immediate() && istr.operand1_is_used() && istr.operand1 == check_register) {
+                return true;
+            } else if (!istr.operand2_is_immediate() && istr.operand2_is_used() && istr.operand2 == check_register) {
+                return true;
+            } else if (!istr.destination_is_immediate() && istr.destination == check_register) {
+                return false;
+            }
+        }
+        if (node.m_successors.empty()) {
+            return false;
+        } else {
+            for (const auto& successor : node.m_successors) {
+                return register_gets_read_before_overwrite(successor, check_register, -1);
+            }
+        }
+    }
 }

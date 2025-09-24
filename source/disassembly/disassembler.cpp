@@ -1107,7 +1107,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::FAbs: {
             frame[op1].set_first_type(RegisterValueType::F32);
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
+            std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = RegisterValueType::F32;
             frame[dest].m_F32 = abs(frame[op1].m_F32);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ABS(r%d) [%f] -> <%f>", 
