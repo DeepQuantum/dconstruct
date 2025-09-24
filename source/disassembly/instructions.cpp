@@ -124,6 +124,21 @@ namespace dconstruct {
             || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm;
     }
 
+    [[nodiscard]] b8 Instruction::operand1_is_used() const noexcept {
+        return opcode != Opcode::Branch && opcode != Opcode::Return && opcode != Opcode::AssertPointer;
+    }
+
+    [[nodiscard]] b8 Instruction::operand2_is_used() const noexcept {
+        u32 num = static_cast<u32>(opcode);
+        b8 is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
+        b8 is_call = opcode == Opcode::CallFf || opcode == Opcode::CallFf;
+        b8 is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
+        b8 is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
+        b8 is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
+        b8 is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual);
+        return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store;
+    }
+
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
         const Register& reg = m_registers[idx];
         if (reg.isArg) {
