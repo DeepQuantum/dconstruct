@@ -157,5 +157,6 @@
     "ranges": "cpp",
     "text_encoding": "cpp",
     "cinttypes": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }
