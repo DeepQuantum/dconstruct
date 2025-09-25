@@ -201,7 +201,7 @@ namespace dconstruct::testing {
             {Opcode::LookupPointer, 0, 0, 0},
             {Opcode::LoadU16Imm, 49, 5, 0},
             {Opcode::Call, 0, 0, 1},
-            {Opcode::Return}
+            {Opcode::Return, 0, 0, 0}
         };
         std::vector<u64> symbol_table;
         symbol_table.push_back(SID("ddict-key-count"));
@@ -235,8 +235,7 @@ namespace dconstruct::testing {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = 
             "function #E16F9CC43A37FADA(unknown arg_0) {\n"
-            "    sid var_0 = player;\n"
-            "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(var_0));\n"
+            "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(player));\n"
             "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#E16F9CC43A37FADA");
@@ -317,6 +316,7 @@ namespace dconstruct::testing {
         ASSERT_EQ(tree.at(0x3), 0xE);
         ASSERT_EQ(tree.at(0xE), 0x2E);
     }
+    */
 
 
     TEST(DECOMPILER, DetermineArgumentType) {
@@ -335,7 +335,7 @@ namespace dconstruct::testing {
             "}";
 
         EXPECT_EQ(expected, actual);
-    }*/
+    }
 
     TEST(DECOMPILER, RegistersToEmit1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
@@ -392,8 +392,10 @@ namespace dconstruct::testing {
         const auto& dc_funcs = dc.decompile();
         const auto& dc_func = dc_funcs.at(id);
         const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
-            "    return arg_0 == 5;\n"
+            "function #8A8D5C923D5DDB3B() {\n"
+            "    if(get-int32(#5389CC70A44E7358, self) > 0)\n"
+            "    "
+            "    return get-int32(#CEF93DF859F605EA, self);"
             "}";
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();

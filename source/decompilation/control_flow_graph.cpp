@@ -420,47 +420,48 @@ namespace dconstruct {
         return body;
     }
 
-    [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
-        std::set<u32> written_to_regs;
-        std::set<u32> read_after_regs;
-        for (const auto& line : m_nodes.at(node).m_lines) {
-            if (!line.m_instruction.destination_is_immediate()) {
-                written_to_regs.insert(line.m_instruction.destination);
-            }
-        }
+     [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
+         std::set<u32> written_to_regs;
+         std::set<u32> read_after_regs;
+         for (const auto& line : m_nodes.at(node).m_lines) {
+             if (!line.m_instruction.destination_is_immediate()) {
+                 written_to_regs.insert(line.m_instruction.destination);
+             }
+         }
 
-        for (const auto& successor : m_nodes.at(node).m_successors) {
-            if (written_to_regs.empty()) {
-                break;
-            }
-            for (const auto& line : m_nodes.at(successor).m_lines) {
-                if (written_to_regs.empty()) {
-                    break;
-                }
-                const Instruction& istr = line.m_instruction;
-                if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate() && istr.opcode != Opcode::Return) {
-                    written_to_regs.erase(istr.destination);
-                } else if (written_to_regs.contains(istr.operand1) && !istr.operand1_is_immediate()) {
-                    written_to_regs.erase(istr.operand1);
-                    read_after_regs.insert(istr.operand1);
-                } else if (written_to_regs.contains(istr.operand2) && !istr.operand2_is_immediate()) {
-                    written_to_regs.erase(istr.operand2);
-                    read_after_regs.insert(istr.operand2);
-                }
-            }
-        }
+         for (const auto& successor : m_nodes.at(node).m_successors) {
+             if (written_to_regs.empty()) {
+                 break;
+             }
+             for (const auto& line : m_nodes.at(successor).m_lines) {
+                 if (written_to_regs.empty()) {
+                     break;
+                 }
+                 const Instruction& istr = line.m_instruction;
+                 if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate() && istr.opcode != Opcode::Return) {
+                     written_to_regs.erase(istr.destination);
+                 } else if (written_to_regs.contains(istr.operand1) && !istr.operand1_is_immediate()) {
+                     written_to_regs.erase(istr.operand1);
+                     read_after_regs.insert(istr.operand1);
+                 } else if (written_to_regs.contains(istr.operand2) && !istr.operand2_is_immediate()) {
+                     written_to_regs.erase(istr.operand2);
+                     read_after_regs.insert(istr.operand2);
+                 }
+             }
+         }
         
-        return read_after_regs;
-    }
+         return read_after_regs;
+     }
 
     [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line) const noexcept {
         const control_flow_node& node = m_nodes.at(node_id);
         for (u32 i = start_line + 1; i < node.m_lines.size(); ++i) {
             const Instruction& istr = node.m_lines[i].m_instruction;
-            if (istr.destination == istr.operand1) {
+            if (istr.opcode == Opcode::Return) {
+                return true;
+            } else if (istr.destination == istr.operand1) {
                 continue;
-            }
-            if (!istr.operand1_is_immediate() && istr.operand1_is_used() && istr.operand1 == check_register) {
+            } else if (!istr.operand1_is_immediate() && istr.operand1_is_used() && istr.operand1 == check_register) {
                 return true;
             } else if (!istr.operand2_is_immediate() && istr.operand2_is_used() && istr.operand2 == check_register) {
                 return true;
@@ -474,6 +475,7 @@ namespace dconstruct {
             for (const auto& successor : node.m_successors) {
                 return register_gets_read_before_overwrite(successor, check_register, -1);
             }
+            return false;
         }
     }
 }

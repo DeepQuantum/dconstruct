@@ -45,7 +45,7 @@ private:
     const BinaryFile& m_currentFile;
 
     void emit_node(const control_flow_node&, decompiled_function&, node_id);
-    void parse_basic_block(const control_flow_node&, expression_frame &, std::set<u32>&);
+    void parse_basic_block(const control_flow_node&, expression_frame &, const ControlFlowGraph&);
 };
 
 }

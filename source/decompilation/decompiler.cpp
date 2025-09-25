@@ -44,10 +44,10 @@ namespace dconstruct::dcompiler {
             const std::string type_name = ast::type_to_declaration_string(arg_type);
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
-        std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
+        //std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
 
         emit_node(fn.m_graph[0], fn, fn.m_graph.get_return_node().m_startLine);
-        parse_basic_block(fn.m_graph.get_return_node(), fn.m_frame, last_set);
+        parse_basic_block(fn.m_graph.get_return_node(), fn.m_frame, fn.m_graph);
 
 
         funcs.emplace(func->m_id, std::move(fn));
@@ -76,8 +76,8 @@ namespace dconstruct::dcompiler {
             const std::string type_name = ast::type_to_declaration_string(arg_type);
             fn.m_frame.m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
         }
-        std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
-        parse_basic_block(fn.m_graph[node], fn.m_frame, last_set);
+        //std::set<u32> last_set = fn.m_graph.get_variant_registers(0);
+        parse_basic_block(fn.m_graph[node], fn.m_frame, fn.m_graph);
 
         funcs.emplace(func->m_id, std::move(fn));
     }
@@ -95,9 +95,7 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         return;
     }
 
-    std::set<u32> registers_to_emit = fn.m_graph.get_variant_registers(current_node_id);
-
-    parse_basic_block(node, fn.m_frame, registers_to_emit);
+    parse_basic_block(node, fn.m_frame, fn.m_graph);
     const auto& last_line = node.get_last_line();
 
     if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
@@ -128,11 +126,13 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     }
 }
 
-void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame, std::set<u32>& registers_to_emit) {
-    const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
-    const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
-    const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
-    const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
+void Decompiler::parse_basic_block(const control_flow_node &node, expression_frame &expression_frame, const ControlFlowGraph& graph) {
+    static const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
+    static const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
+    static const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
+    static const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
+
+    std::set<u32> registers_to_emit = graph.get_variant_registers(node.m_startLine);
 
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
@@ -178,7 +178,16 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
             case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(expression_frame.m_symbolTable.value().get()[istr.operand1].m_i32); break;
 
             case Opcode::Call:
-            case Opcode::CallFf: expression_frame.load_expression_into_var(istr.destination, expression_frame.call(istr)); break;
+            case Opcode::CallFf: {
+                expr_uptr call = expression_frame.call(istr);
+                if (graph.register_gets_read_before_overwrite(node.m_startLine, istr.destination, line.m_location - node.m_startLine)) {
+                    generated_expression = std::move(call);
+                } else {
+                    expression_frame.append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
+                    generated_expression = nullptr;
+                }
+                break;
+            }
             
 
             case Opcode::LoadStaticPointerImm: {
@@ -225,15 +234,14 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 continue;
             }
         }
-
-        if (generated_expression != nullptr) {
-            if (registers_to_emit.contains(istr.destination)) {
-                expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
-            }
-            else {
-                expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
-            }
-        }
+         if (generated_expression != nullptr) {
+             if (registers_to_emit.contains(istr.destination)) {
+                 expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
+             }
+             else {
+                 expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
+             }
+         }
     }
 }
 }
