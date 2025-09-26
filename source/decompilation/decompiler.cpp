@@ -98,11 +98,11 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
     parse_basic_block(node, fn.m_frame, fn.m_graph);
     const auto& last_line = node.get_last_line();
 
-    if (const auto loop = fn.m_graph.get_loop_with_head(current_node_id)) {
-        fn.m_frame.insert_loop_head(loop->get(), fn.m_graph[loop->get().m_headNode].m_lines.back().m_instruction.operand1);
-        for (const auto& successor : node.m_successors) {
-            emit_node(fn.m_graph[successor], fn, loop->get().m_latchNode);
-        }   
+    if (const auto loop = fn.m_graph.get_loop_with_head(last_line.m_location + 1)) {
+        const control_flow_node& head_node = fn.m_graph[last_line.m_location + 1];
+        parse_basic_block(head_node, fn.m_frame, fn.m_graph);
+        fn.m_frame.insert_loop_head(loop->get(), head_node.m_lines.back().m_instruction.operand1);
+        emit_node(fn.m_graph[head_node.get_last_line().m_location + 1], fn, head_node.m_startLine);
         fn.m_frame.m_blockStack.pop();
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         const node_id idom = fn.m_graph.get_immediate_postdominators().at(current_node_id);
@@ -224,23 +224,33 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 break;
             }
 
+            case Opcode::LoadFloat:
+            case Opcode::LoadI32: {
+                generated_expression = expression_frame.load_with_dereference(istr);
+                break;
+            }
+
             case Opcode::AssertPointer:
-            case Opcode::BreakFlag: {
+            case Opcode::BreakFlag:
+            case Opcode::Branch:
+            case Opcode::BranchIf:
+            case Opcode::BranchIfNot: {
                 continue;
             }
 
             case Opcode::Return: expression_frame.insert_return(istr.destination); break;
+
             default: {
-                continue;
+                throw std::runtime_error("");
             }
         }
          if (generated_expression != nullptr) {
-             if (registers_to_emit.contains(istr.destination)) {
-                 expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
-             }
-             else {
-                 expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
-             }
+            if (registers_to_emit.contains(istr.destination)) {
+                expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
+            }
+            else {
+                expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
+            }
          }
     }
 }

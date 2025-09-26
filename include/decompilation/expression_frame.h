@@ -92,6 +92,8 @@ namespace dconstruct::dcompiler {
         
         [[nodiscard]] expr_uptr emit_condition(const control_flow_node& origin);
 
+        [[nodiscard]] expr_uptr load_with_dereference(const Instruction& istr);
+
         ast::return_stmt& insert_return(const u32 dest);
 
         ast::while_stmt& insert_loop_head(const control_flow_loop& loop, const u32 conditional_check_location);

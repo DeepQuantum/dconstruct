@@ -1,7 +1,5 @@
 function #C3B48D02AC9ECB46() {
     if(!is-final-build?()) {
-        display(#5445173390656D6D("DEB-WM: %2s VOX encounter start facts are set", ""), 19);
     }
-    fact-set(global, search-start-played?, new-boxed-value(1, 1));
     return fact-set(global, ambush-played?, new-boxed-value(1, 1));
 }
