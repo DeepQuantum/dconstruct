@@ -420,62 +420,47 @@ namespace dconstruct {
         return body;
     }
 
-     [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
-         std::set<u32> written_to_regs;
-         std::set<u32> read_after_regs;
-         for (const auto& line : m_nodes.at(node).m_lines) {
-             if (!line.m_instruction.destination_is_immediate()) {
-                 written_to_regs.insert(line.m_instruction.destination);
-             }
-         }
+    [[nodiscard]] void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& written_to_regs, std::set<u32>& read_after_regs, u32 start_line) const noexcept {
+        for (u32 i = start_line; i < m_nodes.at(node).m_lines.size(); ++i) {
+            const function_disassembly_line& line = m_nodes.at(node).m_lines[i];
+            if (written_to_regs.empty()) {
+                return;
+            }
+            const Instruction& istr = line.m_instruction;
+            if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate() && istr.opcode != Opcode::Return) {
+                written_to_regs.erase(istr.destination);
+            } else if (written_to_regs.contains(istr.operand1) && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
+                written_to_regs.erase(istr.operand1);
+                read_after_regs.insert(istr.operand1);
+            } else if (written_to_regs.contains(istr.operand2) && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
+                written_to_regs.erase(istr.operand2);
+                read_after_regs.insert(istr.operand2);
+            }
+        }
+        for (const auto& successor : m_nodes.at(node).m_successors) {
+            get_variant_registers_recursive(successor, written_to_regs, read_after_regs);
+        }
+    }
 
-         for (const auto& successor : m_nodes.at(node).m_successors) {
-             if (written_to_regs.empty()) {
-                 break;
-             }
-             for (const auto& line : m_nodes.at(successor).m_lines) {
-                 if (written_to_regs.empty()) {
-                     break;
-                 }
-                 const Instruction& istr = line.m_instruction;
-                 if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate() && istr.opcode != Opcode::Return) {
-                     written_to_regs.erase(istr.destination);
-                 } else if (written_to_regs.contains(istr.operand1) && !istr.operand1_is_immediate()) {
-                     written_to_regs.erase(istr.operand1);
-                     read_after_regs.insert(istr.operand1);
-                 } else if (written_to_regs.contains(istr.operand2) && !istr.operand2_is_immediate()) {
-                     written_to_regs.erase(istr.operand2);
-                     read_after_regs.insert(istr.operand2);
-                 }
-             }
-         }
-        
-         return read_after_regs;
-     }
+    [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
+        std::set<u32> written_to_regs;
+        std::set<u32> read_after_regs;
+        for (const auto& line : m_nodes.at(node).m_lines) {
+            if (!line.m_instruction.destination_is_immediate()) {
+                written_to_regs.insert(line.m_instruction.destination);
+            }
+        }
+        for (const auto& successor : m_nodes.at(node).m_successors) {
+            get_variant_registers_recursive(successor, written_to_regs, read_after_regs);
+        }
+        return read_after_regs;
+    }
 
     [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line) const noexcept {
-        const control_flow_node& node = m_nodes.at(node_id);
-        for (u32 i = start_line + 1; i < node.m_lines.size(); ++i) {
-            const Instruction& istr = node.m_lines[i].m_instruction;
-            if (istr.opcode == Opcode::Return) {
-                return true;
-            } else if (istr.destination == istr.operand1) {
-                continue;
-            } else if (!istr.operand1_is_immediate() && istr.operand1_is_used() && istr.operand1 == check_register) {
-                return true;
-            } else if (!istr.operand2_is_immediate() && istr.operand2_is_used() && istr.operand2 == check_register) {
-                return true;
-            } else if (!istr.destination_is_immediate() && istr.destination == check_register) {
-                return false;
-            }
-        }
-        if (node.m_successors.empty()) {
-            return false;
-        } else {
-            for (const auto& successor : node.m_successors) {
-                return register_gets_read_before_overwrite(successor, check_register, -1);
-            }
-            return false;
-        }
+        std::set<u32> check, written_to;
+        const u32 reg_to_check = m_nodes.at(node_id).m_lines[start_line].m_instruction.destination;
+        check.insert(reg_to_check);
+        get_variant_registers_recursive(node_id, check, written_to, start_line);
+        return check.empty();
     }
 }

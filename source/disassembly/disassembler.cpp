@@ -1390,7 +1390,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadI8: {
             frame[op1].m_type = RegisterValueType::I8_POINTER;
-            std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
             frame[dest].m_type = RegisterValueType::I8;
             frame[dest].m_I8 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i8*)%s", dest, op1_str);
@@ -1398,7 +1398,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadU8: {
             frame[op1].m_type = RegisterValueType::U8_POINTER;
-            std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
             frame[dest].m_type = RegisterValueType::U8;
             frame[dest].m_U8 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u8*)%s", dest, op1_str);
@@ -1406,7 +1406,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadI16: {
             frame[op1].m_type = RegisterValueType::I16_POINTER;
-            std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
             frame[dest].m_type = RegisterValueType::I16;
             frame[dest].m_I16 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i16*)%s", dest, op1_str);
@@ -1414,7 +1414,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadU16: {
             frame[op1].m_type = RegisterValueType::U16_POINTER;
-            std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
             frame[dest].m_type = RegisterValueType::U16;
             frame[dest].m_U16 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(u16*)%s", dest, op1_str);
@@ -1422,7 +1422,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LoadI32: {
             frame[op1].m_type = RegisterValueType::I32_POINTER;
-            std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
             frame[dest].m_type = RegisterValueType::I32;
             frame[dest].m_I32 = 0;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = *(i32*)%s", dest, op1_str);

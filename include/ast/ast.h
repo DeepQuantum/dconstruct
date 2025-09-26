@@ -16,6 +16,7 @@
 #include "primary_expressions/literal.h"
 #include "primary_expressions/identifier.h"
 #include "primary_expressions/cast.h"
+#include "primary_expressions/dereference.h"
 //#include "declarations/function_definition.h"
 //#include "parameter.h"
 #include "statements/block.h"
