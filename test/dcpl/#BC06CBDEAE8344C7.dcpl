@@ -1,0 +1,26 @@
+function #BC06CBDEAE8344C7(u16 arg_0) {
+    if(arg_0 == 0) {
+        string var_1 = "none";
+    } else {
+        if(arg_0 == 1) {
+            string var_1 = "potential";
+        } else {
+            if(arg_0 == 2) {
+                string var_1 = "certain";
+            } else {
+                if(arg_0 == 3) {
+                    string var_1 = "missing";
+                } else {
+                    unknown var_1 = arg_0;
+                    unknown var_1 = var_1 == 4;
+                    if(var_1) {
+                        string var_1 = "lost";
+                    } else {
+                        string var_1 = "invalid";
+                    }
+                }
+            }
+        }
+    }
+    return var_1;
+}

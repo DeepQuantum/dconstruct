@@ -76,6 +76,10 @@ namespace dconstruct::ast {
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
         inline void pseudo(std::ostream& os) const override {
+            if (m_rhs == nullptr) {
+                os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << "asdasd";
+                return;
+            }
             os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
         }
 
