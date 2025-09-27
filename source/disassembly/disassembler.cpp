@@ -532,8 +532,9 @@ void Disassembler::set_register_types(Register &op1, Register &op2, const Regist
         op1.set_first_type(type);
         op2.set_first_type(type);
     } else {
+        auto temp = op1.m_type;
         op1.set_first_type(op2.m_type);
-        op2.set_first_type(op2.m_type);
+        op2.set_first_type(temp);
     }
 }
 
@@ -907,11 +908,16 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::IEqual: {
-            frame[op1].m_type = RegisterValueType::I64;
-            frame[op2].m_type = RegisterValueType::I64;
+            set_register_types(frame[op1], frame[op2], RegisterValueType::I64);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
-            frame[dest].m_type = RegisterValueType::BOOL;
-            frame[dest].m_BOOL = frame[op1].m_I64 == frame[op2].m_I64;
+            if (dest == op1) {
+                if (frame[op1].m_type != RegisterValueType::UNKNOWN && frame[op1].isArg) {
+                    frame.m_registerArgs[frame[op1].argNum] = frame[op1].m_type;
+                }
+                frame[op1].isArg = false;
+            }
+            //frame[dest].m_type = RegisterValueType::BOOL;
+            //frame[dest].m_BOOL = frame[op1].m_I64 == frame[op2].m_I64;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s == %s", 
                 dest, 
                 op1_str,

@@ -330,7 +330,7 @@ namespace dconstruct::testing {
         const auto& actual = func.to_string();
 
         const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
+            "function DetermineArgumentType(u16 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
 
@@ -373,9 +373,12 @@ namespace dconstruct::testing {
         dcompiler::Decompiler dc{ &*func, file };
         const auto& dc_funcs = dc.decompile();
         const auto& dc_func = dc_funcs.at(id);
-        const b8 is_overwritten = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 0, 1);
-        ASSERT_FALSE(is_overwritten);
-        ASSERT_TRUE(dc_func.m_graph.register_gets_read_before_overwrite(0x4, 2, 0xB - 0x4));
+        b8 is_read_first = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 0, 0);
+        ASSERT_FALSE(is_read_first);
+        is_read_first = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 2, 0xB - 0x4);
+        ASSERT_TRUE(is_read_first);
+        is_read_first = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 0, 0xE - 0x4);
+        ASSERT_FALSE(is_read_first);
     }
 
     TEST(DECOMPILER, If1) {
@@ -393,9 +396,12 @@ namespace dconstruct::testing {
         const auto& dc_func = dc_funcs.at(id);
         const std::string expected =
             "function #8A8D5C923D5DDB3B() {\n"
-            "    if(get-int32(#5389CC70A44E7358, self) > 0)\n"
-            "    "
-            "    return get-int32(#CEF93DF859F605EA, self);"
+            "    if(get-int32(#5389CC70A44E7358, self) > 0) {\n"
+            "        unknown var_0 = get-int32(#5389CC70A44E7358, self);\n"
+            "    } else {\n"
+            "        unknown var_0 = get-int32(#CEF93DF859F605EA, self);\n"
+            "    }\n"
+            "    return var_0;\n"
             "}";
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();

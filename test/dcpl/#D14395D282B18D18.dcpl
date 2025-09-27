@@ -1,0 +1,17 @@
+function #D14395D282B18D18(bool arg_0) {
+    if(arg_0) {
+        unknown var_1 = arg_0;
+        unknown var_1 = *var_1;
+        string var_4 = "[intensity, engagers] :";
+        u16 var_5 = 0;
+        unknown var_6 = var_5;
+        unknown var_6 = var_6 < var_1;
+        while(var_6) {
+            unknown var_4 = #5445173390656D6D("%s [%d, %d]", var_4, (i64)*arg_0 + 4 + asdasd, (i64)*arg_0 + 68 + asdasd);
+            unknown var_5 = var_5 + 1;
+        }
+    } else {
+        string var_1 = "Not defined!";
+    }
+    return var_1;
+}
