@@ -117,7 +117,6 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         fn.m_frame.m_blockStack.push(*else_block);
         emit_node(fn.m_graph[last_line.m_instruction.destination], fn, idom);
         fn.m_frame.m_blockStack.pop();
-
         stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), else_block->m_statements.empty() ? nullptr : std::move(else_block));
 
         fn.m_frame.append_to_current_block(std::move(full_if));

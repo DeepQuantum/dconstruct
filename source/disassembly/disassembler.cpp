@@ -577,7 +577,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         if (frame[dest].m_type != RegisterValueType::UNKNOWN && frame[dest].isArg) {
             frame.m_registerArgs[frame[dest].argNum] = frame[dest].m_type;
         }
-        if (dest != op1 && dest != op2) {
+        if (dest != op1 && dest != op2 && istr.operand1_is_used()) {
             frame[dest].isArg = false;
             frame[dest].isReturn = false;
         }
@@ -588,7 +588,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     if (!istr.operand2_is_immediate()) {
         frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_type == RegisterValueType::POINTER ? frame[op2].m_PTR.m_sid : frame[op2].m_SID));
     }
-
+    if (fn.m_id == "#D14395D282B18D18") {
+        std::cout << "retard";
+    }
     switch (istr.opcode) {
         case Opcode::Return: {
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
@@ -1137,7 +1139,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::BranchIf: 
         case Opcode::BranchIfNot: {
-            frame[op1].set_first_type(RegisterValueType::BOOL);
+            //frame[op1].set_first_type(RegisterValueType::BOOL);
             u32 target = dest | (op2 << 8);
             if (fn.m_lines[target].m_instruction.opcode == istr.opcode && fn.m_lines[target].m_instruction.operand1 == op1) {
                 target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
