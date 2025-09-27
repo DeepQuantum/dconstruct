@@ -28,7 +28,12 @@ void expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr)
 [[nodiscard]] expr_uptr expression_frame::cast_to_int(const Instruction& istr) {
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
-        return std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::I64 }, std::move(m_transformableExpressions[istr.operand1]));
+        const auto& op2 = m_transformableExpressions[istr.operand1];
+        return std::make_unique<ast::cast_expr>(
+            compiler::token{ compiler::token_type::IDENTIFIER, "i64"}, 
+            std::make_unique<ast::identifier>("i64"), 
+            is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+        );
     }
     else {
         return std::make_unique<ast::literal>(static_cast<i32>(std::get<f32>(old_lit->m_value)));
@@ -38,10 +43,15 @@ void expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr)
 [[nodiscard]] expr_uptr expression_frame::cast_to_float(const Instruction& istr) {
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
-        return std::make_unique<ast::cast_expr>(ast::primitive_type{ ast::primitive_kind::F32 }, std::move(m_transformableExpressions[istr.operand1]));
+        const auto& op2 = m_transformableExpressions[istr.operand1];
+        return std::make_unique<ast::cast_expr>(
+            compiler::token{ compiler::token_type::IDENTIFIER, "f32"}, 
+            std::make_unique<ast::identifier>("f32"), 
+            is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+        );
     }
     else {
-        return std::make_unique<ast::literal>(static_cast<f32>(std::get<i32>(old_lit->m_value)));
+        return std::make_unique<ast::literal>(static_cast<i32>(std::get<f32>(old_lit->m_value)));
     }
 }
 
@@ -52,7 +62,7 @@ void expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr)
 }
 
 [[nodiscard]] expr_uptr expression_frame::load_with_dereference(const Instruction& istr) {
-    expr_uptr load = std::make_unique<ast::dereference_expr>(std::move(m_transformableExpressions[istr.operand1]));
+    expr_uptr load = std::make_unique<ast::dereference_expr>(compiler::token{ compiler::token_type::STAR, "*" }, std::move(m_transformableExpressions[istr.operand1]));
     return load;
 }
 
@@ -68,7 +78,7 @@ ast::while_stmt& expression_frame::insert_loop_head(const control_flow_loop& loo
     
     auto& while_ref = static_cast<ast::while_stmt&>(*m_blockStack.top().get().m_statements.back().get());
 
-    m_blockStack.push(static_cast<ast::block&>(*m_blockStack.top().get().m_statements.back().get()));
+    m_blockStack.push(static_cast<ast::block&>(*while_ref.m_body.get()));
     
     return while_ref;
 }

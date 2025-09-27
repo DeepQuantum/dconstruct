@@ -420,47 +420,60 @@ namespace dconstruct {
         return body;
     }
 
-    [[nodiscard]] void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& written_to_regs, std::set<u32>& read_after_regs, u32 start_line) const noexcept {
+    [[nodiscard]] void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& regs_to_check, std::set<u32>& read_first, std::set<u32>& written_first, u32 start_line) const noexcept {
         for (u32 i = start_line; i < m_nodes.at(node).m_lines.size(); ++i) {
             const function_disassembly_line& line = m_nodes.at(node).m_lines[i];
-            if (written_to_regs.empty()) {
+            if (regs_to_check.empty()) {
                 return;
             }
             const Instruction& istr = line.m_instruction;
-            if (written_to_regs.contains(istr.destination) && !istr.destination_is_immediate() && istr.opcode != Opcode::Return) {
-                written_to_regs.erase(istr.destination);
-            } else if (written_to_regs.contains(istr.operand1) && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
-                written_to_regs.erase(istr.operand1);
-                read_after_regs.insert(istr.operand1);
-            } else if (written_to_regs.contains(istr.operand2) && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
-                written_to_regs.erase(istr.operand2);
-                read_after_regs.insert(istr.operand2);
+            if (istr.opcode == Opcode::Return) {
+                regs_to_check.erase(istr.destination);
+                read_first.insert(istr.destination);
+                return;
+            }
+            if (istr.destination == istr.operand1 && !istr.operand1_is_immediate()) {
+                continue;
+            }
+            if (regs_to_check.contains(istr.destination) && !istr.destination_is_immediate()) {
+                regs_to_check.erase(istr.destination);
+                written_first.insert(istr.destination);
+            }
+            if (regs_to_check.contains(istr.operand1) && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
+                regs_to_check.erase(istr.operand1);
+                read_first.insert(istr.operand1);
+            }
+            if (regs_to_check.contains(istr.operand2) && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
+                regs_to_check.erase(istr.operand2);
+                read_first.insert(istr.operand2);
             }
         }
         for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_variant_registers_recursive(successor, written_to_regs, read_after_regs);
+            get_variant_registers_recursive(successor, regs_to_check, read_first, written_first);
         }
     }
 
     [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
-        std::set<u32> written_to_regs;
-        std::set<u32> read_after_regs;
+        std::set<u32> regs_to_check, read_first, written_first;
         for (const auto& line : m_nodes.at(node).m_lines) {
-            if (!line.m_instruction.destination_is_immediate()) {
-                written_to_regs.insert(line.m_instruction.destination);
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
+                regs_to_check.insert(line.m_instruction.destination);
             }
         }
         for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_variant_registers_recursive(successor, written_to_regs, read_after_regs);
+            get_variant_registers_recursive(successor, regs_to_check, read_first, written_first);
+            if (regs_to_check.empty()) {
+                break;
+            }
         }
-        return read_after_regs;
+        return read_first;
     }
 
     [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line) const noexcept {
-        std::set<u32> check, written_to;
+        std::set<u32> regs_to_check, read_first, written_first;
         const u32 reg_to_check = m_nodes.at(node_id).m_lines[start_line].m_instruction.destination;
-        check.insert(reg_to_check);
-        get_variant_registers_recursive(node_id, check, written_to, start_line);
-        return check.empty();
+        regs_to_check.insert(reg_to_check);
+        get_variant_registers_recursive(node_id, regs_to_check, read_first, written_first, start_line + 1);
+        return !read_first.empty();
     }
 }

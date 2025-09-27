@@ -26,7 +26,6 @@ void assign_expr::ast(std::ostream& os) const {
         return false;
     }
     return m_lhs == rhs_ptr->m_lhs && m_rhs == rhs_ptr->m_rhs;
-
 }
 
 [[nodiscard]] expr_uptr assign_expr::clone() const {
