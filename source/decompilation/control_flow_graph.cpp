@@ -427,7 +427,7 @@ namespace dconstruct {
                 return;
             }
             const Instruction& istr = line.m_instruction;
-            if (istr.opcode == Opcode::Return) {
+            if (regs_to_check.contains(istr.destination) && istr.opcode == Opcode::Return) {
                 regs_to_check.erase(istr.destination);
                 read_first.insert(istr.destination);
                 return;

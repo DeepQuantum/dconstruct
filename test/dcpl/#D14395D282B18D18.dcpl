@@ -1,4 +1,4 @@
-function #D14395D282B18D18(bool arg_0) {
+function #D14395D282B18D18(i32 arg_0) {
     if(arg_0) {
         unknown var_1 = arg_0;
         unknown var_1 = *var_1;
