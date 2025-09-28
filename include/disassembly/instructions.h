@@ -152,6 +152,12 @@ struct SymbolTableEntry {
     };
 };
 
+
+
+struct SymbolTableEntry {
+
+};
+
 struct function_disassembly_line {
     Instruction m_instruction;
     u64 m_location;
@@ -254,9 +260,10 @@ struct StackFrame {
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     std::vector<RegisterValueType> m_registerArgs;
+    RegisterValueType m_returnType;
     location m_symbolTable;
 
-    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
+    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table), m_returnType{RegisterValueType::UNKNOWN} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].isArg = true;
             m_registers[i].argNum = i - 49;
@@ -281,19 +288,6 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;
-
-    inline void remove_redundant_check_branches() {
-        for (auto& line : m_lines) {
-            auto& istr = line.m_instruction;
-            if ((istr.opcode == Opcode::BranchIf || istr.opcode == Opcode::BranchIfNot)) {
-                const auto& target = m_lines[istr.destination].m_instruction;
-                if (istr.opcode == target.opcode && istr.operand1 == target.operand1) {
-                    istr.destination = target.destination;
-                }
-            }
-        }
-    }
-
 }; 
 
 

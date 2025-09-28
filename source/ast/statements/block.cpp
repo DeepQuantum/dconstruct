@@ -3,13 +3,17 @@
 namespace dconstruct::ast {
 
 void block::pseudo(std::ostream& os) const {
-    os << "{\n";
-    os << indent_more;
-    for (const auto& stmnt : m_statements) {
-        os << indent << *stmnt << '\n';
-    } 
-    os << indent_less;
-    os << indent << '}';
+    if (m_statements.empty()) {
+        os << "{}" << '\n';
+    } else {
+        os << "{\n";
+        os << indent_more;
+        for (const auto& stmnt : m_statements) {
+            os << indent << *stmnt << '\n';
+        } 
+        os << indent_less;
+        os << indent << '}';
+    }
 }
 
 

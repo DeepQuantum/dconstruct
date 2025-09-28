@@ -11,7 +11,7 @@ namespace dconstruct::dcompiler {
 
 [[nodiscard]] std::string decompiled_function::to_string() const {
     std::ostringstream out;
-    out << "function " << m_id << '(';
+    out << ast::type_to_declaration_string(m_returnType) << ' ' << m_id << '(';
     for (u32 i = 0; i < m_frame.m_arguments.size(); ++i) {
         out << m_frame.m_arguments[i].m_typeName << ' ' << m_frame.m_arguments[i].m_identifier;
         if (i != m_frame.m_arguments.size() - 1) {
@@ -34,6 +34,7 @@ namespace dconstruct::dcompiler {
 
         decompiled_function fn{
             func->m_id,
+            ast::register_type_to_ast_type(func->m_stackFrame.m_returnType),
             std::set<node_id>{},
             expression_frame{ func->m_stackFrame.m_symbolTableEntries },
             std::move(cfg)
@@ -66,6 +67,7 @@ namespace dconstruct::dcompiler {
 
         decompiled_function fn{
             func->m_id,
+            ast::register_type_to_ast_type(func->m_stackFrame.m_returnType),
             std::set<node_id>{},
             expression_frame{ func->m_stackFrame.m_symbolTableEntries },
             std::move(single_node_cfg)
@@ -82,6 +84,10 @@ namespace dconstruct::dcompiler {
         funcs.emplace(func->m_id, std::move(fn));
     }
     return funcs;
+}
+
+void emit_condition(const control_flow_node& node, const ControlFlowGraph& graph) {
+    
 }
 
 void Decompiler::emit_node(const control_flow_node& node, decompiled_function& fn, node_id stop_node) {
@@ -106,18 +112,43 @@ void Decompiler::emit_node(const control_flow_node& node, decompiled_function& f
         fn.m_frame.m_blockStack.pop();
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         const node_id idom = fn.m_graph.get_immediate_postdominators().at(current_node_id);
-        expr_uptr condition = fn.m_frame.emit_condition(fn.m_graph[current_node_id]);
+        const auto& successor_last_line = fn.m_graph[node.get_direct_successor()].get_last_line();
+        expr_uptr current_condition = fn.m_frame.m_transformableExpressions[last_line.m_instruction.operand1]->clone();
+        expr_uptr condition = nullptr;
+        node_id proper_sucessor = node.get_direct_successor();
+        node_id proper_destination = last_line.m_instruction.destination;
+        if (last_line.m_instruction.destination == successor_last_line.m_location) {
+            fn.m_parsedNodes.insert(proper_sucessor);
+            parse_basic_block(fn.m_graph[proper_sucessor], fn.m_frame, fn.m_graph);
+            condition = std::make_unique<ast::logical_expr>(
+                compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" },
+                std::move(current_condition),
+                fn.m_frame.m_transformableExpressions[successor_last_line.m_instruction.operand1]->clone()
+            );
+            proper_sucessor = fn.m_graph[proper_sucessor].get_direct_successor();
+            proper_destination = successor_last_line.m_instruction.destination;
+        } else {
+            condition = current_condition->clone();
+        }
         auto then_block = std::make_unique<ast::block>();
         auto else_block = std::make_unique<ast::block>();
 
         fn.m_frame.m_blockStack.push(*then_block);
-        emit_node(fn.m_graph[node.get_direct_successor()], fn, idom);
+        emit_node(fn.m_graph[proper_sucessor], fn, idom);
         fn.m_frame.m_blockStack.pop();
 
         fn.m_frame.m_blockStack.push(*else_block);
-        emit_node(fn.m_graph[last_line.m_instruction.destination], fn, idom);
+        emit_node(fn.m_graph[proper_destination], fn, idom);
         fn.m_frame.m_blockStack.pop();
-        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), else_block->m_statements.empty() ? nullptr : std::move(else_block));
+
+        stmnt_uptr _else = nullptr;
+        if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
+            _else = std::move(else_block->m_statements[0]);
+        } else if (!else_block->m_statements.empty()) {
+            _else = std::move(else_block);
+        }
+
+        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), std::move(_else));
 
         fn.m_frame.append_to_current_block(std::move(full_if));
 
@@ -243,14 +274,14 @@ void Decompiler::parse_basic_block(const control_flow_node &node, expression_fra
                 throw std::runtime_error("");
             }
         }
-         if (generated_expression != nullptr) {
-            if (registers_to_emit.contains(istr.destination)) {
+        if (generated_expression != nullptr) {
+            if (registers_to_emit.contains(istr.destination) || generated_expression->complexity() > 5) {
                 expression_frame.load_expression_into_var(istr.destination, std::move(generated_expression));
             }
             else {
                 expression_frame.m_transformableExpressions[istr.destination] = std::move(generated_expression);
             }
-         }
+        }
     }
 }
 }
