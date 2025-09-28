@@ -34,4 +34,8 @@ void literal::ast(std::ostream& os) const {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
+[[nodiscard]] u16 literal::complexity() const noexcept {
+    return 1;
+}
+
 }

@@ -1,5 +1,6 @@
 #include "ast/type.h"
 #include "disassembly/instructions.h"
+#include <sstream>
 
 namespace dconstruct::ast {
 
@@ -101,6 +102,17 @@ namespace dconstruct::ast {
             return arg.m_name;
         } else if constexpr(std::is_same_v<T, ptr_type>) {
             return type_to_declaration_string(*arg.m_pointedAt) + "*";
+        } else if constexpr(std::is_same_v<T, function_type>) {
+            std::ostringstream os;
+            os << "(";
+            u32 i = 0;
+            for (const auto& [_, arg_type] : arg.m_arguments) {
+                os << type_to_declaration_string(*arg_type.get());
+                if (i < arg.m_arguments.size() - 1) {
+                    os << ", ";
+                }
+            }
+            os << ") -> " << arg.m_return;
         } else {
             return kind_to_string(arg.m_type);
         }

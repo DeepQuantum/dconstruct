@@ -588,10 +588,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     if (!istr.operand2_is_immediate()) {
         frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_type == RegisterValueType::POINTER ? frame[op2].m_PTR.m_sid : frame[op2].m_SID));
     }
-    if (fn.m_id == "#D14395D282B18D18") {
-        std::cout << "retard";
-    }
-    switch (istr.opcode) {
+    const Opcode opcode = istr.opcode;
+    switch (opcode) {
         case Opcode::Return: {
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
@@ -600,6 +598,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     fn.m_stackFrame.m_registerArgs[reg.argNum] = reg.m_type;
                 }
             }
+            fn.m_stackFrame.m_returnType = frame[dest].m_type;
             break;
         }
         case Opcode::IAdd: {
@@ -612,7 +611,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 frame[dest].m_PTR.m_offset += frame[op2].m_U64;
             } else {
                 frame[dest].m_type = RegisterValueType::I64;
-                frame[dest].m_I64 = frame[op1].m_I64 + frame[op2].m_I64;
             }
             frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_PTR.m_sid));
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = %s + %s", dest, op1_str, op2_str);
@@ -623,7 +621,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::I64);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::I64;
-            frame[dest].m_I64 = frame[op1].m_I64 - frame[op2].m_I64;
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s - %s", dst_str, op1_str, op2_str);
             break;
@@ -633,7 +630,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::I64);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::I64;
-            frame[dest].m_I64 = frame[op1].m_I64 * frame[op2].m_I64;
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s * %s", dst_str, op1_str, op2_str);
             break;
@@ -643,13 +639,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::I64);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::I64;
-            if (frame[op2].m_I64 == 0) {
-                frame[dest].m_I64 = frame[op1].m_I64 / 1;
-            } else {
-                frame[dest].m_I64 = frame[op1].m_I64 / frame[op2].m_I64;
-            }
             frame.to_string(dst_str, interpreted_buffer_size, dest);
-            std::snprintf(interpreted, interpreted_buffer_size, "%s = %s / %s", dst_str, op1_str, op2_str);
+            const char op = opcode == Opcode::ISub ? '-' : opcode == Opcode::IMul ? '*' : opcode == Opcode::IDiv ? '/' : ' ';
+            std::snprintf(interpreted, interpreted_buffer_size, "%s = %s %c %s", dst_str, op1_str, op, op2_str);
             break;
         }
         case Opcode::FAdd: {
@@ -667,7 +659,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::F32);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::F32;
-            frame[dest].m_F32 = frame[op1].m_F32 - frame[op2].m_F32;
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s - %s", dst_str, op1_str, op2_str);
             break;
@@ -677,7 +668,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::F32);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::F32;
-            frame[dest].m_F32 = frame[op1].m_F32 * frame[op2].m_F32;
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s * %s", dst_str, op1_str, op2_str);
             break;
@@ -687,11 +677,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op2].set_first_type(RegisterValueType::F32);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame[dest].m_type = RegisterValueType::F32;
-            if (frame[op2].m_F32 == 0) {
-                frame[dest].m_F32 = frame[op1].m_F32 / 1;
-            } else {
-                frame[dest].m_F32 = frame[op1].m_F32 / frame[op2].m_F32;
-            }
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s / %s", dst_str, op1_str, op2_str);
             break;

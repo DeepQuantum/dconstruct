@@ -55,5 +55,13 @@ void call_expr::ast(std::ostream& os) const {
     return std::nullopt;
 };
 
+[[nodiscard]] u16 call_expr::complexity() const noexcept {
+    u16 res = 1;
+    for (const auto& arg : m_arguments) {
+        res += arg->complexity();
+    }
+    return res;
+}
+
 
 }
