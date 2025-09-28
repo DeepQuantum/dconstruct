@@ -432,7 +432,9 @@ namespace dconstruct {
                 read_first.insert(istr.destination);
                 return;
             }
-            if (istr.destination == istr.operand1 && !istr.operand1_is_immediate()) {
+            if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs_to_check.contains(istr.destination)) {
+                regs_to_check.erase(istr.destination);
+                read_first.insert(istr.destination);
                 continue;
             }
             if (regs_to_check.contains(istr.destination) && !istr.destination_is_immediate()) {

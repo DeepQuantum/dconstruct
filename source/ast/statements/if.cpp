@@ -1,4 +1,5 @@
 #include "ast/statements/if.h"
+#include "ast/statements/block.h"
 
 namespace dconstruct::ast {
 

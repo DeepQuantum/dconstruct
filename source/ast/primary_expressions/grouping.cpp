@@ -29,4 +29,8 @@ void grouping::pseudo(std::ostream& os) const {
 [[nodiscard]] std::optional<full_type> grouping::compute_type(const compiler::environment& env) const {
     return m_expr->compute_type(env);
 }
+
+[[nodiscard]] u16 grouping::complexity() const noexcept {
+    return m_expr->complexity();
+}
 }

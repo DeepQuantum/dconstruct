@@ -19,7 +19,7 @@ void expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr)
     std::vector<expr_uptr> args;
 
     for (u8 i = 0; i < istr.operand2; ++i) {
-        args.push_back(m_transformableExpressions[49 + i]->clone()->simplify());
+        args.push_back(m_transformableExpressions[49 + i]->simplify());
     }
 
     return std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));;
@@ -57,6 +57,8 @@ void expression_frame::load_expression_into_var(const u32 dst, expr_uptr&& expr)
 
 [[nodiscard]] expr_uptr expression_frame::emit_condition(const control_flow_node& node) {
     const auto& last_line = node.get_last_line();
+    // const auto& successor_last_line = graph[node.get_direct_successor()].get_last_line();
+    // if ()
     expr_uptr& current_condition = m_transformableExpressions[last_line.m_instruction.operand1];
     return current_condition->clone();
 }

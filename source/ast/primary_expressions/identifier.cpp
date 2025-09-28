@@ -33,4 +33,8 @@ void identifier::pseudo(std::ostream& os) const {
     return std::nullopt;
 }
 
+[[nodiscard]] u16 identifier::complexity() const noexcept {
+    return 1;
+}
+
 }

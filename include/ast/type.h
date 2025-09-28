@@ -40,8 +40,9 @@ namespace dconstruct::ast {
     struct struct_type;
     struct enum_type;
     struct ptr_type;
+    struct function_type;
 
-    using full_type = std::variant<struct_type, enum_type, ptr_type, primitive_type>;
+    using full_type = std::variant<struct_type, enum_type, ptr_type, primitive_type, function_type>;
 
     struct primitive_type {
         primitive_kind m_type;
@@ -65,18 +66,25 @@ namespace dconstruct::ast {
         bool operator==(const ptr_type&) const = default;
     };
 
+    struct function_type {
+        full_type m_return;
+        std::map<std::string, std::shared_ptr<full_type>> m_arguments;
+    };
+
     struct typed_value;
 
     using struct_instance = std::map<std::string, typed_value>;
     using enum_instance = std::string;
     using ptr_instance = std::shared_ptr<typed_value>;
+    using function_instance = std::string;
 
     using value_variant = std::variant<
         std::monostate,
         primitive_value,
         struct_instance,
         enum_instance,
-        ptr_instance
+        ptr_instance,
+        function_instance,
     >;
 
     struct typed_value {

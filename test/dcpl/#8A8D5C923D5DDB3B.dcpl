@@ -1,4 +1,4 @@
-function #8A8D5C923D5DDB3B() {
+i32 #8A8D5C923D5DDB3B() {
     if(get-int32(#5389CC70A44E7358, self) > 0) {
         unknown var_0 = get-int32(#5389CC70A44E7358, self);
     } else {

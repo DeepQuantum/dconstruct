@@ -16,6 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
+        [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
 
         [[nodiscard]] inline std::optional<full_type> get_type(const compiler::environment& env) {
@@ -66,6 +67,10 @@ namespace dconstruct::ast {
             return full_type{ primitive_type { primitive_kind::UNKNOWN } };
         }
 
+        [[nodiscard]] inline u16 complexity() const noexcept override {
+            return 1 + m_rhs->complexity();
+        }
+
         compiler::token m_operator;
         std::unique_ptr<expression> m_rhs;
     };
@@ -98,6 +103,10 @@ namespace dconstruct::ast {
                 return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs && m_lhs == rhs_ptr->m_lhs && m_operator == rhs_ptr->m_operator;
             }
             return false;
+        }
+
+        [[nodiscard]] inline u16 complexity() const noexcept override {
+            return 1 + m_lhs->complexity() + m_rhs->complexity();
         }
 
         compiler::token m_operator;
