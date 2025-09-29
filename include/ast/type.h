@@ -29,7 +29,6 @@ namespace dconstruct::ast {
         STRING,
         SID,
         _NULL,
-        UNKNOWN,
     };
 
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;
@@ -42,7 +41,24 @@ namespace dconstruct::ast {
     struct ptr_type;
     struct function_type;
 
-    using full_type = std::variant<struct_type, enum_type, ptr_type, primitive_type, function_type>;
+    enum full_type_kind : u8 {
+        UNKNOWN_TYPE,
+        PRIMITIVE_TYPE,
+        STRUCT_TYPE,
+        ENUM_TYPE,
+        PTR_TYPE,
+        FUNCTION_TYPE,
+    };
+
+    using full_type_base = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
+    
+    struct full_type : full_type_base  {
+        using full_type_base::full_type_base;
+        
+        full_type() = default;
+
+        full_type(const primitive_kind& kind) noexcept : full_type_base{primitive_type{kind}}{};
+    };
 
     struct primitive_type {
         primitive_kind m_type;
@@ -63,6 +79,11 @@ namespace dconstruct::ast {
 
     struct ptr_type {
         std::shared_ptr<full_type> m_pointedAt;
+        explicit ptr_type() noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::monostate())}{};
+
+        explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(kind)}{};
+
+        explicit ptr_type(ast::full_type&& type) noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::move(type))}{};
         bool operator==(const ptr_type&) const = default;
     };
 
@@ -97,7 +118,4 @@ namespace dconstruct::ast {
     [[nodiscard]] std::string primitive_to_string(const primitive_value& prim);
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;
-
-    [[nodiscard]] full_type register_type_to_ast_type(const RegisterValueType reg_type);
-
 }

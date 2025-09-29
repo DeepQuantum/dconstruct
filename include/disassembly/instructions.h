@@ -128,36 +128,6 @@ struct Instruction {
     const char* opcode_to_string() const noexcept;
 };
 
-enum class SymbolTableEntryType {
-    STRINGID_64,
-    FLOAT,
-    INT32,
-    INT64,
-    STRING,
-    POINTER,
-    FUNCTION,
-    UNKNOWN_TYPE,
-    NONE
-};
-
-
-struct SymbolTableEntry {
-    SymbolTableEntryType m_type;
-    union {
-        sid64 m_hash;
-        f32 m_f32;
-        i32 m_i32;
-        i64 m_i64;
-        p64 m_pointer;
-    };
-};
-
-
-
-struct SymbolTableEntry {
-
-};
-
 struct function_disassembly_line {
     Instruction m_instruction;
     u64 m_location;
@@ -193,81 +163,38 @@ struct RegisterPointer {
     }
 };
 
-enum class RegisterValueType {
-    I8,
-    U8,
-    BOOL,
-    I16,
-    U16,
-    F16,
-    I32,
-    U32,
-    F32,
-    F64,
-    I64,
-    U64,
-    HASH,
-    POINTER,
-    I8_POINTER,
-    U8_POINTER,
-    I16_POINTER,
-    U16_POINTER,
-    I32_POINTER,
-    U32_POINTER,
-    I64_POINTER,
-    U64_POINTER,
-    F32_POINTER,
-    STRING,
-    DARRAY,
-    DDICT,
-    UNKNOWN,
-    VOID
-};
-
 struct Register {
-    RegisterValueType m_type;
-    union {
-        b8                 m_BOOL;
-        i8			       m_I8;
-        u8			       m_U8;
-        i16			       m_I16;
-        u16		           m_U16;
-        u16		           m_F16;
-        i32			       m_I32;
-        u32		           m_U32;
-        f32		           m_F32;
-        f64		           m_F64;
-        int64_t		       m_I64;
-        uint64_t	       m_U64;
-        sid64              m_SID;
-        RegisterPointer    m_PTR;
-    };
-    b8 isReturn = false;
-    b8 isArg = false;
-    u8 argNum;
+    ast::full_type m_type;
+    b8 m_isReturn = false;
+    b8 m_containsArg = false;
+    u8 m_argNum;
+    u64 m_value = 0;
+    u16 m_pointerOffset = UINT16_MAX;
 
-
-    void set_first_type(RegisterValueType type) {
-        if (m_type == RegisterValueType::UNKNOWN) {
-            m_type = type;
+    void set_first_type(ast::full_type&& type) {
+        if (m_type.index() == ast::UNKNOWN_TYPE) {
+            m_type = std::move(type);
         }
+    }
+
+    [[nodiscard]] inline b8 is_pointer() const noexcept {
+        return m_pointerOffset != UINT16_MAX;
     }
 };
 
 struct StackFrame {
     std::array<Register, 128> m_registers;
-    std::vector<SymbolTableEntry> m_symbolTableEntries;
+    std::vector<ast::full_type> m_symbolTableEntries;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
-    std::vector<RegisterValueType> m_registerArgs;
-    RegisterValueType m_returnType;
+    std::vector<ast::full_type> m_registerArgs;
+    ast::full_type m_returnType;
     location m_symbolTable;
 
-    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table), m_returnType{RegisterValueType::UNKNOWN} {
+    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
         for (i32 i = 49; i < 70; ++i) {
-            m_registers[i].isArg = true;
-            m_registers[i].argNum = i - 49;
-            m_registers[i].m_type = RegisterValueType::UNKNOWN;
+            m_registers[i].m_containsArg = true;
+            m_registers[i].m_argNum = i - 49;
         }
     }
 

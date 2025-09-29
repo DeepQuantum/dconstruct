@@ -141,8 +141,8 @@ namespace dconstruct {
 
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
         const Register& reg = m_registers[idx];
-        if (reg.isArg) {
-            std::snprintf(buffer, buffer_size, "arg_%i", reg.argNum);
+        if (reg.m_containsArg) {
+            std::snprintf(buffer, buffer_size, "arg_%i", reg.m_argNum);
             return;
         }
         switch (reg.m_type) {
@@ -175,10 +175,10 @@ namespace dconstruct {
             break;
         case RegisterValueType::POINTER: {
             if (reg.m_PTR.m_offset > 0) {
-                std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.isReturn ? "RET_" : "", reg.m_PTR.m_offset);
+                std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.m_isReturn ? "RET_" : "", reg.m_PTR.m_offset);
             }
             else {
-                if (reg.isReturn) {
+                if (reg.m_isReturn) {
                     std::snprintf(buffer, buffer_size, "RET_%s", resolved);
                 } else {
                     std::snprintf(buffer, buffer_size, "%s", resolved);

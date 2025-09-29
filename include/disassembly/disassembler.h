@@ -84,7 +84,7 @@ namespace dconstruct {
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);
         void insert_on_block(const SsOnBlock* block, const u32);
-        void set_register_types(Register&, Register&, const RegisterValueType);
+        void set_register_types(Register&, Register&, const ast::full_type type);
         void process_instruction(const u32, function_disassembly &);
         void insert_function_disassembly_text(const function_disassembly& functionDisassembly, const u32 indent);
         void insert_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const u32 indent);
@@ -98,10 +98,10 @@ namespace dconstruct {
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
     };
 
-    const std::unordered_map<std::string, std::vector<RegisterValueType>> m_builtinFuntions = {
-        {"get-int32", {RegisterValueType::I32}},
-        {"get-boolean", {RegisterValueType::BOOL, RegisterValueType::POINTER}},
-        {"ddict-key-count", {RegisterValueType::U32}},
-        {"ddict-create", {RegisterValueType::DDICT}}
-    };
+    // const std::unordered_map<std::string, std::vector<RegisterValueType>> m_builtinFuntions = {
+    //     {"get-int32", {RegisterValueType::I32}},
+    //     {"get-boolean", {RegisterValueType::BOOL, RegisterValueType::POINTER}},
+    //     {"ddict-key-count", {RegisterValueType::U32}},
+    //     {"ddict-create", {RegisterValueType::DDICT}}
+    // };
 }

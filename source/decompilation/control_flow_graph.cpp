@@ -113,6 +113,7 @@ namespace dconstruct {
             } 
         }
         m_immediatePostdominators = create_postdominator_tree();
+        find_loops();
     }
 
     [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u32 line) const {
