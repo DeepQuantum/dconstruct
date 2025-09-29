@@ -64,7 +64,7 @@ namespace dconstruct::ast {
         }
 
         [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
-            return full_type{ primitive_type { primitive_kind::UNKNOWN } };
+            return full_type{ std::monostate() };
         }
 
         [[nodiscard]] inline u16 complexity() const noexcept override {
@@ -93,7 +93,7 @@ namespace dconstruct::ast {
         }
 
         [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
-            return full_type{ primitive_type {primitive_kind::UNKNOWN} };
+            return full_type{ std::monostate() };
         }
 
         // for testing ! stupid and expensive.
