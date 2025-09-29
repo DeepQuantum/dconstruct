@@ -8,34 +8,6 @@ namespace dconstruct::ast {
     return static_cast<primitive_kind>(prim.index());
 }
 
-[[nodiscard]] full_type register_type_to_ast_type(const RegisterValueType reg_type) {
-    switch(reg_type) {
-        case RegisterValueType::BOOL: return ast::primitive_type {primitive_kind::BOOL};
-        case RegisterValueType::I8: return ast::primitive_type {primitive_kind::I8};
-        case RegisterValueType::U8: return ast::primitive_type {primitive_kind::U8};
-        case RegisterValueType::I16: return ast::primitive_type {primitive_kind::I16};
-        case RegisterValueType::U16: return ast::primitive_type {primitive_kind::U16};
-        case RegisterValueType::I32: return ast::primitive_type {primitive_kind::I32};
-        case RegisterValueType::U32: return ast::primitive_type {primitive_kind::U32};
-        case RegisterValueType::I64: return ast::primitive_type {primitive_kind::I64};
-        case RegisterValueType::U64: return ast::primitive_type {primitive_kind::U64};
-        case RegisterValueType::F32: return ast::primitive_type {primitive_kind::F32};
-        case RegisterValueType::F64: return ast::primitive_type {primitive_kind::F64};
-        case RegisterValueType::STRING: return ast::primitive_type {primitive_kind::STRING};
-        case RegisterValueType::I8_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::I8})};
-        case RegisterValueType::U8_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::U8})};
-        case RegisterValueType::I16_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::I16})};
-        case RegisterValueType::U16_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::U16})};
-        case RegisterValueType::I32_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::I32})};
-        case RegisterValueType::U32_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::U32})};
-        case RegisterValueType::I64_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::I64})};
-        case RegisterValueType::U64_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::U64})};
-        case RegisterValueType::F32_POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::F32})};
-        case RegisterValueType::POINTER: return ast::ptr_type {std::make_shared<full_type>(ast::primitive_type {primitive_kind::UNKNOWN})};
-        default: return ast::primitive_type {primitive_kind::UNKNOWN};
-    }
-}
-
 [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept {
     return std::visit([](auto&& arg) -> std::optional<primitive_number> {
         if constexpr (std::is_arithmetic_v<std::decay_t<decltype(arg)>>) {
@@ -113,6 +85,8 @@ namespace dconstruct::ast {
                 }
             }
             os << ") -> " << arg.m_return;
+        } else if constexpr(std::is_same_v<T, std::monostate>) {
+            return "unknown";
         } else {
             return kind_to_string(arg.m_type);
         }
