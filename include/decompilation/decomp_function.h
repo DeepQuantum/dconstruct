@@ -9,12 +9,11 @@
 
 namespace dconstruct::dcompiler {
     struct decomp_function {
-
-        explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file, const std::vector<ast::full_type> &table);
+        explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file);
+        explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file, const SymbolTable &table);
 
         [[nodiscard]] std::string to_string() const;
 
-    private:
         const function_disassembly* m_disassembly;
         const BinaryFile& m_file;
         std::string m_id;
@@ -26,7 +25,7 @@ namespace dconstruct::dcompiler {
         compiler::environment m_env;
         ast::block m_baseBlock;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
-        opt_ref<const std::vector<ast::full_type>> m_symbolTable;
+        opt_ref<const SymbolTable> m_symbolTable;
         u32 m_varCount = 0;
 
         void emit_node(const control_flow_node& node, node_id stop_node);

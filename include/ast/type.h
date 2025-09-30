@@ -5,13 +5,11 @@
 #include <optional>
 #include <variant>
 #include <vector>
-#include "disassembly/instructions.h"
 
 namespace dconstruct::ast {
-
-    
     using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
+
 
     enum class primitive_kind {
         U8,
@@ -41,24 +39,10 @@ namespace dconstruct::ast {
     struct ptr_type;
     struct function_type;
 
-    enum full_type_kind : u8 {
-        UNKNOWN_TYPE,
-        PRIMITIVE_TYPE,
-        STRUCT_TYPE,
-        ENUM_TYPE,
-        PTR_TYPE,
-        FUNCTION_TYPE,
-    };
+    using full_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
 
-    using full_type_base = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
-    
-    struct full_type : full_type_base  {
-        using full_type_base::full_type_base;
-        
-        full_type() = default;
 
-        full_type(const primitive_kind& kind) noexcept : full_type_base{primitive_type{kind}}{};
-    };
+    [[nodiscard]] static full_type make_type(const primitive_kind kind);
 
     struct primitive_type {
         primitive_kind m_type;
@@ -77,24 +61,32 @@ namespace dconstruct::ast {
         bool operator==(const enum_type&) const = default;
     };
 
+    struct function_type {
+        std::shared_ptr<full_type> m_return;
+        std::map<std::string, std::shared_ptr<full_type>> m_arguments;
+    };
+    
     struct ptr_type {
         std::shared_ptr<full_type> m_pointedAt;
         explicit ptr_type() noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::monostate())}{};
 
-        explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(kind)}{};
+        explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(make_type(kind))}{};
 
-        explicit ptr_type(ast::full_type&& type) noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::move(type))}{};
         bool operator==(const ptr_type&) const = default;
     };
 
-    struct function_type {
-        full_type m_return;
-        std::map<std::string, std::shared_ptr<full_type>> m_arguments;
-    };
+
+    [[nodiscard]] static full_type make_type(const primitive_kind kind) {
+        return full_type{primitive_type{kind}};
+    }
+
+    [[nodiscard]] static b8 is_unknown(const full_type& type) noexcept {
+        return std::holds_alternative<std::monostate>(type);
+    }
 
     struct typed_value;
 
-    using struct_instance = std::map<std::string, typed_value>;
+    using struct_instance = std::map<std::string, std::shared_ptr<typed_value>>;
     using enum_instance = std::string;
     using ptr_instance = std::shared_ptr<typed_value>;
     using function_instance = std::string;
@@ -104,8 +96,7 @@ namespace dconstruct::ast {
         primitive_value,
         struct_instance,
         enum_instance,
-        ptr_instance,
-        function_instance,
+        ptr_instance
     >;
 
     struct typed_value {

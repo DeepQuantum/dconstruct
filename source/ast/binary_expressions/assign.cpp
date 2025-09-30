@@ -32,4 +32,8 @@ void assign_expr::ast(std::ostream& os) const {
     return std::make_unique<assign_expr>(m_lhs, m_rhs != nullptr ? m_rhs->clone() : nullptr);
 }
 
+[[nodiscard]] inline u16 assign_expr::complexity() const noexcept {
+    return 1 + m_rhs->complexity();
+}
+
 }

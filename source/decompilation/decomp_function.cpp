@@ -3,8 +3,8 @@
 
 namespace dconstruct::dcompiler {
 
-decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file, const std::vector<ast::full_type> &table) : 
-    m_disassembly{func}, m_file{current_file}, m_symbolTable{table}, m_graph{func}
+decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) : 
+    m_disassembly{func}, m_file{current_file}, m_graph{func}
 {
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(49);
@@ -13,7 +13,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
     }
 
     for (u32 i = 0; i < func->m_stackFrame.m_registerArgs.size(); ++i) {
-        const ast::full_type arg_type = func->m_stackFrame.m_registerArgs.at(i);
+        const auto& arg_type = func->m_stackFrame.m_registerArgs.at(i);
         const std::string type_name = ast::type_to_declaration_string(arg_type);
         m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
     }
@@ -21,6 +21,10 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
     emit_node(m_graph[0], m_graph.get_return_node().m_startLine);
     parse_basic_block(m_graph.get_return_node());
 }
+
+decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file, const SymbolTable &table) : decomp_function(func, current_file) {
+    m_symbolTable = table;
+}; 
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
@@ -83,9 +87,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get()[istr.operand1].m_value); break;
-            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get()[istr.operand1].m_f32); break;
-            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get()[istr.operand1].m_i32); break;
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<i32>()); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<f32>()); break;
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<i32>()); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -101,17 +105,17 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             
 
             case Opcode::LoadStaticPointerImm: {
-                std::string string = reinterpret_cast<const char*>(m_symbolTable.value().get()[istr.operand1].m_pointer);
+                std::string string = m_symbolTable.value().get().first.get<const char*>(istr.operand1);
                 generated_expression = std::make_unique<ast::literal>(std::move(string));
                 break;
             }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
-                const sid64 sid = m_symbolTable.value().get()[istr.operand1].m_hash;
+                const sid64 sid = m_symbolTable.value().get().first.get<sid64>(istr.operand1);
                 const std::string& name = m_file.m_sidCache.at(sid);
                 sid_literal sid_literal = {sid, name};
                 expr_uptr lit = std::make_unique<ast::literal>(std::move(sid_literal));
-                if (m_symbolTable.value().get()[istr.operand1].m_type != SymbolTableEntryType::FUNCTION) {
+                if (std::holds_alternative<ast::function_type>(m_symbolTable.value().get().second[istr.operand1])) {
                     generated_expression = std::move(lit);
                 }
                 else {

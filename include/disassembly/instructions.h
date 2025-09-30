@@ -1,6 +1,7 @@
 
 #pragma once
 #include "base.h"
+#include "ast/type.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -171,27 +172,34 @@ struct Register {
     u64 m_value = 0;
     u16 m_pointerOffset = UINT16_MAX;
 
-    void set_first_type(ast::full_type&& type) {
-        if (m_type.index() == ast::UNKNOWN_TYPE) {
-            m_type = std::move(type);
+    inline void set_first_type(const ast::full_type& type) noexcept {
+        if (is_unknown(m_type)) {
+            m_type = type;
+        }
+    }
+
+    inline void set_first_type(const ast::primitive_kind& type) noexcept {
+        if (is_unknown(m_type)) {
+            m_type = make_type(type);
         }
     }
 
     [[nodiscard]] inline b8 is_pointer() const noexcept {
-        return m_pointerOffset != UINT16_MAX;
+        return m_pointerOffset != UINT16_MAX || std::holds_alternative<ast::ptr_type>(m_type);
     }
 };
 
+using SymbolTable = std::pair<location, std::vector<ast::full_type>>;
+
 struct StackFrame {
     std::array<Register, 128> m_registers;
-    std::vector<ast::full_type> m_symbolTableEntries;
+    SymbolTable m_symbolTable;
     std::vector<u32> m_labels;
     std::vector<function_disassembly_line> m_backwardsJumpLocs;
     std::vector<ast::full_type> m_registerArgs;
     ast::full_type m_returnType;
-    location m_symbolTable;
 
-    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable(symbol_table) {
+    StackFrame(location symbol_table = location(nullptr)) noexcept : m_registers{}, m_symbolTable{symbol_table, {}} {
         for (i32 i = 49; i < 70; ++i) {
             m_registers[i].m_containsArg = true;
             m_registers[i].m_argNum = i - 49;

@@ -15,6 +15,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::optional<ast::full_type> compute_type(const compiler::environment& env) const final;
         [[nodiscard]] b8 equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
+        [[nodiscard]] inline u16 complexity() const noexcept final;
         compiler::token m_lhs;
         expr_uptr m_rhs;
     };

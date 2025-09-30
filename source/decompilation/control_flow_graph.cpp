@@ -421,7 +421,7 @@ namespace dconstruct {
         return body;
     }
 
-    [[nodiscard]] void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& regs_to_check, std::set<u32>& read_first, std::set<u32>& written_first, u32 start_line) const noexcept {
+    void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& regs_to_check, std::set<u32>& read_first, std::set<u32>& written_first, u32 start_line) const noexcept {
         for (u32 i = start_line; i < m_nodes.at(node).m_lines.size(); ++i) {
             const function_disassembly_line& line = m_nodes.at(node).m_lines[i];
             if (regs_to_check.empty()) {
