@@ -1,5 +1,5 @@
-#include "decompilation/decompiler.h"
 #include "binaryfile.h"
+#include "decompilation/decomp_function.h"
 #include "disassembly/file_disassembler.h"
 #include "ast/ast.h"
 #include <array>
@@ -47,7 +47,7 @@ namespace dconstruct::testing {
         return decompile_instructions_without_disassembly(istrs, name, std::move(symbol_table)).m_frame;
     }*/
 
-    static dcompiler::decompiled_function decompile_instructions_with_disassembly(
+    static dcompiler::decomp_function decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
         const std::string& name = "Test",
         const std::vector<u64>& symbol_table = {}
@@ -55,9 +55,7 @@ namespace dconstruct::testing {
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
-        dcompiler::Decompiler df{ &fd, file };
-        auto funcs = df.decompile();
-        return std::move(funcs.at(name));
+        return dcompiler::decomp_function{&fd, file};
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
@@ -67,12 +65,10 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
-                dcompiler::Decompiler dc{ &func, file };
-                const auto& funcs = dc.decompile();
-                return funcs.at(function_id).to_string();
+                return dcompiler::decomp_function{&func, file}.to_string();
             }
         }
-        
+        return "";
     }
 
     static std::string get_decompiled_node_from_file(const std::string& path, const std::string& function_id, const node_id node) {
@@ -82,11 +78,10 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
-                dcompiler::Decompiler dc{ &func, file };
-                const auto& funcs = dc.decompile_node(node);
-                return funcs.at(function_id).to_string();
+                return dcompiler::decomp_function{&func, file}.to_string();
             }
         }
+        return "";
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
@@ -96,11 +91,10 @@ namespace dconstruct::testing {
             {Opcode::Return, 0, 0, 0}
         };
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate");
-        const auto& frame = func.m_frame;
 
-        ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
+        ASSERT_EQ(func.m_baseBlock.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
@@ -118,10 +112,9 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
         }, "BasicLoadImmediateString");
-        const auto& frame = func.m_frame;
-        ASSERT_EQ(frame.m_baseBlock.m_statements.size(), 1);
+        ASSERT_EQ(func.m_baseBlock.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
         ASSERT_TRUE(rhs.has_value());
@@ -143,9 +136,8 @@ namespace dconstruct::testing {
             {Opcode::Return, 0, 0, 0}
         };
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString");
-        const auto& frame = func.m_frame;
 
-        const auto& actual = frame.m_baseBlock.m_statements;
+        const auto& actual = func.m_baseBlock.m_statements;
         const std::string expected = "return 1;";
         std::ostringstream os;
         for (const auto& stmt : actual) {
@@ -164,9 +156,8 @@ namespace dconstruct::testing {
             {Opcode::Return, dest, 0, 0}
         };
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
-        const auto& frame = func.m_frame;
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(frame.m_baseBlock.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_baseBlock.m_statements[0].get());
         const std::string expected = "return 1 + 1285;";
         std::ostringstream os;
         os << actual;
@@ -183,9 +174,8 @@ namespace dconstruct::testing {
             {Opcode::Return, dest, 0, 0}
         };
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
-        const auto& frame = func.m_frame;
 
-        const auto& actual = frame.m_baseBlock.m_statements;
+        const auto& actual = func.m_baseBlock.m_statements;
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
         std::ostringstream os;
@@ -206,9 +196,8 @@ namespace dconstruct::testing {
         std::vector<u64> symbol_table;
         symbol_table.push_back(SID("ddict-key-count"));
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table));
-        const auto& frame = func.m_frame;
 
-        const auto& actual = frame.m_baseBlock.m_statements;
+        const auto& actual = func.m_baseBlock.m_statements;
         const std::string expected =
             "return ddict-key-count(5);";
 
@@ -253,9 +242,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const auto& tree = dc_func.m_graph.get_immediate_postdominators();
         for (const auto& [k, v] : tree) {
             ASSERT_EQ(v, 0x16);
@@ -272,9 +259,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const auto& tree = dc_func.m_graph.get_immediate_postdominators();
         for (const auto& [k, v] : tree) {
             ASSERT_EQ(v, 0x16);
@@ -347,9 +332,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::set<u32> registers_to_emit_0 = dc_func.m_graph.get_variant_registers(0);
         const std::set<u32> registers_to_emit_1 = dc_func.m_graph.get_variant_registers(0x9);
         const std::set<u32> registers_to_emit_2 = dc_func.m_graph.get_variant_registers(0x10);
@@ -370,9 +353,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         b8 is_read_first = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 0, 0);
         ASSERT_FALSE(is_read_first);
         is_read_first = dc_func.m_graph.register_gets_read_before_overwrite(0x4, 2, 0xB - 0x4);
@@ -391,9 +372,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function #8A8D5C923D5DDB3B() {\n"
             "    if(get-int32(#5389CC70A44E7358, self) > 0) {\n"
@@ -418,9 +397,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -440,9 +417,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -462,9 +437,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -484,9 +457,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -506,9 +477,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"

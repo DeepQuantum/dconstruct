@@ -75,7 +75,7 @@ namespace dconstruct {
 
         // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
         [[nodiscard]] std::set<u32> get_variant_registers(const node_id node) const noexcept;
-        [[nodiscard]] void get_variant_registers_recursive(const node_id node, std::set<u32>& read_after_regs, std::set<u32>& written_to_regs, std::set<u32>& written_firstm, u32 start_line = 0) const noexcept;
+        void get_variant_registers_recursive(const node_id node, std::set<u32>& read_after_regs, std::set<u32>& written_to_regs, std::set<u32>& written_firstm, u32 start_line = 0) const noexcept;
         
 
     private:
