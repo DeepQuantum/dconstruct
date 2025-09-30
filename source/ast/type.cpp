@@ -84,7 +84,8 @@ namespace dconstruct::ast {
                     os << ", ";
                 }
             }
-            os << ") -> " << arg.m_return;
+            os << ") -> " << type_to_declaration_string(*arg.m_return.get());
+            return os.str();
         } else if constexpr(std::is_same_v<T, std::monostate>) {
             return "unknown";
         } else {

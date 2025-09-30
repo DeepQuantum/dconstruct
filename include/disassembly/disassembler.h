@@ -98,10 +98,5 @@ namespace dconstruct {
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
     };
 
-    // const std::unordered_map<std::string, std::vector<RegisterValueType>> m_builtinFuntions = {
-    //     {"get-int32", {RegisterValueType::I32}},
-    //     {"get-boolean", {RegisterValueType::BOOL, RegisterValueType::POINTER}},
-    //     {"ddict-key-count", {RegisterValueType::U32}},
-    //     {"ddict-create", {RegisterValueType::DDICT}}
-    // };
+    const static std::unordered_map<std::string, ast::function_type> builtinFunctions;
 }

@@ -143,53 +143,24 @@ namespace dconstruct {
         const Register& reg = m_registers[idx];
         if (reg.m_containsArg) {
             std::snprintf(buffer, buffer_size, "arg_%i", reg.m_argNum);
-            return;
-        }
-        switch (reg.m_type) {
-        case RegisterValueType::HASH: {
-            strncpy(buffer, resolved, buffer_size);
-            break;
-        }
-        case RegisterValueType::U16:
-        case RegisterValueType::U32:
-        case RegisterValueType::U64: {
-            std::snprintf(buffer, buffer_size, "%llu", reg.m_U64);
-            break;
-        }
-        case RegisterValueType::I16:
-        case RegisterValueType::I32: {
-            std::snprintf(buffer, buffer_size, "%i", reg.m_I32);
-            break;
-        }
-        case RegisterValueType::I64: {
-            std::snprintf(buffer, buffer_size, "%lli", reg.m_I64);
-            break;
-        }
-        case RegisterValueType::F16:
-        case RegisterValueType::F32:
-        case RegisterValueType::F64:
-            std::snprintf(buffer, buffer_size, "%.2f", reg.m_F32);
-            break;
-        case RegisterValueType::STRING:
-            std::snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_PTR.get()));
-            break;
-        case RegisterValueType::POINTER: {
-            if (reg.m_PTR.m_offset > 0) {
-                std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.m_isReturn ? "RET_" : "", reg.m_PTR.m_offset);
-            }
-            else {
-                if (reg.m_isReturn) {
-                    std::snprintf(buffer, buffer_size, "RET_%s", resolved);
-                } else {
-                    std::snprintf(buffer, buffer_size, "%s", resolved);
+        } else if (std::holds_alternative<ast::primitive_type>(reg.m_type)) {
+            switch(std::get<ast::primitive_type>(reg.m_type).m_type) {
+                case ast::primitive_kind::SID: {
+                    strncpy(buffer, resolved, buffer_size);
+                } 
+                case ast::primitive_kind::STRING: {
+                    std::snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_value));
+                }
+                default: {
+                    std::snprintf(buffer, buffer_size, "%llu", reg.m_value);
                 }
             }
-            break;
-        }
-        default: {
-            std::snprintf(buffer, buffer_size, "0x%llX", reg.m_U64);
-            break;
-        }
+        } else if (reg.is_pointer()) {
+            std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.m_isReturn ? "RET_" : "", reg.m_pointerOffset);
+        } else if (reg.m_isReturn) {
+            std::snprintf(buffer, buffer_size, "RET_%s", resolved);
+        } else {
+            std::snprintf(buffer, buffer_size, "%s", resolved);
         }
     }
 

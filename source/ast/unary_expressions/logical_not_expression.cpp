@@ -25,7 +25,6 @@ void logical_not_expr::ast(std::ostream &os) const {
         const primitive_value value = rhs_ptr->m_value;
         switch(rhs_ptr->get_type()) {
             case primitive_kind::SID:
-            case primitive_kind::UNKNOWN: return nullptr;
             case primitive_kind::BOOL:    return std::make_unique<literal>(!std::get<b8>(value));
             case primitive_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
             case primitive_kind::_NULL:   return std::make_unique<literal>(true);
