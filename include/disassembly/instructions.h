@@ -171,6 +171,7 @@ struct Register {
     u8 m_argNum;
     u64 m_value = 0;
     u16 m_pointerOffset = UINT16_MAX;
+    u8 m_fromSymbolTable = UINT8_MAX;
 
     inline void set_first_type(const ast::full_type& type) noexcept {
         if (is_unknown(m_type)) {
@@ -185,7 +186,7 @@ struct Register {
     }
 
     [[nodiscard]] inline b8 is_pointer() const noexcept {
-        return m_pointerOffset != UINT16_MAX || std::holds_alternative<ast::ptr_type>(m_type);
+        return std::holds_alternative<ast::ptr_type>(m_type);
     }
 };
 
