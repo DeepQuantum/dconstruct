@@ -26,6 +26,7 @@ namespace dconstruct::ast {
         BOOL,
         STRING,
         SID,
+        VOID,
         _NULL,
     };
 
@@ -63,7 +64,7 @@ namespace dconstruct::ast {
 
     struct function_type {
         std::shared_ptr<full_type> m_return;
-        std::map<std::string, std::shared_ptr<full_type>> m_arguments;
+        std::vector<std::pair<std::string, std::shared_ptr<full_type>>> m_arguments;
     };
     
     struct ptr_type {
@@ -82,6 +83,14 @@ namespace dconstruct::ast {
 
     [[nodiscard]] static b8 is_unknown(const full_type& type) noexcept {
         return std::holds_alternative<std::monostate>(type);
+    }
+
+    [[nodiscard]] static function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args) {
+        std::vector<std::pair<std::string, std::shared_ptr<full_type>>> arg_types;
+        for (const auto& [name, type] : args) {
+            arg_types.emplace_back(name, std::make_shared<full_type>(type));
+        }
+        return function_type{std::make_shared<full_type>(return_arg), std::move(arg_types)};
     }
 
     struct typed_value;

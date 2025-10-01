@@ -131,7 +131,7 @@ namespace dconstruct {
     [[nodiscard]] b8 Instruction::operand2_is_used() const noexcept {
         u32 num = static_cast<u32>(opcode);
         b8 is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
-        b8 is_call = opcode == Opcode::CallFf || opcode == Opcode::CallFf;
+        b8 is_call = opcode == Opcode::CallFf || opcode == Opcode::Call;
         b8 is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
         b8 is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
         b8 is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
@@ -147,16 +147,18 @@ namespace dconstruct {
             switch(std::get<ast::primitive_type>(reg.m_type).m_type) {
                 case ast::primitive_kind::SID: {
                     strncpy(buffer, resolved, buffer_size);
+                    break;
                 } 
                 case ast::primitive_kind::STRING: {
                     std::snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_value));
-                }
+                    break;
+                }                      
                 default: {
                     std::snprintf(buffer, buffer_size, "%llu", reg.m_value);
                 }
             }
         } else if (reg.is_pointer()) {
-            std::snprintf(buffer, buffer_size, "[%s%s + %llu]", resolved, reg.m_isReturn ? "RET_" : "", reg.m_pointerOffset);
+            std::snprintf(buffer, buffer_size, "[%s%s + %llu]", reg.m_isReturn ? "RET_" : "", resolved, reg.m_pointerOffset);
         } else if (reg.m_isReturn) {
             std::snprintf(buffer, buffer_size, "RET_%s", resolved);
         } else {

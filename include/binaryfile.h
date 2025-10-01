@@ -40,9 +40,6 @@ namespace dconstruct {
     {
     public:
 
-        b8 dc_setup();
-        BinaryFile();
-
         BinaryFile(const std::filesystem::path &path);
 
         std::filesystem::path m_path;

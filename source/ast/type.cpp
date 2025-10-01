@@ -62,6 +62,7 @@ namespace dconstruct::ast {
         case primitive_kind::BOOL:   return "bool";
         case primitive_kind::STRING: return "string";
         case primitive_kind::SID:    return "sid";
+        case primitive_kind::VOID:    return "void";
         case primitive_kind::_NULL:  return "null";
         default:                     return "unknown";
     }
@@ -84,7 +85,7 @@ namespace dconstruct::ast {
                     os << ", ";
                 }
             }
-            os << ") -> " << type_to_declaration_string(*arg.m_return.get());
+            os << ") -> " << (arg.m_return != nullptr ? type_to_declaration_string(*arg.m_return.get()) : "void");
             return os.str();
         } else if constexpr(std::is_same_v<T, std::monostate>) {
             return "unknown";

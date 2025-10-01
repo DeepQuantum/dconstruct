@@ -17,9 +17,6 @@ static void disasm_file(
     const std::vector<std::string> &edits = {}) {
     
     dconstruct::BinaryFile file(inpath.string());
-    if (!file.dc_setup()) {
-        return;
-    }
 
     if (!edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, options, edits);
