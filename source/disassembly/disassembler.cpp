@@ -17,8 +17,7 @@ namespace dconstruct {
 
     const char *hash_string = m_sidbase->search(sid);
     if (hash_string == nullptr) {
-        const std::string new_hash_string = int_to_string_id(sid);
-        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, new_hash_string);
+        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id(sid));
         hash_string = iter->second.c_str();
     } else {
         m_currentFile->m_sidCache.emplace(sid, hash_string);
@@ -543,15 +542,19 @@ void load_static_imm(
     const u32 dest, 
     const u32 op1, 
     StackFrame &frame, 
+    ast::full_type& table_entry,
     char *varying, 
     const u32 disassembly_text_size, 
     char *interpreted, 
     const u32 interpreted_buffer_size, 
     const char* type_str) 
 {
-    std::snprintf(varying, disassembly_text_size, "r%d, r%d", dest, op1);
+    std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
     const T value = frame.m_symbolTable.first.get<T>(op1 * 8);
-    frame[dest].m_type = make_type(kind);
+    const auto new_type = make_type(kind);
+    frame[dest].m_type = new_type;
+    frame[dest].m_fromSymbolTable = op1;
+    table_entry = new_type;
     if constexpr (std::is_same_v<f32, T>) {
         frame[dest].m_value = std::bit_cast<u32>(value);
     } else {
@@ -630,7 +633,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
 
     if (!istr.destination_is_immediate()) {
         frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_value));
-        if (is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
+        if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
             frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
         }
         if (dest != op1 && dest != op2 && istr.operand1_is_used()) {
@@ -639,10 +642,10 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
     }
     if (!istr.operand1_is_immediate()) {
-        frame.to_string(op1_str, interpreted_buffer_size, op1, lookup(frame[dest].m_value));
+        frame.to_string(op1_str, interpreted_buffer_size, op1, lookup(frame[op1].m_value));
     }
     if (!istr.operand2_is_immediate()) {
-        frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[dest].m_value));
+        frame.to_string(op2_str, interpreted_buffer_size, op2, lookup(frame[op2].m_value));
     }
     const Opcode opcode = istr.opcode;
     switch (opcode) {
@@ -650,7 +653,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
             for (const auto& reg : fn.m_stackFrame.m_registers) {
-                if (reg.m_containsArg && is_unknown(reg.m_type)) {
+                if (reg.m_containsArg && !is_unknown(reg.m_type)) {
                     fn.m_stackFrame.m_registerArgs[reg.m_argNum] = reg.m_type;
                 }
             }
@@ -687,7 +690,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             }
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
             frame.to_string(dst_str, interpreted_buffer_size, dest);
-            std::snprintf(interpreted, interpreted_buffer_size, "%s = %s %c %s", dst_str, op1_str, op2_str);
+            std::snprintf(interpreted, interpreted_buffer_size, "%s = %s %c %s", dst_str, op1_str, op, op2_str);
             break;
         }
         case Opcode::LoadStaticInt: {
@@ -785,23 +788,19 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::LookupPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             const p64 value = frame.m_symbolTable.first.get<p64>(op1 * 8);
-            frame[dest].m_pointerOffset = 0;
             frame[dest].m_value = value;
+            frame[dest].m_fromSymbolTable = op1;
             const b8 is_function = pointer_gets_called(dest, istr_idx + 1, fn);
-            // if (m_currentFile->is_file_ptr(frame.m_symbolTable.first.+ (op1 * 8))) {
-            //     table_entry = make_type(ast::primitive_kind::STRING);
-            //     frame[dest].m_type = make_type(ast::primitive_kind::STRING);
-            //     std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, reinterpret_cast<const char*>(value));
-            // } else {
-                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
-                if (is_function) {
-                    table_entry = ast::function_type{};
-                    frame[dest].m_type = ast::function_type{};
-                } else {
-                    table_entry = ast::ptr_type{};
-                    frame[dest].m_type = ast::ptr_type{};
-                }
-            //}
+            const ast::full_type existing_type = builtinFunctions.contains(value) ? builtinFunctions.at(value) : ast::function_type{};
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
+            if (is_function) {
+                table_entry = existing_type;
+                frame[dest].m_type = existing_type;
+            } else {
+                table_entry = ast::ptr_type{};
+                frame[dest].m_type = ast::ptr_type{};
+                frame[dest].m_pointerOffset = 0;
+            }
             break;
         }
         case Opcode::MoveInt: {
@@ -815,7 +814,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op1].set_first_type(ast::primitive_kind::F32);
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%f>", dest, op1, frame[op1].m_value);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%f>", dest, op1, static_cast<f32>(std::bit_cast<f64>(frame[op1].m_value)));
             break;
         }
         case Opcode::MovePointer: {
@@ -829,30 +828,35 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::I32);
             frame[dest].m_value = frame[op1].m_value;
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%f> => <%d>", dest, op1, std::bit_cast<f64>(frame[op1].m_value), frame[dest].m_value);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%f> => <%llu>", dest, op1, static_cast<f32>(std::bit_cast<f64>(frame[op1].m_value)), frame[dest].m_value);
             break;
         }
         case Opcode::CastFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%d> => <%f>", dest, op1, frame[op1].m_value, frame[dest].m_value);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%llu> => <%f>", dest, op1, frame[op1].m_value, static_cast<f32>(std::bit_cast<f64>(frame[dest].m_value)));
             break;
         }
         case Opcode::Call: 
         case Opcode::CallFf: {
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d, %d", dest, op1, op2);
+            std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
             char comment_str[300];
             const char* function_name = lookup(frame[op1].m_value);
+            const b8 use_builtin = builtinFunctions.contains(frame[op1].m_value);
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
+                if (use_builtin) {
+                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", builtinFunctions.at(frame[op1].m_value).m_arguments[i].first.c_str());
+                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ": ");
+                }
                 frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            if (builtinFunctions.contains(function_name)) {
-                const auto& builtin = builtinFunctions.at(function_name);
+            if (use_builtin) {
+                const auto& builtin = builtinFunctions.at(frame[op1].m_value);
                 frame[dest].m_type = *builtin.m_return;
                 u8 i = 0;
                 for (const auto& [name, type] : builtin.m_arguments) {
@@ -860,7 +864,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     ++i;
                 }
             } else {
-                frame[dest].m_type = ast::function_type{};
+                
+                ast::function_type& table_function_type = std::get<ast::function_type>(frame.m_symbolTable.second[frame[op1].m_fromSymbolTable]);
+                for (u32 i = 0; i < op2; ++i) {
+                     table_function_type.m_arguments.emplace_back("deduced_" + std::to_string(i), std::make_shared<ast::full_type>(frame[49 + i].m_type));
+                }
             }
             frame[dest].m_isReturn = true;
             frame[dest].m_pointerOffset = 0;
@@ -888,7 +896,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[dest].m_type = make_type(ast::primitive_kind::BOOL);
             const char* op = "";
             if (opcode == Opcode::IEqual || opcode == Opcode::FEqual) {
-                op = "=";
+                op = "==";
             } else if (opcode == Opcode::IGreaterThan || opcode == Opcode::FGreaterThan) {
                 op = ">";
             } else if (opcode == Opcode::IGreaterThanEqual || opcode == Opcode::FGreaterThanEqual) {
@@ -901,6 +909,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 op = "!=";
             }
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d %s r%d", dest, op1, op, op2);
+            break;
         }
         case Opcode::IMod:
         case Opcode::FMod: {
@@ -1007,7 +1016,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[op1].set_first_type(ast::primitive_kind::I64);
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::I64);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d [%lli] -> <%lli>", dest, op1);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = -r%d", dest, op1);
             break;
         }
         case Opcode::FNeg: {
@@ -1046,19 +1055,19 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::LoadStaticI32Imm: {
-            load_static_imm<i32, ast::primitive_kind::I32>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i32, ast::primitive_kind::I32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticFloatImm: {
-            load_static_imm<f32, ast::primitive_kind::F32>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%f>");
+            load_static_imm<f32, ast::primitive_kind::F32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%f>");
             break;
         }
         case Opcode::LoadStaticPointerImm: {
-            load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>");
+            load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
             break;
         }
         case Opcode::LoadStaticI64Imm: {
-            load_static_imm<i64, ast::primitive_kind::I64>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%lli>");
+            load_static_imm<i64, ast::primitive_kind::I64>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%lli>");
             break;
         }
         case Opcode::LoadStaticU64Imm: {
@@ -1087,19 +1096,19 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::LoadStaticU32Imm: {
-            load_static_imm<u32, ast::primitive_kind::U32>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+            load_static_imm<u32, ast::primitive_kind::U32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
             break;
         }
         case Opcode::LoadStaticI8Imm: {
-            load_static_imm<i8, ast::primitive_kind::I8>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i8, ast::primitive_kind::I8>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticI16Imm: {
-            load_static_imm<i16, ast::primitive_kind::I16>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i16, ast::primitive_kind::I16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticU16Imm: {
-            load_static_imm<u16, ast::primitive_kind::U16>(dest, op1, frame, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+            load_static_imm<u16, ast::primitive_kind::U16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
             break;
         }
         case Opcode::LoadI8: {
@@ -1168,7 +1177,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     }
 
     if (!is_unknown(table_entry) && op1 == frame.m_symbolTable.second.size()) {
-        frame.m_symbolTable.second.push_back(table_entry);
+        frame.m_symbolTable.second.push_back(std::move(table_entry));
     }
     line.m_text = std::string(disassembly_text);
     line.m_comment = std::string(interpreted);
@@ -1226,27 +1235,38 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
     const auto& [table_location, types] = functionDisassembly.m_stackFrame.m_symbolTable;
 
     for (u32 i = 0; i < types.size(); ++i) {
-        const auto& entry = types[i];
+        const auto& type = types[i];
         location value_location = table_location + i * 8;
         std::snprintf(line_start, sizeof(line_start), "%04X   0x%06X   ", i, get_offset(value_location));
         std::visit([&](auto&& entry) -> void {
             using T = std::decay_t<decltype(entry)>;
-            if constexpr (std::is_same_v<T, i32>) {
-                std::snprintf(type_text, sizeof(type_text), "int: <%i>\n", value_location.get<i32>());
-            } else if constexpr (std::is_same_v<T, f32>) {
-                std::snprintf(type_text, sizeof(type_text), "float: <%f>\n", value_location.get<f32>());
-            } else if constexpr (std::is_same_v<T, std::string>) {
-                std::snprintf(type_text, sizeof(type_text), "string: \"%s\"\n", value_location.get<const char*>());
+            if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                switch (entry.m_type) {
+                    case ast::primitive_kind::I32: {
+                        std::snprintf(type_text, sizeof(type_text), "int: <%i>\n", value_location.get<i32>());
+                        break;
+                    }
+                    case ast::primitive_kind::F32: {
+                        std::snprintf(type_text, sizeof(type_text), "float: <%f>\n", value_location.get<f32>());
+                        break;
+                    }
+                    case ast::primitive_kind::STRING: {
+                        std::snprintf(type_text, sizeof(type_text), "string: \"%s\"\n", value_location.get<const char*>());
+                        break;
+                    }
+                    case ast::primitive_kind::SID: {
+                        std::snprintf(type_text, sizeof(type_text), "sid: %s\n", lookup(value_location.get<sid64>()));
+                        break;
+                    }
+                }
             } else if constexpr (std::is_same_v<T, ast::function_type>) {
-                std::snprintf(type_text, sizeof(type_text), "function: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry));
+                std::snprintf(type_text, sizeof(type_text), "function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
             } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                std::snprintf(type_text, sizeof(type_text), "pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry));
-            } else if constexpr (std::is_same_v<T, sid64>) {
-                std::snprintf(type_text, sizeof(type_text), "sid: %s\n", lookup(value_location.get<sid64>()));
+                std::snprintf(type_text, sizeof(type_text), "pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
             } else if constexpr (std::is_same_v<T, std::monostate>) {
-                std::snprintf(type_text, sizeof(type_text), "unknown: %%llX", value_location.get<u64>());
+                std::snprintf(type_text, sizeof(type_text), "unknown: %llu", value_location.get<u64>());
             }
-        }, entry);
+        }, type);
         std::snprintf(buffer, sizeof(buffer), "%s %s", line_start, type_text);
         insert_span(buffer, indent);
     }

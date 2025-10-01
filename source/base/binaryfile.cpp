@@ -8,8 +8,6 @@
 #include <chrono>
 
 namespace dconstruct {
-    BinaryFile::BinaryFile() {}
-
     BinaryFile::BinaryFile(const std::filesystem::path &path) {
         m_path = path;
         std::ifstream scriptstream(path, std::ios::binary);
@@ -24,35 +22,29 @@ namespace dconstruct {
 
         scriptstream.read((char*)temp_buffer, m_size);
         m_bytes = std::unique_ptr<std::byte[]>(temp_buffer);
-    }
 
-    b8 BinaryFile::dc_setup() {
         constexpr u32 magic = 0x44433030;
         constexpr u32 version = 0x1;
 
         if (m_size == 0) {
             std::cerr << "error: " << m_path.string() << " is empty.\n";
-            return false;
         }
 
         m_dcheader = reinterpret_cast<DC_Header*>(m_bytes.get());
 
-
         if (m_dcheader->m_magic != magic) {
             std::cerr << "error: not a DC-file. magic number doesn't equal 0x44433030: " << *(uint32_t*)m_bytes.get() << '\n';
-            return false;
+            exit(-1);
         }
 
         if (m_dcheader->m_versionNumber != version) {
             std::cerr << "error: not a DC-file. version number doesn't equal 0x00000001: " << *(uint32_t*)(m_bytes.get() + 8) << '\n';
-            return false;
+            exit(-1);
         }
 
         read_reloc_table();
 
         replace_newlines_in_stringtable();
-
-        return true;
     }
 
     void BinaryFile::replace_newlines_in_stringtable() noexcept {

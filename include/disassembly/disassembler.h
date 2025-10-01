@@ -98,5 +98,10 @@ namespace dconstruct {
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
     };
 
-    const static std::unordered_map<std::string, ast::function_type> builtinFunctions;
+    const static std::unordered_map<sid64, ast::function_type> builtinFunctions = {
+        {SID("get-int32"), ast::make_function(make_type(ast::primitive_kind::I32), {
+            {"symbol", make_type(ast::primitive_kind::SID)},
+            {"location", make_type(ast::primitive_kind::SID)}
+        })}
+    };
 }

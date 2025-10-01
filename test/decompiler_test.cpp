@@ -15,7 +15,7 @@ namespace dconstruct::testing {
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
         SIDBase base{TEST_DIR + "test_sidbase.bin"}; 
         BinaryFile file(TEST_DIR + path); 
-        file.dc_setup();
+        
         FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
         const ScriptLambda *lambda_ptr = disassembler.get_value_ptr_at<ScriptLambda>(offset); 
         const function_disassembly fd = disassembler.create_function_disassembly(lambda_ptr);
@@ -60,7 +60,6 @@ namespace dconstruct::testing {
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
         BinaryFile file{ path };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
@@ -73,7 +72,6 @@ namespace dconstruct::testing {
 
     static std::string get_decompiled_node_from_file(const std::string& path, const std::string& function_id, const node_id node) {
         BinaryFile file{ path };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
@@ -235,7 +233,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, ImmediatePostdominator1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
@@ -252,7 +249,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
@@ -265,11 +261,11 @@ namespace dconstruct::testing {
             ASSERT_EQ(v, 0x16);
         }
     }
-
+ 
     /*TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
+        
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#608356039B1FD9FD";
@@ -286,7 +282,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, ImmediatePostdominator3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
+        
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#D14395D282B18D18";
@@ -325,7 +321,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, RegistersToEmit1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
@@ -346,7 +341,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, RegisterReadBeforeOverwrite1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#C3B48D02AC9ECB46";
@@ -365,7 +359,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, If1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
@@ -390,7 +383,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, If2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#C3B48D02AC9ECB46";
@@ -410,7 +402,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, If3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#BC06CBDEAE8344C7";
@@ -430,7 +421,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, Loop1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#D14395D282B18D18";
@@ -450,7 +440,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, ShortCircuit1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#B97D31F760DB0E8E";
@@ -470,7 +459,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, ShortCircuit2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        file.dc_setup();
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#608356039B1FD9FD";
