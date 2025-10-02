@@ -3,8 +3,8 @@
 
 namespace dconstruct::dcompiler {
 
-decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) : 
-    m_disassembly{func}, m_file{current_file}, m_graph{func}
+decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
+    m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
 {
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(49);
@@ -21,10 +21,6 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
     emit_node(m_graph[0], m_graph.get_return_node().m_startLine);
     parse_basic_block(m_graph.get_return_node());
 }
-
-decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file, const SymbolTable &table) : decomp_function(func, current_file) {
-    m_symbolTable = table;
-}; 
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
@@ -87,9 +83,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<i32>()); break;
-            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<f32>()); break;
-            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.value().get().first.get<i32>()); break;
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<f32>()); break;
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -105,17 +101,17 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             
 
             case Opcode::LoadStaticPointerImm: {
-                std::string string = m_symbolTable.value().get().first.get<const char*>(istr.operand1);
+                std::string string = m_symbolTable.first.get<const char*>(istr.operand1 * 8);
                 generated_expression = std::make_unique<ast::literal>(std::move(string));
                 break;
             }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
-                const sid64 sid = m_symbolTable.value().get().first.get<sid64>(istr.operand1);
+                const sid64 sid = m_symbolTable.first.get<sid64>(istr.operand1 * 8);
                 const std::string& name = m_file.m_sidCache.at(sid);
                 sid_literal sid_literal = {sid, name};
                 expr_uptr lit = std::make_unique<ast::literal>(std::move(sid_literal));
-                if (std::holds_alternative<ast::function_type>(m_symbolTable.value().get().second[istr.operand1])) {
+                if (std::holds_alternative<ast::function_type>(m_symbolTable.second[istr.operand1])) {
                     generated_expression = std::move(lit);
                 }
                 else {
@@ -264,13 +260,13 @@ void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) 
     if (old_lit == nullptr) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
         return std::make_unique<ast::cast_expr>(
-            compiler::token{ compiler::token_type::IDENTIFIER, "32"}, 
+            compiler::token{ compiler::token_type::IDENTIFIER, "f32"}, 
             std::make_unique<ast::identifier>("f32"), 
             is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
         );
     }
     else {
-        return std::make_unique<ast::literal>(static_cast<f32>(std::get<i64>(old_lit->m_value)));
+        return std::make_unique<ast::literal>(static_cast<f32>(std::get<i32>(old_lit->m_value)));
     }
 }
 
