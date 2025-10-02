@@ -50,12 +50,12 @@ namespace dconstruct::testing {
     static dcompiler::decomp_function decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
         const std::string& name = "Test",
-        const std::vector<u64>& symbol_table = {}
+        const SymbolTable& table = {}
     ) {
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
-        auto fd = da.create_function_disassembly(std::move(istrs), name, location(symbol_table.data()));
-        return dcompiler::decomp_function{&fd, file};
+        auto fd = da.create_function_disassembly(std::move(istrs), name, table.first);
+        return dcompiler::decomp_function{ &fd, file };
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
@@ -191,9 +191,12 @@ namespace dconstruct::testing {
             {Opcode::Call, 0, 0, 1},
             {Opcode::Return, 0, 0, 0}
         };
-        std::vector<u64> symbol_table;
-        symbol_table.push_back(SID("ddict-key-count"));
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(symbol_table));
+        std::vector<u64> table_entries;
+        table_entries.push_back(SID("ddict-key-count"));
+        std::vector<ast::full_type> symbol_table_types;
+        symbol_table_types.push_back(ast::make_function(ast::make_type(ast::primitive_kind::I32), { {"ddict", ast::make_type(ast::primitive_kind::I32) } }));
+        SymbolTable table{ location(table_entries.data()), std::move(symbol_table_types) };
+        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
 
         const auto& actual = func.m_baseBlock.m_statements;
         const std::string expected =
