@@ -863,12 +863,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     frame[49 + i].m_type = *type;
                     ++i;
                 }
-            } else {
-                
-                ast::function_type& table_function_type = std::get<ast::function_type>(frame.m_symbolTable.second[frame[op1].m_fromSymbolTable]);
-                for (u32 i = 0; i < op2; ++i) {
-                     table_function_type.m_arguments.emplace_back("deduced_" + std::to_string(i), std::make_shared<ast::full_type>(frame[49 + i].m_type));
-                }
             }
             frame[dest].m_isReturn = true;
             frame[dest].m_pointerOffset = 0;
@@ -1260,7 +1254,12 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
                     }
                 }
             } else if constexpr (std::is_same_v<T, ast::function_type>) {
-                std::snprintf(type_text, sizeof(type_text), "function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                if (entry.m_return != nullptr && !is_unknown(*entry.m_return)) {
+                    std::snprintf(type_text, sizeof(type_text), "function: %s%s\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
+                }
+                else {
+                    std::snprintf(type_text, sizeof(type_text), "function: %s\n", lookup(value_location.get<sid64>()));
+                }
             } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
                 std::snprintf(type_text, sizeof(type_text), "pointer: \"%s\" (%s)\n", lookup(value_location.get<sid64>()), ast::type_to_declaration_string(entry).c_str());
             } else if constexpr (std::is_same_v<T, std::monostate>) {
