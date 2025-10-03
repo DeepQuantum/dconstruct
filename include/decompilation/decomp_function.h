@@ -15,7 +15,6 @@ namespace dconstruct::dcompiler {
 
         const function_disassembly* m_disassembly;
         const BinaryFile& m_file;
-        std::string m_id;
         ast::full_type m_returnType;
         std::set<node_id> m_parsedNodes;
         ControlFlowGraph m_graph;

@@ -24,7 +24,9 @@ void identifier::pseudo(std::ostream& os) const {
 }
 
 [[nodiscard]] expr_uptr identifier::clone() const {
-    return std::make_unique<identifier>(m_name);
+    auto expr = std::make_unique<identifier>(m_name);
+    if (m_type.has_value()) expr->set_type(m_type.value());
+    return expr;
 }
 
 [[nodiscard]] std::optional<full_type> identifier::compute_type(const compiler::environment& env) const {

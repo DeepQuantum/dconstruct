@@ -32,7 +32,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual std::optional<full_type> compute_type(const compiler::environment& env) const = 0;
 
-        void set_type(const full_type& type) noexcept {
+        inline void set_type(const full_type& type) noexcept {
             m_type = type;
         }
         
@@ -120,7 +120,9 @@ namespace dconstruct::ast {
         using unary_expr::unary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            return std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
+            auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
+            if (m_type.has_value()) expr->set_type(m_type.value());
+            return expr;
         }
     };
 
@@ -129,11 +131,13 @@ namespace dconstruct::ast {
         using binary_expr::binary_expr;
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            return std::make_unique<impl_binary_expr>(
+            auto expr = std::make_unique<impl_binary_expr>(
                 m_operator,
                 m_lhs != nullptr ? m_lhs->clone() : nullptr,
                 m_rhs != nullptr ? m_rhs->clone() : nullptr
             );
+            if (m_type.has_value()) expr->set_type(m_type.value());
+            return expr;
         }
     };
 

@@ -370,11 +370,11 @@ namespace dconstruct::testing {
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
-            "function #8A8D5C923D5DDB3B() {\n"
+            "i32 #8A8D5C923D5DDB3B() {\n"
             "    if(get-int32(#5389CC70A44E7358, self) > 0) {\n"
-            "        unknown var_0 = get-int32(#5389CC70A44E7358, self);\n"
+            "        i32 var_0 = get-int32(#5389CC70A44E7358, self);\n"
             "    } else {\n"
-            "        unknown var_0 = get-int32(#CEF93DF859F605EA, self);\n"
+            "        i32 var_0 = get-int32(#CEF93DF859F605EA, self);\n"
             "    }\n"
             "    return var_0;\n"
             "}";

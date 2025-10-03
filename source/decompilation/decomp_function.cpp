@@ -24,24 +24,24 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
-    out << ast::type_to_declaration_string(m_returnType) << ' ' << m_id << '(';
+    out << ast::type_to_declaration_string(m_returnType) << ' ' << m_disassembly->m_id << '(';
     for (u32 i = 0; i < m_arguments.size(); ++i) {
         out << m_arguments[i].m_typeName << ' ' << m_arguments[i].m_identifier;
         if (i != m_arguments.size() - 1) {
             out << ", ";
         }
     }
-    out << ") ";
-    out << m_baseBlock;
+    out << ") " << m_baseBlock;
     return out.str();
 }
 
-void decomp_function::parse_basic_block(const control_flow_node &node) {
-    static const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
-    static const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
-    static const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
-    static const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
+static const compiler::token plus = compiler::token{ compiler::token_type::PLUS, "+" };
+static const compiler::token minus = compiler::token{ compiler::token_type::MINUS, "-" };
+static const compiler::token multiply = compiler::token{ compiler::token_type::STAR, "*" };
+static const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
 
+void decomp_function::parse_basic_block(const control_flow_node &node) {
+    
     std::set<u32> registers_to_emit = m_graph.get_variant_registers(node.m_startLine);
 
     for (const auto &line : node.m_lines) {
@@ -109,13 +109,13 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LookupPointer: {
                 const sid64 sid = m_symbolTable.first.get<sid64>(istr.operand1 * 8);
                 const std::string& name = m_file.m_sidCache.at(sid);
-                sid_literal sid_literal = {sid, name};
-                expr_uptr lit = std::make_unique<ast::literal>(std::move(sid_literal));
-                if (std::holds_alternative<ast::function_type>(m_symbolTable.second[istr.operand1])) {
+                expr_uptr lit = std::make_unique<ast::literal>(sid_literal{ sid, name });
+                if (!std::holds_alternative<ast::function_type>(m_symbolTable.second[istr.operand1])) {
                     generated_expression = std::move(lit);
                 }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(lit);
+                    m_transformableExpressions[istr.destination]->set_type(m_symbolTable.second[istr.operand1]);
                 }
                 break;
             }
@@ -155,7 +155,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
         }
         if (generated_expression != nullptr) {
-            if (registers_to_emit.contains(istr.destination) || generated_expression->complexity() > 5) {
+            if (registers_to_emit.contains(istr.destination)) {
                 load_expression_into_var(istr.destination, std::move(generated_expression));
             }
             else {
@@ -225,17 +225,25 @@ void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) 
 
     append_to_current_block(std::move(var_declaration));
     m_transformableExpressions[dst] = std::move(id);
+    m_transformableExpressions[dst]->set_type(type);
 }
 
 [[nodiscard]] expr_uptr decomp_function::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();  
     std::vector<expr_uptr> args;
+    ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env).value());
 
     for (u8 i = 0; i < istr.operand2; ++i) {
-        args.push_back(m_transformableExpressions[49 + i]->simplify());
+        if (m_transformableExpressions[49 + i]->complexity() > 5) {
+            load_expression_into_var(49 + i, std::move(m_transformableExpressions[49 + i]));
+        }
+        args.push_back(m_transformableExpressions[49 + i]->clone());
+        args[i]->set_type(*func_type.m_arguments[i].second);
     }
 
-    return std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));;
+    auto expr = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));;
+    expr->set_type(*func_type.m_return);
+    return expr;
 }
 
 
@@ -299,6 +307,7 @@ void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) 
 }
 
 void decomp_function::insert_return(const u32 dest) {
+    m_returnType = m_transformableExpressions[dest]->get_type(m_env).value_or(std::monostate());
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 

@@ -396,7 +396,9 @@ namespace dconstruct {
                 ipdom[n] = idom;
             }
         }
-
+        if (ipdom.size() == 0) {
+            ipdom[0] = 0;
+        }
         return ipdom;
     }
 
@@ -421,9 +423,16 @@ namespace dconstruct {
         return body;
     }
 
-    void ControlFlowGraph::get_variant_registers_recursive(const node_id node, std::set<u32>& regs_to_check, std::set<u32>& read_first, std::set<u32>& written_first, u32 start_line) const noexcept {
-        for (u32 i = start_line; i < m_nodes.at(node).m_lines.size(); ++i) {
-            const function_disassembly_line& line = m_nodes.at(node).m_lines[i];
+    void ControlFlowGraph::get_variant_registers_recursive(
+        const node_id start_node,
+        const node_id stop_node, 
+        std::set<u32>& regs_to_check, 
+        std::set<u32>& read_first, 
+        std::set<u32>& written_first, 
+        u32 start_line
+    ) const noexcept {
+        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
+            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
             if (regs_to_check.empty()) {
                 return;
             }
@@ -451,20 +460,28 @@ namespace dconstruct {
                 read_first.insert(istr.operand2);
             }
         }
-        for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_variant_registers_recursive(successor, regs_to_check, read_first, written_first);
+        for (const auto& successor : m_nodes.at(start_node).m_successors) {
+            if (successor == stop_node) {
+                break;
+            }
+            get_variant_registers_recursive(successor, stop_node, regs_to_check, read_first, written_first);
         }
     }
 
-    [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id node) const noexcept {
+    [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id start_node) const noexcept {
         std::set<u32> regs_to_check, read_first, written_first;
-        for (const auto& line : m_nodes.at(node).m_lines) {
+        node_id stop_node = get_immediate_postdominators().at(start_node);
+        if (stop_node == start_node) stop_node = -1;
+        for (const auto& line : m_nodes.at(start_node).m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
                 regs_to_check.insert(line.m_instruction.destination);
             }
         }
-        for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_variant_registers_recursive(successor, regs_to_check, read_first, written_first);
+        for (const auto& successor : m_nodes.at(start_node).m_successors) {
+            if (successor == stop_node) {
+                break;
+            }
+            get_variant_registers_recursive(successor, stop_node, regs_to_check, read_first, written_first);
             if (regs_to_check.empty()) {
                 break;
             }
@@ -472,11 +489,12 @@ namespace dconstruct {
         return read_first;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id node_id, const u32 check_register, const u32 start_line) const noexcept {
+    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id start_node, const u32 check_register, const u32 start_line) const noexcept {
         std::set<u32> regs_to_check, read_first, written_first;
-        const u32 reg_to_check = m_nodes.at(node_id).m_lines[start_line].m_instruction.destination;
+        const node_id stop_node = get_immediate_postdominators().at(start_node);
+        const u32 reg_to_check = m_nodes.at(start_node).m_lines[start_line].m_instruction.destination;
         regs_to_check.insert(reg_to_check);
-        get_variant_registers_recursive(node_id, regs_to_check, read_first, written_first, start_line + 1);
+        get_variant_registers_recursive(start_node, stop_node, regs_to_check, read_first, written_first, start_line + 1);
         return !read_first.empty();
     }
 }

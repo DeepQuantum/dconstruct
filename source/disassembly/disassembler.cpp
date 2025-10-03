@@ -616,13 +616,13 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     ast::full_type table_entry;
 
     std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
-            line.m_location,
-            get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),
-            static_cast<u32>(istr.opcode),
-            dest,
-            op1,
-            op2,
-            istr.opcode_to_string()
+        line.m_location,
+        get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),
+        static_cast<u32>(istr.opcode),
+        dest,
+        op1,
+        op2,
+        istr.opcode_to_string()
     );
     char *varying = disassembly_text + strlen(disassembly_text);
     const u32 disassembly_text_size = disassembly_buffer_size - strlen(disassembly_text);
@@ -842,24 +842,29 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size, "r%d, r%d, %d", dest, op1, op2);
             char comment_str[300];
             const char* function_name = lookup(frame[op1].m_value);
-            const b8 use_builtin = builtinFunctions.contains(frame[op1].m_value);
+            const auto builtin = builtinFunctions.find(frame[op1].m_value);
+            if (fn.m_id == "#8A8D5C923D5DDB3B") {
+                u32 test = 2;
+            }
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ", ");
                 }
-                if (use_builtin) {
-                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", builtinFunctions.at(frame[op1].m_value).m_arguments[i].first.c_str());
-                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, ": ");
+                if (builtin != builtinFunctions.end()) {
+                    offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s: ", builtin->second.m_arguments[i].first.c_str());
+                }
+                else {
+                    const auto arg_type = std::make_shared<ast::full_type>(frame[49 + i].m_type);
+                    std::get<ast::function_type>(frame.m_symbolTable.second[frame[dest].m_fromSymbolTable]).m_arguments.emplace_back("deduced", arg_type);
                 }
                 frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
-            if (use_builtin) {
-                const auto& builtin = builtinFunctions.at(frame[op1].m_value);
-                frame[dest].m_type = *builtin.m_return;
+            if (builtin != builtinFunctions.end()) {
+                frame[dest].m_type = *builtin->second.m_return;
                 u8 i = 0;
-                for (const auto& [name, type] : builtin.m_arguments) {
+                for (const auto& [name, type] : builtin->second.m_arguments) {
                     frame[49 + i].m_type = *type;
                     ++i;
                 }
@@ -887,7 +892,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 set_register_types(frame[op1], frame[op2], make_type(ast::primitive_kind::F32));
             }
             std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
-            frame[dest].m_type = make_type(ast::primitive_kind::BOOL);
+            if (op1 != dest) {
+                frame[dest].m_type = make_type(ast::primitive_kind::BOOL);
+            }
             const char* op = "";
             if (opcode == Opcode::IEqual || opcode == Opcode::FEqual) {
                 op = "==";
