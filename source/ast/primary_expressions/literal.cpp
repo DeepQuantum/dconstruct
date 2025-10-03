@@ -27,7 +27,9 @@ void literal::ast(std::ostream& os) const {
 }
 
 [[nodiscard]] expr_uptr literal::clone() const {
-    return std::make_unique<literal>(m_value);
+    auto expr = std::make_unique<literal>(m_value);
+    if (m_type.has_value()) expr->set_type(m_type.value());
+    return expr;
 }
 
 [[nodiscard]] std::optional<full_type> literal::compute_type(const compiler::environment&) const noexcept {

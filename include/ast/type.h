@@ -42,6 +42,7 @@ namespace dconstruct::ast {
 
     using full_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
 
+    using ref_full_type = std::shared_ptr<full_type>;
 
     [[nodiscard]] static full_type make_type(const primitive_kind kind);
 
@@ -52,7 +53,7 @@ namespace dconstruct::ast {
 
     struct struct_type {
         std::string m_name;
-        std::map<std::string, std::shared_ptr<full_type>> m_members;
+        std::map<std::string, ref_full_type> m_members;
         bool operator==(const struct_type&) const = default;
     };
 
@@ -63,12 +64,17 @@ namespace dconstruct::ast {
     };
 
     struct function_type {
-        std::shared_ptr<full_type> m_return;
-        std::vector<std::pair<std::string, std::shared_ptr<full_type>>> m_arguments;
+        using t_arg_list = std::vector<std::pair<std::string, ref_full_type>>;
+
+        ref_full_type m_return;
+        t_arg_list m_arguments;
+
+        explicit function_type() noexcept : m_return{ std::make_shared<ast::full_type>(std::monostate()) } {};
+        explicit function_type(ref_full_type return_type, t_arg_list args) noexcept : m_return{ std::move(return_type) }, m_arguments{args} {};
     };
     
     struct ptr_type {
-        std::shared_ptr<full_type> m_pointedAt;
+        ref_full_type m_pointedAt;
         explicit ptr_type() noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::monostate())}{};
 
         explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(make_type(kind))}{};
@@ -86,11 +92,11 @@ namespace dconstruct::ast {
     }
 
     [[nodiscard]] static function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args) {
-        std::vector<std::pair<std::string, std::shared_ptr<full_type>>> arg_types;
+        ast::function_type::t_arg_list arg_types;
         for (const auto& [name, type] : args) {
             arg_types.emplace_back(name, std::make_shared<full_type>(type));
         }
-        return function_type{std::make_shared<full_type>(return_arg), std::move(arg_types)};
+        return function_type{std::make_shared<ast::full_type>(return_arg), std::move(arg_types)};
     }
 
     struct typed_value;
