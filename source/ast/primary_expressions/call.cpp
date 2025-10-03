@@ -39,7 +39,9 @@ void call_expr::ast(std::ostream& os) const {
     for (const auto& arg : m_arguments) {
         args.push_back(arg->clone());
     }
-    return std::make_unique<call_expr>(m_token, m_callee->clone(), std::move(args));
+    auto expr = std::make_unique<call_expr>(m_token, m_callee->clone(), std::move(args));
+    if (m_type.has_value()) expr->set_type(m_type.value());
+    return expr;
 }
 
 
