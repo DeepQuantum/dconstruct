@@ -2,14 +2,12 @@ string #D14395D282B18D18(i32 arg_0) {
     if(arg_0) {
         unknown var_1 = arg_0;
         unknown var_1 = *var_1;
-        string var_4 = "[intensity, engagers] :";
         u16 var_5 = 0;
         u16 var_6 = var_5;
         unknown var_6 = var_6 < var_1;
         while(var_6) {
             unknown var_51 = (i64)*(arg_0 + 4) + (var_5 * 4);
             unknown var_52 = (i64)*(arg_0 + 68) + (var_5 * 4);
-            unknown var_4 = #5445173390656D6D("%s [%d, %d]", var_4, var_51, var_52);
             unknown var_5 = var_5 + 1;
         }
     } else {
