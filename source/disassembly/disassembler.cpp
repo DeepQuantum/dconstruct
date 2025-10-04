@@ -843,9 +843,6 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             char comment_str[300];
             const char* function_name = lookup(frame[op1].m_value);
             const auto builtin = builtinFunctions.find(frame[op1].m_value);
-            if (fn.m_id == "#8A8D5C923D5DDB3B") {
-                u32 test = 2;
-            }
             u8 offset = std::snprintf(comment_str, sizeof(comment_str), "r%d = %s(", dest, function_name);
             for (u64 i = 0; i < op2; ++i) {
                 if (i != 0) {

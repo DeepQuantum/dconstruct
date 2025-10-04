@@ -48,11 +48,11 @@ namespace dconstruct {
         return ss.str();
     }
 
-    [[nodiscard]] node_id control_flow_node::get_direct_successor() const {
+    [[nodiscard]] inline node_id control_flow_node::get_direct_successor() const {
         return get_last_line().m_location + 1;
     }
 
-    [[nodiscard]] const function_disassembly_line& control_flow_node::get_last_line() const {
+    [[nodiscard]] inline const function_disassembly_line& control_flow_node::get_last_line() const {
         return m_lines.back();
     }
 
@@ -396,9 +396,7 @@ namespace dconstruct {
                 ipdom[n] = idom;
             }
         }
-        if (ipdom.size() == 0) {
-            ipdom[0] = 0;
-        }
+        ipdom[m_returnNode] = m_returnNode;
         return ipdom;
     }
 
@@ -423,12 +421,12 @@ namespace dconstruct {
         return body;
     }
 
-    void ControlFlowGraph::get_variant_registers_recursive(
+    void ControlFlowGraph::get_register_nature(
         const node_id start_node,
-        const node_id stop_node, 
         std::set<u32>& regs_to_check, 
         std::set<u32>& read_first, 
-        std::set<u32>& written_first, 
+        std::set<u32>& written_first,
+        const node_id stop_node,
         u32 start_line
     ) const noexcept {
         for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
@@ -464,37 +462,50 @@ namespace dconstruct {
             if (successor == stop_node) {
                 break;
             }
-            get_variant_registers_recursive(successor, stop_node, regs_to_check, read_first, written_first);
+            get_register_nature(successor, regs_to_check, read_first, written_first, stop_node);
+        }
+    }
+
+    void ControlFlowGraph::get_registers_written_to(const node_id node, const node_id stop, std::set<u32>& result) const {
+        for (const auto& line : m_nodes.at(node).m_lines) {
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
+                result.insert(line.m_instruction.destination);
+            }
+        }
+        for (const auto& successor : m_nodes.at(node).m_successors) {
+            get_registers_written_to(successor, stop, result);
         }
     }
 
     [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id start_node) const noexcept {
-        std::set<u32> regs_to_check, read_first, written_first;
-        node_id stop_node = get_immediate_postdominators().at(start_node);
-        if (stop_node == start_node) stop_node = -1;
+        std::set<u32> regs_to_check, read_first_branches, written_first_branches, read_first_ipdom, written_first_ipdom, result1, result2, left, right;
+        node_id ipdom = get_immediate_postdominators().at(start_node);
+
+        if (ipdom == start_node) {
+            result1.insert(m_nodes.at(start_node).m_lines.back().m_instruction.destination);
+            return result1;
+        }
+
         for (const auto& line : m_nodes.at(start_node).m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
                 regs_to_check.insert(line.m_instruction.destination);
             }
         }
-        for (const auto& successor : m_nodes.at(start_node).m_successors) {
-            if (successor == stop_node) {
-                break;
-            }
-            get_variant_registers_recursive(successor, stop_node, regs_to_check, read_first, written_first);
-            if (regs_to_check.empty()) {
-                break;
-            }
-        }
-        return read_first;
+
+        get_registers_written_to(m_nodes.at(start_node).get_direct_successor(), ipdom, left);
+        get_registers_written_to(m_nodes.at(start_node).get_last_line().m_instruction.destination, ipdom, right);
+
+        get_register_nature(ipdom, regs_to_check, read_first_ipdom, written_first_ipdom, m_returnNode);
+
+        std::set_intersection(left.begin(), left.end(), right.begin(), right.end(), std::inserter(result1, result1.begin()));
+        std::set_intersection(result1.begin(), result1.end(), read_first_ipdom.begin(), read_first_ipdom.end(), std::inserter(result2, result2.begin()));
+        return result2;
     }
 
     [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id start_node, const u32 check_register, const u32 start_line) const noexcept {
-        std::set<u32> regs_to_check, read_first, written_first;
-        const node_id stop_node = get_immediate_postdominators().at(start_node);
-        const u32 reg_to_check = m_nodes.at(start_node).m_lines[start_line].m_instruction.destination;
-        regs_to_check.insert(reg_to_check);
-        get_variant_registers_recursive(start_node, stop_node, regs_to_check, read_first, written_first, start_line + 1);
-        return !read_first.empty();
+        /*std::set<u32> read_first, written_first;
+        get_register_nature(start_node, m_returnNode, read_first, written_first, start_line + 1);
+        return read_first.contains(check_register);*/
+        return true;
     }
 }

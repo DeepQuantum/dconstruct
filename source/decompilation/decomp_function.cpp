@@ -41,9 +41,7 @@ static const compiler::token multiply = compiler::token{ compiler::token_type::S
 static const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
 
 void decomp_function::parse_basic_block(const control_flow_node &node) {
-    
-    std::set<u32> registers_to_emit = m_graph.get_variant_registers(node.m_startLine);
-
+ 
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
 
@@ -155,17 +153,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
         }
         if (generated_expression != nullptr) {
-            if (registers_to_emit.contains(istr.destination)) {
-                load_expression_into_var(istr.destination, std::move(generated_expression));
-            }
-            else {
-                m_transformableExpressions[istr.destination] = std::move(generated_expression);
-            }
+            m_transformableExpressions[istr.destination] = std::move(generated_expression);
         }
     }
 }
 
-void decomp_function::emit_node(const control_flow_node& node, node_id stop_node) {
+void decomp_function::emit_node(const control_flow_node& node, node_id stop_node, opt_ref<std::set<u32>> regs_to_emit) {
     const node_id current_node_id = node.m_startLine;
     if (m_parsedNodes.contains(current_node_id)) {
         return;
@@ -191,14 +184,36 @@ void decomp_function::emit_node(const control_flow_node& node, node_id stop_node
         expr_uptr condition = make_condition(node, proper_successor, proper_destination);
         auto then_block = std::make_unique<ast::block>();
         auto else_block = std::make_unique<ast::block>();
+        std::set<u32> regs_to_emit = m_graph.get_variant_registers(current_node_id);
+        std::unordered_map<u32, std::unique_ptr<ast::identifier>> registers_to_vars;
+
+        for (const auto& reg : regs_to_emit) {
+            registers_to_vars.emplace(reg, std::make_unique<ast::identifier>(get_next_var()));
+        }
 
         m_blockStack.push(*then_block);
         emit_node(m_graph[proper_successor], idom);
+        for (const auto& reg : regs_to_emit) {
+            auto new_var = std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(registers_to_vars[reg]->clone().release())};
+            load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
+        }
         m_blockStack.pop();
 
         m_blockStack.push(*else_block);
         emit_node(m_graph[proper_destination], idom);
+        for (const auto& reg : regs_to_emit) {
+            auto new_var = std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(registers_to_vars[reg]->clone().release()) };
+            load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
+        }
         m_blockStack.pop();
+
+        for (const auto& reg : regs_to_emit) {
+            const auto type = m_transformableExpressions[reg]->get_type(m_env).value_or(std::monostate());
+            const std::string type_name = type_to_declaration_string(type);
+            append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, registers_to_vars[reg]->m_name.m_lexeme));
+            m_transformableExpressions[reg] = registers_to_vars[reg]->clone();
+            m_transformableExpressions[reg]->set_type(type);
+        }
 
         stmnt_uptr _else = nullptr;
         if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
@@ -215,7 +230,7 @@ void decomp_function::emit_node(const control_flow_node& node, node_id stop_node
     }
 }
 
-void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) {
+void decomp_function::load_expression_into_new_var(const u32 dst, expr_uptr&& expr) {
     auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "var_" + std::to_string(dst)});
     const std::string name = id->m_name.m_lexeme;
     const ast::full_type type = expr->get_type(m_env).value_or(std::monostate());
@@ -228,6 +243,17 @@ void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) 
     m_transformableExpressions[dst]->set_type(type);
 }
 
+void decomp_function::load_expression_into_existing_var(const u32 dst, std::unique_ptr<ast::identifier>&& var, expr_uptr&& expr) {
+    const auto type_temp = expr->get_type(m_env).value_or(std::monostate());
+    auto assign_expr = std::make_unique<ast::assign_expr>(compiler::token{ compiler::token_type::IDENTIFIER, var->m_name.m_lexeme }, std::move(expr));
+
+    auto assign_statement = std::make_unique<ast::expression_stmt>(std::move(assign_expr));
+
+    append_to_current_block(std::move(assign_statement));
+    m_transformableExpressions[dst] = std::move(var);
+    m_transformableExpressions[dst]->set_type(type_temp);
+}
+
 [[nodiscard]] expr_uptr decomp_function::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();  
     std::vector<expr_uptr> args;
@@ -235,7 +261,7 @@ void decomp_function::load_expression_into_var(const u32 dst, expr_uptr&& expr) 
 
     for (u8 i = 0; i < istr.operand2; ++i) {
         if (m_transformableExpressions[49 + i]->complexity() > 5) {
-            load_expression_into_var(49 + i, std::move(m_transformableExpressions[49 + i]));
+            load_expression_into_new_var(49 + i, std::move(m_transformableExpressions[49 + i]));
         }
         args.push_back(m_transformableExpressions[49 + i]->clone());
         args[i]->set_type(*func_type.m_arguments[i].second);

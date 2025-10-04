@@ -26,7 +26,7 @@ namespace dconstruct::dcompiler {
         const SymbolTable& m_symbolTable;
         u32 m_varCount = 0;
 
-        void emit_node(const control_flow_node& node, node_id stop_node);
+        void emit_node(const control_flow_node& node, node_id stop_node, opt_ref<std::set<u32>> regs_to_emit = std::nullopt);
 
         void parse_basic_block(const control_flow_node& node);
 
@@ -39,7 +39,8 @@ namespace dconstruct::dcompiler {
             m_blockStack.top().get().m_statements.push_back(std::move(statement));
         }
 
-        void load_expression_into_var(const u32 dst, expr_uptr&& expr);
+        void load_expression_into_new_var(const u32 dst, expr_uptr&& expr);
+        void load_expression_into_existing_var(const u32 dst, std::unique_ptr<ast::identifier>&& var, expr_uptr&& expr);
 
         [[nodiscard]] expr_uptr make_call(const Instruction& istr);
 

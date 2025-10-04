@@ -75,7 +75,7 @@ namespace dconstruct {
 
         // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
         [[nodiscard]] std::set<u32> get_variant_registers(const node_id start_node) const noexcept;
-        void get_variant_registers_recursive(const node_id start_node, const node_id stop_node, std::set<u32>& read_after_regs, std::set<u32>& written_to_regs, std::set<u32>& written_firstm, u32 start_line = 0) const noexcept;
+        void get_register_nature(const node_id start_node, std::set<u32>& check_regs, std::set<u32>& read_first, std::set<u32>& written_first, const node_id stop_node, u32 start_line = 0) const noexcept;
         
 
     private:
@@ -84,6 +84,8 @@ namespace dconstruct {
         std::vector<control_flow_loop> m_loops;
         node_id m_returnNode;
         const function_disassembly *m_func;
+
+        void get_registers_written_to(const node_id node, const node_id stop, std::set<u32>& result) const;
 
         void insert_node_at_line(const node_id start_line);
         [[nodiscard]] std::optional<node_id> get_node_with_last_line(const u32 last_line) const;
