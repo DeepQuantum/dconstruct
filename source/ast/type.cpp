@@ -78,9 +78,8 @@ namespace dconstruct::ast {
         } else if constexpr(std::is_same_v<T, function_type>) {
             std::ostringstream os;
             os << "(";
-            u32 i = 0;
-            for (const auto& [_, arg_type] : arg.m_arguments) {
-                os << type_to_declaration_string(*arg_type.get());
+            for (u32 i = 0; i < arg.m_arguments.size(); ++i) {
+                os << type_to_declaration_string(*arg.m_arguments[i].second.get());
                 if (i < arg.m_arguments.size() - 1) {
                     os << ", ";
                 }
