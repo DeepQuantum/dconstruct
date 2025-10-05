@@ -95,9 +95,9 @@ namespace dconstruct::testing {
         const auto& actual = *static_cast<const ast::return_stmt*>(func.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
-        ASSERT_TRUE(rhs.has_value());
+        ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 
-        const auto& type = rhs.value();
+        const auto& type = rhs;
 
         auto expected = ast::return_stmt(std::make_unique<ast::literal>(static_cast<u16>(1)));
 
@@ -115,9 +115,9 @@ namespace dconstruct::testing {
         const auto& actual = *static_cast<const ast::return_stmt*>(func.m_baseBlock.m_statements[0].get());
         const auto rhs = actual.m_expr->compute_type(env);
 
-        ASSERT_TRUE(rhs.has_value());
+        ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 
-        const auto& type = rhs.value();
+        const auto& type = rhs;
 
         std::ostringstream actual_os;
         actual.pseudo(actual_os);
@@ -331,9 +331,9 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const std::set<u32> registers_to_emit_0 = dc_func.m_graph.get_variant_registers(0);
-        const std::set<u32> registers_to_emit_1 = dc_func.m_graph.get_variant_registers(0x9);
-        const std::set<u32> registers_to_emit_2 = dc_func.m_graph.get_variant_registers(0x10);
+        const std::set<reg_idx> registers_to_emit_0 = dc_func.m_graph.get_variant_registers(0);
+        const std::set<reg_idx> registers_to_emit_1 = dc_func.m_graph.get_variant_registers(0x9);
+        const std::set<reg_idx> registers_to_emit_2 = dc_func.m_graph.get_variant_registers(0x10);
         ASSERT_TRUE(registers_to_emit_0.empty());
         ASSERT_EQ(registers_to_emit_1.size(), 1);
         ASSERT_EQ(registers_to_emit_2.size(), 1);
@@ -371,7 +371,7 @@ namespace dconstruct::testing {
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
             "i32 #8A8D5C923D5DDB3B() {\n"
-            "    i32 var_0;"
+            "    i32 var_0;\n"
             "    if(get-int32(#5389CC70A44E7358, self) > 0) {\n"
             "        var_0 = get-int32(#5389CC70A44E7358, self);\n"
             "    } else {\n"
@@ -414,8 +414,22 @@ namespace dconstruct::testing {
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
         const std::string expected =
-            "function DetermineArgumentType(i64 arg_0) {\n"
-            "    return arg_0 == 5;\n"
+            "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
+            "    string var_0;\n"
+            "    if(arg_0 == 0) {\n"
+            "        var_0 = \"none\";\n"
+            "    } else if(arg_0 == 1) {\n"
+            "        var_0 = \"potential\";\n"
+            "    } else if(arg_0 == 2) {\n"
+            "        var_0 = \"certain\";\n"
+            "    } else if(arg_0 == 3) {\n"
+            "        var_0 = \"missing\";\n"
+            "    } else if(arg_0 == 4) {\n"
+            "        var_0 = \"lost\";\n"
+            "    } else {\n"
+            "        var_0 = \"invalid\";\n"
+            "    }\n"
+            "    return var_0;\n"
             "}";
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();

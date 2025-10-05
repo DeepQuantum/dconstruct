@@ -15,7 +15,7 @@ void cast_expr::ast(std::ostream& os) const {
     return std::make_unique<cast_expr>(m_operator, m_lhs->clone(), m_rhs->simplify());
 }
 
-[[nodiscard]] std::optional<full_type> cast_expr::compute_type(const compiler::environment& env) const {
+[[nodiscard]] full_type cast_expr::compute_type(const compiler::environment& env) const {
     return m_lhs->get_type(env);
 };
 

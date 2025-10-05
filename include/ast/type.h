@@ -83,11 +83,11 @@ namespace dconstruct::ast {
     };
 
 
-    [[nodiscard]] static full_type make_type(const primitive_kind kind) {
+    [[nodiscard]] inline static full_type make_type(const primitive_kind kind) {
         return full_type{primitive_type{kind}};
     }
 
-    [[nodiscard]] static b8 is_unknown(const full_type& type) noexcept {
+    [[nodiscard]] inline static b8 is_unknown(const full_type& type) noexcept {
         return std::holds_alternative<std::monostate>(type);
     }
 

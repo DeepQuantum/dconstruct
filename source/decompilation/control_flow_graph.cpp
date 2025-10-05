@@ -204,9 +204,9 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::pair<std::unordered_map<u32, Agnode_t*>, u32> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
-        std::unordered_map<u32, Agnode_t*> node_map{};
-        u32 max_node = 0;
+    [[nodiscard]] std::pair<std::unordered_map<node_id, Agnode_t*>, node_id> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
+        std::unordered_map<node_id, Agnode_t*> node_map{};
+        node_id max_node = 0;
         for (const auto& [node_start, node] : m_nodes) {
             std::string name = std::to_string(node_start);
             Agnode_t* current_node = agnode(g, name.data(), 1);
@@ -225,7 +225,7 @@ namespace dconstruct {
         return { node_map, max_node };
     }
 
-    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<u32, Agnode_t*>& node_map) const {
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<node_id, Agnode_t*>& node_map) const {
         for (const auto& [node_start, node] : m_nodes) {
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
@@ -423,13 +423,13 @@ namespace dconstruct {
 
     void ControlFlowGraph::get_register_nature(
         const node_id start_node,
-        std::set<u32>& regs_to_check, 
-        std::set<u32>& read_first, 
-        std::set<u32>& written_first,
+        std::set<reg_idx>& regs_to_check, 
+        std::set<reg_idx>& read_first, 
+        std::set<reg_idx>& written_first,
         const node_id stop_node,
         u32 start_line
     ) const noexcept {
-        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
+        for (reg_idx i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
             const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
             if (regs_to_check.empty()) {
                 return;
@@ -466,34 +466,40 @@ namespace dconstruct {
         }
     }
 
-    void ControlFlowGraph::get_registers_written_to(const node_id node, const node_id stop, std::set<u32>& result) const {
+    void ControlFlowGraph::get_registers_written_to(const node_id node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const {
+        if (node == stop || checked.contains(node)) {
+            return;
+        }
+        checked.insert(node);
         for (const auto& line : m_nodes.at(node).m_lines) {
-            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
                 result.insert(line.m_instruction.destination);
             }
         }
         for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_registers_written_to(successor, stop, result);
+            get_registers_written_to(successor, stop, result, checked);
         }
     }
 
-    [[nodiscard]] std::set<u32> ControlFlowGraph::get_variant_registers(const node_id start_node) const noexcept {
-        std::set<u32> regs_to_check, read_first_branches, written_first_branches, read_first_ipdom, written_first_ipdom, result1, result2, left, right;
+    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_variant_registers(const node_id start_node) const noexcept {
+        std::set<reg_idx> regs_to_check, read_first_branches, written_first_branches, read_first_ipdom, written_first_ipdom, result1, result2, left, right;
+        std::set<node_id> checked;
         node_id ipdom = get_immediate_postdominators().at(start_node);
 
         if (ipdom == start_node) {
             result1.insert(m_nodes.at(start_node).m_lines.back().m_instruction.destination);
             return result1;
         }
-
         for (const auto& line : m_nodes.at(start_node).m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
                 regs_to_check.insert(line.m_instruction.destination);
             }
         }
 
-        get_registers_written_to(m_nodes.at(start_node).get_direct_successor(), ipdom, left);
-        get_registers_written_to(m_nodes.at(start_node).get_last_line().m_instruction.destination, ipdom, right);
+
+        get_registers_written_to(m_nodes.at(start_node).get_direct_successor(), ipdom, left, checked);
+        checked = std::set<node_id>();
+        get_registers_written_to(m_nodes.at(start_node).get_last_line().m_instruction.destination, ipdom, right, checked);
 
         get_register_nature(ipdom, regs_to_check, read_first_ipdom, written_first_ipdom, m_returnNode);
 
@@ -502,10 +508,10 @@ namespace dconstruct {
         return result2;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id start_node, const u32 check_register, const u32 start_line) const noexcept {
-        /*std::set<u32> read_first, written_first;
-        get_register_nature(start_node, m_returnNode, read_first, written_first, start_line + 1);
-        return read_first.contains(check_register);*/
-        return true;
+    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id start_node, const reg_idx check_register, const u32 start_line) const noexcept {
+        std::set<reg_idx> register_set, read_first, written_first;
+        register_set.insert(check_register);
+        get_register_nature(start_node, register_set, read_first, written_first, -1, start_line + 1);
+        return !read_first.empty();
     }
 }

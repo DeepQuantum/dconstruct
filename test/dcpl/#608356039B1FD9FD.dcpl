@@ -1,13 +1,16 @@
 u16 #608356039B1FD9FD() {
-    unknown var_0 = get-symbol(current-task, self);
-    unknown var_0 = var_0 == get-symbol(current-task, ss-wave-manager-level-set-loader-1);
-    unknown var_0 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
-    if(var_0 && var_0) {
-        u16 var_9 = 0;
-        unknown var_9 = var_9 == string-compare(#8693D9A4BDE7277F(get-svar(#47CB08FCD5FE82DB)), "");
-        if(var_9) {}
-
-        unknown var_51 = #5445173390656D6D("%s %s", #8693D9A4BDE7277F(get-svar(#47CB08FCD5FE82DB)), #9B439BF7680342CC(#1E176D04CC65D2D7(task-get-current-node-id(), task-get-current-subnode-id())));
+    u16 var_0;
+    if(get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1) && get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1)) {
+        string var_1;
+        if(0 == string-compare(#8693D9A4BDE7277F(get-svar(#47CB08FCD5FE82DB)), "")) {
+            var_1 = "Default";
+        } else {
+            var_1 = #8693D9A4BDE7277F(get-svar(#47CB08FCD5FE82DB));
+        }
+        unknown var_2 = #5445173390656D6D("%s %s", var_1, #9B439BF7680342CC(#1E176D04CC65D2D7(task-get-current-node-id(), task-get-current-subnode-id())));
+        var_0 = log-event("encounter-enemy-awareness", 1, var_2, 0, 0);
+    } else {
+        var_0 = 0;
     }
-    return 0;
+    return var_0;
 }

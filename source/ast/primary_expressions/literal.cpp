@@ -28,11 +28,11 @@ void literal::ast(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr literal::clone() const {
     auto expr = std::make_unique<literal>(m_value);
-    if (m_type.has_value()) expr->set_type(m_type.value());
+    if (!is_unknown(m_type)) expr->set_type(m_type);
     return expr;
 }
 
-[[nodiscard]] std::optional<full_type> literal::compute_type(const compiler::environment&) const noexcept {
+[[nodiscard]] full_type literal::compute_type(const compiler::environment&) const noexcept {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
