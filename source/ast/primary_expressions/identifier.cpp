@@ -25,14 +25,14 @@ void identifier::pseudo(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr identifier::clone() const {
     auto expr = std::make_unique<identifier>(m_name);
-    if (m_type.has_value()) expr->set_type(m_type.value());
+    if (!is_unknown(m_type)) expr->set_type(m_type);
     return expr;
 }
 
-[[nodiscard]] std::optional<full_type> identifier::compute_type(const compiler::environment& env) const {
+[[nodiscard]] full_type identifier::compute_type(const compiler::environment& env) const {
     if (auto opt = env.lookup(m_name.m_lexeme))
         return opt.value().get().type;
-    return std::nullopt;
+    return std::monostate();
 }
 
 [[nodiscard]] u16 identifier::complexity() const noexcept {

@@ -10,7 +10,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] std::optional<full_type> compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
     private:
         compiler::token m_token;

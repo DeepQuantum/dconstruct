@@ -50,8 +50,10 @@ namespace dconstruct {
         void find_loops();
         void write_to_txt_file(const std::string& path = "graph.txt") const;
         void write_image(const std::string &path = "graph.svg") const;
-
+        
         void insert_loop_subgraphs(Agraph_t *g) const;
+        std::set<node_id> m_ipdomsEmitted;
+
 
         [[nodiscard]] const std::unordered_map<node_id, control_flow_node>& get_nodes() const {
             return m_nodes;
@@ -71,12 +73,11 @@ namespace dconstruct {
             return m_nodes.at(m_returnNode);
         }
 
-        [[nodiscard]] b8 register_gets_read_before_overwrite(const node_id start_node, const u32 check_register, const u32 start_line = 0) const noexcept;
+        [[nodiscard]] b8 register_gets_read_before_overwrite(const node_id start_node, const reg_idx check_register, const u32 start_line = 0) const noexcept;
 
         // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
-        [[nodiscard]] std::set<u32> get_variant_registers(const node_id start_node) const noexcept;
-        void get_register_nature(const node_id start_node, std::set<u32>& check_regs, std::set<u32>& read_first, std::set<u32>& written_first, const node_id stop_node, u32 start_line = 0) const noexcept;
-        
+        [[nodiscard]] std::set<reg_idx> get_variant_registers(const node_id start_node) const noexcept;
+        void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, std::set<reg_idx>& written_first, const node_id stop_node, u32 start_line = 0) const noexcept;
 
     private:
         std::unordered_map<node_id, control_flow_node> m_nodes;
@@ -85,7 +86,7 @@ namespace dconstruct {
         node_id m_returnNode;
         const function_disassembly *m_func;
 
-        void get_registers_written_to(const node_id node, const node_id stop, std::set<u32>& result) const;
+        void get_registers_written_to(const node_id node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const;
 
         void insert_node_at_line(const node_id start_line);
         [[nodiscard]] std::optional<node_id> get_node_with_last_line(const u32 last_line) const;

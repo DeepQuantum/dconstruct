@@ -26,6 +26,10 @@ using sid_literal = std::pair<sid64, std::string>;
 template<class T>
 using opt_ref = std::optional<std::reference_wrapper<T>>;
 
+using reg_idx = u8;
+
+constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
+
 #define SID(str) (dconstruct::ToStringId64(str))
 
 namespace dconstruct {
