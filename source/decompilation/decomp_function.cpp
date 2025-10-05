@@ -1,7 +1,7 @@
 #include "decompilation/decomp_function.h"
 #include <sstream>
 
-namespace dconstruct::dcompiler {
+namespace dconstruct::dcompiler{
 
 decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
     m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
@@ -177,76 +177,81 @@ void decomp_function::emit_node(const control_flow_node& node, node_id stop_node
     const auto& last_line = node.get_last_line();
 
     if (const auto loop = m_graph.get_loop_with_head(last_line.m_location + 1)) {
-        const control_flow_node& head_node = m_graph[last_line.m_location + 1];
-        parse_basic_block(head_node);
-        insert_loop_head(loop->get(), head_node.m_lines.back().m_instruction.operand1);
-        emit_node(m_graph[head_node.get_last_line().m_location + 1], head_node.m_startLine);
-        m_blockStack.pop();
+        emit_loop(last_line, loop->get());
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
-        const node_id idom = m_graph.get_immediate_postdominators().at(current_node_id);
-        const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
-        m_graph.m_ipdomsEmitted.insert(idom);
-        node_id proper_successor, proper_destination, proper_head;
-        expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
-        auto then_block = std::make_unique<ast::block>();
-        auto else_block = std::make_unique<ast::block>();
-        std::set<reg_idx> regs_to_emit = m_graph.get_variant_registers(proper_head);
-        std::unordered_map<reg_idx, ast::full_type> regs_to_type;
-
-        if (!idom_already_emitted) {
-            for (const auto& reg : regs_to_emit) {
-                m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
-                regs_to_type.emplace(reg, std::monostate());
-            }
-        }
-
-        m_blockStack.push(*then_block);
-        emit_node(m_graph[proper_successor], idom);
-        for (const auto& reg : regs_to_emit) {
-            auto new_var = std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release()) };
-            load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
-            if(!std::holds_alternative<std::monostate>(m_transformableExpressions[reg]->get_type(m_env))) {
-                regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
-            }
-        }
-        m_blockStack.pop();
-
-        m_blockStack.push(*else_block);
-        emit_node(m_graph[proper_destination], idom);
-        for (const auto& reg : regs_to_emit) {
-            auto new_var = std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release()) };
-            load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
-            if(!std::holds_alternative<std::monostate>(m_transformableExpressions[reg]->get_type(m_env))) {
-                regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
-            }
-        }
-        m_blockStack.pop();
-
-        for (const auto& reg : regs_to_emit) {
-            if (!idom_already_emitted) {
-                const auto& type = regs_to_type[reg];
-                m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
-                m_transformableExpressions[reg]->set_type(type);
-                const std::string type_name = type_to_declaration_string(type);
-                append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
-                m_registersToVars[reg].pop();
-            }
-        }
-
-        stmnt_uptr _else = nullptr;
-        if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
-            _else = std::move(else_block->m_statements[0]);
-        } else if (!else_block->m_statements.empty()) {
-            _else = std::move(else_block);
-        }
-
-        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), std::move(_else));
-
-        append_to_current_block(std::move(full_if));
-
-        emit_node(m_graph[idom], stop_node);
+        emit_branches(node, stop_node);
     }
 }
+
+void decomp_function::emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop) {
+    const control_flow_node& head_node = m_graph[last_line.m_location + 1];
+    parse_basic_block(head_node);
+    insert_loop_head(loop, head_node.m_lines.back().m_instruction.operand1);
+    emit_node(m_graph[head_node.get_last_line().m_location + 1], head_node.m_startLine);
+    m_blockStack.pop();
+}
+
+void decomp_function::emit_branches(const dconstruct::control_flow_node &node, dconstruct::node_id stop_node) {
+    const node_id idom = m_graph.get_immediate_postdominators().at(node.m_startLine);
+    const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
+    m_graph.m_ipdomsEmitted.insert(idom);
+    node_id proper_successor, proper_destination, proper_head;
+    expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
+    auto then_block = std::make_unique<ast::block>();
+    auto else_block = std::make_unique<ast::block>();
+    std::set<reg_idx> regs_to_emit = m_graph.get_variant_registers(proper_head);
+    std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+
+    if (!idom_already_emitted) {
+        for (const auto &reg : regs_to_emit) {
+            m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+            regs_to_type.emplace(reg, std::monostate());
+        }
+    }
+
+    emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
+
+    emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
+
+    for (const auto &reg : regs_to_emit) {
+        if (!idom_already_emitted) {
+            const auto &type = regs_to_type[reg];
+            m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+            m_transformableExpressions[reg]->set_type(type);
+            const std::string type_name = type_to_declaration_string(type);
+            append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
+            m_registersToVars[reg].pop();
+        }
+    }
+
+    stmnt_uptr _else = nullptr;
+    if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
+        _else = std::move(else_block->m_statements[0]);
+    }
+    else if (!else_block->m_statements.empty()) {
+        _else = std::move(else_block);
+    }
+
+    stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block), std::move(_else));
+
+    append_to_current_block(std::move(full_if));
+
+    emit_node(m_graph[idom], stop_node);
+}
+
+void decomp_function::emit_branch(ast::block &else_block, const node_id target, const node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, ast::full_type> &regs_to_type) {
+    m_blockStack.push(else_block);
+    emit_node(m_graph[target], idom);
+    for (const auto &reg : regs_to_emit) {
+        auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
+        load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
+        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
+            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+        }
+    }
+    m_blockStack.pop();
+}
+
 
 void decomp_function::load_expression_into_new_var(const reg_idx dst, expr_uptr&& expr) {
     auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var()});
