@@ -30,11 +30,11 @@ namespace dconstruct::dcompiler {
 
         void emit_node(const control_flow_node &node, node_id stop_node);
 
+        void emit_branches(const dconstruct::control_flow_node &node, dconstruct::node_id stop_node);
+ 
+        void emit_branch(ast::block& block, dconstruct::node_id proper_destination, const dconstruct::node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
+
         void emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop);
-
-        void emit_branch(const control_flow_node &node, node_id stop_node);
-
-        void emit_one_branch(std::unique_ptr<ast::block>& block, const reg_idx proper_destination, const node_id idom, const std::set<reg_idx>& regs_to_emit, std::unordered_map<reg_idx, ast::full_type>& regs_to_type);
 
         void parse_basic_block(const control_flow_node& node);
 
