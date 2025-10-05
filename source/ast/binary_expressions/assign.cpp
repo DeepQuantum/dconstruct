@@ -15,7 +15,7 @@ void assign_expr::ast(std::ostream& os) const {
     return m_rhs->simplify();
 }
 
-[[nodiscard]] std::optional<ast::full_type> assign_expr::compute_type(const compiler::environment& env) const {
+[[nodiscard]] ast::full_type assign_expr::compute_type(const compiler::environment& env) const {
     return m_rhs->compute_type(env);
 }
 

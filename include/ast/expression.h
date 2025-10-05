@@ -19,25 +19,21 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
 
-        [[nodiscard]] inline std::optional<full_type> get_type(const compiler::environment& env) {
-            if (!m_type.has_value()) {
-                auto new_type = compute_type(env);
-                if (!new_type.has_value()) {
-                    return std::nullopt;
-                }
-                m_type = new_type;
+        [[nodiscard]] inline full_type get_type(const compiler::environment& env) {
+            if (is_unknown(m_type)) {
+                m_type = compute_type(env);
             }
             return m_type;
         }
 
-        [[nodiscard]] virtual std::optional<full_type> compute_type(const compiler::environment& env) const = 0;
+        [[nodiscard]] virtual full_type compute_type(const compiler::environment& env) const = 0;
 
         inline void set_type(const full_type& type) noexcept {
             m_type = type;
         }
         
     protected:
-        std::optional<full_type> m_type;
+        full_type m_type;
     };
 
     [[nodiscard]] inline b8 operator==(const expression& lhs, const expression& rhs) noexcept {
@@ -63,7 +59,7 @@ namespace dconstruct::ast {
             return false;
         }
 
-        [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
+        [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
             return full_type{ std::monostate() };
         }
 
@@ -92,7 +88,7 @@ namespace dconstruct::ast {
             os << m_operator.m_lexeme << '[' << *m_lhs << ", " << *m_rhs << ']';
         }
 
-        [[nodiscard]] inline std::optional<full_type> compute_type(const compiler::environment&) const override {
+        [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
             return full_type{ std::monostate() };
         }
 
@@ -121,7 +117,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
-            if (m_type.has_value()) expr->set_type(m_type.value());
+            if (!is_unknown(m_type)) expr->set_type(m_type);
             return expr;
         }
     };
@@ -136,7 +132,7 @@ namespace dconstruct::ast {
                 m_lhs != nullptr ? m_lhs->clone() : nullptr,
                 m_rhs != nullptr ? m_rhs->clone() : nullptr
             );
-            if (m_type.has_value()) expr->set_type(m_type.value());
+            if (!is_unknown(m_type)) expr->set_type(m_type);
             return expr;
         }
     };

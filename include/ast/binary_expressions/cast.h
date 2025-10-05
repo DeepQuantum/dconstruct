@@ -9,6 +9,6 @@ namespace dconstruct::ast {
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] std::optional<full_type> compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
     };
 }
