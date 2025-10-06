@@ -74,10 +74,12 @@ namespace dconstruct {
         }
 
         [[nodiscard]] b8 register_gets_read_before_overwrite(const node_id start_node, const reg_idx check_register, const u32 start_line = 0) const noexcept;
+        void get_registers_written_to(const node_id node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const;
 
-        // get the registers in a node that will be read from by the successors, so we know which registers we need to emit
-        [[nodiscard]] std::set<reg_idx> get_variant_registers(const node_id start_node) const noexcept;
-        void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, std::set<reg_idx>& written_first, const node_id stop_node, u32 start_line = 0) const noexcept;
+        [[nodiscard]] std::set<reg_idx> get_branch_variant_registers(const node_id start_node) const noexcept;
+        [[nodiscard]] std::set<reg_idx> get_loop_variant_registers(const node_id head_node) const noexcept;
+
+        void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, const u32 start_line = 0) const noexcept;
 
     private:
         std::unordered_map<node_id, control_flow_node> m_nodes;
@@ -86,7 +88,6 @@ namespace dconstruct {
         node_id m_returnNode;
         const function_disassembly *m_func;
 
-        void get_registers_written_to(const node_id node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const;
 
         void insert_node_at_line(const node_id start_line);
         [[nodiscard]] std::optional<node_id> get_node_with_last_line(const u32 last_line) const;
