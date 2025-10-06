@@ -39,4 +39,8 @@ void identifier::pseudo(std::ostream& os) const {
     return 1;
 }
 
+[[nodiscard]] std::unique_ptr<identifier> identifier::copy() const noexcept {
+    return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
+}
+
 }

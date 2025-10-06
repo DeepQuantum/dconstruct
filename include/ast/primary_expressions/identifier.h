@@ -16,6 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
+        [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
         
         compiler::token m_name;
     };
