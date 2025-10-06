@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace dconstruct::ast {
-    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal>;
+    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal, std::monostate>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
 
@@ -27,7 +27,7 @@ namespace dconstruct::ast {
         STRING,
         SID,
         VOID,
-        _NULL,
+        _NULL
     };
 
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;

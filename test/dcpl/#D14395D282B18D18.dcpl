@@ -1,11 +1,14 @@
 string #D14395D282B18D18(i32 arg_0) {
     string var_0;
     if(arg_0) {
-        while(0 < *arg_0) {
-            unknown var_1 = (i64)*(arg_0 + 4) + (0 * 4);
-            unknown var_2 = (i64)*(arg_0 + 68) + (0 * 4);
+        u32 i = 0;
+        unknown var_1;
+        while(i < *arg_0) {
+            unknown var_2 = (i32)*(arg_0 + 4) + (i * 4);
+            unknown var_3 = (i32)*(arg_0 + 68) + (i * 4);
+            var_1 = #5445173390656D6D("%s [%d, %d]", "[intensity, engagers] :", var_2, var_3);
         }
-        var_0 = *arg_0;
+        var_0 = var_1;
     } else {
         var_0 = "Not defined!";
     }

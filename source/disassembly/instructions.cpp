@@ -158,7 +158,7 @@ namespace dconstruct {
                 }
             }
         } else if (reg.is_pointer()) {
-            std::snprintf(buffer, buffer_size, "[%s%s + %llu]", reg.m_isReturn ? "RET_" : "", resolved, reg.m_pointerOffset);
+            std::snprintf(buffer, buffer_size, "[%s%s + %u]", reg.m_isReturn ? "RET_" : "", resolved, reg.m_pointerOffset);
         } else if (reg.m_isReturn) {
             std::snprintf(buffer, buffer_size, "RET_%s", resolved);
         } else {
