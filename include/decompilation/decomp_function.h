@@ -28,13 +28,13 @@ namespace dconstruct::dcompiler {
         const SymbolTable& m_symbolTable;
         u32 m_varCount = 0;
 
-        void emit_node(const control_flow_node &node, node_id stop_node);
+        void emit_node(const control_flow_node &node, const node_id stop_node);
 
-        void emit_branches(const dconstruct::control_flow_node &node, dconstruct::node_id stop_node);
+        void emit_branches(const control_flow_node &node, const node_id stop_node);
  
-        void emit_branch(ast::block& block, dconstruct::node_id proper_destination, const dconstruct::node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
+        void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
 
-        void emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop);
+        void emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
 
         void parse_basic_block(const control_flow_node& node);
 

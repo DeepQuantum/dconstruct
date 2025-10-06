@@ -27,7 +27,6 @@ void logical_not_expr::ast(std::ostream &os) const {
             case primitive_kind::SID:
             case primitive_kind::BOOL:    return std::make_unique<literal>(!std::get<b8>(value));
             case primitive_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
-            case primitive_kind::_NULL:   return std::make_unique<literal>(true);
             default: {
                 const std::optional<primitive_number> num_opt = get_number(value);
                 if (num_opt.has_value()) {
