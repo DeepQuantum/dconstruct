@@ -1,0 +1,17 @@
+unknown #E5FCFC6B95B3F669() {
+    begin-foreach();
+    u32 i = 0;
+    while(i < darray-count(#88F409F4BF0F056A)) {
+        u16 var_0;
+        if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 7) {
+            var_0 = *darray-at(#88F409F4BF0F056A, i);
+        } else if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 5) {
+            var_0 = *darray-at(#88F409F4BF0F056A, i);
+        } else if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 4) {
+            var_0 = *darray-at(#88F409F4BF0F056A, i);
+        } else {
+            var_0 = 0;
+        }
+    }
+    return end-foreach();
+}

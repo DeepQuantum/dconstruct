@@ -137,7 +137,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::LoadFloat:
-            case Opcode::LoadI32: {
+            case Opcode::LoadI32: 
+            case Opcode::LoadU64: 
+            case Opcode::LoadU16: {
                 generated_expression = make_dereference(istr);
                 break;
             }
@@ -200,10 +202,12 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
     auto id = std::make_unique<ast::identifier>(name);
 
     auto declaration = std::make_unique<ast::variable_declaration>("u32", name, std::move(m_transformableExpressions[loop_var_reg]));
+    
     append_to_current_block(std::move(declaration));
     m_transformableExpressions[loop_var_reg] = id->clone();
     m_transformableExpressions[loop_var_reg]->set_type(make_type(ast::primitive_kind::U32));
-    m_registersToVars[loop_var_reg].push(std::move(id));
+    m_registersToVars[loop_var_reg].push(id->copy());
+    //m_registersToVars[loop_alternative_reg].push(std::move(new_var));
 
     parse_basic_block(head_node);
 
@@ -223,6 +227,7 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
             regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
         }
     }
+    load_expression_into_existing_var(loop_var_reg, id->copy(), std::move(m_transformableExpressions[loop_var_reg]));
     m_blockStack.pop();
 
     for (const auto reg : regs_to_emit) {
