@@ -1,0 +1,3 @@
+unknown anonymous@110208() {
+    return set-int32(#A7826A8526845AFE, darray-count(#9C27142D7E9F3555), self);
+}

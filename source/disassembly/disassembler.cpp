@@ -941,10 +941,22 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::BranchIf: 
         case Opcode::BranchIfNot: {
             u32 target = dest | (op2 << 8);
-            if (fn.m_lines[target].m_instruction.opcode == istr.opcode && fn.m_lines[target].m_instruction.operand1 == op1) {
-                target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+            b8 is_branching_target = true;
+            while (is_branching_target) {
+                if (fn.m_lines[target].m_instruction.opcode == istr.opcode && fn.m_lines[target].m_instruction.operand1 == op1) {
+                    target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+                }
+                else if (istr.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == op1) {
+                    target = fn.m_lines[target].m_location + 1;
+                }
+                else if (istr.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.operand1 == op1) {
+                    target = fn.m_lines[target].m_location + 1;
+                }
+                else {
+                    is_branching_target = false;
+                }
             }
-            std::snprintf(varying, disassembly_text_size,"r%d, 0x%X", op1, target);
+            std::snprintf(varying, disassembly_text_size, "r%d, 0x%X", op1, target);
             const char* comment = istr.opcode == Opcode::BranchIf ? "IF r%d [%s] " : "IF NOT r%d [%s] ";
             std::snprintf(interpreted, interpreted_buffer_size, comment, op1, op1_str);
             line.m_target = target;

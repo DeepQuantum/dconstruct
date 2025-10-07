@@ -1,4 +1,4 @@
-unknown #E5FCFC6B95B3F669() {
+unknown anonymous@53936() {
     begin-foreach();
     u32 i = 0;
     while(i < darray-count(#88F409F4BF0F056A)) {

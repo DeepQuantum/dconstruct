@@ -4,11 +4,11 @@ u16 #A548628CB635DC72(u16 arg_0, () -> unknown arg_1) {
     u16 var_0;
     while(i < darray-count(#88F409F4BF0F056A)) {
         u16 var_1;
-        if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 7) {
+        if(darray-at(#88F409F4BF0F056A, i) && *(darray-at(#88F409F4BF0F056A, i) + 12) == 7) {
             var_1 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 5) {
+        } else if(darray-at(#88F409F4BF0F056A, i) && *(darray-at(#88F409F4BF0F056A, i) + 12) == 5) {
             var_1 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && *darray-at(#88F409F4BF0F056A, i) + 12 == 4) {
+        } else if(darray-at(#88F409F4BF0F056A, i) && *(darray-at(#88F409F4BF0F056A, i) + 12) == 4) {
             var_1 = *darray-at(#88F409F4BF0F056A, i);
         } else {
             var_1 = 0;

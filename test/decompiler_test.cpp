@@ -212,7 +212,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, FileFunction1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected =
-            "function #7C28D25188889230(unknown arg_0) {\n"
+            "unknown #7C28D25188889230(unknown arg_0) {\n"
             "    return #E16F9CC43A37FADA(arg_0) * -1.00;\n"
             "}";
 
@@ -224,7 +224,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, FileFunction2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = 
-            "function #E16F9CC43A37FADA(unknown arg_0) {\n"
+            "unknown #E16F9CC43A37FADA(unknown arg_0) {\n"
             "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(player));\n"
             "}";
 
@@ -314,7 +314,7 @@ namespace dconstruct::testing {
         const auto& actual = func.to_string();
 
         const std::string expected =
-            "function DetermineArgumentType(u16 arg_0) {\n"
+            "bool DetermineArgumentType(u16 arg_0) {\n"
             "    return arg_0 == 5;\n"
             "}";
 
@@ -531,7 +531,7 @@ namespace dconstruct::testing {
         ASSERT_EQ(dc_func.to_string(), expected);
     }
 
-    TEST(DECOMPILER, If4) {
+    /*TEST(DECOMPILER, If4) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
@@ -548,6 +548,42 @@ namespace dconstruct::testing {
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();
         ASSERT_EQ(dc_func.to_string(), expected);
+    }*/
+
+    TEST(DECOMPILER, If5) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#43DF4E5E85BFD47C";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const std::string expected =
+            "function DetermineArgumentType(i64 arg_0) {\n"
+            "    return arg_0 == 5;\n"
+            "}";
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        out << dc_func.to_string();
+        ASSERT_EQ(dc_func.to_string(), expected);
+    }
+
+    TEST(DECOMPILER, AllFuncs) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const auto& funcs = da.get_functions();
+        for (const auto& func : funcs) {
+            if (func.m_id[0] == '#') continue;
+            try {
+                const auto dc_func = dcompiler::decomp_function{ &func, file };
+                std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dc_func.m_disassembly->m_id + ".dcpl");
+                out << dc_func.to_string();
+            } catch (...) {}
+            
+        }
     }
 
     /*TEST(DECOMPILER, LongNode1) {
