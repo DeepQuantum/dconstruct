@@ -1,0 +1,3 @@
+unknown anonymous@112944() {
+    return set-symbol(#80F4C52A6BDCA6BC, darray-create(self, -1, 0), self);
+}

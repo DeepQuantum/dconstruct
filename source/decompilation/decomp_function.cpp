@@ -1,11 +1,14 @@
 #include "decompilation/decomp_function.h"
 #include <sstream>
+#include <iostream>
 
 namespace dconstruct::dcompiler{
 
 decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
     m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
 {
+    std::cout << "parsing graph " << m_disassembly->m_id << '\n';
+    m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(49);
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
@@ -45,7 +48,7 @@ static const compiler::token multiply = compiler::token{ compiler::token_type::S
 static const compiler::token divide = compiler::token{ compiler::token_type::SLASH, "/" };
 
 void decomp_function::parse_basic_block(const control_flow_node &node) {
- 
+    std::cout << "parsing node" << node.m_startLine << '\n';
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
 
@@ -87,7 +90,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
             case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<f32>()); break;
-            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>(istr.operand1 * 8)); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
@@ -101,10 +104,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 break;
             }
             
-
+            case Opcode::LoadStaticFloatImm: {
+                generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<f32>(istr.operand1 * 8));
+                break;
+            }
             case Opcode::LoadStaticPointerImm: {
-                std::string string = m_symbolTable.first.get<const char*>(istr.operand1 * 8);
-                generated_expression = std::make_unique<ast::literal>(std::move(string));
+                generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<p64>(istr.operand1 * 8));
                 break;
             }
             case Opcode::LoadStaticU64Imm:
@@ -140,8 +145,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadI32: 
             case Opcode::LoadU64: 
             case Opcode::LoadU16: {
-                generated_expression = make_dereference(istr);
-                break;
+                generated_expression = apply_unary_op<ast::dereference_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
             }
 
             case Opcode::AssertPointer:
@@ -207,7 +211,6 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
     m_transformableExpressions[loop_var_reg] = id->clone();
     m_transformableExpressions[loop_var_reg]->set_type(make_type(ast::primitive_kind::U32));
     m_registersToVars[loop_var_reg].push(id->copy());
-    //m_registersToVars[loop_alternative_reg].push(std::move(new_var));
 
     parse_basic_block(head_node);
 
@@ -297,8 +300,7 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
     m_blockStack.push(else_block);
     emit_node(m_graph[target], idom);
     for (const auto reg : regs_to_emit) {
-        auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
-        load_expression_into_existing_var(reg, std::move(new_var), std::move(m_transformableExpressions[reg]));
+        load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy(), std::move(m_transformableExpressions[reg]));
         if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
             regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
         }
@@ -405,7 +407,7 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
         proper_successor = m_graph[proper_successor].get_direct_successor();
         proper_destination = successor_last_line.m_instruction.destination;
     } else {
-        condition = current_condition->clone();
+        condition = std::move(current_condition);
     }
     return condition;
 }
