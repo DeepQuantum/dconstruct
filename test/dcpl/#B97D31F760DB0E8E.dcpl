@@ -1,7 +1,7 @@
 u16 #B97D31F760DB0E8E() {
     u16 var_0;
     if(get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1) && get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1)) {
-        var_0 = log-event("encounter-enemy-type", get-int32(#CEF93DF859F605EA, self), #C57EE0A64537AE8F(get-int32(#30BFAD05B9FB096E, self)), 0, 0);
+        var_0 = log-event(2199048418285, get-int32(#CEF93DF859F605EA, self), #C57EE0A64537AE8F(get-int32(#30BFAD05B9FB096E, self)), 0, 0);
     } else {
         var_0 = 0;
     }
