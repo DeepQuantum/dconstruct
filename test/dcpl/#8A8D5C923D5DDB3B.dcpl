@@ -1,6 +1,6 @@
 i32 #8A8D5C923D5DDB3B() {
     i32 var_0;
-    if(get-int32(#5389CC70A44E7358, self) > 0) {
+    if (get-int32(#5389CC70A44E7358, self) > 0) {
         var_0 = get-int32(#5389CC70A44E7358, self);
     } else {
         var_0 = get-int32(#CEF93DF859F605EA, self);

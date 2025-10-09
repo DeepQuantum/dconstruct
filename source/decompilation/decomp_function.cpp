@@ -144,7 +144,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
             case Opcode::LoadFloat:
             case Opcode::LoadI32: 
-            case Opcode::LoadU64: 
+            case Opcode::LoadU64:
+            case Opcode::LoadU8:
             case Opcode::LoadU16: {
                 generated_expression = apply_unary_op<ast::dereference_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
             }
@@ -170,17 +171,19 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 }
 
 void decomp_function::emit_node(const control_flow_node& node, const node_id stop_node) {
+    std::cout << "emitting node " << std::hex << node.m_startLine << '\n';
+
     const node_id current_node_id = node.m_startLine;
+    if (current_node_id == stop_node) {
+        return;
+    }
     if (m_parsedNodes.contains(current_node_id)) {
         return;
     }
     m_parsedNodes.insert(current_node_id);
 
-    if (current_node_id == stop_node) {
-        return;
-    }
+    
 
-    std::cout << "emitting node " << std::hex << node.m_startLine << '\n';
 
     parse_basic_block(node);
     const auto& last_line = node.get_last_line();
@@ -411,12 +414,12 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
             condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());
             proper_head = proper_successor;
             proper_successor = successor.get_direct_successor();
-            proper_destination = last_line.m_target;
+            proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
         } else if (last_line.m_instruction.opcode == Opcode::BranchIf) {
             condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());
             proper_head = proper_successor;
             proper_successor = successor.get_direct_successor();
-            proper_destination = last_line.m_target;
+            proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
         }
         current_node = &m_graph[current_node->get_direct_successor()];
     }
