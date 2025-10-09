@@ -1,6 +1,6 @@
 u16 #608356039B1FD9FD() {
     u16 var_0;
-    if(get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1) && get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1)) {
+    if(get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1) && get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1)) {
         string var_1;
         if(0 == string-compare(#8693D9A4BDE7277F(get-svar(#47CB08FCD5FE82DB)), "")) {
             var_1 = "Default";

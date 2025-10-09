@@ -1,0 +1,9 @@
+u16 anonymous@64816() {
+    u16 var_0;
+    if(#B96C7EEF7ACAB122 && #B96C7EEF7ACAB122) {
+        var_0 = send-event(designer-menu-changed, self);
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
