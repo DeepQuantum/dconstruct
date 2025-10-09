@@ -488,16 +488,12 @@ namespace dconstruct {
             result1.insert(m_nodes.at(start_node).m_lines.back().m_instruction.destination);
             return result1;
         }
-        for (const auto& line : m_nodes.at(start_node).m_lines) {
-            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
-                regs_to_check.insert(line.m_instruction.destination);
-            }
-        }
 
         get_registers_written_to(m_nodes.at(start_node).get_direct_successor(), ipdom, left, checked);
         checked = std::set<node_id>();
         get_registers_written_to(m_nodes.at(start_node).get_last_line().m_instruction.destination, ipdom, right, checked);
 
+        std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
         get_register_nature(ipdom, regs_to_check, read_first_ipdom, m_returnNode);
 
         std::set_intersection(left.begin(), left.end(), right.begin(), right.end(), std::inserter(result1, result1.begin()));
