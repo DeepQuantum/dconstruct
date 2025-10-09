@@ -35,9 +35,30 @@ u16 #43DF4E5E85BFD47C(unknown arg_0, u16 arg_1) {
         string var_8;
         if(var_1 > 0.00 || var_2 > 0.00) {
             var_8 = "Has stimulus";
+        } else {
+            var_8 = "Has awareness";
         }
         var_3 = 0;
         var_4 = var_8;
+    }
+    if(#B96C7EEF7ACAB122 && *(#B96C7EEF7ACAB122 + 49)) {
+        unknown var_9 = get-object-position(arg_0);
+        unknown var_10 = alloc-vector(0.00, 1.80, 0.00, 1.00, 0);
+        unknown var_11 = offset-position(var_9, var_10);
+        string var_12;
+        if(var_3) {
+            var_12 = "Safe";
+        } else {
+            var_12 = "Unsafe";
+        }
+        unknown var_13 = #5445173390656D6D("[Acq: %.2f] [Rec: %.2f] [%s - %s]", var_1, var_2, var_12, var_4);
+        u16 var_14;
+        if(var_3) {
+            var_14 = 1;
+        } else {
+            var_14 = 9;
+        }
+        debug-draw-string(var_11, var_13, var_14, 0.00, 0, 1.00, 0, 0);
     }
     return var_3;
 }
