@@ -580,6 +580,20 @@ namespace dconstruct::testing {
         ASSERT_EQ(dc_func.to_string(), expected);
     }
 
+    TEST(DECOMPILER, SpecialFunc1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "anonymous@42560";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        out << dc_func.to_string();
+    }
+
     TEST(DECOMPILER, AllFuncs) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };

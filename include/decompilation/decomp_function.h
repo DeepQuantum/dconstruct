@@ -10,10 +10,6 @@ constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
 
-    struct transformable_expression : expr_uptr {
-        b8 m_mustBeEmitted;
-    };
-
     struct decomp_function {
         explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file);
 
@@ -24,7 +20,7 @@ namespace dconstruct::dcompiler {
         ast::full_type m_returnType;
         std::set<node_id> m_parsedNodes;
         ControlFlowGraph m_graph;
-        std::vector<transformable_expression> m_transformableExpressions;
+        std::vector<expr_uptr> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         compiler::environment m_env;
         ast::block m_baseBlock;
@@ -53,8 +49,8 @@ namespace dconstruct::dcompiler {
             m_blockStack.top().get().m_statements.push_back(std::move(statement));
         }
 
-        void load_expression_into_new_var(const reg_idx dst, expr_uptr&& expr);
-        void load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var, expr_uptr&& expr);
+        void load_expression_into_new_var(const reg_idx dst);
+        void load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var);
 
         [[nodiscard]] expr_uptr make_call(const Instruction& istr);
 
@@ -75,8 +71,8 @@ namespace dconstruct::dcompiler {
 
         template <typename T>
         [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr) {
-            const auto& op1 = m_transformableExpressions[istr.operand1].m_expr;
-            const auto& op2 = m_transformableExpressions[istr.operand2].m_expr;
+            const auto& op1 = m_transformableExpressions[istr.operand1];
+            const auto& op2 = m_transformableExpressions[istr.operand2];
             return std::make_unique<T>(
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
