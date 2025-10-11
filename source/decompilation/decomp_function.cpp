@@ -146,7 +146,10 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadI32: 
             case Opcode::LoadU64:
             case Opcode::LoadU8:
-            case Opcode::LoadU16: {
+            case Opcode::LoadU32:
+            case Opcode::LoadU16: 
+            case Opcode::LoadI64: 
+            case Opcode::LoadPointer: {
                 generated_expression = apply_unary_op<ast::dereference_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
             }
 
@@ -182,9 +185,6 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     }
     m_parsedNodes.insert(current_node_id);
 
-    
-
-
     parse_basic_block(node);
     const auto& last_line = node.get_last_line();
 
@@ -198,10 +198,10 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
     const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
     const node_id loop_entry = head_node.get_direct_successor();
-    const node_id loop_tail = head_node.get_last_line().m_instruction.destination;
+    const node_id loop_tail = head_node.get_last_line().m_instruction.destination | (head_node.get_last_line().m_instruction.operand2 << 8);
     auto loop_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_loop_variant_registers(head_node.m_startLine);
-    const node_id idom = m_graph.get_immediate_postdominators().at(loop_tail);
+    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node.m_startLine);
+    const node_id idom = m_graph.get_ipdom_at(loop_tail);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
     reg_idx loop_var_reg = head_node.m_lines[0].m_instruction.operand1;
@@ -255,17 +255,17 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
 }
 
 void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
-    const node_id idom = m_graph.get_immediate_postdominators().at(node.m_startLine);
+    const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
     const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
     m_graph.m_ipdomsEmitted.insert(idom);
     node_id proper_successor, proper_destination, proper_head;
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_branch_variant_registers(proper_head);
+    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(proper_head);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
-    if (!idom_already_emitted) {
+    if (!idom_already_emitted && idom != proper_destination) {
         for (const auto reg : regs_to_emit) {
             m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
             regs_to_type.emplace(reg, std::monostate());
@@ -274,10 +274,12 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
 
     emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
 
-    emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
+    if (idom != proper_destination) {
+        emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
+    }
 
-    for (const auto reg : regs_to_emit) {
-        if (!idom_already_emitted) {
+    if (!idom_already_emitted) {
+        for (const auto reg : regs_to_emit) {
             const auto &type = regs_to_type[reg];
             m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
             m_transformableExpressions[reg]->set_type(type);
@@ -412,15 +414,12 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
         parse_basic_block(successor);
         if (last_line.m_instruction.opcode == Opcode::BranchIfNot) {
             condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());
-            proper_head = proper_successor;
-            proper_successor = successor.get_direct_successor();
-            proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
         } else if (last_line.m_instruction.opcode == Opcode::BranchIf) {
-            condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());
-            proper_head = proper_successor;
-            proper_successor = successor.get_direct_successor();
-            proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
+            condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());   
         }
+        proper_head = proper_successor;
+        proper_successor = successor.get_direct_successor();
+        proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
         current_node = &m_graph[current_node->get_direct_successor()];
     }
     return condition;

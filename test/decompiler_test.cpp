@@ -243,9 +243,8 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
-        for (const auto& [k, v] : tree) {
-            ASSERT_EQ(v, 0x16);
+        for (const auto& [k, v] : dc_func.m_graph.get_nodes()) {
+            ASSERT_EQ(dc_func.m_graph.get_ipdom_at(k), 0x16);
         }
     }
 
@@ -259,9 +258,8 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
-        for (const auto& [k, v] : tree) {
-            ASSERT_EQ(v, 0x16);
+        for (const auto& [k, v] : dc_func.m_graph.get_nodes()) {
+            ASSERT_EQ(dc_func.m_graph.get_ipdom_at(k), 0x16);
         }
     }
  
@@ -331,9 +329,9 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const std::set<reg_idx> registers_to_emit_0 = dc_func.m_graph.get_branch_variant_registers(0);
-        const std::set<reg_idx> registers_to_emit_1 = dc_func.m_graph.get_branch_variant_registers(0x9);
-        const std::set<reg_idx> registers_to_emit_2 = dc_func.m_graph.get_branch_variant_registers(0x10);
+        const std::set<reg_idx> registers_to_emit_0 = dc_func.m_graph.get_branch_phi_registers(0);
+        const std::set<reg_idx> registers_to_emit_1 = dc_func.m_graph.get_branch_phi_registers(0x9);
+        const std::set<reg_idx> registers_to_emit_2 = dc_func.m_graph.get_branch_phi_registers(0x10);
         ASSERT_TRUE(registers_to_emit_0.empty());
         ASSERT_EQ(registers_to_emit_1.size(), 1);
         ASSERT_EQ(registers_to_emit_2.size(), 1);
@@ -556,6 +554,25 @@ namespace dconstruct::testing {
         Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#43DF4E5E85BFD47C";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const std::string expected =
+            "function DetermineArgumentType(i64 arg_0) {\n"
+            "    return arg_0 == 5;\n"
+            "}";
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        out << dc_func.to_string();
+        ASSERT_EQ(dc_func.to_string(), expected);
+    }
+
+    TEST(DECOMPILER, If6) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "#14C6FC79122F4A87";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());

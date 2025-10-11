@@ -102,6 +102,10 @@ namespace dconstruct {
         {SID("get-int32"), ast::make_function(make_type(ast::primitive_kind::I32), {
             {"symbol", make_type(ast::primitive_kind::SID)},
             {"location", make_type(ast::primitive_kind::SID)}
+        })},
+        {SID("get-boolean"), ast::make_function(make_type(ast::primitive_kind::BOOL), {
+            {"symbol", make_type(ast::primitive_kind::SID)},
+            {"location", make_type(ast::primitive_kind::SID)}
         })}
     };
 }

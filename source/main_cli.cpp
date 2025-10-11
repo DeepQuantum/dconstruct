@@ -1,5 +1,6 @@
 #include "disassembly/file_disassembler.h"
 #include "disassembly/edit_disassembler.h"
+#include "decompilation/decomp_function.h"
 #include "cxxopts.hpp"
 #include "about.h"
 #include <chrono>
@@ -25,6 +26,11 @@ static void disasm_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
+    for (const auto& func : disassembler.get_functions()) {
+        const auto dcompiled = dconstruct::dcompiler::decomp_function{ &func, file };
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + func.m_id + ".dcpl");
+        out << dcompiled.to_string();
+    }
 }
 
 static void disassemble_multiple(
