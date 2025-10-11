@@ -1,9 +1,16 @@
 u16 #B97D31F760DB0E8E() {
-    u16 var_0;
-    if(get-symbol(current-task, self) == get-symbol(current-task, ss-wave-manager-level-set-loader-1) && get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1)) {
-        var_0 = log-event("encounter-enemy-type", get-int32(#CEF93DF859F605EA, self), #C57EE0A64537AE8F(get-int32(#30BFAD05B9FB096E, self)), 0, 0);
+    unknown var_0 = get-symbol(current-task, self);
+    unknown var_1 = get-symbol(current-task, ss-wave-manager-level-set-loader-1);
+    unknown var_2 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
+    u16 var_3;
+    if(var_0 == var_1 && var_2) {
+        i32 var_4 = get-int32(#CEF93DF859F605EA, self);
+        i32 var_5 = get-int32(#30BFAD05B9FB096E, self);
+        unknown var_6 = #C57EE0A64537AE8F(var_5);
+        unknown var_7 = log-event("encounter-enemy-type", var_4, var_6, 0, 0);
+        var_3 = var_7;
     } else {
-        var_0 = 0;
+        var_3 = 0;
     }
-    return var_0;
+    return var_3;
 }

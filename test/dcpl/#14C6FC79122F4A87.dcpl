@@ -1,0 +1,95 @@
+unknown #14C6FC79122F4A87(unknown arg_0) {
+    unknown var_0 = ddict-key-count(arg_0);
+    unknown var_1 = darray-create(self, -1, 0);
+    u32 i = 0;
+    while(i < var_0) {
+        unknown var_2 = ddict-key-at(arg_0, i);
+        unknown var_3 = get-spawner-position(var_2, 1);
+        unknown var_4 = alloc-vector(0.00, 1.40, 0.00, 1.00, 0);
+        unknown var_5 = offset-position(var_3, var_4);
+        unknown var_6 = alloc-bound-frame(var_5, 0, 0, 0, 0);
+        unknown var_7 = camera-locator(0);
+        unknown var_8 = kick-raycast(var_6, var_7, player, 6147);
+        unknown var_9 = new-boxed-value(2, var_8);
+        ddict-set(arg_0, var_2, var_9);
+        unknown var_10 = get-locator-position(var_6);
+        unknown var_11 = new-boxed-value(14, var_10);
+        unknown var_12 = darray-append(var_1, var_11, 0);
+        i = i + 1;
+    }
+    wait-one-frame();
+    u32 i = 0;
+    while(i < var_0) {
+        unknown var_13 = ddict-key-at(arg_0, i);
+        unknown var_14 = ddict-value-at(arg_0, i);
+        u16 var_15;
+        if(var_14 && *(var_14 + 12) == 1) {
+            var_15 = *var_14;
+        } else if(var_14 && *(var_14 + 12) == 2) {
+            var_15 = *var_14;
+        } else if(var_14 && *(var_14 + 12) == 3) {
+            var_15 = *var_14;
+        } else if(var_14 && *(var_14 + 12) == 4) {
+            var_15 = *var_14;
+        } else if(var_14 && *(var_14 + 12) == 5) {
+            var_15 = *var_14;
+        } else if(var_14 && *(var_14 + 12) == 6) {
+            var_15 = (i32)*var_14;
+        } else {
+            var_15 = 0;
+        }
+        unknown var_16 = darray-at(var_1, i);
+        string var_17;
+        if(var_16 && *(var_16 + 12) == 14) {
+            var_17 = *var_16;
+        } else {
+            var_17 = "";
+        }
+        unknown var_18 = wait-raycast-t(var_15);
+        unknown var_19;
+        if(var_18 == -1.00) {
+            var_19 = var_18 >= 0.90;
+        }
+        if(#B96C7EEF7ACAB122 && *(#B96C7EEF7ACAB122 + 39)) {
+            unknown var_20 = get-spawner-position(var_13, 1);
+            u16 var_21;
+            if(var_19) {
+                var_21 = 2;
+            } else {
+                var_21 = 3;
+            }
+            debug-draw-cross(var_20, 0.25, var_21, 2.00, 0, 0, 0);
+            unknown var_22 = get-spawner-position(var_13, 1);
+            unknown var_23 = string-debug(var_13);
+            u16 var_24;
+            if(var_19) {
+                var_24 = 2;
+            } else {
+                var_24 = 3;
+            }
+            debug-draw-string(var_22, var_23, var_24, 2.00, 0, 0.50, 0, 0);
+            unknown var_25 = #5445173390656D6D("%.1f t", var_18);
+            u16 var_26;
+            if(var_19) {
+                var_26 = 2;
+            } else {
+                var_26 = 3;
+            }
+            debug-draw-string(var_17, var_25, var_26, 2.00, 0, 0.50, 0, 0);
+            debug-draw-raycast(var_15, 2.00);
+        }
+        unknown var_27;
+        if(var_19) {
+            unknown var_28 = new-boxed-value(1, 0);
+            unknown var_29 = ddict-set(arg_0, var_13, var_28);
+            var_27 = var_29;
+        } else {
+            unknown var_30 = new-boxed-value(1, 1);
+            unknown var_31 = ddict-set(arg_0, var_13, var_30);
+            var_27 = var_31;
+        }
+        i = i + 1;
+    }
+    unknown var_32 = darray-destroy(var_1);
+    return var_32;
+}

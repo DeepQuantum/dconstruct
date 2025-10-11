@@ -56,6 +56,11 @@ namespace dconstruct {
         return m_lines.back();
     }
 
+    [[nodiscard]] inline u16 control_flow_node::get_target() const {
+        const auto& istr = m_lines.back().m_instruction;
+        return istr.destination | (istr.operand2 << 8);
+    }
+
     [[nodiscard]] b8 control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
         if (m_lines.size() != rhs.m_lines.size()) {
             return false;
@@ -464,53 +469,54 @@ namespace dconstruct {
         }
     }
 
-    void ControlFlowGraph::get_registers_written_to(const node_id node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const {
-        if (node == stop || checked.contains(node)) {
+    void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const {
+        if (node.m_startLine == stop || checked.contains(node.m_startLine)) {
             return;
         }
-        checked.insert(node);
-        for (const auto& line : m_nodes.at(node).m_lines) {
+        checked.insert(node.m_startLine);
+        for (const auto& line : node.m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
                 result.insert(line.m_instruction.destination);
             }
         }
-        for (const auto& successor : m_nodes.at(node).m_successors) {
-            get_registers_written_to(successor, stop, result, checked);
+        for (const auto& successor : node.m_successors) {
+            get_registers_written_to(m_nodes.at(successor), stop, result, checked);
         }
     }
 
-    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_branch_variant_registers(const node_id start_node) const noexcept {
-        std::set<reg_idx> regs_to_check, read_first_branches, read_first_ipdom, result1, result2, left, right;
+    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node) const noexcept {
+        std::set<reg_idx> regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
         std::set<node_id> checked;
-        node_id ipdom = get_immediate_postdominators().at(start_node);
+        node_id ipdom = get_ipdom_at(start_node.m_startLine);
 
-        if (ipdom == start_node) {
-            result1.insert(m_nodes.at(start_node).m_lines.back().m_instruction.destination);
-            return result1;
+        const u16 target = start_node.get_target();
+
+        if (ipdom == start_node.m_startLine) {
+            result.insert(target);
+            return result;
         }
 
-        get_registers_written_to(m_nodes.at(start_node).get_direct_successor(), ipdom, left, checked);
+        get_registers_written_to(m_nodes.at(start_node.get_direct_successor()), ipdom, left, checked);
         checked = std::set<node_id>();
-        get_registers_written_to(m_nodes.at(start_node).get_last_line().m_instruction.destination, ipdom, right, checked);
+        get_registers_written_to(m_nodes.at(target), ipdom, right, checked);
 
         std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
         get_register_nature(ipdom, regs_to_check, read_first_ipdom, m_returnNode);
 
-        std::set_intersection(left.begin(), left.end(), right.begin(), right.end(), std::inserter(result1, result1.begin()));
-        std::set_intersection(result1.begin(), result1.end(), read_first_ipdom.begin(), read_first_ipdom.end(), std::inserter(result2, result2.begin()));
-        return result2;
+        return read_first_ipdom;
     }
 
-    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_loop_variant_registers(const node_id head_node) const noexcept {
+    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
         std::set<reg_idx> regs_to_check, read_first, result;
         std::set<node_id> checked;
-        for (const auto& line : m_nodes.at(head_node).m_lines) {
-            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < 49) {
+        for (const auto& line : head_node.m_lines) {
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
                 regs_to_check.insert(line.m_instruction.destination);
             }
         }
-        get_registers_written_to(m_nodes.at(head_node).get_direct_successor(), head_node, regs_to_check, checked);
-        get_register_nature(m_nodes.at(head_node).get_last_line().m_instruction.destination, regs_to_check, read_first, m_returnNode);
+        get_registers_written_to(head_node.get_direct_successor(), head_node, regs_to_check, checked);
+        const u16 target = 
+        get_register_nature(target, regs_to_check, read_first, m_returnNode);
 
         return read_first;
     }
