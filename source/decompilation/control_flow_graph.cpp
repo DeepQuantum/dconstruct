@@ -462,11 +462,54 @@ namespace dconstruct {
             }
         }
         for (const auto& successor : m_nodes.at(start_node).m_successors) {
-            if (successor == stop_node) {
+            if (successor == stop_node || regs_to_check.empty()) {
                 break;
             }
             get_register_nature(successor, regs_to_check, read_first, stop_node);
         }
+    }
+
+    u16 ControlFlowGraph::get_register_nature_count(
+        const node_id start_node,
+        const reg_idx reg_to_check,
+        const node_id stop_node,
+        std::set<node_id>& checked,
+        const u32 start_line
+    ) const noexcept {
+        if (checked.contains(start_node)) {
+            return 0;
+        }
+        checked.insert(start_node);
+        u16 count = 0;
+        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
+            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
+            const Instruction& istr = line.m_instruction;
+            if (count >= 2) {
+                return count;
+            }
+            if (reg_to_check == istr.destination && istr.opcode == Opcode::Return) {
+                return ++count;
+            }
+            if (reg_to_check == istr.destination && istr.destination == istr.operand1 && !istr.operand1_is_immediate() && istr.operand1_is_used()) {
+                return ++count;
+            }
+            if (reg_to_check == istr.destination && !istr.destination_is_immediate()) {
+                return count;
+            }
+            if (reg_to_check == istr.operand1 && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
+                count++;
+            }
+            if (reg_to_check == istr.operand2 && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
+                count++;
+            }
+        }
+        for (const auto& successor : m_nodes.at(start_node).m_successors) {
+            if (successor == stop_node || count >= 2) {
+                break;
+            }
+            count += get_register_nature_count(successor, reg_to_check, stop_node, checked);
+        }
+        return count;
     }
 
     void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const {
@@ -514,17 +557,9 @@ namespace dconstruct {
                 regs_to_check.insert(line.m_instruction.destination);
             }
         }
-        get_registers_written_to(head_node.get_direct_successor(), head_node, regs_to_check, checked);
-        const u16 target = 
-        get_register_nature(target, regs_to_check, read_first, m_returnNode);
+        get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
+        get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode);
 
         return read_first;
-    }
-
-    [[nodiscard]] b8 ControlFlowGraph::register_gets_read_before_overwrite(const node_id start_node, const reg_idx check_register, const u32 start_line) const noexcept {
-        std::set<reg_idx> register_set, read_first;
-        register_set.insert(check_register);
-        get_register_nature(start_node, register_set, read_first, -1, start_line + 1);
-        return !read_first.empty();
     }
 }

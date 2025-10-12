@@ -95,12 +95,15 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::Call:
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
-                if (m_graph.register_gets_read_before_overwrite(node.m_startLine, istr.destination, line.m_location - node.m_startLine)) {
-                    //generated_expression = std::move(call);
-                    load_expression_into_new_var(istr.destination, std::move(call));
-                } else {
+                std::set<node_id> checked;
+                u16 call_usage_count = m_graph.get_register_nature_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, line.m_location - node.m_startLine + 1);
+                if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                     generated_expression = nullptr;
+                } else if (call_usage_count == 1) {
+                    generated_expression = std::move(call);
+                } else {
+                    load_expression_into_new_var(istr.destination, std::move(call));
                 }
                 break;
             }
@@ -120,6 +123,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 expr_uptr lit = std::make_unique<ast::literal>(sid_literal{ sid, name });
                 if (!std::holds_alternative<ast::function_type>(m_symbolTable.second[istr.operand1])) {
                     generated_expression = std::move(lit);
+                    generated_expression->set_type(m_symbolTable.second[istr.operand1]);
                 }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(lit);
@@ -153,7 +157,10 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 generated_expression = apply_unary_op<ast::dereference_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
             }
 
-            case Opcode::AssertPointer:
+            case Opcode::AssertPointer: {
+                m_transformableExpressions[istr.destination]->set_type(ast::ptr_type{});
+                break;
+            }
             case Opcode::BreakFlag:
             case Opcode::Branch:
             case Opcode::BranchIf:
@@ -191,8 +198,32 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     if (const auto loop = m_graph.get_loop_with_head(last_line.m_location + 1)) {
         emit_loop(last_line, loop->get(), stop_node);
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
-        emit_branches(node, stop_node);
+        const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
+        if (idom == node.get_target()) {
+            emit_single_branch(node, stop_node);
+        } else {
+            emit_branches(node, stop_node);
+        }
     }
+}
+
+void decomp_function::emit_single_branch(const control_flow_node& node, const node_id stop_node) {
+    const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
+    const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
+    m_graph.m_ipdomsEmitted.insert(idom);
+    node_id proper_successor, proper_destination, proper_head;
+    expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
+    auto then_block = std::make_unique<ast::block>();
+    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
+    std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+
+    emit_branch(*then_block, proper_successor, idom, {}, regs_to_type);
+
+    stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block));
+
+    append_to_current_block(std::move(full_if));
+
+    emit_node(m_graph[idom], stop_node);
 }
 
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
@@ -200,7 +231,7 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
     const node_id loop_entry = head_node.get_direct_successor();
     const node_id loop_tail = head_node.get_last_line().m_instruction.destination | (head_node.get_last_line().m_instruction.operand2 << 8);
     auto loop_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node.m_startLine);
+    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node);
     const node_id idom = m_graph.get_ipdom_at(loop_tail);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
@@ -262,10 +293,10 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(proper_head);
+    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
-    if (!idom_already_emitted && idom != proper_destination) {
+    if (!idom_already_emitted) {
         for (const auto reg : regs_to_emit) {
             m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
             regs_to_type.emplace(reg, std::monostate());
@@ -274,9 +305,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
 
     emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
 
-    if (idom != proper_destination) {
-        emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
-    }
+    emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
 
     if (!idom_already_emitted) {
         for (const auto reg : regs_to_emit) {
@@ -326,6 +355,7 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst, expr_uptr&
     auto var_declaration = std::make_unique<ast::variable_declaration>(type_name, name, std::move(expr));
 
     append_to_current_block(std::move(var_declaration));
+    m_registersToVars[dst].push(id->copy());
     m_transformableExpressions[dst] = std::move(id);
     m_transformableExpressions[dst]->set_type(type);
 }
@@ -351,9 +381,9 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env));
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
-        if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > max_expression_complexity) {
-            load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i, std::move(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]));
-        }
+        // if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > max_expression_complexity) {
+        //     load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i, std::move(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]));
+        // }
         args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());
         args[i]->set_type(*func_type.m_arguments[i].second);
     }
@@ -368,11 +398,13 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
-        return std::make_unique<ast::cast_expr>(
+        auto cast = std::make_unique<ast::cast_expr>(
             compiler::token{ compiler::token_type::IDENTIFIER, "i32"}, 
             std::make_unique<ast::identifier>("i32"), 
             is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
         );
+        cast->set_type(make_type(ast::primitive_kind::I32));
+        return cast;
     }
     else {
         return std::make_unique<ast::literal>(static_cast<i32>(std::get<f32>(old_lit->m_value)));
@@ -384,43 +416,52 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
-        return std::make_unique<ast::cast_expr>(
+        auto cast = std::make_unique<ast::cast_expr>(
             compiler::token{ compiler::token_type::IDENTIFIER, "f32"}, 
             std::make_unique<ast::identifier>("f32"), 
             is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
         );
+        cast->set_type(make_type(ast::primitive_kind::F32));
+        return cast;
     }
     else {
         return std::make_unique<ast::literal>(static_cast<f32>(std::get<i32>(old_lit->m_value)));
     }
 }
 
+[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx from) const noexcept {
+    expr_uptr condition = m_transformableExpressions[from]->clone();
+    if (std::holds_alternative<ast::ptr_type>(condition->get_type(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type(m_env))) {
+        condition = std::make_unique<ast::compare_expr>(compiler::token{ compiler::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
+    }
+    return condition;
+}
+
 [[nodiscard]] expr_uptr decomp_function::make_condition(const control_flow_node& condition_start, node_id& proper_head, node_id& proper_successor, node_id& proper_destination) {
     const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
     const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
     const control_flow_node* current_node = &condition_start;
-    expr_uptr condition = m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone();
+    expr_uptr condition = get_expression_as_condition(current_node->get_last_line().m_instruction.operand1);
     proper_head = current_node->m_startLine;
     proper_successor = current_node->get_direct_successor();
     proper_destination = current_node->get_last_line().m_target;
-    while (true) {
-        const auto& last_line = current_node->get_last_line();
-        const u16 unlinked_target = last_line.m_instruction.destination | (last_line.m_instruction.operand2 << 8);
-        const auto& successor = m_graph[proper_successor];
-        const b8 linked = unlinked_target == successor.m_endLine;
-        if (!linked) {
-            break;
+    auto* last_line = &current_node->get_last_line();
+    auto* successor = &m_graph[proper_successor];
+    while (current_node->get_target() == successor->m_endLine) {
+        parse_basic_block(*successor);
+        if (last_line->m_instruction.opcode == Opcode::BranchIfNot) {
+            condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), get_expression_as_condition(current_node->get_last_line().m_instruction.operand1));
+        } else if (last_line->m_instruction.opcode == Opcode::BranchIf) {
+            condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), get_expression_as_condition(current_node->get_last_line().m_instruction.operand1));   
         }
-        parse_basic_block(successor);
-        if (last_line.m_instruction.opcode == Opcode::BranchIfNot) {
-            condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());
-        } else if (last_line.m_instruction.opcode == Opcode::BranchIf) {
-            condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), m_transformableExpressions[current_node->get_last_line().m_instruction.operand1]->clone());   
-        }
+
         proper_head = proper_successor;
-        proper_successor = successor.get_direct_successor();
-        proper_destination = successor.get_last_line().m_instruction.destination | (successor.get_last_line().m_instruction.operand2 << 8);
+        proper_successor = successor->get_direct_successor();
+        proper_destination = successor->get_target();
         current_node = &m_graph[current_node->get_direct_successor()];
+
+        last_line = &current_node->get_last_line();
+        successor = &m_graph[proper_successor];
     }
     return condition;
 }

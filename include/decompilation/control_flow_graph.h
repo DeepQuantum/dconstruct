@@ -75,13 +75,13 @@ namespace dconstruct {
             return m_nodes.at(m_returnNode);
         }
 
-        [[nodiscard]] b8 register_gets_read_before_overwrite(const node_id start_node, const reg_idx check_register, const u32 start_line = 0) const noexcept;
         void get_registers_written_to(const control_flow_node& node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const;
 
         [[nodiscard]] std::set<reg_idx> get_branch_phi_registers(const control_flow_node& start_node) const noexcept;
         [[nodiscard]] std::set<reg_idx> get_loop_phi_registers(const control_flow_node& head_node) const noexcept;
 
         void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, const u32 start_line = 0) const noexcept;
+        u16 get_register_nature_count(const node_id start_node, const reg_idx check_reg, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
 
     private:
         std::unordered_map<node_id, control_flow_node> m_nodes;

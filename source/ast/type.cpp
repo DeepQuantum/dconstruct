@@ -40,6 +40,9 @@ namespace dconstruct::ast {
             const std::string first = std::to_string(arg);
             return first.substr(0, first.find(".") + 3);
         }
+        else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return "nullptr";
+        }
         else {
             return std::to_string(arg);
         }
@@ -62,7 +65,7 @@ namespace dconstruct::ast {
         case primitive_kind::BOOL:   return "bool";
         case primitive_kind::STRING: return "string";
         case primitive_kind::SID:    return "sid";
-        case primitive_kind::VOID:   return "void";
+        case primitive_kind::NULLPTR:   return "nullptr";
         default:                     return "unknown";
     }
 }
