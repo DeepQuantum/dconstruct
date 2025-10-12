@@ -31,6 +31,8 @@ namespace dconstruct::dcompiler {
         void emit_node(const control_flow_node &node, const node_id stop_node);
 
         void emit_branches(const control_flow_node &node, const node_id stop_node);
+
+        void emit_single_branch(const control_flow_node& node, const node_id stop_node);
  
         void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
 
@@ -57,6 +59,8 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
 
         [[nodiscard]] expr_uptr make_dereference(const Instruction& istr);
+
+        [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const noexcept;
 
         void insert_return(const reg_idx dest);
 
