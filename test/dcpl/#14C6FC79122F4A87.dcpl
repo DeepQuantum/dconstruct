@@ -1,76 +1,78 @@
 unknown #14C6FC79122F4A87(unknown arg_0) {
     unknown var_0 = ddict-key-count(arg_0);
+    unknown var_1 = darray-create(self, -1, 0);
     u32 i = 0;
     while(i < var_0) {
-        unknown var_1 = ddict-key-at(arg_0, i);
-        unknown var_2 = alloc-bound-frame(offset-position(get-spawner-position(var_1, 1), alloc-vector(0.00, 1.40, 0.00, 1.00, 0)), 0, 0, 0, 0);
-        ddict-set(arg_0, var_1, new-boxed-value(2, kick-raycast(var_2, camera-locator(0), player, 6147)));
+        unknown var_2 = ddict-key-at(arg_0, i);
+        unknown var_3 = alloc-vector(0.00, 1.40, 0.00, 1.00, 0);
+        unknown var_4 = offset-position(get-spawner-position(var_2, 1), var_3);
+        unknown var_5 = alloc-bound-frame(var_4, 0, 0, 0, 0);
+        unknown var_6 = kick-raycast(var_5, camera-locator(0), player, 6147);
+        ddict-set(arg_0, var_2, new-boxed-value(2, var_6));
         i = i + 1;
     }
     wait-one-frame();
     u32 i = 0;
     while(i < var_0) {
-        unknown var_3 = ddict-key-at(arg_0, i);
-        unknown var_4 = ddict-value-at(arg_0, i);
-        u16 var_5;
-        if(var_4 && *(var_4 + 12) == 1) {
-            var_5 = *var_4;
-        } else if(var_4 && *(var_4 + 12) == 2) {
-            var_5 = *var_4;
-        } else if(var_4 && *(var_4 + 12) == 3) {
-            var_5 = *var_4;
-        } else if(var_4 && *(var_4 + 12) == 4) {
-            var_5 = *var_4;
-        } else if(var_4 && *(var_4 + 12) == 5) {
-            var_5 = *var_4;
-        } else if(var_4 && *(var_4 + 12) == 6) {
-            var_5 = (i32)*var_4;
+        unknown var_7 = ddict-key-at(arg_0, i);
+        unknown var_8 = ddict-value-at(arg_0, i);
+        u16 var_9;
+        if(var_8 && *(var_8 + 12) == 1) {
+            var_9 = *var_8;
+        } else if(var_8 && *(var_8 + 12) == 2) {
+            var_9 = *var_8;
+        } else if(var_8 && *(var_8 + 12) == 3) {
+            var_9 = *var_8;
+        } else if(var_8 && *(var_8 + 12) == 4) {
+            var_9 = *var_8;
+        } else if(var_8 && *(var_8 + 12) == 5) {
+            var_9 = *var_8;
+        } else if(var_8 && *(var_8 + 12) == 6) {
+            var_9 = (i32)*var_8;
         } else {
-            var_5 = 0;
+            var_9 = 0;
         }
-        unknown var_6 = darray-at(darray-create(self, -1, 0), i);
-        string var_7;
-        if(var_6 && *(var_6 + 12) == 14) {
-            var_7 = *var_6;
+        unknown var_10 = darray-at(var_1, i);
+        string var_11;
+        if(var_10 && *(var_10 + 12) == 14) {
+            var_11 = *var_10;
         } else {
-            var_7 = "";
+            var_11 = "";
         }
-        unknown var_8 = wait-raycast-t(var_5);
-        unknown var_9;
-        if(var_8 == -1.00) {
-            var_9 = var_8 >= 0.90;
-        }
+        unknown var_12 = wait-raycast-t(var_9);
+        if(var_12 == -1.00) {}
+
         if(#B96C7EEF7ACAB122 != nullptr && *(#B96C7EEF7ACAB122 + 39)) {
-            u16 var_10;
-            if(var_9) {
-                var_10 = 2;
+            u16 var_13;
+            if(var_12 >= 0.90) {
+                var_13 = 2;
             } else {
-                var_10 = 3;
+                var_13 = 3;
             }
-            debug-draw-cross(get-spawner-position(var_3, 1), 0.25, var_10, 2.00, 0, 0, 0);
-            u16 var_11;
-            if(var_9) {
-                var_11 = 2;
+            debug-draw-cross(get-spawner-position(var_7, 1), 0.25, var_13, 2.00, 0, 0, 0);
+            u16 var_14;
+            if(var_12 >= 0.90) {
+                var_14 = 2;
             } else {
-                var_11 = 3;
+                var_14 = 3;
             }
-            debug-draw-string(get-spawner-position(var_3, 1), string-debug(var_3), var_11, 2.00, 0, 0.50, 0, 0);
-            u16 var_12;
-            if(var_9) {
-                var_12 = 2;
+            debug-draw-string(get-spawner-position(var_7, 1), string-debug(var_7), var_14, 2.00, 0, 0.50, 0, 0);
+            u16 var_15;
+            if(var_12 >= 0.90) {
+                var_15 = 2;
             } else {
-                var_12 = 3;
+                var_15 = 3;
             }
-            debug-draw-string(var_7, #5445173390656D6D("%.1f t", var_8), var_12, 2.00, 0, 0.50, 0, 0);
-            debug-draw-raycast(var_5, 2.00);
+            debug-draw-string(var_11, #5445173390656D6D("%.1f t", var_12), var_15, 2.00, 0, 0.50, 0, 0);
+            debug-draw-raycast(var_9, 2.00);
         }
-        unknown var_13;
-        if(var_9) {
-            var_13 = ddict-set(arg_0, var_3, new-boxed-value(1, 0));
+        unknown var_16;
+        if(var_12 >= 0.90) {
+            var_16 = ddict-set(arg_0, var_7, new-boxed-value(1, 0));
         } else {
-            var_13 = ddict-set(arg_0, var_3, new-boxed-value(1, 1));
+            var_16 = ddict-set(arg_0, var_7, new-boxed-value(1, 1));
         }
         i = i + 1;
     }
-    return darray-destroy(darray-create(self, -1, 0));
+    return darray-destroy(var_1);
 }

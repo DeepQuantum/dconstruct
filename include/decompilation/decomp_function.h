@@ -6,7 +6,7 @@
 #include <set>
 #include <stack>
 
-constexpr u8 max_expression_complexity = 4;
+constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
     struct decomp_function {
