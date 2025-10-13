@@ -96,10 +96,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
                 std::set<node_id> checked;
-                u16 call_usage_count = m_graph.get_register_nature_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, line.m_location - node.m_startLine + 1);
+                u16 call_usage_count = m_graph.get_register_read_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
-                    generated_expression = nullptr;
                 } else if (call_usage_count == 1) {
                     generated_expression = std::move(call);
                 } else {
@@ -217,11 +216,11 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
-    emit_branch(*then_block, proper_successor, idom, {}, regs_to_type);
+    m_blockStack.push(*then_block);
+    emit_node(m_graph[proper_successor], idom);
+    m_blockStack.pop();
 
-    stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block));
-
-    append_to_current_block(std::move(full_if));
+    append_to_current_block(std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block)));
 
     emit_node(m_graph[idom], stop_node);
 }
@@ -381,9 +380,9 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env));
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
-        // if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > max_expression_complexity) {
-        //     load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i, std::move(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]));
-        // }
+        if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > MAX_EXPRESSION_COMPLEXITY) {
+            load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i, std::move(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]));
+        }
         args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());
         args[i]->set_type(*func_type.m_arguments[i].second);
     }
