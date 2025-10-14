@@ -132,11 +132,11 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::CastInteger: {
-                generated_expression = make_cast_to_int(istr);
+                generated_expression = make_cast<f32, i32>(istr, make_type(ast::primitive_kind::I32));
                 break;
             }
             case Opcode::CastFloat: {
-                generated_expression = make_cast_to_float(istr);
+                generated_expression = make_cast<i32, f32>(istr, make_type(ast::primitive_kind::F32));
                 break;
             }
 
@@ -145,15 +145,29 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 break;
             }
 
-            case Opcode::LoadFloat:
-            case Opcode::LoadI32: 
-            case Opcode::LoadU64:
-            case Opcode::LoadU8:
-            case Opcode::LoadU32:
-            case Opcode::LoadU16: 
-            case Opcode::LoadI64: 
+            case Opcode::LoadFloat: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::F32 })); break;
+            }
+            case Opcode::LoadI32: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::I32 })); break;
+            }
+            case Opcode::LoadU64: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U64 })); break;
+            }
+            case Opcode::LoadU8: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U8 })); break;
+            }
+            case Opcode::LoadU32: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U32 })); break;
+            }
+            case Opcode::LoadU16: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U16 })); break;
+            }
+            case Opcode::LoadI64: {
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::I64 })); break;
+            }
             case Opcode::LoadPointer: {
-                generated_expression = apply_unary_op<ast::dereference_expr>(istr, compiler::token{compiler::token_type::STAR, "*"}); break;
+                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::ptr_type {} })); break;
             }
 
             case Opcode::AssertPointer: {
@@ -215,10 +229,41 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     auto then_block = std::make_unique<ast::block>();
     std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+    std::unordered_map<reg_idx, expr_uptr> regs_to_potential_inits;
+
+    for (const auto reg : regs_to_emit) {
+        m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+        regs_to_type.emplace(reg, std::monostate());
+        if (reg == m_graph[proper_head].get_last_line().m_instruction.operand1) {
+            regs_to_potential_inits[reg] = std::move(condition);
+            regs_to_type[reg] = make_type(ast::primitive_kind::BOOL);
+            condition = m_registersToVars[reg].top()->clone();
+        }
+        else {
+            regs_to_potential_inits[reg] = m_transformableExpressions[reg]->clone();
+        }
+    }
 
     m_blockStack.push(*then_block);
     emit_node(m_graph[proper_successor], idom);
+    for (const auto reg : regs_to_emit) {
+        load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy(), std::move(m_transformableExpressions[reg]));
+        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
+            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+        }
+    }
     m_blockStack.pop();
+
+    for (const auto reg : regs_to_emit) {
+        const auto &type = regs_to_type[reg];
+        m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+        if (!is_unknown(type)) {
+            m_transformableExpressions[reg]->set_type(type);
+        }
+        const std::string type_name = type_to_declaration_string(m_transformableExpressions[reg]->get_type(m_env));
+        append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme, std::move(regs_to_potential_inits[reg])));
+        m_registersToVars[reg].pop();
+    }
 
     append_to_current_block(std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block)));
 
@@ -392,39 +437,21 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     return expr;
 }
 
-
-[[nodiscard]] expr_uptr decomp_function::make_cast_to_int(const Instruction& istr) {
+template<typename from, typename to>
+[[nodiscard]] expr_uptr decomp_function::make_cast(const Instruction& istr, const ast::full_type& type) {
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
+        const std::string type_name = ast::type_to_declaration_string(type);
         auto cast = std::make_unique<ast::cast_expr>(
-            compiler::token{ compiler::token_type::IDENTIFIER, "i32"}, 
-            std::make_unique<ast::identifier>("i32"), 
+            type_name,
             is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
         );
-        cast->set_type(make_type(ast::primitive_kind::I32));
+        cast->set_type(type);
         return cast;
     }
     else {
-        return std::make_unique<ast::literal>(static_cast<i32>(std::get<f32>(old_lit->m_value)));
-    }
-}
-
-
-[[nodiscard]] expr_uptr decomp_function::make_cast_to_float(const Instruction& istr) {
-    const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
-    if (old_lit == nullptr) {
-        const auto& op2 = m_transformableExpressions[istr.operand1];
-        auto cast = std::make_unique<ast::cast_expr>(
-            compiler::token{ compiler::token_type::IDENTIFIER, "f32"}, 
-            std::make_unique<ast::identifier>("f32"), 
-            is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
-        );
-        cast->set_type(make_type(ast::primitive_kind::F32));
-        return cast;
-    }
-    else {
-        return std::make_unique<ast::literal>(static_cast<f32>(std::get<i32>(old_lit->m_value)));
+        return std::make_unique<ast::literal>(static_cast<to>(std::get<from>(old_lit->m_value)));
     }
 }
 
@@ -446,7 +473,7 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     proper_destination = current_node->get_last_line().m_target;
     auto* last_line = &current_node->get_last_line();
     auto* successor = &m_graph[proper_successor];
-    while (current_node->get_target() == successor->m_endLine) {
+    /*while (current_node->get_target() == successor->m_endLine) {
         parse_basic_block(*successor);
         if (last_line->m_instruction.opcode == Opcode::BranchIfNot) {
             condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), get_expression_as_condition(current_node->get_last_line().m_instruction.operand1));
@@ -462,12 +489,7 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
         last_line = &current_node->get_last_line();
         successor = &m_graph[proper_successor];
     }
-    return condition;
-}
-
-[[nodiscard]] expr_uptr decomp_function::make_dereference(const Instruction& istr) {
-    expr_uptr load = std::make_unique<ast::dereference_expr>(compiler::token{ compiler::token_type::STAR, "*" }, std::move(m_transformableExpressions[istr.operand1]));
-    return load;
+    return condition;*/
 }
 
 void decomp_function::insert_return(const reg_idx dest) {

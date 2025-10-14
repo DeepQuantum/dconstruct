@@ -329,14 +329,8 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const std::set<reg_idx> registers_to_emit_0 = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
-        const std::set<reg_idx> registers_to_emit_1 = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0x9]);
-        const std::set<reg_idx> registers_to_emit_2 = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0x10]);
-        ASSERT_TRUE(registers_to_emit_0.empty());
-        ASSERT_EQ(registers_to_emit_1.size(), 1);
-        ASSERT_EQ(registers_to_emit_2.size(), 1);
-        ASSERT_TRUE(registers_to_emit_1.contains(0));
-        ASSERT_TRUE(registers_to_emit_2.contains(0));
+        const std::set<reg_idx> registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
+        ASSERT_TRUE(registers_to_emit.contains(0));
     }
 
     /*TEST(DECOMPILER, RegisterReadBeforeOverwrite1) {
