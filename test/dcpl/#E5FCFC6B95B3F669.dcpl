@@ -2,16 +2,22 @@ unknown #E5FCFC6B95B3F669() {
     begin-foreach();
     u32 i = 0;
     while(i < darray-count(#88F409F4BF0F056A)) {
-        u16 var_0;
-        if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_0 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_0 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_0 = *darray-at(#88F409F4BF0F056A, i);
+        unknown var_0 = darray-at(#88F409F4BF0F056A, i);
+        u16 var_1;
+        if(var_0 && *(u16*)(var_0 + 12) == 7) {
+            var_1 = *(u64*)var_0;
+        } else if(var_0 && *(u16*)(var_0 + 12) == 5) {
+            var_1 = *(u64*)var_0;
+        } else if(var_0 && *(u16*)(var_0 + 12) == 4) {
+            var_1 = *(u64*)var_0;
         } else {
-            var_0 = 0;
+            var_1 = 0;
         }
+        if(npc-alive?(var_1)) {
+            npc-disable-has-ever-seen-updates/f(var_1);
+            fact-set(var_1, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
+        }
+        i = i + 1;
     }
     return end-foreach();
 }

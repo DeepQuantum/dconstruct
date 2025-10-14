@@ -17,60 +17,62 @@ unknown #14C6FC79122F4A87(unknown arg_0) {
         unknown var_7 = ddict-key-at(arg_0, i);
         unknown var_8 = ddict-value-at(arg_0, i);
         u16 var_9;
-        if(var_8 && *(var_8 + 12) == 1) {
-            var_9 = *var_8;
-        } else if(var_8 && *(var_8 + 12) == 2) {
-            var_9 = *var_8;
-        } else if(var_8 && *(var_8 + 12) == 3) {
-            var_9 = *var_8;
-        } else if(var_8 && *(var_8 + 12) == 4) {
-            var_9 = *var_8;
-        } else if(var_8 && *(var_8 + 12) == 5) {
-            var_9 = *var_8;
-        } else if(var_8 && *(var_8 + 12) == 6) {
-            var_9 = (i32)*var_8;
+        if(var_8 && *(u16*)(var_8 + 12) == 1) {
+            var_9 = *(u8*)var_8;
+        } else if(var_8 && *(u16*)(var_8 + 12) == 2) {
+            var_9 = *(i32*)var_8;
+        } else if(var_8 && *(u16*)(var_8 + 12) == 3) {
+            var_9 = *(u32*)var_8;
+        } else if(var_8 && *(u16*)(var_8 + 12) == 4) {
+            var_9 = *(i64*)var_8;
+        } else if(var_8 && *(u16*)(var_8 + 12) == 5) {
+            var_9 = *(u64*)var_8;
+        } else if(var_8 && *(u16*)(var_8 + 12) == 6) {
+            var_9 = (i32)*(f32*)var_8;
         } else {
             var_9 = 0;
         }
         unknown var_10 = darray-at(var_1, i);
         string var_11;
-        if(var_10 && *(var_10 + 12) == 14) {
-            var_11 = *var_10;
+        if(var_10 && *(u16*)(var_10 + 12) == 14) {
+            var_11 = *(unknown*)var_10;
         } else {
             var_11 = "";
         }
         unknown var_12 = wait-raycast-t(var_9);
-        if(var_12 == -1.00) {}
-
-        if(#B96C7EEF7ACAB122 != nullptr && *(#B96C7EEF7ACAB122 + 39)) {
-            u16 var_13;
-            if(var_12 >= 0.90) {
-                var_13 = 2;
-            } else {
-                var_13 = 3;
-            }
-            debug-draw-cross(get-spawner-position(var_7, 1), 0.25, var_13, 2.00, 0, 0, 0);
+        bool var_13 = var_12 == -1.00;
+        if(var_13) {
+            var_13 = var_12 >= 0.90;
+        }
+        if(#B96C7EEF7ACAB122 != nullptr && *(u8*)(#B96C7EEF7ACAB122 + 39)) {
             u16 var_14;
-            if(var_12 >= 0.90) {
+            if(var_13) {
                 var_14 = 2;
             } else {
                 var_14 = 3;
             }
-            debug-draw-string(get-spawner-position(var_7, 1), string-debug(var_7), var_14, 2.00, 0, 0.50, 0, 0);
+            debug-draw-cross(get-spawner-position(var_7, 1), 0.25, var_14, 2.00, 0, 0, 0);
             u16 var_15;
-            if(var_12 >= 0.90) {
+            if(var_13) {
                 var_15 = 2;
             } else {
                 var_15 = 3;
             }
-            debug-draw-string(var_11, #5445173390656D6D("%.1f t", var_12), var_15, 2.00, 0, 0.50, 0, 0);
+            debug-draw-string(get-spawner-position(var_7, 1), string-debug(var_7), var_15, 2.00, 0, 0.50, 0, 0);
+            u16 var_16;
+            if(var_13) {
+                var_16 = 2;
+            } else {
+                var_16 = 3;
+            }
+            debug-draw-string(var_11, #5445173390656D6D("%.1f t", var_12), var_16, 2.00, 0, 0.50, 0, 0);
             debug-draw-raycast(var_9, 2.00);
         }
-        unknown var_16;
-        if(var_12 >= 0.90) {
-            var_16 = ddict-set(arg_0, var_7, new-boxed-value(1, 0));
+        unknown var_17;
+        if(var_13) {
+            var_17 = ddict-set(arg_0, var_7, new-boxed-value(1, 0));
         } else {
-            var_16 = ddict-set(arg_0, var_7, new-boxed-value(1, 1));
+            var_17 = ddict-set(arg_0, var_7, new-boxed-value(1, 1));
         }
         i = i + 1;
     }

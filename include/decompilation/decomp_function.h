@@ -53,12 +53,10 @@ namespace dconstruct::dcompiler {
 
         [[nodiscard]] expr_uptr make_call(const Instruction& istr);
 
-        [[nodiscard]] expr_uptr make_cast_to_int(const Instruction& istr);
-        [[nodiscard]] expr_uptr make_cast_to_float(const Instruction& istr);
+        template<typename from, typename to>
+        [[nodiscard]] expr_uptr make_cast(const Instruction& istr, const ast::full_type& type);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
-
-        [[nodiscard]] expr_uptr make_dereference(const Instruction& istr);
 
         [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const noexcept;
 
