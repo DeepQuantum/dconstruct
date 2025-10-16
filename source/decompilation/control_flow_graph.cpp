@@ -457,11 +457,11 @@ namespace dconstruct {
             if (regs_to_check.contains(istr.destination) && !istr.destination_is_immediate()) {
                 regs_to_check.erase(istr.destination);
             }
-            if (regs_to_check.contains(istr.operand1) && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
+            if (regs_to_check.contains(istr.operand1) && istr.op1_is_reg()) {
                 regs_to_check.erase(istr.operand1);
                 read_first.insert(istr.operand1);
             }
-            if (regs_to_check.contains(istr.operand2) && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
+            if (regs_to_check.contains(istr.operand2) && istr.op2_is_reg()) {
                 regs_to_check.erase(istr.operand2);
                 read_first.insert(istr.operand2);
             }
@@ -489,34 +489,35 @@ namespace dconstruct {
         checked.insert(start_node);
         u16 count = 0;
         for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
-            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
-            const Instruction& istr = line.m_instruction;
             if (count >= 2) {
                 return count;
             }
+            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
+            const Instruction& istr = line.m_instruction;
             if (reg_to_check == istr.destination && istr.opcode == Opcode::Return) {
                 return ++count;
             }
-            if (reg_to_check == istr.destination && istr.destination == istr.operand1 && !istr.operand1_is_immediate() && istr.operand1_is_used()) {
+            if (reg_to_check == istr.destination && istr.destination == istr.operand1 && istr.op1_is_reg()) {
                 return ++count;
             }
             if (reg_to_check == istr.destination && !istr.destination_is_immediate()) {
                 return count;
             }
-            if (reg_to_check == istr.operand1 && istr.operand1_is_used() && !istr.operand1_is_immediate()) {
+            if (reg_to_check == istr.operand1 && istr.op1_is_reg()) {
                 count++;
             }
-            if (reg_to_check == istr.operand2 && istr.operand2_is_used() && !istr.operand2_is_immediate()) {
+            if (reg_to_check == istr.operand2 && istr.op2_is_reg()) {
                 count++;
             }
+        }
+        if (start_node == stop_node) {
+            return count;
         }
         for (const auto& successor : m_nodes.at(start_node).m_successors) {
             if (count >= 2) {
                 break;
             }
-            if (successor != stop_node) {
-                count += get_register_read_count(successor, reg_to_check, stop_node, checked);
-            }
+            count += get_register_read_count(successor, reg_to_check, stop_node, checked);
         }
         return count;
     }

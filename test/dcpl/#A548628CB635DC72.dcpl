@@ -3,17 +3,32 @@ u16 #A548628CB635DC72(u16 arg_0, () -> unknown arg_1) {
     u32 i = 0;
     u16 var_0;
     while(i < darray-count(#88F409F4BF0F056A)) {
-        u16 var_1;
-        if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_1 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_1 = *darray-at(#88F409F4BF0F056A, i);
-        } else if(darray-at(#88F409F4BF0F056A, i) && darray-at(#88F409F4BF0F056A, i)) {
-            var_1 = *darray-at(#88F409F4BF0F056A, i);
+        unknown var_1 = darray-at(#88F409F4BF0F056A, i);
+        u16 var_2;
+        if(var_1 && *(u16*)(var_1 + 12) == 7) {
+            var_2 = *(u64*)var_1;
+        } else if(var_1 && *(u16*)(var_1 + 12) == 5) {
+            var_2 = *(u64*)var_1;
+        } else if(var_1 && *(u16*)(var_1 + 12) == 4) {
+            var_2 = *(u64*)var_1;
         } else {
-            var_1 = 0;
+            var_2 = 0;
         }
-        var_0 = 0;
+        u16 var_3;
+        if(npc-alive?(var_2)) {
+            unknown var_4 = npc-get-awareness(var_2, player);
+            u16 var_5;
+            u16 var_6;
+            if(var_2 != arg_0 && 0 != 1 && var_4 >= 0 || var_4 != arg_1 && npc-get-recognition(var_2, player) > 0.00) {
+                var_5 = 1;
+                var_6 = 1;
+            } else {
+                var_6 = 0;
+            }
+            var_3 = var_5;
+        }
+        var_0 = var_3;
+        i = i + 1;
     }
     return var_0;
 }

@@ -139,6 +139,14 @@ namespace dconstruct {
         return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store;
     }
 
+    [[nodiscard]] b8 Instruction::op1_is_reg() const noexcept {
+        return operand1_is_used() && !operand1_is_immediate();
+    }
+
+    [[nodiscard]] b8 Instruction::op2_is_reg() const noexcept {
+        return operand2_is_used() && !operand2_is_immediate();
+    }
+
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
         const Register& reg = m_registers[idx];
         if (reg.m_containsArg) {
