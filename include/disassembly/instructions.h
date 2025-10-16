@@ -119,11 +119,14 @@ struct Instruction {
 
     [[nodiscard]] b8 destination_is_immediate() const noexcept;
 
-    [[nodiscard]] b8 operand1_is_immediate() const noexcept;
 
+    [[nodiscard]] b8 operand1_is_immediate() const noexcept;
     [[nodiscard]] b8 operand2_is_immediate() const noexcept;
     [[nodiscard]] b8 operand1_is_used() const noexcept;
     [[nodiscard]] b8 operand2_is_used() const noexcept;
+
+    [[nodiscard]] b8 op1_is_reg() const noexcept;
+    [[nodiscard]] b8 op2_is_reg() const noexcept;
 
 
     const char* opcode_to_string() const noexcept;
