@@ -15,7 +15,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
     for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < 128; ++i) {
-        m_transformableExpressions.push_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)}));
+        m_transformableExpressions.emplace_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)}));
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
 
@@ -56,18 +56,18 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
         switch(istr.opcode) {
             case Opcode::IAdd: 
-            case Opcode::FAdd: generated_expression = apply_binary_op<ast::add_expr>(istr, plus); break;
+            case Opcode::FAdd: generated_expression = apply_binary_op<ast::add_expr>(istr); break;
             case Opcode::ISub:
-            case Opcode::FSub: generated_expression = apply_binary_op<ast::sub_expr>(istr, minus); break;
+            case Opcode::FSub: generated_expression = apply_binary_op<ast::sub_expr>(istr); break;
             case Opcode::IMul:
-            case Opcode::FMul: generated_expression = apply_binary_op<ast::mul_expr>(istr, multiply); break;
+            case Opcode::FMul: generated_expression = apply_binary_op<ast::mul_expr>(istr); break;
             case Opcode::IDiv:
-            case Opcode::FDiv: generated_expression = apply_binary_op<ast::div_expr>(istr, divide); break;
+            case Opcode::FDiv: generated_expression = apply_binary_op<ast::div_expr>(istr); break;
 
-            case Opcode::IAddImm: generated_expression = apply_binary_op_imm<ast::add_expr>(istr, plus); break;
-            case Opcode::IMulImm: generated_expression = apply_binary_op_imm<ast::mul_expr>(istr, multiply); break;
-            case Opcode::ISubImm: generated_expression = apply_binary_op_imm<ast::sub_expr>(istr, minus); break;
-            case Opcode::IDivImm: generated_expression = apply_binary_op_imm<ast::div_expr>(istr, divide); break;
+            case Opcode::IAddImm: generated_expression = apply_binary_op_imm<ast::add_expr>(istr); break;
+            case Opcode::IMulImm: generated_expression = apply_binary_op_imm<ast::mul_expr>(istr); break;
+            case Opcode::ISubImm: generated_expression = apply_binary_op_imm<ast::sub_expr>(istr); break;
+            case Opcode::IDivImm: generated_expression = apply_binary_op_imm<ast::div_expr>(istr); break;
 
             case Opcode::IEqual:
             case Opcode::FEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
@@ -82,10 +82,10 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::IGreaterThanEqual:
             case Opcode::FGreaterThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
 
-            case Opcode::OpLogNot: generated_expression = apply_unary_op<ast::logical_not_expr>(istr, compiler::token{compiler::token_type::BANG, "!"}); break;
-            case Opcode::OpBitNot: generated_expression = apply_unary_op<ast::bitwise_not_expr>(istr, compiler::token{compiler::token_type::TILDE, "~"}); break;
+            case Opcode::OpLogNot: generated_expression = apply_unary_op<ast::logical_not_expr>(istr); break;
+            case Opcode::OpBitNot: generated_expression = apply_unary_op<ast::bitwise_not_expr>(istr); break;
             case Opcode::INeg:
-            case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr, compiler::token{compiler::token_type::MINUS, "-"}); break;
+            case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr); break;
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
@@ -455,41 +455,79 @@ template<typename from, typename to>
     }
 }
 
-[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx from) const noexcept {
-    expr_uptr condition = m_transformableExpressions[from]->clone();
+[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const noexcept {
+    expr_uptr condition = m_transformableExpressions[src]->clone();
     if (std::holds_alternative<ast::ptr_type>(condition->get_type(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type(m_env))) {
         condition = std::make_unique<ast::compare_expr>(compiler::token{ compiler::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
     }
     return condition;
 }
 
-[[nodiscard]] expr_uptr decomp_function::make_condition(const control_flow_node& condition_start, node_id& proper_head, node_id& proper_successor, node_id& proper_destination) {
+[[nodiscard]] expr_uptr decomp_function::make_condition(
+    const control_flow_node& condition_start,
+    node_id& proper_head,
+    node_id& proper_successor,
+    node_id& proper_destination
+) {
     const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
     const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
+
     const control_flow_node* current_node = &condition_start;
+    const control_flow_node* failure_exit = nullptr;
+    const control_flow_node* success_exit = nullptr;
+
     expr_uptr condition = get_expression_as_condition(current_node->get_last_line().m_instruction.operand1);
     proper_head = current_node->m_startLine;
     proper_successor = current_node->get_direct_successor();
     proper_destination = current_node->get_last_line().m_target;
-    auto* last_line = &current_node->get_last_line();
-    auto* successor = &m_graph[proper_successor];
-    /*while (current_node->get_target() == successor->m_endLine) {
-        parse_basic_block(*successor);
-        if (last_line->m_instruction.opcode == Opcode::BranchIfNot) {
-            condition = std::make_unique<ast::logical_expr>(and_token, std::move(condition), get_expression_as_condition(current_node->get_last_line().m_instruction.operand1));
-        } else if (last_line->m_instruction.opcode == Opcode::BranchIf) {
-            condition = std::make_unique<ast::logical_expr>(or_token, std::move(condition), get_expression_as_condition(current_node->get_last_line().m_instruction.operand1));   
+
+    while (true) {
+        const auto& last_line = current_node->get_last_line();
+        const auto  target = last_line.m_target;
+
+        const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
+        const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
+
+        if (!is_and && !is_or)
+            break;
+
+        auto& exit_node = is_and ? failure_exit : success_exit;
+        auto& alt_exit = is_and ? success_exit : failure_exit;
+        const auto& token = is_and ? and_token : or_token;
+
+        if (exit_node == nullptr) {
+            if (alt_exit == nullptr) {
+                exit_node = &m_graph[target];
+            }
+            else {
+                parse_basic_block(*current_node);
+                condition = std::make_unique<ast::logical_expr>(
+                    token, std::move(condition),
+                    get_expression_as_condition(last_line.m_instruction.operand1)
+                );
+                proper_head = current_node->m_startLine;
+                proper_successor = current_node->get_direct_successor();
+                proper_destination = target;
+            }
+        }
+        else if (exit_node->m_startLine != target) {
+            break;
+        }
+        else {
+            parse_basic_block(*current_node);
+            condition = std::make_unique<ast::logical_expr>(
+                token, std::move(condition),
+                get_expression_as_condition(last_line.m_instruction.operand1)
+            );
+            proper_head = current_node->m_startLine;
+            proper_successor = current_node->get_direct_successor();
+            proper_destination = target;
         }
 
-        proper_head = proper_successor;
-        proper_successor = successor->get_direct_successor();
-        proper_destination = successor->get_target();
         current_node = &m_graph[current_node->get_direct_successor()];
-
-        last_line = &current_node->get_last_line();
-        successor = &m_graph[proper_successor];
     }
-    return condition;*/
+
+    return condition;
 }
 
 void decomp_function::insert_return(const reg_idx dest) {

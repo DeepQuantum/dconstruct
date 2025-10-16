@@ -1,15 +1,17 @@
 string #BC06CBDEAE8344C7(u16 arg_0) {
     string var_0;
-    if(arg_0 == 0 && "none") {
-        if(arg_0 == 1 && "potential") {
-            if(arg_0 == 2 && "certain") {
-                if(arg_0 == 3 && "missing") {
-                    if(arg_0 == 4 && "lost") {
-                        var_0 = "invalid";
-                    }
-                }
-            }
-        }
+    if(arg_0 == 0) {
+        var_0 = "none";
+    } else if(arg_0 == 1) {
+        var_0 = "potential";
+    } else if(arg_0 == 2) {
+        var_0 = "certain";
+    } else if(arg_0 == 3) {
+        var_0 = "missing";
+    } else if(arg_0 == 4) {
+        var_0 = "lost";
+    } else {
+        var_0 = "invalid";
     }
     return var_0;
 }
