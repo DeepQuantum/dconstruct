@@ -580,6 +580,7 @@ namespace dconstruct::testing {
         ASSERT_EQ(dc_func.to_string(), expected);
     }
 
+<<<<<<< HEAD
     TEST(DECOMPILER, SpecialFunc1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
@@ -594,6 +595,8 @@ namespace dconstruct::testing {
         out << dc_func.to_string();
     }
 
+=======
+>>>>>>> 40ffdacb6620bb54044a61f59471d44f046cae00
     TEST(DECOMPILER, AllFuncs) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
