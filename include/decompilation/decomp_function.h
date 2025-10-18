@@ -71,8 +71,13 @@ namespace dconstruct::dcompiler {
 
         template <typename T>
         [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr) {
+<<<<<<< HEAD
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
+=======
+            const auto& op1 = m_transformableExpressions[istr.operand1].m_expr;
+            const auto& op2 = m_transformableExpressions[istr.operand2].m_expr;
+>>>>>>> 40ffdacb6620bb54044a61f59471d44f046cae00
             return std::make_unique<T>(
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
