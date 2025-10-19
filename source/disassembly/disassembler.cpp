@@ -952,7 +952,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 else if (istr.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.operand1 == op1) {
                     target = fn.m_lines[target].m_location + 1;
                 }
-                else {
+                /*else if (istr.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.opcode == Opcode::OpLogNot && fn.m_lines[target + 1].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == op1) {
+                    target = fn.m_lines[target + 1].m_instruction.destination | (fn.m_lines[target + 1].m_instruction.operand2 << 8);
+                }*/ else {
                     is_branching_target = false;
                 }
             }

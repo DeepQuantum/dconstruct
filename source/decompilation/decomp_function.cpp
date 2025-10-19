@@ -271,7 +271,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
     const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
     const node_id loop_entry = head_node.get_direct_successor();
-    const node_id loop_tail = head_node.get_last_line().m_instruction.destination | (head_node.get_last_line().m_instruction.operand2 << 8);
+    const node_id loop_tail = head_node.get_target();
     auto loop_block = std::make_unique<ast::block>();
     std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node);
     const node_id idom = m_graph.get_ipdom_at(loop_tail);
