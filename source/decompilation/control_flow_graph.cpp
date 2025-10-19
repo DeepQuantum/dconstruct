@@ -32,6 +32,22 @@ namespace dconstruct {
         return std::nullopt;
     }
 
+    static std::string html_escape(const std::string& input) {
+        std::string output;
+        output.reserve(input.size());
+        for (char c : input) {
+            switch (c) {
+            case '&':  output += "&amp;";  break;
+            case '<':  output += "&lt;";   break;
+            case '>':  output += "&gt;";   break;
+            case '"':  output += "&quot;"; break;
+            case '\'': output += "&#39;";  break;
+            default:   output += c;        break;
+            }
+        }
+        return output;
+    }
+
     [[nodiscard]] std::string control_flow_node::get_label_html() const {
         std::stringstream ss;
 
@@ -39,7 +55,7 @@ namespace dconstruct {
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
         for (const auto& line : m_lines) {
-            ss << line.m_text << "&#160;&#160;" <<  "<BR/>";
+            ss << line.m_text << "   " << html_escape(line.m_comment) << "&#160;&#160;<BR/>";
         }
 
         ss << "</FONT></TD></TR></TABLE>";
@@ -118,7 +134,7 @@ namespace dconstruct {
             } 
         }
         m_immediatePostdominators = create_postdominator_tree();
-        find_loops();
+        //find_loops();
     }
 
     [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u32 line) const {
@@ -573,5 +589,22 @@ namespace dconstruct {
         get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode, checked);
 
         return read_first;
+    }
+
+    [[nodiscard]] void ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
+        for (const auto successor : m_nodes.at(node).m_successors) {
+            if (successor == exit_node) {
+                out = successor;
+            } else {
+                get_final_loop_condition_node(successor, exit_node, out);
+            }
+        }
+    }
+
+    [[nodiscard]] node_id ControlFlowGraph::get_proper_loop_head(const control_flow_loop& loop) const noexcept {
+        const node_id exit_node = m_nodes.at(loop.m_latchNode).m_endLine + 1;
+        node_id res = -1;
+        get_final_loop_condition_node(loop.m_headNode, exit_node, res);
+        return res;
     }
 }
