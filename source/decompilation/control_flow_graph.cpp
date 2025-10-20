@@ -282,6 +282,7 @@ namespace dconstruct {
                 std::cout << "backwards jump is not loop\n";
                 continue;
             }
+            control_flow_loop loop = 
             m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
     }
@@ -434,7 +435,7 @@ namespace dconstruct {
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
         std::vector<node_id> body{};
 
-        const auto& suc = m_nodes.at(head).get_direct_successor();
+        const auto& suc = m_nodes.at(get_proper_loop_head(head, latch)).get_direct_successor();
         body.push_back(suc);
 
         add_successors(body, m_nodes.at(suc), m_nodes.at(latch));
@@ -591,20 +592,28 @@ namespace dconstruct {
         return read_first;
     }
 
-    [[nodiscard]] void ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
+    [[nodiscard]] b8 ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
         for (const auto successor : m_nodes.at(node).m_successors) {
             if (successor == exit_node) {
                 out = successor;
-            } else {
-                get_final_loop_condition_node(successor, exit_node, out);
+                break;
             }
         }
+        if (out != -1) {
+            return true;
+        }
+        for (const auto successor : m_nodes.at(node).m_successors) {
+            if (get_final_loop_condition_node(successor, exit_node, out)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    [[nodiscard]] node_id ControlFlowGraph::get_proper_loop_head(const control_flow_loop& loop) const noexcept {
-        const node_id exit_node = m_nodes.at(loop.m_latchNode).m_endLine + 1;
+    [[nodiscard]] node_id ControlFlowGraph::get_proper_loop_head(const node_id head, const node_id latch) const noexcept {
+        const node_id exit_node = m_nodes.at(latch).m_endLine + 1;
         node_id res = -1;
-        get_final_loop_condition_node(loop.m_headNode, exit_node, res);
+        get_final_loop_condition_node(head, exit_node, res);
         return res;
     }
 }
