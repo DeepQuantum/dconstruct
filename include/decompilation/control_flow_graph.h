@@ -80,7 +80,7 @@ namespace dconstruct {
         [[nodiscard]] std::set<reg_idx> get_branch_phi_registers(const control_flow_node& start_node) const noexcept;
         [[nodiscard]] std::set<reg_idx> get_loop_phi_registers(const control_flow_node& head_node) const noexcept;
 
-        [[nodiscard]] node_id get_proper_loop_head(const control_flow_loop& loop) const noexcept;
+        [[nodiscard]] node_id get_proper_loop_head(const node_id head, const node_id latch) const noexcept;
 
         void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
         u16 get_register_read_count(const node_id start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
@@ -108,7 +108,7 @@ namespace dconstruct {
         
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
 
-        [[nodiscard]] void get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept; 
+        [[nodiscard]] b8 get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept; 
 
         void add_successors(std::vector<node_id>& nodes, const control_flow_node& node, const control_flow_node& stop) const;
     };
