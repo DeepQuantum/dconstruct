@@ -134,7 +134,7 @@ namespace dconstruct {
             } 
         }
         m_immediatePostdominators = create_postdominator_tree();
-        //find_loops();
+        find_loops();
     }
 
     [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u32 line) const {
@@ -433,13 +433,14 @@ namespace dconstruct {
     }
 
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
-        std::vector<node_id> body{};
+        std::vector<node_id> body;
 
-        const auto& suc = m_nodes.at(get_proper_loop_head(head, latch)).get_direct_successor();
+        const auto proper_head = get_proper_loop_head(head, latch);
+        const auto& suc = m_nodes.at(proper_head).get_direct_successor();
         body.push_back(suc);
 
-        add_successors(body, m_nodes.at(suc), m_nodes.at(latch));
-        
+        add_successors(body, m_nodes.at(suc), m_nodes.at(proper_head));
+
         return body;
     }
 
@@ -592,10 +593,10 @@ namespace dconstruct {
         return read_first;
     }
 
-    [[nodiscard]] b8 ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
+    b8 ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
         for (const auto successor : m_nodes.at(node).m_successors) {
             if (successor == exit_node) {
-                out = successor;
+                out = node;
                 break;
             }
         }

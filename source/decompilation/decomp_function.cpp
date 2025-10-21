@@ -269,60 +269,60 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
 }
 
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
-    const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
-    const node_id loop_entry = head_node.get_direct_successor();
-    const node_id loop_tail = head_node.get_target();
-    auto loop_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node);
-    const node_id idom = m_graph.get_ipdom_at(loop_tail);
-    std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+    // const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
+    // const node_id loop_entry = head_node.get_direct_successor();
+    // const node_id loop_tail = head_node.get_target();
+    // auto loop_block = std::make_unique<ast::block>();
+    // std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node);
+    // const node_id idom = m_graph.get_ipdom_at(loop_tail);
+    // std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
-    reg_idx loop_var_reg = head_node.m_lines[0].m_instruction.operand1;
-    reg_idx loop_alternative_reg = head_node.get_last_line().m_instruction.operand1;
-    regs_to_emit.erase(loop_var_reg);
-    regs_to_emit.erase(loop_alternative_reg);
-    const std::string name = "i";
-    auto id = std::make_unique<ast::identifier>(name);
+    // reg_idx loop_var_reg = head_node.m_lines[0].m_instruction.operand1;
+    // reg_idx loop_alternative_reg = head_node.get_last_line().m_instruction.operand1;
+    // regs_to_emit.erase(loop_var_reg);
+    // regs_to_emit.erase(loop_alternative_reg);
+    // const std::string name = "i";
+    // auto id = std::make_unique<ast::identifier>(name);
 
-    auto declaration = std::make_unique<ast::variable_declaration>("u32", name, std::move(m_transformableExpressions[loop_var_reg]));
+    // auto declaration = std::make_unique<ast::variable_declaration>("u32", name, std::move(m_transformableExpressions[loop_var_reg]));
 
-    append_to_current_block(std::move(declaration));
-    m_transformableExpressions[loop_var_reg] = id->clone();
-    m_transformableExpressions[loop_var_reg]->set_type(make_type(ast::primitive_kind::U32));
-    m_registersToVars[loop_var_reg].push(id->copy());
+    // append_to_current_block(std::move(declaration));
+    // m_transformableExpressions[loop_var_reg] = id->clone();
+    // m_transformableExpressions[loop_var_reg]->set_type(make_type(ast::primitive_kind::U32));
+    // m_registersToVars[loop_var_reg].push(id->copy());
 
-    parse_basic_block(head_node);
+    // parse_basic_block(head_node);
 
-    expr_uptr condition = m_transformableExpressions[loop_alternative_reg]->clone();
+    // expr_uptr condition = m_transformableExpressions[loop_alternative_reg]->clone();
 
-    for (const auto reg : regs_to_emit) {
-        m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
-        regs_to_type.emplace(reg, std::monostate());
-    }
+    // for (const auto reg : regs_to_emit) {
+    //     m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+    //     regs_to_type.emplace(reg, std::monostate());
+    // }
 
-    m_blockStack.push(*loop_block);
-    emit_node(m_graph[loop_entry], head_node.m_startLine);
-    for (const auto reg : regs_to_emit) {
-        auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
-        load_expression_into_existing_var(reg, std::move(new_var));
-        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
-            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
-        }
-    }
-    load_expression_into_existing_var(loop_var_reg, id->copy());
-    m_blockStack.pop();
+    // m_blockStack.push(*loop_block);
+    // emit_node(m_graph[loop_entry], head_node.m_startLine);
+    // for (const auto reg : regs_to_emit) {
+    //     auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
+    //     load_expression_into_existing_var(reg, std::move(new_var));
+    //     if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
+    //         regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+    //     }
+    // }
+    // load_expression_into_existing_var(loop_var_reg, id->copy());
+    // m_blockStack.pop();
 
-    for (const auto reg : regs_to_emit) {
-        const auto &type = regs_to_type[reg];
-        m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
-        m_transformableExpressions[reg]->set_type(type);
-        const std::string type_name = type_to_declaration_string(type);
-        append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
-        m_registersToVars[reg].pop();
-    }
+    // for (const auto reg : regs_to_emit) {
+    //     const auto &type = regs_to_type[reg];
+    //     m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+    //     m_transformableExpressions[reg]->set_type(type);
+    //     const std::string type_name = type_to_declaration_string(type);
+    //     append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
+    //     m_registersToVars[reg].pop();
+    // }
 
-    auto full_while = std::make_unique<ast::while_stmt>(std::move(condition), std::move(loop_block));
-    append_to_current_block(std::move(full_while));
+    // auto full_while = std::make_unique<ast::while_stmt>(std::move(condition), std::move(loop_block));
+    // append_to_current_block(std::move(full_while));
 
     emit_node(m_graph[loop_tail], stop_node);
 }
