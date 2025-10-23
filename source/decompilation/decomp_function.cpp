@@ -268,7 +268,33 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     emit_node(m_graph[idom], stop_node);
 }
 
+[[nodiscard]] b8 decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {
+    constexpr Opcode standard_for_loop_pattern[] = {
+        Opcode::Move,
+        Opcode::Move,
+        Opcode::ILessThan,
+        Opcode::BranchIfNot,
+    };
+    const node_id idom = m_graph.get_ipdom_at(loop.m_headNode);
+    if (idom != loop.m_lastConditionalNode) {
+        return false;
+    }
+    const auto& lines = m_graph[loop.m_headNode].m_lines;
+    for (u32 i = 0; i < 4; ++i) {
+        if (lines[i].m_instruction.opcode != standard_for_loop_pattern[i]) {
+            return false;
+        }
+    }
+}
+
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
+    if (is_for_loop(loop)) {
+        emit_for_loop();
+    } else {
+        emit_while_loop();
+    }
+
+
     // const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
     // const node_id loop_entry = head_node.get_direct_successor();
     // const node_id loop_tail = head_node.get_target();
@@ -323,6 +349,22 @@ void decomp_function::emit_loop(const function_disassembly_line &detect_node_las
 
     // auto full_while = std::make_unique<ast::while_stmt>(std::move(condition), std::move(loop_block));
     // append_to_current_block(std::move(full_while));
+
+
+    const node_id loop_tail = m_graph[loop.m_headNode].get_target();
+    auto loop_block = std::make_unique<ast::block>();
+
+    const node_id proper_loop_head = m_graph.get_proper_loop_head(loop.m_headNode, loop.m_latchNode);
+    const node_id idom = m_graph.get_ipdom_at(loop_tail);
+
+    node_id proper_head, proper_destination, proper_successor;
+    const auto condition = make_condition(m_graph[loop.m_headNode], proper_head, proper_successor, proper_destination);
+
+    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_head]);
+
+    auto id = std::make_unique<ast::identifier>("i");
+
+    auto declaration = std::make_unique<ast::variable_declaration>("u32", "i", std::move(m_transformableExpressions[m_graph[proper_head].get_last_line().m_instruction.destination]));
 
     emit_node(m_graph[loop_tail], stop_node);
 }
