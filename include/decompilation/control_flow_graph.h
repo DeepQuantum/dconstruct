@@ -40,6 +40,7 @@ namespace dconstruct {
         std::vector<node_id> m_body;
         node_id m_headNode;
         node_id m_latchNode;
+        node_id m_lastConditionalNode;
     };
 
     class ControlFlowGraph {

@@ -283,7 +283,7 @@ namespace dconstruct {
                 continue;
             }
             control_flow_loop loop = 
-            m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
+            m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch, get_proper_loop_head(loop_head, loop_latch));
         }
     }
 

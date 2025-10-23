@@ -39,6 +39,11 @@ namespace dconstruct::dcompiler {
 
         void emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
 
+        [[nodiscard]] b8 is_for_loop(const control_flow_loop& loop) const noexcept;
+
+        void emit_for_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
+        void emit_while_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
+
         void parse_basic_block(const control_flow_node& node);
 
         inline std::string get_next_var() {
