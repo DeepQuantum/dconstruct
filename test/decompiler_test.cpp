@@ -433,7 +433,7 @@ namespace dconstruct::testing {
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
-        const std::string id = "#D14395D282B18D18";
+        const std::string id = "#14C6FC79122F4A87";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
