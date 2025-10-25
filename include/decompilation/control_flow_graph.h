@@ -109,7 +109,7 @@ namespace dconstruct {
         
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
 
-        [[nodiscard]] b8 get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept; 
+        b8 get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept; 
 
         void add_successors(std::vector<node_id>& nodes, const control_flow_node& node, const control_flow_node& stop) const;
     };

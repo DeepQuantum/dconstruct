@@ -3,7 +3,7 @@
 namespace dconstruct::ast {
     struct for_stmt : public statement {
         explicit for_stmt(stmnt_uptr&& init, expr_uptr&& condition, expr_uptr&& incr, stmnt_uptr&& body) noexcept :
-        m_condition(std::move(condition)), m_body(std::move(body)) {};
+        m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)) {};
 
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
