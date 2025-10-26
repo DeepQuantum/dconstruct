@@ -601,11 +601,10 @@ namespace dconstruct::testing {
         da.disassemble();
         const auto& funcs = da.get_functions();
         for (const auto& func : funcs) {
-            if (func.m_id[0] == '#') continue;
             try {
                 const auto dc_func = dcompiler::decomp_function{ &func, file };
-                std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dc_func.m_disassembly->m_id + ".dcpl");
-                out << dc_func.to_string();
+                std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)", std::ios::app);
+                out << dc_func.to_string() << "\n\n";
             } catch (...) {}
             
         }

@@ -4,7 +4,7 @@
 namespace dconstruct::ast {
 
 void while_stmt::pseudo(std::ostream& os) const {
-    os << "while(" << *m_condition << ") " << *m_body;
+    os << "while (" << *m_condition << ") " << *m_body;
 }
 
 
