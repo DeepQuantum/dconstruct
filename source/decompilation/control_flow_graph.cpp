@@ -282,8 +282,7 @@ namespace dconstruct {
                 std::cout << "backwards jump is not loop\n";
                 continue;
             }
-            control_flow_loop loop = 
-            m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch, get_proper_loop_head(loop_head, loop_latch));
+            m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
     }
 
@@ -422,24 +421,26 @@ namespace dconstruct {
         return ipdom;
     }
 
-    void ControlFlowGraph::add_successors(std::vector<node_id> &nodes, const control_flow_node& node, const control_flow_node& stop) const {
-        if (node.m_startLine == stop.m_startLine) {
+    void ControlFlowGraph::add_successors(std::vector<node_id> &nodes, const control_flow_node& node, const control_flow_node& stop, std::set<node_id>& checked) const {
+        if (node.m_startLine == stop.m_startLine || checked.contains(node.m_startLine)) {
             return;
         }
+        checked.insert(node.m_startLine);
         nodes.insert(nodes.end(), node.m_successors.begin(), node.m_successors.end());
         for (const auto& successor : node.m_successors) {
-            add_successors(nodes, m_nodes.at(successor), stop);
+            add_successors(nodes, m_nodes.at(successor), stop, checked);
         }
     }
 
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
         std::vector<node_id> body;
+        std::set<node_id> checked;
 
         const auto proper_head = get_proper_loop_head(head, latch);
         const auto& suc = m_nodes.at(proper_head).get_direct_successor();
         body.push_back(suc);
 
-        add_successors(body, m_nodes.at(suc), m_nodes.at(proper_head));
+        add_successors(body, m_nodes.at(suc), m_nodes.at(proper_head), checked);
 
         return body;
     }
@@ -591,30 +592,5 @@ namespace dconstruct {
         get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode, checked);
 
         return read_first;
-    }
-
-    b8 ControlFlowGraph::get_final_loop_condition_node(const node_id node, const node_id exit_node, node_id& out) const noexcept {
-        for (const auto successor : m_nodes.at(node).m_successors) {
-            if (successor == exit_node) {
-                out = node;
-                break;
-            }
-        }
-        if (out != -1) {
-            return true;
-        }
-        for (const auto successor : m_nodes.at(node).m_successors) {
-            if (get_final_loop_condition_node(successor, exit_node, out)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    [[nodiscard]] node_id ControlFlowGraph::get_proper_loop_head(const node_id head, const node_id latch) const noexcept {
-        const node_id exit_node = m_nodes.at(latch).m_endLine + 1;
-        node_id res = -1;
-        get_final_loop_condition_node(head, exit_node, res);
-        return res;
     }
 }

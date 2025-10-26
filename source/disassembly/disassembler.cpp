@@ -943,18 +943,27 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             u32 target = dest | (op2 << 8);
             b8 is_branching_target = true;
             while (is_branching_target) {
-                if (fn.m_lines[target].m_instruction.opcode == istr.opcode && fn.m_lines[target].m_instruction.operand1 == op1) {
-                    target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+                const auto& target_line = fn.m_lines[target];
+                const auto& target_op = target_line.m_instruction.opcode;
+                if (target_op == istr.opcode && target_line.m_instruction.operand1 == op1) {
+                    target = target_line.m_instruction.destination | (target_line.m_instruction.operand2 << 8);
                 }
-                else if (istr.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == op1) {
-                    target = fn.m_lines[target].m_location + 1;
+                else if (istr.opcode == Opcode::BranchIf && target_op == Opcode::BranchIfNot && target_line.m_instruction.operand1 == op1) {
+                    target = target_line.m_location + 1;
                 }
-                else if (istr.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.operand1 == op1) {
-                    target = fn.m_lines[target].m_location + 1;
+                else if (istr.opcode == Opcode::BranchIfNot && target_op == Opcode::BranchIf && target_line.m_instruction.operand1 == op1) {
+                    target = target_line.m_location + 1;
                 }
-                /*else if (istr.opcode == Opcode::BranchIf && fn.m_lines[target].m_instruction.opcode == Opcode::OpLogNot && fn.m_lines[target + 1].m_instruction.opcode == Opcode::BranchIfNot && fn.m_lines[target].m_instruction.operand1 == op1) {
-                    target = fn.m_lines[target + 1].m_instruction.destination | (fn.m_lines[target + 1].m_instruction.operand2 << 8);
-                }*/ else {
+                else if (target_op == Opcode::OpLogNot && target_line.m_instruction.operand1 == op1) {
+                    const auto& flipped_target_opcode = fn.m_lines[target + 1].m_instruction.opcode;
+                    if (istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIfNot) {
+                        target = fn.m_lines[target + 1].m_instruction.destination | (fn.m_lines[target + 1].m_instruction.operand2 << 8);
+                    }
+                    else if (istr.opcode == Opcode::BranchIfNot && flipped_target_opcode == Opcode::BranchIfNot || istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIf) {
+                        target = target + 3;
+                    }
+                }
+                else {
                     is_branching_target = false;
                 }
             }

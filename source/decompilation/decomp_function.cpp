@@ -275,7 +275,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
         Opcode::ILessThan,
         Opcode::BranchIfNot,
     };
-    if (loop.m_headNode != loop.m_lastConditionalNode) {
+    if (m_graph.get_ipdom_at(loop.m_headNode) != m_graph[loop.m_latchNode].m_endLine + 1) {
         return false;
     }
     const auto& lines = m_graph[loop.m_headNode].m_lines;
@@ -343,29 +343,53 @@ void decomp_function::emit_for_loop(const function_disassembly_line &detect_node
     emit_node(m_graph[loop_tail], stop_node);
 }
 
+void decomp_function::emit_while_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
+    const node_id loop_tail = m_graph[loop.m_headNode].get_target();
+    auto loop_block = std::make_unique<ast::block>();
+    const node_id head_ipdom = m_graph.get_ipdom_at(loop.m_headNode);
+    const node_id proper_loop_head = head_ipdom != m_graph[loop.m_latchNode].m_endLine + 1 ? head_ipdom : loop.m_headNode;
+    const node_id idom = m_graph.get_ipdom_at(loop_tail);
+
+    expr_uptr condition = nullptr;
+    if (proper_loop_head == m_graph[loop.m_headNode].get_target()) {
+        parse_basic_block(m_graph[loop.m_headNode]);
+        //par
+    }
+
+    reg_idx loop_var_reg = m_graph[proper_loop_head].m_lines.back().m_instruction.operand1;
+
+    std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
+
+    for (const auto reg : regs_to_emit) {
+        m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+    }
+
+    m_blockStack.push(*loop_block);
+    emit_node(m_graph[m_graph[proper_loop_head].get_direct_successor()], loop.m_headNode);
+    for (const auto reg : regs_to_emit) {
+        auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
+        load_expression_into_existing_var(reg, std::move(new_var));
+    }
+    m_blockStack.pop();
+
+    for (const auto reg : regs_to_emit) {
+        m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+        append_to_current_block(std::make_unique<ast::variable_declaration>("unknown", m_registersToVars[reg].top()->m_name.m_lexeme));
+        m_registersToVars[reg].pop();
+    }
+
+    auto while_loop = std::make_unique<ast::while_stmt>(std::move(condition), std::move(loop_block));
+    append_to_current_block(std::move(while_loop));
+
+    emit_node(m_graph[loop_tail], stop_node);
+}
+
 void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
     if (is_for_loop(loop)) {
         emit_for_loop(detect_node_last_line, loop, stop_node);
     } else {
-        return;
+        //emit_while_loop(detect_node_last_line, loop, stop_node);
     }
-
-    // const node_id loop_tail = m_graph[loop.m_headNode].get_target();
-    // auto loop_block = std::make_unique<ast::block>();
-
-    // const node_id proper_loop_head = m_graph.get_proper_loop_head(loop.m_headNode, loop.m_latchNode);
-    // const node_id idom = m_graph.get_ipdom_at(loop_tail);
-
-    // node_id proper_head, proper_destination, proper_successor;
-    // const auto condition = make_condition(m_graph[loop.m_headNode], proper_head, proper_successor, proper_destination);
-
-    // std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_head]);
-
-    // auto id = std::make_unique<ast::identifier>("i");
-
-    // auto declaration = std::make_unique<ast::variable_declaration>("u32", "i", std::move(m_transformableExpressions[m_graph[proper_head].get_last_line().m_instruction.destination]));
-
-    // emit_node(m_graph[loop_tail], stop_node);
 }
 
 void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
