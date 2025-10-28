@@ -46,7 +46,7 @@ namespace dconstruct {
     public:
         ControlFlowGraph() = default;
         explicit ControlFlowGraph(const function_disassembly *);
-        ControlFlowGraph(const function_disassembly* func, std::unordered_map<node_id, control_flow_node> nodes) : ControlFlowGraph(func) {
+        ControlFlowGraph(const function_disassembly* func, std::map<node_id, control_flow_node> nodes) : ControlFlowGraph(func) {
             m_nodes = std::move(nodes);
         };
         void find_loops();
@@ -57,7 +57,7 @@ namespace dconstruct {
         std::set<node_id> m_ipdomsEmitted;
 
 
-        [[nodiscard]] const std::unordered_map<node_id, control_flow_node>& get_nodes() const {
+        [[nodiscard]] const std::map<node_id, control_flow_node>& get_nodes() const {
             return m_nodes;
         }
 
@@ -85,7 +85,7 @@ namespace dconstruct {
         u16 get_register_read_count(const node_id start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
 
     private:
-        std::unordered_map<node_id, control_flow_node> m_nodes;
+        std::map<node_id, control_flow_node> m_nodes;
         std::unordered_map<node_id, node_id> m_immediatePostdominators;
         std::vector<control_flow_loop> m_loops;
         node_id m_returnNode;
@@ -108,7 +108,6 @@ namespace dconstruct {
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
 
 
-        void add_successors(std::vector<node_id>& nodes, const control_flow_node& node, const control_flow_node& stop, std::set<node_id>& checked) const;
     };
 
     

@@ -4,6 +4,10 @@
 
 namespace dconstruct::dcompiler{
 
+
+const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
+const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
+
 decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
     m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
 {
@@ -203,18 +207,21 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     }
     m_parsedNodes.insert(current_node_id);
 
-    parse_basic_block(node);
     const auto& last_line = node.get_last_line();
 
-    if (const auto loop = m_graph.get_loop_with_head(last_line.m_location + 1)) {
-        emit_loop(last_line, loop->get(), stop_node);
+    if (const auto loop = m_graph.get_loop_with_head(node.m_startLine)) {
+        emit_loop(loop->get(), stop_node);
     } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
+        parse_basic_block(node);
         const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
         if (idom == node.get_target()) {
             emit_single_branch(node, stop_node);
         } else {
             emit_branches(node, stop_node);
         }
+    }
+    else {
+        parse_basic_block(node);
     }
 }
 
@@ -287,8 +294,8 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     return true;
 }
 
-void decomp_function::emit_for_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
-    const control_flow_node& head_node = m_graph[detect_node_last_line.m_location + 1];
+void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id stop_node) {
+    const control_flow_node& head_node = m_graph[loop.m_headNode];
     const node_id loop_entry = head_node.get_direct_successor();
     const node_id loop_tail = head_node.get_target();
     auto loop_block = std::make_unique<ast::block>();
@@ -343,29 +350,54 @@ void decomp_function::emit_for_loop(const function_disassembly_line &detect_node
     emit_node(m_graph[loop_tail], stop_node);
 }
 
-void decomp_function::emit_while_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
+[[nodiscard]] expr_uptr decomp_function::make_loop_condition(const std::set<reg_idx>& regs_to_emit, const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit) {
+    auto it_start = m_graph.get_nodes().find(head_start);
+    auto it_end = m_graph.get_nodes().find(loop_entry);
+    expr_uptr condition = nullptr;
+    for (auto& it = it_start; it != it_end; ++it) {
+        const auto& current_node = it->second;
+        const auto& last_line = current_node.get_last_line();
+        const auto  target = last_line.m_target;
+
+        const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
+        const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
+        
+        parse_basic_block(current_node);
+        auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
+        if (condition == nullptr) {
+            condition = std::move(current_expression);
+        } else {
+            condition = std::make_unique<ast::logical_expr>(
+                is_and ? and_token : or_token, 
+                std::move(condition),
+                std::move(current_expression)
+            );
+        }
+    }
+    return condition;
+}
+
+void decomp_function::emit_while_loop(const control_flow_loop &loop, const node_id stop_node) {
     const node_id loop_tail = m_graph[loop.m_headNode].get_target();
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph.get_ipdom_at(loop.m_headNode);
-    const node_id proper_loop_head = head_ipdom != m_graph[loop.m_latchNode].m_endLine + 1 ? head_ipdom : loop.m_headNode;
+    const node_id exit_node = m_graph[loop.m_latchNode].m_endLine + 1;
+    const node_id proper_loop_head = head_ipdom != exit_node ? head_ipdom : loop.m_headNode;
     const node_id idom = m_graph.get_ipdom_at(loop_tail);
 
-    expr_uptr condition = nullptr;
-    if (proper_loop_head == m_graph[loop.m_headNode].get_target()) {
-        parse_basic_block(m_graph[loop.m_headNode]);
-        //par
-    }
-
-    reg_idx loop_var_reg = m_graph[proper_loop_head].m_lines.back().m_instruction.operand1;
+    const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].get_direct_successor()];
 
     std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
+
+    expr_uptr condition = make_loop_condition(regs_to_emit, loop.m_headNode, proper_loop_head, loop_entry.m_startLine, exit_node);
+    reg_idx loop_var_reg = m_graph[proper_loop_head].m_lines.back().m_instruction.operand1;
 
     for (const auto reg : regs_to_emit) {
         m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
     }
 
     m_blockStack.push(*loop_block);
-    emit_node(m_graph[m_graph[proper_loop_head].get_direct_successor()], loop.m_headNode);
+    emit_node(loop_entry, loop.m_headNode);
     for (const auto reg : regs_to_emit) {
         auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
         load_expression_into_existing_var(reg, std::move(new_var));
@@ -381,14 +413,14 @@ void decomp_function::emit_while_loop(const function_disassembly_line &detect_no
     auto while_loop = std::make_unique<ast::while_stmt>(std::move(condition), std::move(loop_block));
     append_to_current_block(std::move(while_loop));
 
-    emit_node(m_graph[loop_tail], stop_node);
+    emit_node(m_graph[exit_node], stop_node);
 }
 
-void decomp_function::emit_loop(const function_disassembly_line &detect_node_last_line, const control_flow_loop &loop, const node_id stop_node) {
+void decomp_function::emit_loop(const control_flow_loop &loop, const node_id stop_node) {
     if (is_for_loop(loop)) {
-        emit_for_loop(detect_node_last_line, loop, stop_node);
+        emit_for_loop(loop, stop_node);
     } else {
-        //emit_while_loop(detect_node_last_line, loop, stop_node);
+        emit_while_loop(loop, stop_node);
     }
 }
 
@@ -528,15 +560,13 @@ template<typename from, typename to>
     return condition;
 }
 
+
 [[nodiscard]] expr_uptr decomp_function::make_condition(
     const control_flow_node& condition_start,
     node_id& proper_head,
     node_id& proper_successor,
     node_id& proper_destination
 ) {
-    const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
-    const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
-
     const control_flow_node* current_node = &condition_start;
     const control_flow_node* failure_exit = nullptr;
     const control_flow_node* success_exit = nullptr;
