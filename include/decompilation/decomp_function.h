@@ -37,12 +37,12 @@ namespace dconstruct::dcompiler {
  
         void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, const std::set<reg_idx> &regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
 
-        void emit_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
+        void emit_loop(const control_flow_loop &loop, const node_id stop_node);
 
         [[nodiscard]] b8 is_for_loop(const control_flow_loop& loop) const noexcept;
 
-        void emit_for_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
-        void emit_while_loop(const function_disassembly_line &last_line, const control_flow_loop &loop, const node_id stop_node);
+        void emit_for_loop(const control_flow_loop &loop, const node_id stop_node);
+        void emit_while_loop(const control_flow_loop &loop, const node_id stop_node);
 
         void parse_basic_block(const control_flow_node& node);
 
@@ -63,6 +63,8 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] expr_uptr make_cast(const Instruction& istr, const ast::full_type& type);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
+
+        [[nodisacrd]] expr_uptr make_loop_condition(const std::set<reg_idx>& regs_to_emit, const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 
         [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const noexcept;
 

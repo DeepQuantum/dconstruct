@@ -73,8 +73,7 @@ namespace dconstruct {
     }
 
     [[nodiscard]] inline u16 control_flow_node::get_target() const {
-        const auto& istr = m_lines.back().m_instruction;
-        return istr.destination | (istr.operand2 << 8);
+        return m_lines.back().m_target;
     }
 
     [[nodiscard]] b8 control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
@@ -421,27 +420,17 @@ namespace dconstruct {
         return ipdom;
     }
 
-    void ControlFlowGraph::add_successors(std::vector<node_id> &nodes, const control_flow_node& node, const control_flow_node& stop, std::set<node_id>& checked) const {
-        if (node.m_startLine == stop.m_startLine || checked.contains(node.m_startLine)) {
-            return;
-        }
-        checked.insert(node.m_startLine);
-        nodes.insert(nodes.end(), node.m_successors.begin(), node.m_successors.end());
-        for (const auto& successor : node.m_successors) {
-            add_successors(nodes, m_nodes.at(successor), stop, checked);
-        }
-    }
-
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
         std::vector<node_id> body;
-        std::set<node_id> checked;
 
-        const auto proper_head = get_proper_loop_head(head, latch);
-        const auto& suc = m_nodes.at(proper_head).get_direct_successor();
-        body.push_back(suc);
-
-        add_successors(body, m_nodes.at(suc), m_nodes.at(proper_head), checked);
-
+        const node_id head_ipdom = get_ipdom_at(head);
+        const node_id proper_loop_head = head_ipdom != m_nodes.at(latch).m_endLine + 1 ? head_ipdom : head;
+        const auto& suc = m_nodes.at(proper_loop_head).get_direct_successor();
+        auto it_start = m_nodes.find(head);
+        auto it_end = m_nodes.find(latch);
+        for (auto& it = it_start; it != it_end; ++it) {
+            body.push_back(it->first);
+        }
         return body;
     }
 
@@ -569,9 +558,9 @@ namespace dconstruct {
         }
 
         get_registers_written_to(m_nodes.at(start_node.get_direct_successor()), ipdom, left, checked);
-        checked = std::set<node_id>();
+        checked.clear();
         get_registers_written_to(m_nodes.at(target), ipdom, right, checked);
-        checked = std::set<node_id>();
+        checked.clear();
 
         std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
         get_register_nature(ipdom, regs_to_check, read_first_ipdom, m_returnNode, checked);
@@ -588,7 +577,7 @@ namespace dconstruct {
             }
         }
         get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
-        checked = std::set<node_id>();
+        checked.clear();
         get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode, checked);
 
         return read_first;

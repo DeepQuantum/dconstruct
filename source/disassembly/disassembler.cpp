@@ -960,7 +960,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                         target = fn.m_lines[target + 1].m_instruction.destination | (fn.m_lines[target + 1].m_instruction.operand2 << 8);
                     }
                     else if (istr.opcode == Opcode::BranchIfNot && flipped_target_opcode == Opcode::BranchIfNot || istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIf) {
-                        target = target + 3;
+                        target = target + 2;
                     }
                 }
                 else {
