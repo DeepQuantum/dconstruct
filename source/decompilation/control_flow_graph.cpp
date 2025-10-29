@@ -72,7 +72,7 @@ namespace dconstruct {
         return m_lines.back();
     }
 
-    [[nodiscard]] inline u16 control_flow_node::get_target() const {
+    [[nodiscard]] inline u16 control_flow_node::get_adjusted_target() const {
         return m_lines.back().m_target;
     }
 
@@ -581,5 +581,16 @@ namespace dconstruct {
         get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode, checked);
 
         return read_first;
+    }
+
+    [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept {
+        auto it_start = m_nodes.find(loop.m_headNode);
+        auto it_end = m_nodes.find(loop.m_latchNode);
+        for (auto& it = it_end; it != it_start; --it) {
+            if (it->second.get_target() == exit_node) {
+                return it->second;
+            }
+        }
+        return m_nodes.at(loop.m_headNode);
     }
 }

@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 
-namespace dconstruct::dcompiler{
+namespace dconstruct::dcompiler {
 
 
 const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
@@ -357,18 +357,17 @@ void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id
     for (auto& it = it_start; it != it_end; ++it) {
         const auto& current_node = it->second;
         const auto& last_line = current_node.get_last_line();
-        const auto  target = last_line.m_target;
 
         const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
         const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
-        
+
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
         if (condition == nullptr) {
             condition = std::move(current_expression);
         } else {
             condition = std::make_unique<ast::logical_expr>(
-                is_and ? and_token : or_token, 
+                is_and ? and_token : or_token,
                 std::move(condition),
                 std::move(current_expression)
             );
@@ -382,7 +381,7 @@ void decomp_function::emit_while_loop(const control_flow_loop &loop, const node_
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph.get_ipdom_at(loop.m_headNode);
     const node_id exit_node = m_graph[loop.m_latchNode].m_endLine + 1;
-    const node_id proper_loop_head = head_ipdom != exit_node ? head_ipdom : loop.m_headNode;
+    const node_id proper_loop_head = m_graph.get_final_loop_condition_node(loop, exit_node).m_startLine;
     const node_id idom = m_graph.get_ipdom_at(loop_tail);
 
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].get_direct_successor()];

@@ -16,7 +16,7 @@ file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/ast/*.cpp"
     "${SOURCE_DIR}/base/*.cpp"
 )
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
 FetchContent_Declare(
