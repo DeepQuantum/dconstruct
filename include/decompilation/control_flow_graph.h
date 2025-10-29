@@ -33,7 +33,7 @@ namespace dconstruct {
         
         [[nodiscard]] const function_disassembly_line& get_last_line() const;
 
-        [[nodiscard]] u16 get_target() const;
+        [[nodiscard]] u16 get_adjusted_target() const;
     };
 
     struct control_flow_loop {
@@ -83,6 +83,7 @@ namespace dconstruct {
 
         void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
         u16 get_register_read_count(const node_id start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
+        [[nodiscard]] const control_flow_node& get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept;
 
     private:
         std::map<node_id, control_flow_node> m_nodes;
@@ -106,6 +107,7 @@ namespace dconstruct {
         [[nodiscard]] std::vector<node_id> collect_loop_body(const node_id, const node_id) const;
         
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;
+
 
 
     };
