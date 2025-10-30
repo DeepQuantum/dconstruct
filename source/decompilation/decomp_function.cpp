@@ -11,7 +11,10 @@ const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
 decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
     m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
 {
+#ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly->m_id << '\n';
+#endif
+
     m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(49);
@@ -47,7 +50,9 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 }
 
 void decomp_function::parse_basic_block(const control_flow_node &node) {
+#ifdef _DEBUG
     std::cout << "parsing node " << node.m_startLine << '\n';
+#endif
 
 
     for (const auto &line : node.m_lines) {
@@ -196,13 +201,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 }
 
 void decomp_function::emit_node(const control_flow_node& node, const node_id stop_node) {
+#ifdef _DEBUG
     std::cout << "emitting node " << std::hex << node.m_startLine << '\n';
+#endif
 
     const node_id current_node_id = node.m_startLine;
-    if (current_node_id == stop_node) {
-        return;
-    }
-    if (m_parsedNodes.contains(current_node_id)) {
+    if (current_node_id == stop_node || m_parsedNodes.contains(current_node_id)) {
         return;
     }
     m_parsedNodes.insert(current_node_id);
@@ -211,13 +215,20 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 
     if (const auto loop = m_graph.get_loop_with_head(node.m_startLine)) {
         emit_loop(loop->get(), stop_node);
-    } else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
+    }
+    else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         parse_basic_block(node);
         const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
-        if (idom == node.get_target()) {
+        if (idom == node.get_adjusted_target()) {
             emit_single_branch(node, stop_node);
         } else {
             emit_branches(node, stop_node);
+        }
+    }
+    else if (const auto loop = m_graph.get_loop_with_head(node.get_direct_successor())) {
+        if (node.get_direct_successor() != stop_node) {
+            parse_basic_block(node);
+            emit_loop(loop->get(), stop_node);
         }
     }
     else {
@@ -297,7 +308,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
 void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id stop_node) {
     const control_flow_node& head_node = m_graph[loop.m_headNode];
     const node_id loop_entry = head_node.get_direct_successor();
-    const node_id loop_tail = head_node.get_target();
+    const node_id loop_tail = head_node.get_adjusted_target();
     auto loop_block = std::make_unique<ast::block>();
     std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(head_node);
     const node_id idom = m_graph.get_ipdom_at(loop_tail);
@@ -377,7 +388,7 @@ void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id
 }
 
 void decomp_function::emit_while_loop(const control_flow_loop &loop, const node_id stop_node) {
-    const node_id loop_tail = m_graph[loop.m_headNode].get_target();
+    const node_id loop_tail = m_graph[loop.m_headNode].get_adjusted_target();
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph.get_ipdom_at(loop.m_headNode);
     const node_id exit_node = m_graph[loop.m_latchNode].m_endLine + 1;
@@ -500,6 +511,9 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
 }
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
+    if (m_transformableExpressions[dst] == nullptr) {
+        m_transformableExpressions[dst] = std::make_unique<ast::identifier>("upsi pupsi");
+    }
     auto& expr = m_transformableExpressions[dst];
     auto rhs_ptr = dynamic_cast<ast::identifier*>(expr.get());
     if (rhs_ptr && rhs_ptr->m_name == var->m_name) {
