@@ -55,7 +55,7 @@ namespace dconstruct {
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
         for (const auto& line : m_lines) {
-            ss << line.m_text << "   " << html_escape(line.m_comment) << "&#160;&#160;<BR/>";
+            ss << line.m_text << "&#160;&#160;<BR/>";
         }
 
         ss << "</FONT></TD></TR></TABLE>";
@@ -446,7 +446,7 @@ namespace dconstruct {
             return;
         }
         checked.insert(start_node);
-        for (reg_idx i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
+        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
             const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
             if (regs_to_check.empty()) {
                 return;
@@ -550,7 +550,7 @@ namespace dconstruct {
         std::set<node_id> checked;
         node_id ipdom = get_ipdom_at(start_node.m_startLine);
 
-        const u16 target = start_node.get_target();
+        const u16 target = start_node.get_adjusted_target();
 
         if (ipdom == start_node.m_startLine) {
             result.insert(target);
@@ -563,7 +563,7 @@ namespace dconstruct {
         checked.clear();
 
         std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
-        get_register_nature(ipdom, regs_to_check, read_first_ipdom, m_returnNode, checked);
+        get_register_nature(ipdom, regs_to_check, read_first_ipdom, -1, checked);
 
         return read_first_ipdom;
     }
@@ -578,7 +578,7 @@ namespace dconstruct {
         }
         get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
         checked.clear();
-        get_register_nature(head_node.get_target(), regs_to_check, read_first, m_returnNode, checked);
+        get_register_nature(head_node.get_adjusted_target(), regs_to_check, read_first, m_returnNode, checked);
 
         return read_first;
     }
@@ -587,7 +587,7 @@ namespace dconstruct {
         auto it_start = m_nodes.find(loop.m_headNode);
         auto it_end = m_nodes.find(loop.m_latchNode);
         for (auto& it = it_end; it != it_start; --it) {
-            if (it->second.get_target() == exit_node) {
+            if (it->second.get_adjusted_target() == exit_node) {
                 return it->second;
             }
         }
