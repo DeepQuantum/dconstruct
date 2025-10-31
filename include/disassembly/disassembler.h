@@ -33,6 +33,32 @@ namespace dconstruct {
         b8 m_emitOnce = false;
     };
 
+    struct anonymous_function_name {
+        std::string m_state;
+        std::string m_track;
+        std::string m_event;
+        std::string m_idx;
+
+        static constexpr std::string_view SEP = "@";
+
+        [[nodiscard]] std::string get() const noexcept {
+            const size_t total_size =
+                m_state.size() + m_track.size() + m_event.size() + m_idx.size() +
+                3 * SEP.size();
+
+            std::string result;
+            result.reserve(total_size);
+            result += m_state;
+            result += SEP;
+            result += m_track;
+            result += SEP;
+            result += m_event;
+            result += SEP;
+            result += m_idx;
+            return result;
+        }
+    };
+
     class Disassembler {
     public:
         Disassembler(BinaryFile* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
@@ -40,7 +66,7 @@ namespace dconstruct {
         void disassemble();
         u64 m_versionNumber = 0x1;
         virtual ~Disassembler() {};
-        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const sid64 name_id = 0);
+        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table);
 
         [[nodiscard]] const std::vector<function_disassembly>& get_functions() const noexcept {
@@ -83,7 +109,7 @@ namespace dconstruct {
         void insert_unmapped_struct(const structs::unmapped*, const u32);
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);
-        void insert_on_block(const SsOnBlock* block, const u32);
+        void insert_on_block(const SsOnBlock* block, const u32, anonymous_function_name& state_name);
         void set_register_types(Register&, Register&, const ast::full_type type);
         void process_instruction(const u32, function_disassembly &);
         void insert_function_disassembly_text(const function_disassembly& functionDisassembly, const u32 indent);
