@@ -18,7 +18,7 @@ namespace dconstruct::testing {
         
         FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
         const ScriptLambda *lambda_ptr = disassembler.get_value_ptr_at<ScriptLambda>(offset); 
-        const function_disassembly fd = disassembler.create_function_disassembly(lambda_ptr);
+        const function_disassembly fd = disassembler.create_function_disassembly(lambda_ptr, "");
         return fd;
     }
     

@@ -248,7 +248,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
-            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name_id);
+            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), lookup(name_id));
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
             break;
@@ -377,41 +377,43 @@ void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
     insert_span("\n");
 }
 
-void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent) {
+void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, anonymous_function_name& function_name) {
     switch (block->m_blockType) {
         case 0: {
-            insert_span("ON start {\n", indent);
+            function_name.m_event = "start";
             break;
         }
         case 1: {
-            insert_span("ON end {\n", indent);
+            function_name.m_event = "end";
             break;
         }
         case 2: {
-            insert_span_indent("%*sON event %s {\n", indent, lookup(block->m_blockEventId));
+            function_name.m_event = std::string("event_").append(lookup(block->m_blockEventId));
             break;
         }
         case 3: {
-            insert_span("ON update {\n",indent);
+            function_name.m_event = "update";
             break;
         }
         case 4: {
-            insert_span("ON virtual {\n",indent);
+            function_name.m_event = "virtual";
             break;
         }
         default: {
-            insert_span_indent("%*sON UNKNOWN [%d] {\n", indent, block->m_blockType);
+            function_name.m_event = "unknown";
             break;
         }
     }
+    insert_span_fmt("ON %s {\n", function_name.m_event.c_str());
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        const char* track_name = lookup(track_ptr->m_trackId);
-        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, track_name);
+        function_name.m_track = lookup(track_ptr->m_trackId);
+        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, function_name.m_track.c_str());
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
-            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda);
+            function_name.m_idx = std::to_string(j);
+            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name.get());
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
             m_functions.push_back(std::move(function));
             insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
@@ -443,14 +445,15 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
             }
         }
     }
+    anonymous_function_name anon_name;
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        const char *state_name = lookup(state_ptr->m_stateId);
-        insert_span_indent("%*sSTATE %s {\n", indent + m_options.m_indentPerLevel, state_name);
+        anon_name.m_state = lookup(state_ptr->m_stateId);
+        insert_span_indent("%*sSTATE %s {\n", indent + m_options.m_indentPerLevel, anon_name.m_state.c_str());
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
-            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_options.m_indentPerLevel * 2);
+            insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_options.m_indentPerLevel * 2, anon_name);
         }
-        insert_span_indent("%*s} END STATE %s\n\n", indent + m_options.m_indentPerLevel, state_name);
+        insert_span_indent("%*s} END STATE %s\n\n", indent + m_options.m_indentPerLevel, anon_name.m_state.c_str());
     }
 }
 
@@ -463,7 +466,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return false;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const sid64 name_id) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -473,7 +476,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
-        name_id ? lookup(name_id) : "anonymous@" + std::to_string(get_offset(lambda->m_pOpcode))
+        name
     };
 
 
