@@ -77,12 +77,12 @@ namespace dconstruct {
 
         void get_registers_written_to(const control_flow_node& node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const;
 
-        [[nodiscard]] std::set<reg_idx> get_branch_phi_registers(const control_flow_node& start_node) const noexcept;
+        [[nodiscard]] std::set<reg_idx> get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept;
         [[nodiscard]] std::set<reg_idx> get_loop_phi_registers(const control_flow_node& head_node) const noexcept;
 
 
-        void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
-        u16 get_register_read_count(const node_id start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const u32 start_line = 0) const noexcept;
+        void get_register_nature(const node_id start_node, std::set<reg_idx>& check_regs, std::set<reg_idx>& read_first, const node_id stop_node, std::set<node_id>& checked, const b8 return_is_read, const u32 start_line = 0) const noexcept;
+        u16 get_register_read_count(const node_id start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const b8 return_is_read, const u32 start_line = 0) const noexcept;
         [[nodiscard]] const control_flow_node& get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept;
 
     private:

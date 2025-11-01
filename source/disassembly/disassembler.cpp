@@ -413,7 +413,7 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, ano
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
             function_name.m_idx = std::to_string(j);
-            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name.get());
+            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name.get(), true);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
             m_functions.push_back(std::move(function));
             insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
@@ -466,7 +466,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return false;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const b8 is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -476,7 +476,8 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
-        name
+        name,
+        is_script_function
     };
 
 
@@ -499,7 +500,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return functionDisassembly;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table, const b8 is_script_function) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
 
@@ -510,7 +511,8 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(symbol_table),
-        name
+        name,
+        is_script_function
     };
 
     b8 counting_args = true;

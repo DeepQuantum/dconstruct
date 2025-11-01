@@ -440,6 +440,7 @@ namespace dconstruct {
         std::set<reg_idx>& read_first, 
         const node_id stop_node,
         std::set<node_id>& checked,
+        const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
         if (checked.contains(start_node)) {
@@ -454,7 +455,9 @@ namespace dconstruct {
             const Instruction& istr = line.m_instruction;
             if (regs_to_check.contains(istr.destination) && istr.opcode == Opcode::Return) {
                 regs_to_check.erase(istr.destination);
-                read_first.insert(istr.destination);
+                if (return_is_read) {
+                    read_first.insert(istr.destination);
+                }
                 return;
             }
             if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs_to_check.contains(istr.destination)) {
@@ -479,7 +482,7 @@ namespace dconstruct {
                 break;
             }
             if (successor != stop_node) {
-                get_register_nature(successor, regs_to_check, read_first, stop_node, checked);
+                get_register_nature(successor, regs_to_check, read_first, stop_node, checked, return_is_read);
             }
         }
     }
@@ -489,6 +492,7 @@ namespace dconstruct {
         const reg_idx reg_to_check,
         const node_id stop_node,
         std::set<node_id>& checked,
+        const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
         if (checked.contains(start_node)) {
@@ -503,7 +507,10 @@ namespace dconstruct {
             const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
             const Instruction& istr = line.m_instruction;
             if (reg_to_check == istr.destination && istr.opcode == Opcode::Return) {
-                return ++count;
+                if (return_is_read) {
+                    return ++count;
+                }
+                return count;
             }
             if (reg_to_check == istr.destination && istr.destination == istr.operand1 && istr.op1_is_reg()) {
                 return ++count;
@@ -525,7 +532,7 @@ namespace dconstruct {
             if (count >= 2) {
                 break;
             }
-            count += get_register_read_count(successor, reg_to_check, stop_node, checked);
+            count += get_register_read_count(successor, reg_to_check, stop_node, checked, return_is_read);
         }
         return count;
     }
@@ -545,7 +552,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node) const noexcept {
+    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept {
         std::set<reg_idx> regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
         std::set<node_id> checked;
         node_id ipdom = get_ipdom_at(start_node.m_startLine);
@@ -563,7 +570,7 @@ namespace dconstruct {
         checked.clear();
 
         std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
-        get_register_nature(ipdom, regs_to_check, read_first_ipdom, -1, checked);
+        get_register_nature(ipdom, regs_to_check, read_first_ipdom, -1, checked, return_is_read);
 
         return read_first_ipdom;
     }
@@ -578,7 +585,7 @@ namespace dconstruct {
         }
         get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
         checked.clear();
-        get_register_nature(head_node.get_adjusted_target(), regs_to_check, read_first, m_returnNode, checked);
+        get_register_nature(head_node.get_adjusted_target(), regs_to_check, read_first, m_returnNode, checked, true);
 
         return read_first;
     }

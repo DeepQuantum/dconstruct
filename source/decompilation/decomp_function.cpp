@@ -38,7 +38,8 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
-    out << ast::type_to_declaration_string(m_returnType) << ' ' << m_disassembly->m_id << '(';
+    const std::string return_type = m_disassembly->m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
+    out << return_type << ' ' << m_disassembly->m_id << '(';
     for (u8 i = 0; i < m_arguments.size(); ++i) {
         out << m_arguments[i].m_typeName << ' ' << m_arguments[i].m_identifier;
         if (i != m_arguments.size() - 1) {
@@ -102,7 +103,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
                 std::set<node_id> checked;
-                u16 call_usage_count = m_graph.get_register_read_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, line.m_location - node.m_startLine + 1);
+                u16 call_usage_count = m_graph.get_register_read_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, !m_disassembly->m_isScriptFunction, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 } else if (call_usage_count == 1) {
@@ -188,8 +189,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 continue;
             }
 
-            case Opcode::Return: insert_return(istr.destination); break;
-
+            case Opcode::Return:{
+                if (!m_disassembly->m_isScriptFunction) {
+                    insert_return(istr.destination);
+                }
+                break;
+            }
             default: {
                 throw std::runtime_error("");
             }
@@ -243,7 +248,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     node_id proper_successor, proper_destination, proper_head;
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
+    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
     std::unordered_map<reg_idx, expr_uptr> regs_to_potential_inits;
 
@@ -442,7 +447,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
+    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
     if (!idom_already_emitted) {
