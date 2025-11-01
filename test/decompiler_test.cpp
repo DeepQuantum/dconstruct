@@ -329,7 +329,7 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const std::set<reg_idx> registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
+        const std::set<reg_idx> registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0], dc_func.m_disassembly->m_isScriptFunction);
         ASSERT_TRUE(registers_to_emit.contains(0));
     }
 
@@ -585,7 +585,7 @@ namespace dconstruct::testing {
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
-        const std::string id = "anonymous@8344";
+        const std::string id = "setup-spawn-config@main@start@0";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());

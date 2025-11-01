@@ -66,8 +66,8 @@ namespace dconstruct {
         void disassemble();
         u64 m_versionNumber = 0x1;
         virtual ~Disassembler() {};
-        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name);
-        [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table);
+        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name, const b8 is_script_function = false);
+        [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table, const b8 is_script_function = false);
 
         [[nodiscard]] const std::vector<function_disassembly>& get_functions() const noexcept {
             return m_functions;
