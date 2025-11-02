@@ -8,7 +8,7 @@ namespace dconstruct::ast {
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
 
-        [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
+        [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 
         expr_uptr m_condition;
         stmnt_uptr m_body;

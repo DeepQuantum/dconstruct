@@ -30,7 +30,7 @@ namespace dconstruct {
 
     struct DisassemblerOptions {
         u8 m_indentPerLevel = 2;
-        b8 m_emitOnce = false;
+        bool m_emitOnce = false;
     };
 
     struct anonymous_function_name {
@@ -66,8 +66,8 @@ namespace dconstruct {
         void disassemble();
         u64 m_versionNumber = 0x1;
         virtual ~Disassembler() {};
-        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name, const b8 is_script_function = false);
-        [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table, const b8 is_script_function = false);
+        [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name, const bool is_script_function = false);
+        [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table, const bool is_script_function = false);
 
         [[nodiscard]] const std::vector<function_disassembly>& get_functions() const noexcept {
             return m_functions;
@@ -97,10 +97,10 @@ namespace dconstruct {
         template<TextFormat text_format = TextFormat{}, typename... Args> 
         void insert_span_indent(const char*, const u32, Args ...);
         [[nodiscard]] const char* lookup(const sid64 hash);
-        [[nodiscard]] b8 is_unmapped_sid(const location) const noexcept;
+        [[nodiscard]] bool is_unmapped_sid(const location) const noexcept;
         void insert_header_line();
-        [[nodiscard]] b8 is_possible_float(const f32* ptr) const noexcept;
-        [[nodiscard]] b8 is_possible_i32(const i32* ptr) const noexcept;
+        [[nodiscard]] bool is_possible_float(const f32* ptr) const noexcept;
+        [[nodiscard]] bool is_possible_i32(const i32* ptr) const noexcept;
         u8 insert_struct_or_arraylike(const location, const u32);
         [[nodiscard]] u32 get_size_array(const location, const u32);
         void insert_anonymous_array(const location, const u32);
@@ -117,8 +117,8 @@ namespace dconstruct {
         void insert_goto_label(const std::vector<u32>& labels, const function_disassembly_line& line, const u32 func_size, const std::vector<function_disassembly_line>& lines);
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
-        [[nodiscard]] b8 pointer_gets_called(const u32, const u32, const function_disassembly&) const;
-        b8 handle_immediate_instruction(const Instruction& istr, StackFrame& frame, function_disassembly_line& line,const function_disassembly& fn,char* disassembly_text,char* varying, const u32 disassembly_text_size, char* interpreted) const noexcept;
+        [[nodiscard]] bool pointer_gets_called(const u32, const u32, const function_disassembly&) const;
+        bool handle_immediate_instruction(const Instruction& istr, StackFrame& frame, function_disassembly_line& line,const function_disassembly& fn,char* disassembly_text,char* varying, const u32 disassembly_text_size, char* interpreted) const noexcept;
 
         static constexpr u32 INTERPRETED_BUFFER_SIZE = 512;
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;

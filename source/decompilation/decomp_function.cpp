@@ -8,18 +8,17 @@ namespace dconstruct::dcompiler {
 static const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
 
-decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
+decomp_function::decomp_function(const function_disassembly &func, const BinaryFile &current_file) :
     m_disassembly{func}, 
     m_file{current_file}, 
     m_graph{func}, 
-    m_symbolTable{func->m_stackFrame.m_symbolTable}, 
     m_parsedNodes(m_graph.m_nodes.size(), false), 
     m_ipdomsEmitted(m_graph.m_nodes.size(), false)
 {
 #ifdef _DEBUG
-    std::cout << "parsing graph " << m_disassembly->m_id << '\n';
+    std::cout << "parsing graph " << m_disassembly.m_id << '\n';
     if (m_graph.m_nodes.size() > 1) {
-        m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
+        m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly.m_id + ".svg");
     }
 #endif
 
@@ -28,13 +27,13 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
-    for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < 128; ++i) {
+    for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
         m_transformableExpressions.emplace_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)}));
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
 
-    for (reg_idx i = 0; i < func->m_stackFrame.m_registerArgs.size(); ++i) {
-        const auto& arg_type = func->m_stackFrame.m_registerArgs.at(i);
+    for (reg_idx i = 0; i < func.m_stackFrame.m_registerArgs.size(); ++i) {
+        const auto& arg_type = func.m_stackFrame.m_registerArgs.at(i);
         m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
     }
 
@@ -44,8 +43,8 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
-    const std::string return_type = m_disassembly->m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
-    out << return_type << ' ' << m_disassembly->m_id << '(';
+    const std::string return_type = m_disassembly.m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
+    out << return_type << ' ' << m_disassembly.m_id << '(';
     for (u8 i = 0; i < m_arguments.size(); ++i) {
         out << type_to_declaration_string(m_arguments[i].m_type) << ' ' << m_arguments[i].m_identifier;
         if (i != m_arguments.size() - 1) {
@@ -69,6 +68,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
         const Instruction &istr = line.m_instruction;
 
         expr_uptr generated_expression = nullptr;
+
+        const auto& symbol_table = m_disassembly.m_stackFrame.m_symbolTable.first;
 
         switch(istr.opcode) {
             case Opcode::IAdd:
@@ -106,15 +107,15 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr); break;
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>()); break;
-            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<f32>()); break;
-            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<i32>(istr.operand1 * 8)); break;
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>()); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>()); break;
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1 * 8)); break;
 
             case Opcode::Call:
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
                 node_set checked(m_graph.m_nodes.size(), false);
-                u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, m_graph.m_nodes.back().m_index, checked, !m_disassembly->m_isScriptFunction, line.m_location - node.m_startLine + 1);
+                u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, m_graph.m_nodes.back().m_index, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 } else if (call_usage_count == 1) {
@@ -127,12 +128,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::LoadStaticFloatImm: {
-                generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<f32>(istr.operand1 * 8));
+                generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>(istr.operand1 * 8));
                 break;
             }
             case Opcode::LoadStaticPointerImm: {
-                if (m_symbolTable.first.get<p64>(istr.operand1 * 8) >= (p64)(m_file.m_strings.m_ptr)) {
-                    generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<const char*>(istr.operand1 * 8));
+                if (symbol_table.get<p64>(istr.operand1 * 8) >= (p64)(m_file.m_strings.m_ptr)) {
+                    generated_expression = std::make_unique<ast::literal>(symbol_table.get<const char*>(istr.operand1 * 8));
                 } else {
                     generated_expression = std::make_unique<ast::literal>("");
                 }
@@ -140,16 +141,16 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
-                const sid64 sid = m_symbolTable.first.get<sid64>(istr.operand1 * 8);
+                const sid64 sid = symbol_table.get<sid64>(istr.operand1 * 8);
                 const std::string& name = m_file.m_sidCache.at(sid);
                 expr_uptr lit = std::make_unique<ast::literal>(sid_literal{ sid, name });
-                if (!std::holds_alternative<ast::function_type>(m_symbolTable.second[istr.operand1])) {
+                if (!std::holds_alternative<ast::function_type>(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1])) {
                     generated_expression = std::move(lit);
-                    generated_expression->set_type(m_symbolTable.second[istr.operand1]);
+                    generated_expression->set_type(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1]);
                 }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(lit);
-                    m_transformableExpressions[istr.destination]->set_type(m_symbolTable.second[istr.operand1]);
+                    m_transformableExpressions[istr.destination]->set_type(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1]);
                 }
                 break;
             }
@@ -191,7 +192,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::Return:{
-                if (!m_disassembly->m_isScriptFunction) {
+                if (!m_disassembly.m_isScriptFunction) {
                     insert_return(istr.destination);
                 }
                 break;
@@ -225,14 +226,14 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     }
     else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         parse_basic_block(node);
-        if (node.m_ipdom == node.m_targetSuccessor) {
+        if (node.m_ipdom == node.m_targetNode) {
             emit_single_branch(node, stop_node);
         } else {
             emit_branches(node, stop_node);
         }
     }
-    else if (const auto loop = m_graph.get_loop_with_head(node.m_directSuccessor)) {
-        if (node.m_directSuccessor != stop_node) {
+    else if (const auto loop = m_graph.get_loop_with_head(node.m_followingNode)) {
+        if (node.m_followingNode != stop_node) {
             parse_basic_block(node);
             emit_loop(loop->get(), stop_node);
         }
@@ -249,9 +250,9 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
-    const control_flow_node* target = &m_graph[node.m_targetSuccessor];
+    const control_flow_node* target = &m_graph[node.m_targetNode];
 
-    const control_flow_node* current_node = &m_graph[node.m_directSuccessor];
+    const control_flow_node* current_node = &m_graph[node.m_followingNode];
 
     expr_uptr final_condition = m_transformableExpressions[check_register]->clone();
 
@@ -259,7 +260,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
         final_condition = std::make_unique<ast::compare_expr>(token, m_transformableExpressions[check_register]->clone(), std::move(final_condition));
-        current_node = &m_graph[current_node->m_directSuccessor];
+        current_node = &m_graph[current_node->m_followingNode];
     }
 
     auto id = std::make_unique<ast::identifier>(get_next_var());
@@ -295,8 +296,8 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
 
 void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id stop_node) {
     const control_flow_node& head_node = m_graph[loop.m_headNode];
-    const node_id loop_entry = head_node.m_directSuccessor;
-    const node_id loop_tail = head_node.m_targetSuccessor;
+    const node_id loop_entry = head_node.m_followingNode;
+    const node_id loop_tail = head_node.m_targetNode;
     auto loop_block = std::make_unique<ast::block>();
     reg_set regs_to_emit = m_graph.get_loop_phi_registers(head_node);
     const node_id idom = m_graph[loop_tail].m_ipdom;
@@ -384,14 +385,14 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
 }
 
 void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_id stop_node) {
-    const node_id loop_tail = m_graph[loop.m_headNode].m_targetSuccessor;
+    const node_id loop_tail = m_graph[loop.m_headNode].m_targetNode;
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom; //m_graph.get_ipdom_at(loop.m_headNode);
     const node_id exit_node = loop.m_latchNode + 1;
     const node_id proper_loop_head = m_graph.get_final_loop_condition_node(loop, exit_node).m_index;
     const node_id idom = m_graph[loop_tail].m_ipdom; //m_graph.get_ipdom_at(loop_tail);
 
-    const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_directSuccessor];
+    const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_followingNode];
 
     reg_set regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
     reg_idx alt_loop_var_reg = -1;
@@ -467,7 +468,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
+    reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
     if (!idom_already_emitted) {
@@ -633,12 +634,12 @@ template<typename from, typename to>
 
     expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
     proper_head = current_node->m_index;
-    proper_successor = current_node->m_directSuccessor;
-    proper_destination = current_node->m_targetSuccessor;
+    proper_successor = current_node->m_followingNode;
+    proper_destination = current_node->m_targetNode;
 
     while (true) {
         const auto& last_line = current_node->m_lines.back();
-        const auto  target = current_node->m_targetSuccessor;
+        const auto  target = current_node->m_targetNode;
 
         const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
         const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
@@ -661,7 +662,7 @@ template<typename from, typename to>
                     get_expression_as_condition(last_line.m_instruction.operand1)
                 );
                 proper_head = current_node->m_index;
-                proper_successor = current_node->m_directSuccessor;
+                proper_successor = current_node->m_followingNode;
                 proper_destination = target;
             }
         }
@@ -675,11 +676,11 @@ template<typename from, typename to>
                 get_expression_as_condition(last_line.m_instruction.operand1)
             );
             proper_head = current_node->m_index;
-            proper_successor = current_node->m_directSuccessor;
+            proper_successor = current_node->m_followingNode;
             proper_destination = target;
         }
 
-        current_node = &m_graph[current_node->m_directSuccessor];
+        current_node = &m_graph[current_node->m_followingNode];
     }
 
     return condition;
