@@ -175,7 +175,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::I64 })); break;
             }
             case Opcode::LoadPointer: {
-                generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::ptr_type {} })); break;
+                generated_expression = apply_unary_op<ast::dereference_expr>(istr); break;
             }
 
             case Opcode::AssertPointer: {
@@ -557,13 +557,18 @@ template<typename from, typename to>
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
     if (old_lit == nullptr) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
-        const std::string type_name = ast::type_to_declaration_string(type);
-        auto cast = std::make_unique<ast::cast_expr>(
-            type_name,
-            is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
-        );
-        cast->set_type(type);
-        return cast;
+        const ast::cast_expr* old_cast = dynamic_cast<ast::cast_expr*>(op2.get());
+        if (old_cast != nullptr) {
+            auto new_cast = std::make_unique<ast::cast_expr>(type, old_cast->m_rhs->clone());
+            return new_cast;
+        }
+        else {
+            auto cast = std::make_unique<ast::cast_expr>(
+                type,
+                is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+            );
+            return cast;
+        }
     }
     else {
         return std::make_unique<ast::literal>(static_cast<to>(std::get<from>(old_lit->m_value)));

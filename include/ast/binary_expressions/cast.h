@@ -4,16 +4,20 @@
 #include "ast/primary_expressions/identifier.h"
 
 namespace dconstruct::ast {
-    struct cast_expr : public clonable_binary_expr<cast_expr> {
-        using clonable_binary_expr::clonable_binary_expr;
-
-        explicit cast_expr(const std::string& type_name, expr_uptr&& rhs) noexcept : 
-        clonable_binary_expr(compiler::token{ compiler::token_type::IDENTIFIER, type_name }, std::make_unique<ast::identifier>(type_name), std::move(rhs)) {};
+    struct cast_expr : expression {
+        explicit cast_expr(const ast::full_type& type, expr_uptr&& rhs) noexcept : m_type(type), m_rhs(std::move(rhs)) { };
 
 
         void pseudo(std::ostream& os) const final;
         void ast(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] expr_uptr clone() const noexcept final;
+        [[nodiscard]] b8 equals(const expression& other) const noexcept final;
+        [[nodiscard]] u16 complexity() const noexcept final;
+
+
+        ast::full_type m_type;
+        expr_uptr m_rhs;
     };
 }
