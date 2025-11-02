@@ -90,11 +90,18 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
-            return std::make_unique<T>(
+            auto expr = std::make_unique<T>(
                 std::move(op),
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
             );
+            if constexpr (std::is_same_v<T, ast::compare_expr>) {
+                const b8 is_comp = expr->m_operator.m_lexeme == "==" || expr->m_operator.m_lexeme == "!=";
+                if (is_comp && dynamic_cast<ast::literal*>(expr->m_lhs.get()) != nullptr) {
+                    std::swap(expr->m_lhs, expr->m_rhs);
+                }
+            }
+            return expr;
         }
 
         template <typename T>
