@@ -13,7 +13,7 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream& os) const override;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] ast::full_type compute_type(const compiler::environment& env) const final;
-        [[nodiscard]] b8 equals(const expression& rhs) const noexcept final;
+        [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] inline u16 complexity() const noexcept final;
         expr_uptr m_lhs;

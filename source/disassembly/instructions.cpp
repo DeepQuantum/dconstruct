@@ -106,7 +106,7 @@ namespace dconstruct {
 
     [[nodiscard]] bool Instruction::destination_is_immediate() const noexcept {
         return opcode == Opcode::Branch || opcode == Opcode::BranchIf
-            || opcode == Opcode::BranchIfNot;
+            || opcode == Opcode::BranchIfNot || opcode == Opcode::Return;
     }
 
     [[nodiscard]] bool Instruction::operand1_is_immediate() const noexcept {
@@ -142,11 +142,11 @@ namespace dconstruct {
     }
 
     [[nodiscard]] bool Instruction::op1_is_reg() const noexcept {
-        return operand1_is_used() && !operand1_is_immediate();
+        return operand1_is_used() && !operand1_is_immediate() && operand1 < ARGUMENT_REGISTERS_IDX;
     }
 
     [[nodiscard]] bool Instruction::op2_is_reg() const noexcept {
-        return operand2_is_used() && !operand2_is_immediate();
+        return operand2_is_used() && !operand2_is_immediate() && operand2 < ARGUMENT_REGISTERS_IDX;
     }
 
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {

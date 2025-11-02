@@ -14,7 +14,7 @@ struct lexing_error {
     u32 m_line;
     std::string m_message;
 
-    [[nodiscard]] b8 operator==(const lexing_error &rhs) const noexcept {
+    [[nodiscard]] bool operator==(const lexing_error &rhs) const noexcept {
         return m_line == rhs.m_line && m_message == rhs.m_message;
     }
 };
@@ -62,10 +62,10 @@ private:
     u32 m_current = 0;
     u32 m_line = 1;
 
-    b8 m_hadError = false;
+    bool m_hadError = false;
 
     [[nodiscard]] token scan_token();
-    [[nodiscard]] b8 reached_eof() const noexcept;
+    [[nodiscard]] bool reached_eof() const noexcept;
     char advance();
     [[nodiscard]] std::string make_current_lexeme() const;
     [[nodiscard]] token make_current_token(const token_type, const ast::primitive_value& = 0) const;
@@ -74,9 +74,9 @@ private:
     [[nodiscard]] token make_hex();
     [[nodiscard]] token make_identifier();
     [[nodiscard]] token make_sid();
-    [[nodiscard]] b8 is_sid_char(const char) const noexcept;
-    [[nodiscard]] b8 is_hex_char(const char) const noexcept;
-    [[nodiscard]] b8 match(const char);
+    [[nodiscard]] bool is_sid_char(const char) const noexcept;
+    [[nodiscard]] bool is_hex_char(const char) const noexcept;
+    [[nodiscard]] bool match(const char);
     [[nodiscard]] char peek() const;
     [[nodiscard]] char peek_next() const;
 };

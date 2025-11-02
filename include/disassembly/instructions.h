@@ -115,18 +115,18 @@ struct Instruction {
     u8 operand2;
     u32 padding;
 
-    [[nodiscard]] b8 operator==(const Instruction& rhs) const noexcept = default;
+    [[nodiscard]] bool operator==(const Instruction& rhs) const noexcept = default;
 
-    [[nodiscard]] b8 destination_is_immediate() const noexcept;
+    [[nodiscard]] bool destination_is_immediate() const noexcept;
 
 
-    [[nodiscard]] b8 operand1_is_immediate() const noexcept;
-    [[nodiscard]] b8 operand2_is_immediate() const noexcept;
-    [[nodiscard]] b8 operand1_is_used() const noexcept;
-    [[nodiscard]] b8 operand2_is_used() const noexcept;
+    [[nodiscard]] bool operand1_is_immediate() const noexcept;
+    [[nodiscard]] bool operand2_is_immediate() const noexcept;
+    [[nodiscard]] bool operand1_is_used() const noexcept;
+    [[nodiscard]] bool operand2_is_used() const noexcept;
 
-    [[nodiscard]] b8 op1_is_reg() const noexcept;
-    [[nodiscard]] b8 op2_is_reg() const noexcept;
+    [[nodiscard]] bool op1_is_reg() const noexcept;
+    [[nodiscard]] bool op2_is_reg() const noexcept;
 
 
     const char* opcode_to_string() const noexcept;
@@ -134,12 +134,12 @@ struct Instruction {
 
 struct function_disassembly_line {
     Instruction m_instruction;
-    u64 m_location;
+    istr_line m_location;
     std::string m_text;
     const Instruction* m_globalPointer;
     std::string m_comment;
     i64 m_target = -1;
-    b8 m_isArgMove;
+    bool m_isArgMove;
 
     function_disassembly_line() noexcept = default;
 
@@ -169,8 +169,8 @@ struct RegisterPointer {
 
 struct Register {
     ast::full_type m_type;
-    b8 m_isReturn = false;
-    b8 m_containsArg = false;
+    bool m_isReturn = false;
+    bool m_containsArg = false;
     u8 m_argNum;
     u64 m_value = 0;
     u16 m_pointerOffset = UINT16_MAX;
@@ -188,7 +188,7 @@ struct Register {
         }
     }
 
-    [[nodiscard]] inline b8 is_pointer() const noexcept {
+    [[nodiscard]] inline bool is_pointer() const noexcept {
         return std::holds_alternative<ast::ptr_type>(m_type);
     }
 };
@@ -227,7 +227,7 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     std::string m_id;
-    b8 m_isScriptFunction;
+    bool m_isScriptFunction;
 }; 
 
 

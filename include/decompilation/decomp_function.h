@@ -11,7 +11,7 @@ constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 namespace dconstruct::dcompiler {
 
     struct decomp_function {
-        explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file);
+        explicit decomp_function(const function_disassembly &func, const BinaryFile &current_file);
 
         [[nodiscard]] std::string to_string() const;
         
@@ -21,13 +21,12 @@ namespace dconstruct::dcompiler {
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
         compiler::environment m_env;
-        const function_disassembly* m_disassembly;
+        const function_disassembly& m_disassembly;
         const BinaryFile& m_file;
         ast::full_type m_returnType;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
         ast::block m_baseBlock;
-        const SymbolTable& m_symbolTable;
         char m_loopVar = 'i';
 		u16 m_varCount = 0;
 
@@ -41,7 +40,7 @@ namespace dconstruct::dcompiler {
 
         void emit_loop(const control_flow_loop &loop, const node_id stop_node);
 
-        [[nodiscard]] b8 is_for_loop(const control_flow_loop& loop) const noexcept;
+        [[nodiscard]] bool is_for_loop(const control_flow_loop& loop) const noexcept;
 
         void emit_for_loop(const control_flow_loop &loop, const node_id stop_node);
         void emit_while_loop(const control_flow_loop &loop, const node_id stop_node);
@@ -75,7 +74,7 @@ namespace dconstruct::dcompiler {
 
         void insert_return(const reg_idx dest);
 
-        [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
+        [[nodiscard]] inline bool is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
         }
 
@@ -99,7 +98,7 @@ namespace dconstruct::dcompiler {
                 is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
             );
             if constexpr (std::is_same_v<T, ast::compare_expr>) {
-                const b8 is_comp = expr->m_operator.m_lexeme == "==" || expr->m_operator.m_lexeme == "!=";
+                const bool is_comp = expr->m_operator.m_lexeme == "==" || expr->m_operator.m_lexeme == "!=";
                 if (is_comp && dynamic_cast<ast::literal*>(expr->m_lhs.get()) != nullptr) {
                     std::swap(expr->m_lhs, expr->m_rhs);
                 }

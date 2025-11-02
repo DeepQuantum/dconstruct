@@ -28,7 +28,7 @@ namespace dconstruct {
         union {
             i32* i32_ptr;
             f32* f32_ptr;
-            b8* b8_ptr;
+            bool* b8_ptr;
             StateScript* ss_ptr;
             ScriptLambda* lambda_ptr;
             uint64_t* hash_ptr;
@@ -51,10 +51,10 @@ namespace dconstruct {
         location m_strings;
         location m_relocTable;
         std::map<sid64, const std::string> m_sidCache;
-        std::set<p64> m_emittedStructs{};
-        [[nodiscard]] b8 is_file_ptr(const location) const noexcept;
-        [[nodiscard]] b8 gets_pointed_at(const location) const noexcept;
-        [[nodiscard]] b8 is_string(const location) const noexcept;
+        std::set<p64> m_emittedStructs;
+        [[nodiscard]] bool is_file_ptr(const location) const noexcept;
+        [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
+        [[nodiscard]] bool is_string(const location) const noexcept;
         [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const;
 
     private:

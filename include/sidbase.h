@@ -14,7 +14,7 @@ namespace dconstruct {
     public:
         explicit SIDBase(const std::filesystem::path& path);
         [[nodiscard]] const char* search(const sid64 hash) const noexcept;
-        [[nodiscard]] b8 sid_exists(const sid64 hash) const noexcept;
+        [[nodiscard]] bool sid_exists(const sid64 hash) const noexcept;
         sid64 m_lowestSid = 0;
         sid64 m_highestSid = 0;
 
