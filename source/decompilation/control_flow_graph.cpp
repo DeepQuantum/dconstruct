@@ -55,7 +55,7 @@ namespace dconstruct {
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
         for (const auto& line : m_lines) {
-            ss << line.m_text << "&#160;&#160;<BR/>";
+            ss << line.m_text << " " << html_escape(line.m_comment) << "&#160;&#160;<BR/>";
         }
 
         ss << "</FONT></TD></TR></TABLE>";
@@ -543,7 +543,7 @@ namespace dconstruct {
         }
         checked.insert(node.m_startLine);
         for (const auto& line : node.m_lines) {
-            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
+            if (!line.m_instruction.destination_is_immediate()) {
                 result.insert(line.m_instruction.destination);
             }
         }
