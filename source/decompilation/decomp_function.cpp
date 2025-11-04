@@ -13,9 +13,9 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 {
 #ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly->m_id << '\n';
+    m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
 #endif
 
-    m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(49);
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
@@ -28,8 +28,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 
     for (reg_idx i = 0; i < func->m_stackFrame.m_registerArgs.size(); ++i) {
         const auto& arg_type = func->m_stackFrame.m_registerArgs.at(i);
-        const std::string type_name = ast::type_to_declaration_string(arg_type);
-        m_arguments.push_back(ast::variable_declaration(type_name, "arg_" + std::to_string(i)));
+        m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
     }
 
     emit_node(m_graph[0], m_graph.get_return_node().m_startLine);
@@ -41,7 +40,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
     const std::string return_type = m_disassembly->m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
     out << return_type << ' ' << m_disassembly->m_id << '(';
     for (u8 i = 0; i < m_arguments.size(); ++i) {
-        out << m_arguments[i].m_typeName << ' ' << m_arguments[i].m_identifier;
+        out << type_to_declaration_string(m_arguments[i].m_type) << ' ' << m_arguments[i].m_identifier;
         if (i != m_arguments.size() - 1) {
             out << ", ";
         }
@@ -281,8 +280,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
         if (!is_unknown(type)) {
             m_transformableExpressions[reg]->set_type(type);
         }
-        const std::string type_name = type_to_declaration_string(m_transformableExpressions[reg]->get_type(m_env));
-        append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme, std::move(regs_to_potential_inits[reg])));
+        append_to_current_block(std::make_unique<ast::variable_declaration>(m_transformableExpressions[reg]->get_type(m_env), m_registersToVars[reg].top()->m_name.m_lexeme, std::move(regs_to_potential_inits[reg])));
         m_registersToVars[reg].pop();
     }
 
@@ -325,7 +323,7 @@ void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id
     regs_to_emit.erase(loop_alternative_reg);
     auto id = std::make_unique<ast::identifier>("i");
 
-    auto declaration = std::make_unique<ast::variable_declaration>("u64", "i", std::move(m_transformableExpressions[loop_var_reg]));
+    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), "i", std::move(m_transformableExpressions[loop_var_reg]));
     auto increment = std::make_unique<ast::increment_expression>(id->clone());
 
     m_transformableExpressions[loop_var_reg] = id->clone();
@@ -356,8 +354,7 @@ void decomp_function::emit_for_loop(const control_flow_loop &loop, const node_id
         const auto &type = regs_to_type[reg];
         m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
         m_transformableExpressions[reg]->set_type(type);
-        const std::string type_name = type_to_declaration_string(type);
-        append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
+        append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
         m_registersToVars[reg].pop();
     }
 
@@ -403,9 +400,25 @@ void decomp_function::emit_while_loop(const control_flow_loop &loop, const node_
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].get_direct_successor()];
 
     std::set<reg_idx> regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
-
+    reg_idx alt_loop_var_reg = -1;
+    std::unique_ptr<ast::identifier> id = nullptr;
+    const Instruction& head_instruction = m_graph[loop.m_headNode].m_lines.front().m_instruction;
+    const b8 has_loop_variable = head_instruction.opcode == Opcode::Move;
+    if (has_loop_variable) {
+        const reg_idx loop_var_reg = head_instruction.operand1;
+        alt_loop_var_reg = head_instruction.destination;
+        regs_to_emit.erase(loop_var_reg);
+        regs_to_emit.erase(alt_loop_var_reg);
+        const std::string loop_var_name = std::string(1, get_next_loop_var());
+        id = std::make_unique<ast::identifier>(loop_var_name);
+        auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), loop_var_name, std::move(m_transformableExpressions[loop_var_reg]));
+        append_to_current_block(std::move(declaration));
+        m_transformableExpressions[loop_var_reg] = id->copy();
+        id->set_type(make_type(ast::primitive_kind::U64));
+        m_registersToVars[loop_var_reg].push(id->copy());
+        m_registersToVars[alt_loop_var_reg].push(id->copy());
+    }
     expr_uptr condition = make_loop_condition(regs_to_emit, loop.m_headNode, proper_loop_head, loop_entry.m_startLine, exit_node);
-    reg_idx loop_var_reg = m_graph[proper_loop_head].m_lines.back().m_instruction.operand1;
 
     for (const auto reg : regs_to_emit) {
         m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
@@ -414,14 +427,19 @@ void decomp_function::emit_while_loop(const control_flow_loop &loop, const node_
     m_blockStack.push(*loop_block);
     emit_node(loop_entry, loop.m_headNode);
     for (const auto reg : regs_to_emit) {
-        auto new_var = std::unique_ptr<ast::identifier>{static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release())};
+        auto new_var = m_registersToVars[reg].top()->copy();
         load_expression_into_existing_var(reg, std::move(new_var));
+    }
+    if (has_loop_variable) {
+        load_expression_into_existing_var(alt_loop_var_reg, id->copy());
     }
     m_blockStack.pop();
 
+    m_loopDepth--;
+
     for (const auto reg : regs_to_emit) {
         m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
-        append_to_current_block(std::make_unique<ast::variable_declaration>("unknown", m_registersToVars[reg].top()->m_name.m_lexeme));
+        append_to_current_block(std::make_unique<ast::variable_declaration>(std::monostate(), m_registersToVars[reg].top()->m_name.m_lexeme));
         m_registersToVars[reg].pop();
     }
 
@@ -466,8 +484,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
             const auto &type = regs_to_type[reg];
             m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
             m_transformableExpressions[reg]->set_type(type);
-            const std::string type_name = type_to_declaration_string(type);
-            append_to_current_block(std::make_unique<ast::variable_declaration>(type_name, m_registersToVars[reg].top()->m_name.m_lexeme));
+            append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
             m_registersToVars[reg].pop();
         }
     }
@@ -505,9 +522,8 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var()});
     const std::string name = id->m_name.m_lexeme;
     const ast::full_type type = expr->get_type(m_env);
-    const std::string type_name = type_to_declaration_string(type);
 
-    auto var_declaration = std::make_unique<ast::variable_declaration>(type_name, name, std::move(expr));
+    auto var_declaration = std::make_unique<ast::variable_declaration>(type, name, std::move(expr));
 
     append_to_current_block(std::move(var_declaration));
     m_registersToVars[dst].push(id->copy());

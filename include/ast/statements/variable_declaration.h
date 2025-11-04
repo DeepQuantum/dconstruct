@@ -6,14 +6,14 @@
 namespace dconstruct::ast {
     struct variable_declaration : public statement {
 
-        explicit variable_declaration(std::string type, std::string id_name) noexcept :
-        m_typeName(std::move(type)), m_identifier(std::move(id_name)), m_init(nullptr) {}; 
+        explicit variable_declaration(ast::full_type type, std::string id_name) noexcept :
+        m_type(std::move(type)), m_identifier(std::move(id_name)), m_init(nullptr) {}; 
 
-        explicit variable_declaration(std::string type, std::string id_name, expr_uptr&& init) noexcept :
-        m_typeName(std::move(type)), m_identifier(std::move(id_name)), m_init(std::move(init)) {}; 
+        explicit variable_declaration(ast::full_type type, std::string id_name, expr_uptr&& init) noexcept :
+        m_type(std::move(type)), m_identifier(std::move(id_name)), m_init(std::move(init)) {}; 
 
-        explicit variable_declaration(std::string type, std::string id_name, const ast::primitive_value& init) noexcept :
-        m_typeName(std::move(type)), m_identifier(std::move(id_name)), m_init(std::make_unique<ast::literal>(init)) {};
+        explicit variable_declaration(ast::full_type type, std::string id_name, const ast::primitive_value& init) noexcept :
+        m_type(std::move(type)), m_identifier(std::move(id_name)), m_init(std::make_unique<ast::literal>(init)) {};
 
         void pseudo(std::ostream& os) const final;
 
@@ -25,7 +25,7 @@ namespace dconstruct::ast {
             return m_init.get();
         } 
 
-        std::string m_typeName;
+        ast::full_type m_type;
         std::string m_identifier;
         expr_uptr m_init;
     };

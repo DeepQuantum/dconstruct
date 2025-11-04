@@ -97,11 +97,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (consume(token_type::SEMICOLON, "expected ';' after variable declaration.") == nullptr) {
         return nullptr;
     }
-    if (init != nullptr) {
+    /*if (init != nullptr) {
         return std::make_unique<ast::variable_declaration>(type_name, name->m_lexeme, std::move(init));
     } else {
         return std::make_unique<ast::variable_declaration>(type_name, name->m_lexeme); 
-    }
+    }*/
 }
 
 
