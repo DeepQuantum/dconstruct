@@ -489,7 +489,7 @@ namespace dconstruct::testing {
 
         const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
 
-        const ast::variable_declaration expected{"u16", "number"};
+        const ast::variable_declaration expected{ast::make_type(ast::primitive_kind::U16), "number"};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -510,7 +510,7 @@ namespace dconstruct::testing {
 
         const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
 
-        const ast::variable_declaration expected{"u16", "number", 2};
+        const ast::variable_declaration expected{ast::make_type(ast::primitive_kind::U16), "number", 2};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -592,8 +592,8 @@ namespace dconstruct::testing {
                 )
             )
         ));
-        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "x", 0));
-        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "y", 1));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "x", 0));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "y", 1));
         expected.push_back(std::make_unique<ast::while_stmt>(
             std::make_unique<ast::compare_expr>(
                 compiler::token(compiler::token_type::LESS, "<", 0, 1),
@@ -621,7 +621,7 @@ namespace dconstruct::testing {
 
         std::vector<stmnt_uptr> expected;
 
-        expected.push_back(std::make_unique<ast::variable_declaration>("i32", "x",
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "x",
             std::make_unique<ast::sub_expr>(
                 compiler::token(compiler::token_type::MINUS, "-", 0, 1),
                 std::make_unique<ast::add_expr>(
