@@ -17,7 +17,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 #endif
 
     m_blockStack.push(std::ref(m_baseBlock));
-    m_transformableExpressions.resize(49);
+    m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
@@ -102,7 +102,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
                 std::set<node_id> checked;
-                u16 call_usage_count = m_graph.get_register_read_count(node.m_startLine, istr.destination, m_graph.get_return_node().m_startLine, checked, !m_disassembly->m_isScriptFunction, line.m_location - node.m_startLine + 1);
+                u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, m_graph.get_return_node().m_startLine, checked, !m_disassembly->m_isScriptFunction, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 } else if (call_usage_count == 1) {
@@ -119,7 +119,11 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 break;
             }
             case Opcode::LoadStaticPointerImm: {
-                generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<const char*>(istr.operand1 * 8));
+                if (m_symbolTable.first.get<p64>(istr.operand1 * 8) >= (p64)(m_file.m_strings.m_ptr)) {
+                    generated_expression = std::make_unique<ast::literal>(m_symbolTable.first.get<const char*>(istr.operand1 * 8));
+                } else {
+                    generated_expression = std::make_unique<ast::literal>("");
+                }
                 break;
             }
             case Opcode::LoadStaticU64Imm:

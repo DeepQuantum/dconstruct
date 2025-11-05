@@ -132,6 +132,7 @@ namespace dconstruct {
                 current_node = following_node;
             } 
         }
+        std::sort(m_nodes[current_node].m_successors.begin(), m_nodes[current_node].m_successors.end());
         m_immediatePostdominators = create_postdominator_tree();
         find_loops();
     }
@@ -435,20 +436,20 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::get_register_nature(
-        const node_id start_node,
-        std::set<reg_idx>& regs_to_check, 
+        const control_flow_node& start_node,
+        std::set<reg_idx> regs_to_check, 
         std::set<reg_idx>& read_first, 
         const node_id stop_node,
         std::set<node_id>& checked,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
-        if (checked.contains(start_node)) {
+        if (checked.contains(start_node.m_startLine)) {
             return;
         }
-        checked.insert(start_node);
-        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
-            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
+        checked.insert(start_node.m_startLine);
+        for (u32 i = start_line; i < start_node.m_lines.size(); ++i) {
+            const function_disassembly_line& line = start_node.m_lines[i];
             if (regs_to_check.empty()) {
                 return;
             }
@@ -477,34 +478,34 @@ namespace dconstruct {
                 read_first.insert(istr.operand2);
             }
         }
-        for (const auto& successor : m_nodes.at(start_node).m_successors) {
+        for (const auto& successor : start_node.m_successors) {
             if (regs_to_check.empty()) {
-                break;
+                    break;
             }
             if (successor != stop_node) {
-                get_register_nature(successor, regs_to_check, read_first, stop_node, checked, return_is_read);
+                get_register_nature(m_nodes.at(successor), regs_to_check, read_first, stop_node, checked, return_is_read);
             }
         }
     }
 
     u16 ControlFlowGraph::get_register_read_count(
-        const node_id start_node,
+        const control_flow_node& start_node,
         const reg_idx reg_to_check,
         const node_id stop_node,
         std::set<node_id>& checked,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
-        if (checked.contains(start_node)) {
+        if (checked.contains(start_node.m_startLine)) {
             return 0;
         }
-        checked.insert(start_node);
+        checked.insert(start_node.m_startLine);
         u16 count = 0;
-        for (u32 i = start_line; i < m_nodes.at(start_node).m_lines.size(); ++i) {
+        for (u32 i = start_line; i < start_node.m_lines.size(); ++i) {
             if (count >= 2) {
                 return count;
             }
-            const function_disassembly_line& line = m_nodes.at(start_node).m_lines[i];
+            const function_disassembly_line& line = start_node.m_lines[i];
             const Instruction& istr = line.m_instruction;
             if (reg_to_check == istr.destination && istr.opcode == Opcode::Return) {
                 if (return_is_read) {
@@ -525,14 +526,14 @@ namespace dconstruct {
                 count++;
             }
         }
-        if (start_node == stop_node) {
+        if (start_node.m_startLine == stop_node) {
             return count;
         }
-        for (const auto& successor : m_nodes.at(start_node).m_successors) {
+        for (const auto& successor : start_node.m_successors) {
             if (count >= 2) {
                 break;
             }
-            count += get_register_read_count(successor, reg_to_check, stop_node, checked, return_is_read);
+            count += get_register_read_count(m_nodes.at(successor), reg_to_check, stop_node, checked, return_is_read);
         }
         return count;
     }
@@ -570,7 +571,7 @@ namespace dconstruct {
         checked.clear();
 
         std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
-        get_register_nature(ipdom, regs_to_check, read_first_ipdom, -1, checked, return_is_read);
+        get_register_nature(m_nodes.at(ipdom), regs_to_check, read_first_ipdom, -1, checked, return_is_read);
 
         return read_first_ipdom;
     }
@@ -585,7 +586,7 @@ namespace dconstruct {
         }
         get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
         checked.clear();
-        get_register_nature(head_node.get_adjusted_target(), regs_to_check, read_first, m_returnNode, checked, true);
+        get_register_nature(m_nodes.at(head_node.get_adjusted_target()), regs_to_check, read_first, m_returnNode, checked, true);
 
         return read_first;
     }
