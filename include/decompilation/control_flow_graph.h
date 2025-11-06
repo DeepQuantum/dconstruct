@@ -33,7 +33,7 @@ namespace dconstruct {
         
         [[nodiscard]] const function_disassembly_line& get_last_line() const;
 
-        [[nodiscard]] u16 get_adjusted_target() const;
+        [[nodiscard]] node_id get_adjusted_target() const;
     };
 
     struct control_flow_loop {

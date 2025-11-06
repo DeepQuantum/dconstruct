@@ -581,11 +581,11 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\activities.bin)";
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
-        const std::string id = "--script--@main@update@3";
+        const std::string id = "#451EEFDC085298B4";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -607,6 +607,31 @@ namespace dconstruct::testing {
                 out << dc_func.to_string() << "\n\n";
             } catch (...) {}
             
+        }
+    }
+
+    TEST(DECOMPILER, FullGame) {
+        const std::filesystem::path base_path = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)";
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1)")) {
+            if (entry.path().extension() != ".bin") {
+                continue;
+            }
+            std::filesystem::path new_path = base_path / entry.path().filename().replace_extension(".dcpl");
+
+            BinaryFile file{ entry.path() };
+            Disassembler da{ &file, &base };
+            da.disassemble();
+            const auto& funcs = da.get_functions();
+            for (const auto& func : funcs) {
+                try {
+                    const auto dc_func = dcompiler::decomp_function{ &func, file };
+                    std::ofstream out(new_path, std::ios::app);
+                    out << dc_func.to_string() << "\n\n";
+                }
+                catch (const std::exception& e) {
+                    std::cout << e.what() << '\n';
+                }
+            }
         }
     }
 

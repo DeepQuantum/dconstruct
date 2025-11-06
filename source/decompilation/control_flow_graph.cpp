@@ -72,7 +72,7 @@ namespace dconstruct {
         return m_lines.back();
     }
 
-    [[nodiscard]] inline u16 control_flow_node::get_adjusted_target() const {
+    [[nodiscard]] inline node_id control_flow_node::get_adjusted_target() const {
         return m_lines.back().m_target;
     }
 

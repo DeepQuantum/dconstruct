@@ -4,6 +4,7 @@
 #include "disassembly/disassembler.h"
 #include <cstring>
 #include <fstream>
+#include <sstream>
 
 static constexpr char ENTRY_SEP[] = "##############################";
 
@@ -248,7 +249,17 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
-            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), lookup(name_id));
+            std::string name;
+            if (name_id == 0) {
+                std::stringstream ss;
+                ss << "anonymous@";
+                ss << std::hex << offset;
+                name = ss.str();
+            }
+            else {
+                name = lookup(name_id);
+            }
+            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
             break;
@@ -467,6 +478,9 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 }
 
 [[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const b8 is_script_function) {
+    if (name == "#0000000000000000") {
+        lambda = nullptr;
+    }
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -490,7 +504,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     for (u64 i = 0; i < instructionCount; ++i) {
         process_instruction(i, functionDisassembly);
         if (counting_args) {
-            if (functionDisassembly.m_lines[i].m_instruction.operand1 >= 49) {
+            if (functionDisassembly.m_lines[i].m_instruction.operand1 >= ARGUMENT_REGISTERS_IDX) {
                 functionDisassembly.m_stackFrame.m_registerArgs.push_back(std::monostate());
             } else {
                 counting_args = false;
@@ -966,6 +980,9 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     }
                     else if (istr.opcode == Opcode::BranchIfNot && flipped_target_opcode == Opcode::BranchIfNot || istr.opcode == Opcode::BranchIf && flipped_target_opcode == Opcode::BranchIf) {
                         target = target + 2;
+                    }
+                    else {
+                        is_branching_target = false;
                     }
                 }
                 else {
