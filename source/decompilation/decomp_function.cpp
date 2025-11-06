@@ -13,7 +13,9 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 {
 #ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly->m_id << '\n';
-    m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
+    if (m_graph.get_nodes().size() > 1) {
+        m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + std::string("a.svg"));
+    }
 #endif
 
     m_blockStack.push(std::ref(m_baseBlock));
@@ -248,47 +250,81 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     const node_id idom = m_graph.get_ipdom_at(node.m_startLine);
     const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
     m_graph.m_ipdomsEmitted.insert(idom);
-    node_id proper_successor, proper_destination, proper_head;
-    expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
-    auto then_block = std::make_unique<ast::block>();
-    std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
-    std::unordered_map<reg_idx, ast::full_type> regs_to_type;
-    std::unordered_map<reg_idx, expr_uptr> regs_to_potential_inits;
+    //node_id proper_successor, proper_destination, proper_head;
 
-    for (const auto reg : regs_to_emit) {
-        m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
-        regs_to_type.emplace(reg, std::monostate());
-        if (reg == m_graph[proper_head].get_last_line().m_instruction.operand1) {
-            regs_to_potential_inits[reg] = std::move(condition);
-            regs_to_type[reg] = make_type(ast::primitive_kind::BOOL);
-            condition = m_registersToVars[reg].top()->clone();
-        }
-        else {
-            regs_to_potential_inits[reg] = m_transformableExpressions[reg]->clone();
-        }
+    const reg_idx check_register = node.get_last_line().m_instruction.operand1;
+
+    const control_flow_node* target = &m_graph[node.get_adjusted_target()];
+
+    const control_flow_node* current_node = &m_graph[node.get_direct_successor()];
+
+    expr_uptr final_condition = m_transformableExpressions[check_register]->clone();
+
+    while (current_node != target) {
+        parse_basic_block(*current_node);
+        const auto& token = current_node->get_last_line().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
+        final_condition = std::make_unique<ast::compare_expr>(token, m_transformableExpressions[check_register]->clone(), std::move(final_condition));
+        current_node = &m_graph[current_node->get_direct_successor()];
     }
 
-    m_blockStack.push(*then_block);
-    emit_node(m_graph[proper_successor], idom);
-    for (const auto reg : regs_to_emit) {
-        load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
-        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
-            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
-        }
-    }
-    m_blockStack.pop();
+    auto id = std::make_unique<ast::identifier>(get_next_var());
 
-    for (const auto reg : regs_to_emit) {
-        const auto &type = regs_to_type[reg];
-        m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
-        if (!is_unknown(type)) {
-            m_transformableExpressions[reg]->set_type(type);
-        }
-        append_to_current_block(std::make_unique<ast::variable_declaration>(m_transformableExpressions[reg]->get_type(m_env), m_registersToVars[reg].top()->m_name.m_lexeme, std::move(regs_to_potential_inits[reg])));
-        m_registersToVars[reg].pop();
-    }
+    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::BOOL), id->m_name.m_lexeme, std::move(final_condition));
 
-    append_to_current_block(std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block)));
+    m_transformableExpressions[check_register] = std::move(id);
+    append_to_current_block(std::move(declaration));
+
+
+    emit_node(m_graph[idom], stop_node);
+
+    // stmnt_uptr _else = nullptr;
+    // if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
+    //     _else = std::move(else_block->m_statements[0]);
+    // }
+    // else if (!else_block->m_statements.empty()) {
+    //     _else = std::move(else_block);
+    // }
+
+    //expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
+    //auto then_block = std::make_unique<ast::block>();
+    //std::set<reg_idx> regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
+    //std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+    //std::unordered_map<reg_idx, expr_uptr> regs_to_potential_inits;
+
+    // for (const auto reg : regs_to_emit) {
+    //     m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+    //     regs_to_type.emplace(reg, std::monostate());
+    //     if (reg == m_graph[proper_head].get_last_line().m_instruction.operand1) {
+    //         regs_to_potential_inits[reg] = std::move(condition);
+    //         regs_to_type[reg] = make_type(ast::primitive_kind::BOOL);
+    //         condition = m_registersToVars[reg].top()->clone();
+    //     }
+    //     else {
+    //         regs_to_potential_inits[reg] = m_transformableExpressions[reg]->clone();
+    //     }
+    // }
+
+    // m_blockStack.push(*then_block);
+    // emit_node(m_graph[proper_successor], idom);
+    // for (const auto reg : regs_to_emit) {
+    //     load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
+    //     if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
+    //         regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+    //     }
+    // }
+    // m_blockStack.pop();
+
+    // for (const auto reg : regs_to_emit) {
+    //     const auto &type = regs_to_type[reg];
+    //     m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+    //     if (!is_unknown(type)) {
+    //         m_transformableExpressions[reg]->set_type(type);
+    //     }
+    //     append_to_current_block(std::make_unique<ast::variable_declaration>(m_transformableExpressions[reg]->get_type(m_env), m_registersToVars[reg].top()->m_name.m_lexeme, std::move(regs_to_potential_inits[reg])));
+    //     m_registersToVars[reg].pop();
+    // }
+
+    // append_to_current_block(std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block)));
 
     emit_node(m_graph[idom], stop_node);
 }
@@ -591,7 +627,13 @@ template<typename from, typename to>
         }
     }
     else {
-        return std::make_unique<ast::literal>(static_cast<to>(std::get<from>(old_lit->m_value)));
+        return std::visit([](auto&& arg) -> std::unique_ptr<ast::literal> {
+            using T = std::decay_t<decltype(arg)>;
+            if constexpr (std::is_arithmetic_v<T>)
+                return std::make_unique<ast::literal>(static_cast<to>(arg));
+            else
+                throw std::bad_variant_access{};
+        }, old_lit->m_value);
     }
 }
 
