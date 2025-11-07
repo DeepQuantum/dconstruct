@@ -121,7 +121,8 @@ namespace dconstruct {
     [[nodiscard]] b8 Instruction::operand2_is_immediate() const noexcept {
         return opcode == Opcode::Call || opcode == Opcode::CallFf
             || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm
-            || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm;
+            || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm
+            || opcode == Opcode::LoadU16Imm;
     }
 
     [[nodiscard]] b8 Instruction::operand1_is_used() const noexcept {
