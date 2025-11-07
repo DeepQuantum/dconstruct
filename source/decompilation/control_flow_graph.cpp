@@ -132,7 +132,6 @@ namespace dconstruct {
                 current_node = following_node;
             } 
         }
-        std::sort(m_nodes[current_node].m_successors.begin(), m_nodes[current_node].m_successors.end());
         m_immediatePostdominators = create_postdominator_tree();
         find_loops();
     }

@@ -595,18 +595,24 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
         BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
+        std::set<std::string> emitted{};
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.dcpl)");
         for (const auto& func : funcs) {
+            if (emitted.contains(func.m_id)) {
+                continue;
+            }
+            emitted.insert(func.m_id);
             try {
                 const auto dc_func = dcompiler::decomp_function{ &func, file };
-                std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)", std::ios::app);
                 out << dc_func.to_string() << "\n\n";
-            } catch (...) {}
-            
+            } catch (const std::exception& e) {
+                std::cout << e.what() << '\n';
+            }
         }
     }
 
@@ -617,12 +623,18 @@ namespace dconstruct::testing {
                 continue;
             }
             std::filesystem::path new_path = base_path / entry.path().filename().replace_extension(".dcpl");
+            std::filesystem::path disassembly_path = base_path / entry.path().filename().replace_extension(".asm");
+            std::set<std::string> emitted{};
 
             BinaryFile file{ entry.path() };
             Disassembler da{ &file, &base };
             da.disassemble();
             const auto& funcs = da.get_functions();
             for (const auto& func : funcs) {
+                if (emitted.contains(func.m_id)) {
+                    continue;
+                }
+                emitted.insert(func.m_id);
                 try {
                     const auto dc_func = dcompiler::decomp_function{ &func, file };
                     std::ofstream out(new_path, std::ios::app);
