@@ -647,31 +647,26 @@ namespace dconstruct::testing {
         }
     }
 
-    /*TEST(DECOMPILER, LongNode1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        const std::string expected = "";
 
-        const std::string actual = get_decompiled_node_from_file(filepath, "#14C6FC79122F4A87", 0x12);
-        ASSERT_EQ(expected, actual);
-    }*/
+    TEST(DECOMPILER, PerfPostdominatorTree) {
 
-    /*TEST(DECOMPILER, SimpleIf1) {
-        std::vector<Instruction> istrs = {
-            {Opcode::LoadU16Imm, 0, 1, 0},
-            {Opcode::LoadU16Imm, 1, 2, 0},
-            {Opcode::IEqual, 2, 0, 1},
-            {Opcode::BranchIf, 6, 2},
-            {Opcode::LoadU16Imm, 0, 5, 0},
-            {Opcode::Branch, 7, 0, 0},
-            {Opcode::LoadU16Imm, 0, 6, 0},
-            {Opcode::Return, 0, 0, 0}
-        };
-
-        auto fd = decompile_instructions_with_disassembly(std::move(istrs), {});
-
-        const std::string expected = "if (0 == 1) { return 5; } else { return 6; }";
-
-        EXPECT_EQ(fd.m_frame.m_baseBlock.m_statements.size(), 3);
-        EXPECT_EQ(fd.to_string(), expected);
-    }*/
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
+        BinaryFile file{ filepath };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.asm)", {} };
+        da.disassemble();
+        const auto& funcs = da.get_functions();
+        std::set<std::string> emitted{};
+        for (const auto& func : funcs) {
+            if (emitted.contains(func.m_id)) {
+                continue;
+            }
+            emitted.insert(func.m_id);
+            try {
+                const auto graph = dconstruct::ControlFlowGraph{ &func };
+            }
+            catch (const std::exception& e) {
+                std::cout << e.what() << '\n';
+            }
+        }
+    }
 }

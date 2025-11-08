@@ -12,6 +12,7 @@
 #include <mutex>
 #include <set>
 #include <algorithm>
+#include <chrono>
 
 namespace dconstruct {
 
@@ -336,6 +337,10 @@ namespace dconstruct {
 
     [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
         using node_set = std::unordered_set<node_id>;
+#define _PERF
+#ifdef _PERF
+        const auto start = std::chrono::high_resolution_clock::now();
+#endif
 
         node_set allNodes;
         for (auto const& [id, _] : m_nodes) {
@@ -417,6 +422,12 @@ namespace dconstruct {
             }
         }
         ipdom[m_returnNode] = m_returnNode;
+
+#ifdef _PERF
+        const auto end = std::chrono::high_resolution_clock::now();
+        const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::cout << diff.count() << "ms\n";
+#endif
         return ipdom;
     }
 
