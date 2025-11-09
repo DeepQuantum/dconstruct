@@ -30,12 +30,12 @@ namespace dconstruct {
             if (indent > 0) {
                 m_outbuf += std::string(indent, ' ');
                 #ifdef _DEBUG
-                printf("%*s", (i32)indent, "");
+                //printf("%*s", (i32)indent, "");
                 #endif
             }
             m_outbuf += text;
             #ifdef _DEBUG
-            printf("%s", text);
+            //printf("%s", text);
             #endif
         }
     };
