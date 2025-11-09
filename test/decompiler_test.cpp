@@ -647,9 +647,7 @@ namespace dconstruct::testing {
         }
     }
 
-
-    TEST(DECOMPILER, PerfPostdominatorTree) {
-
+    TEST(DECOMPILER, NewPostdominatorFunction) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.asm)", {} };
@@ -662,7 +660,8 @@ namespace dconstruct::testing {
             }
             emitted.insert(func.m_id);
             try {
-                const auto graph = dconstruct::ControlFlowGraph{ &func };
+                const auto dc_func = dcompiler::decomp_function{ &func, file };
+                ASSERT_EQ(dc_func.m_graph.create_postdominator_tree(), dc_func.m_graph.create_postdominator_tree_old());
             }
             catch (const std::exception& e) {
                 std::cout << e.what() << '\n';

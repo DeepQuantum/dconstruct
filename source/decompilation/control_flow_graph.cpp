@@ -113,6 +113,7 @@ namespace dconstruct {
             if (current_line.m_target != -1) {
                 insert_node_at_line(current_line.m_target);
                 m_nodes[current_node].m_successors.push_back(current_line.m_target);
+                m_nodes[current_line.m_target].m_predecessors.push_back(current_node);
 
                 following_node = next_line.m_location;
 
@@ -120,6 +121,7 @@ namespace dconstruct {
 
                 if (current_line.m_instruction.opcode != Opcode::Branch) {
                     m_nodes[current_node].m_successors.push_back(following_node);
+                    m_nodes[following_node].m_predecessors.push_back(current_node);
                 }
 
                 m_nodes[current_node].m_endLine = current_line.m_location;
@@ -129,11 +131,12 @@ namespace dconstruct {
                 following_node = next_line.m_location;
                 insert_node_at_line(following_node);
                 m_nodes[current_node].m_successors.push_back(following_node);
+                m_nodes[following_node].m_predecessors.push_back(current_node);
                 m_nodes[current_node].m_endLine = current_line.m_location;
                 current_node = following_node;
             } 
         }
-        m_immediatePostdominators = create_postdominator_tree();
+        m_immediatePostdominators = create_postdominator_tree_old();
         find_loops();
     }
 
@@ -335,7 +338,7 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
+    [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree_old() const {
         using node_set = std::unordered_set<node_id>;
 #define _PERF
 #ifdef _PERF
@@ -429,6 +432,97 @@ namespace dconstruct {
         std::cout << diff.count() << "ms\n";
 #endif
         return ipdom;
+    }
+
+    [[nodiscard]] node_id intersect(node_id a, node_id b, const std::unordered_map<node_id, node_id>& ipdoms) {
+        while (a != b) {
+            while (a < b) {
+                a = ipdoms.at(a);
+            }
+            while (b < a) {
+                b = ipdoms.at(b);
+            }
+        }
+        return a;
+    }
+
+    void dfs(node_id n, std::vector<node_id>& vertex, std::unordered_map<node_id, u32>& dfsnum, std::unordered_set<node_id>& visited, const std::map<node_id, control_flow_node>& nodes) {
+        if (!visited.insert(n).second) return;
+        for (auto p : nodes.at(n).m_predecessors)
+            dfs(p, vertex, dfsnum, visited, nodes);
+        vertex.push_back(n);
+    }
+
+    [[nodiscard]] std::unordered_map<node_id, node_id> ControlFlowGraph::create_postdominator_tree() const {
+#define _PERF
+#ifdef _PERF
+        const auto start = std::chrono::high_resolution_clock::now();
+#endif
+
+        std::vector<node_id> vertex;
+        std::unordered_map<node_id, u32> dfsnum;
+        vertex.reserve(m_nodes.size());
+        dfsnum.reserve(m_nodes.size());
+        std::unordered_set<node_id> visited;
+        std::vector<node_id> stack{ m_returnNode };
+
+        dfs(m_returnNode, vertex, dfsnum, visited, m_nodes);
+        std::reverse(vertex.begin(), vertex.end());
+        for (u32 i = 0; i < vertex.size(); ++i)
+            dfsnum[vertex[i]] = i;
+
+        const u32 N = vertex.size();
+        std::unordered_map<node_id, node_id> idom;
+        idom[m_returnNode] = m_returnNode;
+
+        auto intersect = [&](node_id b1, node_id b2) -> node_id {
+            while (b1 != b2) {
+                while (dfsnum[b1] < dfsnum[b2]) {
+                    b1 = idom.at(b1);
+                }
+                while (dfsnum[b2] < dfsnum[b1]) {
+                    b2 = idom.at(b2);
+                }
+            }
+            return b1;
+        };
+
+        b8 changed = true;
+        while (changed) {
+            changed = false;
+            for (u32 i = 1; i < N; ++i) {
+                node_id n = vertex.at(i);
+                node_id new_idom = 0;
+
+                for (auto p : m_nodes.at(n).m_successors) {
+                    if (idom.contains(p)) {
+                        new_idom = p;
+                        break;
+                    }
+                }
+                if (new_idom == 0) {
+                    continue;
+                }
+                for (auto p : m_nodes.at(n).m_successors) {
+                    if (new_idom != p && idom.contains(p)) {
+                        new_idom = intersect(p, new_idom);
+                    }
+                }
+
+                if (!idom.contains(n) || idom.at(n) != new_idom) {
+                    idom[n] = new_idom;
+                    changed = true;
+                }
+            }
+        }
+
+#ifdef _PERF
+        const auto end = std::chrono::high_resolution_clock::now();
+        const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::cout << diff.count() << "ms\n";
+#endif
+
+        return idom;
     }
 
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
