@@ -6,6 +6,7 @@
 #include <memory>
 #include <optional>
 #include <bitset>
+#include <vector>
 
 
 typedef uint64_t sid64;
@@ -28,8 +29,11 @@ template<class T>
 using opt_ref = std::optional<std::reference_wrapper<T>>;
 
 using reg_idx = u8;
+using node_id = u16;
+
 
 using reg_set = std::bitset<49>;
+using node_set = std::vector<node_id>;
 
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
 

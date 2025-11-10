@@ -162,14 +162,14 @@ namespace dconstruct {
                 current_node = following_node;
             } 
         }
-        for (auto& [_, node] : m_nodes) {
+        /*for (auto& [_, node] : m_nodes) {
             node.determine_register_nature();
-        }
+        }*/
         m_immediatePostdominators = create_postdominator_tree();
         find_loops();
     }
 
-    [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u32 line) const {
+    [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u16 line) const {
         for (const auto& [id, node] : m_nodes) {
             if (node.m_endLine == line) {
                 return id;
@@ -178,7 +178,7 @@ namespace dconstruct {
         return std::nullopt;
     }
 
-    void ControlFlowGraph::insert_node_at_line(const u32 start_line) {
+    void ControlFlowGraph::insert_node_at_line(const u16 start_line) {
         if (!m_nodes.contains(start_line)) {
             m_nodes.emplace(start_line, start_line);
         }
@@ -416,55 +416,74 @@ namespace dconstruct {
         return body;
     }
 
+
     void ControlFlowGraph::get_register_nature(
         const control_flow_node& start_node,
-        std::set<reg_idx> regs_to_check, 
-        std::set<reg_idx>& read_first, 
+        reg_set regs_to_check,
+        reg_set& read_first, 
         const node_id stop_node,
-        std::set<node_id>& checked,
+        std::set<node_id>& asd,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
-        if (checked.contains(start_node.m_startLine)) {
-            return;
-        }
-        checked.insert(start_node.m_startLine);
-        for (u32 i = start_line; i < start_node.m_lines.size(); ++i) {
-            const function_disassembly_line& line = start_node.m_lines[i];
-            if (regs_to_check.empty()) {
-                return;
-            }
-            const Instruction& istr = line.m_instruction;
-            if (regs_to_check.contains(istr.destination) && istr.opcode == Opcode::Return) {
-                regs_to_check.erase(istr.destination);
-                if (return_is_read) {
-                    read_first.insert(istr.destination);
-                }
-                return;
-            }
-            if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs_to_check.contains(istr.destination)) {
-                regs_to_check.erase(istr.destination);
-                read_first.insert(istr.destination);
+
+        struct frame {
+            const control_flow_node* node;
+            reg_set regs;
+        };
+
+        std::vector<frame> node_stack;
+        std::set<const control_flow_node*> visited;
+
+        node_stack.push_back({&start_node, regs_to_check});
+
+        b8 use_start_line = start_line != 0;
+
+        while (!node_stack.empty()) {
+            auto [current_node, regs] = node_stack.back();
+            node_stack.pop_back();
+            if (visited.contains(current_node)) {
                 continue;
             }
-            if (regs_to_check.contains(istr.destination) && !istr.destination_is_immediate()) {
-                regs_to_check.erase(istr.destination);
+            visited.insert(current_node);
+            for (u32 i = use_start_line ? start_line : 0; i < current_node->m_lines.size(); ++i) {
+                const function_disassembly_line& line = current_node->m_lines[i];
+                if (regs.to_ullong() == 0) {
+                    break;
+                }
+                const Instruction& istr = line.m_instruction;
+                if (istr.opcode == Opcode::Return && regs.test(istr.destination)) {
+                    regs.reset(istr.destination);
+                    if (return_is_read) {
+                        read_first.set(istr.destination);
+                    }
+                    break;
+                }
+                if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs.test(istr.destination)) {
+                    regs.reset(istr.destination);
+                    read_first.set(istr.destination);
+                    continue;
+                }
+                if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX && regs.test(istr.destination)) {
+                    regs.reset(istr.destination);
+                }
+                if (istr.op1_is_reg() && istr.operand1 < ARGUMENT_REGISTERS_IDX && regs.test(istr.operand1)) {
+                    regs.reset(istr.operand1);
+                    read_first.set(istr.operand1);
+                }
+                if (istr.op2_is_reg() && istr.operand2 < ARGUMENT_REGISTERS_IDX && regs.test(istr.operand2)) {
+                    regs.reset(istr.operand2);
+                    read_first.set(istr.operand2);
+                }
             }
-            if (regs_to_check.contains(istr.operand1) && istr.op1_is_reg()) {
-                regs_to_check.erase(istr.operand1);
-                read_first.insert(istr.operand1);
+            use_start_line = false;
+            if (regs_to_check.to_ullong() == 0) {
+                continue;
             }
-            if (regs_to_check.contains(istr.operand2) && istr.op2_is_reg()) {
-                regs_to_check.erase(istr.operand2);
-                read_first.insert(istr.operand2);
-            }
-        }
-        for (const auto& successor : start_node.m_successors) {
-            if (regs_to_check.empty()) {
-                break;
-            }
-            if (successor != stop_node) {
-                get_register_nature(m_nodes.at(successor), regs_to_check, read_first, stop_node, checked, return_is_read);
+            for (const auto& successor : current_node->m_successors) {
+                if (successor != stop_node) {
+                    node_stack.push_back({&m_nodes.at(successor), regs});
+                }
             }
         }
     }
@@ -474,7 +493,7 @@ namespace dconstruct {
         std::set<reg_idx> regs_to_check,
         std::set<reg_idx>& read_first, 
         const node_id stop_node,
-        std::set<node_id>& visited,
+        std::set<node_id>& asd,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
@@ -490,18 +509,22 @@ namespace dconstruct {
         node_stack.push_back({&start_node, regs_to_check});
 
         b8 use_start_line = start_line != 0;
-        const control_flow_node* current_node;
 
         while (!node_stack.empty()) {
-            auto& [current_node, regs] = node_stack.back();
+            auto elem = std::move(node_stack.back());
             node_stack.pop_back();
+            auto [current_node, regs] = std::move(elem);
+            if (visited.contains(current_node)) {
+                continue;
+            }
+            visited.insert(current_node);
             for (u32 i = use_start_line ? start_line : 0; i < current_node->m_lines.size(); ++i) {
                 const function_disassembly_line& line = current_node->m_lines[i];
                 if (regs.empty()) {
                     break;
                 }
                 const Instruction& istr = line.m_instruction;
-                if (regs.contains(istr.destination) && istr.opcode == Opcode::Return) {
+                if (istr.opcode == Opcode::Return && regs.contains(istr.destination)) {
                     regs.erase(istr.destination);
                     if (return_is_read) {
                         read_first.insert(istr.destination);
@@ -529,11 +552,10 @@ namespace dconstruct {
             if (regs_to_check.empty()) {
                 continue;
             }
-            if (current_node->get_direct_successor() != stop_node) {
-                node_stack.push_back({&m_nodes.at(current_node->get_direct_successor()), regs});
-            }
-            if (current_node->get_adjusted_target() != stop_node) {
-                node_stack.push_back({&m_nodes.at(current_node->get_adjusted_target()), regs});
+            for (const auto& successor : current_node->m_successors) {
+                if (successor != stop_node) {
+                    node_stack.push_back({&m_nodes.at(successor), regs});
+                }
             }
         }
     }
@@ -588,14 +610,14 @@ namespace dconstruct {
         return count;
     }
 
-    void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, std::set<reg_idx>& result, std::set<node_id>& checked) const {
+    void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, reg_set& result, std::set<node_id>& checked) const {
         if (node.m_startLine == stop || checked.contains(node.m_startLine)) {
             return;
         }
         checked.insert(node.m_startLine);
         for (const auto& line : node.m_lines) {
-            if (!line.m_instruction.destination_is_immediate()) {
-                result.insert(line.m_instruction.destination);
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.destination < ARGUMENT_REGISTERS_IDX) {
+                result.set(line.m_instruction.destination);
             }
         }
         for (const auto& successor : node.m_successors) {
@@ -603,15 +625,15 @@ namespace dconstruct {
         }
     }
     
-    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept {
-        std::set<reg_idx> regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
+    [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept {
+        reg_set regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
         std::set<node_id> checked;
         node_id ipdom = get_ipdom_at(start_node.m_startLine);
 
-        const u16 target = start_node.get_adjusted_target();
+        const node_id target = start_node.get_adjusted_target();
 
         if (ipdom == start_node.m_startLine) {
-            result.insert(target);
+            result.set(target);
             return result;
         }
 
@@ -620,18 +642,18 @@ namespace dconstruct {
         get_registers_written_to(m_nodes.at(target), ipdom, right, checked);
         checked.clear();
 
-        std::set_union(left.begin(), left.end(), right.begin(), right.end(), std::inserter(regs_to_check, regs_to_check.begin()));
+        regs_to_check = left | right;
         get_register_nature(m_nodes.at(ipdom), regs_to_check, read_first_ipdom, -1, checked, return_is_read);
 
         return read_first_ipdom;
     }
 
-    [[nodiscard]] std::set<reg_idx> ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
-        std::set<reg_idx> regs_to_check, read_first, result;
+    [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
+        reg_set regs_to_check, read_first, result;
         std::set<node_id> checked;
         for (const auto& line : head_node.m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
-                regs_to_check.insert(line.m_instruction.destination);
+                regs_to_check.set(line.m_instruction.destination);
             }
         }
         get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
