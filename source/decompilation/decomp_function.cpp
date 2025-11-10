@@ -578,10 +578,12 @@ template<typename from, typename to>
     else {
         return std::visit([](auto&& arg) -> std::unique_ptr<ast::literal> {
             using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_arithmetic_v<T>)
+            if constexpr (std::is_arithmetic_v<T>) {
                 return std::make_unique<ast::literal>(static_cast<to>(arg));
-            else
-                throw std::bad_variant_access{};
+            }
+            else {
+                return nullptr;
+            }
         }, old_lit->m_value);
     }
 }

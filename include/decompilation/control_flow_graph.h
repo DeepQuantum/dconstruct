@@ -9,6 +9,7 @@
 #include <graphviz/cgraph.h>
 #include <optional>
 #include <set>
+#include <bitset>
 
 namespace dconstruct {
 
@@ -18,6 +19,8 @@ namespace dconstruct {
         std::vector<function_disassembly_line> m_lines;
         std::vector<node_id> m_successors;
         std::vector<node_id> m_predecessors;
+        reg_set m_readFirstRegs;
+        reg_set m_writtenToRegs;
         u32 m_startLine = 0;
         u32 m_endLine = 0;
 
@@ -35,6 +38,7 @@ namespace dconstruct {
         [[nodiscard]] const function_disassembly_line& get_last_line() const;
 
         [[nodiscard]] node_id get_adjusted_target() const;
+        void determine_register_nature();
     };
 
     struct control_flow_loop {
@@ -85,14 +89,13 @@ namespace dconstruct {
         void get_register_nature(const control_flow_node& start_node, std::set<reg_idx> check_regs, std::set<reg_idx>& read_first, const node_id stop_node, std::set<node_id>& checked, const b8 return_is_read, const u32 start_line = 0) const noexcept;
         u16 get_register_read_count(const control_flow_node& start_node, const reg_idx reg_to_check, const node_id stop_node, std::set<node_id>& checked, const b8 return_is_read, const u32 start_line = 0) const noexcept;
         [[nodiscard]] const control_flow_node& get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept;
-        [[nodiscard]] std::unordered_map<node_id, node_id> create_postdominator_tree() const;
-        [[nodiscard]] std::unordered_map<node_id, node_id> create_postdominator_tree_old() const;
     private:
         std::map<node_id, control_flow_node> m_nodes;
         std::unordered_map<node_id, node_id> m_immediatePostdominators;
         std::vector<control_flow_loop> m_loops;
         node_id m_returnNode;
         const function_disassembly *m_func;
+        [[nodiscard]] std::unordered_map<node_id, node_id> create_postdominator_tree() const;
 
 
         void insert_node_at_line(const node_id start_line);
@@ -104,8 +107,6 @@ namespace dconstruct {
         
 
 
-        [[nodiscard]] b8 dominates(const node_id, const node_id) const;
-        [[nodiscard]] b8 dominee_not_found_outside_dominator_path(node_id current_head, const node_id dominator, const node_id dominee, std::unordered_set<node_id>& visited) const;
         [[nodiscard]] std::vector<node_id> collect_loop_body(const node_id, const node_id) const;
         
         //[[nodiscard]] std::map<node_id, std::vector<node_id>> compute_predecessors() const;

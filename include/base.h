@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
+#include <bitset>
 
 
 typedef uint64_t sid64;
@@ -27,6 +28,8 @@ template<class T>
 using opt_ref = std::optional<std::reference_wrapper<T>>;
 
 using reg_idx = u8;
+
+using reg_set = std::bitset<49>;
 
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
 
