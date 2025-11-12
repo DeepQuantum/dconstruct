@@ -33,7 +33,7 @@ using node_id = u16;
 
 
 using reg_set = std::bitset<49>;
-using node_set = std::vector<node_id>;
+using node_set = std::vector<b8>;
 
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
 
