@@ -243,8 +243,8 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        for (const auto& [k, v] : dc_func.m_graph.get_nodes()) {
-            ASSERT_EQ(dc_func.m_graph.get_ipdom_at(k), 0x16);
+        for (const auto& node : dc_func.m_graph.m_nodes) {
+            ASSERT_EQ(node.m_ipdom, 0x16);
         }
     }
 
@@ -258,8 +258,8 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        for (const auto& [k, v] : dc_func.m_graph.get_nodes()) {
-            ASSERT_EQ(dc_func.m_graph.get_ipdom_at(k), 0x16);
+        for (const auto& node : dc_func.m_graph.m_nodes) {
+            ASSERT_EQ(node.m_ipdom, 0x16);
         }
     }
  
@@ -608,12 +608,8 @@ namespace dconstruct::testing {
                 continue;
             }
             emitted.insert(func.m_id);
-            try {
-                const auto dc_func = dcompiler::decomp_function{ &func, file };
-                out << dc_func.to_string() << "\n\n";
-            } catch (const std::exception& e) {
-                std::cout << e.what() << '\n';
-            }
+            const auto dc_func = dcompiler::decomp_function{ &func, file };
+            out << dc_func.to_string() << "\n\n";
         }
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();

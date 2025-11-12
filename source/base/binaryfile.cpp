@@ -96,7 +96,7 @@ namespace dconstruct {
 
         m_relocTable = location(reloc_data + 4);
 
-#ifdef DERANGED
+#ifdef false
         const __m512i _indices = _mm512_set_epi64(7, 6, 5, 4, 3, 2, 1, 0);
         const __m512i _1 = _mm512_set1_epi64(0x1);
         const __m512i _7 = _mm512_set1_epi64(0x7);

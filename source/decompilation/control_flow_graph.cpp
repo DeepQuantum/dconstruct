@@ -65,18 +65,6 @@ namespace dconstruct {
         return ss.str();
     }
 
-    [[nodiscard]] inline node_id control_flow_node::get_direct_successor() const {
-        return get_last_line().m_location + 1;
-    }
-
-    [[nodiscard]] inline const function_disassembly_line& control_flow_node::get_last_line() const {
-        return m_lines.back();
-    }
-
-    [[nodiscard]] inline node_id control_flow_node::get_adjusted_target() const {
-        return m_lines.back().m_target;
-    }
-
     [[nodiscard]] b8 control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
         if (m_lines.size() != rhs.m_lines.size()) {
             return false;
@@ -103,7 +91,7 @@ namespace dconstruct {
             if (istr.op1_is_reg() && !m_writtenToRegs.test(istr.operand1)) {
                 m_readFirstRegs.set(istr.operand1);
             }
-            if (istr.destination == istr.operand1 && istr.op1_is_reg()) {
+            if (istr.op1_is_reg() && istr.destination == istr.operand1) {
                 m_readFirstRegs.set(istr.operand1);
                 continue;
             }
@@ -119,17 +107,71 @@ namespace dconstruct {
         }
     }
 
+    static void insert_node_at_line(const u16 start_line, std::map<node_id, control_flow_node>& nodes) {
+        if (!nodes.contains(start_line)) {
+            nodes.emplace(start_line, start_line);
+        }
+    }
+
+    static void dfs(const control_flow_node& n,
+        std::vector<node_id>& rev_postdom,
+        node_set& visited,
+        const std::vector<control_flow_node>& nodes)
+    {
+        if (visited[n.m_index]) {
+            return;
+        }
+        visited[n.m_index] = true;
+        for (auto pred : n.m_predecessors) {
+            dfs(nodes[pred], rev_postdom, visited, nodes);
+        }
+
+        rev_postdom.push_back(n.m_index);
+    }
+
+    [[nodiscard]] static std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes) {
+        std::vector<node_id> result;
+        result.reserve(nodes.size());
+        node_set visited(nodes.size(), false);
+
+        std::vector<std::pair<node_id, size_t>> stack;
+        stack.emplace_back(nodes.back().m_index, 0);
+
+        while (!stack.empty()) {
+            auto [n, i] = stack.back();
+            if (!visited[n]) {
+                visited[n] = true;
+            }
+
+            const auto& preds = nodes[n].m_predecessors;
+            if (i < preds.size()) {
+                stack.back().second++;
+                const auto p = preds[i];
+                if (!visited[p]) {
+                    stack.emplace_back(p, 0);
+                }
+            }
+            else {
+                result.push_back(n);
+                stack.pop_back();
+            }
+        }
+
+        std::reverse(result.begin(), result.end());
+        return result;
+    }
+
     ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
-        m_nodes.emplace(0, 0);
+        std::map<node_id, control_flow_node> nodes;
+        nodes.emplace(0, 0);
         node_id current_node = 0;
         node_id following_node;
         for (u32 i = 0; i < func->m_lines.size(); ++i) {
             const function_disassembly_line &current_line = func->m_lines[i];
-            m_nodes[current_node].m_lines.push_back(current_line);
+            nodes[current_node].m_lines.push_back(current_line);
             if (i == func->m_lines.size() - 1) {
-                m_nodes[current_node].m_endLine = current_line.m_location;
-                m_returnNode = current_node;
+                nodes[current_node].m_endLine = current_line.m_location;
                 break;
             }
             const function_disassembly_line &next_line = func->m_lines[i + 1];
@@ -137,51 +179,48 @@ namespace dconstruct {
             b8 next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
             if (current_line.m_target != -1) {
-                insert_node_at_line(current_line.m_target);
-                m_nodes[current_node].m_successors.push_back(current_line.m_target);
-                m_nodes[current_line.m_target].m_predecessors.push_back(current_node);
+                insert_node_at_line(current_line.m_target, nodes);
+                nodes[current_node].m_targetSuccessor = current_line.m_target;
+                nodes[current_line.m_target].m_predecessors.push_back(current_node);
 
                 following_node = next_line.m_location;
 
-                insert_node_at_line(following_node);
+                insert_node_at_line(following_node, nodes);
 
                 if (current_line.m_instruction.opcode != Opcode::Branch) {
-                    m_nodes[current_node].m_successors.push_back(following_node);
-                    m_nodes[following_node].m_predecessors.push_back(current_node);
+                    nodes[current_node].m_directSuccessor = following_node;
+                    nodes[following_node].m_predecessors.push_back(current_node);
                 }
 
-                m_nodes[current_node].m_endLine = current_line.m_location;
+                nodes[current_node].m_endLine = current_line.m_location;
                 current_node = following_node;
             }
             else if (next_line_is_target) {
                 following_node = next_line.m_location;
-                insert_node_at_line(following_node);
-                m_nodes[current_node].m_successors.push_back(following_node);
-                m_nodes[following_node].m_predecessors.push_back(current_node);
-                m_nodes[current_node].m_endLine = current_line.m_location;
+                insert_node_at_line(following_node, nodes);
+                nodes[current_node].m_directSuccessor = following_node;
+                nodes[following_node].m_predecessors.push_back(current_node);
+                nodes[current_node].m_endLine = current_line.m_location;
                 current_node = following_node;
             } 
         }
-        /*for (auto& [_, node] : m_nodes) {
-            node.determine_register_nature();
-        }*/
-        m_immediatePostdominators = create_postdominator_tree();
-        find_loops();
-    }
-
-    [[nodiscard]] std::optional<node_id> ControlFlowGraph::get_node_with_last_line(const u16 line) const {
-        for (const auto& [id, node] : m_nodes) {
-            if (node.m_endLine == line) {
-                return id;
+        m_nodes.resize(nodes.size());
+        std::unordered_map<node_id, node_id> nodes_to_index;
+        u16 i = 0;
+        for (auto& [id, node] : nodes) {
+            nodes_to_index[id] = i;
+            node.m_index = i++;
+            node.m_directSuccessor = node.m_directSuccessor ? i : 0;
+        }
+        for (auto& [id, node] : nodes) {
+            node.m_targetSuccessor = nodes_to_index.at(node.m_targetSuccessor);
+            for (auto& pred : node.m_predecessors) {
+                pred = nodes_to_index.at(pred);
             }
+            m_nodes[node.m_index] = node;
         }
-        return std::nullopt;
-    }
-
-    void ControlFlowGraph::insert_node_at_line(const u16 start_line) {
-        if (!m_nodes.contains(start_line)) {
-            m_nodes.emplace(start_line, start_line);
-        }
+        compute_postdominators();
+        find_loops();
     }
 
     void ControlFlowGraph::write_to_txt_file(const std::string& path) const {
@@ -191,8 +230,8 @@ namespace dconstruct {
             std::cerr << "couldn't open out graph file " << path << '\n';
         }
         graph_file << "#nodes\n";
-        for (const auto& [id, node] : m_nodes) {
-            graph_file << id << ' ';
+        for (const auto& node : m_nodes) {
+            graph_file << node.m_startLine << '/' << node.m_index << ' ';
             for (const auto& line : node.m_lines) {
                 graph_file << line.m_text << ';';
             }
@@ -200,9 +239,12 @@ namespace dconstruct {
         }
 
         graph_file << "#edges\n";
-        for (const auto& [id, node] : m_nodes) {
-            for (const auto& successor : node.m_successors) {
-                graph_file << id << ' ' << successor << '\n';
+        for (const auto& node : m_nodes) {
+            if (node.m_directSuccessor) {
+                graph_file << node.m_startLine << '/' << node.m_index << ' ' << node.m_directSuccessor << '\n';
+            }
+            if (node.m_targetSuccessor) {
+                graph_file << node.m_startLine << '/' << node.m_index << ' ' << node.m_targetSuccessor << '\n';
             }
         }
     }
@@ -213,12 +255,12 @@ namespace dconstruct {
         Agraph_t* g = agopen((char*)"G", Agdirected, nullptr);
         std::lock_guard<std::mutex> lock(g_graphviz_mutex);
         
-        auto [node_map, max_node] = insert_graphviz_nodes(g);
+        const auto graph_nodes = insert_graphviz_nodes(g);
 
-        insert_graphviz_edges(g, node_map);
+        insert_graphviz_edges(g, graph_nodes);
 
         Agraph_t* returng = agsubg(g, const_cast<char*>("return"), 1);
-        Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(max_node).c_str()), 1);
+        Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(m_nodes.back().m_index).c_str()), 1);
 
         insert_loop_subgraphs(g);
 
@@ -257,16 +299,13 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::pair<std::unordered_map<node_id, Agnode_t*>, node_id> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
-        std::unordered_map<node_id, Agnode_t*> node_map{};
-        node_id max_node = 0;
-        for (const auto& [node_start, node] : m_nodes) {
-            std::string name = std::to_string(node_start);
+    [[nodiscard]] std::vector<Agnode_t*> ControlFlowGraph::insert_graphviz_nodes(Agraph_t *g) const {
+        std::vector<Agnode_t*> ag_nodes;
+        ag_nodes.reserve(m_nodes.size());
+        for (const auto& node : m_nodes) {
+            std::string name = std::to_string(node.m_index);
             Agnode_t* current_node = agnode(g, name.data(), 1);
-            node_map[node_start] = current_node;
-            if (node_start > max_node) {
-                max_node = node_start;
-            }
+            ag_nodes.push_back(current_node);
             const std::string node_html_label = node.get_label_html();
 
             agsafeset_html(current_node, const_cast<char*>("label"), node_html_label.c_str(), "");
@@ -275,26 +314,25 @@ namespace dconstruct {
             agsafeset(current_node, const_cast<char*>("shape"), "plaintext", "");
             agsafeset(current_node, const_cast<char*>("color"), accent_color, "");
         }
-        return { node_map, max_node };
+        return ag_nodes;
     }
 
-    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::unordered_map<node_id, Agnode_t*>& node_map) const {
-        for (const auto& [node_start, node] : m_nodes) {
+    void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::vector<Agnode_t*>& graph_nodes) const {
+        for (const auto& node : m_nodes) {
+            const auto node_start = node.m_index;
             const b8 is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
-            for (const auto& next : node.m_successors) {
-                Agedge_t* edge = agedge(g, node_map.at(node_start), node_map.at(next), const_cast<char*>(""), 1);
-                
-                if (node.m_endLine + 1 == next) {
-                    agsafeset(edge, const_cast<char*>("color"), is_conditional ? conditional_false_color : fallthrough_color, "");
-                }
-                else if (next < node_start) {
+            if (node.m_directSuccessor) {
+                Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_directSuccessor], const_cast<char*>(""), 1);
+                agsafeset(edge, const_cast<char*>("color"), is_conditional ? conditional_false_color : fallthrough_color, "");
+            }
+            if (node.m_targetSuccessor) {
+                Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_targetSuccessor], const_cast<char*>(""), 1);
+                if (node_start > node.m_targetSuccessor) {
                     agsafeset(edge, const_cast<char*>("color"), loop_upwards_color, "");
-                }
-                else if (node.m_lines.back().m_instruction.opcode == Opcode::Branch) {
+                } else if (node.m_lines.back().m_instruction.opcode == Opcode::Branch) {
                     agsafeset(edge, const_cast<char*>("color"), branch_color, "");
-                }
-                else {
+                } else {
                     agsafeset(edge, const_cast<char*>("color"), conditional_true_color, "");
                 }
             }
@@ -303,91 +341,96 @@ namespace dconstruct {
 
     void ControlFlowGraph::find_loops() {
         for (const auto& loc : m_func->m_stackFrame.m_backwardsJumpLocs) {
-            const node_id loop_head = loc.m_target;
-            const node_id loop_latch = get_node_with_last_line(loc.m_location).value();
+            const node_id loop_head = std::lower_bound(
+                m_nodes.begin(), 
+                m_nodes.end(), 
+                loc.m_target, 
+                [](const control_flow_node& node, const u64 target) -> b8 { 
+                    return node.m_startLine < target;
+                }
+            )->m_index;
+            const node_id loop_latch = std::lower_bound(
+                m_nodes.begin(), 
+                m_nodes.end(), 
+                loc.m_location, 
+                [](const control_flow_node& node, const u64 target) -> b8 {
+                    return node.m_startLine < target;
+                }
+            )->m_index;
             m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
     }
 
-    void dfs(node_id n,
-        std::vector<node_id>& rev_postdom,
-        std::unordered_map<node_id, u32>& dfsnum,
-        std::unordered_set<node_id>& visited,
-        const std::map<node_id, control_flow_node>& nodes)
-    {
-        if (!visited.insert(n).second) {
-            return;
-        }
-
-        for (auto pred : nodes.at(n).m_predecessors) {
-            dfs(pred, rev_postdom, dfsnum, visited, nodes);
-        }
-
-        rev_postdom.push_back(n);
-    }
-
-    [[nodiscard]] node_id intersect(node_id b1, node_id b2, const std::unordered_map<node_id, node_id>& ipdom, const std::unordered_map<node_id, u32>& dfsnum) {
-        while (b1 != b2) {
-            while (dfsnum.at(b1) > dfsnum.at(b2)) {
-                b1 = ipdom.at(b1);
+    [[nodiscard]] static const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes) {
+        const control_flow_node* b1 = &nodes[node_b1];
+        const control_flow_node* b2 = &nodes[node_b2];
+        while (b1->m_index != b2->m_index) {
+            while (b1->m_revPostorder > b2->m_revPostorder) {
+                b1 = &nodes[b1->m_ipdom];
             }
-            while (dfsnum.at(b2) > dfsnum.at(b1)) {
-                b2 = ipdom.at(b2);
+            while (b2->m_revPostorder > b1->m_revPostorder) {
+                b2 = &nodes[b2->m_ipdom];
             }
         }
-        return b1;
+        return *b1;
     }
 
-    [[nodiscard]] std::unordered_map<node_id, node_id>
-        ControlFlowGraph::create_postdominator_tree() const
-    {
+    void ControlFlowGraph::compute_postdominators() {
 #ifdef _PERF
         const auto start = std::chrono::high_resolution_clock::now();
 #endif
 
-        std::vector<node_id> rev_postdom;
         std::unordered_map<node_id, u32> dfsnum;
-        rev_postdom.reserve(m_nodes.size());
         dfsnum.reserve(m_nodes.size());
         std::unordered_set<node_id> visited;
 
-        dfs(m_returnNode, rev_postdom, dfsnum, visited, m_nodes);
-        std::reverse(rev_postdom.begin(), rev_postdom.end());
+        auto rev_postdom = create_rev_postord(m_nodes);
 
-        for (u32 i = 0; i < rev_postdom.size(); ++i)
+        u32 i = 0;
+        for (auto& node : m_nodes) {
+            node.m_revPostorder = rev_postdom[i++];
+        }
+        for (u32 i = 0; i < rev_postdom.size(); ++i) {
             dfsnum[rev_postdom[i]] = i;
+        }
 
         const u32 N = rev_postdom.size();
         std::unordered_map<node_id, node_id> ipdom;
-        for (auto n : rev_postdom)
+        for (auto n : rev_postdom) {
             ipdom[n] = 0;
+        }
 
-        ipdom[m_returnNode] = m_returnNode;
+        ipdom[m_nodes.back().m_index] = m_nodes.back().m_index;
 
-        bool changed = true;
+        b8 changed = true;
         while (changed) {
             changed = false;
             for (u32 i = 1; i < N; ++i) {
                 node_id n = rev_postdom[i];
                 node_id new_ipdom = 0;
+                const control_flow_node& node = m_nodes.at(n);
+                const auto dir_s = node.m_directSuccessor;
+                const auto tar_s = node.m_targetSuccessor;
 
-                for (auto s : m_nodes.at(n).m_successors) {
-                    if (ipdom.at(s) != 0) {
-                        new_ipdom = s;
-                        break;
-                    }
+                if (dir_s && ipdom.at(dir_s) != 0) {
+                    new_ipdom = dir_s;
+                } else if (tar_s && ipdom.at(tar_s)) {
+                    new_ipdom = tar_s;
                 }
-
-                if (new_ipdom == 0)
+                if (new_ipdom == 0) {
                     continue;
-
-                for (auto s : m_nodes.at(n).m_successors) {
-                    if (ipdom.at(s) != 0 && s != new_ipdom)
-                        new_ipdom = intersect(s, new_ipdom, ipdom, dfsnum);
+                }
+                
+                if (dir_s && ipdom.at(dir_s) && dir_s != new_ipdom) {
+                    new_ipdom = intersect(dir_s, new_ipdom, m_nodes).m_index;
+                }
+                if (tar_s && ipdom.at(tar_s) && tar_s != new_ipdom) {
+                    new_ipdom = intersect(tar_s, new_ipdom, m_nodes).m_index;
                 }
 
                 if (ipdom.at(n) != new_ipdom) {
                     ipdom[n] = new_ipdom;
+                    m_nodes.at(n).m_ipdom = new_ipdom;
                     changed = true;
                 }
             }
@@ -398,20 +441,12 @@ namespace dconstruct {
         std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
             << "ms\n";
 #endif
-
-        return ipdom;
     }
 
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
         std::vector<node_id> body;
-
-        const node_id head_ipdom = get_ipdom_at(head);
-        const node_id proper_loop_head = head_ipdom != m_nodes.at(latch).m_endLine + 1 ? head_ipdom : head;
-        const auto& suc = m_nodes.at(proper_loop_head).get_direct_successor();
-        auto it_start = m_nodes.find(head);
-        auto it_end = m_nodes.find(latch);
-        for (auto& it = it_start; it != it_end; ++it) {
-            body.push_back(it->first);
+        for (u32 i = head; i < latch; ++i) {
+            body.push_back(i);
         }
         return body;
     }
@@ -422,7 +457,7 @@ namespace dconstruct {
         reg_set regs_to_check,
         reg_set& read_first, 
         const node_id stop_node,
-        std::set<node_id>& asd,
+        node_set& asd,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
@@ -433,7 +468,8 @@ namespace dconstruct {
         };
 
         std::vector<frame> node_stack;
-        std::set<const control_flow_node*> visited;
+        node_set visited;
+        visited.resize(m_nodes.size(), false);
 
         node_stack.push_back({&start_node, regs_to_check});
 
@@ -442,10 +478,10 @@ namespace dconstruct {
         while (!node_stack.empty()) {
             auto [current_node, regs] = node_stack.back();
             node_stack.pop_back();
-            if (visited.contains(current_node)) {
+            if (visited[current_node->m_index]) {
                 continue;
             }
-            visited.insert(current_node);
+            visited[current_node->m_index] = true;
             for (u32 i = use_start_line ? start_line : 0; i < current_node->m_lines.size(); ++i) {
                 const function_disassembly_line& line = current_node->m_lines[i];
                 if (regs.to_ullong() == 0) {
@@ -480,82 +516,11 @@ namespace dconstruct {
             if (regs_to_check.to_ullong() == 0) {
                 continue;
             }
-            for (const auto& successor : current_node->m_successors) {
-                if (successor != stop_node) {
-                    node_stack.push_back({&m_nodes.at(successor), regs});
-                }
+            if (current_node->m_directSuccessor != stop_node) {
+                node_stack.push_back({&m_nodes.at(current_node->m_directSuccessor), regs});
             }
-        }
-    }
-
-    void ControlFlowGraph::get_register_nature(
-        const control_flow_node& start_node,
-        std::set<reg_idx> regs_to_check,
-        std::set<reg_idx>& read_first, 
-        const node_id stop_node,
-        std::set<node_id>& asd,
-        const b8 return_is_read,
-        const u32 start_line
-    ) const noexcept {
-
-        struct frame {
-            const control_flow_node* node;
-            std::set<reg_idx> regs;
-        };
-
-        std::vector<frame> node_stack;
-        std::set<const control_flow_node*> visited;
-
-        node_stack.push_back({&start_node, regs_to_check});
-
-        b8 use_start_line = start_line != 0;
-
-        while (!node_stack.empty()) {
-            auto elem = std::move(node_stack.back());
-            node_stack.pop_back();
-            auto [current_node, regs] = std::move(elem);
-            if (visited.contains(current_node)) {
-                continue;
-            }
-            visited.insert(current_node);
-            for (u32 i = use_start_line ? start_line : 0; i < current_node->m_lines.size(); ++i) {
-                const function_disassembly_line& line = current_node->m_lines[i];
-                if (regs.empty()) {
-                    break;
-                }
-                const Instruction& istr = line.m_instruction;
-                if (istr.opcode == Opcode::Return && regs.contains(istr.destination)) {
-                    regs.erase(istr.destination);
-                    if (return_is_read) {
-                        read_first.insert(istr.destination);
-                    }
-                    break;
-                }
-                if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs.contains(istr.destination)) {
-                    regs.erase(istr.destination);
-                    read_first.insert(istr.destination);
-                    continue;
-                }
-                if (regs.contains(istr.destination) && !istr.destination_is_immediate()) {
-                    regs.erase(istr.destination);
-                }
-                if (regs.contains(istr.operand1) && istr.op1_is_reg()) {
-                    regs.erase(istr.operand1);
-                    read_first.insert(istr.operand1);
-                }
-                if (regs.contains(istr.operand2) && istr.op2_is_reg()) {
-                    regs.erase(istr.operand2);
-                    read_first.insert(istr.operand2);
-                }
-            }
-            use_start_line = false;
-            if (regs_to_check.empty()) {
-                continue;
-            }
-            for (const auto& successor : current_node->m_successors) {
-                if (successor != stop_node) {
-                    node_stack.push_back({&m_nodes.at(successor), regs});
-                }
+            if (current_node->m_targetSuccessor != stop_node) {
+                node_stack.push_back({&m_nodes.at(current_node->m_targetSuccessor), regs});
             }
         }
     }
@@ -564,14 +529,14 @@ namespace dconstruct {
         const control_flow_node& start_node,
         const reg_idx reg_to_check,
         const node_id stop_node,
-        std::set<node_id>& checked,
+        node_set& checked,
         const b8 return_is_read,
         const u32 start_line
     ) const noexcept {
-        if (checked.contains(start_node.m_startLine)) {
+        if (checked[start_node.m_index]) {
             return 0;
         }
-        checked.insert(start_node.m_startLine);
+        checked[start_node.m_index] = true;
         u16 count = 0;
         for (u32 i = start_line; i < start_node.m_lines.size(); ++i) {
             if (count >= 2) {
@@ -601,46 +566,50 @@ namespace dconstruct {
         if (start_node.m_startLine == stop_node) {
             return count;
         }
-        for (const auto& successor : start_node.m_successors) {
-            if (count >= 2) {
-                break;
-            }
-            count += get_register_read_count(m_nodes.at(successor), reg_to_check, stop_node, checked, return_is_read);
+        if (start_node.m_directSuccessor) {
+            count += get_register_read_count(m_nodes.at(start_node.m_directSuccessor), reg_to_check, stop_node, checked, return_is_read);
+        }
+        if (count > 2) {
+            return count;
+        }
+        if (start_node.m_targetSuccessor) {
+            count += get_register_read_count(m_nodes.at(start_node.m_targetSuccessor), reg_to_check, stop_node, checked, return_is_read);
         }
         return count;
     }
 
-    void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, reg_set& result, std::set<node_id>& checked) const {
-        if (node.m_startLine == stop || checked.contains(node.m_startLine)) {
+    void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, reg_set& result, node_set& checked) const {
+        if (node.m_startLine == stop || checked[node.m_index]) {
             return;
         }
-        checked.insert(node.m_startLine);
+        checked[node.m_index] = true;
         for (const auto& line : node.m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.destination < ARGUMENT_REGISTERS_IDX) {
                 result.set(line.m_instruction.destination);
             }
         }
-        for (const auto& successor : node.m_successors) {
-            get_registers_written_to(m_nodes.at(successor), stop, result, checked);
+        if (node.m_directSuccessor) {
+            get_registers_written_to(m_nodes.at(node.m_directSuccessor), stop, result, checked);
+        }
+        if (node.m_targetSuccessor) {
+            get_registers_written_to(m_nodes.at(node.m_targetSuccessor), stop, result, checked);
         }
     }
     
     [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept {
         reg_set regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
-        std::set<node_id> checked;
-        node_id ipdom = get_ipdom_at(start_node.m_startLine);
+        node_set checked(m_nodes.size(), false);
+        node_id ipdom = start_node.m_ipdom;
 
-        const node_id target = start_node.get_adjusted_target();
-
-        if (ipdom == start_node.m_startLine) {
-            result.set(target);
+        if (ipdom == start_node.m_index) {
+            result.set(start_node.m_targetSuccessor);
             return result;
         }
 
-        get_registers_written_to(m_nodes.at(start_node.get_direct_successor()), ipdom, left, checked);
-        checked.clear();
-        get_registers_written_to(m_nodes.at(target), ipdom, right, checked);
-        checked.clear();
+        get_registers_written_to(m_nodes[start_node.m_directSuccessor], ipdom, left, checked);
+        std::fill(checked.begin(), checked.end(), false);
+        get_registers_written_to(m_nodes[start_node.m_targetSuccessor], ipdom, right, checked);
+        std::fill(checked.begin(), checked.end(), false);
 
         regs_to_check = left | right;
         get_register_nature(m_nodes.at(ipdom), regs_to_check, read_first_ipdom, -1, checked, return_is_read);
@@ -650,27 +619,25 @@ namespace dconstruct {
 
     [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
         reg_set regs_to_check, read_first, result;
-        std::set<node_id> checked;
+        node_set checked(m_nodes.size(), false);
         for (const auto& line : head_node.m_lines) {
             if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
                 regs_to_check.set(line.m_instruction.destination);
             }
         }
-        get_registers_written_to(m_nodes.at(head_node.get_direct_successor()), head_node.m_startLine, regs_to_check, checked);
-        checked.clear();
-        get_register_nature(m_nodes.at(head_node.get_adjusted_target()), regs_to_check, read_first, m_returnNode, checked, true);
+        get_registers_written_to(m_nodes[head_node.m_directSuccessor], head_node.m_index, regs_to_check, checked);
+        std::fill(checked.begin(), checked.end(), false);
+        get_register_nature(m_nodes[head_node.m_targetSuccessor], regs_to_check, read_first, m_nodes.back().m_index, checked, true);
 
         return read_first;
     }
 
     [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept {
-        auto it_start = m_nodes.find(loop.m_headNode);
-        auto it_end = m_nodes.find(loop.m_latchNode);
-        for (auto& it = it_end; it != it_start; --it) {
-            if (it->second.get_adjusted_target() == exit_node) {
-                return it->second;
+        for (u16 i = loop.m_latchNode; i > loop.m_headNode; --i) {
+            if (m_nodes[i].m_targetSuccessor == exit_node) {
+                return m_nodes[i];
             }
         }
-        return m_nodes.at(loop.m_headNode);
+        return m_nodes[loop.m_headNode];
     }
 }
