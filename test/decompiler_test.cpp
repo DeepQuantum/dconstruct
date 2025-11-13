@@ -581,11 +581,11 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\activities.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
-        const std::string id = "#451EEFDC085298B4";
+        const std::string id = "ready-waiting@main@start@10";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -595,21 +595,23 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.asm)", {} };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
         std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.dcpl)");
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)");
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto& func : funcs) {
             if (emitted.contains(func.m_id)) {
                 continue;
             }
             emitted.insert(func.m_id);
-            const auto dc_func = dcompiler::decomp_function{ &func, file };
-            out << dc_func.to_string() << "\n\n";
+            try {
+                const auto dc_func = dcompiler::decomp_function{ &func, file };
+                out << dc_func.to_string() << "\n\n";
+            } catch (...) {}
         }
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();

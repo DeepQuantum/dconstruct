@@ -23,7 +23,7 @@ namespace dconstruct {
         node_id m_startLine = 0;
         node_id m_endLine = 0;
         node_id m_index = 0;
-        node_id m_revPostorder = 0;
+        node_id m_postorder = 0;
         node_id m_ipdom = 0;
 
         explicit control_flow_node() = default;
@@ -43,12 +43,14 @@ namespace dconstruct {
         node_id m_latchNode;
     };
 
+    [[nodiscard]] std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes);
+    [[nodiscard]] const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes);
+
     class ControlFlowGraph {
     public:
         std::vector<control_flow_node> m_nodes;
-        //std::unordered_map<node_id, node_id> m_immediatePostdominators;
         std::vector<control_flow_loop> m_loops;
-        //node_id m_returnNode;
+
         const function_disassembly *m_func;
         ControlFlowGraph() = default;
         explicit ControlFlowGraph(const function_disassembly *);
@@ -60,13 +62,8 @@ namespace dconstruct {
         void write_image(const std::string &path = "graph.svg") const;
         
         void insert_loop_subgraphs(Agraph_t *g) const;
-        std::set<node_id> m_ipdomsEmitted;
 
-        [[nodiscard]] const std::vector<control_flow_node>& get_nodes() const {
-            return m_nodes;
-        }
-
-        [[nodiscard]] const control_flow_node& operator[](const node_id at) const {
+        [[nodiscard]] inline const control_flow_node& operator[](const node_id at) const {
             return m_nodes[at];
         }
 
@@ -84,9 +81,6 @@ namespace dconstruct {
         private:
         
         void compute_postdominators();
-
-
-        [[nodiscard]] opt_ref<const control_flow_node> get_node_with_last_line(const node_id last_line) const;
 
         [[nodiscard]] std::vector<Agnode_t*> insert_graphviz_nodes(Agraph_t* g) const;
         void insert_graphviz_edges(Agraph_t* g, const std::vector<Agnode_t*>& nodes) const;
