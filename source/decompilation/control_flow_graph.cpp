@@ -55,6 +55,9 @@ namespace dconstruct {
         ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12">"
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
+        ss << std::hex << "idx: " << m_index << "  ipdom: " << m_ipdom << "  postorder: " << m_postorder << std::dec << "<BR/>";
+
+
         for (const auto& line : m_lines) {
             ss << line.m_text << " " << html_escape(line.m_comment) << "&#160;&#160;<BR/>";
         }
@@ -113,30 +116,15 @@ namespace dconstruct {
         }
     }
 
-    static void dfs(const control_flow_node& n,
-        std::vector<node_id>& rev_postdom,
-        node_set& visited,
-        const std::vector<control_flow_node>& nodes)
-    {
-        if (visited[n.m_index]) {
-            return;
-        }
-        visited[n.m_index] = true;
-        for (auto pred : n.m_predecessors) {
-            dfs(nodes[pred], rev_postdom, visited, nodes);
-        }
-
-        rev_postdom.push_back(n.m_index);
-    }
-
-    [[nodiscard]] static std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes) {
+    [[nodiscard]] std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes) {
         std::vector<node_id> result;
-        result.reserve(nodes.size());
-        node_set visited(nodes.size(), false);
+        const u32 size = nodes.size();
+        result.reserve(size);
+        node_set visited(size, false);
 
         std::vector<std::pair<node_id, size_t>> stack;
         stack.emplace_back(nodes.back().m_index, 0);
-
+        u32 i = 0;
         while (!stack.empty()) {
             auto [n, i] = stack.back();
             if (!visited[n]) {
@@ -152,12 +140,10 @@ namespace dconstruct {
                 }
             }
             else {
-                result.push_back(n);
+                result.insert(result.begin(), n);
                 stack.pop_back();
             }
         }
-
-        std::reverse(result.begin(), result.end());
         return result;
     }
 
@@ -356,19 +342,19 @@ namespace dconstruct {
                 [](const control_flow_node& node, const u64 target) -> b8 {
                     return node.m_startLine < target;
                 }
-            )->m_index;
+            )->m_index - 1;
             m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
     }
 
-    [[nodiscard]] static const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes) {
+    [[nodiscard]] const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes) {
         const control_flow_node* b1 = &nodes[node_b1];
         const control_flow_node* b2 = &nodes[node_b2];
         while (b1->m_index != b2->m_index) {
-            while (b1->m_revPostorder > b2->m_revPostorder) {
+            while (b1->m_postorder < b2->m_postorder) {
                 b1 = &nodes[b1->m_ipdom];
             }
-            while (b2->m_revPostorder > b1->m_revPostorder) {
+            while (b2->m_postorder < b1->m_postorder) {
                 b2 = &nodes[b2->m_ipdom];
             }
         }
@@ -380,18 +366,11 @@ namespace dconstruct {
         const auto start = std::chrono::high_resolution_clock::now();
 #endif
 
-        std::unordered_map<node_id, u32> dfsnum;
-        dfsnum.reserve(m_nodes.size());
-        std::unordered_set<node_id> visited;
-
         auto rev_postdom = create_rev_postord(m_nodes);
 
         u32 i = 0;
         for (auto& node : m_nodes) {
-            node.m_revPostorder = rev_postdom[i++];
-        }
-        for (u32 i = 0; i < rev_postdom.size(); ++i) {
-            dfsnum[rev_postdom[i]] = i;
+            node.m_postorder = rev_postdom[m_nodes.size() - 1 - i++];
         }
 
         const u32 N = rev_postdom.size();
@@ -401,6 +380,7 @@ namespace dconstruct {
         }
 
         ipdom[m_nodes.back().m_index] = m_nodes.back().m_index;
+        m_nodes.back().m_ipdom = m_nodes.back().m_index;
 
         b8 changed = true;
         while (changed) {
@@ -412,7 +392,7 @@ namespace dconstruct {
                 const auto dir_s = node.m_directSuccessor;
                 const auto tar_s = node.m_targetSuccessor;
 
-                if (dir_s && ipdom.at(dir_s) != 0) {
+                if (dir_s && ipdom.at(dir_s)) {
                     new_ipdom = dir_s;
                 } else if (tar_s && ipdom.at(tar_s)) {
                     new_ipdom = tar_s;
@@ -427,6 +407,7 @@ namespace dconstruct {
                 if (tar_s && ipdom.at(tar_s) && tar_s != new_ipdom) {
                     new_ipdom = intersect(tar_s, new_ipdom, m_nodes).m_index;
                 }
+
 
                 if (ipdom.at(n) != new_ipdom) {
                     ipdom[n] = new_ipdom;
@@ -563,7 +544,7 @@ namespace dconstruct {
                 count++;
             }
         }
-        if (start_node.m_startLine == stop_node) {
+        if (start_node.m_index == stop_node) {
             return count;
         }
         if (start_node.m_directSuccessor) {
@@ -579,7 +560,7 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::get_registers_written_to(const control_flow_node& node, const node_id stop, reg_set& result, node_set& checked) const {
-        if (node.m_startLine == stop || checked[node.m_index]) {
+        if (node.m_index == stop || checked[node.m_index]) {
             return;
         }
         checked[node.m_index] = true;
@@ -621,10 +602,11 @@ namespace dconstruct {
         reg_set regs_to_check, read_first, result;
         node_set checked(m_nodes.size(), false);
         for (const auto& line : head_node.m_lines) {
-            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.operand1 < ARGUMENT_REGISTERS_IDX) {
+            if (!line.m_instruction.destination_is_immediate() && line.m_instruction.destination < ARGUMENT_REGISTERS_IDX) {
                 regs_to_check.set(line.m_instruction.destination);
             }
         }
+
         get_registers_written_to(m_nodes[head_node.m_directSuccessor], head_node.m_index, regs_to_check, checked);
         std::fill(checked.begin(), checked.end(), false);
         get_register_nature(m_nodes[head_node.m_targetSuccessor], regs_to_check, read_first, m_nodes.back().m_index, checked, true);

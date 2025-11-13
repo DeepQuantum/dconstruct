@@ -36,6 +36,7 @@ using reg_set = std::bitset<49>;
 using node_set = std::vector<b8>;
 
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
+constexpr reg_idx MAX_REGISTER = 128;
 
 #define SID(str) (dconstruct::ToStringId64(str))
 

@@ -14,18 +14,19 @@ namespace dconstruct::dcompiler {
         explicit decomp_function(const function_disassembly *func, const BinaryFile &current_file);
 
         [[nodiscard]] std::string to_string() const;
-
+        
+        ControlFlowGraph m_graph;
+        std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
+        std::vector<expr_uptr> m_transformableExpressions;
+        std::vector<ast::variable_declaration> m_arguments;
+        std::stack<std::reference_wrapper<ast::block>> m_blockStack;
+        compiler::environment m_env;
         const function_disassembly* m_disassembly;
         const BinaryFile& m_file;
         ast::full_type m_returnType;
-        std::set<node_id> m_parsedNodes;
-        ControlFlowGraph m_graph;
-        std::vector<expr_uptr> m_transformableExpressions;
-        std::vector<ast::variable_declaration> m_arguments;
-        compiler::environment m_env;
+        node_set m_parsedNodes;
+        node_set m_ipdomsEmitted;
         ast::block m_baseBlock;
-        std::stack<std::reference_wrapper<ast::block>> m_blockStack;
-        std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
         const SymbolTable& m_symbolTable;
         u32 m_varCount = 0;
         u32 m_loopDepth = 0;
@@ -38,7 +39,6 @@ namespace dconstruct::dcompiler {
 
         void emit_single_branch(const control_flow_node& node, const node_id stop_node);
  
-        void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, const std::set<reg_idx>& regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type>& regs_to_type);
         void emit_branch(ast::block& block, node_id proper_destination, const node_id idom, reg_set regs_to_emit, std::unordered_map<reg_idx, dconstruct::ast::full_type> &regs_to_type);
 
         void emit_loop(const control_flow_loop &loop, const node_id stop_node);
@@ -77,8 +77,6 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const noexcept;
 
         void insert_return(const reg_idx dest);
-
-        void insert_loop_head(const control_flow_loop& loop, const reg_idx conditional_check_location);
 
         [[nodiscard]] inline b8 is_binary(const ast::expression* expr) {
             return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;

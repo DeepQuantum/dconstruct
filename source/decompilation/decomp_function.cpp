@@ -5,15 +5,20 @@
 namespace dconstruct::dcompiler {
 
 
-const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
-const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
+static const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
+static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
 
 decomp_function::decomp_function(const function_disassembly *func, const BinaryFile &current_file) :
-    m_disassembly{func}, m_file{current_file}, m_graph{func}, m_symbolTable{func->m_stackFrame.m_symbolTable}
+    m_disassembly{func}, 
+    m_file{current_file}, 
+    m_graph{func}, 
+    m_symbolTable{func->m_stackFrame.m_symbolTable}, 
+    m_parsedNodes(m_graph.m_nodes.size(), false), 
+    m_ipdomsEmitted(m_graph.m_nodes.size(), false)
 {
 #ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly->m_id << '\n';
-    if (m_graph.get_nodes().size() > 1) {
+    if (m_graph.m_nodes.size() > 1) {
         m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly->m_id + ".svg");
     }
 #endif
@@ -53,7 +58,7 @@ decomp_function::decomp_function(const function_disassembly *func, const BinaryF
 
 void decomp_function::parse_basic_block(const control_flow_node &node) {
 #ifdef _DEBUG
-    std::cout << "parsing node " << node.m_startLine << '\n';
+    std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
 
@@ -103,7 +108,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::Call:
             case Opcode::CallFf: {
                 expr_uptr call = make_call(istr);
-                node_set checked(m_graph.get_nodes().size(), false);
+                node_set checked(m_graph.m_nodes.size(), false);
                 u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, m_graph.m_nodes.back().m_index, checked, !m_disassembly->m_isScriptFunction, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
@@ -201,7 +206,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 break;
             }
             default: {
-                throw std::runtime_error("");
+                throw std::runtime_error("missing instruction");
             }
         }
         if (generated_expression != nullptr) {
@@ -212,18 +217,18 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
 void decomp_function::emit_node(const control_flow_node& node, const node_id stop_node) {
 #ifdef _DEBUG
-    std::cout << "emitting node " << std::hex << node.m_startLine << '\n';
+    std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
-    const node_id current_node_id = node.m_startLine;
-    if (current_node_id == stop_node || m_parsedNodes.contains(current_node_id)) {
+    const node_id current_node_id = node.m_index;
+    if (current_node_id == stop_node || m_parsedNodes[current_node_id]) {
         return;
     }
-    m_parsedNodes.insert(current_node_id);
+    m_parsedNodes[current_node_id] = true;
 
     const auto& last_line = node.m_lines.back();
 
-    if (const auto loop = m_graph.get_loop_with_head(node.m_startLine)) {
+    if (const auto loop = m_graph.get_loop_with_head(node.m_index)) {
         emit_loop(loop->get(), stop_node);
     }
     else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
@@ -234,11 +239,9 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
             emit_branches(node, stop_node);
         }
     }
-    else if (const auto loop = m_graph.get_loop_with_head(node.m_directSuccessor)) {
-        if (node.m_directSuccessor != stop_node) {
-            parse_basic_block(node);
-            emit_loop(loop->get(), stop_node);
-        }
+    else if (node.m_directSuccessor != stop_node; const auto loop = m_graph.get_loop_with_head(node.m_directSuccessor)) {
+        parse_basic_block(node);
+        emit_loop(loop->get(), stop_node);
     }
     else {
         parse_basic_block(node);
@@ -247,8 +250,8 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 
 void decomp_function::emit_single_branch(const control_flow_node& node, const node_id stop_node) {
     const node_id idom = node.m_ipdom;
-    const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
-    m_graph.m_ipdomsEmitted.insert(idom);
+    const b8 idom_already_emitted = m_ipdomsEmitted[idom];
+    m_ipdomsEmitted[idom] = true;
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
@@ -283,7 +286,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
         Opcode::ILessThan,
         Opcode::BranchIfNot,
     };
-    if (loop.m_headNode != m_graph[loop.m_latchNode].m_index + 1) {
+    if (m_graph[loop.m_headNode].m_ipdom != loop.m_latchNode + 1) {
         return false;
     }
     const auto& lines = m_graph[loop.m_headNode].m_lines;
@@ -331,7 +334,7 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
     }
 
     m_blockStack.push(*loop_block);
-    emit_node(m_graph[loop_entry], head_node.m_startLine);
+    emit_node(m_graph[loop_entry], head_node.m_index);
     bits = regs_to_emit.to_ullong();
     while (bits != 0) {
         const reg_idx reg = std::countr_zero(bits);
@@ -390,8 +393,8 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
     const node_id loop_tail = m_graph[loop.m_headNode].m_targetSuccessor;
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom; //m_graph.get_ipdom_at(loop.m_headNode);
-    const node_id exit_node = m_graph[loop.m_latchNode].m_endLine + 1;
-    const node_id proper_loop_head = m_graph.get_final_loop_condition_node(loop, exit_node).m_startLine;
+    const node_id exit_node = loop.m_latchNode + 1;
+    const node_id proper_loop_head = m_graph.get_final_loop_condition_node(loop, exit_node).m_index;
     const node_id idom = m_graph[loop_tail].m_ipdom; //m_graph.get_ipdom_at(loop_tail);
 
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_directSuccessor];
@@ -415,7 +418,7 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
         m_registersToVars[loop_var_reg].push(id->copy());
         m_registersToVars[alt_loop_var_reg].push(id->copy());
     }
-    expr_uptr condition = make_loop_condition(loop.m_headNode, proper_loop_head, loop_entry.m_startLine, exit_node);
+    expr_uptr condition = make_loop_condition(loop.m_headNode, proper_loop_head, loop_entry.m_index, exit_node);
     auto bits = regs_to_emit.to_ullong();
     while (bits != 0) {
         const reg_idx reg = std::countr_zero(bits);
@@ -465,8 +468,8 @@ void decomp_function::emit_loop(const control_flow_loop &loop, const node_id sto
 
 void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
     const node_id idom = node.m_ipdom; //m_graph.get_ipdom_at(node.m_startLine);
-    const b8 idom_already_emitted = m_graph.m_ipdomsEmitted.contains(idom);
-    m_graph.m_ipdomsEmitted.insert(idom);
+    const b8 idom_already_emitted = m_ipdomsEmitted[idom];
+    m_ipdomsEmitted[idom] = true;
     node_id proper_successor, proper_destination, proper_head;
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
@@ -633,13 +636,13 @@ template<typename from, typename to>
     const control_flow_node* success_exit = nullptr;
 
     expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
-    proper_head = current_node->m_startLine;
+    proper_head = current_node->m_index;
     proper_successor = current_node->m_directSuccessor;
-    proper_destination = current_node->m_lines.back().m_target;
+    proper_destination = current_node->m_targetSuccessor;
 
     while (true) {
         const auto& last_line = current_node->m_lines.back();
-        const auto  target = last_line.m_target;
+        const auto  target = current_node->m_targetSuccessor;
 
         const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
         const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
@@ -661,12 +664,12 @@ template<typename from, typename to>
                     token, std::move(condition),
                     get_expression_as_condition(last_line.m_instruction.operand1)
                 );
-                proper_head = current_node->m_startLine;
+                proper_head = current_node->m_index;
                 proper_successor = current_node->m_directSuccessor;
                 proper_destination = target;
             }
         }
-        else if (exit_node->m_startLine != target) {
+        else if (exit_node->m_index != target) {
             break;
         }
         else {
@@ -675,7 +678,7 @@ template<typename from, typename to>
                 token, std::move(condition),
                 get_expression_as_condition(last_line.m_instruction.operand1)
             );
-            proper_head = current_node->m_startLine;
+            proper_head = current_node->m_index;
             proper_successor = current_node->m_directSuccessor;
             proper_destination = target;
         }
