@@ -239,9 +239,11 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
             emit_branches(node, stop_node);
         }
     }
-    else if (node.m_directSuccessor != stop_node; const auto loop = m_graph.get_loop_with_head(node.m_directSuccessor)) {
-        parse_basic_block(node);
-        emit_loop(loop->get(), stop_node);
+    else if (const auto loop = m_graph.get_loop_with_head(node.m_directSuccessor)) {
+        if (node.m_directSuccessor != stop_node) {
+            parse_basic_block(node);
+            emit_loop(loop->get(), stop_node);
+        }
     }
     else {
         parse_basic_block(node);
@@ -467,7 +469,7 @@ void decomp_function::emit_loop(const control_flow_loop &loop, const node_id sto
 
 
 void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
-    const node_id idom = node.m_ipdom; //m_graph.get_ipdom_at(node.m_startLine);
+    const node_id idom = node.m_ipdom;
     const b8 idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
     node_id proper_successor, proper_destination, proper_head;
@@ -477,8 +479,8 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
-    auto bits = regs_to_emit.to_ullong();
     if (!idom_already_emitted) {
+        auto bits = regs_to_emit.to_ullong();
         while (bits != 0) {
             const reg_idx reg = std::countr_zero(bits);
             bits &= bits - 1;
@@ -492,6 +494,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     emit_branch(*else_block, proper_destination, idom, regs_to_emit, regs_to_type);
 
     if (!idom_already_emitted) {
+        auto bits = regs_to_emit.to_ullong();
         while (bits != 0) {
             const reg_idx reg = std::countr_zero(bits);
             bits &= bits - 1;
