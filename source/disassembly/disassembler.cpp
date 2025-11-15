@@ -415,7 +415,7 @@ void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, ano
             break;
         }
     }
-    insert_span_fmt("ON %s {\n", function_name.m_event.c_str());
+    insert_span_indent("%*sON %s {\n", indent, function_name.m_event.c_str());
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
@@ -478,9 +478,6 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
 }
 
 [[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const b8 is_script_function) {
-    if (name == "#0000000000000000") {
-        lambda = nullptr;
-    }
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 

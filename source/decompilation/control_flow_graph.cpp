@@ -13,6 +13,7 @@
 #include <set>
 #include <algorithm>
 #include <chrono>
+#include <functional>
 
 namespace dconstruct {
 
@@ -37,6 +38,10 @@ namespace dconstruct {
         std::string output;
         output.reserve(input.size());
         for (char c : input) {
+            if (c < '\n') {
+                output += "borked";
+                continue;
+            }
             switch (c) {
             case '&':  output += "&amp;";  break;
             case '<':  output += "&lt;";   break;
@@ -146,6 +151,29 @@ namespace dconstruct {
         }
         return result;
     }
+
+    //recursive version of the above
+    /*[[nodiscard]] std::vector<node_id> create_postord_recursive(const std::vector<control_flow_node>& nodes) {
+        std::vector<node_id> result;
+        const u32 size = nodes.size();
+        result.reserve(size);
+        node_set visited(size, false);
+
+        std::function<void(node_id)> visit = [&](node_id n) {
+            if (visited[n]) {
+                return;
+            }
+            visited[n] = true;
+            for (const auto& pred : nodes[n].m_predecessors) {
+                visit(pred);
+            }
+            result.push_back(n);
+        };
+
+        visit(nodes.back().m_index);
+        std::reverse(result.begin(), result.end());
+        return result;
+    }*/
 
     ControlFlowGraph::ControlFlowGraph(const function_disassembly *func) : m_func(func)  {
         const std::vector<u32> &labels = func->m_stackFrame.m_labels;
@@ -282,6 +310,7 @@ namespace dconstruct {
             agsafeset(loopg, const_cast<char*>("fontcolor"), accent_color, "");
             agsafeset(loopg, const_cast<char*>("fontname"), "Consolas", "");
             agsafeset(loopg, const_cast<char*>("color"), "purple", "");
+            agsafeset(loopg, const_cast<char*>("style"), "dashed", "");
         }
     }
 
@@ -362,21 +391,16 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::compute_postdominators() {
-#ifdef _PERF
-        const auto start = std::chrono::high_resolution_clock::now();
-#endif
-
         auto rev_postdom = create_rev_postord(m_nodes);
-
-        u32 i = 0;
-        for (auto& node : m_nodes) {
-            node.m_postorder = rev_postdom[m_nodes.size() - 1 - i++];
-        }
+        static constexpr node_id UNDEF = std::numeric_limits<node_id>::max();
+		for (u32 i = m_nodes.size(); i > 0; --i) {
+            m_nodes[m_nodes.size() - i].m_postorder = rev_postdom[i - 1];
+		}
 
         const u32 N = rev_postdom.size();
         std::unordered_map<node_id, node_id> ipdom;
         for (auto n : rev_postdom) {
-            ipdom[n] = 0;
+            ipdom[n] = UNDEF;
         }
 
         ipdom[m_nodes.back().m_index] = m_nodes.back().m_index;
@@ -387,27 +411,26 @@ namespace dconstruct {
             changed = false;
             for (u32 i = 1; i < N; ++i) {
                 node_id n = rev_postdom[i];
-                node_id new_ipdom = 0;
+                node_id new_ipdom = UNDEF;
                 const control_flow_node& node = m_nodes.at(n);
                 const auto dir_s = node.m_directSuccessor;
                 const auto tar_s = node.m_targetSuccessor;
 
-                if (dir_s && ipdom.at(dir_s)) {
+                if (dir_s && ipdom.at(dir_s) != UNDEF) {
                     new_ipdom = dir_s;
-                } else if (tar_s && ipdom.at(tar_s)) {
+                } else if (tar_s && ipdom.at(tar_s) != UNDEF) {
                     new_ipdom = tar_s;
                 }
-                if (new_ipdom == 0) {
+                if (new_ipdom == UNDEF) {
                     continue;
                 }
                 
-                if (dir_s && ipdom.at(dir_s) && dir_s != new_ipdom) {
+                if (dir_s && ipdom.at(dir_s) != UNDEF && dir_s != new_ipdom) {
                     new_ipdom = intersect(dir_s, new_ipdom, m_nodes).m_index;
                 }
-                if (tar_s && ipdom.at(tar_s) && tar_s != new_ipdom) {
+                if (tar_s && ipdom.at(tar_s) != UNDEF && tar_s != new_ipdom) {
                     new_ipdom = intersect(tar_s, new_ipdom, m_nodes).m_index;
                 }
-
 
                 if (ipdom.at(n) != new_ipdom) {
                     ipdom[n] = new_ipdom;
@@ -416,12 +439,6 @@ namespace dconstruct {
                 }
             }
         }
-
-#ifdef _PERF
-        const auto end = std::chrono::high_resolution_clock::now();
-        std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
-            << "ms\n";
-#endif
     }
 
     [[nodiscard]] std::vector<node_id> ControlFlowGraph::collect_loop_body(const node_id head, const node_id latch) const {
@@ -435,7 +452,7 @@ namespace dconstruct {
 
     void ControlFlowGraph::get_register_nature(
         const control_flow_node& start_node,
-        reg_set regs_to_check,
+        reg_set check_regs,
         reg_set& read_first, 
         const node_id stop_node,
         node_set& asd,
@@ -452,12 +469,12 @@ namespace dconstruct {
         node_set visited;
         visited.resize(m_nodes.size(), false);
 
-        node_stack.push_back({&start_node, regs_to_check});
+        node_stack.push_back({&start_node, check_regs});
 
         b8 use_start_line = start_line != 0;
 
         while (!node_stack.empty()) {
-            auto [current_node, regs] = node_stack.back();
+            auto [current_node, check_write_regs] = node_stack.back();
             node_stack.pop_back();
             if (visited[current_node->m_index]) {
                 continue;
@@ -465,43 +482,49 @@ namespace dconstruct {
             visited[current_node->m_index] = true;
             for (u32 i = use_start_line ? start_line : 0; i < current_node->m_lines.size(); ++i) {
                 const function_disassembly_line& line = current_node->m_lines[i];
-                if (regs.to_ullong() == 0) {
+                if (check_write_regs.to_ullong() == 0) {
                     break;
                 }
                 const Instruction& istr = line.m_instruction;
-                if (istr.opcode == Opcode::Return && regs.test(istr.destination)) {
-                    regs.reset(istr.destination);
+                if (istr.opcode == Opcode::Return && check_write_regs.test(istr.destination)) {
+                    check_write_regs.reset(istr.destination);
                     if (return_is_read) {
                         read_first.set(istr.destination);
                     }
                     break;
                 }
-                if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && regs.test(istr.destination)) {
-                    regs.reset(istr.destination);
+                if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && check_write_regs.test(istr.destination)) {
+                    check_write_regs.reset(istr.destination);
                     read_first.set(istr.destination);
+					check_regs.reset(istr.destination);
                     continue;
                 }
-                if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX && regs.test(istr.destination)) {
-                    regs.reset(istr.destination);
+                if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX && check_write_regs.test(istr.destination)) {
+                    check_write_regs.reset(istr.destination);
                 }
-                if (istr.op1_is_reg() && istr.operand1 < ARGUMENT_REGISTERS_IDX && regs.test(istr.operand1)) {
-                    regs.reset(istr.operand1);
+                if (istr.op1_is_reg() && istr.operand1 < ARGUMENT_REGISTERS_IDX && check_write_regs.test(istr.operand1)) {
+                    check_write_regs.reset(istr.operand1);
+                    check_regs.reset(istr.operand1);
                     read_first.set(istr.operand1);
                 }
-                if (istr.op2_is_reg() && istr.operand2 < ARGUMENT_REGISTERS_IDX && regs.test(istr.operand2)) {
-                    regs.reset(istr.operand2);
+                if (istr.op2_is_reg() && istr.operand2 < ARGUMENT_REGISTERS_IDX && check_write_regs.test(istr.operand2)) {
+                    check_write_regs.reset(istr.operand2);
+                    check_regs.reset(istr.operand1);
                     read_first.set(istr.operand2);
                 }
             }
             use_start_line = false;
-            if (regs_to_check.to_ullong() == 0) {
+            if (check_write_regs.to_ullong() == 0) {
                 continue;
             }
-            if (current_node->m_directSuccessor != stop_node) {
-                node_stack.push_back({&m_nodes.at(current_node->m_directSuccessor), regs});
+            if (check_regs.to_ullong() == 0) {
+                return;
             }
-            if (current_node->m_targetSuccessor != stop_node) {
-                node_stack.push_back({&m_nodes.at(current_node->m_targetSuccessor), regs});
+            if (current_node->m_directSuccessor && current_node->m_directSuccessor != stop_node) {
+                node_stack.push_back({&m_nodes.at(current_node->m_directSuccessor), check_write_regs });
+            }
+            if (current_node->m_targetSuccessor && current_node->m_targetSuccessor != stop_node) {
+                node_stack.push_back({&m_nodes.at(current_node->m_targetSuccessor), check_write_regs });
             }
         }
     }

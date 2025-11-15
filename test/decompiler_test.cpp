@@ -585,7 +585,7 @@ namespace dconstruct::testing {
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
-        const std::string id = "ready-waiting@main@start@10";
+        const std::string id = "#E5FCFC6B95B3F669";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -611,7 +611,9 @@ namespace dconstruct::testing {
             try {
                 const auto dc_func = dcompiler::decomp_function{ &func, file };
                 out << dc_func.to_string() << "\n\n";
-            } catch (...) {}
+            } catch (const std::exception& e) {
+                std::cout << e.what() << '\n';
+            }   
         }
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
