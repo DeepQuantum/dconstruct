@@ -1,3 +1,8 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+from networkx.drawing.nx_agraph import graphviz_layout
+
+
 def reverse_postorder(graph, start):
     visited = set()
     postorder = []
@@ -15,5 +20,25 @@ def reverse_postorder(graph, start):
     return postorder
 
 
-graph = {0x2F: [4], 0x4: [3, 0x2E], 0x2E: [0x2D], 0x2D: [0x2C], 0x2C: [4], 0x3: [0x1], 1: [0, 2], 2: [1]}
-print(reverse_postorder(graph, 0x2F))
+graph = {
+    "A": ["B"],
+    "B": ["C", "H"],
+    "C": ["D", "E"],
+    "D": ["F"],
+    "E": ["F"],
+    "F": ["G"],
+    "G": ["B"],
+}
+
+G = nx.DiGraph()
+for src, dsts in graph.items():
+    for dst in dsts:
+        G.add_edge(src, dst)
+
+G.nodes["H"]["rank"] = "sink"
+
+pos = graphviz_layout(G, prog="dot")
+
+plt.figure(figsize=(8, 7))
+nx.draw(G, pos, with_labels=True, arrows=True, node_size=1600, font_size=12)
+plt.show()

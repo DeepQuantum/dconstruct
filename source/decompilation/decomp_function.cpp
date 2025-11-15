@@ -61,7 +61,6 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
-
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
 
@@ -411,7 +410,7 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
         alt_loop_var_reg = head_instruction.destination;
         regs_to_emit.reset(loop_var_reg);
         regs_to_emit.reset(alt_loop_var_reg);
-        const std::string loop_var_name = std::string(1, get_next_loop_var());
+        const std::string loop_var_name = std::string(1, m_loopVar++);
         id = std::make_unique<ast::identifier>(loop_var_name);
         auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), loop_var_name, std::move(m_transformableExpressions[loop_var_reg]));
         append_to_current_block(std::move(declaration));
@@ -442,7 +441,7 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
     }
     m_blockStack.pop();
 
-    m_loopDepth--;
+    m_loopVar--;
 
     bits = regs_to_emit.to_ullong();
     while (bits != 0) {
@@ -476,7 +475,7 @@ void decomp_function::emit_branches(const control_flow_node &node, node_id stop_
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
+    const reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
     if (!idom_already_emitted) {

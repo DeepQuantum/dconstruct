@@ -28,10 +28,8 @@ namespace dconstruct::dcompiler {
         node_set m_ipdomsEmitted;
         ast::block m_baseBlock;
         const SymbolTable& m_symbolTable;
-        u32 m_varCount = 0;
-        u32 m_loopDepth = 0;
-
-        constexpr static char loop_var_names[] = { 'i', 'j', 'k', 'l' };
+        char m_loopVar = 'i';
+		u16 m_varCount = 0;
 
         void emit_node(const control_flow_node &node, const node_id stop_node);
 
@@ -52,10 +50,6 @@ namespace dconstruct::dcompiler {
 
         inline std::string get_next_var() {
             return "var_" + std::to_string(m_varCount++);
-        }
-
-        inline char get_next_loop_var() noexcept {
-            return loop_var_names[m_loopDepth++];
         }
 
         void append_to_current_block(stmnt_uptr&& statement) {
