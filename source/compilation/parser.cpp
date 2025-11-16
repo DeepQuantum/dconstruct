@@ -27,7 +27,7 @@ void Parser::synchronize() {
     return m_tokens[m_current - 1];
 }
 
-[[nodiscard]] b8 Parser::is_at_end() const {
+[[nodiscard]] bool Parser::is_at_end() const {
     return peek().m_type == token_type::_EOF;
 }
 
@@ -46,14 +46,14 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return nullptr;
 }
 
-[[nodiscard]] b8 Parser::check(const token_type type) const {
+[[nodiscard]] bool Parser::check(const token_type type) const {
     if (is_at_end()) {
         return false;
     }
     return peek().m_type == type;
 }
 
-[[nodiscard]] b8 Parser::match(const std::initializer_list<token_type>& types) {
+[[nodiscard]] bool Parser::match(const std::initializer_list<token_type>& types) {
     for (const token_type tt : types) {
         if (check(tt)) {
             advance();
@@ -75,7 +75,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 
-[[nodiscard]] b8 Parser::match_type() {
+[[nodiscard]] bool Parser::match_type() {
     return m_knownTypes.contains(peek().m_lexeme);
 }
 

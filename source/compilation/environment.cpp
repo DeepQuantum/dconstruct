@@ -7,7 +7,7 @@ void environment::define(const std::string& name, ast::typed_value value) {
     m_values[name] = value;
 }
 
-b8 environment::assign(const std::string& name, ast::typed_value value) {
+bool environment::assign(const std::string& name, ast::typed_value value) {
     if (m_values.contains(name)) {
         m_values[name] = std::move(value);
         return true;

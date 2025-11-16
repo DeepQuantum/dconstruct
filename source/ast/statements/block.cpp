@@ -2,7 +2,7 @@
 
 namespace dconstruct::ast {
 
-void block::pseudo(std::ostream& os) const {
+void block::pseudo_c(std::ostream& os) const {
     if (m_statements.empty()) {
         os << "{}" << '\n';
     } else {
@@ -17,15 +17,14 @@ void block::pseudo(std::ostream& os) const {
 }
 
 
-void block::ast(std::ostream& os) const {
-    os << "block[";
+void block::pseudo_py(std::ostream& os) const {
+    os << ':' << indent_more;
     for (const auto& stmnt : m_statements) {
-        os << *stmnt << ',';
+        os << indent << *stmnt << '\n';
     } 
-    os << ']';
 }
 
-[[nodiscard]] b8 block::equals(const statement& rhs) const noexcept {
+[[nodiscard]] bool block::equals(const statement& rhs) const noexcept {
     const block* rhs_ptr = dynamic_cast<const block*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

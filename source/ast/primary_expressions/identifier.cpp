@@ -3,15 +3,16 @@
 
 namespace dconstruct::ast {
 
-void identifier::ast(std::ostream& os) const {
-    os << "identifier[" << m_name.m_lexeme << ']';
-}
-
-void identifier::pseudo(std::ostream& os) const {
+    
+void identifier::pseudo_c(std::ostream& os) const {
     os << m_name.m_lexeme;
 }
 
-[[nodiscard]] b8 identifier::equals(const expression &rhs) const noexcept {
+void identifier::pseudo_py(std::ostream& os) const {
+    os << m_name.m_lexeme;
+}
+
+[[nodiscard]] bool identifier::equals(const expression &rhs) const noexcept {
     const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
     if (rhs_id == nullptr) {
         return false;

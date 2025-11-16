@@ -8,8 +8,8 @@ namespace dconstruct::ast {
 
         explicit dereference_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compiler::token{ compiler::token_type::STAR, "*" }, std::move(rhs)) {};
 
-        void pseudo(std::ostream& os) const final;
-        void ast(std::ostream& os) const final;
+        void pseudo_c(std::ostream& os) const final;
+        void pseudo_py(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] full_type compute_type(const compiler::environment&) const override;
     };

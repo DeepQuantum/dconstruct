@@ -3,16 +3,16 @@
 
 namespace dconstruct::ast {
 
-void for_stmt::pseudo(std::ostream& os) const {
+void for_stmt::pseudo_c(std::ostream& os) const {
     os << "for (" << *m_init << ' ' << *m_condition << "; " << *m_incr << ") " << *m_body;
 }
 
 
-void for_stmt::ast(std::ostream& os) const {
-    os << "for[init=" << *m_init << ", condition=" << *m_condition << ", increment=" << *m_incr << ", body=" << *m_body << "]";
+void for_stmt::pseudo_py(std::ostream& os) const {
+    //os << "for " << m_init-> << 
 }
 
-[[nodiscard]] b8 for_stmt::equals(const statement& rhs) const noexcept {
+[[nodiscard]] bool for_stmt::equals(const statement& rhs) const noexcept {
     const for_stmt* rhs_ptr = dynamic_cast<const for_stmt*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

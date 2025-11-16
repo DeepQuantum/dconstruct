@@ -3,7 +3,7 @@
 
 namespace dconstruct::ast {
 
-void call_expr::pseudo(std::ostream& os) const {
+void call_expr::pseudo_c(std::ostream& os) const {
     os << *m_callee << '(';
     for (u16 i = 0; i < m_arguments.size(); ++i) {
         os << *m_arguments[i];
@@ -14,15 +14,15 @@ void call_expr::pseudo(std::ostream& os) const {
     os << ')';
 }
 
-void call_expr::ast(std::ostream& os) const {
-    os << "call[callee=" << *m_callee << ";args={";
+void call_expr::pseudo_py(std::ostream& os) const {
+    os << *m_callee << '(';
     for (u16 i = 0; i < m_arguments.size(); ++i) {
         os << *m_arguments[i];
         if (i != m_arguments.size() - 1) {
-            os << ",";
+            os << ", ";
         }
     }
-    os << "}]";
+    os << ')';
 }
 
 [[nodiscard]] expr_uptr call_expr::simplify() const {
@@ -45,7 +45,7 @@ void call_expr::ast(std::ostream& os) const {
 }
 
 
-[[nodiscard]] b8 call_expr::equals(const expression &rhs) const noexcept {
+[[nodiscard]] bool call_expr::equals(const expression &rhs) const noexcept {
     const call_expr* rhs_ptr = dynamic_cast<const call_expr*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

@@ -19,7 +19,7 @@ namespace dconstruct::compiler {
 
 
 
-[[nodiscard]] b8 Lexer::reached_eof() const noexcept {
+[[nodiscard]] bool Lexer::reached_eof() const noexcept {
     return m_current >= m_source.size();
 }
 
@@ -36,7 +36,7 @@ char Lexer::advance() {
     return m_source.at(m_current++);
 }
 
-[[nodiscard]] b8 Lexer::match(const char expected) {
+[[nodiscard]] bool Lexer::match(const char expected) {
     if (reached_eof()) {
         return false;
     }
@@ -78,7 +78,7 @@ char Lexer::advance() {
     return token(token_type::STRING, lexeme, literal, m_line);
 }
 
-[[nodiscard]] b8 Lexer::is_sid_char(const char c) const noexcept {
+[[nodiscard]] bool Lexer::is_sid_char(const char c) const noexcept {
     return std::isdigit(c) || std::isalpha(c) || c == '-' || c == '_';
 }
 
@@ -91,7 +91,7 @@ char Lexer::advance() {
 }
 
 [[nodiscard]] token Lexer::make_number() {
-    b8 is_double = false;
+    bool is_double = false;
     while (std::isdigit(peek())) {
         advance();
     }
@@ -108,7 +108,7 @@ char Lexer::advance() {
     return make_current_token(token_type::INT, std::stoi(make_current_lexeme()));
 }
 
-[[nodiscard]] b8 Lexer::is_hex_char(const char c) const noexcept {
+[[nodiscard]] bool Lexer::is_hex_char(const char c) const noexcept {
     return std::isdigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
 

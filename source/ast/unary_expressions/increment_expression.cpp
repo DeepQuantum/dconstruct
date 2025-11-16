@@ -3,12 +3,12 @@
 
 namespace dconstruct::ast {
 
-void increment_expression::pseudo(std::ostream& os) const {
+void increment_expression::pseudo_c(std::ostream& os) const {
     os << *m_rhs << "++";
 }
 
-void increment_expression::ast(std::ostream& os) const {
-    os << "increment[" << *m_rhs << ']';
+void increment_expression::pseudo_py(std::ostream& os) const {
+    os << *m_rhs << "++";
 }
 
 [[nodiscard]] expr_uptr increment_expression::simplify() const {

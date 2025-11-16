@@ -17,7 +17,7 @@ label = "<f0> 0xf7fc4380| <f1> | <f2> |-1"
 shape = "record"
 ];
 "node2" [
-label = "<f0> 0xf7fc44b8| | |2"
+label = "<f0> 0xf7fc44bool| | |2"
 shape = "record"
 ];
 "node3" [

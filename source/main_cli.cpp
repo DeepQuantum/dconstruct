@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
     options.add_options("configuration")
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
-            cxxopts::value<b8>()->default_value("false"));
+            cxxopts::value<bool>()->default_value("false"));
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
         ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>())
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    const b8 output_is_folder = std::filesystem::is_directory(output);
+    const bool output_is_folder = std::filesystem::is_directory(output);
 
     const std::filesystem::path sidbase_path = opts["s"].as<std::string>();
     if (!std::filesystem::exists(sidbase_path)) {
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
     }
 
     const u8 indent_per_level = opts["indent"].as<u8>();
-    const b8 emit_once = opts["emit_once"].as<b8>();
+    const bool emit_once = opts["emit_once"].as<bool>();
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
         edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());

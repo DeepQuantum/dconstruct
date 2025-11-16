@@ -3,12 +3,12 @@
 
 namespace dconstruct::ast {
 
-void cast_expr::pseudo(std::ostream& os) const {
+void cast_expr::pseudo_c(std::ostream& os) const {
     os << '(' << type_to_declaration_string(m_type) << ')' << *m_rhs; 
 }
 
-void cast_expr::ast(std::ostream& os) const {
-    os << "cast[type=" << type_to_declaration_string(m_type) << ",expr=" << *m_rhs << ']';
+void cast_expr::pseudo_py(std::ostream& os) const {
+    os << type_to_declaration_string(m_type) << '(' << *m_rhs << ')';
 }
 
 [[nodiscard]] expr_uptr cast_expr::simplify() const {
@@ -23,7 +23,7 @@ void cast_expr::ast(std::ostream& os) const {
     return m_type;
 };
 
-[[nodiscard]] b8 cast_expr::equals(const expression& other) const noexcept {
+[[nodiscard]] bool cast_expr::equals(const expression& other) const noexcept {
     return false;
 }
 

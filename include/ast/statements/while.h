@@ -5,8 +5,8 @@ namespace dconstruct::ast {
         explicit while_stmt(expr_uptr&& condition, stmnt_uptr&& body) noexcept :
         m_condition(std::move(condition)), m_body(std::move(body)) {};
 
-        void pseudo(std::ostream& os) const final;
-        void ast(std::ostream& os) const final;
+        void pseudo_c(std::ostream& os) const final;
+        void pseudo_py(std::ostream& os) const final;
 
         [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
 

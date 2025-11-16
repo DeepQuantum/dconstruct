@@ -73,7 +73,7 @@ namespace dconstruct {
         return ss.str();
     }
 
-    [[nodiscard]] b8 control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
+    [[nodiscard]] bool control_flow_node::operator==(const control_flow_node& rhs) const noexcept {
         if (m_lines.size() != rhs.m_lines.size()) {
             return false;
         }
@@ -85,7 +85,7 @@ namespace dconstruct {
         return true;
     }
 
-    [[nodiscard]] b8 control_flow_node::operator!=(const control_flow_node& rhs) const noexcept {
+    [[nodiscard]] bool control_flow_node::operator!=(const control_flow_node& rhs) const noexcept {
         return !(*this == rhs);
     }
 
@@ -190,7 +190,7 @@ namespace dconstruct {
             }
             const function_disassembly_line &next_line = func->m_lines[i + 1];
 
-            b8 next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
+            bool next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
             if (current_line.m_target != -1) {
                 insert_node_at_line(current_line.m_target, nodes);
@@ -335,7 +335,7 @@ namespace dconstruct {
     void ControlFlowGraph::insert_graphviz_edges(Agraph_t* g, const std::vector<Agnode_t*>& graph_nodes) const {
         for (const auto& node : m_nodes) {
             const auto node_start = node.m_index;
-            const b8 is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
+            const bool is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
             if (node.m_directSuccessor) {
                 Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_directSuccessor], const_cast<char*>(""), 1);
@@ -360,7 +360,7 @@ namespace dconstruct {
                 m_nodes.begin(), 
                 m_nodes.end(), 
                 loc.m_target, 
-                [](const control_flow_node& node, const u64 target) -> b8 { 
+                [](const control_flow_node& node, const u64 target) -> bool { 
                     return node.m_startLine < target;
                 }
             )->m_index;
@@ -368,7 +368,7 @@ namespace dconstruct {
                 m_nodes.begin(), 
                 m_nodes.end(), 
                 loc.m_location, 
-                [](const control_flow_node& node, const u64 target) -> b8 {
+                [](const control_flow_node& node, const u64 target) -> bool {
                     return node.m_startLine < target;
                 }
             )->m_index - 1;
@@ -391,8 +391,11 @@ namespace dconstruct {
     }
 
     void ControlFlowGraph::compute_postdominators() {
+
         auto rev_postdom = create_rev_postord(m_nodes);
+
         static constexpr node_id UNDEF = std::numeric_limits<node_id>::max();
+
 		for (u32 i = m_nodes.size(); i > 0; --i) {
             m_nodes[m_nodes.size() - i].m_postorder = rev_postdom[i - 1];
 		}
@@ -406,7 +409,7 @@ namespace dconstruct {
         ipdom[m_nodes.back().m_index] = m_nodes.back().m_index;
         m_nodes.back().m_ipdom = m_nodes.back().m_index;
 
-        b8 changed = true;
+        bool changed = true;
         while (changed) {
             changed = false;
             for (u32 i = 1; i < N; ++i) {
@@ -456,7 +459,7 @@ namespace dconstruct {
         reg_set& read_first, 
         const node_id stop_node,
         node_set& asd,
-        const b8 return_is_read,
+        const bool return_is_read,
         const u32 start_line
     ) const noexcept {
 
@@ -471,7 +474,7 @@ namespace dconstruct {
 
         node_stack.push_back({&start_node, check_regs});
 
-        b8 use_start_line = start_line != 0;
+        bool use_start_line = start_line != 0;
 
         while (!node_stack.empty()) {
             auto [current_node, check_write_regs] = node_stack.back();
@@ -534,7 +537,7 @@ namespace dconstruct {
         const reg_idx reg_to_check,
         const node_id stop_node,
         node_set& checked,
-        const b8 return_is_read,
+        const bool return_is_read,
         const u32 start_line
     ) const noexcept {
         if (checked[start_node.m_index]) {
@@ -600,7 +603,7 @@ namespace dconstruct {
         }
     }
     
-    [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const b8 return_is_read) const noexcept {
+    [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node, const bool return_is_read) const noexcept {
         reg_set regs_to_check, read_first_branches, read_first_ipdom, left, right, result;
         node_set checked(m_nodes.size(), false);
         node_id ipdom = start_node.m_ipdom;

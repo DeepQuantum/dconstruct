@@ -108,7 +108,7 @@ namespace dconstruct {
     }
 
     void EditDisassembler::apply_file_edits() noexcept {
-        b8 applied_at_least_one = false;
+        bool applied_at_least_one = false;
         u16 edit_index = 0;
         for (const auto& edit_str : m_edits) {
             ++edit_index;

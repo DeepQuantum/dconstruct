@@ -27,7 +27,7 @@ namespace dconstruct::ast {
         else if constexpr (std::is_same_v<T, char>) {
             return std::string(1, arg);
         }
-        else if constexpr (std::is_same_v<T, b8>) {
+        else if constexpr (std::is_same_v<T, bool>) {
             return arg ? "true" : "false";
         }
         else if constexpr (std::is_same_v<T, std::monostate>) {

@@ -9,8 +9,8 @@ namespace dconstruct::ast {
 
         explicit identifier(std::string name) : m_name(compiler::token{compiler::token_type::IDENTIFIER, std::move(name), 0, 1}){};
 
-        void pseudo(std::ostream& os) const final;
-        void ast(std::ostream& os) const final;
+        void pseudo_c(std::ostream& os) const final;
+        void pseudo_py(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept override;
         [[nodiscard]] expr_uptr clone() const final;
