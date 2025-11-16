@@ -104,12 +104,12 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] b8 Instruction::destination_is_immediate() const noexcept {
+    [[nodiscard]] bool Instruction::destination_is_immediate() const noexcept {
         return opcode == Opcode::Branch || opcode == Opcode::BranchIf
             || opcode == Opcode::BranchIfNot;
     }
 
-    [[nodiscard]] b8 Instruction::operand1_is_immediate() const noexcept {
+    [[nodiscard]] bool Instruction::operand1_is_immediate() const noexcept {
         return opcode == Opcode::LoadStaticI32Imm || opcode == Opcode::LoadStaticI16Imm
             || opcode == Opcode::LoadStaticU16Imm || opcode == Opcode::LoadStaticI8Imm
             || opcode == Opcode::LoadStaticU8Imm || opcode == Opcode::LoadStaticU32Imm
@@ -118,33 +118,33 @@ namespace dconstruct {
             || opcode == Opcode::LoadU16Imm || opcode == Opcode::LookupPointer;
     }
 
-    [[nodiscard]] b8 Instruction::operand2_is_immediate() const noexcept {
+    [[nodiscard]] bool Instruction::operand2_is_immediate() const noexcept {
         return opcode == Opcode::Call || opcode == Opcode::CallFf
             || opcode == Opcode::IAddImm || opcode == Opcode::IMulImm
             || opcode == Opcode::ISubImm || opcode == Opcode::IDivImm
             || opcode == Opcode::LoadU16Imm;
     }
 
-    [[nodiscard]] b8 Instruction::operand1_is_used() const noexcept {
+    [[nodiscard]] bool Instruction::operand1_is_used() const noexcept {
         return opcode != Opcode::Branch && opcode != Opcode::Return && opcode != Opcode::AssertPointer;
     }
 
-    [[nodiscard]] b8 Instruction::operand2_is_used() const noexcept {
+    [[nodiscard]] bool Instruction::operand2_is_used() const noexcept {
         u32 num = static_cast<u32>(opcode);
-        b8 is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
-        b8 is_call = opcode == Opcode::CallFf || opcode == Opcode::Call;
-        b8 is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
-        b8 is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
-        b8 is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
-        b8 is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual);
+        bool is_arithmetic = num >= static_cast<u32>(Opcode::IAdd) && num <= static_cast<u32>(Opcode::FDiv);
+        bool is_call = opcode == Opcode::CallFf || opcode == Opcode::Call;
+        bool is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
+        bool is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
+        bool is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
+        bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual);
         return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store;
     }
 
-    [[nodiscard]] b8 Instruction::op1_is_reg() const noexcept {
+    [[nodiscard]] bool Instruction::op1_is_reg() const noexcept {
         return operand1_is_used() && !operand1_is_immediate();
     }
 
-    [[nodiscard]] b8 Instruction::op2_is_reg() const noexcept {
+    [[nodiscard]] bool Instruction::op2_is_reg() const noexcept {
         return operand2_is_used() && !operand2_is_immediate();
     }
 

@@ -48,7 +48,7 @@ namespace dconstruct {
         return nullptr;
     }
 
-    [[nodiscard]] b8 SIDBase::sid_exists(const sid64 hash) const noexcept {
+    [[nodiscard]] bool SIDBase::sid_exists(const sid64 hash) const noexcept {
         return search(hash) != nullptr;
     }
 }

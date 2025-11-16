@@ -5,8 +5,8 @@
 namespace dconstruct::ast {
     struct call_expr : public expression {
         call_expr(compiler::token token, expr_uptr&& expr, std::vector<expr_uptr>&& args) noexcept : m_token{std::move(token)}, m_callee{std::move(expr)}, m_arguments{std::move(args)} {};
-        void pseudo(std::ostream& os) const final;
-        void ast(std::ostream& os) const final;
+        void pseudo_c(std::ostream& os) const final;
+        void pseudo_py(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] b8 equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;

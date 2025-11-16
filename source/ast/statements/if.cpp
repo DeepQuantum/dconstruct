@@ -3,21 +3,21 @@
 
 namespace dconstruct::ast {
 
-void if_stmt::pseudo(std::ostream& os) const {
+void if_stmt::pseudo_c(std::ostream& os) const {
     os << "if (" << *m_condition << ") " << *m_then;
     if (m_else != nullptr) {
         os << " else " << *m_else;
     }
 }
 
-void if_stmt::ast(std::ostream& os) const {
-    os << "if_stmt[cond=" << *m_condition << ",then=" << *m_then;
+void if_stmt::pseudo_py(std::ostream& os) const {
+    os << "if " << *m_condition << ' ' << *m_then;
     if (m_else != nullptr) {
-        os << ",else=";
+        os << " else " << *m_else;
     }
 }
 
-[[nodiscard]] b8 if_stmt::equals(const statement& rhs) const noexcept {
+[[nodiscard]] bool if_stmt::equals(const statement& rhs) const noexcept {
     const if_stmt* rhs_ptr = dynamic_cast<const if_stmt*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

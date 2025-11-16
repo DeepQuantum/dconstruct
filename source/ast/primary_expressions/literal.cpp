@@ -3,14 +3,12 @@
 
 namespace dconstruct::ast {
 
-void literal::pseudo(std::ostream& os) const {
+void literal::pseudo_c(std::ostream& os) const {
     os << primitive_to_string(m_value);
 }
 
-void literal::ast(std::ostream& os) const {
-    os << "literal[" << kind_to_string(static_cast<primitive_kind>(m_value.index()));
-    pseudo(os);
-    os << "]";
+void literal::pseudo_py(std::ostream& os) const {
+    os << primitive_to_string(m_value);
 }
 
 
@@ -18,7 +16,7 @@ void literal::ast(std::ostream& os) const {
     return std::make_unique<literal>(m_value);
 }
 
-[[nodiscard]] b8 literal::equals(const expression& rhs) const noexcept {
+[[nodiscard]] bool literal::equals(const expression& rhs) const noexcept {
     const literal* rhs_ptr = dynamic_cast<const literal*>(&rhs);
     if (rhs_ptr != nullptr) {
         return m_value == rhs_ptr->m_value;

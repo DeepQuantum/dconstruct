@@ -10,8 +10,8 @@ namespace dconstruct::ast {
           m_then(std::move(then_branch)),
           m_else(std::move(else_branch)) {}
 
-        void pseudo(std::ostream&) const final;
-        void ast(std::ostream&) const final;
+        void pseudo_c(std::ostream&) const final;
+        void pseudo_py(std::ostream&) const final;
         [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
 
         expr_uptr m_condition;

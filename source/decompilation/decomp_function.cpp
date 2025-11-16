@@ -61,6 +61,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
+
     for (const auto &line : node.m_lines) {
         const Instruction &istr = line.m_instruction;
 
@@ -205,7 +206,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 break;
             }
             default: {
-                throw std::runtime_error("missing instruction");
+				std::cerr << "unhandled opcode " << static_cast<u64>(istr.opcode) << " at " << std::hex << line.m_location << std::dec << '\n';
+                std::terminate();
             }
         }
         if (generated_expression != nullptr) {
@@ -251,7 +253,7 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 
 void decomp_function::emit_single_branch(const control_flow_node& node, const node_id stop_node) {
     const node_id idom = node.m_ipdom;
-    const b8 idom_already_emitted = m_ipdomsEmitted[idom];
+    const bool idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
@@ -280,7 +282,7 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     emit_node(m_graph[idom], stop_node);
 }
 
-[[nodiscard]] b8 decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {
+[[nodiscard]] bool decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {
     constexpr Opcode standard_for_loop_pattern[] = {
         Opcode::Move,
         Opcode::Move,
@@ -372,8 +374,8 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
         const auto& current_node = m_graph[i];
         const auto& last_line = current_node.m_lines.back();
 
-        const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
-        const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
+        const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
+        const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
 
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
@@ -404,7 +406,7 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
     reg_idx alt_loop_var_reg = -1;
     std::unique_ptr<ast::identifier> id = nullptr;
     const Instruction& head_instruction = m_graph[loop.m_headNode].m_lines.front().m_instruction;
-    const b8 has_loop_variable = head_instruction.opcode == Opcode::Move;
+    const bool has_loop_variable = head_instruction.opcode == Opcode::Move;
     if (has_loop_variable) {
         const reg_idx loop_var_reg = head_instruction.operand1;
         alt_loop_var_reg = head_instruction.destination;
@@ -440,7 +442,6 @@ void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_
         load_expression_into_existing_var(alt_loop_var_reg, id->copy());
     }
     m_blockStack.pop();
-
     m_loopVar--;
 
     bits = regs_to_emit.to_ullong();
@@ -469,13 +470,13 @@ void decomp_function::emit_loop(const control_flow_loop &loop, const node_id sto
 
 void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
     const node_id idom = node.m_ipdom;
-    const b8 idom_already_emitted = m_ipdomsEmitted[idom];
+    const bool idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
     node_id proper_successor, proper_destination, proper_head;
     expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
     auto then_block = std::make_unique<ast::block>();
     auto else_block = std::make_unique<ast::block>();
-    const reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
+    reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head], !m_disassembly->m_isScriptFunction);
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
     if (!idom_already_emitted) {
@@ -646,8 +647,8 @@ template<typename from, typename to>
         const auto& last_line = current_node->m_lines.back();
         const auto  target = current_node->m_targetSuccessor;
 
-        const b8 is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
-        const b8 is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
+        const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
+        const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
 
         if (!is_and && !is_or)
             break;

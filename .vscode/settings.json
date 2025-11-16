@@ -1,5 +1,6 @@
 {
   //"cmake.cmakePath": "C:/Qt/Tools/CMake_64/bin/cmake.exe",
+  "debugpy.debugJustMyCode": false,
   "cmake.defaultVariants": {
     "buildType": {
       "default": "debug",

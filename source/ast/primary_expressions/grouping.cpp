@@ -2,15 +2,16 @@
 
 namespace dconstruct::ast {
 
-void grouping::ast(std::ostream& os) const {
-    os << "grouping[" << *m_expr << ']';
-}
-
-void grouping::pseudo(std::ostream& os) const {
+    
+void grouping::pseudo_c(std::ostream& os) const {
     os << '(' << *m_expr << ')';
 }
 
-[[nodiscard]] b8 grouping::equals(const expression &rhs) const noexcept {
+void grouping::pseudo_py(std::ostream& os) const {
+    os << '(' << *m_expr << ')';
+}
+
+[[nodiscard]] bool grouping::equals(const expression &rhs) const noexcept {
     const grouping* rhs_ptr = dynamic_cast<const grouping*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

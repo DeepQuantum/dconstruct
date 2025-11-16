@@ -41,18 +41,18 @@ void Disassembler::insert_span_indent(const char* format, const u32 indent, Args
     insert_span(buffer, 0, text_format);
 }
 
-[[nodiscard]] b8 Disassembler::is_unmapped_sid(const location loc) const noexcept {
-    const b8 in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
-    const b8 is_fileptr = m_currentFile->is_file_ptr(loc);
+[[nodiscard]] bool Disassembler::is_unmapped_sid(const location loc) const noexcept {
+    const bool in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
+    const bool is_fileptr = m_currentFile->is_file_ptr(loc);
     return loc.is_aligned() && in_range && !is_fileptr;
 }
 
-[[nodiscard]] b8 Disassembler::is_possible_float(const f32 *val) const noexcept {
+[[nodiscard]] bool Disassembler::is_possible_float(const f32 *val) const noexcept {
     f32 rounded = std::roundf(*val * 1e4f) / 1e4f;
     return std::fabsf(*val - rounded) < 1e-4f && *val > -1e4f && *val < 1e4f && rounded != 0.f;
 }
 
-[[nodiscard]] b8 Disassembler::is_possible_i32(const i32 *val) const noexcept {
+[[nodiscard]] bool Disassembler::is_possible_i32(const i32 *val) const noexcept {
     return std::abs(*val) < 50000;
 }
 
@@ -168,7 +168,7 @@ void Disassembler::insert_array(const location array, const u32 array_size, cons
 
 void Disassembler::insert_unmapped_struct(const structs::unmapped *struct_ptr, const u32 indent) {
     u64 member_offset = 0;
-    b8 offset_gets_pointed_at = false;
+    bool offset_gets_pointed_at = false;
     u64 last_member_size = 0;
     u32 member_count = 0;
     const location member_start = location(&struct_ptr->m_data);
@@ -301,7 +301,7 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 }
 
 void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
-    b8 is_nullptr = var->m_pDeclValue == nullptr;
+    bool is_nullptr = var->m_pDeclValue == nullptr;
 
 
     insert_span_indent("%*s[0x%06X] ",  indent, get_offset(var));
@@ -311,7 +311,7 @@ void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
     switch (var->m_declTypeId) {
         case SID("boolean"): {
             if (!is_nullptr) 
-                insert_span(*reinterpret_cast<b8*>(var->m_pDeclValue) ? "true" : "false");
+                insert_span(*reinterpret_cast<bool*>(var->m_pDeclValue) ? "true" : "false");
             break;
         }
         case SID("vector"): {
@@ -468,7 +468,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     }
 }
 
-[[nodiscard]] b8 Disassembler::pointer_gets_called(const u32 dst, const u32 start_idx, const function_disassembly& fn) const {
+[[nodiscard]] bool Disassembler::pointer_gets_called(const u32 dst, const u32 start_idx, const function_disassembly& fn) const {
     for (auto it = fn.m_lines.begin() + start_idx; it != fn.m_lines.end(); ++it) {
         if (it->m_instruction.destination == dst) {
             return it->m_instruction.opcode == Opcode::Call || it->m_instruction.opcode == Opcode::CallFf;
@@ -477,7 +477,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return false;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const b8 is_script_function) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const bool is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -496,7 +496,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         functionDisassembly.m_lines.emplace_back(i, instructionPtr);
     }
 
-    b8 counting_args = true;
+    bool counting_args = true;
 
     for (u64 i = 0; i < instructionCount; ++i) {
         process_instruction(i, functionDisassembly);
@@ -511,7 +511,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
     return functionDisassembly;
 }
 
-[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table, const b8 is_script_function) {
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table, const bool is_script_function) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
 
@@ -526,7 +526,7 @@ void Disassembler::insert_state_script(const StateScript *stateScript, const u32
         is_script_function
     };
 
-    b8 counting_args = true;
+    bool counting_args = true;
 
     for (u64 i = 0; i < instructions.size(); ++i) {
         process_instruction(i, functionDisassembly);
@@ -806,7 +806,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             const p64 value = frame.m_symbolTable.first.get<p64>(op1 * 8);
             frame[dest].m_value = value;
             frame[dest].m_fromSymbolTable = op1;
-            const b8 is_function = pointer_gets_called(dest, istr_idx + 1, fn);
+            const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);
             const ast::full_type existing_type = builtinFunctions.contains(value) ? builtinFunctions.at(value) : ast::function_type{};
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
             if (is_function) {
@@ -957,7 +957,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::BranchIf: 
         case Opcode::BranchIfNot: {
             u32 target = dest | (op2 << 8);
-            b8 is_branching_target = true;
+            bool is_branching_target = true;
             while (is_branching_target) {
                 const auto& target_line = fn.m_lines[target];
                 const auto& target_op = target_line.m_instruction.opcode;

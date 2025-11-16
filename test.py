@@ -1,44 +1,41 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.drawing.nx_agraph import graphviz_layout
-
-
-def reverse_postorder(graph, start):
-    visited = set()
-    postorder = []
-
-    def dfs(node):
-        if node in visited:
-            return
-        visited.add(node)
-        for succ in graph.get(node, []):
-            dfs(succ)
-        postorder.append(node)
-
-    dfs(start)
-    postorder.reverse()
-    return postorder
-
+from graphviz import Digraph
+from IPython.display import Image
+import networkx as nx
 
 graph = {
-    "A": ["B"],
-    "B": ["C", "H"],
-    "C": ["D", "E"],
-    "D": ["F"],
-    "E": ["F"],
-    "F": ["G"],
-    "G": ["B"],
+    0: {1},
+    1: {2, 3},
+    2: set(),
+    3: {4, 5, 6, 7},
+    4: {8},
+    5: {9},
+    6: {10, 11},
+    7: {11},
+    8: {12},
+    9: {13},
+    10: {9, 13},
+    11: {10},
+    12: {1},
+    13: {8, 12},
 }
 
+edge_list = [(dst, src) for src, dsts in graph.items() for dst in dsts]
+
+
 G = nx.DiGraph()
+G.add_edges_from(edge_list)
+print(list(reversed(list(nx.dfs_postorder_nodes(G, source=0)))))
+print(nx.immediate_dominators(G, start=12))
+
+dot = Digraph()
 for src, dsts in graph.items():
+    dot.node(str(src))
     for dst in dsts:
-        G.add_edge(src, dst)
+        dot.edge(str(src), str(dst))
 
-G.nodes["H"]["rank"] = "sink"
-
-pos = graphviz_layout(G, prog="dot")
-
-plt.figure(figsize=(8, 7))
-nx.draw(G, pos, with_labels=True, arrows=True, node_size=1600, font_size=12)
-plt.show()
+dot.format = "png"
+dot.render("cfg", cleanup=True)
+Image(filename="cfg.png")

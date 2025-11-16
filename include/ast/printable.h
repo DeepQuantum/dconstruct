@@ -6,8 +6,8 @@
 namespace dconstruct {
     struct Iprintable {
         virtual ~Iprintable() = default;
-        virtual void pseudo(std::ostream&) const = 0;
-        virtual void ast(std::ostream&) const = 0;
+        virtual void pseudo_c(std::ostream&) const = 0;
+        virtual void pseudo_py(std::ostream&) const = 0;
     };
 
     enum class Flags {
@@ -51,7 +51,7 @@ namespace dconstruct {
         if (os.iword(get_flag_index()) & static_cast<i32>(Flags::AST)) {
             expr.ast(os);
         } else {
-            expr.pseudo(os);
+            expr.pseudo_c(os);
         }
         return os;
     }

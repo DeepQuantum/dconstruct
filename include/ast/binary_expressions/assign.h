@@ -9,8 +9,8 @@ namespace dconstruct::ast {
         explicit assign_expr(compiler::token lhs, expr_uptr&& rhs) noexcept :
         m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {};
         
-        void pseudo(std::ostream& os) const override;
-        void ast(std::ostream& os) const override;
+        void pseudo_c(std::ostream& os) const override;
+        void pseudo_py(std::ostream& os) const override;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] ast::full_type compute_type(const compiler::environment& env) const final;
         [[nodiscard]] b8 equals(const expression& rhs) const noexcept final;

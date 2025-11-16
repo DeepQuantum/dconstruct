@@ -2,13 +2,13 @@
 
 namespace dconstruct::ast {    
 
-void assign_expr::pseudo(std::ostream& os) const {
+void assign_expr::pseudo_c(std::ostream& os) const {
     os << m_lhs.m_lexeme << " = " << *m_rhs;
 }
 
 
-void assign_expr::ast(std::ostream& os) const {
-    os << "assign[" << m_lhs.m_lexeme << ", " << *m_rhs << ']';
+void assign_expr::pseudo_py(std::ostream& os) const {
+    os << m_lhs.m_lexeme << " = " << *m_rhs;
 }
 
 [[nodiscard]] expr_uptr assign_expr::simplify() const {
@@ -20,7 +20,7 @@ void assign_expr::ast(std::ostream& os) const {
 }
 
 
-[[nodiscard]] b8 assign_expr::equals(const expression& rhs) const noexcept {
+[[nodiscard]] bool assign_expr::equals(const expression& rhs) const noexcept {
     const assign_expr* rhs_ptr = dynamic_cast<const assign_expr*>(&rhs);
     if (rhs_ptr == nullptr) {
         return false;

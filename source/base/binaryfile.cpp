@@ -59,12 +59,12 @@ namespace dconstruct {
     }
 
 
-    [[nodiscard]] b8 BinaryFile::gets_pointed_at(const location loc) const noexcept {
+    [[nodiscard]] bool BinaryFile::gets_pointed_at(const location loc) const noexcept {
         const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get())) / 8;
         return (u8)m_pointedAtTable[offset / 8] & (1 << (offset % 8));
     }
 
-    [[nodiscard]] b8 BinaryFile::is_file_ptr(const location loc) const noexcept {
+    [[nodiscard]] bool BinaryFile::is_file_ptr(const location loc) const noexcept {
         p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
         if (offset >= m_size) {
             return false;
@@ -73,7 +73,7 @@ namespace dconstruct {
         return m_relocTable.get<u8>(offset / 8) & (1 << (offset % 8));
     }
 
-    [[nodiscard]] b8 BinaryFile::is_string(const location loc) const noexcept {
+    [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
         return loc >= m_strings;
     }
 

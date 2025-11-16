@@ -76,7 +76,7 @@ namespace dconstruct::ast {
         binary_expr(compiler::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
-        inline void pseudo(std::ostream& os) const override {
+        inline void pseudo_c(std::ostream& os) const override {
             if (m_rhs == nullptr) {
                 os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << "asdasd";
                 return;
@@ -84,7 +84,7 @@ namespace dconstruct::ast {
             os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
         }
 
-        inline void ast(std::ostream& os) const override {
+        inline void pseudo_py(std::ostream& os) const override {
             os << m_operator.m_lexeme << '[' << *m_lhs << ", " << *m_rhs << ']';
         }
 
