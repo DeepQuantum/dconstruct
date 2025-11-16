@@ -121,7 +121,7 @@ namespace dconstruct {
         }
     }
 
-    [[nodiscard]] std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes) {
+    [[nodiscard]] std::vector<node_id> postorder(const std::vector<control_flow_node>& nodes) {
         std::vector<node_id> result;
         const u32 size = nodes.size();
         result.reserve(size);
@@ -145,7 +145,7 @@ namespace dconstruct {
                 }
             }
             else {
-                result.insert(result.begin(), n);
+                result.push_back(n);
                 stack.pop_back();
             }
         }
@@ -392,17 +392,19 @@ namespace dconstruct {
 
     void ControlFlowGraph::compute_postdominators() {
 
-        auto rev_postdom = create_rev_postord(m_nodes);
+        auto order = postorder(m_nodes);
 
         static constexpr node_id UNDEF = std::numeric_limits<node_id>::max();
 
-		for (u32 i = m_nodes.size(); i > 0; --i) {
-            m_nodes[m_nodes.size() - i].m_postorder = rev_postdom[i - 1];
-		}
+        for (u32 i = 0; i < m_nodes.size(); ++i) {
+            m_nodes[order[i]].m_postorder = i;
+        }
+        order.pop_back();
+		std::reverse(order.begin(), order.end());
 
-        const u32 N = rev_postdom.size();
+        const u32 N = order.size();
         std::unordered_map<node_id, node_id> ipdom;
-        for (auto n : rev_postdom) {
+        for (auto n : order) {
             ipdom[n] = UNDEF;
         }
 
@@ -412,8 +414,8 @@ namespace dconstruct {
         bool changed = true;
         while (changed) {
             changed = false;
-            for (u32 i = 1; i < N; ++i) {
-                node_id n = rev_postdom[i];
+            for (u32 i = 0; i < N; ++i) {
+                node_id n = order[i];
                 node_id new_ipdom = UNDEF;
                 const control_flow_node& node = m_nodes.at(n);
                 const auto dir_s = node.m_directSuccessor;

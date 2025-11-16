@@ -120,7 +120,7 @@ namespace dconstruct::testing {
         const auto& type = rhs;
 
         std::ostringstream actual_os;
-        actual.pseudo(actual_os);
+		actual.pseudo_c(actual_os);
         const std::string actual_str = actual_os.str();
         const std::string expected_str = "return 1;";
         ASSERT_EQ(expected_str, actual_str);
@@ -139,7 +139,7 @@ namespace dconstruct::testing {
         const std::string expected = "return 1;";
         std::ostringstream os;
         for (const auto& stmt : actual) {
-            stmt->pseudo(os);
+            stmt->pseudo_c(os);
         }
         EXPECT_EQ(expected, os.str());
     }
@@ -178,7 +178,7 @@ namespace dconstruct::testing {
 
         std::ostringstream os;
         for (const auto& stmt : actual) {
-            stmt->pseudo(os);
+            stmt->pseudo_c(os);
         }
         EXPECT_EQ(expected, os.str());
     }
@@ -204,7 +204,7 @@ namespace dconstruct::testing {
 
         std::ostringstream os;
         for (const auto& stmt : actual) {
-            stmt->pseudo(os);
+            stmt->pseudo_c(os);
         }
         EXPECT_EQ(expected, os.str());
     }

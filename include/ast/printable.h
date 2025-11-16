@@ -49,7 +49,7 @@ namespace dconstruct {
 
     inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
         if (os.iword(get_flag_index()) & static_cast<i32>(Flags::AST)) {
-            expr.ast(os);
+            expr.pseudo_py(os);
         } else {
             expr.pseudo_c(os);
         }
