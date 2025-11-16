@@ -6,29 +6,30 @@ from IPython.display import Image
 import networkx as nx
 
 graph = {
-    0: {1},
-    1: {2, 3},
-    2: set(),
-    3: {4, 5, 6, 7},
-    4: {8},
-    5: {9},
-    6: {10, 11},
-    7: {11},
-    8: {12},
-    9: {13},
-    10: {9, 13},
-    11: {10},
-    12: {1},
-    13: {8, 12},
+    0: {14},
+    1: {0, 12},
+    2: {1},
+    3: {1},
+    4: {3},
+    5: {3},
+    6: {3},
+    7: {3},
+    8: {4, 13},
+    9: {5, 10},
+    10: {6, 11},
+    11: {6, 7},
+    12: {8, 13},
+    13: {9, 10},
+    14: {},
 }
 
-edge_list = [(dst, src) for src, dsts in graph.items() for dst in dsts]
+edge_list = [(src, dst) for src, dsts in graph.items() for dst in dsts]
 
 
 G = nx.DiGraph()
 G.add_edges_from(edge_list)
-print(list(reversed(list(nx.dfs_postorder_nodes(G, source=0)))))
-print(nx.immediate_dominators(G, start=12))
+G = G.reverse()
+print(nx.immediate_dominators(G, start=14))
 
 dot = Digraph()
 for src, dsts in graph.items():
