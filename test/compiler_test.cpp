@@ -584,7 +584,7 @@ namespace dconstruct::testing {
 
         block_stmnt.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::assign_expr>(
-                compiler::token(compiler::token_type::IDENTIFIER, "x", 0, 1),
+				std::make_unique<ast::identifier>("x"),
                 std::make_unique<ast::add_expr>(
                     compiler::token(compiler::token_type::PLUS, "+", 0, 1),
                     std::make_unique<ast::identifier>("x"),

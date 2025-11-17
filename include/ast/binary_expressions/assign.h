@@ -6,7 +6,7 @@
 
 namespace dconstruct::ast {
     struct assign_expr : public expression {
-        explicit assign_expr(compiler::token lhs, expr_uptr&& rhs) noexcept :
+        explicit assign_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept :
         m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {};
         
         void pseudo_c(std::ostream& os) const override;
@@ -16,7 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] b8 equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] inline u16 complexity() const noexcept final;
-        compiler::token m_lhs;
+        expr_uptr m_lhs;
         expr_uptr m_rhs;
     };
 }

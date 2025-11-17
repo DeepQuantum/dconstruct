@@ -3,12 +3,12 @@
 namespace dconstruct::ast {    
 
 void assign_expr::pseudo_c(std::ostream& os) const {
-    os << m_lhs.m_lexeme << " = " << *m_rhs;
+    os << *m_lhs << " = " << *m_rhs;
 }
 
 
 void assign_expr::pseudo_py(std::ostream& os) const {
-    os << m_lhs.m_lexeme << " = " << *m_rhs;
+    os << *m_lhs << " = " << *m_rhs;
 }
 
 [[nodiscard]] expr_uptr assign_expr::simplify() const {
@@ -29,7 +29,7 @@ void assign_expr::pseudo_py(std::ostream& os) const {
 }
 
 [[nodiscard]] expr_uptr assign_expr::clone() const {
-    return std::make_unique<assign_expr>(m_lhs, m_rhs != nullptr ? m_rhs->clone() : nullptr);
+    return std::make_unique<assign_expr>(m_lhs->clone(), m_rhs != nullptr ? m_rhs->clone() : nullptr);
 }
 
 [[nodiscard]] inline u16 assign_expr::complexity() const noexcept {
