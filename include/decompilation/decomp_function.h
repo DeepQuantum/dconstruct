@@ -63,6 +63,9 @@ namespace dconstruct::dcompiler {
 
         template<typename from, typename to>
         [[nodiscard]] expr_uptr make_cast(const Instruction& istr, const ast::full_type& type);
+
+        template<ast::primitive_kind kind>
+        [[nodiscard]] expr_uptr make_store(const Instruction& istr);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
 

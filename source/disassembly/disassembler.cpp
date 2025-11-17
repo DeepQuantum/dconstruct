@@ -613,7 +613,7 @@ void store_nonstatic(
     frame[dest].m_type = ast::ptr_type{kind};
     std::snprintf(varying, disassembly_text_size, "[r%d], r%d", dest, op1);
     frame[op1].m_type = make_type(kind);
-    std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", dest, op1_str, op2_str);
+    std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
 }
 
 void Disassembler::process_instruction(const u32 istr_idx, function_disassembly &fn) {

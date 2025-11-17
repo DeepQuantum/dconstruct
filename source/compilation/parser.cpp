@@ -296,10 +296,10 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (match({token_type::EQUAL})) {
         const token equals = previous();
         expr_uptr value = make_assignment();
+        // todo fix
         const ast::identifier* expr_ptr = dynamic_cast<const ast::identifier*>(expr.get());
         if (expr_ptr != nullptr) {
-            const token name = expr_ptr->m_name;
-            return std::make_unique<ast::assign_expr>(name, std::move(value));
+            return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
         }
 
         m_errors.emplace_back(equals, "invalid assignment target.");
