@@ -5,6 +5,7 @@
 #include "binary_expressions/sub.h"
 #include "binary_expressions/mul.h"
 #include "binary_expressions/div.h"
+#include "binary_expressions/mod.h"
 #include "binary_expressions/assign.h"
 #include "binary_expressions/compare.h"
 #include "binary_expressions/logical.h"

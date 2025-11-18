@@ -63,6 +63,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
 
     for (const auto &line : node.m_lines) {
+        #ifdef _DEBUG
+		std::cout << "parsing instruction " << std::hex << line.m_location << '\n';
+        #endif
         const Instruction &istr = line.m_instruction;
 
         expr_uptr generated_expression = nullptr;
@@ -76,6 +79,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FMul: generated_expression = apply_binary_op<ast::mul_expr>(istr); break;
             case Opcode::IDiv:
             case Opcode::FDiv: generated_expression = apply_binary_op<ast::div_expr>(istr); break;
+            case Opcode::IMod:
+            case Opcode::FMod: generated_expression = apply_binary_op<ast::mod_expr>(istr); break;
 
             case Opcode::IAddImm: generated_expression = apply_binary_op_imm<ast::add_expr>(istr); break;
             case Opcode::IMulImm: generated_expression = apply_binary_op_imm<ast::mul_expr>(istr); break;
@@ -539,7 +544,8 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
     if (m_transformableExpressions[dst] == nullptr) {
-        std::cerr << "error: dst " << dst << "contains nullptr." << '\n'; 
+        std::cerr << "error: dst " << dst << " contains nullptr." << '\n';
+        std::terminate();
         m_transformableExpressions[dst] = std::make_unique<ast::identifier>("var_error");
     }
     auto& expr = m_transformableExpressions[dst];

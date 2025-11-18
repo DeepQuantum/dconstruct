@@ -115,6 +115,7 @@ namespace dconstruct {
             || opcode == Opcode::LoadStaticU8Imm || opcode == Opcode::LoadStaticU32Imm
             || opcode == Opcode::LoadStaticI64Imm || opcode == Opcode::LoadStaticU64Imm
             || opcode == Opcode::LoadStaticFloatImm || opcode == Opcode::LoadStaticPointer
+            || opcode == Opcode::LoadStaticPointerImm
             || opcode == Opcode::LoadU16Imm || opcode == Opcode::LookupPointer;
     }
 
