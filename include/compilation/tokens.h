@@ -15,6 +15,7 @@ namespace dconstruct::compiler {
         MINUS, MINUS_EQUAL, MINUS_MINUS,
         STAR, STAR_EQUAL,
         SLASH, SLASH_EQUAL,
+        PERCENT, PERCENT_EQUAL,
         BANG, BANG_EQUAL,
         EQUAL, EQUAL_EQUAL,
         GREATER, GREATER_EQUAL,
