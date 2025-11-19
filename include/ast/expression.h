@@ -14,7 +14,7 @@ namespace dconstruct::ast {
     struct expression : public Iprintable {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
-        [[nodiscard]] virtual b8 equals(const expression& other) const noexcept = 0;
+        [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
@@ -36,11 +36,11 @@ namespace dconstruct::ast {
         full_type m_type;
     };
 
-    [[nodiscard]] inline b8 operator==(const expression& lhs, const expression& rhs) noexcept {
+    [[nodiscard]] inline bool operator==(const expression& lhs, const expression& rhs) noexcept {
         return lhs.equals(rhs);
     }
 
-    [[nodiscard]] inline b8 operator==(const std::unique_ptr<expression>& lhs, const std::unique_ptr<expression>& rhs) noexcept {
+    [[nodiscard]] inline bool operator==(const std::unique_ptr<expression>& lhs, const std::unique_ptr<expression>& rhs) noexcept {
         if (lhs == nullptr || rhs == nullptr) {
             return lhs == nullptr && rhs == nullptr;
         }
@@ -51,7 +51,7 @@ namespace dconstruct::ast {
         unary_expr(compiler::token op, std::unique_ptr<expression>&& rhs) noexcept : m_operator(std::move(op)), m_rhs(std::move(rhs)) {};
 
         // for testing ! stupid and expensive.
-        [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
+        [[nodiscard]] inline bool equals(const expression& rhs) const noexcept final {
             const unary_expr* rhs_ptr = dynamic_cast<const unary_expr*>(&rhs);
             if (rhs_ptr != nullptr) {
                 return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs;
@@ -93,7 +93,7 @@ namespace dconstruct::ast {
         }
 
         // for testing ! stupid and expensive.
-        [[nodiscard]] inline b8 equals(const expression& rhs) const noexcept final {
+        [[nodiscard]] inline bool equals(const expression& rhs) const noexcept final {
             const binary_expr* rhs_ptr = dynamic_cast<const binary_expr*>(&rhs);
             if (rhs_ptr != nullptr) {
                 return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs && m_lhs == rhs_ptr->m_lhs && m_operator == rhs_ptr->m_operator;

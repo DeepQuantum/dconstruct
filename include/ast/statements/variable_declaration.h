@@ -19,7 +19,7 @@ namespace dconstruct::ast {
 
         void pseudo_py(std::ostream& os) const final;
 
-        [[nodiscard]] b8 equals(const statement& rhs) const noexcept final;
+        [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 
         [[nodiscard]] inline const expression* get_init_ptr() const noexcept {
             return m_init.get();

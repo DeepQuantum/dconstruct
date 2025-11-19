@@ -52,10 +52,10 @@ namespace dconstruct::compiler {
         const token* consume(const token_type, const std::string&);
         [[nodiscard]] const token& peek() const;
         [[nodiscard]] const token& previous() const;
-        [[nodiscard]] b8 is_at_end() const;
-        [[nodiscard]] b8 check(const token_type) const;
-        [[nodiscard]] b8 match(const std::initializer_list<token_type>& types);
-        [[nodiscard]] b8 match_type();
+        [[nodiscard]] bool is_at_end() const;
+        [[nodiscard]] bool check(const token_type) const;
+        [[nodiscard]] bool match(const std::initializer_list<token_type>& types);
+        [[nodiscard]] bool match_type();
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
         [[nodiscard]] stmnt_uptr make_declaration();

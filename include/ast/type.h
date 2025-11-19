@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace dconstruct::ast {
-    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, b8, std::string, sid_literal, std::nullptr_t, std::monostate>;
+    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, bool, std::string, sid_literal, std::nullptr_t, std::monostate>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
 
@@ -87,7 +87,7 @@ namespace dconstruct::ast {
         return full_type{primitive_type{kind}};
     }
 
-    [[nodiscard]] inline static b8 is_unknown(const full_type& type) noexcept {
+    [[nodiscard]] inline static bool is_unknown(const full_type& type) noexcept {
         return std::holds_alternative<std::monostate>(type);
     }
 
