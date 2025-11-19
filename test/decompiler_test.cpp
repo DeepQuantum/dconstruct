@@ -55,7 +55,7 @@ namespace dconstruct::testing {
         BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
         Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, table.first);
-        return dcompiler::decomp_function{ &fd, file };
+        return dcompiler::decomp_function{ fd, file };
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
@@ -64,7 +64,7 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
-                return dcompiler::decomp_function{&func, file}.to_string();
+                return dcompiler::decomp_function{func, file}.to_string();
             }
         }
         return "";
@@ -76,7 +76,7 @@ namespace dconstruct::testing {
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
-                return dcompiler::decomp_function{&func, file}.to_string();
+                return dcompiler::decomp_function{func, file}.to_string();
             }
         }
         return "";
@@ -242,7 +242,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         for (const auto& node : dc_func.m_graph.m_nodes) {
             ASSERT_EQ(node.m_ipdom, 0x16);
         }
@@ -257,7 +257,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         for (const auto& node : dc_func.m_graph.m_nodes) {
             ASSERT_EQ(node.m_ipdom, 0x16);
         }
@@ -328,8 +328,8 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
-        const reg_set registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0], dc_func.m_disassembly->m_isScriptFunction);
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
+        const reg_set registers_to_emit = dc_func.m_graph.get_branch_phi_registers(dc_func.m_graph[0]);
         ASSERT_TRUE(registers_to_emit.test(0));
     }
 
@@ -360,7 +360,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "i32 #8A8D5C923D5DDB3B() {\n"
             "    i32 var_0;\n"
@@ -385,7 +385,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -404,7 +404,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
             "    string var_0;\n"
@@ -437,7 +437,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -456,7 +456,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -475,7 +475,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -494,7 +494,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -513,7 +513,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -551,7 +551,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -570,7 +570,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         const std::string expected =
             "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -580,29 +580,53 @@ namespace dconstruct::testing {
         ASSERT_EQ(dc_func.to_string(), expected);
     }
 
+    TEST(DECOMPILER, NodeRegisters0) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const std::string id = "select-spawn-regions@main@start@0";
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+		const auto dc_func = dcompiler::decomp_function{ *func, file };
+        const auto& node0 = dc_func.m_graph.m_nodes[0];
+        ASSERT_EQ(node0.m_readFirstRegs, 0b0);
+        ASSERT_EQ(node0.m_writtenToRegs, 0b1);
+		const auto& node1 = dc_func.m_graph.m_nodes[1];
+        ASSERT_EQ(node1.m_readFirstRegs, 0b0);
+		ASSERT_EQ(node1.m_writtenToRegs, 0b111);
+		const auto& node2 = dc_func.m_graph.m_nodes[2];
+		ASSERT_EQ(node2.m_readFirstRegs, 0b0);
+		ASSERT_EQ(node2.m_writtenToRegs, 0b1);
+		const auto& node3 = dc_func.m_graph.m_nodes[3];
+		ASSERT_EQ(node3.m_readFirstRegs, 0b0);
+		ASSERT_EQ(node3.m_writtenToRegs, 0b0);
+    }
+
     TEST(DECOMPILER, SpecialFunc1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.asm)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "select-wave-composition@main@start@2";
+        const std::string id = "#A238C0593743A3AE";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ &*func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
         BinaryFile file{ filepath };
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.asm)", {} };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\scinematic-controls.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
         std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)");
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.dcpl)");
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto& func : funcs) {
             if (emitted.contains(func.m_id)) {
@@ -610,7 +634,7 @@ namespace dconstruct::testing {
             }
             emitted.insert(func.m_id);
             try {
-                const auto dc_func = dcompiler::decomp_function{ &func, file };
+                const auto dc_func = dcompiler::decomp_function{ func, file };
                 out << dc_func.to_string() << "\n\n";
             } catch (const std::exception& e) {
                 std::cout << e.what() << '\n';
@@ -641,7 +665,7 @@ namespace dconstruct::testing {
                 }
                 emitted.insert(func.m_id);
                 try {
-                    const auto dc_func = dcompiler::decomp_function{ &func, file };
+                    const auto dc_func = dcompiler::decomp_function{ func, file };
                     std::ofstream out(new_path, std::ios::app);
                     out << dc_func.to_string() << "\n\n";
                 }

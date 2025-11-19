@@ -12,7 +12,7 @@ namespace dconstruct::compiler {
 
         void define(const std::string& name, ast::typed_value value);
 
-        b8 assign(const std::string& name, ast::typed_value value);
+        bool assign(const std::string& name, ast::typed_value value);
 
         [[nodiscard]] opt_ref<const ast::typed_value> lookup(const std::string& name) const;
 

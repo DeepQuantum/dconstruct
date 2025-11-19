@@ -18,7 +18,6 @@ typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
-typedef bool b8;
 typedef float f32;
 typedef double f64;
 typedef uintptr_t p64;
@@ -30,13 +29,13 @@ using opt_ref = std::optional<std::reference_wrapper<T>>;
 
 using reg_idx = u8;
 using node_id = u16;
-
-
-using reg_set = std::bitset<49>;
-using node_set = std::vector<b8>;
+using istr_line = u16;
 
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
 constexpr reg_idx MAX_REGISTER = 128;
+
+using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX>;
+using node_set = std::vector<bool>;
 
 #define SID(str) (dconstruct::ToStringId64(str))
 
@@ -78,15 +77,15 @@ namespace dconstruct {
 			return location(m_ptr - rhs);
 		}
 
-		[[nodiscard]] b8 operator>(const location &rhs) const noexcept {
+		[[nodiscard]] bool operator>(const location &rhs) const noexcept {
 			return reinterpret_cast<p64>(m_ptr) > reinterpret_cast<p64>(rhs.m_ptr);
 		}
 
-		[[nodiscard]] b8 operator>=(const location &rhs) const noexcept {
+		[[nodiscard]] bool operator>=(const location &rhs) const noexcept {
 			return reinterpret_cast<p64>(m_ptr) >= reinterpret_cast<p64>(rhs.m_ptr);
 		}
 
-		[[nodiscard]] b8 is_aligned() const noexcept {
+		[[nodiscard]] bool is_aligned() const noexcept {
 			return reinterpret_cast<p64>(m_ptr) % 8 == 0;
 		}
 	};
@@ -114,6 +113,3 @@ namespace dconstruct {
 		return buffer;
 	}
 };
-
-
-

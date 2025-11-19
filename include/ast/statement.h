@@ -10,14 +10,14 @@ namespace dconstruct::ast {
 
     struct statement : public Iprintable {
         virtual ~statement() = default;
-        [[nodiscard]] virtual b8 equals(const statement &rhs) const noexcept = 0;
+        [[nodiscard]] virtual bool equals(const statement &rhs) const noexcept = 0;
     };
 
-    [[nodiscard]] inline b8 operator==(const statement& lhs, const statement& rhs) noexcept {
+    [[nodiscard]] inline bool operator==(const statement& lhs, const statement& rhs) noexcept {
         return lhs.equals(rhs);
     }
 
-    [[nodiscard]] inline b8 operator==(const std::unique_ptr<statement>& lhs, const std::unique_ptr<statement>& rhs) noexcept {
+    [[nodiscard]] inline bool operator==(const std::unique_ptr<statement>& lhs, const std::unique_ptr<statement>& rhs) noexcept {
         return *lhs == *rhs;
     }
 }
