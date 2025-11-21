@@ -591,17 +591,17 @@ namespace dconstruct::testing {
         ASSERT_NE(func, funcs.end());
 		const auto dc_func = dcompiler::decomp_function{ *func, file };
         const auto& node0 = dc_func.m_graph.m_nodes[0];
-        ASSERT_EQ(node0.m_readFirstRegs, 0b0);
-        ASSERT_EQ(node0.m_writtenToRegs, 0b1);
+        ASSERT_EQ(node0.m_regs.m_readFirst, 0b0);
+        ASSERT_EQ(node0.m_regs.m_written, 0b1);
 		const auto& node1 = dc_func.m_graph.m_nodes[1];
-        ASSERT_EQ(node1.m_readFirstRegs, 0b0);
-		ASSERT_EQ(node1.m_writtenToRegs, 0b111);
+        ASSERT_EQ(node1.m_regs.m_readFirst, 0b0);
+		ASSERT_EQ(node1.m_regs.m_written, 0b111);
 		const auto& node2 = dc_func.m_graph.m_nodes[2];
-		ASSERT_EQ(node2.m_readFirstRegs, 0b0);
-		ASSERT_EQ(node2.m_writtenToRegs, 0b1);
+		ASSERT_EQ(node2.m_regs.m_readFirst, 0b0);
+		ASSERT_EQ(node2.m_regs.m_written, 0b1);
 		const auto& node3 = dc_func.m_graph.m_nodes[3];
-		ASSERT_EQ(node3.m_readFirstRegs, 0b0);
-		ASSERT_EQ(node3.m_writtenToRegs, 0b0);
+		ASSERT_EQ(node3.m_regs.m_readFirst, 0b0);
+		ASSERT_EQ(node3.m_regs.m_written, 0b0);
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
@@ -610,7 +610,7 @@ namespace dconstruct::testing {
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "#A238C0593743A3AE";
+        const std::string id = "#43DF4E5E85BFD47C";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -620,13 +620,13 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\cinematic-controls.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\scinematic-controls.asm)", {} };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
         std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\cinematic-controls.dcpl)");
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)");
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto& func : funcs) {
             if (emitted.contains(func.m_id)) {

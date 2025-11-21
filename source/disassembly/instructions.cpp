@@ -127,7 +127,7 @@ namespace dconstruct {
     }
 
     [[nodiscard]] bool Instruction::operand1_is_used() const noexcept {
-        return opcode != Opcode::Branch && opcode != Opcode::Return && opcode != Opcode::AssertPointer;
+        return opcode != Opcode::Branch  || opcode == Opcode::Return && opcode != Opcode::AssertPointer;
     }
 
     [[nodiscard]] bool Instruction::operand2_is_used() const noexcept {
