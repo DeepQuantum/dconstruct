@@ -7,7 +7,8 @@
 #include <optional>
 #include <bitset>
 #include <vector>
-
+#include <sstream>
+#include <bit>
 
 typedef uint64_t sid64;
 typedef int8_t i8;
@@ -36,6 +37,9 @@ constexpr reg_idx MAX_REGISTER = 128;
 
 using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX>;
 using node_set = std::vector<bool>;
+
+
+
 
 #define SID(str) (dconstruct::ToStringId64(str))
 
@@ -111,5 +115,17 @@ namespace dconstruct {
 		char buffer[20] = { 0 };
 		std::snprintf(buffer, sizeof(buffer), "0x%06X", offset);
 		return buffer;
+	}
+
+	[[nodiscard]] static inline std::string pretty_regset(reg_set set) {
+		std::stringstream ss;
+		ss << '[';
+		auto bits = set.to_ullong();
+		while (bits != 0) {
+			ss << std::countr_zero(bits) << ", ";
+			bits &= bits - 1;
+		}
+		ss << ']';
+		return ss.str();
 	}
 };

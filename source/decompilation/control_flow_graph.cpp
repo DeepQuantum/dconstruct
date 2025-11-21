@@ -10,9 +10,7 @@
 #include <graphviz/cgraph.h>
 #include <sstream>
 #include <mutex>
-#include <set>
 #include <algorithm>
-#include <chrono>
 #include <functional>
 
 namespace dconstruct {
@@ -93,55 +91,54 @@ namespace dconstruct {
         for (const auto& line : m_lines) {
             const auto& istr = line.m_instruction;
 
-            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !m_writtenToRegs[istr.destination])  {
-                m_readFirstTwiceRegs[istr.destination] = m_readFirstTwiceRegs[istr.destination] || m_readFirstRegs[istr.destination] && !m_writtenToRegs[istr.destination];
-                m_readFirstRegs.set(istr.destination);
+            if (istr.destination == istr.operand1 && istr.op1_is_reg() && !m_regs.m_written[istr.destination])  {
+                m_regs.m_readTwice[istr.destination] = m_regs.m_readTwice[istr.destination] || m_regs.m_readFirst[istr.destination] && !m_regs.m_written[istr.destination];
+                m_regs.m_readFirst[istr.destination] = true;
                 continue;
             }
             
             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX) {
-                m_writtenToRegs.set(istr.destination);
+                m_regs.m_written[istr.destination] = true;
             }
 
-            if (istr.op1_is_reg() && !m_writtenToRegs[istr.operand1]) {
-                m_readFirstTwiceRegs[istr.operand1] = m_readFirstTwiceRegs[istr.operand1] || m_readFirstRegs[istr.operand1] && !m_writtenToRegs[istr.operand1];
-                m_readFirstRegs.set(istr.operand1);
+            if (istr.op1_is_reg() && !m_regs.m_written[istr.operand1]) {
+                m_regs.m_readTwice[istr.operand1] = m_regs.m_readTwice[istr.operand1] || m_regs.m_readFirst[istr.operand1] && !m_regs.m_written[istr.operand1];
+                m_regs.m_readFirst[istr.operand1] = true;
             }
-            if (istr.op2_is_reg() && !m_writtenToRegs[istr.operand2]) {
-                m_readFirstTwiceRegs[istr.operand2] = m_readFirstTwiceRegs[istr.operand2] || m_readFirstRegs[istr.operand2] && !m_writtenToRegs[istr.operand2];
-                m_readFirstRegs.set(istr.operand2);
+            if (istr.op2_is_reg() && !m_regs.m_written[istr.operand2]) {
+                m_regs.m_readTwice[istr.operand2] = m_regs.m_readTwice[istr.operand2] || m_regs.m_readFirst[istr.operand2] && !m_regs.m_written[istr.operand2];
+                m_regs.m_readFirst[istr.operand2] = true;
             }
         }
     }
 
-    [[nodiscard]] std::pair<reg_set, reg_set> control_flow_node::get_read_count_starting_at(const istr_line start_line) const noexcept {
-        reg_set read_first, multi_read;
-        reg_set write_regs;
+    [[nodiscard]] register_nature control_flow_node::get_register_nature_starting_at(const istr_line start_line) const noexcept {
+        reg_set read_first, multi_read, write_regs;
         for (istr_line i = start_line; i < m_lines.size(); ++i) {
             const auto& istr = m_lines[i].m_instruction;
 
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
                 multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination] && !write_regs[istr.destination];
-                read_first.set(istr.destination);
-                write_regs.set(istr.destination);
+                read_first[istr.destination] = true;
+                write_regs[istr.destination] = true;
                 continue;
             }
             
             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX) {
-                write_regs.set(istr.destination);
+                write_regs[istr.destination] = true;
             }
 
             if (istr.op1_is_reg() && !write_regs[istr.operand1]) {
                 multi_read[istr.operand1] = multi_read[istr.operand1] || read_first[istr.operand1] && !write_regs[istr.operand1];
-                read_first.set(istr.operand1);
+                read_first[istr.operand1] = true;
             }
             if (istr.op2_is_reg() && !write_regs[istr.operand2]) {
                 multi_read[istr.operand2] = multi_read[istr.operand2] || read_first[istr.operand2] && !write_regs[istr.operand2];
-                read_first.set(istr.operand2);
+                read_first[istr.operand2] = true;
             }
         }
 
-        return {read_first, multi_read};
+        return {read_first, multi_read, write_regs};
     }
 
     static void insert_node_at_line(const istr_line start_line, std::map<node_id, control_flow_node>& nodes) {
@@ -180,29 +177,6 @@ namespace dconstruct {
         }
         return result;
     }
-
-    //recursive version of the above
-    /*[[nodiscard]] std::vector<node_id> create_postord_recursive(const std::vector<control_flow_node>& nodes) {
-        std::vector<node_id> result;
-        const u32 size = nodes.size();
-        result.reserve(size);
-        node_set visited(size, false);
-
-        std::function<void(node_id)> visit = [&](node_id n) {
-            if (visited[n]) {
-                return;
-            }
-            visited[n] = true;
-            for (const auto& pred : nodes[n].m_predecessors) {
-                visit(pred);
-            }
-            result.push_back(n);
-        };
-
-        visit(nodes.back().m_index);
-        std::reverse(result.begin(), result.end());
-        return result;
-    }*/
 
     ControlFlowGraph::ControlFlowGraph(const function_disassembly &func) : m_func(func)  {
         const std::vector<u32> &labels = func.m_stackFrame.m_labels;
@@ -265,8 +239,8 @@ namespace dconstruct {
         }
         auto& last_node = m_nodes.back();
         const u8 last_dest = last_node.m_lines.back().m_instruction.destination;
-        const bool flag = !m_func.m_isScriptFunction && !last_node.m_writtenToRegs[last_dest];
-        last_node.m_readFirstRegs[last_dest] = last_node.m_readFirstRegs[last_dest] || flag;
+        const bool flag = !m_func.m_isScriptFunction && !last_node.m_regs.m_written[last_dest];
+        last_node.m_regs.m_readFirst[last_dest] = last_node.m_regs.m_readFirst[last_dest] || flag;
         compute_postdominators();
         find_loops();
     }
@@ -434,7 +408,7 @@ namespace dconstruct {
             m_nodes[order[i]].m_postorder = i;
         }
         order.pop_back();
-		std::reverse(order.begin(), order.end());
+        std::reverse(order.begin(), order.end());
 
         const u32 N = order.size();
         std::unordered_map<node_id, node_id> ipdom;
@@ -457,13 +431,14 @@ namespace dconstruct {
 
                 if (dir_s && ipdom.at(dir_s) != UNDEF) {
                     new_ipdom = dir_s;
-                } else if (tar_s && ipdom.at(tar_s) != UNDEF) {
+                }
+                else if (tar_s && ipdom.at(tar_s) != UNDEF) {
                     new_ipdom = tar_s;
                 }
                 if (new_ipdom == UNDEF) {
                     continue;
                 }
-                
+
                 if (dir_s && ipdom.at(dir_s) != UNDEF && dir_s != new_ipdom) {
                     new_ipdom = intersect(dir_s, new_ipdom, m_nodes).m_index;
                 }
@@ -488,200 +463,101 @@ namespace dconstruct {
         return body;
     }
 
-
-    // void ControlFlowGraph::get_register_nature(
-    //     const control_flow_node& start_node,
-    //     reg_set check_regs,
-    //     reg_set& read_first, 
-    //     const node_id stop_node,
-    //     node_set& asd,
-    //     const istr_line start_line
-    // ) const noexcept {
-
-    //     struct frame {
-    //         const control_flow_node* node;
-    //         reg_set regs;
-    //     };
-
-    //     std::vector<std::pair<const control_flow_node&, reg_set>> node_stack;
-    //     node_set visited;
-    //     visited.resize(m_nodes.size(), false);
-
-    //     node_stack.push_back({&start_node, check_regs});
-
-    //     while (!node_stack.empty()) {
-    //         auto [current_node, check_write_regs] = node_stack.back();
-    //         node_stack.pop_back();
-    //         if (visited[current_node->m_index]) {
-    //             continue;
-    //         }
-    //         visited[current_node->m_index] = true;
-    //         for (u32 i = start_line; i < current_node->m_lines.size(); ++i) {
-    //             const function_disassembly_line& line = current_node->m_lines[i];
-    //             if (check_write_regs.to_ullong() == 0) {
-    //                 break;
-    //             }
-    //             const Instruction& istr = line.m_instruction;
-    //             if (istr.opcode == Opcode::Return && check_write_regs[istr.destination]) {
-    //                 check_write_regs.reset(istr.destination);
-    //                 if (!m_func.m_isScriptFunction) {
-    //                     read_first.set(istr.destination);
-    //                 }
-    //                 break;
-    //             }
-    //             if (istr.destination == istr.operand1 && !istr.operand1_is_immediate() && check_write_regs[istr.destination]) {
-    //                 check_write_regs.reset(istr.destination);
-    //                 read_first.set(istr.destination);
-	// 				check_regs.reset(istr.destination);
-    //                 continue;
-    //             }
-    //             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX && check_write_regs[istr.destination]) {
-    //                 check_write_regs.reset(istr.destination);
-    //             }
-    //             if (istr.op1_is_reg() && istr.operand1 < ARGUMENT_REGISTERS_IDX && check_write_regs[istr.operand1]) {
-    //                 check_write_regs.reset(istr.operand1);
-    //                 check_regs.reset(istr.operand1);
-    //                 read_first.set(istr.operand1);
-    //             }
-    //             if (istr.op2_is_reg() && istr.operand2 < ARGUMENT_REGISTERS_IDX && check_write_regs[istr.operand2]) {
-    //                 check_write_regs.reset(istr.operand2);
-    //                 check_regs.reset(istr.operand1);
-    //                 read_first.set(istr.operand2);
-    //             }
-    //         }
-    //         use_start_line = false;
-    //         if (check_write_regs.to_ullong() == 0) {
-    //             continue;
-    //         }
-    //         if (check_regs.to_ullong() == 0) {
-    //             return;
-    //         }
-    //         if (current_node->m_followingNode && current_node->m_followingNode != stop_node) {
-    //             node_stack.push_back({&m_nodes.at(current_node->m_followingNode), check_write_regs });
-    //         }
-    //         if (current_node->m_targetNode && current_node->m_targetNode != stop_node) {
-    //             node_stack.push_back({&m_nodes.at(current_node->m_targetNode), check_write_regs });
-    //         }
-    //     }
-    // }
-
     [[nodiscard]] reg_set ControlFlowGraph::get_register_nature(
         const control_flow_node& start_node,
-        reg_set check_regs,
+        reg_set check_regs_orig,
         const node_id stop_node,
-        const istr_line start_line)
-    const noexcept {
-        reg_set result;
+        const istr_line start_line
+    ) const noexcept {
+
+        struct node_reg_pair {
+            const control_flow_node& node;
+            reg_set regs_to_check;
+		};
+
+
+
+		reg_set read, check_regs = check_regs_orig;
+
         node_set checked(m_nodes.size(), false);
-        std::vector<std::reference_wrapper<const control_flow_node>> node_stack;
+
+
+        std::vector<node_reg_pair> node_stack;
 
         if (start_line) {
-            const auto [read_first, _] = start_node.get_read_count_starting_at(start_line);
-            result |= read_first & check_regs;
+            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line);
+            read |= read_first & check_regs;
             check_regs &= ~read_first;
             checked[start_node.m_index] = true;
             if (start_node.m_followingNode) {
-                node_stack.push_back(m_nodes[start_node.m_followingNode]);
+                node_stack.emplace_back(m_nodes[start_node.m_followingNode], check_regs);
             }
             if (start_node.m_targetNode) {
-                node_stack.push_back(m_nodes[start_node.m_targetNode]);
+                node_stack.emplace_back(m_nodes[start_node.m_targetNode], check_regs);
             }
-        } else {
-            node_stack.push_back(start_node);
+        }
+        else {
+            node_stack.emplace_back(start_node, check_regs);
         }
 
-        while (!node_stack.empty() && check_regs.to_ullong() != 0) {
-            const auto& node = node_stack.back().get();
+#ifdef _DEBUG  
+        std::cout << "check_regs: " << pretty_regset(check_regs) << '\n';
+#endif
+        while (!node_stack.empty()) {
+            auto [node, local_check_regs] = node_stack.back();
+#ifdef _DEBUG
+			std::cout << "processing nature for node " << node.m_index 
+                << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
+                << " written: " << pretty_regset(node.m_regs.m_written) 
+                << '\n';
+			std::cout << "local check_regs before: " << pretty_regset(local_check_regs) << " read before: " << pretty_regset(read) << '\n';
+#endif
             node_stack.pop_back();
             checked[node.m_index] = true;
 
-            result |= node.m_readFirstRegs;
-            check_regs &= ~node.m_readFirstRegs;
+            read |= node.m_regs.m_readFirst & local_check_regs;
+            local_check_regs &= ~(node.m_regs.m_readFirst | node.m_regs.m_written);
+
+#ifdef _DEBUG
+            std::cout << "local check_regs after: " << pretty_regset(local_check_regs) << " read after: " << pretty_regset(read) << '\n';
+#endif
+
+            if (local_check_regs.to_ullong() == 0) {
+                continue;
+            }
 
             if (node.m_followingNode && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
-                node_stack.push_back(m_nodes[node.m_followingNode]);
+                node_stack.emplace_back(m_nodes[node.m_followingNode], local_check_regs);
             }
             if (node.m_targetNode && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
-                node_stack.push_back(m_nodes[node.m_targetNode]);
+                node_stack.emplace_back(m_nodes[node.m_targetNode], local_check_regs);
             }
         }
 
-        return result;
+        return read;
     }
 
-   /* u16 ControlFlowGraph::get_register_read_count(
+    u8 ControlFlowGraph::get_register_read_count(
         const control_flow_node& start_node,
         const reg_idx reg_to_check,
-        const node_id stop_node,
-        node_set& checked,
         const istr_line start_line
     ) const noexcept {
-        if (checked[start_node.m_index]) {
-            return 0;
-        }
-        checked[start_node.m_index] = true;
-        u16 count = 0;
-        for (u32 i = start_line; i < start_node.m_lines.size(); ++i) {
-            if (count >= 2) {
-                return count;
-            }
-            const function_disassembly_line& line = start_node.m_lines[i];
-            const Instruction& istr = line.m_instruction;
-            if (reg_to_check == istr.destination && istr.opcode == Opcode::Return) {
-                if (!m_func.m_isScriptFunction) {
-                    return ++count;
-                }
-                return count;
-            }
-            if (reg_to_check == istr.destination && istr.destination == istr.operand1 && istr.op1_is_reg()) {
-                return ++count;
-            }
-            if (reg_to_check == istr.destination && !istr.destination_is_immediate()) {
-                return count;
-            }
-            if (reg_to_check == istr.operand1 && istr.op1_is_reg()) {
-                count++;
-            }
-            if (reg_to_check == istr.operand2 && istr.op2_is_reg()) {
-                count++;
-            }
-        }
-        if (start_node.m_index == stop_node) {
-            return count;
-        }
-        if (start_node.m_followingNode) {
-            count += get_register_read_count(m_nodes.at(start_node.m_followingNode), reg_to_check, stop_node, checked);
-        }
-        if (count > 2) {
-            return count;
-        }
-        if (start_node.m_targetNode) {
-            count += get_register_read_count(m_nodes.at(start_node.m_targetNode), reg_to_check, stop_node, checked);
-        }
-        return count;
-    }*/
-
-    u8 ControlFlowGraph::get_register_read_count(const control_flow_node& start_node,
-        const reg_idx reg_to_check,
-        const node_id stop_node,
-        const istr_line start_line
-    ) const noexcept {
-        //reg_set single, multi;
-       // reg_set check_reg = reg_set().set(reg_to_check);
-        
         node_set checked(m_nodes.size(), false);
-        bool read_once = false;
+        bool already_read = false;
         std::vector<std::reference_wrapper<const control_flow_node>> node_stack;
 
         if (start_line) {
-            const auto [single_read, multi_read] = start_node.get_read_count_starting_at(start_line);
+            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line);
 
-            
-            if (multi_read[reg_to_check]) {
+            if (read_twice[reg_to_check]) {
                 return 2;
             }
 
-            read_once = single_read[reg_to_check];
+            if (read_once[reg_to_check] && written[reg_to_check]) {
+                return 1;
+            }
+
+            already_read = read_once[reg_to_check];
 
             checked[start_node.m_index] = true;
             if (start_node.m_followingNode) {
@@ -700,27 +576,30 @@ namespace dconstruct {
             node_stack.pop_back();
             checked[node.m_index] = true;
 
-
-            // if we read first twice, than we can return 2
-            // or if we already read first at the previous node, that node doesnt write to the check reg, and we read first at the current node
-            if (node.m_readFirstTwiceRegs[reg_to_check] || (node.m_readFirstRegs[reg_to_check] && read_once)) {
+            if (node.m_regs.m_readTwice[reg_to_check] || (node.m_regs.m_readFirst[reg_to_check] && already_read)) {
                 return 2;
             }
-            
-            // if the current node reads AND writes, its 1
-            if (node.m_readFirstRegs[reg_to_check] && node.m_writtenToRegs[reg_to_check]) {
-                
+
+            if (node.m_regs.m_readFirst[reg_to_check] && node.m_regs.m_written[reg_to_check]) {
+                return 1;
             }
 
-            if (node.m_followingNode && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
+            if (!node.m_regs.m_readFirst[reg_to_check] && node.m_regs.m_written[reg_to_check]) {
+                return static_cast<u8>(already_read);
+            }
+
+            already_read |= node.m_regs.m_readFirst[reg_to_check] && !node.m_regs.m_written[reg_to_check];
+
+
+            if (node.m_followingNode && !checked[node.m_followingNode]) {
                 node_stack.push_back(m_nodes[node.m_followingNode]);
             }
-            if (node.m_targetNode && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
+            if (node.m_targetNode && !checked[node.m_targetNode]) {
                 node_stack.push_back(m_nodes[node.m_targetNode]);
             }
         }
 
-		return single[reg_to_check] ? (multi[reg_to_check] ? 2 : 1) : 0;
+        return static_cast<u8>(already_read);
     }
 
     [[nodiscard]] reg_set ControlFlowGraph::get_registers_written_to(const control_flow_node& start_node, const node_id stop) const {
@@ -732,7 +611,7 @@ namespace dconstruct {
             const auto& current_node = node_stack.back().get();
             node_stack.pop_back();
             checked[current_node.m_index] = true;
-            result |= current_node.m_writtenToRegs;
+            result |= current_node.m_regs.m_written;
             
             if (current_node.m_followingNode && !checked[current_node.m_followingNode] && current_node.m_followingNode != stop) {
                 node_stack.push_back(m_nodes[current_node.m_followingNode]);
@@ -746,31 +625,31 @@ namespace dconstruct {
     }
     
     [[nodiscard]] reg_set ControlFlowGraph::get_branch_phi_registers(const control_flow_node& start_node) const noexcept {
-        reg_set read_first_branches, read_first_ipdom, result;
+        reg_set result;
         node_set checked(m_nodes.size(), false);
         node_id ipdom = start_node.m_ipdom;
 
         if (ipdom == start_node.m_index) {
-            result.set(start_node.m_targetNode);
+            result[start_node.m_targetNode] = true;
             return result;
         }
 
         const reg_set left = get_registers_written_to(m_nodes[start_node.m_followingNode], ipdom);
         const reg_set right = get_registers_written_to(m_nodes[start_node.m_targetNode], ipdom);
 
-        const reg_set check_regs = left | right;
-        const reg_set res = get_register_nature(m_nodes.at(ipdom), check_regs, m_nodes.back().m_index + 1);
+        const reg_set written = left | right;
+        result = get_register_nature(m_nodes.at(ipdom), written, m_nodes.back().m_index + 1);
 
-        return res;
+        return result;
     }
 
     [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
         node_set checked(m_nodes.size(), false);
 
-        const reg_set written = head_node.m_writtenToRegs | get_registers_written_to(m_nodes[head_node.m_followingNode], head_node.m_index);
-        const reg_set read_first = get_register_nature(m_nodes[head_node.m_targetNode], written, m_nodes.back().m_index);
+        const reg_set written = head_node.m_regs.m_written | get_registers_written_to(m_nodes[head_node.m_followingNode], head_node.m_index);
+        const reg_set res = get_register_nature(m_nodes[head_node.m_targetNode], written, m_nodes.back().m_index);
 
-        return read_first;
+        return res;
     }
 
     [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept {

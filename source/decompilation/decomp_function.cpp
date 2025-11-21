@@ -113,9 +113,17 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 
             case Opcode::Call:
             case Opcode::CallFf: {
+                /* I WANT THIS:
+                - script functions do not return. the return instruction DOES NOT COUNT as a READ. WRITE DOESNT MATTER.
+                - non script functions DO return. their return COUNTS AS A READ.
+                - so READ FIRST should get the register if were ARENT IN A SCRIPT FUNC.
+                - COUNT should be one higher if we are in a script func AND that register actually gets read at the end
+
+
+                */
+
                 expr_uptr call = make_call(istr);
-                node_set checked(m_graph.m_nodes.size(), false);
-                u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, m_graph.m_nodes.back().m_index, line.m_location - node.m_startLine + 1);
+                /*u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 } else if (call_usage_count == 1) {
@@ -123,7 +131,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 } else {
                     m_transformableExpressions[istr.destination] = std::move(call);
                     load_expression_into_new_var(istr.destination);
-                }
+                }*/
+                m_transformableExpressions[istr.destination] = std::move(call);
+                load_expression_into_new_var(istr.destination);
                 break;
             }
 
@@ -192,9 +202,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::Return:{
-                if (!m_disassembly.m_isScriptFunction) {
                     insert_return(istr.destination);
-                }
                 break;
             }
             default: {
@@ -545,7 +553,7 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
     if (m_transformableExpressions[dst] == nullptr) {
-        std::cerr << "error: dst " << dst << " contains nullptr." << '\n';
+        std::cerr << "error: dst " << std::to_string(dst) << " contains nullptr." << '\n';
         std::terminate();
         m_transformableExpressions[dst] = std::make_unique<ast::identifier>("var_error");
     }
