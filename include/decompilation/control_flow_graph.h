@@ -40,7 +40,7 @@ namespace dconstruct {
 
         [[nodiscard]] std::string get_label_html() const;
         void determine_register_nature();
-        [[nodiscard]] register_nature get_register_nature_starting_at(const istr_line start_line) const noexcept;
+        [[nodiscard]] register_nature get_register_nature_starting_at(const istr_line start_line, const bool return_is_read) const noexcept;
     };
 
     struct control_flow_loop {
