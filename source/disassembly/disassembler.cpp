@@ -704,7 +704,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             } else if (opcode == Opcode::IDiv || opcode == Opcode::FDiv) {
                 op = '/';
             }
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d, r%d", dest, op1, op2);
+            std::snprintf(varying, disassembly_text_size, "r%d, r%d, r%d", dest, op1, op2);
             frame.to_string(dst_str, interpreted_buffer_size, dest);
             std::snprintf(interpreted, interpreted_buffer_size, "%s = %s %c %s", dst_str, op1_str, op, op2_str);
             break;

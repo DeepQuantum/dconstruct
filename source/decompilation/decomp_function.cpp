@@ -17,7 +17,7 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
 {
 #ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly.m_id << '\n';
-    if (m_graph.m_nodes.size() > 1) {
+    if (m_graph.m_nodes.size() > 0) {
         m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly.m_id + ".svg");
     }
 #endif
@@ -111,19 +111,14 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>()); break;
             case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1 * 8)); break;
 
+            case Opcode::IAbs: generated_expression = make_abs<ast::primitive_kind::U64>(istr); break;
+            case Opcode::FAbs: generated_expression = make_abs<ast::primitive_kind::F32>(istr); break;
+            
+
             case Opcode::Call:
             case Opcode::CallFf: {
-                /* I WANT THIS:
-                - script functions do not return. the return instruction DOES NOT COUNT as a READ. WRITE DOESNT MATTER.
-                - non script functions DO return. their return COUNTS AS A READ.
-                - so READ FIRST should get the register if were ARENT IN A SCRIPT FUNC.
-                - COUNT should be one higher if we are in a script func AND that register actually gets read at the end
-
-
-                */
-
-                expr_uptr call = make_call(istr);
-                /*u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
+                auto call = make_call(istr);
+                u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 } else if (call_usage_count == 1) {
@@ -131,9 +126,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 } else {
                     m_transformableExpressions[istr.destination] = std::move(call);
                     load_expression_into_new_var(istr.destination);
-                }*/
-                m_transformableExpressions[istr.destination] = std::move(call);
-                load_expression_into_new_var(istr.destination);
+                }
                 break;
             }
 
@@ -202,7 +195,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::Return:{
-                    insert_return(istr.destination);
+				if (!m_disassembly.m_isScriptFunction) {
+                    insert_return(istr.destination); 
+                }
                 break;
             }
             default: {
@@ -235,9 +230,9 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         parse_basic_block(node);
         if (node.m_ipdom == node.m_targetNode) {
-            emit_single_branch(node, stop_node);
+            emit_if(node, stop_node);
         } else {
-            emit_branches(node, stop_node);
+            emit_if_else(node, stop_node);
         }
     }
     else if (const auto loop = m_graph.get_loop_with_head(node.m_followingNode)) {
@@ -251,10 +246,8 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     }
 }
 
-void decomp_function::emit_single_branch(const control_flow_node& node, const node_id stop_node) {
+void decomp_function::emit_if(const control_flow_node& node, const node_id stop_node) {
     const node_id idom = node.m_ipdom;
-    const bool idom_already_emitted = m_ipdomsEmitted[idom];
-    m_ipdomsEmitted[idom] = true;
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
@@ -265,9 +258,16 @@ void decomp_function::emit_single_branch(const control_flow_node& node, const no
     expr_uptr final_condition = m_transformableExpressions[check_register]->clone();
 
     while (current_node != target) {
+        if (current_node->m_targetNode != idom) {
+            emit_node(*current_node, current_node->m_ipdom);
+            const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
+            final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
+            current_node = &m_graph[current_node->m_followingNode];
+            break;
+        }
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
-        final_condition = std::make_unique<ast::compare_expr>(token, m_transformableExpressions[check_register]->clone(), std::move(final_condition));
+        final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
         current_node = &m_graph[current_node->m_followingNode];
     }
 
@@ -368,18 +368,16 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
 
 
 [[nodiscard]] expr_uptr decomp_function::make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit) {
-
     expr_uptr condition = nullptr;
     for (u32 i = head_start; i != loop_entry; ++i) {
         const auto& current_node = m_graph[i];
         const auto& last_line = current_node.m_lines.back();
 
         const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
-        const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
 
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
-        if (condition == nullptr) {
+        if (!condition) {
             condition = std::move(current_expression);
         } else {
             condition = std::make_unique<ast::logical_expr>(
@@ -395,10 +393,10 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
 void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_id stop_node) {
     const node_id loop_tail = m_graph[loop.m_headNode].m_targetNode;
     auto loop_block = std::make_unique<ast::block>();
-    const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom; //m_graph.get_ipdom_at(loop.m_headNode);
+    const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom;
     const node_id exit_node = loop.m_latchNode + 1;
     const node_id proper_loop_head = m_graph.get_final_loop_condition_node(loop, exit_node).m_index;
-    const node_id idom = m_graph[loop_tail].m_ipdom; //m_graph.get_ipdom_at(loop_tail);
+    const node_id idom = m_graph[loop_tail].m_ipdom;
 
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_followingNode];
 
@@ -468,7 +466,7 @@ void decomp_function::emit_loop(const control_flow_loop &loop, const node_id sto
 }
 
 
-void decomp_function::emit_branches(const control_flow_node &node, node_id stop_node) {
+void decomp_function::emit_if_else(const control_flow_node &node, node_id stop_node) {
     const node_id idom = node.m_ipdom;
     const bool idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
@@ -552,10 +550,9 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
 }
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
-    if (m_transformableExpressions[dst] == nullptr) {
+    if (!m_transformableExpressions[dst]) {
         std::cerr << "error: dst " << std::to_string(dst) << " contains nullptr." << '\n';
         std::terminate();
-        m_transformableExpressions[dst] = std::make_unique<ast::identifier>("var_error");
     }
     auto& expr = m_transformableExpressions[dst];
     auto rhs_ptr = dynamic_cast<ast::identifier*>(expr.get());
@@ -572,7 +569,17 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     m_transformableExpressions[dst]->set_type(type_temp);
 }
 
-[[nodiscard]] expr_uptr decomp_function::make_call(const Instruction& istr) {
+template<ast::primitive_kind kind>
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_abs(const Instruction& istr) {
+    std::vector<expr_uptr> arg;
+    arg.push_back(m_transformableExpressions[istr.destination]->clone());
+    auto callee = std::make_unique<ast::identifier>("abs");
+    auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+    call->set_type(make_type(kind));
+    return call;
+}
+
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
     ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env));
@@ -593,10 +600,10 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
 template<typename from, typename to>
 [[nodiscard]] expr_uptr decomp_function::make_cast(const Instruction& istr, const ast::full_type& type) {
     const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
-    if (old_lit == nullptr) {
+    if (!old_lit) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
         const ast::cast_expr* old_cast = dynamic_cast<ast::cast_expr*>(op2.get());
-        if (old_cast != nullptr) {
+        if (old_cast) {
             auto new_cast = std::make_unique<ast::cast_expr>(type, old_cast->m_rhs->clone());
             return new_cast;
         }
@@ -609,13 +616,13 @@ template<typename from, typename to>
         }
     }
     else {
-        return std::visit([](auto&& arg) -> std::unique_ptr<ast::literal> {
+        return std::visit([&type, &old_lit](auto&& arg) -> expr_uptr {
             using T = std::decay_t<decltype(arg)>;
             if constexpr (std::is_arithmetic_v<T>) {
                 return std::make_unique<ast::literal>(static_cast<to>(arg));
             }
             else {
-                return nullptr;
+                return std::make_unique<ast::cast_expr>(type, old_lit->clone());
             }
         }, old_lit->m_value);
     }
@@ -659,8 +666,8 @@ template<typename from, typename to>
         auto& alt_exit = is_and ? success_exit : failure_exit;
         const auto& token = is_and ? and_token : or_token;
 
-        if (exit_node == nullptr) {
-            if (alt_exit == nullptr) {
+        if (!exit_node) {
+            if (!alt_exit) {
                 exit_node = &m_graph[target];
             }
             else {
