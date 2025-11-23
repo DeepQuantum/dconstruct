@@ -51,8 +51,12 @@ namespace dconstruct::dcompiler {
             return "var_" + std::to_string(m_varCount++);
         }
 
-        void append_to_current_block(stmnt_uptr&& statement) {
+        inline void append_to_current_block(stmnt_uptr&& statement) {
             m_blockStack.top().get().m_statements.push_back(std::move(statement));
+        }
+
+        inline void append_to_current_block(expr_uptr&& statement) {
+            append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(statement)));
         }
 
         void load_expression_into_new_var(const reg_idx dst);
@@ -61,13 +65,13 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_call(const Instruction& istr);
 
         template<ast::primitive_kind kind>
-        [[nodiscard]] std::unique_ptr<ast::call_expr> make_abs(const Instruction& istr);
+        [[nodiscard]] std::unique_ptr<ast::call_expr> make_abs(const reg_idx dst);
 
         template<typename from, typename to>
         [[nodiscard]] expr_uptr make_cast(const Instruction& istr, const ast::full_type& type);
 
         template<ast::primitive_kind kind>
-        [[nodiscard]] expr_uptr make_store(const Instruction& istr);
+        [[nodiscard]] std::unique_ptr<ast::assign_expr> make_store(const Instruction& istr);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
 

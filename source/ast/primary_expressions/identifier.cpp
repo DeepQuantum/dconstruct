@@ -32,7 +32,7 @@ void identifier::pseudo_py(std::ostream& os) const {
 
 [[nodiscard]] full_type identifier::compute_type(const compiler::environment& env) const {
     if (auto opt = env.lookup(m_name.m_lexeme))
-        return opt.value().get().type;
+        return opt->type;
     return std::monostate();
 }
 

@@ -111,8 +111,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>()); break;
             case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1 * 8)); break;
 
-            case Opcode::IAbs: generated_expression = make_abs<ast::primitive_kind::U64>(istr); break;
-            case Opcode::FAbs: generated_expression = make_abs<ast::primitive_kind::F32>(istr); break;
+            case Opcode::IAbs: generated_expression = make_abs<ast::primitive_kind::U64>(istr.destination); break;
+            case Opcode::FAbs: generated_expression = make_abs<ast::primitive_kind::F32>(istr.destination); break;
             
 
             case Opcode::Call:
@@ -121,9 +121,10 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
-                } else if (call_usage_count == 1) {
-                    generated_expression = std::move(call);
-                } else {
+                }
+                //} else if (call_usage_count == 1) {
+                //    //generated_expression = std::move(call);
+                else {
                     m_transformableExpressions[istr.destination] = std::move(call);
                     load_expression_into_new_var(istr.destination);
                 }
@@ -225,7 +226,7 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     const auto& last_line = node.m_lines.back();
 
     if (const auto loop = m_graph.get_loop_with_head(node.m_index)) {
-        emit_loop(loop->get(), stop_node);
+        emit_loop(*loop, stop_node);
     }
     else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
         parse_basic_block(node);
@@ -238,7 +239,7 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
     else if (const auto loop = m_graph.get_loop_with_head(node.m_followingNode)) {
         if (node.m_followingNode != stop_node) {
             parse_basic_block(node);
-            emit_loop(loop->get(), stop_node);
+            emit_loop(*loop, stop_node);
         }
     }
     else {
@@ -263,12 +264,13 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
             const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
             final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
             current_node = &m_graph[current_node->m_followingNode];
-            break;
         }
-        parse_basic_block(*current_node);
-        const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
-        final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
-        current_node = &m_graph[current_node->m_followingNode];
+        else {
+            parse_basic_block(*current_node);
+            const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
+            final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
+            current_node = &m_graph[current_node->m_followingNode];
+        }
     }
 
     auto id = std::make_unique<ast::identifier>(get_next_var());
@@ -280,6 +282,46 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
 
 
     emit_node(m_graph[idom], stop_node);
+
+ //   const node_id idom = node.m_ipdom;
+ //   const bool idom_already_emitted = m_ipdomsEmitted[idom];
+ //   m_ipdomsEmitted[idom] = true;
+ //   node_id proper_successor, proper_destination, proper_head;
+ //   expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
+ //   auto then_block = std::make_unique<ast::block>();
+	//const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
+ //   std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+
+ //   if (!idom_already_emitted) {
+ //       auto bits = regs_to_emit.to_ullong();
+ //       while (bits != 0) {
+ //           const reg_idx reg = std::countr_zero(bits);
+ //           bits &= bits - 1;
+ //           m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+ //           regs_to_type.emplace(reg, std::monostate());
+ //       }
+ //   }
+
+ //   emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
+
+ //   if (!idom_already_emitted) {
+ //       auto bits = regs_to_emit.to_ullong();
+ //       while (bits != 0) {
+ //           const reg_idx reg = std::countr_zero(bits);
+ //           bits &= bits - 1;
+ //           const auto& type = regs_to_type[reg];
+ //           m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+ //           m_transformableExpressions[reg]->set_type(type);
+ //           append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
+ //           m_registersToVars[reg].pop();
+ //       }
+ //   }
+
+ //   stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block));
+
+ //   append_to_current_block(std::move(full_if));
+
+ //   emit_node(m_graph[idom], stop_node);
 }
 
 [[nodiscard]] bool decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {
@@ -570,9 +612,9 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
 }
 
 template<ast::primitive_kind kind>
-[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_abs(const Instruction& istr) {
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_abs(const reg_idx dst) {
     std::vector<expr_uptr> arg;
-    arg.push_back(m_transformableExpressions[istr.destination]->clone());
+    arg.push_back(m_transformableExpressions[dst]->clone());
     auto callee = std::make_unique<ast::identifier>("abs");
     auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     call->set_type(make_type(kind));
@@ -707,11 +749,11 @@ void decomp_function::insert_return(const reg_idx dest) {
 }
 
 template<ast::primitive_kind kind>
-[[nodiscard]] expr_uptr decomp_function::make_store(const Instruction& istr) {
+[[nodiscard]] std::unique_ptr<ast::assign_expr> decomp_function::make_store(const Instruction& istr) {
     auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ kind }));
     auto rhs = m_transformableExpressions[istr.operand2]->clone();
     auto res = std::make_unique<ast::assign_expr>(std::move(lhs), std::move(rhs));
-    append_to_current_block(std::make_unique<ast::expression_stmt>(res->clone()));
+    append_to_current_block(res->clone());
     return res;
 }
 
