@@ -25,9 +25,6 @@ typedef uintptr_t p64;
 
 using sid_literal = std::pair<sid64, std::string>;
 
-template<class T>
-using opt_ref = std::optional<std::reference_wrapper<T>>;
-
 using reg_idx = u8;
 using node_id = u16;
 using istr_line = u16;

@@ -51,7 +51,6 @@ namespace dconstruct {
 
     
 
-    [[nodiscard]] std::vector<node_id> create_rev_postord(const std::vector<control_flow_node>& nodes);
     [[nodiscard]] const control_flow_node& intersect(const node_id node_b1, const node_id node_b2, const std::vector<control_flow_node>& nodes);
 
     class ControlFlowGraph {
@@ -76,7 +75,7 @@ namespace dconstruct {
             return m_nodes[at];
         }
 
-        [[nodiscard]] opt_ref<const control_flow_loop> get_loop_with_head(const node_id node) const;
+        [[nodiscard]] const control_flow_loop* get_loop_with_head(const node_id node) const;
 
         [[nodiscard]] reg_set get_registers_written_to(const control_flow_node& node, const node_id stop) const;
         [[nodiscard]] reg_set get_branch_phi_registers(const control_flow_node& start_node) const noexcept;

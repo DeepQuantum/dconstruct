@@ -23,13 +23,13 @@ namespace dconstruct {
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
 
-    [[nodiscard]] opt_ref<const control_flow_loop> ControlFlowGraph::get_loop_with_head(const node_id node) const {
+    [[nodiscard]] const control_flow_loop* ControlFlowGraph::get_loop_with_head(const node_id node) const {
         for (const auto& loop : m_loops) {
             if (loop.m_headNode == node) {
-                return loop;
+                return &loop;
             }
         }
-        return std::nullopt;
+        return nullptr;
     }
 
     static std::string html_escape(const std::string& input) {
@@ -120,7 +120,7 @@ namespace dconstruct {
 
             if (istr.opcode == Opcode::Return) {
                 if (return_is_read) {
-                    multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination] && !write_regs[istr.destination];
+                    multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination];
                     read_first[istr.destination] = read_first[istr.destination] || !write_regs[istr.destination];
                 }
                 write_regs[istr.destination] = true;
@@ -128,8 +128,9 @@ namespace dconstruct {
             }
 
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
-                multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination] && !write_regs[istr.destination];
+                multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination];
                 read_first[istr.destination] = true;
+                read_first[istr.operand2] = istr.op2_is_reg() && !write_regs[istr.operand2];
                 write_regs[istr.destination] = true;
                 continue;
             }
@@ -139,11 +140,11 @@ namespace dconstruct {
             }
 
             if (istr.op1_is_reg() && !write_regs[istr.operand1]) {
-                multi_read[istr.operand1] = multi_read[istr.operand1] || read_first[istr.operand1] && !write_regs[istr.operand1];
+                multi_read[istr.operand1] = multi_read[istr.operand1] || read_first[istr.operand1];
                 read_first[istr.operand1] = true;
             }
             if (istr.op2_is_reg() && !write_regs[istr.operand2]) {
-                multi_read[istr.operand2] = multi_read[istr.operand2] || read_first[istr.operand2] && !write_regs[istr.operand2];
+                multi_read[istr.operand2] = multi_read[istr.operand2] || read_first[istr.operand2];
                 read_first[istr.operand2] = true;
             }
         }
