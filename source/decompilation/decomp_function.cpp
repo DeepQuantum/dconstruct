@@ -56,13 +56,13 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
 }
 
 void decomp_function::parse_basic_block(const control_flow_node &node) {
-#ifdef _DEBUG
+#ifdef false
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
 
     for (const auto &line : node.m_lines) {
-        #ifdef _DEBUG
+        #ifdef false
 		std::cout << "parsing instruction " << std::hex << line.m_location << '\n';
         #endif
         const Instruction &istr = line.m_instruction;
@@ -100,6 +100,15 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FGreaterThan: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
             case Opcode::IGreaterThanEqual:
             case Opcode::FGreaterThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
+			
+            case Opcode::OpBitAnd: generated_expression = apply_binary_op<ast::bitwise_and_expr>(istr); break;
+			case Opcode::OpBitOr: generated_expression = apply_binary_op<ast::bitwise_or_expr>(istr); break;
+			case Opcode::OpBitXor: generated_expression = apply_binary_op<ast::bitwise_xor_expr>(istr); break;
+            case Opcode::OpBitNor: {
+                m_transformableExpressions[istr.operand1] = apply_binary_op<ast::bitwise_or_expr>(istr);
+                generated_expression = apply_unary_op<ast::bitwise_not_expr>(istr);
+                break;
+            }
 
             case Opcode::OpLogNot: generated_expression = apply_unary_op<ast::logical_not_expr>(istr); break;
             case Opcode::OpBitNot: generated_expression = apply_unary_op<ast::bitwise_not_expr>(istr); break;
@@ -109,7 +118,14 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
             case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>()); break;
             case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>()); break;
+			case Opcode::LoadStaticI8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i8>(istr.operand1 * 8)); break;
+			case Opcode::LoadStaticU8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u8>(istr.operand1 * 8)); break;
+			case Opcode::LoadStaticI16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i16>(istr.operand1 * 8)); break;
+			case Opcode::LoadStaticU16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u16>(istr.operand1 * 8)); break;
             case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1 * 8)); break;
+			case Opcode::LoadStaticU32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u32>(istr.operand1 * 8)); break;
+            case Opcode::LoadStaticI64Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i64>(istr.operand1 * 8)); break;
+
 
             case Opcode::IAbs: generated_expression = make_abs<ast::primitive_kind::U64>(istr.destination); break;
             case Opcode::FAbs: generated_expression = make_abs<ast::primitive_kind::F32>(istr.destination); break;
@@ -213,7 +229,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 }
 
 void decomp_function::emit_node(const control_flow_node& node, const node_id stop_node) {
-#ifdef _DEBUG
+#ifdef false
     std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
@@ -248,7 +264,48 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 }
 
 void decomp_function::emit_if(const control_flow_node& node, const node_id stop_node) {
-    const node_id idom = node.m_ipdom;
+        const node_id idom = node.m_ipdom;
+        const bool idom_already_emitted = m_ipdomsEmitted[idom];
+        m_ipdomsEmitted[idom] = true;
+        node_id proper_successor, proper_destination, proper_head;
+        expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
+		parse_basic_block(m_graph[proper_head]);
+        auto then_block = std::make_unique<ast::block>();
+        reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
+        std::unordered_map<reg_idx, ast::full_type> regs_to_type;
+
+        if (!idom_already_emitted) {
+            auto bits = regs_to_emit.to_ullong();
+            while (bits != 0) {
+                const reg_idx reg = std::countr_zero(bits);
+                bits &= bits - 1;
+                m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
+                regs_to_type.emplace(reg, std::monostate());
+            }
+        }
+
+        emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
+
+        if (!idom_already_emitted) {
+            auto bits = regs_to_emit.to_ullong();
+            while (bits != 0) {
+                const reg_idx reg = std::countr_zero(bits);
+                bits &= bits - 1;
+                const auto& type = regs_to_type[reg];
+                m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
+                m_transformableExpressions[reg]->set_type(type);
+                append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
+                m_registersToVars[reg].pop();
+            }
+        }
+
+        stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block));
+
+        append_to_current_block(std::move(full_if));
+
+        emit_node(m_graph[idom], stop_node);
+    
+    /*const node_id idom = node.m_ipdom;
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
@@ -259,13 +316,19 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
     expr_uptr final_condition = m_transformableExpressions[check_register]->clone();
 
     while (current_node != target) {
-        if (current_node->m_targetNode != idom) {
-            emit_node(*current_node, current_node->m_ipdom);
+        if (current_node->m_targetNode != idom && current_node->m_followingNode != target->m_index) {
+#ifdef _DEBUG
+			std::cout << "parsing branching if node " << std::hex << current_node->m_startLine << std::dec << " (" << current_node->m_index << ")\n";
+#endif
+            emit_node(*current_node, idom);
             const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
             final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
-            current_node = &m_graph[current_node->m_followingNode];
+            current_node = &m_graph[idom];
         }
         else {
+#ifdef _DEBUG
+			std::cout << "parsing chained if node " << std::hex << current_node->m_startLine << std::dec << " (" << current_node->m_index << ")\n";
+#endif
             parse_basic_block(*current_node);
             const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
             final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
@@ -281,47 +344,7 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
     append_to_current_block(std::move(declaration));
 
 
-    emit_node(m_graph[idom], stop_node);
-
- //   const node_id idom = node.m_ipdom;
- //   const bool idom_already_emitted = m_ipdomsEmitted[idom];
- //   m_ipdomsEmitted[idom] = true;
- //   node_id proper_successor, proper_destination, proper_head;
- //   expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
- //   auto then_block = std::make_unique<ast::block>();
-	//const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
- //   std::unordered_map<reg_idx, ast::full_type> regs_to_type;
-
- //   if (!idom_already_emitted) {
- //       auto bits = regs_to_emit.to_ullong();
- //       while (bits != 0) {
- //           const reg_idx reg = std::countr_zero(bits);
- //           bits &= bits - 1;
- //           m_registersToVars[reg].push(std::make_unique<ast::identifier>(get_next_var()));
- //           regs_to_type.emplace(reg, std::monostate());
- //       }
- //   }
-
- //   emit_branch(*then_block, proper_successor, idom, regs_to_emit, regs_to_type);
-
- //   if (!idom_already_emitted) {
- //       auto bits = regs_to_emit.to_ullong();
- //       while (bits != 0) {
- //           const reg_idx reg = std::countr_zero(bits);
- //           bits &= bits - 1;
- //           const auto& type = regs_to_type[reg];
- //           m_transformableExpressions[reg] = m_registersToVars[reg].top()->clone();
- //           m_transformableExpressions[reg]->set_type(type);
- //           append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
- //           m_registersToVars[reg].pop();
- //       }
- //   }
-
- //   stmnt_uptr full_if = std::make_unique<ast::if_stmt>(std::move(condition), std::move(then_block));
-
- //   append_to_current_block(std::move(full_if));
-
- //   emit_node(m_graph[idom], stop_node);
+    emit_node(m_graph[idom], stop_node);*/
 }
 
 [[nodiscard]] bool decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {

@@ -3,14 +3,6 @@
 
 namespace dconstruct::ast {
 
-void negate_expr::pseudo_c(std::ostream& os) const {
-    os << "-" << *m_rhs;
-}
-
-void negate_expr::pseudo_py(std::ostream& os) const {
-    os << "-" << *m_rhs;
-}
-
 // [[nodiscard]] bool negate_expr::equals(const expression& rhs) const noexcept {
 //     const negate_expr* rhs_ptr = dynamic_cast<const negate_expr*>(&rhs);
 //     if (rhs_ptr == nullptr) {

@@ -11,6 +11,10 @@ void literal::pseudo_py(std::ostream& os) const {
     os << primitive_to_string(m_value);
 }
 
+void literal::pseudo_racket(std::ostream& os) const {
+    os << primitive_to_string(m_value);
+}
+
 
 [[nodiscard]] expr_uptr literal::simplify() const {
     return std::make_unique<literal>(m_value);

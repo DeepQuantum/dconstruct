@@ -25,6 +25,15 @@ void call_expr::pseudo_py(std::ostream& os) const {
     os << ')';
 }
 
+void call_expr::pseudo_racket(std::ostream& os) const {
+    os << '(' << *m_callee;
+    for (const auto& arg : m_arguments) {
+        os << ' ' << *arg;
+    }
+    os << ')';
+}
+
+
 [[nodiscard]] expr_uptr call_expr::simplify() const {
     std::vector<expr_uptr> args{};
     for (const auto& arg : m_arguments) {

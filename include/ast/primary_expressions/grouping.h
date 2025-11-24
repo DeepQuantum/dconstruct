@@ -7,6 +7,7 @@ namespace dconstruct::ast {
         grouping(expr_uptr&& expr) : m_expr(std::move(expr)) {};
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
+        void pseudo_racket(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
