@@ -59,6 +59,18 @@ namespace dconstruct::ast {
             return false;
         }
 
+        inline void pseudo_c(std::ostream& os) const override {
+            os << m_operator.m_lexeme << *m_rhs;
+        }
+
+        inline void pseudo_py(std::ostream& os) const override {
+            os << m_operator.m_lexeme << *m_rhs;
+        }
+
+        inline void pseudo_racket(std::ostream& os) const override {
+            os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
+        }
+
         [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
             return full_type{ std::monostate() };
         }
@@ -77,15 +89,15 @@ namespace dconstruct::ast {
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
         inline void pseudo_c(std::ostream& os) const override {
-            if (m_rhs == nullptr) {
-                os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << "asdasd";
-                return;
-            }
             os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
         }
 
         inline void pseudo_py(std::ostream& os) const override {
-            os << m_operator.m_lexeme << '[' << *m_lhs << ", " << *m_rhs << ']';
+            os << *m_lhs << ' ' << m_operator.m_lexeme << ' ' << *m_rhs;
+        }
+
+        inline void pseudo_racket(std::ostream& os) const override {
+            os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
         }
 
         [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
@@ -95,7 +107,7 @@ namespace dconstruct::ast {
         // for testing ! stupid and expensive.
         [[nodiscard]] inline bool equals(const expression& rhs) const noexcept final {
             const binary_expr* rhs_ptr = dynamic_cast<const binary_expr*>(&rhs);
-            if (rhs_ptr != nullptr) {
+            if (rhs_ptr) {
                 return typeid(*this) == typeid(*rhs_ptr) && m_rhs == rhs_ptr->m_rhs && m_lhs == rhs_ptr->m_lhs && m_operator == rhs_ptr->m_operator;
             }
             return false;
@@ -129,8 +141,8 @@ namespace dconstruct::ast {
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             auto expr = std::make_unique<impl_binary_expr>(
                 m_operator,
-                m_lhs != nullptr ? m_lhs->clone() : nullptr,
-                m_rhs != nullptr ? m_rhs->clone() : nullptr
+                m_lhs ? m_lhs->clone() : nullptr,
+                m_rhs ? m_rhs->clone() : nullptr
             );
             if (!is_unknown(m_type)) expr->set_type(m_type);
             return expr;

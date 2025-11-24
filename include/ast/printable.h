@@ -8,10 +8,13 @@ namespace dconstruct {
         virtual ~Iprintable() = default;
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
+        virtual void pseudo_racket(std::ostream&) const = 0;
     };
 
     enum class Flags {
-        AST = 0x1,
+        C = 0x1,
+        PY = 0x2,
+        RACKET = 0x4,
     };
 
     inline i32 get_flag_index() {
@@ -19,8 +22,8 @@ namespace dconstruct {
         return index;
     }
     
-    inline std::ostream& set_ast(std::ostream& os) {
-        os.iword(get_flag_index()) |= static_cast<i32>(Flags::AST);
+    inline std::ostream& set_c(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(Flags::C);
         return os;
     }
 
@@ -48,10 +51,12 @@ namespace dconstruct {
     }
 
     inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
-        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::AST)) {
+        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::C)) {
+            expr.pseudo_c(os);
+        } else if (os.iword(get_flag_index()) & static_cast<i32>(Flags::PY)) {
             expr.pseudo_py(os);
         } else {
-            expr.pseudo_c(os);
+            expr.pseudo_racket(os);
         }
         return os;
     }

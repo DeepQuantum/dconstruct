@@ -10,6 +10,10 @@ void logical_not_expr::pseudo_py(std::ostream &os) const {
     os << "not " << *m_rhs; 
 }
 
+void logical_not_expr::pseudo_racket(std::ostream &os) const {
+    os << "(! " << *m_rhs << ')';
+}
+
 // [[nodiscard]] bool logical_not_expr::equals(const expression &rhs) const noexcept {
 //     const logical_not_expr* rhs_ptr = dynamic_cast<const logical_not_expr*>(&rhs);
 //     if (rhs_ptr == nullptr) {

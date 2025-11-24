@@ -507,12 +507,12 @@ namespace dconstruct {
             node_stack.emplace_back(start_node, check_regs);
         }
 
-#ifdef _DEBUG  
+#ifdef false  
         std::cout << "check_regs: " << pretty_regset(check_regs) << '\n';
 #endif
         while (!node_stack.empty()) {
             auto [node, local_check_regs] = node_stack.back();
-#ifdef _DEBUG
+#ifdef false
 			std::cout << "processing nature for node " << node.m_index 
                 << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
                 << " written: " << pretty_regset(node.m_regs.m_written) 
@@ -525,7 +525,7 @@ namespace dconstruct {
             read |= node.m_regs.m_readFirst & local_check_regs;
             local_check_regs &= ~(node.m_regs.m_readFirst | node.m_regs.m_written);
 
-#ifdef _DEBUG
+#ifdef false
             std::cout << "local check_regs after: " << pretty_regset(local_check_regs) << " read after: " << pretty_regset(read) << '\n';
 #endif
 
@@ -552,12 +552,12 @@ namespace dconstruct {
         node_set checked(m_nodes.size(), false);
         bool already_read = false;
         std::vector<std::reference_wrapper<const control_flow_node>> node_stack;
-#ifdef _DEBUG
+#ifdef false
         std::cout << "check reg " << std::to_string(reg_to_check) << '\n';
 #endif
         if (start_line) {
             const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
-#ifdef _DEBUG
+#ifdef false
             std::cout << "using start line " << start_line << " , "
                 << " read_first: " << pretty_regset(read_once)
                 << " read_twice: " << pretty_regset(read_twice)
@@ -590,7 +590,7 @@ namespace dconstruct {
         while (!node_stack.empty()) {
             const auto& node = node_stack.back().get();
             node_stack.pop_back();
-#ifdef _DEBUG
+#ifdef false
             std::cout << "processing read count for node " << node.m_index 
                 << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
                 << " read_twice: " << pretty_regset(node.m_regs.m_readTwice) 
@@ -601,7 +601,7 @@ namespace dconstruct {
             checked[node.m_index] = true;
 
             if (node.m_regs.m_readTwice[reg_to_check] || (node.m_regs.m_readFirst[reg_to_check] && already_read)) {
-#ifdef _DEBUG
+#ifdef false
 				std::cout << "register " << static_cast<u32>(reg_to_check) << " read twice at node " << node.m_index << '\n';
 #endif
                 return 2;
@@ -612,7 +612,7 @@ namespace dconstruct {
             }
 
             
-#ifdef _DEBUG
+#ifdef false
             std::cout << "already read after: " << std::boolalpha << already_read << '\n';
 #endif
 

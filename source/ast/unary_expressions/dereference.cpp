@@ -3,14 +3,6 @@
 
 namespace dconstruct::ast {
 
-    void dereference_expr::pseudo_c(std::ostream& os) const {
-        os << '*' << *m_rhs;
-    }
-
-    void dereference_expr::pseudo_py(std::ostream& os) const {
-        os << '*' << *m_rhs;
-    }
-
     [[nodiscard]] expr_uptr dereference_expr::simplify() const {
         return std::make_unique<ast::dereference_expr>(m_operator, m_rhs->simplify());
     }

@@ -12,6 +12,7 @@ namespace dconstruct::ast {
 
         void pseudo_c(std::ostream&) const final;
         void pseudo_py(std::ostream&) const final;
+        void pseudo_racket(std::ostream&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 
         expr_uptr m_condition;

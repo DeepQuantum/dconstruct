@@ -12,6 +12,10 @@ void identifier::pseudo_py(std::ostream& os) const {
     os << m_name.m_lexeme;
 }
 
+void identifier::pseudo_racket(std::ostream& os) const {
+    os << m_name.m_lexeme;
+}
+
 [[nodiscard]] bool identifier::equals(const expression &rhs) const noexcept {
     const identifier* rhs_id = dynamic_cast<const identifier*>(&rhs);
     if (rhs_id == nullptr) {
