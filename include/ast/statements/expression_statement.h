@@ -7,6 +7,7 @@ namespace dconstruct::ast {
         explicit expression_stmt(expr_uptr&& expr) noexcept : m_expression(std::move(expr)) {};
         void pseudo_c(std::ostream&) const final;
         void pseudo_py(std::ostream&) const final;
+		void pseudo_racket(std::ostream&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         
         expr_uptr m_expression;

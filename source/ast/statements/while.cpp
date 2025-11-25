@@ -9,7 +9,11 @@ void while_stmt::pseudo_c(std::ostream& os) const {
 
 
 void while_stmt::pseudo_py(std::ostream& os) const {
-    os << "while " << *m_condition << ' ' << *m_body;
+    os << "while " << *m_condition << ":\n" << *m_body;
+}
+
+void while_stmt::pseudo_racket(std::ostream& os) const {
+    os << "(while " << *m_condition << " " << *m_body << ")";
 }
 
 [[nodiscard]] bool while_stmt::equals(const statement& rhs) const noexcept {

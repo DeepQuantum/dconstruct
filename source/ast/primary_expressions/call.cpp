@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/call.h"
+#include "ast/primary_expressions/identifier.h"
 
 
 namespace dconstruct::ast {
@@ -27,8 +28,12 @@ void call_expr::pseudo_py(std::ostream& os) const {
 
 void call_expr::pseudo_racket(std::ostream& os) const {
     os << '(' << *m_callee;
+    std::string sep = " ";
+	if (static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "and" || static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "or") {
+        sep = "\n";
+    }
     for (const auto& arg : m_arguments) {
-        os << ' ' << *arg;
+        os << sep << *arg;
     }
     os << ')';
 }

@@ -620,13 +620,14 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\npc-infected-ratking.bin)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         BinaryFile file{ filepath };
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\npc-infected-ratking.asm)", {} };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
         std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\npc-infected-ratking.dcpl)");
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\ss-wave-manager.dcpl)");
+		out << dconstruct::c;
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto& func : funcs) {
             if (emitted.contains(func.m_id)) {
@@ -676,4 +677,40 @@ namespace dconstruct::testing {
             }
         }
     }
+
+    TEST(DECOMPILER, Racket0) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
+        const std::string id = "anonymous@25038";
+        BinaryFile file{ filepath };
+        Disassembler da{ &file, &base };
+        da.disassemble();
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+        ASSERT_NE(func, funcs.end());
+
+        const std::string expected = 
+            "(and\n"
+            "    (or\n"
+            "        shambler-standing-explode-line-of-motion-check()\n"
+            "        (and"
+            "            is-rogue-mode?()\n"
+            "            is-player?()\n"
+            "            (or\n"
+            "                player-is-prone?()\n"
+            "                player-is-supine?()\n"
+            "            )\n"
+            "            player-in-prone-hiding-region?()\n"
+            "        )\n"
+            "    )\n"
+            "    (> melee-fact-get-time-since(player, shambler-explode) 5)\n"
+            "    (> melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) 2)\n"
+            ")\n";
+
+        
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
+        std::ostringstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+		out << dconstruct::racket << dc_func.to_string();
+
+        ASSERT_EQ(expected, out.str());
+    } 
 }

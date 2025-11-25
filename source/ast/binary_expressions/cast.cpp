@@ -11,6 +11,10 @@ void cast_expr::pseudo_py(std::ostream& os) const {
     os << type_to_declaration_string(m_type) << '(' << *m_rhs << ')';
 }
 
+void cast_expr::pseudo_racket(std::ostream& os) const {
+	os << type_to_declaration_string(m_type) << "-> " << *m_rhs;  
+}
+
 [[nodiscard]] expr_uptr cast_expr::simplify() const {
     return std::make_unique<cast_expr>(m_type, m_rhs->simplify());
 }

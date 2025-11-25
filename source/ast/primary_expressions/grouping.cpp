@@ -11,6 +11,10 @@ void grouping::pseudo_py(std::ostream& os) const {
     os << '(' << *m_expr << ')';
 }
 
+void grouping::pseudo_racket(std::ostream& os) const {
+    os << *m_expr;
+}
+
 [[nodiscard]] bool grouping::equals(const expression &rhs) const noexcept {
     const grouping* rhs_ptr = dynamic_cast<const grouping*>(&rhs);
     if (rhs_ptr == nullptr) {

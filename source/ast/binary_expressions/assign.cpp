@@ -11,6 +11,10 @@ void assign_expr::pseudo_py(std::ostream& os) const {
     os << *m_lhs << " = " << *m_rhs;
 }
 
+void assign_expr::pseudo_racket(std::ostream& os) const {
+    os << "(set! " << *m_lhs << ' ' << *m_rhs << ')';
+}
+
 [[nodiscard]] expr_uptr assign_expr::simplify() const {
     return m_rhs->simplify();
 }

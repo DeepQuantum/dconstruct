@@ -10,6 +10,10 @@ void return_stmt::pseudo_py(std::ostream& os) const {
     os << "return " << *m_expr << '\n';
 }
 
+void return_stmt::pseudo_racket(std::ostream& os) const {
+    return;
+}
+
 [[nodiscard]] bool return_stmt::equals(const statement& rhs) const noexcept {
     const return_stmt* rhs_ptr = dynamic_cast<const return_stmt*>(&rhs);
     if (rhs_ptr == nullptr) {

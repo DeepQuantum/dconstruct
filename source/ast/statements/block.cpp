@@ -24,6 +24,16 @@ void block::pseudo_py(std::ostream& os) const {
     } 
 }
 
+void block::pseudo_racket(std::ostream& os) const {
+    os << "(begin\n";
+    os << indent_more;
+    for (const auto& stmnt : m_statements) {
+        os << indent << *stmnt << '\n';
+    } 
+    os << indent_less;
+    os << indent << ')';
+}
+
 [[nodiscard]] bool block::equals(const statement& rhs) const noexcept {
     const block* rhs_ptr = dynamic_cast<const block*>(&rhs);
     if (rhs_ptr == nullptr) {
