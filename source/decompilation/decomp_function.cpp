@@ -43,6 +43,7 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
 
 [[nodiscard]] std::string decomp_function::to_string() const {
     std::ostringstream out;
+    out << c;
     const std::string return_type = m_disassembly.m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
     out << return_type << ' ' << m_disassembly.m_id << '(';
     for (u8 i = 0; i < m_arguments.size(); ++i) {
@@ -269,11 +270,12 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
         m_ipdomsEmitted[idom] = true;
         node_id proper_successor, proper_destination, proper_head;
         expr_uptr condition = make_condition(node, proper_head, proper_successor, proper_destination);
-		parse_basic_block(m_graph[proper_head]);
-        auto then_block = std::make_unique<ast::block>();
-        reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
+		//parse_basic_block(m_graph[proper_head]);
+        //auto then_block = std::make_unique<ast::block>();
+        //reg_set regs_to_emit = m_graph.get_branch_phi_registers(m_graph[proper_head]);
         std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
+        /*
         if (!idom_already_emitted) {
             auto bits = regs_to_emit.to_ullong();
             while (bits != 0) {
@@ -303,7 +305,7 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
 
         append_to_current_block(std::move(full_if));
 
-        emit_node(m_graph[idom], stop_node);
+        emit_node(m_graph[idom], stop_node);*/
     
     /*const node_id idom = node.m_ipdom;
 
@@ -712,7 +714,8 @@ template<typename from, typename to>
     const control_flow_node* failure_exit = nullptr;
     const control_flow_node* success_exit = nullptr;
 
-    expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
+	expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
+    //std::vector<expr_uptr> condition = { get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1) };
     proper_head = current_node->m_index;
     proper_successor = current_node->m_followingNode;
     proper_destination = current_node->m_targetNode;

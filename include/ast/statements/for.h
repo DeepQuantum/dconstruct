@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ast/statement.h"
 
 namespace dconstruct::ast {
@@ -7,6 +9,7 @@ namespace dconstruct::ast {
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
+        void pseudo_racket(std::ostream& os) const final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 

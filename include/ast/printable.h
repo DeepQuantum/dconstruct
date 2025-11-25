@@ -22,8 +22,18 @@ namespace dconstruct {
         return index;
     }
     
-    inline std::ostream& set_c(std::ostream& os) {
+    inline std::ostream& c(std::ostream& os) {
         os.iword(get_flag_index()) |= static_cast<i32>(Flags::C);
+        return os;
+    }
+
+    inline std::ostream& py(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(Flags::PY);
+        return os;
+    }
+
+    inline std::ostream& racket(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(Flags::RACKET);
         return os;
     }
 

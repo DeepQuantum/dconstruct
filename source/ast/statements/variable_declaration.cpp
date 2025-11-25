@@ -11,13 +11,18 @@ void variable_declaration::pseudo_c(std::ostream& os) const {
 }
 
 void variable_declaration::pseudo_py(std::ostream& os) const {
-    os << "variable_declaration[" << type_to_declaration_string(m_type) << ", " << m_identifier << ", ";
+    os << m_identifier;
     if (m_init != nullptr) {
-        os << '{' << *m_init << '}';
-    } else {
-        os << "null";
+        os << " = " << *m_init;
     }
-    os << ';';
+}
+
+void variable_declaration::pseudo_racket(std::ostream& os) const {
+    os << "(define " << m_identifier;
+    if (m_init != nullptr) {
+        os << ' ' << *m_init;
+    }
+    os << ')';
 }
 
 [[nodiscard]] bool variable_declaration::equals(const statement& rhs) const noexcept {
