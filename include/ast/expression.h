@@ -149,8 +149,10 @@ namespace dconstruct::ast {
         }
     };
 
-    template<typename expr_t>
-    concept requires_binary_expr = std::is_base_of_v<binary_expr, expr_t>;    
+    template <typename T>
+    [[nodiscard]] std::unique_ptr<T> clone_cast(const std::unique_ptr<T>& expr) noexcept {
+        return std::unique_ptr<T>(static_cast<T*>(expr->clone().release()));
+    }
 };
 
 using expr_uptr = std::unique_ptr<dconstruct::ast::expression>;
