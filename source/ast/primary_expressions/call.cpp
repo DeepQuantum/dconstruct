@@ -27,15 +27,22 @@ void call_expr::pseudo_py(std::ostream& os) const {
 }
 
 void call_expr::pseudo_racket(std::ostream& os) const {
-    os << '(' << *m_callee;
-    std::string sep = " ";
-	if (static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "and" || static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "or") {
-        sep = "\n";
+    const bool is_builtin = static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "and" || static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "or";
+	if (!is_builtin) {
+        os << '(' << *m_callee;
+        for (const auto& arg : m_arguments) {
+            os << " " << * arg;
+        }
+        os << ')';
+    } else {
+        os << '(' << *m_callee << "\n";
+		os << indent_more;
+        for (const auto& arg : m_arguments) {
+            os << indent << *arg << "\n";
+        }
+        os << indent_less;
+        os << indent << ')';
     }
-    for (const auto& arg : m_arguments) {
-        os << sep << *arg;
-    }
-    os << ')';
 }
 
 

@@ -74,6 +74,7 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] std::unique_ptr<ast::assign_expr> make_store(const Instruction& istr);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
+        [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin);
 
         [[nodiscard]] expr_uptr make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 

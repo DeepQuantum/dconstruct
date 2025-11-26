@@ -680,7 +680,7 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, Racket0) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
-        const std::string id = "anonymous@25038";
+        const std::string id = "anonymous@25260";
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
@@ -693,24 +693,27 @@ namespace dconstruct::testing {
             "    (or\n"
             "        shambler-standing-explode-line-of-motion-check()\n"
             "        (and"
-            "            is-rogue-mode?()\n"
-            "            is-player?()\n"
+            "            (is-rogue-mode?)\n"
+            "            (is-player?)\n"
             "            (or\n"
-            "                player-is-prone?()\n"
-            "                player-is-supine?()\n"
+            "                (player-is-prone?)\n"
+            "                (player-is-supine?)\n"
             "            )\n"
-            "            player-in-prone-hiding-region?()\n"
+            "            (player-in-prone-hiding-region?)\n"
             "        )\n"
             "    )\n"
-            "    (> melee-fact-get-time-since(player, shambler-explode) 5)\n"
-            "    (> melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) 2)\n"
+            "    (> (melee-fact-get-time-since player shambler-explode) 5)\n"
+            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 2)\n"
             ")\n";
 
         
         const auto dc_func = dcompiler::decomp_function{ *func, file };
-        std::ostringstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        std::ostringstream out;
 		out << dconstruct::racket << dc_func.to_string();
+        file_out << dconstruct::racket << out.str();
 
         ASSERT_EQ(expected, out.str());
+		
     } 
 }

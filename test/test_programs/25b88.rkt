@@ -1,4 +1,3 @@
-
 (and
     (or 
         shambler-standing-explode-line-of-motion-check()
@@ -18,8 +17,6 @@
             (< distance-between-points(get-nav-destination(arg_2), get_object-position(arg_3)) 4.0)
         )
     )
-    (and 
-        (> melee-fact-get-time-since(player, shambler-explode) 5) 
-        (> melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) 2) 
-    )
+    (> melee-fact-get-time-since(player, shambler-explode) 5) 
+    (> melee-fact-get-time-since(arg_2, time-since-in-finisher-fail) 2) 
 )
