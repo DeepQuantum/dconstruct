@@ -648,9 +648,9 @@ template<ast::primitive_kind kind>
     ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env));
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
-        /*if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > MAX_EXPRESSION_COMPLEXITY) {
+        if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > MAX_EXPRESSION_COMPLEXITY) {
             load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i);
-        }*/
+        }
         args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());
         args[i]->set_type(*func_type.m_arguments[i].second);
     }
@@ -700,76 +700,11 @@ template<typename from, typename to>
 }
 
 [[nodiscard]] expr_uptr decomp_function::make_condition(const control_flow_node& condition_start) {
-    using start_end_condition = std::pair<std::unique_ptr<ast::call_expr>, const node_id>; 
-    
-    // REWORK TIME!
-
-
-    // Similar approach to before, but now we need to think recursively.
-	// We start at the top and check the instruction at the end, branchif -> we make an or, branchifnot -> and
-	// the target is the end of the current condition
-    // the current condition ENDS when we have a node that has the FIRST target as its following node
-    // or alternative, the end of the current condition is the target node of the first instruction of the condition
-    // for an or, the branch target is the start of the next condition of the condition above the current or
-    // for example:
-    // (or
-    //     cond1
-    //     cond2
-    //     cond3
-    // )
-    // cond4
-    // in nodes: cond1 "branch if" to first node of cond4, cond2 also branch if to first node of cond4, cond1 & cond2 fall through to cond3
-    // cond3 either has no branch at all if at end of function OR it has a branch if not to the exit node of the above AND
-
-    // (and
-    //     cond1
-    //     cond2
-    //     cond3 
-    // )
-    // cond4
-
-    // then cond1 will have a branchifnot to cond4
-
-    // how long do we process each condition?
-    // a condition/block ends under the following two conditions:
-    // 1. another node has the following node as its target, meaning that that top-node ends its block there
-    // 2. a node has the exit node (target) of the condition as its FOLLOWING node. thats the last node of the condition.
-
-
-    // how do we create a condition?
-    // whenever we have a NEW target, thats a new condition
-    // sub-conditions may have the same target, but thats short-circuiting
-
-    // how do we store conditions?
-    // we start at the first node. we see its an or. check following, see its still or so add that as sibling.
-    // next following node has a different target, so we create a new condition.
-    // we push the old condition on the stack? including its target
-    // we then process the following nodes, theyre all part of an and so
-    // eventually we reach the bottom and the 2nd condition of the above points kicks in,
-    // as in the following node will be the target of the first node.
-    // so we're done, we have no sub-conditions to process.
-    // we can then add this condition to the top condition on the stack,
-    // and continue processing from there? or maybe we can check if that final
-    // node is also the final node of the top condition and just jump over completely?
-
-
-    // WHEN do we push/pop?
-    // when we discover that the following node doesnt have the same target, and we need a sub-condition
-    // we push the current one on the stack and start anew with the current node as the head of the new
-    // condition.
-    // when we reach the end of the current condition, EITHER by having no sub-conditions
-    // or when all sub-conditions are done, we don't even need to push the current condition anymore,
-    // we just add it to the top of the stack and then the stack picks up at the "old" condition
-    // so we only need pushing/popping when we actually have subconditions
-    // we POP off the stack when a conditions ends via being targeted by an outside block.
-    // in that case, we take the current condition and add it to that popped off condition
-    // then we simply continue: we check the next nodes last instruction and make a new condition off of that.
-    // the previous, popped condition becomes the first sibling in the new condition.
-    // boy i have no clue if this is correct.
-    // can we say, that this is always the exit node of the condition at the top of the stack? probably?
-
-
-
+    struct stacked_condition {
+        std::unique_ptr<ast::call_expr> cond;
+        node_id exit;
+        bool is_or;
+    };
 
     const auto and_func = std::make_unique<ast::call_expr>(
         compiler::token{ compiler::token_type::_EOF, "" },
@@ -785,7 +720,7 @@ template<typename from, typename to>
 
     auto &start = condition_start.m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_func : and_func;
 
-    std::vector<start_end_condition> condition_stack;
+    std::vector<stacked_condition> condition_stack;
 	condition_stack.emplace_back(ast::clone_cast(start), condition_start.m_targetNode);
 
     const control_flow_node* current_node = &condition_start;
@@ -796,8 +731,9 @@ template<typename from, typename to>
         
         const bool is_or = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf;
         const auto exit = current_node->m_targetNode;
-        auto current_condition = std::move(condition_stack.back().first);
-        auto last_condition_exit = condition_stack.back().second;
+        auto current_condition = std::move(condition_stack.back().cond);
+        auto last_condition_exit = condition_stack.back().exit;
+		bool last_condition_is_or = condition_stack.back().is_or;
 		std::cout << "new condition at " << current_node->m_index;
 		std::cout << " with callee " << (is_or ? "or" : "and") << " and target " << exit << "\n";
         condition_stack.pop_back();
@@ -829,35 +765,33 @@ template<typename from, typename to>
                 if (condition_stack.empty()) {
                     return current_condition;
                 }
-                const auto previous_exit = condition_stack.back().second;
-                if (current_node->m_targetNode == previous_exit) {
-                    
-                }
-                else {
-                    condition_stack.emplace_back(std::move(current_condition), last_condition_exit);
-                }
+                const auto previous_exit = condition_stack.back().exit;
+                condition_stack.back().cond->m_arguments.push_back(std::move(current_condition));
                 current_node = following_node;
                 following_node = &m_graph[following_node->m_followingNode];
                 break;
             }
             else if (gets_targeted) {
                 std::cout << "targeted\n";
-                auto top_condition = std::move(condition_stack.back().first);
+                auto top_condition = std::move(condition_stack.back().cond);
 				condition_stack.pop_back();
                 top_condition->m_arguments.push_back(std::move(current_condition));
                 if (condition_stack.empty()) {
                     condition_stack.emplace_back(ast::clone_cast(following_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_func : and_func), exit);
                 }
-				condition_stack.back().first->m_arguments.push_back(std::move(top_condition));
+				condition_stack.back().cond->m_arguments.push_back(std::move(top_condition));
                 break;
             }
             else if (!fallthrough) {
-				const auto previous_exit = !condition_stack.empty() ? condition_stack.back().second : 0;
+				const auto previous_exit = !condition_stack.empty() ? condition_stack.back().exit : 0;
                 auto &cond = following_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_func : and_func;
-                if (current_node->m_targetNode == previous_exit) {
-					condition_stack.back().first->m_arguments.push_back(std::move(current_condition));
+                const bool condi = is_or ? last_condition_is_or : !last_condition_is_or;
+                if (current_node->m_targetNode == previous_exit && condi) {
+					std::cout << "inserting as sibling\n";
+					condition_stack.back().cond->m_arguments.push_back(std::move(current_condition));
                 }
                 else {
+					std::cout << "new condition on stack\n";
                     condition_stack.emplace_back(std::move(current_condition), last_condition_exit);
                 }
                 condition_stack.emplace_back(ast::clone_cast(cond), current_node->m_targetNode);
@@ -871,7 +805,7 @@ template<typename from, typename to>
         std::cout << "stack: " << condition_stack.size() << "\n";
     }
 
-	return std::move(condition_stack.back().first);
+	return std::move(condition_stack.back().cond);
 }
 
 
