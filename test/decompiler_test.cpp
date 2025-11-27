@@ -678,23 +678,44 @@ namespace dconstruct::testing {
         }
     }
 
-    TEST(DECOMPILER, Racket0) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
-        const std::string id = "anonymous@25260";
+	static void racket_test(const std::string& filepath, const std::string& id, const std::string& expected) {
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
+        const auto dc_func = dcompiler::decomp_function{ *func, file };
+        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        std::ostringstream out;
+        out << dconstruct::racket << *dc_func.m_baseBlock.m_statements.front();
+        file_out << dconstruct::racket << out.str();
+        ASSERT_EQ(expected, out.str());
+    }
 
+    TEST(DECOMPILER_RACKET, Racket0) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
+        const std::string id = "anonymous@25880";
+        const std::string expected =
+            "(or\n"
+            "    (melee-fact-get-bool arg_2 disable-grabs)\n"
+            "    (npc-struggle-cooldown-func arg_2 arg_3 10.00 20.00 1)\n"
+            "    (character-in-struggle? arg_3 16)\n"
+            "    (< (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
+            ")";
+		racket_test(filepath, id, expected);
+    }
+
+    TEST(DECOMPILER_RACKET, Racket1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
+        const std::string id = "anonymous@25038";
         const std::string expected = 
             "(and\n"
             "    (or\n"
-            "        shambler-standing-explode-line-of-motion-check()\n"
-            "        (and"
+            "        (shambler-standing-explode-line-of-motion-check arg_2 arg_3)\n"
+            "        (and\n"
             "            (is-rogue-mode?)\n"
-            "            (is-player?)\n"
+            "            (is-player? arg_3)\n"
             "            (or\n"
             "                (player-is-prone?)\n"
             "                (player-is-supine?)\n"
@@ -702,18 +723,37 @@ namespace dconstruct::testing {
             "            (player-in-prone-hiding-region?)\n"
             "        )\n"
             "    )\n"
-            "    (> (melee-fact-get-time-since player shambler-explode) 5)\n"
-            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 2)\n"
-            ")\n";
+            "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
+            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 2.00)\n"
+            ")";
+		racket_test(filepath, id, expected);
+    }
 
-        
-        const auto dc_func = dcompiler::decomp_function{ *func, file };
-        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
-        std::ostringstream out;
-		out << dconstruct::racket << dc_func.to_string();
-        file_out << dconstruct::racket << out.str();
-
-        ASSERT_EQ(expected, out.str());
-		
-    } 
+    TEST(DECOMPILER_RACKET, Racket2) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
+        const std::string id = "anonymous@25b88";
+        const std::string expected =
+            "(and\n"
+            "    (or\n"
+            "        (shambler-standing-explode-line-of-motion-check arg_2 arg_3)\n"
+            "        (and\n"
+            "            (is-rogue-mode?)\n"
+            "            (is-player? arg_3)\n"
+            "            (or\n"
+            "                (player-is-prone?)\n"
+            "                (player-is-supine?)\n"
+            "            )\n"
+            "            (player-in-prone-hiding-region?)\n"
+            "        )\n"
+            "       (and\n"
+            "            (is-rogue-mode?)\n"
+            "            (is-player? arg_3)\n"
+            "            (not (npc-can-path-to-object? arg_2 arg_3))\n"
+            "            (<= (distance-between-points (npc-get-nav-destination arg_2) (get-object-position arg_3)) 4.00)\n"
+            "    )\n"
+            "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
+            "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 1.50)\n"
+            ")";
+        racket_test(filepath, id, expected);
+    }
 }
