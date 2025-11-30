@@ -27,7 +27,7 @@ namespace dconstruct::ast {
         STRING,
         SID,
         NULLPTR,
-        _NULL
+        NOTHING
     };
 
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;

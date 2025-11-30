@@ -28,7 +28,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     if (rhs_ptr != nullptr) {
         const primitive_value value = rhs_ptr->m_value;
         switch(rhs_ptr->get_type()) {
-            case primitive_kind::SID:
+            case primitive_kind::SID: 
             case primitive_kind::BOOL:    return std::make_unique<literal>(!std::get<bool>(value));
             case primitive_kind::STRING:  return std::make_unique<literal>(!(std::get<std::string>(value).empty()));
             default: {
