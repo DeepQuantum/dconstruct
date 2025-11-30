@@ -237,13 +237,7 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
         emit_loop(*loop, stop_node);
     }
     else if (last_line.m_instruction.opcode == Opcode::BranchIf || last_line.m_instruction.opcode == Opcode::BranchIfNot) {
-        //parse_basic_block(node);
         emit_if(node, stop_node);
-        /*if (node.m_ipdom == node.m_targetNode) {
-            emit_if(node, stop_node);
-        } else {
-            emit_if_else(node, stop_node);
-        }*/
     }
     else if (const auto loop = m_graph.get_loop_with_head(node.m_followingNode)) {
         if (node.m_followingNode != stop_node) {
@@ -701,7 +695,7 @@ template<typename from, typename to>
 
 [[nodiscard]] expr_uptr decomp_function::make_condition(const control_flow_node& condition_start) {
     struct stacked_condition {
-        std::unique_ptr<ast::call_expr> cond;
+        expr_uptr cond;
         node_id exit;
         bool is_or;
     };
@@ -721,7 +715,7 @@ template<typename from, typename to>
     auto &start = condition_start.m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_func : and_func;
 
     std::vector<stacked_condition> condition_stack;
-	condition_stack.emplace_back(ast::clone_cast(start), condition_start.m_targetNode);
+	condition_stack.emplace_back(ast::clone_cast(start), condition_start.m_targetNode, condition_start.m_lines.back().m_instruction.opcode == Opcode::BranchIf);
 
     const control_flow_node* current_node = &condition_start;
 	const control_flow_node* following_node = &m_graph[condition_start.m_followingNode];
@@ -731,24 +725,12 @@ template<typename from, typename to>
         
         const bool is_or = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf;
         const auto exit = current_node->m_targetNode;
-        auto current_condition = std::move(condition_stack.back().cond);
+        auto current_condition = std::unique_ptr<ast::call_expr>(static_cast<ast::call_expr*>(condition_stack.back().cond.release()));
         auto last_condition_exit = condition_stack.back().exit;
 		bool last_condition_is_or = condition_stack.back().is_or;
 		std::cout << "new condition at " << current_node->m_index;
 		std::cout << " with callee " << (is_or ? "or" : "and") << " and target " << exit << "\n";
         condition_stack.pop_back();
-
-        if (current_node->m_lines.back().m_instruction.opcode != Opcode::BranchIf &&
-            current_node->m_lines.back().m_instruction.opcode != Opcode::BranchIfNot) {
-            m_transformableExpressions[check_register] = current_condition->clone();
-            parse_basic_block(*current_node);
-            current_condition->m_arguments.push_back(get_expression_as_condition(check_register));
-            current_node = &m_graph[current_node->m_followingNode];
-            following_node = &m_graph[following_node->m_followingNode];
-			condition_stack.emplace_back(std::move(current_condition), last_condition_exit);
-            continue;
-        }
-
         while (true) {
 			std::cout << "processing next node in chain: " << current_node->m_index << "\n";
             parse_basic_block(*current_node);
@@ -762,24 +744,33 @@ template<typename from, typename to>
                 parse_basic_block(*following_node);
                 std::cout << "done\n";
                 current_condition->m_arguments.push_back(get_expression_as_condition(check_register));
-                if (condition_stack.empty()) {
+                if (m_graph[following_node->m_followingNode].m_index != condition_start.m_ipdom && m_graph[following_node->m_followingNode].m_lines.back().m_instruction.opcode != Opcode::BranchIf &&
+                    m_graph[following_node->m_followingNode].m_lines.back().m_instruction.opcode != Opcode::BranchIfNot) {
+                    m_transformableExpressions[check_register] = current_condition->clone();
+                    parse_basic_block(m_graph[following_node->m_followingNode]);
+                    current_node = &m_graph[current_node->m_index + 2];
+                    following_node = &m_graph[current_node->m_followingNode];
+                    static_cast<ast::call_expr*>(condition_stack.back().cond.get())->m_arguments.push_back(get_expression_as_condition(check_register));
+                }
+                else if (condition_stack.empty()) {
                     return current_condition;
                 }
-                const auto previous_exit = condition_stack.back().exit;
-                condition_stack.back().cond->m_arguments.push_back(std::move(current_condition));
-                current_node = following_node;
-                following_node = &m_graph[following_node->m_followingNode];
+                else {
+                    static_cast<ast::call_expr*>(condition_stack.back().cond.get())->m_arguments.push_back(std::move(current_condition));
+                    current_node = following_node;
+                    following_node = &m_graph[following_node->m_followingNode];
+                }
                 break;
             }
             else if (gets_targeted) {
                 std::cout << "targeted\n";
-                auto top_condition = std::move(condition_stack.back().cond);
+                auto top_condition = std::unique_ptr<ast::call_expr>(static_cast<ast::call_expr*>(condition_stack.back().cond.release()));
 				condition_stack.pop_back();
                 top_condition->m_arguments.push_back(std::move(current_condition));
                 if (condition_stack.empty()) {
-                    condition_stack.emplace_back(ast::clone_cast(following_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_func : and_func), exit);
+                    condition_stack.emplace_back(ast::clone_cast(is_or ? or_func : and_func), exit, is_or);
                 }
-				condition_stack.back().cond->m_arguments.push_back(std::move(top_condition));
+                static_cast<ast::call_expr*>(condition_stack.back().cond.get())->m_arguments.push_back(std::move(top_condition));
                 break;
             }
             else if (!fallthrough) {
@@ -788,13 +779,13 @@ template<typename from, typename to>
                 const bool condi = is_or ? last_condition_is_or : !last_condition_is_or;
                 if (current_node->m_targetNode == previous_exit && condi) {
 					std::cout << "inserting as sibling\n";
-					condition_stack.back().cond->m_arguments.push_back(std::move(current_condition));
+                    static_cast<ast::call_expr*>(condition_stack.back().cond.get())->m_arguments.push_back(std::move(current_condition));
                 }
                 else {
 					std::cout << "new condition on stack\n";
-                    condition_stack.emplace_back(std::move(current_condition), last_condition_exit);
+                    condition_stack.emplace_back(std::move(current_condition), last_condition_exit, last_condition_is_or);
                 }
-                condition_stack.emplace_back(ast::clone_cast(cond), current_node->m_targetNode);
+                condition_stack.emplace_back(ast::clone_cast(cond), current_node->m_targetNode, is_or);
                 break;
             }
             current_node = &m_graph[current_node->m_followingNode];

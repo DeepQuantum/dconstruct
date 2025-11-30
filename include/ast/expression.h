@@ -149,7 +149,7 @@ namespace dconstruct::ast {
         }
     };
 
-    template <typename T>
+    template <typename T> requires (std::is_base_of_v<ast::expression, T>)
     [[nodiscard]] std::unique_ptr<T> clone_cast(const std::unique_ptr<T>& expr) noexcept {
         return std::unique_ptr<T>(static_cast<T*>(expr->clone().release()));
     }
