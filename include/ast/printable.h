@@ -61,12 +61,12 @@ namespace dconstruct {
     }
 
     inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
-        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::C)) {
-            expr.pseudo_c(os);
+        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::RACKET)) {
+            expr.pseudo_racket(os);
         } else if (os.iword(get_flag_index()) & static_cast<i32>(Flags::PY)) {
             expr.pseudo_py(os);
         } else {
-            expr.pseudo_racket(os);
+            expr.pseudo_c(os);
         }
         return os;
     }

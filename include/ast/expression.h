@@ -19,7 +19,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         //[[nodiscard]] virtual compilation::dc_register evaluate_to_register() const noexcept;
 
-        [[nodiscard]] inline full_type get_type(const compiler::environment& env) {
+        [[nodiscard]] inline const full_type& get_type(const compiler::environment& env) {
             if (is_unknown(m_type)) {
                 m_type = compute_type(env);
             }

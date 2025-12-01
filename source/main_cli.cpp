@@ -8,7 +8,31 @@
 #include <filesystem>
 #include <execution>
 
-static constexpr char DEFAULT_OUT[] = "<input_path.txt>";
+static constexpr char DEFAULT_OUT[] = "<input_path.asm>";
+
+static void decomp_file(
+    const std::filesystem::path &inpath, 
+    const std::filesystem::path &out_disasm_filename, 
+    const std::filesystem::path &out_decomp_filename,
+    const dconstruct::SIDBase &base,
+    const dconstruct::DisassemblerOptions &options,
+    const std::vector<std::string> &edits = {}) {
+    
+    dconstruct::BinaryFile file(inpath.string());
+
+    if (!edits.empty()) {
+        dconstruct::EditDisassembler ed(&file, &base, options, edits);
+        ed.apply_file_edits();
+    }
+
+    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
+    disassembler.disassemble();
+    std::ofstream out(out_decomp_filename);
+    for (const auto func : disassembler.get_named_functions()) {
+        const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
+        out << dcompiled.to_string() << "\n";
+    }
+}
 
 static void disasm_file(
     const std::filesystem::path &inpath, 
@@ -26,18 +50,53 @@ static void disasm_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
-    for (const auto& func : disassembler.get_functions()) {
-        const auto dcompiled = dconstruct::dcompiler::decomp_function{ func, file };
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + func.m_id + ".dcpl");
-        out << dcompiled.to_string();
+}
+
+static void decompile_multiple(
+    const std::filesystem::path &in, 
+    const std::filesystem::path &out, 
+    const dconstruct::SIDBase &sidbase, 
+    const dconstruct::DisassemblerOptions &options
+) {
+
+    std::vector<std::filesystem::path> filepaths;
+        
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
+        if (entry.path().extension() != ".bin") {
+            continue;
+        }
+        std::filesystem::path output_file_path = out;
+        filepaths.emplace_back(entry.path());
     }
+
+    const auto start = std::chrono::high_resolution_clock::now();
+
+    std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
+
+    std::for_each(
+        std::execution::par_unseq,
+        filepaths.begin(),
+        filepaths.end(),
+        [&](const std::filesystem::path &entry) {
+            const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
+            const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
+            std::filesystem::create_directories(disasm_outpath.parent_path());
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options);
+        }
+    );
+
+    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+
+
+    std::cout << "took " << time_taken.count() << "ms\n";
 }
 
 static void disassemble_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
-    const dconstruct::DisassemblerOptions &options) {
+    const dconstruct::DisassemblerOptions &options
+) {
 
     std::vector<std::filesystem::path> filepaths;
         
@@ -58,7 +117,7 @@ static void disassemble_multiple(
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
-            const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".txt");
+            const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             std::filesystem::create_directories(outpath.parent_path());
             disasm_file(entry.string(), outpath, sidbase, options);
         }
@@ -87,7 +146,7 @@ static std::vector<std::string> edits_from_file(const std::filesystem::path &pat
 
 int main(int argc, char *argv[]) {
 
-    cxxopts::Options options("dconstruct", "\na program for disassembling and editing tlouii dc files. use --about for a more detailed description.\n");
+    cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
 
     options.add_options("information")
         ("h, help", "display this message")
@@ -98,6 +157,7 @@ int main(int argc, char *argv[]) {
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
         ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value("sidbase.bin"), "<path>");
     options.add_options("configuration")
+        ("decompile", "will also emit a file containing the decompiled named functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"));
@@ -146,7 +206,7 @@ int main(int argc, char *argv[]) {
     std::filesystem::path output;
     if (opts.count("o") == 0) {
         if (!std::filesystem::is_directory(filepath)) {
-            output = filepath.string() + ".txt";
+            output = filepath.string() + ".asm";
         } else {
             constexpr char default_out_folder_path[] = "./disassembled";
             std::filesystem::create_directory(default_out_folder_path);
@@ -159,7 +219,7 @@ int main(int argc, char *argv[]) {
             return -1;
         }
         if (std::filesystem::is_directory(output) && !std::filesystem::is_directory(filepath)) {
-            output /= filepath.filename().string() + ".txt";
+            output /= filepath.filename().string() + ".asm";
         }
     }
 
@@ -173,6 +233,7 @@ int main(int argc, char *argv[]) {
 
     const u8 indent_per_level = opts["indent"].as<u8>();
     const bool emit_once = opts["emit_once"].as<bool>();
+    const bool decompile = opts["decompile"].as<bool>();
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
         edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());
@@ -192,11 +253,21 @@ int main(int argc, char *argv[]) {
         if (!edits.empty()) {
             std::cout << "warning: edits ignored as input path is a directory. edits only work in single file disassembly.\n";
         }
-        disassemble_multiple(filepath, output, base, disassember_options);
+        if (decompile) {
+            decompile_multiple(filepath, output, base, disassember_options);
+        }
+        else {
+            disassemble_multiple(filepath, output, base, disassember_options);
+        }
     } else {
         std::cout << "disassembling " << filepath.filename() << " to " << output << "...\n";
         const auto start = std::chrono::high_resolution_clock::now();
-        disasm_file(filepath, output, base, disassember_options, edits);
+        if (decompile) {
+            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, edits);
+        }
+        else {
+            disasm_file(filepath, output, base, disassember_options, edits);
+        }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
         std::cout << "took " << time_taken.count() << "ms\n";
     }
