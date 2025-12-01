@@ -76,7 +76,7 @@ namespace dconstruct::ast {
         if constexpr (std::is_same_v<T, struct_type> || std::is_same_v<T, enum_type>) {
             return arg.m_name;
         } else if constexpr(std::is_same_v<T, ptr_type>) {
-            return type_to_declaration_string(*arg.m_pointedAt) + "*";
+            return type_to_declaration_string(*arg.m_pointedAt) + '*';
         } else if constexpr(std::is_same_v<T, function_type>) {
             std::ostringstream os;
             os << "(";

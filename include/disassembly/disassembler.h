@@ -73,6 +73,16 @@ namespace dconstruct {
             return m_functions;
         }
 
+        [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept {
+            std::vector<const function_disassembly*> funcs;
+            for (const auto& func : m_functions) {
+                if (!func.m_id.starts_with("anonymous")) {
+                    funcs.push_back(&func);
+                }
+            }
+            return funcs;
+        }
+
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         

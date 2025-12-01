@@ -634,12 +634,8 @@ namespace dconstruct::testing {
                 continue;
             }
             emitted.insert(func.m_id);
-            try {
-                const auto dc_func = dcompiler::decomp_function{ func, file };
-                out << dc_func.to_string() << "\n\n";
-            } catch (const std::exception& e) {
-                std::cout << e.what() << '\n';
-            }   
+            const auto dc_func = dcompiler::decomp_function{ func, file };
+            out << dc_func.to_string() << "\n\n";
         }
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
@@ -761,6 +757,24 @@ namespace dconstruct::testing {
     TEST(DECOMPILER_RACKET, Racket3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
         const std::string id = "anonymous@267d8";
+        const std::string expected =
+            "(and\n"
+            "    (not (character-in-struggle? arg_3 16))\n"
+            "    (> (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
+            "    (not (and\n"
+            "        (character-in-melee-attack-as-attacker? arg_3)\n"
+            "        (character-in-melee-attack-of-other-character? arg_2 arg_3)\n"
+            "        (get-current-melee-attack arg_3)\n"
+            "        (== (* u64*-> (+ (get-current-melee-attack arg_3) 16)) melee-player-swing-free)\n"
+            "        (not (dog-in-melee-with-character? arg_3))\n"
+            "    ))\n"
+            ")";
+        racket_test(filepath, id, expected);
+    }
+
+    TEST(DECOMPILER_RACKET, Racket4) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
+        const std::string id = "anonymous@25930";
         const std::string expected =
             "(and\n"
             "    (not (character-in-struggle? arg_3 16))\n"
