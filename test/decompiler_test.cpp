@@ -605,12 +605,12 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.bin)";
-        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\behaviors.asm)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.asm)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "anonymous@269d0";
+        const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());

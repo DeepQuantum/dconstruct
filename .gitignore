@@ -84,3 +84,6 @@ vs_proj
 .rcc/
 .uic/
 /build*/
+lib/*
+include/ll*
+include/clang*
