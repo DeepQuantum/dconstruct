@@ -167,7 +167,14 @@ namespace dconstruct {
                     const f32 float_value = std::bit_cast<f32>(static_cast<u32>(reg.m_value));
                     std::snprintf(buffer, buffer_size, "%f", float_value);
                     break;
-                }             
+                }
+                case ast::primitive_kind::I8:
+                case ast::primitive_kind::I16:
+                case ast::primitive_kind::I32:
+                case ast::primitive_kind::I64: {
+                    std::snprintf(buffer, buffer_size, "%lli", reg.m_value);
+                    break;
+                }
                 default: {
                     std::snprintf(buffer, buffer_size, "%llu", reg.m_value);
                 }

@@ -130,7 +130,7 @@ namespace dconstruct {
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
                 multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination];
                 read_first[istr.destination] = true;
-                read_first[istr.operand2] = istr.op2_is_reg() && !write_regs[istr.operand2];
+                read_first[istr.operand2] = read_first[istr.operand2] || istr.op2_is_reg() && !write_regs[istr.operand2];
                 write_regs[istr.destination] = true;
                 continue;
             }

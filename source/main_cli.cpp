@@ -30,7 +30,7 @@ static void decomp_file(
     std::ofstream out(out_decomp_filename);
     for (const auto func : disassembler.get_named_functions()) {
         const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
-        out << dcompiled.to_string() << "\n";
+        out << dcompiled.to_string() << "\n\n";
     }
 }
 
