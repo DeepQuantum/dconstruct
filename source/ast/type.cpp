@@ -1,5 +1,4 @@
 #include "ast/type.h"
-#include "disassembly/instructions.h"
 #include <sstream>
 
 namespace dconstruct::ast {
@@ -51,22 +50,22 @@ namespace dconstruct::ast {
 
 [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept {
     switch(kind) {
-        case primitive_kind::U8:     return "u8";
-        case primitive_kind::U16:    return "u16";
-        case primitive_kind::U32:    return "u32";
-        case primitive_kind::U64:    return "u64";
-        case primitive_kind::I8:     return "i8";
-        case primitive_kind::I16:    return "i16";
-        case primitive_kind::I32:    return "i32";
-        case primitive_kind::I64:    return "i64";
-        case primitive_kind::F32:    return "f32";
-        case primitive_kind::F64:    return "f64";
-        case primitive_kind::CHAR:   return "char";
-        case primitive_kind::BOOL:   return "bool";
-        case primitive_kind::STRING: return "string";
-        case primitive_kind::SID:    return "sid";
+        case primitive_kind::U8:        return "u8";
+        case primitive_kind::U16:       return "u16";
+        case primitive_kind::U32:       return "u32";
+        case primitive_kind::U64:       return "u64";
+        case primitive_kind::I8:        return "i8";
+        case primitive_kind::I16:       return "i16";
+        case primitive_kind::I32:       return "i32";
+        case primitive_kind::I64:       return "i64";
+        case primitive_kind::F32:       return "f32";
+        case primitive_kind::F64:       return "f64";
+        case primitive_kind::CHAR:      return "char";
+        case primitive_kind::BOOL:      return "bool";
+        case primitive_kind::STRING:    return "string";
+        case primitive_kind::SID:       return "sid";
         case primitive_kind::NULLPTR:   return "nullptr";
-        default:                     return "unknown";
+        default:                        return "u64?";
     }
 }
 
@@ -89,7 +88,7 @@ namespace dconstruct::ast {
             os << ") -> " << (arg.m_return != nullptr ? type_to_declaration_string(*arg.m_return.get()) : "void");
             return os.str();
         } else if constexpr(std::is_same_v<T, std::monostate>) {
-            return "unknown";
+            return "u64?";
         } else {
             return kind_to_string(arg.m_type);
         }

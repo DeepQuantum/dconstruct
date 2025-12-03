@@ -987,8 +987,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 }
             }
             std::snprintf(varying, disassembly_text_size, "r%d, 0x%X", op1, target);
-            const char* comment = istr.opcode == Opcode::BranchIf ? "IF r%d [%s] " : "IF NOT r%d [%s] ";
-            std::snprintf(interpreted, interpreted_buffer_size, comment, op1, op1_str);
+            const char* comment = istr.opcode == Opcode::BranchIf ? "IF r%d " : "IF NOT r%d ";
+            std::snprintf(interpreted, interpreted_buffer_size, comment, op1);
             line.m_target = target;
             frame.add_target_label(target);
             if (target < line.m_location) {
@@ -1283,11 +1283,11 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
             if constexpr (std::is_same_v<T, ast::primitive_type>) {
                 switch (entry.m_type) {
                     case ast::primitive_kind::I32: {
-                        std::snprintf(type_text, sizeof(type_text), "int: <%i>\n", value_location.get<i32>());
+                        std::snprintf(type_text, sizeof(type_text), "int: %i\n", value_location.get<i32>());
                         break;
                     }
                     case ast::primitive_kind::F32: {
-                        std::snprintf(type_text, sizeof(type_text), "float: <%f>\n", value_location.get<f32>());
+                        std::snprintf(type_text, sizeof(type_text), "float: %f\n", value_location.get<f32>());
                         break;
                     }
                     case ast::primitive_kind::STRING: {

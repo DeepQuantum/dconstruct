@@ -15,12 +15,10 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
     m_parsedNodes(m_graph.m_nodes.size(), false), 
     m_ipdomsEmitted(m_graph.m_nodes.size(), false)
 {
-#ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly.m_id << '\n';
     if (m_graph.m_nodes.size() > 1) {
         m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly.m_id + ".svg");
     }
-#endif
 
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);
@@ -138,7 +136,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 }
-               /* else if (call_usage_count == 1) {
+                /*else if (call_usage_count == 1) {
                     generated_expression = std::move(call);
                 }*/
                 else {
@@ -147,7 +145,6 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 }
                 break;
             }
-
             case Opcode::LoadStaticFloatImm: {
                 generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>(istr.operand1 * 8));
                 break;
@@ -266,7 +263,6 @@ void decomp_function::emit_node(const control_flow_node& node, const node_id sto
 
 void decomp_function::emit_if(const control_flow_node& node, const node_id stop_node) {
     const node_id idom = node.m_ipdom;
-    const bool idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
@@ -556,7 +552,7 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto var_declaration = std::make_unique<ast::variable_declaration>(type, name, std::move(expr));
 
     append_to_current_block(std::move(var_declaration));
-    m_registersToVars[dst].push(id->copy());
+    //m_registersToVars[dst].push(id->copy());
     m_transformableExpressions[dst] = std::move(id);
     m_transformableExpressions[dst]->set_type(type);
 }

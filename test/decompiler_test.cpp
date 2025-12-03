@@ -674,7 +674,8 @@ namespace dconstruct::testing {
         }
     }
 
-	static void racket_test(const std::string& filepath, const std::string& id, const std::string& expected) {
+
+	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, decltype(dconstruct::racket) stream_lang = dconstruct::racket) {
         BinaryFile file{ filepath };
         Disassembler da{ &file, &base };
         da.disassemble();
@@ -684,8 +685,8 @@ namespace dconstruct::testing {
         const auto dc_func = dcompiler::decomp_function{ *func, file };
         std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         std::ostringstream out;
-        out << dconstruct::racket << *dc_func.m_baseBlock.m_statements.front();
-        file_out << dconstruct::racket << out.str();
+        out << stream_lang << dc_func.to_string();
+        file_out << stream_lang << out.str();
         ASSERT_EQ(expected, out.str());
     }
 
@@ -699,7 +700,7 @@ namespace dconstruct::testing {
             "    (character-in-struggle? arg_3 16)\n"
             "    (< (melee-fact-get-time-since arg_3 last-time-in-prone-struggle) 5.00)\n"
             ")";
-		racket_test(filepath, id, expected);
+		decomp_test(filepath, id, expected);
     }
 
     TEST(DECOMPILER_RACKET, Racket1) {
@@ -722,7 +723,7 @@ namespace dconstruct::testing {
             "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
             "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 2.00)\n"
             ")";
-		racket_test(filepath, id, expected);
+		decomp_test(filepath, id, expected);
     }
 
     TEST(DECOMPILER_RACKET, Racket2) {
@@ -751,7 +752,7 @@ namespace dconstruct::testing {
             "    (> (melee-fact-get-time-since player shambler-explode) 5.00)\n"
             "    (> (melee-fact-get-time-since arg_2 time-since-in-finisher-fail) 1.50)\n"
             ")";
-        racket_test(filepath, id, expected);
+        decomp_test(filepath, id, expected);
     }
 
     TEST(DECOMPILER_RACKET, Racket3) {
@@ -769,7 +770,7 @@ namespace dconstruct::testing {
             "        (not (dog-in-melee-with-character? arg_3))\n"
             "    ))\n"
             ")";
-        racket_test(filepath, id, expected);
+        decomp_test(filepath, id, expected);
     }
 
     TEST(DECOMPILER_RACKET, Racket4) {
@@ -787,6 +788,39 @@ namespace dconstruct::testing {
             "        (not (dog-in-melee-with-character? arg_3))\n"
             "    ))\n"
             ")";
-        racket_test(filepath, id, expected);
+        decomp_test(filepath, id, expected);
+    }
+
+    TEST(DECOMPILER, Var1) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string id = "#8A8D5C923D5DDB3B";
+        std::string expected = 
+            "i32 #8A8D5C923D5DDB3B() {\n"
+            "    i32 var_0 = get-int32(#5389CC70A44E7358, self);\n"
+            "    i32 var_1;\n"
+            "    if (var_0 > 0) {\n"
+            "        i32 var_2 = get-int32(#5389CC70A44E7358, self);\n"
+            "        var_1 = var_2;\n"
+            "    } else {\n"
+            "        i32 var_3 = get-int32(#CEF93DF859F605EA, self);\n"
+            "        var_1 = var_3;\n"
+            "    }\n"
+            "    return var_1;\n"
+            "}";
+        decomp_test(filepath, id, expected, dconstruct::c);
+    }
+
+    TEST(DECOMPILER, Var2) {
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+        const std::string id = "select-wave-composition@main@start@0";
+        std::string expected =
+            "void select-wave-composition@main@start@0() {\n"
+            "    u64? var_0 = is-final-build?();\n"
+            "    if (!var_0) {\n"
+            "        u64? var_1 = #5445173390656D6D(\"DEB - WM: --SELECT WAVE COMPOSITION--\")\n"
+            "        display(var_1, 19);\n"
+            "    }\n"
+            "}";
+        decomp_test(filepath, id, expected, dconstruct::c);
     }
 }

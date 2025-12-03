@@ -4,7 +4,11 @@
 
 namespace dconstruct::compiler {
     struct environment {
-        explicit environment() noexcept : m_enclosing(nullptr) {};
+        environment() noexcept : m_enclosing(nullptr) {};
+        
+        environment(const environment& rhs) = delete;
+
+        environment& operator=(const environment& rhs) = delete;
 
         explicit environment(std::unique_ptr<environment>&& enclosing) noexcept : m_enclosing(std::move(enclosing)) {};
 
