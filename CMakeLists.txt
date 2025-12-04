@@ -25,9 +25,12 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+#set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
+
+add_subdirectory(${SOURCE_DIR}/llvm/llvm)
+
 
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
@@ -55,28 +58,28 @@ if(WIN32)
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lia
     )
     target_include_directories(dconstruct PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
@@ -133,28 +136,28 @@ if(WIN32)
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
-        #${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
     )
     target_include_directories(dconstruct_test PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
