@@ -29,9 +29,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-add_subdirectory(${SOURCE_DIR}/llvm/llvm)
-
-
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
 target_compile_options(dconstruct PRIVATE
@@ -79,7 +76,7 @@ if(WIN32)
         # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
         # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
         # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lia
+        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
     )
     target_include_directories(dconstruct PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
@@ -95,6 +92,7 @@ endif()
 target_link_libraries(dconstruct
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
+    
 )
 
 # add_custom_command(

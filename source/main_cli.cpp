@@ -27,10 +27,15 @@ static void decomp_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
     disassembler.disassemble();
-    std::ofstream out(out_decomp_filename);
-    for (const auto func : disassembler.get_named_functions()) {
-        const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
-        out << dcompiled.to_string() << "\n\n";
+    const auto funcs = disassembler.get_named_functions();
+    if (!funcs.empty()) {
+        std::ofstream out(out_decomp_filename);
+        std::cout << inpath <<  "\n";
+        for (const auto func : funcs) {
+            std::cout << func->m_id << "\n";
+            const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
+            out << dcompiled.to_string() << "\n\n";
+        }
     }
 }
 
