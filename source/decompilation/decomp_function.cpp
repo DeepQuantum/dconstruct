@@ -15,10 +15,12 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
     m_parsedNodes(m_graph.m_nodes.size(), false), 
     m_ipdomsEmitted(m_graph.m_nodes.size(), false)
 {
+#ifdef _DEBUG
     std::cout << "parsing graph " << m_disassembly.m_id << '\n';
     if (m_graph.m_nodes.size() > 1) {
         m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly.m_id + ".svg");
     }
+#endif
 
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);
