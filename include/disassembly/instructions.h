@@ -138,7 +138,7 @@ struct function_disassembly_line {
     std::string m_text;
     const Instruction* m_globalPointer;
     std::string m_comment;
-    i64 m_target = -1;
+    u16 m_target = std::numeric_limits<u16>::max();
     bool m_isArgMove;
 
     function_disassembly_line() noexcept = default;

@@ -206,7 +206,7 @@ namespace dconstruct {
 
             bool next_line_is_target = std::find(labels.begin(), labels.end(), next_line.m_location) != labels.end();
 
-            if (current_line.m_target != -1) {
+            if (current_line.m_target != control_flow_node::invalid_node) {
                 insert_node_at_line(current_line.m_target, nodes);
                 nodes[current_node].m_targetNode = current_line.m_target;
                 nodes[current_line.m_target].m_predecessors.push_back(current_node);
@@ -241,7 +241,9 @@ namespace dconstruct {
             node.m_followingNode = node.m_followingNode ? i : 0;
         }
         for (auto& [id, node] : nodes) {
-            node.m_targetNode = nodes_to_index.at(node.m_targetNode);
+            if (node.has_target()) {
+                node.m_targetNode = nodes_to_index.at(node.m_targetNode);
+            }
             for (auto& pred : node.m_predecessors) {
                 pred = nodes_to_index.at(pred);
             }
@@ -276,7 +278,7 @@ namespace dconstruct {
             if (node.m_followingNode) {
                 graph_file << node.m_startLine << '/' << node.m_index << ' ' << node.m_followingNode << '\n';
             }
-            if (node.m_targetNode) {
+            if (node.has_target()) {
                 graph_file << node.m_startLine << '/' << node.m_index << ' ' << node.m_targetNode << '\n';
             }
         }
@@ -360,7 +362,7 @@ namespace dconstruct {
                 Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_followingNode], const_cast<char*>(""), 1);
                 agsafeset(edge, const_cast<char*>("color"), is_conditional ? conditional_false_color : fallthrough_color, "");
             }
-            if (node.m_targetNode) {
+            if (node.has_target()) {
                 Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_targetNode], const_cast<char*>(""), 1);
                 if (node_start > node.m_targetNode) {
                     agsafeset(edge, const_cast<char*>("color"), loop_upwards_color, "");
@@ -383,14 +385,12 @@ namespace dconstruct {
                     return node.m_startLine < target;
                 }
             )->m_index;
-            const node_id loop_latch = std::lower_bound(
-                m_nodes.begin(), 
-                m_nodes.end(), 
-                loc.m_location, 
-                [](const control_flow_node& node, const u64 target) -> bool {
-                    return node.m_startLine < target;
+            node_id loop_latch = 0;
+            for (const auto& node : m_nodes) {
+                if (node.m_endLine == loc.m_location) {
+                    loop_latch = node.m_index;
                 }
-            )->m_index - 1;
+            }
             m_loops.emplace_back(std::move(collect_loop_body(loop_head, loop_latch)), loop_head, loop_latch);
         }
     }
@@ -413,8 +413,6 @@ namespace dconstruct {
 
         auto order = postorder(m_nodes);
 
-        static constexpr node_id UNDEF = std::numeric_limits<node_id>::max();
-
         for (u32 i = 0; i < m_nodes.size(); ++i) {
             m_nodes[order[i]].m_postorder = i;
         }
@@ -424,7 +422,7 @@ namespace dconstruct {
         const u32 N = order.size();
         std::unordered_map<node_id, node_id> ipdom;
         for (auto n : order) {
-            ipdom[n] = UNDEF;
+            ipdom[n] = control_flow_node::invalid_node;
         }
 
         ipdom[m_nodes.back().m_index] = m_nodes.back().m_index;
@@ -435,25 +433,25 @@ namespace dconstruct {
             changed = false;
             for (u32 i = 0; i < N; ++i) {
                 node_id n = order[i];
-                node_id new_ipdom = UNDEF;
+                node_id new_ipdom = control_flow_node::invalid_node;
                 const control_flow_node& node = m_nodes.at(n);
                 const auto dir_s = node.m_followingNode;
                 const auto tar_s = node.m_targetNode;
 
-                if (dir_s && ipdom.at(dir_s) != UNDEF) {
+                if (dir_s && ipdom.at(dir_s) != control_flow_node::invalid_node) {
                     new_ipdom = dir_s;
                 }
-                else if (tar_s && ipdom.at(tar_s) != UNDEF) {
+                else if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node) {
                     new_ipdom = tar_s;
                 }
-                if (new_ipdom == UNDEF) {
+                if (new_ipdom == control_flow_node::invalid_node) {
                     continue;
                 }
 
-                if (dir_s && ipdom.at(dir_s) != UNDEF && dir_s != new_ipdom) {
+                if (dir_s && ipdom.at(dir_s) != control_flow_node::invalid_node && dir_s != new_ipdom) {
                     new_ipdom = intersect(dir_s, new_ipdom, m_nodes).m_index;
                 }
-                if (tar_s && ipdom.at(tar_s) != UNDEF && tar_s != new_ipdom) {
+                if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node && tar_s != new_ipdom) {
                     new_ipdom = intersect(tar_s, new_ipdom, m_nodes).m_index;
                 }
 
@@ -499,7 +497,7 @@ namespace dconstruct {
             if (start_node.m_followingNode) {
                 node_stack.emplace_back(m_nodes[start_node.m_followingNode], check_regs);
             }
-            if (start_node.m_targetNode) {
+            if (start_node.has_target()) {
                 node_stack.emplace_back(m_nodes[start_node.m_targetNode], check_regs);
             }
         }
@@ -536,7 +534,7 @@ namespace dconstruct {
             if (node.m_followingNode && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
                 node_stack.emplace_back(m_nodes[node.m_followingNode], local_check_regs);
             }
-            if (node.m_targetNode && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
+            if (node.has_target() && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
                 node_stack.emplace_back(m_nodes[node.m_targetNode], local_check_regs);
             }
         }
@@ -579,7 +577,7 @@ namespace dconstruct {
             if (start_node.m_followingNode) {
                 node_stack.push_back(m_nodes[start_node.m_followingNode]);
             }
-            if (start_node.m_targetNode) {
+            if (start_node.has_target()) {
                 node_stack.push_back(m_nodes[start_node.m_targetNode]);
             }
         }
@@ -619,7 +617,7 @@ namespace dconstruct {
             if (node.m_followingNode && !checked[node.m_followingNode]) {
                 node_stack.push_back(m_nodes[node.m_followingNode]);
             }
-            if (node.m_targetNode && !checked[node.m_targetNode]) {
+            if (node.has_target() && !checked[node.m_targetNode]) {
                 node_stack.push_back(m_nodes[node.m_targetNode]);
             }
         }
@@ -641,7 +639,7 @@ namespace dconstruct {
             if (current_node.m_followingNode && !checked[current_node.m_followingNode] && current_node.m_followingNode != stop) {
                 node_stack.push_back(m_nodes[current_node.m_followingNode]);
             }
-            if (current_node.m_targetNode && !checked[current_node.m_targetNode] && current_node.m_targetNode != stop) {
+            if (current_node.has_target() && !checked[current_node.m_targetNode] && current_node.m_targetNode != stop) {
                 node_stack.push_back(m_nodes[current_node.m_targetNode]);
             }
         }

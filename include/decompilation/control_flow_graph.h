@@ -20,11 +20,13 @@ namespace dconstruct {
     };
 
     struct control_flow_node {
+        static constexpr node_id invalid_node = std::numeric_limits<node_id>::max();
+
         std::vector<function_disassembly_line> m_lines;
         std::vector<node_id> m_predecessors;
         register_nature m_regs;
         node_id m_followingNode = 0;
-        node_id m_targetNode = 0;
+        node_id m_targetNode = invalid_node;
         istr_line m_startLine = 0;
         istr_line m_endLine = 0;
         node_id m_index = 0;
@@ -35,6 +37,10 @@ namespace dconstruct {
 
         explicit control_flow_node(const istr_line line) : m_startLine(line) {}
 
+        [[nodiscard]] bool has_target() const noexcept {
+            return m_targetNode != invalid_node;
+        }
+
         [[nodiscard]] bool operator==(const control_flow_node& rhs) const noexcept;
         [[nodiscard]] bool operator!=(const control_flow_node& rhs) const noexcept;
 
@@ -42,7 +48,6 @@ namespace dconstruct {
         void determine_register_nature();
         [[nodiscard]] register_nature get_register_nature_starting_at(const istr_line start_line, const bool return_is_read) const noexcept;
     };
-
     struct control_flow_loop {
         std::vector<node_id> m_body;
         node_id m_headNode;

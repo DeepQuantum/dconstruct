@@ -631,7 +631,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     const u32 op2 = istr.operand2;
     ast::full_type table_entry;
 
-    std::snprintf(disassembly_text, disassembly_buffer_size, "%04llX   0x%06X   %02X %02X %02X %02X   %-21s",
+    std::snprintf(disassembly_text, disassembly_buffer_size, "%04X   0x%06X   %02X %02X %02X %02X   %-21s",
         line.m_location,
         get_offset(reinterpret_cast<const void*>(line.m_globalPointer + line.m_location)),
         static_cast<u32>(istr.opcode),
@@ -869,7 +869,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 }
                 else {
                     const auto arg_type = std::make_shared<ast::full_type>(frame[49 + i].m_type);
-                    std::get<ast::function_type>(frame.m_symbolTable.second[frame[dest].m_fromSymbolTable]).m_arguments.emplace_back("deduced", arg_type);
+                    auto& ftype = frame.m_symbolTable.second[frame[dest].m_fromSymbolTable];
+                    if (!std::holds_alternative<ast::function_type>(ftype)) {
+                        ftype = ast::function_type{};
+                    }
+                    std::get<ast::function_type>(ftype).m_arguments.emplace_back("deduced", arg_type);
                 }
                 frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
@@ -1238,7 +1242,7 @@ void Disassembler::insert_label(const std::vector<u32> &labels, const function_d
 }
 
 void Disassembler::insert_goto_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const std::vector<function_disassembly_line> &lines) {
-    if (line.m_target != -1) {
+    if (line.m_target != std::numeric_limits<u16>::max()) {
         u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target));
         if (line.m_target == func_size) {
             insert_span("=> L_RETURN");
