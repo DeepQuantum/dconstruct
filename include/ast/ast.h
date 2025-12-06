@@ -13,6 +13,7 @@
 #include "binary_expressions/bitwise_and.h"
 #include "binary_expressions/bitwise_or.h"
 #include "binary_expressions/bitwise_xor.h"
+#include "binary_expressions/shift.h"
 #include "unary_expressions/logical_not_expression.h"
 #include "unary_expressions/bitwise_not_expression.h"
 #include "unary_expressions/negate_expression.h"

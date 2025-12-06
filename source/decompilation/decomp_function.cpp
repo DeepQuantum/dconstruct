@@ -82,6 +82,8 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FDiv: generated_expression = apply_binary_op<ast::div_expr>(istr); break;
             case Opcode::IMod:
             case Opcode::FMod: generated_expression = apply_binary_op<ast::mod_expr>(istr); break;
+            
+            case Opcode::IntAsh: generated_expression = make_shift(istr); break;
 
             case Opcode::IAddImm: generated_expression = apply_binary_op_imm<ast::add_expr>(istr); break;
             case Opcode::IMulImm: generated_expression = apply_binary_op_imm<ast::mul_expr>(istr); break;
@@ -134,6 +136,9 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::Call:
             case Opcode::CallFf: {
                 auto call = make_call(istr);
+                if (!call) {
+                    return;
+                }
                 u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
@@ -269,6 +274,7 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
 
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
+    assert(node.has_target());
     const control_flow_node* target = &m_graph[node.m_targetNode];
 
     const control_flow_node* current_node = &m_graph[node.m_followingNode];
@@ -303,7 +309,7 @@ void decomp_function::emit_if(const control_flow_node& node, const node_id stop_
         return false;
     }
     const auto& lines = m_graph[loop.m_headNode].m_lines;
-    for (u32 i = 0; i < sizeof(standard_for_loop_pattern); ++i) {
+    for (u8 i = 0; i < sizeof(standard_for_loop_pattern); ++i) {
         if (lines[i].m_instruction.opcode != standard_for_loop_pattern[i]) {
             return false;
         }
@@ -387,6 +393,10 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
 
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
+        if (current_expression == nullptr) {
+            std::cout << "warning: invalid expression in condition\n";
+            continue;
+        }
         if (!condition) {
             condition = std::move(current_expression);
         } else {
@@ -536,6 +546,10 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
     while (bits != 0) {
         const reg_idx reg = std::countr_zero(bits);
         bits &= bits - 1;
+        if (m_registersToVars[reg].empty()) {
+            std::cout << "warning: false graph parsed" << "\n";
+            continue;
+        }
         load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
         if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
             regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
@@ -592,7 +606,12 @@ template<ast::primitive_kind kind>
 [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
-    ast::function_type func_type = std::get<ast::function_type>(callee->get_type(m_env));
+    const auto& callee_type = callee->get_type(m_env);
+    //assert(std::holds_alternative<ast::function_type>(callee_type), callee_type.index());
+    if (!std::holds_alternative<ast::function_type>(callee_type)) {
+        return nullptr;
+    }
+    ast::function_type func_type = std::get<ast::function_type>(callee_type);
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
         if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > MAX_EXPRESSION_COMPLEXITY) {
@@ -639,6 +658,9 @@ template<typename from, typename to>
 }
 
 [[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const noexcept {
+    if (m_transformableExpressions[src] == nullptr) {
+        return nullptr;
+    }
     expr_uptr condition = m_transformableExpressions[src]->clone();
     if (std::holds_alternative<ast::ptr_type>(condition->get_type(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type(m_env))) {
         condition = std::make_unique<ast::compare_expr>(compiler::token{ compiler::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));

@@ -53,6 +53,8 @@ static void disasm_file(
         ed.apply_file_edits();
     }
 
+    std::cout << out_filename << "\n";
+
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
 }
@@ -79,7 +81,7 @@ static void decompile_multiple(
     std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
 
     std::for_each(
-        std::execution::par_unseq,
+        std::execution::seq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {

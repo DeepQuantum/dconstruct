@@ -74,7 +74,7 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] std::unique_ptr<ast::assign_expr> make_store(const Instruction& istr);
         
         [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin, node_id& proper_head, node_id& proper_successor, node_id& proper_destination);
-        [[nodiscard]] expr_uptr make_condition(const control_flow_node& origin);
+        //[[nodiscard]] expr_uptr make_condition(const control_flow_node& origin);
 
         [[nodiscard]] expr_uptr make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 
@@ -87,7 +87,7 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr) {
+        [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
             return std::make_unique<T>(
@@ -97,7 +97,7 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        [[nodiscard]] inline expr_uptr apply_binary_op(const Instruction& istr, compiler::token op) {
+        [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr, compiler::token op) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
             auto expr = std::make_unique<T>(
@@ -115,7 +115,7 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        [[nodiscard]] inline expr_uptr apply_binary_op_imm(const Instruction& istr) {
+        [[nodiscard]] inline std::unique_ptr<T> apply_binary_op_imm(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             return std::make_unique<T>(
                 is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
@@ -124,9 +124,18 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        [[nodiscard]] inline expr_uptr apply_unary_op(const Instruction& istr) {
+        [[nodiscard]] inline std::unique_ptr<T> apply_unary_op(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             return std::make_unique<T>(is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone());
+        }
+
+        [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_shift(const Instruction& istr) {
+            std::vector<expr_uptr> arg;
+            arg.push_back(m_transformableExpressions[istr.destination]->clone());
+            auto callee = std::make_unique<ast::identifier>("int_ash");
+            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+            call->set_type(make_type(ast::primitive_kind::U64));
+            return call;
         }
     };
 } 
