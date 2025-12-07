@@ -25,14 +25,12 @@ static void decomp_file(
         ed.apply_file_edits();
     }
 
-    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
+    dconstruct::Disassembler disassembler(&file, &base);
     disassembler.disassemble();
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
-        std::cout << inpath <<  "\n";
         for (const auto func : funcs) {
-            std::cout << func->m_id << "\n";
             try {
                 const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
                 out << dcompiled.to_string() << "\n\n";
@@ -86,7 +84,7 @@ static void decompile_multiple(
     std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
 
     std::for_each(
-        std::execution::seq,
+        std::execution::par_unseq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
