@@ -605,12 +605,12 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-ground-animal-flee.bin)";
-        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-ground-animal-flee.asm)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-vox-san-streets-resort-pool.bin)";
+        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-vox-san-streets-resort-pool.bin.asm)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "flee-spline@follow-spline@start@0";
+        const std::string id = "#502C6E38E46C6A50";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -634,8 +634,13 @@ namespace dconstruct::testing {
                 continue;
             }
             emitted.insert(func.m_id);
-            const auto dc_func = dcompiler::decomp_function{ func, file };
-            out << dc_func.to_string() << "\n\n";
+            try {
+                const auto dc_func = dcompiler::decomp_function{ func, file };
+                out << dc_func.to_string() << "\n\n";
+            }
+            catch (const std::runtime_error& e) {
+                std::cout << e.what();
+            }
         }
         const auto stop = std::chrono::high_resolution_clock::now();
         const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();

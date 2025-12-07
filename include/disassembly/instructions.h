@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <map>
 #include <array>
-
+#include <limits>
 namespace dconstruct {
     enum class Opcode : u8 {
         Return,

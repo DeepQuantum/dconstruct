@@ -33,8 +33,13 @@ static void decomp_file(
         std::cout << inpath <<  "\n";
         for (const auto func : funcs) {
             std::cout << func->m_id << "\n";
-            const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
-            out << dcompiled.to_string() << "\n\n";
+            try {
+                const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
+                out << dcompiled.to_string() << "\n\n";
+            }
+            catch (const std::runtime_error& e) {
+                std::cout << e.what() << "\n";
+            }
         }
     }
 }
