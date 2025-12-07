@@ -118,8 +118,11 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::FNeg: generated_expression = apply_unary_op<ast::negate_expr>(istr); break;
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
-            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>()); break;
-            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>()); break;
+
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::cast_expr>(make_type(ast::primitive_kind::U64), make_load_symbol_table(istr)); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::cast_expr>(make_type(ast::primitive_kind::F32), make_load_symbol_table(istr)); break;
+            case Opcode::LoadStaticPointer: generated_expression = std::make_unique<ast::cast_expr>(ast::ptr_type{}, make_load_symbol_table(istr)); break;
+
 			case Opcode::LoadStaticI8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i8>(istr.operand1 * 8)); break;
 			case Opcode::LoadStaticU8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u8>(istr.operand1 * 8)); break;
 			case Opcode::LoadStaticI16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i16>(istr.operand1 * 8)); break;
@@ -136,9 +139,6 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             case Opcode::Call:
             case Opcode::CallFf: {
                 auto call = make_call(istr);
-                if (!call) {
-                    return;
-                }
                 u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
@@ -220,7 +220,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
 				if (!m_disassembly.m_isScriptFunction) {
                     insert_return(istr.destination); 
                 }
-                break;
+                return;
             }
             default: {
 				std::cerr << "unhandled opcode " << static_cast<u64>(istr.opcode) << " at " << std::hex << line.m_location << std::dec << '\n';
@@ -394,8 +394,7 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
         parse_basic_block(current_node);
         auto current_expression = get_expression_as_condition(last_line.m_instruction.operand1);
         if (current_expression == nullptr) {
-            std::cout << "warning: invalid expression in condition\n";
-            continue;
+            throw std::runtime_error("error: current expression was nullptr");
         }
         if (!condition) {
             condition = std::move(current_expression);
@@ -547,8 +546,7 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
         const reg_idx reg = std::countr_zero(bits);
         bits &= bits - 1;
         if (m_registersToVars[reg].empty()) {
-            std::cout << "warning: false graph parsed" << "\n";
-            continue;
+            throw std::runtime_error("error: register_to_vars is empty");
         }
         load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
         if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
@@ -568,15 +566,13 @@ void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto var_declaration = std::make_unique<ast::variable_declaration>(type, name, std::move(expr));
 
     append_to_current_block(std::move(var_declaration));
-    //m_registersToVars[dst].push(id->copy());
     m_transformableExpressions[dst] = std::move(id);
     m_transformableExpressions[dst]->set_type(type);
 }
 
 void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
     if (!m_transformableExpressions[dst]) {
-        std::cerr << "error: dst " << std::to_string(dst) << " contains nullptr." << '\n';
-        std::terminate();
+        throw std::runtime_error("error: expressions was empty at " + std::to_string(dst));
     }
     auto& expr = m_transformableExpressions[dst];
     auto rhs_ptr = dynamic_cast<ast::identifier*>(expr.get());
@@ -607,9 +603,8 @@ template<ast::primitive_kind kind>
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
     const auto& callee_type = callee->get_type(m_env);
-    //assert(std::holds_alternative<ast::function_type>(callee_type), callee_type.index());
     if (!std::holds_alternative<ast::function_type>(callee_type)) {
-        return nullptr;
+        throw std::runtime_error("error: trying to call non-function");
     }
     ast::function_type func_type = std::get<ast::function_type>(callee_type);
 
@@ -657,9 +652,9 @@ template<typename from, typename to>
     }
 }
 
-[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const noexcept {
+[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const {
     if (m_transformableExpressions[src] == nullptr) {
-        return nullptr;
+        throw std::runtime_error("error: empty expression at " + std::to_string(src));
     }
     expr_uptr condition = m_transformableExpressions[src]->clone();
     if (std::holds_alternative<ast::ptr_type>(condition->get_type(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type(m_env))) {

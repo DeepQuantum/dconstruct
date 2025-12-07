@@ -250,10 +250,7 @@ namespace dconstruct {
             m_nodes[node.m_index] = node;
             m_nodes[node.m_index].determine_register_nature();
         }
-        auto& last_node = m_nodes.back();
-        const u8 last_dest = last_node.m_lines.back().m_instruction.destination;
-        const bool flag = !m_func.m_isScriptFunction && !last_node.m_regs.m_written[last_dest];
-        last_node.m_regs.m_readFirst[last_dest] = flag;
+        m_nodes.back().m_regs = m_nodes.back().get_register_nature_starting_at(0, m_func.m_isScriptFunction);
         compute_postdominators();
         find_loops();
     }

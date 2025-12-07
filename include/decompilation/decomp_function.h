@@ -78,7 +78,7 @@ namespace dconstruct::dcompiler {
 
         [[nodiscard]] expr_uptr make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit);
 
-        [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const noexcept;
+        [[nodiscard]] expr_uptr get_expression_as_condition(const reg_idx from) const;
 
         void insert_return(const reg_idx dest);
 
@@ -130,11 +130,17 @@ namespace dconstruct::dcompiler {
         }
 
         [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_shift(const Instruction& istr) {
-            std::vector<expr_uptr> arg;
-            arg.push_back(m_transformableExpressions[istr.destination]->clone());
+            std::vector<expr_uptr> arg{m_transformableExpressions[istr.destination]->clone()};
             auto callee = std::make_unique<ast::identifier>("int_ash");
             auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             call->set_type(make_type(ast::primitive_kind::U64));
+            return call;
+        }
+
+        [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_load_symbol_table(const Instruction& istr) {
+            std::vector<expr_uptr> arg{m_transformableExpressions[istr.destination]->clone()};
+            auto callee = std::make_unique<ast::identifier>("symbol_table_load");
+            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             return call;
         }
     };
