@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dconstruct LANGUAGES CXX)
+project(dconstruct LANGUAGES CXX C)
 
 set(VERSION_NUMBER "beta_3")
 
@@ -24,6 +24,12 @@ FetchContent_Declare(
     URL https://github.com/google/googletest/archive/v1.17.0.zip
     DOWNLOAD_EXTRACT_TIMESTAMP true
 )
+
+find_package(LLVM REQUIRED CONFIG)
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+include_directories(${LLVM_INCLUDE_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
 
 #set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
@@ -55,28 +61,6 @@ if(WIN32)
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
     )
     target_include_directories(dconstruct PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
@@ -90,9 +74,10 @@ else()
 endif()
 
 target_link_libraries(dconstruct
-    $<$<CXX_COMPILER_ID:GNU>: tbb12>
-    $<$<CONFIG:CreateProfile>: gcov>
-    
+    LLVM-21
+    m
+    tbb
+    gcov
 )
 
 # add_custom_command(
@@ -101,19 +86,19 @@ target_link_libraries(dconstruct
 # " ${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin "
 # ${CMAKE_CURRENT_BINARY_DIR}
 # )
-set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
-add_custom_command(
-    OUTPUT ${BUILDINFO_H}
-    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
-    DEPENDS
-    ${BASE_SOURCE_FILES}
-    "${SOURCE_DIR}/main_cli.cpp"
-    COMMENT "Generating build info header by running buildinfo.py with compiler version"
-)
+#set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
+#add_custom_command(
+#    OUTPUT ${BUILDINFO_H}
+#    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+#    DEPENDS
+#    ${BASE_SOURCE_FILES}
+#    "${SOURCE_DIR}/main_cli.cpp"
+#    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+#)
 
-add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
+#add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
-add_dependencies(dconstruct generate_buildinfo)
+#add_dependencies(dconstruct generate_buildinfo)
 
 set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 
@@ -127,53 +112,19 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
-if(WIN32)
-    target_link_libraries(
-        dconstruct_test
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCore.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSupport.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMIRReader.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitReader.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMBitWriter.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAnalysis.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMScalarOpts.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMInstCombine.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTransformUtils.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMTarget.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmParser.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMAsmPrinter.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMSelectionDAG.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMCodeGen.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMGlobalISel.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMC.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCParser.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMMCDisassembler.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86CodeGen.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Desc.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86Info.lib
-        # ${CMAKE_CURRENT_SOURCE_DIR}/lib/LLVMX86AsmParser.lib
-    )
-    target_include_directories(dconstruct_test PRIVATE
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
-    )
-else()
-    target_link_libraries(
-        dconstruct_test
-        gvc
-        cgraph
-    )
-endif()
 
-target_link_libraries(
-    dconstruct_test
-    $<$<CXX_COMPILER_ID:GNU>: tbb12>
-    $<$<CONFIG:CreateProfile>: gcov>
+target_link_libraries(dconstruct_test PRIVATE
+    LLVM-21
+    tbb
+    m
+    gvc
+    cgraph
+    gcov
     GTest::gtest_main
 )
+
+set_target_properties(dconstruct_test PROPERTIES LINKER_LANGUAGE CXX)
+
 
 target_include_directories(dconstruct_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 

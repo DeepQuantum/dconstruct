@@ -8,6 +8,10 @@
 #include "compilation/environment.h"
 #include <ostream>
 #include <vector>
+#include "llvm/IR/Value.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Module.h"
+
 
 namespace dconstruct::ast {
 
@@ -17,7 +21,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        //[[nodiscard]] virtual llvm::Value* evaluate_to_register() const noexcept;
+        [[nodiscard]] virtual llvm::Value* emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept = 0;
 
         [[nodiscard]] inline const full_type& get_type(const compiler::environment& env) {
             if (is_unknown(m_type)) {
