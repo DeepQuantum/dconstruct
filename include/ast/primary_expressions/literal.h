@@ -10,6 +10,10 @@ namespace dconstruct::ast {
         template<typename T>
         literal(T&& value) : m_value(std::forward<T>(value)) {};
 
+        static u32 m_emittedStringCount;
+
+        [[nodiscard]] llvm::Value* emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept final;
+
         [[nodiscard]] inline primitive_kind get_type() const noexcept {
             return kind_from_primitive_value(m_value);
         }
