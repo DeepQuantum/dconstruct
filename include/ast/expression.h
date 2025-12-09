@@ -2,6 +2,7 @@
 
 #include "base.h"
 #include "printable.h"
+#include <expected>
 #include "compilation/dc_register.h"
 #include "compilation/tokens.h"
 #include "ast/type.h"
@@ -15,13 +16,21 @@
 
 namespace dconstruct::ast {
 
+    struct llvm_error {
+        std::string m_message;
+    };
+
+    using llvm_ir_expected = std::expected<llvm::Value*, llvm_error>;
+
     struct expression : public Iprintable {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        [[nodiscard]] virtual llvm::Value* emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept = 0;
+        [[nodiscard]] virtual llvm_ir_expected emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const {
+            return std::unexpected{llvm_error{"not implemented"}};
+        };
 
         [[nodiscard]] inline const full_type& get_type(const compiler::environment& env) {
             if (is_unknown(m_type)) {
