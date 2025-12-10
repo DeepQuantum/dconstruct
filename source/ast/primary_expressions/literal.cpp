@@ -1,5 +1,6 @@
 #include "ast/primary_expressions/literal.h"
 
+#include "llvm/IR/Constant.h"
 
 namespace dconstruct::ast {
 
@@ -41,5 +42,38 @@ void literal::pseudo_racket(std::ostream& os) const {
 [[nodiscard]] u16 literal::complexity() const noexcept {
     return 1;
 }
+
+[[nodiscard]] llvm::Value* literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
+    return std::visit([&](auto&& lit) -> llvm::Value* {
+        using T = std::decay_t<decltype(lit)>;
+        if constexpr (std::is_floating_point_v<T>) {
+            return llvm::ConstantFP::get(ctx, llvm::APFloat(lit));
+        } else if constexpr (std::is_integral_v<T>) {
+            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T) * 8, lit, std::is_signed_v<T>));
+        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+            return llvm::ConstantPointerNull::get(llvm::PointerType::get(ctx, 0));
+        } else if constexpr (std::is_same_v<T, sid_literal>) {
+            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(lit.first) * 8, lit.first, std::is_signed_v<sid64>));
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            auto gv = new llvm::GlobalVariable(
+                module,
+                llvm::ArrayType::get(llvm::Type::getInt8Ty(ctx), lit.length() + 1),
+                true,
+                llvm::GlobalValue::PrivateLinkage,
+                llvm::ConstantDataArray::getString(ctx, lit, true),
+                ".str"
+            );
+            return llvm::ConstantExpr::getGetElementPtr(
+                gv->getValueType(),
+                gv,
+                {llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0),
+                 llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0)}
+            );
+        } else {
+            static_assert(std::is_same_v<T, std::monostate>, "cannot emit type-less literal");
+        }
+    }, m_value);
+}
+
 
 }
