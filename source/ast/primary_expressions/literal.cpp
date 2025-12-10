@@ -43,8 +43,8 @@ void literal::pseudo_racket(std::ostream& os) const {
     return 1;
 }
 
-[[nodiscard]] llvm::Value* literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
-    return std::visit([&](auto&& lit) -> llvm::Value* {
+[[nodiscard]] llvm_ir_expected literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module) const noexcept {
+    return std::visit([&](auto&& lit) -> llvm_ir_expected {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {
             return llvm::ConstantFP::get(ctx, llvm::APFloat(lit));
@@ -53,7 +53,7 @@ void literal::pseudo_racket(std::ostream& os) const {
         } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
             return llvm::ConstantPointerNull::get(llvm::PointerType::get(ctx, 0));
         } else if constexpr (std::is_same_v<T, sid_literal>) {
-            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(lit.first) * 8, lit.first, std::is_signed_v<sid64>));
+            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T::first) * 8, lit.first, std::is_signed_v<sid64>));
         } else if constexpr (std::is_same_v<T, std::string>) {
             auto gv = new llvm::GlobalVariable(
                 module,
@@ -61,16 +61,14 @@ void literal::pseudo_racket(std::ostream& os) const {
                 true,
                 llvm::GlobalValue::PrivateLinkage,
                 llvm::ConstantDataArray::getString(ctx, lit, true),
-                ".str"
+                ".str_" + std::to_string(m_emittedStringCount++)
             );
-            return llvm::ConstantExpr::getGetElementPtr(
-                gv->getValueType(),
-                gv,
+            return llvm::ConstantExpr::getGetElementPtr(gv->getValueType(), gv, llvm::ArrayRef<llvm::Constant*>{
                 {llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0),
-                 llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0)}
+                llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0)}}
             );
-        } else {
-            static_assert(std::is_same_v<T, std::monostate>, "cannot emit type-less literal");
+        } else if constexpr (std::is_same_v<T, std::monostate>) {
+            return std::unexpected{llvm_error{"tried to emit literal with unknown type"}};
         }
     }, m_value);
 }
