@@ -605,12 +605,12 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\script-user-funcs-impl.bin)";
-        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\script-user-funcs-impl.bin.asm)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\score-definitions.bin)";
+        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\score-definitions.bin.asm)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "get-locator-between-locators-closest-to-object";
+        const std::string id = "#732545B587AD57F7";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
