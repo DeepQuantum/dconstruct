@@ -6,9 +6,15 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] llvm::Value* bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
-    auto res = builder.CreateXor(m_rhs->emit_llvm(ctx, builder, module), -1);
-    assert(res != nullptr);
+[[nodiscard]] expected_value_ptr bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
+    auto rhs = m_rhs->emit_llvm(ctx, builder, module);
+    if (!rhs) {
+        return rhs;
+    }
+    llvm::Value* res = builder.CreateXor(*rhs, -1);
+    if (!res) {
+        return std::unexpected{llvm_error{"xor was nullptr", *this}};
+    }
     return res;
 }
 

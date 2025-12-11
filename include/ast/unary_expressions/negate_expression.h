@@ -9,7 +9,7 @@ namespace dconstruct::ast {
         
         explicit negate_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compiler::token{ compiler::token_type::MINUS, "-" }, std::move(rhs)) {};
 
-        [[nodiscard]] llvm::Value* emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept final;
+        [[nodiscard]] expected_value_ptr emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept final;
 
         [[nodiscard]] expr_uptr simplify() const final;       
 

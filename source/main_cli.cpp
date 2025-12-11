@@ -36,7 +36,7 @@ static void decomp_file(
                 out << dcompiled.to_string() << "\n\n";
             }
             catch (const std::runtime_error& e) {
-                std::cout << e.what() << "\n";
+                std::cout << func->m_id << " " << e.what() << "\n";
             }
         }
     }

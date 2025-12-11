@@ -48,6 +48,8 @@
     "${workspaceFolder}/include/",
     "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/source/Graphviz-13.1.0-win64/include",
     "build/_deps/googletest-src/googletest/include",
+    "${workspaceFolder}/source/llvm/llvm/include",
+    "${workspaceFolder}/build/source/llvm/llvm/include"
     //"C:/Qt/6.9.0/mingw_64/include/**",
   ],
   "C_Cpp.default.cppStandard": "c++23",

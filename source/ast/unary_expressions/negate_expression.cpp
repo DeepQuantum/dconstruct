@@ -27,10 +27,16 @@ namespace dconstruct::ast {
     return std::make_unique<negate_expr>(m_operator, std::move(rhs));
 }
 
-[[nodiscard]] llvm::Value* negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
-    llvm::Value* res = m_rhs->emit_llvm(ctx, builder, module);
-    assert(res != nullptr);
-    return builder.CreateNeg(res);
+[[nodiscard]] expected_value_ptr negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
+    auto rhs = m_rhs->emit_llvm(ctx, builder, module);
+    if (!rhs) {
+        return rhs;
+    }
+    llvm::Value* res = builder.CreateNeg(*rhs); 
+    if (!res) {
+        return std::unexpected{llvm_error{"negate was nullptr", *this}};
+    }
+    return res;
 }
 
 

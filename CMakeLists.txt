@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dconstruct LANGUAGES CXX C)
+project(dconstruct LANGUAGES CXX)
 
 set(VERSION_NUMBER "beta_3")
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
@@ -25,17 +25,28 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 
-find_package(LLVM REQUIRED CONFIG)
-message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
-include_directories(${LLVM_INCLUDE_DIRS})
-add_definitions(${LLVM_DEFINITIONS})
-
 #set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
+set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
+set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
+set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
+
+
+
+add_subdirectory(${SOURCE_DIR}/llvm/llvm)
+
+llvm_map_components_to_libnames(LLVM_LIBS
+    core
+    support
+    irreader
+    bitreader
+)
+
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
+
 
 target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:Release>:-O3 -Wall -g0>
@@ -45,18 +56,23 @@ target_compile_options(dconstruct PRIVATE
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 
-add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP>
-                    $<$<CXX_COMPILER_ID:MSVC>:/MP>)
+add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP /FS /wd4514>
+                    $<$<CXX_COMPILER_ID:MSVC>:/MP /FS /wd4514>)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-target_include_directories(dconstruct PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(dconstruct PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+    "${LLVM_BINARY_DIR}/include"
+    "${LLVM_SOURCE_DIR}/include"
+)
 
 if(WIN32)
     target_link_libraries(
         dconstruct
+        ${LLVM_LIBS}
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
@@ -74,10 +90,9 @@ else()
 endif()
 
 target_link_libraries(dconstruct
-    LLVM-21
-    m
-    tbb
-    gcov
+    $<$<CXX_COMPILER_ID:GNU>: tbb12>
+    $<$<CONFIG:CreateProfile>: gcov>
+    
 )
 
 # add_custom_command(
@@ -86,19 +101,19 @@ target_link_libraries(dconstruct
 # " ${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin "
 # ${CMAKE_CURRENT_BINARY_DIR}
 # )
-#set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
-#add_custom_command(
-#    OUTPUT ${BUILDINFO_H}
-#    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
-#    DEPENDS
-#    ${BASE_SOURCE_FILES}
-#    "${SOURCE_DIR}/main_cli.cpp"
-#    COMMENT "Generating build info header by running buildinfo.py with compiler version"
-#)
+set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
+add_custom_command(
+    OUTPUT ${BUILDINFO_H}
+    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+    DEPENDS
+    ${BASE_SOURCE_FILES}
+    "${SOURCE_DIR}/main_cli.cpp"
+    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+)
 
-#add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
+add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
-#add_dependencies(dconstruct generate_buildinfo)
+add_dependencies(dconstruct generate_buildinfo)
 
 set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 
@@ -112,19 +127,31 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
+if(WIN32)
+    target_link_libraries(
+        dconstruct_test
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
+    )
+    target_include_directories(dconstruct_test PRIVATE
+        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
+    )
+else()
+    target_link_libraries(
+        dconstruct_test
+        gvc
+        cgraph
+    )
+endif()
 
-target_link_libraries(dconstruct_test PRIVATE
-    LLVM-21
-    tbb
-    m
-    gvc
-    cgraph
-    gcov
+target_link_libraries(
+    dconstruct_test
+    $<$<CXX_COMPILER_ID:GNU>: tbb12>
+    $<$<CONFIG:CreateProfile>: gcov>
     GTest::gtest_main
 )
-
-set_target_properties(dconstruct_test PROPERTIES LINKER_LANGUAGE CXX)
-
 
 target_include_directories(dconstruct_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
