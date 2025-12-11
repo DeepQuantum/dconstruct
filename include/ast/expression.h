@@ -16,11 +16,14 @@
 
 namespace dconstruct::ast {
 
+    struct expression;
+
     struct llvm_error {
         std::string m_message;
+        const expression& m_expr;
     };
 
-    using llvm_ir_expected = std::expected<llvm::Value*, llvm_error>;
+    using expected_value_ptr = std::expected<llvm::Value*, llvm_error>;
 
     struct expression : public Iprintable {
         virtual ~expression() = default;
@@ -28,8 +31,8 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        [[nodiscard]] virtual llvm_ir_expected emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const {
-            return std::unexpected{llvm_error{"not implemented"}};
+        [[nodiscard]] virtual expected_value_ptr emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const {
+            return std::unexpected{llvm_error{"not implemented", *this}};
         };
 
         [[nodiscard]] inline const full_type& get_type(const compiler::environment& env) {

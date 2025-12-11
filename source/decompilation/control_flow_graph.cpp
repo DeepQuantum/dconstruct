@@ -95,6 +95,8 @@ namespace dconstruct {
                 m_regs.m_readTwice[istr.destination] = m_regs.m_readTwice[istr.destination] || m_regs.m_readFirst[istr.destination];
                 m_regs.m_readFirst[istr.destination] = true;
                 m_regs.m_written[istr.destination] = true;
+                m_regs.m_readTwice[istr.operand2] = m_regs.m_readTwice[istr.operand2] || istr.op2_is_reg() && m_regs.m_readFirst[istr.operand2] && !m_regs.m_written[istr.operand2];
+                m_regs.m_readFirst[istr.operand2] = m_regs.m_readFirst[istr.operand2] || istr.op2_is_reg() && !m_regs.m_written[istr.operand2];
                 continue;
             }
             
@@ -130,6 +132,7 @@ namespace dconstruct {
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
                 multi_read[istr.destination] = multi_read[istr.destination] || read_first[istr.destination];
                 read_first[istr.destination] = true;
+                multi_read[istr.operand2] = multi_read[istr.operand2] || istr.op2_is_reg() && read_first[istr.operand2] && !write_regs[istr.operand2];
                 read_first[istr.operand2] = read_first[istr.operand2] || istr.op2_is_reg() && !write_regs[istr.operand2];
                 write_regs[istr.destination] = true;
                 continue;
@@ -250,7 +253,12 @@ namespace dconstruct {
             m_nodes[node.m_index] = node;
             m_nodes[node.m_index].determine_register_nature();
         }
-        m_nodes.back().m_regs = m_nodes.back().get_register_nature_starting_at(0, m_func.m_isScriptFunction);
+        // we say return is a READ by DEFAULT
+        // are we a script function? -> run get_register_nature_starting_at(0, false), because we need to overwrite the return being a read
+        // no ? -> regs should already be gucci, no need to do anything
+        if (m_func.m_isScriptFunction) {
+            m_nodes.back().m_regs = m_nodes.back().get_register_nature_starting_at(0, false);
+        }
         compute_postdominators();
         find_loops();
     }
