@@ -376,7 +376,7 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
         append_to_current_block(std::make_unique<ast::variable_declaration>(type, m_registersToVars[reg].top()->m_name.m_lexeme));
         m_registersToVars[reg].pop();
     }
-
+    m_registersToVars[loop_var_reg].pop();
     auto for_loop = std::make_unique<ast::for_stmt>(std::move(declaration), std::move(condition), std::move(increment), std::move(loop_block));
     append_to_current_block(std::move(for_loop));
     emit_node(m_graph[loop_tail], stop_node);

@@ -15,6 +15,7 @@ file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/compilation/*.cpp"
     "${SOURCE_DIR}/ast/*.cpp"
     "${SOURCE_DIR}/base/*.cpp"
+    "${SOURCE_DIR}/shaders/*.cpp"
 )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
@@ -31,10 +32,8 @@ FetchContent_MakeAvailable(googletest)
 
 set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
-set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
 set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
-
-
+set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
 
 add_subdirectory(${SOURCE_DIR}/llvm/llvm)
 
@@ -43,21 +42,22 @@ llvm_map_components_to_libnames(LLVM_LIBS
     support
     irreader
     bitreader
+    object
+    binaryformat
 )
 
 add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
-
 target_compile_options(dconstruct PRIVATE
-    $<$<CONFIG:Release>:-O3 -Wall -g0>
+    $<$<CONFIG:Release>:-O3 -g0>
     $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
     $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g3 -Wall>
+    $<$<CONFIG:Debug>:-O0 -g3>
     $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
 )
 
-add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP /FS /wd4514>
-                    $<$<CXX_COMPILER_ID:MSVC>:/MP /FS /wd4514>)
+add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP>
+                    $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -130,6 +130,7 @@ add_executable(
 if(WIN32)
     target_link_libraries(
         dconstruct_test
+        ${LLVM_LIBS}
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
@@ -151,9 +152,14 @@ target_link_libraries(
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
     GTest::gtest_main
+    
 )
 
-target_include_directories(dconstruct_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(dconstruct_test PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+    "${LLVM_BINARY_DIR}/include"
+    "${LLVM_SOURCE_DIR}/include"
+    )
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test)

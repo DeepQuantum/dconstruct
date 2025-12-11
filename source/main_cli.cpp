@@ -1,6 +1,7 @@
 #include "disassembly/file_disassembler.h"
 #include "disassembly/edit_disassembler.h"
 #include "decompilation/decomp_function.h"
+#include "shaders/ndshader.h"
 #include "cxxopts.hpp"
 #include "about.h"
 #include <chrono>
@@ -154,6 +155,16 @@ static std::vector<std::string> edits_from_file(const std::filesystem::path &pat
     return result;
 }
 
+static i32 disassemble_shader(const std::filesystem::path& path) {
+    const auto ir_exp = dconstruct::shaders::ndshader_file::parse_from_file(path);
+    if (!ir_exp) {
+        std::cerr << "couldn't process shader file: " << ir_exp.error() << "\n";
+        return -1;
+    }
+    std::cout << ir_exp->to_string() << "\n";
+    return 0;
+}
+
 int main(int argc, char *argv[]) {
 
     cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
@@ -169,6 +180,7 @@ int main(int argc, char *argv[]) {
     options.add_options("configuration")
         ("decompile", "will also emit a file containing the decompiled named functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
+        ("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"));
     options.add_options("edit")
@@ -205,6 +217,10 @@ int main(int argc, char *argv[]) {
             std::cout << "error: input filepath " << filepath << " doesn't exist\n";
             return -1;
         }
+    }
+
+    if (opts.count("shader") > 0) {
+        return disassemble_shader(filepath);
     }
 
     std::vector<std::string> edits{};
