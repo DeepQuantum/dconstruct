@@ -58,8 +58,9 @@ namespace dconstruct {
         ss << R"(<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12">"
         "<TR><TD ALIGN="LEFT" BALIGN="LEFT"><FONT FACE="Consolas">)";
 
+#ifdef _DEBUG
         ss << std::hex << "idx: " << m_index << "  ipdom: " << m_ipdom << "  postorder: " << m_postorder << std::dec << "<BR/>";
-
+#endif
 
         for (const auto& line : m_lines) {
             ss << line.m_text << " " << html_escape(line.m_comment) << "&#160;&#160;<BR/>";
@@ -293,7 +294,7 @@ namespace dconstruct {
     void ControlFlowGraph::write_image(const std::string& path) const {
         GVC_t* gvc = gvContext();
         Agraph_t* g = agopen((char*)"G", Agdirected, nullptr);
-        std::lock_guard<std::mutex> lock(g_graphviz_mutex);
+        std::lock_guard lock(g_graphviz_mutex);
         
         const auto graph_nodes = insert_graphviz_nodes(g);
 
