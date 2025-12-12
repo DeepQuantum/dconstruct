@@ -8,19 +8,17 @@ namespace dconstruct::dcompiler {
 static const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
 
-decomp_function::decomp_function(const function_disassembly &func, const BinaryFile &current_file) :
+decomp_function::decomp_function(const function_disassembly &func, const BinaryFile &current_file, std::optional<std::filesystem::path> graph_path) :
     m_disassembly{func}, 
     m_file{current_file}, 
     m_graph{func}, 
     m_parsedNodes(m_graph.m_nodes.size(), false), 
-    m_ipdomsEmitted(m_graph.m_nodes.size(), false)
+    m_ipdomsEmitted(m_graph.m_nodes.size(), false),
+    m_graphPath(graph_path)
 {
-#ifdef _DEBUG
-    std::cout << "parsing graph " << m_disassembly.m_id << '\n';
-    if (m_graph.m_nodes.size() > 1) {
-        m_graph.write_image(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\images\)" + m_disassembly.m_id + ".svg");
-    }
-#endif
+    if (m_graphPath && m_graph.m_nodes.size() > 1) {
+        m_graph.write_image(m_graphPath->string());
+    }    
 
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);

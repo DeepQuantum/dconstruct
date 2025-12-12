@@ -11,12 +11,40 @@
 
 static constexpr char DEFAULT_OUT[] = "<input_path.asm>";
 
+[[nodiscard]] static std::filesystem::path get_sanitized_graph_path(const std::filesystem::path& graph_dir, const std::string &func_id) {
+    std::string sanitized_func_id;
+    sanitized_func_id.reserve(func_id.size());
+    for (char c : func_id) {
+        switch (c) {
+            case '?':
+            case '>':
+            case '<':
+            case '*':
+            case '\\':
+            case '/':
+            case '|':
+            case '\"':
+            case ':':
+            case '@':
+            case '-': {
+                sanitized_func_id += '_';
+                break;
+            }
+            default: {
+                sanitized_func_id += c;
+            }
+        }
+    }
+    return (graph_dir / sanitized_func_id).replace_extension(".svg");
+} 
+
 static void decomp_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_disasm_filename, 
     const std::filesystem::path &out_decomp_filename,
     const dconstruct::SIDBase &base,
     const dconstruct::DisassemblerOptions &options,
+    const bool write_graphs,
     const std::vector<std::string> &edits = {}) {
     
     dconstruct::BinaryFile file(inpath.string());
@@ -26,17 +54,23 @@ static void decomp_file(
         ed.apply_file_edits();
     }
 
-    dconstruct::Disassembler disassembler(&file, &base);
+    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
     disassembler.disassemble();
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
         for (const auto func : funcs) {
+            std::optional<std::filesystem::path> graph_path = std::nullopt;
+            if (write_graphs) {
+                auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));
+                std::filesystem::create_directories(graph_dir);
+                graph_path = get_sanitized_graph_path(graph_dir, func->m_id);
+            }
             try {
-                const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file };
+                const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file, std::move(graph_path) };
                 out << dcompiled.to_string() << "\n\n";
             }
-            catch (const std::runtime_error& e) {
+            catch (const std::exception& e) {
                 std::cout << func->m_id << " " << e.what() << "\n";
             }
         }
@@ -67,11 +101,12 @@ static void decompile_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
-    const dconstruct::DisassemblerOptions &options
+    const dconstruct::DisassemblerOptions &options,
+    const bool generate_graphs
 ) {
 
     std::vector<std::filesystem::path> filepaths;
-        
+    
     for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
         if (entry.path().extension() != ".bin") {
             continue;
@@ -92,7 +127,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs);
         }
     );
 
@@ -178,9 +213,10 @@ int main(int argc, char *argv[]) {
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
         ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value("sidbase.bin"), "<path>");
     options.add_options("configuration")
-        ("decompile", "will also emit a file containing the decompiled named functions in the file", cxxopts::value<bool>()->default_value("false"))
+        ("decompile", "will also emit a file containing the decompiled (named) functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
-        ("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
+        //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
+        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation..", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"));
     options.add_options("edit")
@@ -194,17 +230,17 @@ int main(int argc, char *argv[]) {
 
     if (opts.count("h") > 0) {
         std::cout << options.help({"", "information", "input/output", "configuration", "edit"}) << '\n';
-        return -1;
+        return 0;
     }
 
     if (opts.count("help_edit") > 0) {
         std::cout << HELP_EDIT;
-        return -1;
+        return 0;
     }
 
     if (opts.count("a") > 0) {
         print_about();
-        return -1;
+        return 0;
     }
     
     std::filesystem::path filepath;
@@ -219,9 +255,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (opts.count("shader") > 0) {
-        return disassemble_shader(filepath);
-    }
+    // if (opts.count("shader") > 0) {
+    //     return disassemble_shader(filepath);
+    // }
 
     std::vector<std::string> edits{};
     if (opts.count("edit_file") > 0) {
@@ -260,6 +296,9 @@ int main(int argc, char *argv[]) {
     const u8 indent_per_level = opts["indent"].as<u8>();
     const bool emit_once = opts["emit_once"].as<bool>();
     const bool decompile = opts["decompile"].as<bool>();
+    const bool generate_graphs = opts["graphs"].as<bool>();
+
+
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
         edits.insert(edits.end(), edit_strings.begin(), edit_strings.end());
@@ -280,18 +319,23 @@ int main(int argc, char *argv[]) {
             std::cout << "warning: edits ignored as input path is a directory. edits only work in single file disassembly.\n";
         }
         if (decompile) {
-            decompile_multiple(filepath, output, base, disassember_options);
+            if (generate_graphs) {
+                std::filesystem::create_directory(output / "graphs");
+            }
+            decompile_multiple(filepath, output, base, disassember_options, generate_graphs);
         }
         else {
             disassemble_multiple(filepath, output, base, disassember_options);
         }
     } else {
-        std::cout << "disassembling " << filepath.filename() << " to " << output << "...\n";
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
-            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, edits);
+            std::cout << "disassembling & decompiling " << filepath.filename() << " to " << output.parent_path() << "...\n";
+            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, edits);
         }
         else {
+            std::cout << "disassembling " << filepath.filename() << " to " << output << "...\n";
+
             disasm_file(filepath, output, base, disassember_options, edits);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);

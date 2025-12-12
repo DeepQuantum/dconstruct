@@ -11,7 +11,7 @@ constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 namespace dconstruct::dcompiler {
 
     struct decomp_function {
-        explicit decomp_function(const function_disassembly &func, const BinaryFile &current_file);
+        explicit decomp_function(const function_disassembly &func, const BinaryFile &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
 
         [[nodiscard]] std::string to_string() const;
         
@@ -23,6 +23,7 @@ namespace dconstruct::dcompiler {
         compiler::environment m_env;
         const function_disassembly& m_disassembly;
         const BinaryFile& m_file;
+        std::optional<std::filesystem::path> m_graphPath;
         ast::full_type m_returnType;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
