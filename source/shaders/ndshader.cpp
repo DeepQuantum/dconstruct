@@ -11,6 +11,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Bitcode/BitcodeReader.h"
 #include "llvm/Support/DXILABI.h"
+#include "llvm/Passes/PassBuilder.h"
 #include "llvm/Transforms/Utils/DXILUpgrade.h"
 #include "llvm/Support/Error.h"
 #include <filesystem>
@@ -39,20 +40,22 @@ namespace dconstruct::shaders {
     if (!buffer) {
         return std::unexpected{"couldn't get file slice"};
     }
-    auto container = llvm::object::DXContainer::create(buffer.get()->getMemBufferRef());
-    if (auto e = container.takeError()) {
-        return std::unexpected{llvm::toString(std::move(e))};
-    }
-    return ndshader_file(path, std::move(*container));
+    
+    return ndshader_file(path, std::move(*buffer));
 }
 
-[[nodiscard]] std::string ndshader_file::to_string() const noexcept {
+[[nodiscard]] std::tuple<std::string, bool> ndshader_file::to_string() const noexcept {
     std::stringstream out;
+
+    auto dxbc_container = llvm::object::DXContainer::create(m_dxbcbuffer.get()->getMemBufferRef());
+    if (auto e = dxbc_container.takeError()) {
+        return {llvm::toString(std::move(e)), false};
+    }
 
     out << "=== ndshader file === \n";
     out << "header: \n";
 
-    const auto& header = m_dxcontainer.getHeader();
+    const auto& header = dxbc_container->getHeader();
 
     out << " magic: DXBC\n";
     out << " digest: ";
@@ -68,24 +71,33 @@ namespace dconstruct::shaders {
 
     out << "=== DXBC parts ===\n\n";
 
-    for (const auto& part : m_dxcontainer) {
+    for (const auto& part : *dxbc_container) {
         const auto& name = part.Part.getName().str();
         out << "=== " << name << " ===\n\n";
 
         if (name == "DXIL") {
-            llvm::StringRef program_header = part.Data;
-            const auto* program_header_ptr = reinterpret_cast<const llvm::dxbc::ProgramHeader*>(program_header.data());
-            const auto* bitcode_header = &program_header_ptr->Bitcode;
-            const auto bitcode = llvm::StringRef(reinterpret_cast<const char*>(bitcode_header) + bitcode_header->Offset, bitcode_header->Size);
+            // llvm::StringRef program_header = part.Data;
+            // const auto* program_header_ptr = reinterpret_cast<const llvm::dxbc::ProgramHeader*>(program_header.data());
+            // const auto* bitcode_header = &program_header_ptr->Bitcode;
+            // const auto bitcode = llvm::StringRef(reinterpret_cast<const char*>(bitcode_header) + bitcode_header->Offset, bitcode_header->Size);
 
-            auto buffer = llvm::MemoryBuffer::getMemBuffer(bitcode);
+            auto* dxil = reinterpret_cast<const llvm::dxbc::ProgramHeader*>(part.Data.data());
+            auto& bitcode_header = dxil->Bitcode;
+            const auto& bitcode = llvm::StringRef(reinterpret_cast<const char*>(&bitcode_header) + bitcode_header.Offset, bitcode_header.Size);
+
+
+            auto buffer = llvm::MemoryBuffer::getMemBuffer(bitcode, "", false);
 
             auto ctx = std::make_unique<llvm::LLVMContext>();
 
             auto mod = llvm::parseBitcodeFile(buffer->getMemBufferRef(), *ctx);
-
+            
             std::string ir;
             llvm::raw_string_ostream os(ir);
+
+            if (auto e = mod.takeError()) {
+                return {llvm::toString(std::move(e)), false};
+            }
 
             mod->get()->print(os, nullptr);
             os.flush();
@@ -93,6 +105,6 @@ namespace dconstruct::shaders {
         }
     }
 
-    return out.str();
+    return {out.str(), true};
 }
 }

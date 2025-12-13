@@ -91,7 +91,7 @@ static void disasm_file(
         ed.apply_file_edits();
     }
 
-    std::cout << out_filename << "\n";
+//    std::cout << out_filename << "\n";
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
@@ -196,7 +196,12 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
         std::cerr << "couldn't process shader file: " << ir_exp.error() << "\n";
         return -1;
     }
-    std::cout << ir_exp->to_string() << "\n";
+    const auto [msg, success] = ir_exp->to_string();
+    if (!success) {
+        std::cerr << msg << "\n";
+        return -1;
+    }
+    std::cout << msg << "\n";
     return 0;
 }
 
@@ -215,7 +220,7 @@ int main(int argc, char *argv[]) {
     options.add_options("configuration")
         ("decompile", "will also emit a file containing the decompiled (named) functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
-        //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
+        ("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation..", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"));
@@ -255,9 +260,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // if (opts.count("shader") > 0) {
-    //     return disassemble_shader(filepath);
-    // }
+    if (opts.count("shader") > 0) {
+       return disassemble_shader(filepath);
+    }
 
     std::vector<std::string> edits{};
     if (opts.count("edit_file") > 0) {
