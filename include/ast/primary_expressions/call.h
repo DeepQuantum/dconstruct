@@ -13,6 +13,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
+        [[nodiscard]] expected_value_ptr emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const noexcept final;
         compiler::token m_token;
         expr_uptr m_callee;
         std::vector<expr_uptr> m_arguments;

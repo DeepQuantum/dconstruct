@@ -9,13 +9,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+    "${LLVM_BINARY_DIR}/include"
+    "${LLVM_SOURCE_DIR}/include"
+)
+
 file(GLOB_RECURSE BASE_SOURCE_FILES
     "${SOURCE_DIR}/disassembly/*.cpp"
     "${SOURCE_DIR}/decompilation/*.cpp"
     "${SOURCE_DIR}/compilation/*.cpp"
     "${SOURCE_DIR}/ast/*.cpp"
     "${SOURCE_DIR}/base/*.cpp"
-    "${SOURCE_DIR}/shaders/*.cpp"
 )
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
@@ -34,6 +40,7 @@ set(LLVM_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(LLVM_ENABLE_PROJECTS "" CACHE STRING "" FORCE)
 set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
 set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
+set(LLVM_ENABLE_ASSERTIONS OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${SOURCE_DIR}/llvm/llvm)
 
@@ -44,30 +51,55 @@ llvm_map_components_to_libnames(LLVM_LIBS
     bitreader
     object
     binaryformat
+    ipo
+    analysis
+    passes
 )
 
-add_executable(dconstruct ${BASE_SOURCE_FILES} "${SOURCE_DIR}/main_cli.cpp")
 
-target_compile_options(dconstruct PRIVATE
-    $<$<CONFIG:Release>:-O3 -g0>
-    $<$<CONFIG:ReleaseProfile>:-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp>
-    $<$<CONFIG:RelWithDebInfo>:-O2 -g -DNDEBUG -fopenmp>
-    $<$<CONFIG:Debug>:-O0 -g3>
-    $<$<CONFIG:CreateProfile>:-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp>
+add_library(dxbc_shader_decomp STATIC 
+    "${SOURCE_DIR}/shaders/ndshader.cpp"
 )
 
-add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP>
-                    $<$<CXX_COMPILER_ID:MSVC>:/MP>)
-
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-)
-
-target_include_directories(dconstruct PRIVATE 
+target_include_directories(dxbc_shader_decomp PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include" 
     "${LLVM_BINARY_DIR}/include"
     "${LLVM_SOURCE_DIR}/include"
 )
+
+# Set optimization flags per configuration
+set(OPT_FLAGS_RELEASE "-O3")
+set(OPT_FLAGS_RELEASE_PROFILE "-O2 -fprofile-use -march=znver4 -mavx512f -fopenmp")
+set(OPT_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG -fopenmp")
+set(OPT_FLAGS_DEBUG "-O0 -g3")
+set(OPT_FLAGS_CREATE_PROFILE "-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp")
+
+# MSVC-specific flags
+
+
+# Apply flags based on compiler
+if(MSVC)
+    target_compile_options(dxbc_shader_decomp PRIVATE
+        $<$<CONFIG:Release>:${MSVC_FLAGS}>
+        $<$<CONFIG:ReleaseProfile>:${MSVC_FLAGS}>
+        $<$<CONFIG:RelWithDebInfo>:${MSVC_FLAGS}>
+        $<$<CONFIG:Debug>:${MSVC_FLAGS}>
+        $<$<CONFIG:CreateProfile>:${MSVC_FLAGS}>
+    )
+else()
+    target_compile_options(dxbc_shader_decomp PRIVATE
+        $<$<CONFIG:Release>:${OPT_FLAGS_RELEASE}>
+        $<$<CONFIG:ReleaseProfile>:${OPT_FLAGS_RELEASE_PROFILE}>
+        $<$<CONFIG:RelWithDebInfo>:${OPT_FLAGS_RELWITHDEBINFO}>
+        $<$<CONFIG:Debug>:${OPT_FLAGS_DEBUG}>
+        $<$<CONFIG:CreateProfile>:${OPT_FLAGS_CREATE_PROFILE}>
+    )
+endif()
+target_link_libraries(dxbc_shader_decomp 
+    ${LLVM_LIBS}
+)
+
+add_library(dconstruct ${BASE_SOURCE_FILES})
 
 if(WIN32)
     target_link_libraries(
@@ -92,7 +124,7 @@ endif()
 target_link_libraries(dconstruct
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
-    
+    dxbc_shader_decomp
 )
 
 # add_custom_command(
@@ -121,45 +153,21 @@ enable_testing()
 
 add_executable(
     dconstruct_test
-    ${BASE_SOURCE_FILES}
     ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
     ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
-if(WIN32)
-    target_link_libraries(
-        dconstruct_test
-        ${LLVM_LIBS}
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
-    )
-    target_include_directories(dconstruct_test PRIVATE
-        ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
-    )
-else()
-    target_link_libraries(
-        dconstruct_test
-        gvc
-        cgraph
-    )
-endif()
+target_link_libraries(dconstruct_test PRIVATE dconstruct)
 
-target_link_libraries(
-    dconstruct_test
-    $<$<CXX_COMPILER_ID:GNU>: tbb12>
-    $<$<CONFIG:CreateProfile>: gcov>
-    GTest::gtest_main
-    
+add_executable(
+    dconstruct_cli
+    ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
-target_include_directories(dconstruct_test PRIVATE 
-    "${CMAKE_CURRENT_SOURCE_DIR}/include" 
-    "${LLVM_BINARY_DIR}/include"
-    "${LLVM_SOURCE_DIR}/include"
-    )
+target_link_libraries(dconstruct_cli PRIVATE "${SOURCE_DIR}/main_cli.cpp")
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test)

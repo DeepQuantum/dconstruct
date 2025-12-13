@@ -1,7 +1,8 @@
-#include "base.h"
+#pragma once
+
+#include "../base.h"
 
 #include "llvm/Object/DXContainer.h"
-
 
 #include <expected>
 #include <filesystem>
@@ -21,13 +22,13 @@ namespace dconstruct::shaders {
 
         [[nodiscard]] static ndshader_file::expected parse_from_file(const std::filesystem::path &path) noexcept;
 
-        [[nodiscard]] std::string to_string() const noexcept;
+        [[nodiscard]] std::tuple<std::string, bool> to_string() const noexcept;
     
     private:
         std::filesystem::path m_filepath;
-        llvm::object::DXContainer m_dxcontainer;
+        std::unique_ptr<llvm::MemoryBuffer> m_dxbcbuffer;
         std::string m_IR;
 
-        explicit ndshader_file(std::filesystem::path path, llvm::object::DXContainer container) : m_filepath(std::move(path)), m_dxcontainer(std::move(container)) {};
+        explicit ndshader_file(std::filesystem::path path, std::unique_ptr<llvm::MemoryBuffer>&& buffer) : m_filepath(std::move(path)), m_dxbcbuffer(std::move(buffer)) {};
     };
 }

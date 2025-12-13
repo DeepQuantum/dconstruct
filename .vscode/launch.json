@@ -1,83 +1,17 @@
 {
     "configurations": [
-    {
-        "name": "Launch cli",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/dconstruct.exe",
-        "args": [
-            "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-wave-manager.bin",
-        ],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build",
-        "preLaunchTask": "build",
-        "environment": [],
-        "externalConsole": true,
-        "MIMode": "gdb",
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            },
-            {
-                "description": "Set Disassembly Flavor to Intel",
-                "text": "-gdb-set disassembly-flavor intel",
-                "ignoreFailures": true
-            }
-        ]
-    },
-    {
-        "name": "Debug Tests cli",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/dconstruct_test.exe",
-        "args": [
-        ],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build",
-        "preLaunchTask": "build",
-        "environment": [],
-        "externalConsole": true,
-        "MIMode": "gdb",
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            },
-            {
-                "description": "Set Disassembly Flavor to Intel",
-                "text": "-gdb-set disassembly-flavor intel",
-                "ignoreFailures": true
-            }
-        ]
-    },
-    {
-        "name": "Launch gui",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/tlou2_disasm_gui.exe",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build",
-        "preLaunchTask": "build",
-        "environment": [],
-        "externalConsole": true,
-        "MIMode": "gdb",
-        "miDebuggerPath": "C:/Qt/Tools/mingw1310_64/bin/gdb.exe",
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            },
-            {
-                "description": "Set Disassembly Flavor to Intel",
-                "text": "-gdb-set disassembly-flavor intel",
-                "ignoreFailures": true
-            }
-        ]
-    }
-    ]
+        {
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/build/Debug/dconstruct.exe",
+            "args": ["-i", "test/shader_test_files/2.cxo", "--shader"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "internalConsole",
+        }
+    ],
+    "version": "2.0.0"
 }
