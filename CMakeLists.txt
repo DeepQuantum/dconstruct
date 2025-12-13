@@ -11,7 +11,8 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${SOURCE_DIR}/Graphviz-13.1.0-win64/include"
     "${LLVM_BINARY_DIR}/include"
     "${LLVM_SOURCE_DIR}/include"
 )
@@ -75,6 +76,7 @@ set(OPT_FLAGS_DEBUG "-O0 -g3")
 set(OPT_FLAGS_CREATE_PROFILE "-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp")
 
 # MSVC-specific flags
+set(OPT_FLAGS_DEBUG "/LTCG")
 
 
 # Apply flags based on compiler
@@ -158,16 +160,15 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
-target_link_libraries(dconstruct_test PRIVATE dconstruct)
+target_link_libraries(dconstruct_test PRIVATE dconstruct GTest::gtest_main)
+
 
 add_executable(
     dconstruct_cli
-    ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
-    ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
-    ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
+    ${SOURCE_DIR}/main_cli.cpp
 )
 
-target_link_libraries(dconstruct_cli PRIVATE "${SOURCE_DIR}/main_cli.cpp")
+target_link_libraries(dconstruct_cli PRIVATE dconstruct)
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test)

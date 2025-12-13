@@ -408,7 +408,7 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
 }
 
 void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_id stop_node) {
-    const node_id loop_tail = m_graph[loop.m_headNode].m_targetNode;
+    const node_id loop_tail = m_graph[loop.m_headNode].has_target() ? m_graph[loop.m_headNode].m_targetNode : m_graph[loop.m_headNode].m_followingNode;
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom;
     const node_id exit_node = loop.m_latchNode + 1;

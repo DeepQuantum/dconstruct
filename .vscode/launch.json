@@ -1,17 +1,41 @@
 {
     "configurations": [
+        // {
+        //     "name": "run tests",
+        //     "type": "cppvsdbg",
+        //     "request": "launch",
+        //     "preLaunchTask": "build_tests",
+        //     "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
+        //     "args": ["--gtest_filter=DECOMPILER.SpecialFunc1"],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "console": "internalConsole",
+        // },
         {
-            "name": "(Windows) Launch",
+            "name": "cli test",
             "type": "cppvsdbg",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/build/Debug/dconstruct.exe",
-            "args": ["-i", "test/shader_test_files/2.cxo", "--shader"],
+            "preLaunchTask": "build_cli",
+            "program": "${workspaceFolder}/build/Release/dconstruct_cli.exe",
+            "args": ["C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1", "--decompile","-s", "test/dc_test_files/test_sidbase.bin"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "internalConsole",
-        }
+        },
+        // {
+        //     "name": "shader test",
+        //     "type": "cppvsdbg",
+        //     "request": "launch",
+        //     "preLaunchTask": "build",
+        //     "program": "${workspaceFolder}/build/Debug/dconstruct.exe",
+        //     "args": ["-i", "test/shader_test_files/2.cxo", "--shader"],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "console": "internalConsole",
+        // }
     ],
     "version": "2.0.0"
 }

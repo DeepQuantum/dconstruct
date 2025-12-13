@@ -151,7 +151,10 @@ namespace dconstruct {
 
     void StackFrame::to_string(char* buffer, const u64 buffer_size, const u64 idx, const char* resolved) const noexcept {
         const Register& reg = m_registers[idx];
-        if (reg.m_containsArg) {
+        if (reg.m_value == Register::UNKNOWN_VAL) {
+            std::snprintf(buffer, buffer_size, "?");
+        }
+        else if (reg.m_containsArg) {
             std::snprintf(buffer, buffer_size, "arg_%i", reg.m_argNum);
         } else if (std::holds_alternative<ast::primitive_type>(reg.m_type)) {
             switch(std::get<ast::primitive_type>(reg.m_type).m_type) {

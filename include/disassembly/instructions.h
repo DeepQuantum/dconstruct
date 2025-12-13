@@ -173,8 +173,10 @@ struct Register {
     bool m_containsArg = false;
     u8 m_argNum;
     u64 m_value = 0;
-    u16 m_pointerOffset = UINT16_MAX;
-    u8 m_fromSymbolTable = UINT8_MAX;
+    u16 m_pointerOffset = std::numeric_limits<u16>::max();
+    u8 m_fromSymbolTable = std::numeric_limits<u8>::max();
+
+    static constexpr u64 UNKNOWN_VAL = std::numeric_limits<u64>::max() - 1;
 
     inline void set_first_type(const ast::full_type& type) noexcept {
         if (is_unknown(m_type)) {
