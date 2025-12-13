@@ -605,16 +605,16 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, SpecialFunc1) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\score-definitions.bin)";
-        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\score-definitions.bin.asm)";
+        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-boss-health-tts.bin)";
+        const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-boss-health-tts.asm)";
         BinaryFile file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
-        const std::string id = "#732545B587AD57F7";
+        const std::string id = "wait-for-tts@main@start@0";
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ *func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file, "graph.svg" };
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         out << dc_func.to_string();
     }

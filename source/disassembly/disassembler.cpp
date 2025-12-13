@@ -594,6 +594,7 @@ void load_nonstatic(
     frame[op1].m_type = ast::ptr_type{kind};
     std::snprintf(varying, disassembly_text_size, "r%d, [r%d]", dest, op1);
     frame[dest].m_type = make_type(kind);
+    frame[dest].m_value = Register::UNKNOWN_VAL;
     std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str);
 }
 
@@ -611,6 +612,7 @@ void store_nonstatic(
     const char* op2_str
 ) {
     frame[dest].m_type = ast::ptr_type{kind};
+    frame[dest].m_value = Register::UNKNOWN_VAL;
     std::snprintf(varying, disassembly_text_size, "[r%d], r%d", dest, op1);
     frame[op1].m_type = make_type(kind);
     std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
@@ -844,13 +846,13 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::I32);
             frame[dest].m_value = frame[op1].m_value;
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%f> => <%llu>", dest, op1, static_cast<f32>(std::bit_cast<f64>(frame[op1].m_value)), frame[dest].m_value);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%s> => <%s>", dest, op1, op1_str, dst_str);
             break;
         }
         case Opcode::CastFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
             frame[dest].m_type = make_type(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%llu> => <%f>", dest, op1, frame[op1].m_value, static_cast<f32>(std::bit_cast<f64>(frame[dest].m_value)));
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%s> => <%s>", dest, op1, op1_str, dst_str);
             break;
         }
         case Opcode::Call: 
