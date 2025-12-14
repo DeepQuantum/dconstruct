@@ -4,6 +4,9 @@
 #include "shaders/ndshader.h"
 #include "cxxopts.hpp"
 #include "about.h"
+#include "windows.h"
+#include <locale>
+#include <codecvt>
 #include <chrono>
 #include <iostream>
 #include <filesystem>
@@ -71,7 +74,7 @@ static void decomp_file(
                 out << dcompiled.to_string() << "\n\n";
             }
             catch (const std::exception& e) {
-                std::cout << "warning: couldn't decompile" << func->m_id << ": " << e.what() << "\n";
+                std::cout << "warning: couldn't decompile <" << func->m_id << ">: " << e.what() << "\n";
             }
         }
     }
@@ -91,7 +94,6 @@ static void disasm_file(
         ed.apply_file_edits();
     }
 
-//    std::cout << out_filename << "\n";
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
@@ -205,9 +207,24 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
     return 0;
 }
 
+
+std::wstring get_executable_path()
+{
+    wchar_t buffer[MAX_PATH];
+    DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
+    if (len == 0 || len == MAX_PATH)
+        throw std::runtime_error("GetModuleFileNameW failed");
+    return std::wstring(buffer, len);
+}
+
 int main(int argc, char *argv[]) {
 
     cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
+
+    using convert_type = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_type, wchar_t> converter;
+
+    std::filesystem::path current_program_path = converter.to_bytes(get_executable_path());
 
     options.add_options("information")
         ("h, help", "display this message")
@@ -216,7 +233,7 @@ int main(int argc, char *argv[]) {
     options.add_options("input/output")
         ("i,input",  "input DC file or folder", cxxopts::value<std::string>(), "<path>")
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
-        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value("sidbase.bin"), "<path>");
+        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>");
     options.add_options("configuration")
         ("decompile", "will also emit a file containing the decompiled (named) functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
@@ -230,8 +247,13 @@ int main(int argc, char *argv[]) {
     ;
 
     options.parse_positional({"i"});
-
-    auto opts = options.parse(argc, argv);
+    cxxopts::ParseResult opts;
+    try {
+        opts = options.parse(argc, argv);
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << "\n";
+        return -1;
+    }
 
     if (opts.count("h") > 0) {
         std::cout << options.help({"", "information", "input/output", "configuration", "edit"}) << '\n';
@@ -293,6 +315,7 @@ int main(int argc, char *argv[]) {
     const bool output_is_folder = std::filesystem::is_directory(output);
 
     const std::filesystem::path sidbase_path = opts["s"].as<std::string>();
+
     if (!std::filesystem::exists(sidbase_path)) {
         std::cout << "error: sidbase path " << sidbase_path << " doesn't exist\n";
         return -1;
@@ -335,11 +358,11 @@ int main(int argc, char *argv[]) {
     } else {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
-            std::cout << "disassembling & decompiling " << filepath.filename() << " to " << output.parent_path() << "...\n";
+            std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
             decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, edits);
         }
         else {
-            std::cout << "disassembling " << filepath.filename() << " to " << output << "...\n";
+            std::cout << "disassembling " << filepath.filename() << "...\n";
 
             disasm_file(filepath, output, base, disassember_options, edits);
         }

@@ -11,11 +11,60 @@ You can also make edits to files via the command line, including replacing entir
 
 # Main feautures
 
-- Optimized for speed. Disassembling & decompiling files is blazingly fast.
+- Optimized for speed. Disassembling & decompiling files is blazingly fast. Dumping the entire game usually only take around 10 seconds.
 - Accurate automatic interpretation of all structures in the disassembly
 - Disassembling & decompiling multiple files at the same time. Disassembling every single .bin file in the game takes only a couple seconds
 - Making edits via the `-e` flag, creating new files that you can use for mods
 - Loading custom sidbases to use for disassembly
+
+# How to use
+
+First, it's recommended that you move the unzipped dconstruct directory into some safe location, such as `C:\Program Files`.
+
+In order to make dconstruct as easy to use as possible, it's recommended that you add the .\bin directory inside the dconstruct folder to your `PATH`. You can find out more [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/), or follow these quick steps:
+
+- Go into your windows search bar and type "environment variables", you should get an option that reads "Edit the system environment variables"
+- After selecting that option, you should get a window with the title "System properties". In the bottom right of that window, above the Ok, Cancel and Apply, buttons, you should see a button that says "Environment variables..."
+- After clicking this button, another window should appear. Here, go into the second table (titled "System variables") and find the entry with the variable name "Path". Double click it.
+- In this dialog, select the "New" option on the right. Now paste in the path to the .\bin directory. It should look something like this:
+
+![a](images/path.png)
+
+- Make sure your path ends in "\bin" and NOT "\dconstruct".
+
+- Click 'OK' on all open dialogs.
+
+- To verify that it worked, open a new command prompt and type `dconstruct --about`. You should see some output from the program and no error message.
+
+Run a command like this in the command line to generate your first disassembled file:
+
+```shell
+dconstruct my_bin_file.bin
+```
+
+This will then output a file called `my_bin_file.bin.asm` in the same directory as your input file. You can then open that file using a text/editor. I would recommend using something like VSCode which offers advanced searching features and is good at handling large files. Standard Windows notepad is not recommended.
+
+To decompile a file, add the `--decompile` flag when running the command.
+
+# Command line arguments
+
+- `-i` - input file or folder. Can be omitted if passing in the input path as the first argument.
+
+- `-o` - output path. If your input path is a folder, this cannot be a file. If no output is specified, the .txt file will be put next to the input file. If the input is a folder and no output is specified, the program will create a "output" directoy in the current working directory and put all the files in there.
+
+- `-s` - specify a path the the sidbase. By default, the program will look in the current working directoy for `sidbase.bin`.
+
+- `--decompile` - emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file.
+
+- `--graphs` - emit .svg files containing control flow graphs for all decompiled functions. Each .bin file gets its own folder containing all of its graphs. This **significantly** slows down decompilation speed, so it is not recommended when decompiling a large number of files at the same time. Does nothing if `--decompile` is not passed as well.
+
+- `--indent` - specify the number of spaces used to indent the disassembly output. 2 by default.
+
+- `--emit_once` - prohibits the same structure from being emitted twice in the disassembly. If a structure shows up multiple times, only the first instance will be fully emitted, and all other occasions will be replaced by a `ALREADY_EMITTED` tag. This can significantly reduce file size.
+
+- `-e` - make an edit. More info in the section below.
+
+- `--edit_file` - provide an edit file. an edit file contains one edit per line. it uses the same syntax as the -e flag.
 
 # What is a disassembler?
 
@@ -170,40 +219,6 @@ The purpose of the function is now very clear, we take the absolute value of the
 }
 ```
 
-# How to use
-
-The easiest way to start is to place a sidbase.bin file in the same directory as the program, or using `-s <filepath>` to point the program at a sidbase. The sidbase MUST be sorted, otherwise this program will not resolve hashes correctly.
-
-You can them simply drag and drop a .bin file or folder containing .bin files onto the dconstruct_cli executable. Alternative, run a command like this in the command line to generate your first disassembled file:
-
-```shell
-dconstruct my_bin_file.bin
-```
-
-This will then output a file called `my_bin_file.bin.asm` in the same directory as your input file. You can then open that file using a text/editor. I would recommend using something like VSCode which offers advanced searching features and is good at handling large files. Standard Windows notepad is not recommended.
-
-To decompile a file, add the `--decompile` flag when running the command.
-
-# Command line arguments
-
-- `-i` - input file or folder. Can be omitted if passing in the input path as the first argument.
-
-- `-o` - output path. If your input path is a folder, this cannot be a file. If no output is specified, the .txt file will be put next to the input file. If the input is a folder and no output is specified, the program will create a "output" directoy in the current working directory and put all the files in there.
-
-- `-s` - specify a path the the sidbase. By default, the program will look in the current working directoy for `sidbase.bin`.
-
-- `--decompile` - emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file.
-
-- `--graphs` - emit .svg files containing control flow graphs for all decompiled functions. Each .bin file gets its own folder containing all of its graphs. This **significantly** slows down decompilation speed, so it is not recommended when decompiling a large number of files at the same time. Does nothing if `--decompile` is not passed as well.
-
-- `--indent` - specify the number of spaces used to indent the disassembly output. 2 by default.
-
-- `--emit_once` - prohibits the same structure from being emitted twice in the disassembly. If a structure shows up multiple times, only the first instance will be fully emitted, and all other occasions will be replaced by a `ALREADY_EMITTED` tag. This can significantly reduce file size.
-
-- `-e` - make an edit. More info in the section below.
-
-- `--edit_file` - provide an edit file. an edit file contains one edit per line. it uses the same syntax as the -e flag.
-
 # Editing
 
 Editing DC Files Using the -e Flag
@@ -308,7 +323,9 @@ VS Code supports creating custom extensions to add syntax highlighting to custom
 code --install-extension <path/to/extension/dcpl-lint-0.0.1.vsix>
 ```
 
-After this, your .dcpl code should look like this:
+or open the command palette with CTRL+SHIFT+P and type "Install extension via VSIX" and select the .vsix file.
+
+After this, your .dcpl code should look something like this:
 
 ![dcpl_code](images/dcpl_1.png)
 
@@ -321,6 +338,7 @@ The decompiler is currently not 100% complete and therefore in an "experimental"
 - certain types are incorrect, particularly argument types
 - empty if blocks in if/else statements can cause weird indentation. this is again not always my fault, as there are certain branches that actually don't do any real work, which is difficult to detect.
 - nested loops are somtimes broken
+- function pointers are sometimes emitted instead of the function call
 
 Along with these, there are some issues that will probably not be fixed:
 
