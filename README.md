@@ -24,7 +24,7 @@ First, it's recommended that you move the unzipped dconstruct directory into som
 In order to make dconstruct as easy to use as possible, it's recommended that you add the .\bin directory inside the dconstruct folder to your `PATH`. You can find out more [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/), or follow these quick steps:
 
 - Go into your windows search bar and type "environment variables", you should get an option that reads "Edit the system environment variables"
-- After selecting that option, you should get a window with the title "System properties". In the bottom right of that window, above the Ok, Cancel and Apply, buttons, you should see a button that says "Environment variables..."
+- After selecting that option, you should get a window with the title "System properties". Above the "Ok", "Cancel" and "Apply" buttons, you should see a button that says "Environment variables..."
 - After clicking this button, another window should appear. Here, go into the second table (titled "System variables") and find the entry with the variable name "Path". Double click it.
 - In this dialog, select the "New" option on the right. Now paste in the path to the .\bin directory. It should look something like this:
 
@@ -42,7 +42,7 @@ Run a command like this in the command line to generate your first disassembled 
 dconstruct my_bin_file.bin
 ```
 
-This will then output a file called `my_bin_file.bin.asm` in the same directory as your input file. You can then open that file using a text/editor. I would recommend using something like VSCode which offers advanced searching features and is good at handling large files. Standard Windows notepad is not recommended.
+This will then output a file called `my_bin_file.bin.asm` in the same directory as your input file. You can then open that file using a text/code editor. I would recommend using something like VSCode which offers advanced searching features and is good at handling large files. Standard Windows notepad is not recommended.
 
 To decompile a file, add the `--decompile` flag when running the command.
 
@@ -52,7 +52,7 @@ To decompile a file, add the `--decompile` flag when running the command.
 
 - `-o` - output path. If your input path is a folder, this cannot be a file. If no output is specified, the .txt file will be put next to the input file. If the input is a folder and no output is specified, the program will create a "output" directoy in the current working directory and put all the files in there.
 
-- `-s` - specify a path the the sidbase. By default, the program will look in the current working directoy for `sidbase.bin`.
+- `-s` - specify a path the the sidbase. By default, the program will look in path for the directory.
 
 - `--decompile` - emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file.
 
@@ -357,6 +357,8 @@ Along with these, there are some issues that will probably not be fixed:
 - **Specilizer** – for his DC-Tool, also an inspiration for this program.
 
 - **uxh** – for scripting knowledge.
+
+- **bigdragon** & **Wedge** for beta testing
 
 - The entire modding Discord community – for being friendly & helpful.
 
