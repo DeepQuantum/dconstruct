@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
-set(VERSION_NUMBER "beta_3")
+set(VERSION_NUMBER "0.41.0")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -135,19 +135,7 @@ target_link_libraries(dconstruct
 # " ${CMAKE_SOURCE_DIR}/Graphviz-13.1.0-win64/bin "
 # ${CMAKE_CURRENT_BINARY_DIR}
 # )
-set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
-add_custom_command(
-    OUTPUT ${BUILDINFO_H}
-    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
-    DEPENDS
-    ${BASE_SOURCE_FILES}
-    "${SOURCE_DIR}/main_cli.cpp"
-    COMMENT "Generating build info header by running buildinfo.py with compiler version"
-)
 
-add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
-
-add_dependencies(dconstruct generate_buildinfo)
 
 set(CMAKE_CURRENT_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 
@@ -162,6 +150,8 @@ add_executable(
 
 target_link_libraries(dconstruct_test PRIVATE dconstruct GTest::gtest_main)
 
+include(GoogleTest)
+gtest_discover_tests(dconstruct_test)
 
 add_executable(
     dconstruct_cli
@@ -170,5 +160,17 @@ add_executable(
 
 target_link_libraries(dconstruct_cli PRIVATE dconstruct)
 
-include(GoogleTest)
-gtest_discover_tests(dconstruct_test)
+set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
+add_custom_command(
+    OUTPUT ${BUILDINFO_H}
+    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+    DEPENDS
+    ${BASE_SOURCE_FILES}
+    "${SOURCE_DIR}/main_cli.cpp"
+    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+)
+
+add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
+
+add_dependencies(dconstruct_cli generate_buildinfo)
+

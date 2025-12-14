@@ -1,8 +1,5 @@
 #pragma once
-#pragma once
-#define COMPILER_VERSION "MSVC"
-#define BUILD_DATE "5.7.2025"
-#define VERSION "beta_2"
+#include "buildinfo.h"
 #include <cstdio>
 
 static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to dc files that are then put into a new copy of the original file.\n" 
@@ -34,12 +31,7 @@ static constexpr char HELP_EDIT[] = "\nusing the -e flag, you can make edits to 
 static void print_about() noexcept {
     std::printf(
         "\ndconstruct by deepquantum version %s. built with %s on %s\n\n\n" 
-        "This program disassembles (interprets the binary data) of the DC-Script files used in TLOU2.\n" 
-        "It outputs large text files containing structured data of the orinal DC-file. It's optimized for data accuracy and speed.\n" 
-        "It also allows you to make edits to files via the command line, including replacing entire structures with little effort.\n"
-        "Use --help to find all the options available. This is a beta version, so there might be bugs, incorrect data or" 
-        " unexpected crashes. If you encounter any of these, please let me know, and include the command" 
-        " you were running. There will be many more features in future updates.\n"
+        "This program disassembles & decompiles (interprets the binary data) of the DC-Script files used in TLOU2.\n" 
         "you can always find tons of more info in the README.md file.\n\n"
         "SPECIAL THANKS: \n\n"
         "* icemesh for providing the underlying structures for the DC-files. (https://github.com/icemesh/dc/tree/main/t2), and his disassembler, which largely served as an inspiration for this program\n" 
