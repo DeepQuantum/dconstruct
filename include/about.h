@@ -37,6 +37,7 @@ static void print_about() noexcept {
         "* icemesh for providing the underlying structures for the DC-files. (https://github.com/icemesh/dc/tree/main/t2), and his disassembler, which largely served as an inspiration for this program\n" 
         "* Specilizer for his DC-Tool, which was also used as inspiration for this program\n" 
         "* uxh for his scripting knowledge\n" 
+        "* bigdragon & Wedge for beta testing\n"
         "* the entire modding discord for being friendly & helpful.\n\n"
         
         "All my tools/mods will always be 100%% free, but programs like this take a lot of work. If you'd like to support me, you can visit my ko-fi.\n"\
