@@ -71,7 +71,7 @@ static void decomp_file(
                 out << dcompiled.to_string() << "\n\n";
             }
             catch (const std::exception& e) {
-                std::cout << func->m_id << " " << e.what() << "\n";
+                std::cout << "warning: couldn't decompile" << func->m_id << ": " << e.what() << "\n";
             }
         }
     }
