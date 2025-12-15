@@ -870,22 +870,21 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                     offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s: ", builtin->second.m_arguments[i].first.c_str());
                 }
                 else {
-                    const auto arg_type = std::make_shared<ast::full_type>(frame[49 + i].m_type);
+                    const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
                     auto& ftype = frame.m_symbolTable.second[frame[dest].m_fromSymbolTable];
                     if (!std::holds_alternative<ast::function_type>(ftype)) {
                         ftype = ast::function_type{};
                     }
                     std::get<ast::function_type>(ftype).m_arguments.emplace_back("deduced", arg_type);
                 }
-                frame.to_string(dst_str, interpreted_buffer_size, 49 + i, lookup(frame[i + 49].m_value));
+                frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
             }
             if (builtin != builtinFunctions.end()) {
                 frame[dest].m_type = *builtin->second.m_return;
                 u8 i = 0;
                 for (const auto& [name, type] : builtin->second.m_arguments) {
-                    frame[49 + i].m_type = *type;
-                    ++i;
+                    frame[ARGUMENT_REGISTERS_IDX + i++].m_type = *type;
                 }
             }
             frame[dest].m_isReturn = true;
@@ -1320,6 +1319,29 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
         }, type);
         std::snprintf(buffer, sizeof(buffer), "%s %s", line_start, type_text);
         insert_span(buffer, indent);
+    }
+}
+
+void Disassembler::disassemble_functions_from_bin_file() {
+    constexpr sid64 function_sid = SID("function");
+    constexpr u32 func_start = 0x15;
+    const location start = location(m_currentFile->m_bytes.get());
+    for (u64 i = 0; i < m_currentFile->m_size; i += 4) {
+        if (start.get<u32>(i) == func_start) {
+            std::vector<Instruction> istrs;
+            const ShortInstruction* instr_ptr = start.as<ShortInstruction>(i);
+            while (instr_ptr->opcode != Opcode::Return) {
+                istrs.emplace_back(instr_ptr->opcode, instr_ptr->destination, instr_ptr->operand1, instr_ptr->operand2);
+                instr_ptr++;
+            }
+            instr_ptr++;
+            istrs.emplace_back(instr_ptr->opcode, instr_ptr->destination, instr_ptr->operand1, instr_ptr->operand2);
+            
+            auto function_disassembly = create_function_disassembly(std::move(istrs), "anonymous@" + std::to_string(i), location(instr_ptr), false);
+            m_functions.push_back(std::move(function_disassembly));
+            insert_function_disassembly_text(m_functions[0], 4);
+            return;
+        }
     }
 }
 
