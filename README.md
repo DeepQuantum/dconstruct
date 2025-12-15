@@ -11,7 +11,7 @@ You can also make edits to files via the command line, including replacing entir
 
 # Main feautures
 
-- Optimized for speed. Disassembling & decompiling files is blazingly fast. Dumping the entire game usually only take around 10 seconds.
+- Optimized for speed. Disassembling & decompiling files is blazingly fast.
 - Accurate automatic interpretation of all structures in the disassembly
 - Disassembling & decompiling multiple files at the same time. Disassembling every single .bin file in the game takes only a couple seconds
 - Making edits via the `-e` flag, creating new files that you can use for mods

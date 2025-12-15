@@ -4,6 +4,7 @@
 
 namespace dconstruct::dcompiler {
 
+static constexpr u8 MIN_GRAPH_SIZE = 0;
 
 static const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
@@ -16,9 +17,9 @@ decomp_function::decomp_function(const function_disassembly &func, const BinaryF
     m_ipdomsEmitted(m_graph.m_nodes.size(), false),
     m_graphPath(graph_path)
 {
-    if (m_graphPath && m_graph.m_nodes.size() > 1) {
+    if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
-    }    
+    }
 
     m_blockStack.push(std::ref(m_baseBlock));
     m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);

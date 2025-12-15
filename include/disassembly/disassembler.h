@@ -83,6 +83,8 @@ namespace dconstruct {
             return funcs;
         }
 
+        void disassemble_functions_from_bin_file();
+
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         
@@ -128,7 +130,7 @@ namespace dconstruct {
         [[nodiscard]] u32 get_offset(const location) const noexcept;
         [[nodiscard]] u32 get_offset(const void*) const noexcept;
         [[nodiscard]] bool pointer_gets_called(const u32, const u32, const function_disassembly&) const;
-        bool handle_immediate_instruction(const Instruction& istr, StackFrame& frame, function_disassembly_line& line,const function_disassembly& fn,char* disassembly_text,char* varying, const u32 disassembly_text_size, char* interpreted) const noexcept;
+        
 
         static constexpr u32 INTERPRETED_BUFFER_SIZE = 512;
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
