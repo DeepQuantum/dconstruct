@@ -5,7 +5,7 @@
 
 namespace dconstruct {
 
-    SIDBase::SIDBase(const std::filesystem::path& path) {
+    [[nodiscard]] SIDBase SIDBase::from_binary(const std::filesystem::path& path) noexcept {
 
         std::ifstream sidfile(path, std::ios::binary);
 
@@ -17,15 +17,18 @@ namespace dconstruct {
         std::size_t fsize = std::filesystem::file_size(path);
         std::byte* temp_buffer = new std::byte[fsize];
 
-        sidfile.read(reinterpret_cast<char*>(&m_numEntries), 8);
+        u64 num_entries = 0;
+        sidfile.read(reinterpret_cast<char*>(&num_entries), 8);
         sidfile.seekg(0);
 
         sidfile.read(reinterpret_cast<char*>(temp_buffer), fsize);
 
-        m_entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
-        m_sidbytes = std::unique_ptr<std::byte[]>(temp_buffer);
-        m_lowestSid = m_entries[0].hash;
-        m_highestSid = m_entries[m_numEntries - 1].hash;
+        auto entries = reinterpret_cast<SIDBaseEntry*>(temp_buffer + 8);
+        auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
+        const sid64 lowest = entries[0].hash;
+        const sid64 highest = entries[num_entries - 1].hash;
+
+        return SIDBase{num_entries, std::move(bytes), entries, lowest, highest};
     }
 
     [[nodiscard]] const char* SIDBase::search(const sid64 hash) const noexcept {

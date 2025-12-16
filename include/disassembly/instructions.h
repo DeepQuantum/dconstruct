@@ -297,7 +297,7 @@ template<u8 padding>
     bool is_comp = num >= static_cast<u32>(Opcode::IEqual) && num <= static_cast<u32>(Opcode::FMod);
     bool is_bit = opcode == Opcode::OpBitAnd || (num >= static_cast<u32>(Opcode::OpBitOr) && num <= static_cast<u32>(Opcode::OpLogOr));
     bool is_arithmetic_imm = num >= static_cast<u32>(Opcode::IAddImm) && num <= static_cast<u32>(Opcode::IDivImm);
-    bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual);
+    bool is_store = num >= static_cast<u32>(Opcode::StoreI8) && num <= static_cast<u32>(Opcode::FNotEqual) || num >= static_cast<u32>(Opcode::StoreInt) && num <= static_cast<u32>(Opcode::StorePointer);
     return is_arithmetic || is_call || is_comp || is_bit || is_arithmetic_imm || is_store;
 }
 template<u8 padding>

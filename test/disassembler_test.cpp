@@ -10,7 +10,7 @@ TEST(SANITY, Basic) {
 
 namespace dconstruct::testing {
 
-    static SIDBase base{R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)"};
+    static SIDBase base = SIDBase::from_binary(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\uc4\sidbase_sorted.bin)");
 
 
     TEST(DISASSEMBLER, NonExistingFile) {

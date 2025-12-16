@@ -96,7 +96,17 @@ namespace dconstruct {
 		u64 base = 0xCBF29CE484222325;
 		if (*str) {
 			do {
-				base = 0x100000001B3 * (base ^ *str++);
+				base = 0xCBF29CE484222325 * (base ^ *str++);
+			} while (*str);
+		}
+		return base;
+	}
+
+	constexpr sid32 ToStringId32(const char* str) noexcept {
+		u32 base = 0x811c9dc5;
+		if (*str) {
+			do {
+				base = 0x01000193  * (base ^ *str++);
 			} while (*str);
 		}
 		return base;
