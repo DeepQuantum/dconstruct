@@ -165,16 +165,17 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
             case Opcode::LoadStaticU64Imm:
             case Opcode::LookupPointer: {
-                const sid64 sid = symbol_table.get<sid64>(istr.operand1 * 8);
+                const sid64 sid = symbol_table.get<sid32>(istr.operand1 * 8 + 4);
                 const std::string& name = m_file.m_sidCache.at(sid);
                 expr_uptr lit = std::make_unique<ast::literal>(sid_literal{ sid, name });
-                if (!std::holds_alternative<ast::function_type>(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1])) {
+                const auto& type = m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1];
+                if (!std::holds_alternative<ast::function_type>(type)) {
                     generated_expression = std::move(lit);
-                    generated_expression->set_type(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1]);
+                    generated_expression->set_type(type);
                 }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(lit);
-                    m_transformableExpressions[istr.destination]->set_type(m_disassembly.m_stackFrame.m_symbolTable.second[istr.operand1]);
+                    m_transformableExpressions[istr.destination]->set_type(type);
                 }
                 break;
             }

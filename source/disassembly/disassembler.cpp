@@ -805,7 +805,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LookupPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-            const p64 value = frame.m_symbolTable.first.get<p64>(op1 * 8);
+            const p64 value = frame.m_symbolTable.first.get<u32>(op1 * 8 + 4);
             frame[dest].m_value = value;
             frame[dest].m_fromSymbolTable = op1;
             const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);

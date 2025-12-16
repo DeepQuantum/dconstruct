@@ -64,7 +64,6 @@ namespace dconstruct {
         Disassembler(BinaryFile* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
 
         void disassemble();
-        u64 m_versionNumber = 0x1;
         virtual ~Disassembler() {};
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, const std::string& name, const bool is_script_function = false);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, const std::string&, const location& symbol_table, const bool is_script_function = false);
@@ -94,6 +93,8 @@ namespace dconstruct {
         std::vector<function_disassembly> m_functions;
 
         std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
+
+        bool is_32bit = false;
 
         constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };
         constexpr static TextFormat ENTRY_TYPE_FMT = { TYPE_COLOR, 20 };
