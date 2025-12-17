@@ -26,7 +26,8 @@ using f32 = float;
 using f64 = double;
 using p64 = uintptr_t;
 
-using sid_literal = std::pair<sid64, std::string>;
+using sid64_literal = std::pair<sid64, std::string>;
+using sid32_literal = std::pair<sid32, std::string>;
 
 using reg_idx = u8;
 using node_id = u16;

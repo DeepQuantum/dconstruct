@@ -2,6 +2,7 @@
 #include "base.h"
 #include <memory>
 #include <filesystem>
+#include <expected>
 
 namespace dconstruct {
     struct SIDBaseEntry {
@@ -17,7 +18,7 @@ namespace dconstruct {
         SIDBase(const u64 num_entries, std::unique_ptr<std::byte[]>&& bytes, SIDBaseEntry* entries, const sid64 lowest, const sid64 highest) : 
         m_numEntries(num_entries), m_sidbytes(std::move(bytes)), m_entries(entries), m_lowestSid(lowest), m_highestSid(highest) {};
 
-        [[nodiscard]] static SIDBase from_binary(const std::filesystem::path& path) noexcept;
+        [[nodiscard]] static std::expected<SIDBase, std::string> from_binary(const std::filesystem::path& path) noexcept;
         //[[nodiscard]] static SIDBase from_uc4_binary(const std::filesystem::path& path) noexcept;
         
         [[nodiscard]] const char* search(const sid64 hash) const noexcept;

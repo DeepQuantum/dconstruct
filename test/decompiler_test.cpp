@@ -1,4 +1,4 @@
-#include "binaryfile.h"
+#include "BinaryFile.h"
 #include "decompilation/decomp_function.h"
 #include "disassembly/file_disassembler.h"
 #include "ast/ast.h"
@@ -14,7 +14,7 @@ namespace dconstruct::testing {
 
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
         SIDBase base = SIDBase::from_binary(TEST_DIR + "test_sidbase.bin"); 
-        BinaryFile file(TEST_DIR + path); 
+        BinaryFile<> file(TEST_DIR + path); 
         
         FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
         const ScriptLambda *lambda_ptr = disassembler.get_value_ptr_at<ScriptLambda>(offset); 
@@ -47,20 +47,20 @@ namespace dconstruct::testing {
         return decompile_instructions_without_disassembly(istrs, name, std::move(symbol_table)).m_frame;
     }*/
 
-    static dcompiler::decomp_function decompile_instructions_with_disassembly(
+    static dcompiler::TLOU2decomp_function decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
         const std::string& name = "Test",
         const SymbolTable& table = {}
     ) {
-        BinaryFile file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
-        Disassembler da{ &file, &base };
-        auto fd = da.create_function_disassembly(std::move(istrs), name, table.first);
-        return dcompiler::decomp_function{ fd, file };
+        BinaryFile<>file{ R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\dummy.bin)" };
+        TLOU2Disassembler da{ &file, &base };
+        auto fd = da.create_function_disassembly(std::move(istrs), name, table.m_location);
+        return dconstruct::dcompiler::TLOU2decomp_function{ fd, file };
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
-        BinaryFile file{ path };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ path };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
@@ -71,8 +71,8 @@ namespace dconstruct::testing {
     }
 
     static std::string get_decompiled_node_from_file(const std::string& path, const std::string& function_id, const node_id node) {
-        BinaryFile file{ path };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ path };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.m_id == function_id) {
@@ -235,8 +235,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ImmediatePostdominator1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -250,8 +250,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -265,9 +265,9 @@ namespace dconstruct::testing {
  
     /*TEST(DECOMPILER, ImmediatePostdominator2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
+        BinaryFile<> file{ filepath };
         
-        Disassembler da{ &file, &base };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#608356039B1FD9FD";
         const auto& funcs = da.get_functions();
@@ -282,9 +282,9 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ImmediatePostdominator3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
+        BinaryFile<> file{ filepath };
         
-        Disassembler da{ &file, &base };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#D14395D282B18D18";
         const auto& funcs = da.get_functions();
@@ -321,8 +321,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, RegistersToEmit1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -335,8 +335,8 @@ namespace dconstruct::testing {
 
     /*TEST(DECOMPILER, RegisterReadBeforeOverwrite1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#C3B48D02AC9ECB46";
         const auto& funcs = da.get_functions();
@@ -353,8 +353,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -378,8 +378,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#C3B48D02AC9ECB46";
         const auto& funcs = da.get_functions();
@@ -397,8 +397,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#BC06CBDEAE8344C7";
         const auto& funcs = da.get_functions();
@@ -430,8 +430,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, Loop1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#14C6FC79122F4A87";
         const auto& funcs = da.get_functions();
@@ -449,8 +449,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ShortCircuit1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#B97D31F760DB0E8E";
         const auto& funcs = da.get_functions();
@@ -468,8 +468,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ShortCircuit2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#608356039B1FD9FD";
         const auto& funcs = da.get_functions();
@@ -487,8 +487,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, Loop2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#E5FCFC6B95B3F669";
         const auto& funcs = da.get_functions();
@@ -506,8 +506,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, Loop3) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#A548628CB635DC72";
         const auto& funcs = da.get_functions();
@@ -525,8 +525,8 @@ namespace dconstruct::testing {
 
     /*TEST(DECOMPILER, If4) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#9265F983755147F4";
         const auto& funcs = da.get_functions();
@@ -544,8 +544,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If5) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#43DF4E5E85BFD47C";
         const auto& funcs = da.get_functions();
@@ -563,8 +563,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If6) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#14C6FC79122F4A87";
         const auto& funcs = da.get_functions();
@@ -582,8 +582,8 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, NodeRegisters0) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "select-spawn-regions@main@start@0";
         const auto& funcs = da.get_functions();
@@ -607,7 +607,7 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, SpecialFunc1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-boss-health-tts.bin)";
         const std::string outpath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-boss-health-tts.asm)";
-        BinaryFile file{ filepath };
+        BinaryFile<> file{ filepath };
         FileDisassembler da{ &file, &base, outpath, {} };
         da.disassemble();
         const std::string id = "wait-for-tts@main@start@0";
@@ -621,7 +621,7 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, AllFuncs) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\\ss-faq-lightning-flash-manager.bin)";
-        BinaryFile file{ filepath };
+        BinaryFile<> file{ filepath };
         FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.asm)", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
@@ -658,8 +658,8 @@ namespace dconstruct::testing {
             std::filesystem::path disassembly_path = base_path / entry.path().filename().replace_extension(".asm");
             std::set<std::string> emitted{};
 
-            BinaryFile file{ entry.path() };
-            Disassembler da{ &file, &base };
+            BinaryFile<> file{ entry.path() };
+            TLOU2Disassembler da{ &file, &base };
             da.disassemble();
             const auto& funcs = da.get_functions();
             for (const auto& func : funcs) {
@@ -681,8 +681,8 @@ namespace dconstruct::testing {
 
 
 	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, decltype(dconstruct::racket) stream_lang = dconstruct::racket) {
-        BinaryFile file{ filepath };
-        Disassembler da{ &file, &base };
+        BinaryFile<> file{ filepath };
+        TLOU2Disassembler da{ &file, &base };
         da.disassemble();
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });

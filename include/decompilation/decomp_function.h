@@ -9,9 +9,9 @@
 constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
-
+    template<bool is_64_bit = true>
     struct decomp_function {
-        explicit decomp_function(const function_disassembly &func, const BinaryFile &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
+        explicit decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
 
         [[nodiscard]] std::string to_string() const;
         
@@ -22,7 +22,7 @@ namespace dconstruct::dcompiler {
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
         compiler::environment m_env;
         const function_disassembly& m_disassembly;
-        const BinaryFile& m_file;
+        const BinaryFile<is_64_bit>& m_file;
         std::optional<std::filesystem::path> m_graphPath;
         ast::full_type m_returnType;
         node_set m_parsedNodes;
@@ -147,4 +147,10 @@ namespace dconstruct::dcompiler {
             return call;
         }
     };
+
+    extern template struct decomp_function<true>;
+    extern template struct decomp_function<false>;
+
+    using TLOU2decomp_function = decomp_function<true>;
+    using UC4decomp_function = decomp_function<false>;
 } 

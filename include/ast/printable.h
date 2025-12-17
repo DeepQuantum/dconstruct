@@ -70,4 +70,6 @@ namespace dconstruct {
         }
         return os;
     }
+
+    using print_fn_type = std::ostream& (*)(std::ostream&);
 }

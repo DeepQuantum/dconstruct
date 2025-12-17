@@ -8,7 +8,12 @@
 #include <chrono>
 
 namespace dconstruct {
-    BinaryFile::BinaryFile(const std::filesystem::path &path) {
+
+    template class BinaryFile<tru>;
+    template class BinaryFile<false>;
+
+    template<bool is_64_bit>
+    BinaryFile<is_64_bit>::BinaryFile(const std::filesystem::path &path) {
         m_path = path;
         std::ifstream scriptstream(path, std::ios::binary);
 
@@ -47,7 +52,8 @@ namespace dconstruct {
         replace_newlines_in_stringtable();
     }
 
-    void BinaryFile::replace_newlines_in_stringtable() noexcept {
+    template<bool is_64_bit>
+    void BinaryFile<is_64_bit>::replace_newlines_in_stringtable() noexcept {
         constexpr u8 table_size_offset = 4;
         const u64 table_size = m_relocTable.num() - table_size_offset - m_strings.num();
         char* string_table = const_cast<char*>(m_strings.as<char>());
@@ -59,12 +65,14 @@ namespace dconstruct {
     }
 
 
-    [[nodiscard]] bool BinaryFile::gets_pointed_at(const location loc) const noexcept {
+    template<bool is_64_bit>
+    [[nodiscard]] bool BinaryFile<is_64_bit>::gets_pointed_at(const location loc) const noexcept {
         const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get())) / 8;
         return (u8)m_pointedAtTable[offset / 8] & (1 << (offset % 8));
     }
 
-    [[nodiscard]] bool BinaryFile::is_file_ptr(const location loc) const noexcept {
+    template<bool is_64_bit>
+    [[nodiscard]] bool BinaryFile<is_64_bit>::is_file_ptr(const location loc) const noexcept {
         p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
         if (offset >= m_size) {
             return false;
@@ -73,7 +81,8 @@ namespace dconstruct {
         return m_relocTable.get<u8>(offset / 8) & (1 << (offset % 8));
     }
 
-    [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
+    template<bool is_64_bit>
+    [[nodiscard]] bool BinaryFile<is_64_bit>::is_string(const location loc) const noexcept {
         return loc >= m_strings;
     }
 
@@ -87,7 +96,8 @@ namespace dconstruct {
     //     printf("\n");
     // }
 
-    void BinaryFile::read_reloc_table() {
+    template<bool is_64_bit>
+    void BinaryFile<is_64_bit>::read_reloc_table() {
 
         std::byte *reloc_data = m_bytes.get() + m_dcheader->m_textSize;
 
@@ -128,8 +138,8 @@ namespace dconstruct {
         m_strings = location(m_bytes.get() + m_dcheader->m_stringsOffset);
     }
 
-    
-    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const { 
+    template<bool is_64_bit>
+    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile<is_64_bit>::get_unmapped() const { 
         std::byte *unmapped_bytes = new std::byte[m_size];
 
         std::memcpy(unmapped_bytes, m_bytes.get(), m_size);

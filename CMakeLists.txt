@@ -73,26 +73,14 @@ set(OPT_FLAGS_DEBUG "-O0 -g3")
 set(OPT_FLAGS_CREATE_PROFILE "-O2 -fprofile-generate -ftest-coverage -march=znver4 -mavx512f -fopenmp")
 
 # MSVC-specific flags
-set(OPT_FLAGS_DEBUG "/LTCG")
+set(MSVC_FLAGS "/MP")
 
 
 # Apply flags based on compiler
 if(MSVC)
-    target_compile_options(dxbc_shader_decomp PRIVATE
-        $<$<CONFIG:Release>:${MSVC_FLAGS}>
-        $<$<CONFIG:ReleaseProfile>:${MSVC_FLAGS}>
-        $<$<CONFIG:RelWithDebInfo>:${MSVC_FLAGS}>
-        $<$<CONFIG:Debug>:${MSVC_FLAGS}>
-        $<$<CONFIG:CreateProfile>:${MSVC_FLAGS}>
-    )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 else()
-    target_compile_options(dxbc_shader_decomp PRIVATE
-        $<$<CONFIG:Release>:${OPT_FLAGS_RELEASE}>
-        $<$<CONFIG:ReleaseProfile>:${OPT_FLAGS_RELEASE_PROFILE}>
-        $<$<CONFIG:RelWithDebInfo>:${OPT_FLAGS_RELWITHDEBINFO}>
-        $<$<CONFIG:Debug>:${OPT_FLAGS_DEBUG}>
-        $<$<CONFIG:CreateProfile>:${OPT_FLAGS_CREATE_PROFILE}>
-    )
+    message("Not applying MSVC")
 endif()
 target_link_libraries(dxbc_shader_decomp 
     ${LLVM_LIBS}
@@ -145,6 +133,12 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
 )
 
+if(MSVC)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+else()
+    message("Not applying MSVC")
+endif()
+
 target_link_libraries(dconstruct_test PRIVATE dconstruct GTest::gtest_main)
 
 include(GoogleTest)
@@ -154,6 +148,12 @@ add_executable(
     dconstruct_cli
     ${SOURCE_DIR}/main_cli.cpp
 )
+
+if(MSVC)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+else()
+    message("Not applying MSVC")
+endif()
 
 target_link_libraries(dconstruct_cli PRIVATE dconstruct)
 
