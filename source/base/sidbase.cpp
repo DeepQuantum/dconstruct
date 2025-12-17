@@ -5,13 +5,12 @@
 
 namespace dconstruct {
 
-    [[nodiscard]] SIDBase SIDBase::from_binary(const std::filesystem::path& path) noexcept {
+    [[nodiscard]] std::expected<SIDBase, std::string> SIDBase::from_binary(const std::filesystem::path& path) noexcept {
 
         std::ifstream sidfile(path, std::ios::binary);
 
         if (!sidfile.is_open()) {
-            std::cerr << "couldn't open sidbase at path \'" << path << "'\n";
-            exit(-1);
+            return std::unexpected{std::string("couldn't open sidbase at path \'") + path.string() + "'\n"};
         }
 
         std::size_t fsize = std::filesystem::file_size(path);

@@ -34,7 +34,7 @@
         {
             "label": "build_tests",
             "type": "shell",
-            "command": "cmake --build . --target dconstruct_test --parallel --config Debug",
+            "command": "cmake --build . --target dconstruct_test --parallel --config Debug -v",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}/build"

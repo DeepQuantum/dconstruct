@@ -362,7 +362,22 @@ struct Register {
     }
 };
 
-using SymbolTable = std::pair<location, std::vector<ast::full_type>>;
+//using SymbolTable = std::pair<location, std::vector<ast::full_type>>;
+
+struct SymbolTable {
+    location m_location;
+    std::vector<ast::full_type> m_types;
+
+    template<typename T, bool is_64_bit = true>
+    [[nodiscard]] const T& get_val(const u64 offset) const noexcept {
+        if constexpr (is_64_bit) {
+            return m_location.get<T>(offset * 8); 
+        } else {
+            return m_location.get<T>(offset * 8 + 4);
+        }
+    }
+};
+
 
 struct StackFrame {
     std::array<Register, MAX_REGISTER> m_registers;

@@ -59,9 +59,15 @@ namespace dconstruct {
         }
     };
 
+    template <bool is_64_bit = true>
     class Disassembler {
     public:
-        Disassembler(BinaryFile* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
+        using max_signed_int_t = std::conditional_t<is_64_bit, i64, i32>;
+        using max_signed_int_kind_t = std::conditional_t<is_64_bit, ast::primitive_kind::I64, ast::primitive_kind::I32>;
+        using sid_t = std::conditional_t<is_64_bit, sid64, sid32>;
+        using sid_literal_t = std::conditional_t<is_64_bit, sid64_literal, sid32_literal>;
+
+        Disassembler(BinaryFile<bitness>* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
 
         void disassemble();
         virtual ~Disassembler() {};
@@ -87,7 +93,7 @@ namespace dconstruct {
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         
-        BinaryFile* m_currentFile = nullptr;
+        BinaryFile<bitness>* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
         DisassemblerOptions m_options;
         std::vector<function_disassembly> m_functions;
@@ -136,6 +142,12 @@ namespace dconstruct {
         static constexpr u32 INTERPRETED_BUFFER_SIZE = 512;
         static constexpr u32 DISASSEMBLY_BUFFER_SIZE = 256;
     };
+
+    extern template class Disassembler<true>;
+    extern template class Disassembler<false>;
+
+    using TLOU2Disassembler = Disassembler<true>;
+    using UC4Disassembler = Disassembler<false>;
 
     const static std::unordered_map<sid64, ast::function_type> builtinFunctions = {
         {SID("get-int32"), ast::make_function(make_type(ast::primitive_kind::I32), {

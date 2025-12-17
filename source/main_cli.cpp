@@ -48,7 +48,8 @@ static void decomp_file(
     const dconstruct::SIDBase &base,
     const dconstruct::DisassemblerOptions &options,
     const bool write_graphs,
-    const std::vector<std::string> &edits = {}) {
+    const std::vector<std::string> &edits = {},
+    const dconstruct::print_fn_type language_type) {
     
     dconstruct::BinaryFile file(inpath.string());
 
@@ -62,6 +63,7 @@ static void decomp_file(
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
+        out << language_type;
         for (const auto func : funcs) {
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
@@ -104,7 +106,8 @@ static void decompile_multiple(
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
     const dconstruct::DisassemblerOptions &options,
-    const bool generate_graphs
+    const bool generate_graphs,
+    const dconstruct::print_fn_type language_print
 ) {
 
     std::vector<std::filesystem::path> filepaths;
@@ -113,7 +116,6 @@ static void decompile_multiple(
         if (entry.path().extension() != ".bin") {
             continue;
         }
-        std::filesystem::path output_file_path = out;
         filepaths.emplace_back(entry.path());
     }
 
@@ -129,7 +131,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, {}, language_print);
         }
     );
 
@@ -207,7 +209,6 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
     return 0;
 }
 
-
 std::wstring get_executable_path()
 {
     wchar_t buffer[MAX_PATH];
@@ -215,6 +216,18 @@ std::wstring get_executable_path()
     if (len == 0 || len == MAX_PATH)
         throw std::runtime_error("GetModuleFileNameW failed");
     return std::wstring(buffer, len);
+}
+
+[[nodiscard]] static std::optional<dconstruct::print_fn_type> get_print_type(const std::string& input_string) {
+    if (input_string == "C" || input_string == "c") {
+        return dconstruct::c;
+    } else if (input_string == "Python" || input_string == "python") {
+        return dconstruct::py;
+    } else if (input_string == "Racket" || input_string == "racket") {
+        return dconstruct::racket;
+    } else {
+        return std::nullopt;
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -237,10 +250,13 @@ int main(int argc, char *argv[]) {
     options.add_options("configuration")
         ("decompile", "will also emit a file containing the decompiled (named) functions in the file", cxxopts::value<bool>()->default_value("false"))
         ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
+        ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
         ("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation..", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
-            cxxopts::value<bool>()->default_value("false"));
+            cxxopts::value<bool>()->default_value("false"))
+        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead", cxxopts::value<bool>()->default_value("false"));
+
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
         ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>())
@@ -325,7 +341,15 @@ int main(int argc, char *argv[]) {
     const bool emit_once = opts["emit_once"].as<bool>();
     const bool decompile = opts["decompile"].as<bool>();
     const bool generate_graphs = opts["graphs"].as<bool>();
+    const std::string language_type = opts["language"].as<std::string>();
 
+    const auto opt_print_func = get_print_type(language_type);
+    if (!opt_print_func) {
+        std::cerr << "error: unknown language type: '" << language_type << "'\n";
+        return -1;
+    }
+    const auto& print_func = *opt_print_func;
+    
 
     if (opts.count("e") > 0) {
         std::vector<std::string> edit_strings = opts["e"].as<std::vector<std::string>>();
@@ -336,7 +360,12 @@ int main(int argc, char *argv[]) {
         emit_once,
     };
 
-    dconstruct::SIDBase base{sidbase_path};
+    auto base_exp = dconstruct::SIDBase::from_binary(sidbase_path);
+    if (!base_exp) {
+        std::cerr << base_exp.error();
+        return -1;
+    }
+    const auto& base = *base_exp;
 
     if (std::filesystem::is_directory(filepath)) {
         if (!output_is_folder) {
@@ -350,7 +379,7 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            decompile_multiple(filepath, output, base, disassember_options, generate_graphs);
+            decompile_multiple(filepath, output, base, disassember_options, generate_graphs, print_func);
         }
         else {
             disassemble_multiple(filepath, output, base, disassember_options);
@@ -359,11 +388,10 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, edits);
+            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, edits, print_func);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";
-
             disasm_file(filepath, output, base, disassember_options, edits);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);

@@ -3,13 +3,14 @@
 
 
 namespace dconstruct {
-    class FileDisassembler : public Disassembler {
+    template<bool is_64_bit>
+    class FileDisassembler : public Disassembler<is_64_bit> {
 
     public:
-        FileDisassembler(BinaryFile* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options) noexcept : Disassembler(file, sidbase) {
+        FileDisassembler(BinaryFile<is_64_bit>* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options) noexcept : Disassembler<is_64_bit>(file, sidbase) {
             m_outbuf.reserve(0x2FFFFFULL);
             m_outfptr = fopen(out_file.c_str(), "wb");
-            m_options = options;
+            this->m_options = options;
         }
 
         ~FileDisassembler() noexcept override {
@@ -19,7 +20,7 @@ namespace dconstruct {
 
         template<typename T>
         const T* get_value_ptr_at(const u64 offset) const noexcept {
-            return reinterpret_cast<const T*>(&m_currentFile->m_bytes[offset]);
+            return reinterpret_cast<const T*>(&this->m_currentFile->m_bytes[offset]);
         }
 
     private:

@@ -36,6 +36,7 @@ namespace dconstruct {
         };
     };
 
+    template<bool is_64_bit = true>
     class BinaryFile
     {
     public:
@@ -61,4 +62,7 @@ namespace dconstruct {
         void read_reloc_table();
         void replace_newlines_in_stringtable() noexcept;
     };
+
+    extern template class BinaryFile<true>;
+    extern template class BinaryFile<false>;
 }
