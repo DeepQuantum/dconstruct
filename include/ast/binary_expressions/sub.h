@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/expression.h"
+#include "ast/binary_expression.h"
 
 namespace dconstruct::ast { 
     struct sub_expr : public clonable_binary_expr<sub_expr> {

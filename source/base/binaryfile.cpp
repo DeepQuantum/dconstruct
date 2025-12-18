@@ -9,7 +9,7 @@
 
 namespace dconstruct {
 
-    template class BinaryFile<tru>;
+    template class BinaryFile<true>;
     template class BinaryFile<false>;
 
     template<bool is_64_bit>
@@ -49,7 +49,9 @@ namespace dconstruct {
 
         read_reloc_table();
 
-        replace_newlines_in_stringtable();
+        if constexpr (is_64_bit) {
+            replace_newlines_in_stringtable();
+        }
     }
 
     template<bool is_64_bit>

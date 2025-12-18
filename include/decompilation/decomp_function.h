@@ -83,17 +83,19 @@ namespace dconstruct::dcompiler {
 
         void insert_return(const reg_idx dest);
 
-        [[nodiscard]] inline bool is_binary(const ast::expression* expr) {
-            return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
-        }
+        // [[nodiscard]] inline bool is_binary(const ast::expression* expr) {
+        //     return dynamic_cast<const ast::binary_expr*>(expr) != nullptr;
+        // }
 
         template <typename T>
         [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             const auto& op2 = m_transformableExpressions[istr.operand2];
             return std::make_unique<T>(
-                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
-                is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+                op1->get_grouped(),
+                op2->get_grouped()
+                //is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
+                //is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
             );
         }
 
@@ -103,8 +105,10 @@ namespace dconstruct::dcompiler {
             const auto& op2 = m_transformableExpressions[istr.operand2];
             auto expr = std::make_unique<T>(
                 std::move(op),
-                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
-                is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
+                op1->get_grouped(),
+                op2->get_grouped()
+                //is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
+                //is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
             );
             if constexpr (std::is_same_v<T, ast::compare_expr>) {
                 const bool is_comp = expr->m_operator.m_lexeme == "==" || expr->m_operator.m_lexeme == "!=";
@@ -119,7 +123,8 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] inline std::unique_ptr<T> apply_binary_op_imm(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
             return std::make_unique<T>(
-                is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
+                op1->get_grouped(),
+                //is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone(),
                 std::make_unique<ast::literal>(istr.operand2)
             );
         }
@@ -127,7 +132,7 @@ namespace dconstruct::dcompiler {
         template <typename T>
         [[nodiscard]] inline std::unique_ptr<T> apply_unary_op(const Instruction& istr) {
             const auto& op1 = m_transformableExpressions[istr.operand1];
-            return std::make_unique<T>(is_binary(op1.get()) ? std::make_unique<ast::grouping>(op1->clone()) : op1->clone());
+            return std::make_unique<T>(op1->get_grouped());
         }
 
         [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_shift(const Instruction& istr) {

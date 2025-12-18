@@ -1,5 +1,6 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
+CHANGELOG.md
 sidbase.bin
 test/dc_test_files
 *.dcpl

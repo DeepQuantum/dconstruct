@@ -30,6 +30,9 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<expression> clone() const = 0;
+        [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
+            return clone();
+        }
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         [[nodiscard]] virtual expected_value_ptr emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
@@ -145,21 +148,6 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
-            if (!is_unknown(m_type)) expr->set_type(m_type);
-            return expr;
-        }
-    };
-
-    template <typename impl_binary_expr>
-    struct clonable_binary_expr : public binary_expr {
-        using binary_expr::binary_expr;
-
-        [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            auto expr = std::make_unique<impl_binary_expr>(
-                m_operator,
-                m_lhs ? m_lhs->clone() : nullptr,
-                m_rhs ? m_rhs->clone() : nullptr
-            );
             if (!is_unknown(m_type)) expr->set_type(m_type);
             return expr;
         }

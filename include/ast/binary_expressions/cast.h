@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/expression.h"
+#include "ast/binary_expression.h"
 #include "ast/primary_expressions/identifier.h"
 
 namespace dconstruct::ast {
