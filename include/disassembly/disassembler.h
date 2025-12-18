@@ -63,11 +63,11 @@ namespace dconstruct {
     class Disassembler {
     public:
         using max_signed_int_t = std::conditional_t<is_64_bit, i64, i32>;
-        using max_signed_int_kind_t = std::conditional_t<is_64_bit, ast::primitive_kind::I64, ast::primitive_kind::I32>;
         using sid_t = std::conditional_t<is_64_bit, sid64, sid32>;
         using sid_literal_t = std::conditional_t<is_64_bit, sid64_literal, sid32_literal>;
+        static constexpr ast::primitive_kind max_signed_int_kind_t = is_64_bit ? ast::primitive_kind::I64 : ast::primitive_kind::I32;  
 
-        Disassembler(BinaryFile<bitness>* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
+        Disassembler(BinaryFile<is_64_bit>* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
 
         void disassemble();
         virtual ~Disassembler() {};
@@ -93,7 +93,7 @@ namespace dconstruct {
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
         
-        BinaryFile<bitness>* m_currentFile = nullptr;
+        BinaryFile<is_64_bit>* m_currentFile = nullptr;
         const SIDBase* m_sidbase = nullptr;
         DisassemblerOptions m_options;
         std::vector<function_disassembly> m_functions;
@@ -115,7 +115,7 @@ namespace dconstruct {
         void insert_span_fmt(const char* format, Args ...args);
         template<TextFormat text_format = TextFormat{}, typename... Args> 
         void insert_span_indent(const char*, const u32, Args ...);
-        [[nodiscard]] const char* lookup(const sid64 hash);
+        [[nodiscard]] const char* lookup(const sid_t hash);
         [[nodiscard]] bool is_unmapped_sid(const location) const noexcept;
         void insert_header_line();
         [[nodiscard]] bool is_possible_float(const f32* ptr) const noexcept;

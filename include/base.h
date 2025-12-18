@@ -113,9 +113,14 @@ namespace dconstruct {
 		return base;
 	}
 
-	inline const std::string int_to_string_id(sid64 sid) noexcept {
+	template<typename T> requires (std::is_same_v<T, sid32> || std::is_same_v<T,sid64>)
+	inline const std::string int_to_string_id(T sid) noexcept {
 		char buffer[20] = { 0 };
-		std::snprintf(buffer, sizeof(buffer), "#%016llX", sid);
+		if constexpr (sizeof(T) == 4) {
+			std::snprintf(buffer, sizeof(buffer), "#%08llX", sid);
+		} else {
+			std::snprintf(buffer, sizeof(buffer), "#%016llX", sid);
+		}
 		return buffer;
 	}
 

@@ -32,7 +32,7 @@ namespace dconstruct::ast {
         else if constexpr (std::is_same_v<T, std::monostate>) {
             return "null";
         }
-        else if constexpr (std::is_same_v<T, sid_literal>) {
+        else if constexpr (std::is_same_v<T, sid32_literal> || std::is_same_v<T, sid64_literal>) {
             return std::get<1>(arg);
         }
         else if constexpr (std::is_same_v<T, f32>) {

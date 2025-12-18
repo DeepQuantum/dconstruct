@@ -13,13 +13,16 @@ namespace dconstruct {
             this->m_options = options;
         }
 
-        ~FileDisassembler() noexcept override {
+        void dump() const noexcept {
             fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
+        }
+
+        ~FileDisassembler() noexcept override {
             fclose(m_outfptr);
         }
 
         template<typename T>
-        const T* get_value_ptr_at(const u64 offset) const noexcept {
+        [[nodiscard]] const T* get_value_ptr_at(const u64 offset) const noexcept {
             return reinterpret_cast<const T*>(&this->m_currentFile->m_bytes[offset]);
         }
 

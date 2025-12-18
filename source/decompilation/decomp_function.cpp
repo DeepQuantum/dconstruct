@@ -128,19 +128,34 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
             case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::cast_expr>(make_type(ast::primitive_kind::F32), make_load_symbol_table(istr)); break;
             case Opcode::LoadStaticPointer: generated_expression = std::make_unique<ast::cast_expr>(ast::ptr_type{}, make_load_symbol_table(istr)); break;
 
-			case Opcode::LoadStaticI8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i8>(istr.operand1 * 8)); break;
-			case Opcode::LoadStaticU8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u8>(istr.operand1 * 8)); break;
-			case Opcode::LoadStaticI16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i16>(istr.operand1 * 8)); break;
-			case Opcode::LoadStaticU16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u16>(istr.operand1 * 8)); break;
+			case Opcode::LoadStaticI8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i8>(istr.operand1)); break;
+			case Opcode::LoadStaticU8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u8>(istr.operand1)); break;
+			case Opcode::LoadStaticI16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i16>(istr.operand1)); break;
+			case Opcode::LoadStaticU16Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u16>(istr.operand1)); break;
 
-            case Opcode::LoadStaticI32Imm: {
+            case Opcode::LoadStaticI32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1)); break;
+
+
+			case Opcode::LoadStaticU32Imm: {
                 if constexpr (is_64_bit) {
-                    generated_expression = std::make_unique<ast::literal>(symbol_table.get<i32>(istr.operand1 * 8)); break;
+                    generated_expression = std::make_unique<ast::literal>(symbol_table.get<u32>(istr.operand1)); break;
+                } else {
+                    const sid32 sid = symbol_table.get<sid32>(istr.operand1);
+                    const std::string& name = m_file.m_sidCache.at(sid);
+                    expr_uptr lit = std::make_unique<ast::literal>(sid32_literal{ sid, name });
+                    const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
+                    if (!std::holds_alternative<ast::function_type>(type)) {
+                        generated_expression = std::move(lit);
+                        generated_expression->set_type(type);
+                    }
+                    else {
+                        m_transformableExpressions[istr.destination] = std::move(lit);
+                        m_transformableExpressions[istr.destination]->set_type(type);
+                    }
                 }
-
-
-			case Opcode::LoadStaticU32Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<u32>(istr.operand1 * 8)); break;
-            case Opcode::LoadStaticI64Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i64>(istr.operand1 * 8)); break;
+                break;
+            } 
+            case Opcode::LoadStaticI64Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i64>(istr.operand1)); break;
 
 
             case Opcode::IAbs: generated_expression = make_abs<ast::primitive_kind::U64>(istr.destination); break;
@@ -164,12 +179,12 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 break;
             }
             case Opcode::LoadStaticFloatImm: {
-                generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>(istr.operand1 * 8));
+                generated_expression = std::make_unique<ast::literal>(symbol_table.get<f32>(istr.operand1));
                 break;
             }
             case Opcode::LoadStaticPointerImm: {
-                if (symbol_table.get<p64>(istr.operand1 * 8) >= (p64)(m_file.m_strings.m_ptr)) {
-                    generated_expression = std::make_unique<ast::literal>(symbol_table.get<const char*>(istr.operand1 * 8));
+                if (symbol_table.get<p64>(istr.operand1) >= (p64)(m_file.m_strings.m_ptr)) {
+                    generated_expression = std::make_unique<ast::literal>(symbol_table.get<const char*>(istr.operand1));
                 } else {
                     generated_expression = std::make_unique<ast::literal>("");
                 }
@@ -185,16 +200,16 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
             case Opcode::LookupPointer: {
                 expr_uptr lit = nullptr;
                 if constexpr (is_64_bit) {
-                    const sid64 sid = symbol_table.get<sid64, true>(istr.operand1);
+                    const sid64 sid = symbol_table.get<sid64>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
                     lit = std::make_unique<ast::literal>(sid64_literal{ sid, name });
                     
                 } else {
-                    const sid32 sid = symbol_table.get<sid32, false>(istr.operand1);
+                    const sid32 sid = symbol_table.get<sid32>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
                     lit = std::make_unique<ast::literal>(sid32_literal{ sid, name });
                 }
-                const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_type[istr.operand1];
+                const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                 if (!std::holds_alternative<ast::function_type>(type)) {
                     generated_expression = std::move(lit);
                     generated_expression->set_type(type);
@@ -672,10 +687,7 @@ template<typename from, typename to>
             return new_cast;
         }
         else {
-            auto cast = std::make_unique<ast::cast_expr>(
-                type,
-                is_binary(op2.get()) ? std::make_unique<ast::grouping>(op2->clone()) : op2->clone()
-            );
+            auto cast = std::make_unique<ast::cast_expr>(type, op2->get_grouped());
             return cast;
         }
     }

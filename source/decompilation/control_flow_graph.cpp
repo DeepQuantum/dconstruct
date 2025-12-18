@@ -37,7 +37,7 @@ namespace dconstruct {
         output.reserve(input.size());
         for (char c : input) {
             if (c < '\n') {
-                output += "borked";
+                output += " ";
                 continue;
             }
             switch (c) {

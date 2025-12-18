@@ -10,10 +10,10 @@ const std::string TEST_DIR = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcons
 
 namespace dconstruct::testing {
 
-    static SIDBase base = SIDBase::from_binary(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)");
+    static SIDBase base = *SIDBase::from_binary(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)");
 
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
-        SIDBase base = SIDBase::from_binary(TEST_DIR + "test_sidbase.bin"); 
+        SIDBase base = *SIDBase::from_binary(TEST_DIR + "test_sidbase.bin"); 
         BinaryFile<> file(TEST_DIR + path); 
         
         FileDisassembler disassembler(&file, &base, "", DisassemblerOptions{}); 
@@ -828,4 +828,10 @@ namespace dconstruct::testing {
             "}";
         decomp_test(filepath, id, expected, dconstruct::c);
     }
+
+    // TEST(DECOMPILER, RacketSqrt) {
+    //     const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\user-script-funcs-impl.bin)";
+    //     const std::string id = "sqrt-sign";
+    //     std::string 
+    // }
 }

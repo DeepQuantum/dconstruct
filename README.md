@@ -345,14 +345,6 @@ Along with these, there are some issues that will probably not be fixed:
 - returning garbage when it is not known whether a function is void or not
 - tons of redundant code
 
-# Changelog
-
-## Uncharted 4 Support
-
-- Added support for decompiling UC4 functions. For now only function code is supported, structures aren't.
-
-- Fixed StoreInt/Float/Pointer Instructions not treating the 2nd operand as a read
-
 # Planned features
 
 - a complete Racket and Python output format

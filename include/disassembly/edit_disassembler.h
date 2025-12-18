@@ -23,10 +23,10 @@ namespace dconstruct {
         };
     };
 
-    class EditDisassembler : public Disassembler<i64> {
+    class EditDisassembler : public Disassembler<> {
 
     public:
-        EditDisassembler(BinaryFile<i64>* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits) noexcept : Disassembler<i64>(file, sidbase) {
+        EditDisassembler(BinaryFile<>* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits) noexcept : Disassembler<>(file, sidbase) {
             m_options = options;
             m_edits = edits;
         }
