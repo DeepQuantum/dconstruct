@@ -23,7 +23,13 @@ namespace dconstruct::ast {
         const expression& m_expr;
     };
 
-    using expected_value_ptr = std::expected<llvm::Value*, llvm_error>;
+    enum class OP_KIND {
+        PREFIX,
+        INFIX,
+        POSTFIX,
+    };
+
+    using expec_llvm_value = std::expected<llvm::Value*, llvm_error>;
 
     struct expression : public Iprintable {
         virtual ~expression() = default;
@@ -34,7 +40,7 @@ namespace dconstruct::ast {
             return clone();
         }
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        [[nodiscard]] virtual expected_value_ptr emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&) const {
+        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
 
@@ -139,6 +145,7 @@ namespace dconstruct::ast {
         compiler::token m_operator;
         std::unique_ptr<expression> m_lhs;
         std::unique_ptr<expression> m_rhs;
+        OP_KIND m_opkind;
     };
 
 

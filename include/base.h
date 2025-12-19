@@ -107,7 +107,7 @@ namespace dconstruct {
 		u32 base = 0x811c9dc5;
 		if (*str) {
 			do {
-				base = 0x01000193  * (base ^ *str++);
+				base = 0x811c9dc5  * (base ^ *str++);
 			} while (*str);
 		}
 		return base;
@@ -117,7 +117,7 @@ namespace dconstruct {
 	inline const std::string int_to_string_id(T sid) noexcept {
 		char buffer[20] = { 0 };
 		if constexpr (sizeof(T) == 4) {
-			std::snprintf(buffer, sizeof(buffer), "#%08llX", sid);
+			std::snprintf(buffer, sizeof(buffer), "#%08lX", sid);
 		} else {
 			std::snprintf(buffer, sizeof(buffer), "#%016llX", sid);
 		}

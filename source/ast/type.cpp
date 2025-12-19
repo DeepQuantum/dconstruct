@@ -17,6 +17,17 @@ namespace dconstruct::ast {
     }, prim);
 }
 
+[[nodiscard]] bool is_signed(const ast::full_type& type) noexcept {
+    return std::visit([](auto&& arg) -> bool {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, ast::primitive_type>) {
+            return arg.m_type == primitive_kind::I8 || arg.m_type == primitive_kind::I16 || arg.m_type == primitive_kind::I32 || arg.m_type == primitive_kind::I64;
+        } else {
+            return false;
+        }
+    }, type);
+}
+
 [[nodiscard]] std::string primitive_to_string(const primitive_value& prim) {
     return std::visit([](auto&& arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
