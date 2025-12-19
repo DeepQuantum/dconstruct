@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build_tests",
             "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-            "args": ["--gtest_filter=DISASSEMBLER.UC4Funcs"],
+            "args": ["--gtest_filter=DECOMPILER.MoveRegisters1"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
