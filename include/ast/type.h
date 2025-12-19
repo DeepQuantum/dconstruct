@@ -34,6 +34,7 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept;
 
+
     struct primitive_type;
     struct struct_type;
     struct enum_type;
@@ -90,6 +91,9 @@ namespace dconstruct::ast {
     [[nodiscard]] inline static bool is_unknown(const full_type& type) noexcept {
         return std::holds_alternative<std::monostate>(type);
     }
+
+    [[nodiscard]] bool is_signed(const full_type& type) noexcept; 
+
 
     [[nodiscard]] static function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args) {
         ast::function_type::t_arg_list arg_types;

@@ -92,32 +92,46 @@ namespace dconstruct {
         for (const auto& line : m_lines) {
             const auto& istr = line.m_instruction;
 
+            if (istr.opcode == Opcode::Move) {
+                m_regs.m_openAfterMove[istr.destination] = m_regs.m_openAfterMove[istr.destination] || istr.destination < ARGUMENT_REGISTERS_IDX && !m_regs.m_written[istr.operand1];
+                continue;
+            }
+
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !m_regs.m_written[istr.destination])  {
                 m_regs.m_readTwice[istr.destination] = m_regs.m_readTwice[istr.destination] || m_regs.m_readFirst[istr.destination];
                 m_regs.m_readFirst[istr.destination] = true;
                 m_regs.m_written[istr.destination] = true;
                 m_regs.m_readTwice[istr.operand2] = m_regs.m_readTwice[istr.operand2] || istr.op2_is_reg() && m_regs.m_readFirst[istr.operand2] && !m_regs.m_written[istr.operand2];
                 m_regs.m_readFirst[istr.operand2] = m_regs.m_readFirst[istr.operand2] || istr.op2_is_reg() && !m_regs.m_written[istr.operand2];
+                m_regs.m_readAfterMove[istr.operand1] = m_regs.m_readAfterMove[istr.operand1] || m_regs.m_openAfterMove[istr.operand1];
+                m_regs.m_readAfterMove[istr.operand2] = m_regs.m_readAfterMove[istr.operand2] || m_regs.m_openAfterMove[istr.operand2];
+                m_regs.m_openAfterMove[istr.operand1] = !(m_regs.m_openAfterMove[istr.operand1] && m_regs.m_readAfterMove[istr.operand1]);
+                m_regs.m_openAfterMove[istr.operand2] = !(m_regs.m_openAfterMove[istr.operand2] && m_regs.m_readAfterMove[istr.operand2]);
                 continue;
             }
             
             if (!istr.destination_is_immediate() && istr.destination < ARGUMENT_REGISTERS_IDX) {
                 m_regs.m_written[istr.destination] = true;
+                m_regs.m_openAfterMove[istr.destination] = false;
             }
 
             if (istr.op1_is_reg() && !m_regs.m_written[istr.operand1]) {
                 m_regs.m_readTwice[istr.operand1] = m_regs.m_readTwice[istr.operand1] || m_regs.m_readFirst[istr.operand1];
                 m_regs.m_readFirst[istr.operand1] = true;
+                m_regs.m_readAfterMove[istr.operand1] = m_regs.m_readAfterMove[istr.operand1] || m_regs.m_openAfterMove[istr.operand1];
+                m_regs.m_openAfterMove[istr.operand1] = !(m_regs.m_openAfterMove[istr.operand1] && m_regs.m_readAfterMove[istr.operand1]);
             }
             if (istr.op2_is_reg() && !m_regs.m_written[istr.operand2]) {
                 m_regs.m_readTwice[istr.operand2] = m_regs.m_readTwice[istr.operand2] || m_regs.m_readFirst[istr.operand2];
                 m_regs.m_readFirst[istr.operand2] = true;
+                m_regs.m_readAfterMove[istr.operand1] = m_regs.m_readAfterMove[istr.operand1] || m_regs.m_openAfterMove[istr.operand1];
+                m_regs.m_openAfterMove[istr.operand1] = !(m_regs.m_openAfterMove[istr.operand1] && m_regs.m_readAfterMove[istr.operand1]);
             }
         }
     }
 
     [[nodiscard]] register_nature control_flow_node::get_register_nature_starting_at(const istr_line start_line, const bool return_is_read) const noexcept {
-        reg_set read_first, multi_read, write_regs;
+        reg_set read_first, multi_read, write_regs, read_after_move, awaiting_read_after_move;
         for (istr_line i = start_line; i < m_lines.size(); ++i) {
             const auto& istr = m_lines[i].m_instruction;
 
@@ -128,6 +142,11 @@ namespace dconstruct {
                 }
                 write_regs[istr.destination] = true;
                 break;
+            }
+
+            if (istr.opcode == Opcode::Move) {
+                awaiting_read_after_move[istr.destination] = awaiting_read_after_move[istr.destination] || istr.destination < ARGUMENT_REGISTERS_IDX && !write_regs[istr.operand1];
+                continue;
             }
 
             if (istr.destination == istr.operand1 && istr.op1_is_reg() && !write_regs[istr.destination])  {
@@ -478,7 +497,7 @@ namespace dconstruct {
         return body;
     }
 
-    [[nodiscard]] reg_set ControlFlowGraph::get_register_nature(
+    [[nodiscard]] reg_set ControlFlowGraph::get_read_registers(
         const control_flow_node& start_node,
         reg_set check_regs,
         const node_id stop_node,
@@ -488,6 +507,7 @@ namespace dconstruct {
         struct node_reg_pair {
             const control_flow_node& node;
             reg_set regs_to_check;
+            reg_set awaiting_read_after_move;
 		};
 
 		reg_set read;
@@ -496,38 +516,53 @@ namespace dconstruct {
         std::vector<node_reg_pair> node_stack;
 
         if (start_line) {
-            const auto [read_first, _x, _y] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
-            read |= read_first & check_regs;
-            check_regs &= ~read_first;
+            const auto regs = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
+
+            // we still say r0 would be written to, then it would be move into.
+            // but then we have a seperate field, read_after_move, that would only be set to true for r0 if after that move, we read it again
+            // want to check r1, r0 already written, move r0, r1 -> r0 in awaiting stage, we then say call r0, r0 is read after move and no longer awaiting
+
+            read |= regs.m_readFirst & check_regs;
+            check_regs &= ~regs.m_readFirst;
+            check_regs |= (regs.m_readAfterMove & ~regs.m_readFirst);
             checked[start_node.m_index] = true;
+
             if (start_node.m_followingNode) {
-                node_stack.emplace_back(m_nodes[start_node.m_followingNode], check_regs);
+                node_stack.emplace_back(m_nodes[start_node.m_followingNode], check_regs, start_node.m_regs.m_openAfterMove);
             }
             if (start_node.has_target()) {
-                node_stack.emplace_back(m_nodes[start_node.m_targetNode], check_regs);
+                node_stack.emplace_back(m_nodes[start_node.m_targetNode], check_regs, start_node.m_regs.m_openAfterMove);
             }
         }
         else {
-            node_stack.emplace_back(start_node, check_regs);
+            node_stack.emplace_back(start_node, check_regs, reg_set{});
         }
 
 #ifdef _DEBUG  
         std::cout << "check_regs: " << pretty_regset(check_regs) << '\n';
 #endif
         while (!node_stack.empty()) {
-            auto [node, local_check_regs] = node_stack.back();
+            auto [node, local_check_regs, open_after_move] = node_stack.back();
 #ifdef _DEBUG
 			std::cout << "processing nature for node " << node.m_index 
                 << " read_first: " << pretty_regset(node.m_regs.m_readFirst) 
                 << " written: " << pretty_regset(node.m_regs.m_written) 
+                << " read_after_move: " << pretty_regset(node.m_regs.m_readAfterMove) 
+                << " open_after_move current: " << pretty_regset(node.m_regs.m_openAfterMove) 
+                << " open_after_move last: " << pretty_regset(open_after_move) 
                 << '\n';
 			std::cout << "local check_regs before: " << pretty_regset(local_check_regs) << " read before: " << pretty_regset(read) << '\n';
 #endif
             node_stack.pop_back();
             checked[node.m_index] = true;
+        
+            local_check_regs |= (node.m_regs.m_readFirst & open_after_move); // any "open" registers? if they are READ FIRST, they need to be checked in the following.
+            // what if we move out of it though? i dont think it matters. say r0 is open. then say we move OUT of r0 into r1. r1 is now open (according to the CURRENT node), but so is r0.
+            open_after_move &= ~(node.m_regs.m_written | node.m_regs.m_readFirst | node.m_regs.m_readAfterMove);
 
             read |= node.m_regs.m_readFirst & local_check_regs;
             local_check_regs &= ~(node.m_regs.m_readFirst | node.m_regs.m_written);
+            local_check_regs |= (node.m_regs.m_readAfterMove & ~node.m_regs.m_readFirst);
 
 #ifdef _DEBUG
             std::cout << "local check_regs after: " << pretty_regset(local_check_regs) << " read after: " << pretty_regset(read) << '\n';
@@ -538,10 +573,10 @@ namespace dconstruct {
             }
 
             if (node.m_followingNode && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
-                node_stack.emplace_back(m_nodes[node.m_followingNode], local_check_regs);
+                node_stack.emplace_back(m_nodes[node.m_followingNode], local_check_regs, node.m_regs.m_openAfterMove & open_after_move);
             }
             if (node.has_target() && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
-                node_stack.emplace_back(m_nodes[node.m_targetNode], local_check_regs);
+                node_stack.emplace_back(m_nodes[node.m_targetNode], local_check_regs, node.m_regs.m_openAfterMove & open_after_move);
             }
         }
 
@@ -556,11 +591,15 @@ namespace dconstruct {
         node_set checked(m_nodes.size(), false);
         bool already_read = false;
         std::vector<std::reference_wrapper<const control_flow_node>> node_stack;
+
+        reg_set regs_to_check;
+        regs_to_check[reg_to_check] = true;
+
 #ifdef _DEBUG
-        std::cout << "check reg " << std::to_string(reg_to_check) << '\n';
+        std::cout << "check reg " << pretty_regset(regs_to_check) << '\n';
 #endif
         if (start_line) {
-            const auto [read_once, read_twice, written] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
+            const auto [read_once, read_twice, written, read_after_move, open_after_move] = start_node.get_register_nature_starting_at(start_line, !m_func.m_isScriptFunction);
 #ifdef _DEBUG
             std::cout << "using start line " << start_line << " , "
                 << " read_first: " << pretty_regset(read_once)
@@ -569,15 +608,19 @@ namespace dconstruct {
                 << '\n';
 #endif
 
-            if (read_twice[reg_to_check]) {
-                return 2;
-            }
+            // if (read_twice[reg_to_check]) {
+            //     return 2;
+            // }
 
-            if (written[reg_to_check]) {
-                return read_once[reg_to_check];
-            }
+            // if (moved[reg_to_check]) {
+            //     read_once[]
+            // }
 
-            already_read = read_once[reg_to_check];
+            // if (written[reg_to_check]) {
+            //     return read_once[reg_to_check];
+            // }
+
+            // already_read = read_once[reg_to_check];
 
             checked[start_node.m_index] = true;
             if (start_node.m_followingNode) {
@@ -667,7 +710,7 @@ namespace dconstruct {
         const reg_set right = get_registers_written_to(m_nodes[start_node.m_targetNode], ipdom);
 
         const reg_set written = left | right;
-        result = get_register_nature(m_nodes.at(ipdom), written, m_nodes.back().m_index + 1);
+        result = get_read_registers(m_nodes.at(ipdom), written, m_nodes.back().m_index + 1);
 
         return result;
     }
@@ -676,7 +719,7 @@ namespace dconstruct {
         node_set checked(m_nodes.size(), false);
 
         const reg_set written = head_node.m_regs.m_written | get_registers_written_to(m_nodes[head_node.m_followingNode], head_node.m_index);
-        const reg_set res = get_register_nature(m_nodes[head_node.m_targetNode], written, m_nodes.back().m_index);
+        const reg_set res = get_read_registers(m_nodes[head_node.m_targetNode], written, m_nodes.back().m_index);
 
         return res;
     }

@@ -86,7 +86,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return res;
 }
 
-[[nodiscard]] expected_value_ptr call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
+[[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::environment& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};
@@ -103,7 +103,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     args_v.reserve(m_arguments.size());
 
     for (const auto& arg : m_arguments) {
-        auto exp_value = arg->emit_llvm(ctx, builder, module);
+        auto exp_value = arg->emit_llvm(ctx, builder, module, env);
         if (!exp_value) {
             return exp_value;
         }

@@ -169,9 +169,9 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
                 }
-                /*else if (call_usage_count == 1) {
+                else if (call_usage_count == 1) {
                     generated_expression = std::move(call);
-                }*/
+                }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(call);
                     load_expression_into_new_var(istr.destination);

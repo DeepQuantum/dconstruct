@@ -6,8 +6,8 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] expected_value_ptr bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
-    auto rhs = m_rhs->emit_llvm(ctx, builder, module);
+[[nodiscard]] expec_llvm_value bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::environment& env) const noexcept {
+    auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;
     }

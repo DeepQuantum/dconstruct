@@ -3,7 +3,7 @@ def fnv(msg: str) -> int:
     mask = 2**32 - 1
     for char in msg:
         base ^= ord(char)
-        base *= 0x01000193
+        base *= 0x811C9DC5
         base &= mask
     return base
 

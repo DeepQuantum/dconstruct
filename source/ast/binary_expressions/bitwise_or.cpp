@@ -7,12 +7,12 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] expected_value_ptr bitwise_or_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module) const noexcept {
-    expected_value_ptr lhs = m_lhs->emit_llvm(ctx, builder, module);
+[[nodiscard]] expec_llvm_value bitwise_or_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::environment& env) const noexcept {
+    expec_llvm_value lhs = m_lhs->emit_llvm(ctx, builder, module, env);
     if (!lhs) {
         return lhs;
     }
-    expected_value_ptr rhs = m_rhs->emit_llvm(ctx, builder, module);
+    expec_llvm_value rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;
     }
