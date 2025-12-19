@@ -97,7 +97,7 @@ namespace dconstruct {
 		u64 base = 0xCBF29CE484222325;
 		if (*str) {
 			do {
-				base = 0xCBF29CE484222325 * (base ^ *str++);
+				base = 0x100000001B3 * (base ^ *str++);
 			} while (*str);
 		}
 		return base;

@@ -17,8 +17,6 @@ namespace dconstruct {
         reg_set m_readFirst;
         reg_set m_readTwice;
         reg_set m_written;
-        reg_set m_readAfterMove;
-        reg_set m_openAfterMove;
     };
 
     struct control_flow_node {
