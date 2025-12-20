@@ -33,12 +33,16 @@ void grouping::pseudo_racket(std::ostream& os) const {
     return expr;
 }
 
-[[nodiscard]] full_type grouping::compute_type(const compiler::environment& env) const {
+[[nodiscard]] full_type grouping::compute_type(const type_environment& env) const {
     return m_expr->compute_type(env);
 }
 
 [[nodiscard]] u16 grouping::complexity() const noexcept {
     return m_expr->complexity();
+}
+
+void grouping::decomp_optimization_pass(second_pass_env& env) noexcept {
+    m_expr->decomp_optimization_pass(env);
 }
 
 

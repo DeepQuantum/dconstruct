@@ -6,6 +6,7 @@ namespace dconstruct::ast {
     struct block : public statement {
         explicit block() noexcept : m_statements{} {};
         explicit block(std::vector<stmnt_uptr>&& stmnts) noexcept : m_statements{ std::move(stmnts) } {};
+        void decomp_optimization_pass(second_pass_env& env) noexcept final;
         void pseudo_c(std::ostream&) const final;
         void pseudo_py(std::ostream&) const final;
 		void pseudo_racket(std::ostream&) const final;

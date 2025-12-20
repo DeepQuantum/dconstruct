@@ -23,7 +23,7 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return std::make_unique<cast_expr>(m_type, m_rhs->clone());
 }
 
-[[nodiscard]] full_type cast_expr::compute_type(const compiler::environment& env) const {
+[[nodiscard]] full_type cast_expr::compute_type(const type_environment& env) const {
     return m_type;
 };
 

@@ -3,11 +3,13 @@
 
 namespace dconstruct::compiler {
 
-void environment::define(const std::string& name, ast::typed_value value) {
+template<typename T>
+void environment<T>::define(const std::string& name, T value) {
     m_values[name] = value;
 }
 
-bool environment::assign(const std::string& name, ast::typed_value value) {
+template<typename T>
+bool environment<T>::assign(const std::string& name, T value) {
     if (m_values.contains(name)) {
         m_values[name] = std::move(value);
         return true;
@@ -18,14 +20,15 @@ bool environment::assign(const std::string& name, ast::typed_value value) {
     return false;
 }
 
-[[nodiscard]] const ast::typed_value* environment::lookup(const std::string& name) const {
+template<typename T>
+[[nodiscard]] T* environment<T>::lookup(const std::string& name) const {
     if (auto it = m_values.find(name); it != m_values.end()) {
         return &it->second;
     }
     if (m_enclosing != nullptr) {
         return m_enclosing->lookup(name);
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 }

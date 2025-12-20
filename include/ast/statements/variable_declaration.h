@@ -15,6 +15,8 @@ namespace dconstruct::ast {
         explicit variable_declaration(ast::full_type type, std::string id_name, const ast::primitive_value& init) noexcept :
         m_type(std::move(type)), m_identifier(std::move(id_name)), m_init(std::make_unique<ast::literal>(init)) {};
 
+        void decomp_optimization_pass(second_pass_env& env) noexcept final;
+
         void pseudo_c(std::ostream& os) const final;
 
         void pseudo_py(std::ostream& os) const final;

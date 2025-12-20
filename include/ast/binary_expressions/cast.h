@@ -12,7 +12,7 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream& os) const final;
 		void pseudo_racket(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] expr_uptr clone() const noexcept final;
         [[nodiscard]] bool equals(const expression& other) const noexcept final;
         [[nodiscard]] u16 complexity() const noexcept final;

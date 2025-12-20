@@ -74,7 +74,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return m_callee == rhs_ptr->m_callee && m_arguments == rhs_ptr->m_arguments;
 }
 
-[[nodiscard]] full_type call_expr::compute_type(const compiler::environment& env) const {
+[[nodiscard]] full_type call_expr::compute_type(const type_environment& env) const {
     return std::monostate();
 };
 
@@ -86,7 +86,13 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return res;
 }
 
-[[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::environment& env) const noexcept {
+void call_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
+    for (const auto& arg : m_arguments) {
+        arg->decomp_optimization_pass(env);
+    }
+}
+
+[[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, type_environment& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};

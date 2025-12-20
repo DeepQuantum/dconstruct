@@ -11,9 +11,10 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
-        [[nodiscard]] expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::environment&) const noexcept final;
+        [[nodiscard]] expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, type_environment&) const noexcept final;
+        void decomp_optimization_pass(second_pass_env& env) noexcept final;
         compiler::token m_token;
         expr_uptr m_callee;
         std::vector<expr_uptr> m_arguments;

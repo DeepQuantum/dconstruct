@@ -15,10 +15,11 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept override;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type(const compiler::environment& env) const final;
+        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
-        
+        void decomp_optimization_pass(second_pass_env& ctx) noexcept;
+
         compiler::token m_name;
     };
 }

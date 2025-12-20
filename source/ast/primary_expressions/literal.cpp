@@ -35,7 +35,7 @@ void literal::pseudo_racket(std::ostream& os) const {
     return expr;
 }
 
-[[nodiscard]] full_type literal::compute_type(const compiler::environment&) const noexcept {
+[[nodiscard]] full_type literal::compute_type(const type_environment& env) const noexcept {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
@@ -43,7 +43,7 @@ void literal::pseudo_racket(std::ostream& os) const {
     return 1;
 }
 
-[[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compiler::environment&) const noexcept {
+[[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, type_environment& env) const noexcept {
    return std::visit([&](auto&& lit) -> expec_llvm_value {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {
