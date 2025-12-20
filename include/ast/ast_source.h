@@ -1,14 +1,26 @@
 #pragma once
 
-#include "base.h"
+#include "compilation/environment.h"
 #include <ostream>
 
-namespace dconstruct {
-    struct Iprintable {
-        virtual ~Iprintable() = default;
+namespace dconstruct::ast {
+
+    struct expression;
+
+    struct second_pass_context {
+        std::unique_ptr<ast_element>* m_declareSite;
+        expression* m_firstUsageSite;
+        u32 m_uses;
+    };
+
+    using second_pass_env = std::unique_ptr<compiler::environment<second_pass_context>>;
+
+    struct ast_element {
+        virtual ~ast_element() = default;
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
+        virtual void decomp_optimization_pass(second_pass_env& env) = 0;
     };
 
     enum class Flags {
@@ -60,7 +72,7 @@ namespace dconstruct {
         return os;
     }
 
-    inline std::ostream& operator<<(std::ostream& os, const Iprintable &expr) {
+    inline std::ostream& operator<<(std::ostream& os, const ast_element &expr) {
         if (os.iword(get_flag_index()) & static_cast<i32>(Flags::RACKET)) {
             expr.pseudo_racket(os);
         } else if (os.iword(get_flag_index()) & static_cast<i32>(Flags::PY)) {

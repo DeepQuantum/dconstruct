@@ -33,4 +33,9 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return m_type.index() == rhs_ptr->m_type.index() && m_identifier == rhs_ptr->m_identifier && m_init == rhs_ptr->m_init;
 }
 
+void variable_declaration::decomp_optimization_pass(second_pass_env& env) noexcept {
+    assert(!env.lookup(m_identifier));
+    env.define(m_identifier, {&m_init, 0});
+}
+
 }

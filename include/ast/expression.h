@@ -1,7 +1,6 @@
 #pragma once
 
-#include "base.h"
-#include "printable.h"
+#include "ast_source.h"
 #include <expected>
 #include "compilation/dc_register.h"
 #include "compilation/tokens.h"
@@ -30,8 +29,9 @@ namespace dconstruct::ast {
     };
 
     using expec_llvm_value = std::expected<llvm::Value*, llvm_error>;
+    using type_environment = compiler::environment<ast::full_type>;
 
-    struct expression : public Iprintable {
+    struct expression : public ast_element {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
         [[nodiscard]] virtual bool equals(const expression& other) const noexcept = 0;
@@ -40,18 +40,18 @@ namespace dconstruct::ast {
             return clone();
         }
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::environment&) const {
+        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, type_environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
-
-        [[nodiscard]] inline const full_type& get_type(const compiler::environment& env) {
+        
+        [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {
                 m_type = compute_type(env);
             }
             return m_type;
         }
 
-        [[nodiscard]] virtual full_type compute_type(const compiler::environment& env) const = 0;
+        [[nodiscard]] virtual full_type compute_type(const type_environment& env) const = 0;
 
         inline void set_type(const full_type& type) noexcept {
             m_type = type;
@@ -96,7 +96,7 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
+        [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
             return full_type{ std::monostate() };
         }
 
@@ -125,7 +125,7 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
+        [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
             return full_type{ std::monostate() };
         }
 

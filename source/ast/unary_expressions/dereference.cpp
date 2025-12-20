@@ -7,7 +7,7 @@ namespace dconstruct::ast {
         return std::make_unique<ast::dereference_expr>(m_operator, m_rhs->simplify());
     }
 
-    [[nodiscard]] full_type dereference_expr::compute_type(const compiler::environment& env) const {
+    [[nodiscard]] full_type dereference_expr::compute_type(const type_environment& env) const {
         const auto rhs_type = m_rhs->compute_type(env);
         if (std::holds_alternative<ast::ptr_type>(rhs_type)) {
             return *std::get<ast::ptr_type>(rhs_type).m_pointedAt;

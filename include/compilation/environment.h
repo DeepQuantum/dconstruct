@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 namespace dconstruct::compiler {
+    template<typename T = ast::typed_value>
     struct environment {
         environment() noexcept : m_enclosing(nullptr) {};
         
@@ -12,13 +13,13 @@ namespace dconstruct::compiler {
 
         explicit environment(std::unique_ptr<environment>&& enclosing) noexcept : m_enclosing(std::move(enclosing)) {};
 
-        std::unordered_map<std::string, ast::typed_value> m_values;
+        std::unordered_map<std::string, T> m_values;
 
-        void define(const std::string& name, ast::typed_value value);
+        void define(const std::string& name, T value);
 
-        bool assign(const std::string& name, ast::typed_value value);
+        bool assign(const std::string& name, T value);
 
-        [[nodiscard]] const ast::typed_value* lookup(const std::string& name) const;
+        [[nodiscard]] T* lookup(const std::string& name) const;
 
         std::unique_ptr<environment> m_enclosing;
     };

@@ -22,4 +22,8 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return *m_expression == *rhs_ptr->m_expression;
 }
 
+void expression_stmt::decomp_optimization_pass(second_pass_env& ctx) noexcept {
+    m_expression->decomp_optimization_pass(ctx);
+}
+
 }

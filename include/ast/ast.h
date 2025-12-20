@@ -32,3 +32,5 @@
 #include "statements/expression_statement.h"
 #include "statements/variable_declaration.h"
 #include "statements/return.h"
+
+using second_pass_env = dconstruct::type_environment<dconstruct::ast::identifier*>;

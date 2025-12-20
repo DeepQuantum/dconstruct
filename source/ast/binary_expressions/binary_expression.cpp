@@ -20,7 +20,7 @@
 //             os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
 //         }
 
-//         [[nodiscard]] inline full_type compute_type(const compiler::environment&) const override {
+//         [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
 //             return full_type{ std::monostate() };
 //         }
 
