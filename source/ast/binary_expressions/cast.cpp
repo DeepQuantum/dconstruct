@@ -1,4 +1,4 @@
-#include "ast/binary_expressions/cast.h"
+#include "ast/cast.h"
 
 
 namespace dconstruct::ast {
@@ -33,6 +33,13 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] u16 cast_expr::complexity() const noexcept {
     return 1 + m_rhs->complexity();
+}
+
+bool cast_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
+    if (m_rhs->decomp_optimization_pass(env)) {
+        env->lookup(static_cast<identifier&>(*m_rhs).m_name.m_lexeme)->m_firstUsageSite = &m_rhs;
+    }
+    return false;
 }
 
 

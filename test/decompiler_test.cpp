@@ -83,7 +83,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
-        const compiler::environment env{};
+        compiler::environment<ast::full_type> env{};
         std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
@@ -105,7 +105,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
-        const compiler::environment env{};
+        compiler::environment<ast::full_type> env{};
         const auto func = decompile_instructions_with_disassembly({
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
@@ -627,7 +627,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         std::set<std::string> emitted{};
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.dcpl)");
-		out << dconstruct::c;
+		out << dconstruct::ast::c;
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto& func : funcs) {
             if (emitted.contains(func.m_id)) {
@@ -680,7 +680,7 @@ namespace dconstruct::testing {
     }
 
 
-	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, decltype(dconstruct::racket) stream_lang = dconstruct::racket) {
+	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket) {
         BinaryFile<> file{ filepath };
         TLOU2Disassembler da{ &file, &base };
         da.disassemble();
@@ -812,7 +812,7 @@ namespace dconstruct::testing {
             "    }\n"
             "    return var_1;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::c);
     }
 
     TEST(DECOMPILER, Var2) {
@@ -826,7 +826,7 @@ namespace dconstruct::testing {
             "        display(var_1, 19);\n"
             "    }\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::c);
     }
 
     // TEST(DECOMPILER, RacketSqrt) {
@@ -838,6 +838,6 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, MoveRegisters1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string id = "#14C6FC79122F4A87";
-        decomp_test(filepath, id, "expected", dconstruct::c);
+        decomp_test(filepath, id, "expected", dconstruct::ast::c);
     }
 }

@@ -1,4 +1,6 @@
 #include "ast/primary_expressions/grouping.h"
+#include "ast/primary_expressions/identifier.h"
+
 
 namespace dconstruct::ast {
 
@@ -41,8 +43,11 @@ void grouping::pseudo_racket(std::ostream& os) const {
     return m_expr->complexity();
 }
 
-void grouping::decomp_optimization_pass(second_pass_env& env) noexcept {
-    m_expr->decomp_optimization_pass(env);
+bool grouping::decomp_optimization_pass(second_pass_env& env) noexcept {
+    if (m_expr->decomp_optimization_pass(env)) {
+        env->lookup(static_cast<identifier&>(*m_expr).m_name.m_lexeme)->m_firstUsageSite = &m_expr;
+    }
+    return false;
 }
 
 

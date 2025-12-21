@@ -22,8 +22,11 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return *m_expression == *rhs_ptr->m_expression;
 }
 
-void expression_stmt::decomp_optimization_pass(second_pass_env& ctx) noexcept {
-    m_expression->decomp_optimization_pass(ctx);
+bool expression_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
+    if (m_expression->decomp_optimization_pass(env)) {
+        env->lookup(static_cast<identifier&>(*m_expression).m_name.m_lexeme)->m_firstUsageSite = &m_expression;
+    }
+    return false;
 }
 
 }

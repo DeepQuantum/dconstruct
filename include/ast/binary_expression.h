@@ -1,6 +1,7 @@
 #pragma once
 #include "expression.h"
 #include "primary_expressions/grouping.h"
+#include "primary_expressions/identifier.h"
 
 namespace dconstruct::ast {
     template <typename impl_binary_expr>
@@ -19,6 +20,16 @@ namespace dconstruct::ast {
 
         [[nodiscard]] expr_uptr get_grouped() const {
             return std::make_unique<ast::grouping>(clone());
+        }
+
+        bool decomp_optimization_pass(second_pass_env& env) noexcept {
+            if (m_lhs->decomp_optimization_pass(env)) {
+                env->lookup(static_cast<identifier&>(*m_lhs).m_name.m_lexeme)->m_firstUsageSite = &m_lhs;
+            }
+            if (m_rhs->decomp_optimization_pass(env)) {
+                env->lookup(static_cast<identifier&>(*m_rhs).m_name.m_lexeme)->m_firstUsageSite = &m_rhs;
+            }
+            return false;
         }
     };
 }

@@ -43,7 +43,11 @@ void literal::pseudo_racket(std::ostream& os) const {
     return 1;
 }
 
-[[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, type_environment& env) const noexcept {
+bool literal::decomp_optimization_pass(second_pass_env& env) noexcept {
+    return false;
+}
+
+[[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
    return std::visit([&](auto&& lit) -> expec_llvm_value {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {

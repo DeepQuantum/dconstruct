@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/expression.h"
+#include "ast/unary_expression.h"
 
 namespace dconstruct::ast {
     struct logical_not_expr : public clonable_unary_expr<logical_not_expr> {
