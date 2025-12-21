@@ -48,8 +48,8 @@ static void decomp_file(
     const dconstruct::SIDBase &base,
     const dconstruct::DisassemblerOptions &options,
     const bool write_graphs,
-    const std::vector<std::string> &edits = {},
-    const dconstruct::print_fn_type language_type) {
+    const dconstruct::ast::print_fn_type language_type,
+    const std::vector<std::string> &edits = {}) {
     
     dconstruct::BinaryFile file(inpath.string());
 
@@ -72,7 +72,8 @@ static void decomp_file(
                 graph_path = get_sanitized_graph_path(graph_dir, func->m_id);
             }
             try {
-                const auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file, std::move(graph_path) };
+                auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file, std::move(graph_path) };
+                dcompiled.optimize_ast();
                 out << dcompiled.to_string() << "\n\n";
             }
             catch (const std::exception& e) {
@@ -107,7 +108,7 @@ static void decompile_multiple(
     const dconstruct::SIDBase &sidbase, 
     const dconstruct::DisassemblerOptions &options,
     const bool generate_graphs,
-    const dconstruct::print_fn_type language_print
+    const dconstruct::ast::print_fn_type language_print
 ) {
 
     std::vector<std::filesystem::path> filepaths;
@@ -131,7 +132,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, {}, language_print);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, {});
         }
     );
 
@@ -218,13 +219,13 @@ std::wstring get_executable_path()
     return std::wstring(buffer, len);
 }
 
-[[nodiscard]] static std::optional<dconstruct::print_fn_type> get_print_type(const std::string& input_string) {
+[[nodiscard]] static std::optional<dconstruct::ast::print_fn_type> get_print_type(const std::string& input_string) {
     if (input_string == "C" || input_string == "c") {
-        return dconstruct::c;
+        return dconstruct::ast::c;
     } else if (input_string == "Python" || input_string == "python") {
-        return dconstruct::py;
+        return dconstruct::ast::py;
     } else if (input_string == "Racket" || input_string == "racket") {
-        return dconstruct::racket;
+        return dconstruct::ast::racket;
     } else {
         return std::nullopt;
     }
@@ -388,7 +389,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, edits, print_func);
+            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, edits);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";
