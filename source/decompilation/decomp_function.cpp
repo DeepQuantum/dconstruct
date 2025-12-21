@@ -903,6 +903,9 @@ template<ast::primitive_kind kind>
     return res;
 }
 
-
-
+template<bool is_64_bit>
+void decomp_function<is_64_bit>::optimize_ast() {
+    ast::second_pass_env base{};
+    m_baseBlock.decomp_optimization_pass(base);
+}
 }

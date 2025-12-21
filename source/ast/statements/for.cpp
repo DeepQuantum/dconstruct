@@ -29,15 +29,16 @@ void for_stmt::pseudo_racket(std::ostream& os) const {
     return m_init == rhs_ptr->m_init && m_condition == rhs_ptr->m_condition && m_incr == rhs_ptr->m_incr && m_body == rhs_ptr->m_body;
 }
 
+[[nodiscard]] std::unique_ptr<statement> for_stmt::clone() const noexcept {
+    return std::make_unique<for_stmt>(m_init->clone(), m_condition->clone(), m_incr->clone(), m_body->clone());
+}
+
+
 bool for_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
-    m_init->decomp_optimization_pass(env);
-    if (m_condition->decomp_optimization_pass(env)) {
-        env->lookup(static_cast<identifier&>(*m_condition).m_name.m_lexeme)->m_firstUsageSite = &m_condition;
-    }
-    if (m_incr->decomp_optimization_pass(env)) {
-        env->lookup(static_cast<identifier&>(*m_incr).m_name.m_lexeme)->m_firstUsageSite = &m_incr;
-    }
-    m_body->decomp_optimization_pass(env);
+    statement::check_optimization(&m_init, env);
+    expression::check_optimization(&m_condition, env);
+    expression::check_optimization(&m_incr, env);
+    statement::check_optimization(&m_body, env);
     return false;
 }
 

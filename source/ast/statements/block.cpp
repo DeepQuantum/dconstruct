@@ -1,6 +1,8 @@
 #include "ast/statements/block.h"
 #include "ast/statements/variable_declaration.h"
 
+#include <iostream>
+
 namespace dconstruct::ast {
 
 void block::pseudo_c(std::ostream& os) const {
@@ -43,27 +45,52 @@ void block::pseudo_racket(std::ostream& os) const {
     return m_statements == rhs_ptr->m_statements;
 }
 
+[[nodiscard]] std::unique_ptr<statement> block::clone() const noexcept {
+    std::vector<stmnt_uptr> new_statements;
+    new_statements.reserve(m_statements.size());
+    for (const auto& statement : m_statements) {
+        new_statements.emplace_back(statement->clone());
+    }
+    return std::make_unique<block>(std::move(new_statements));
+}
+
 bool block::decomp_optimization_pass(second_pass_env& env) noexcept {
-    second_pass_env new_env{std::move(env)};
+    second_pass_env new_env{&env};
+
+   // std::vector<stmnt_uptr> copies;
 
     for (auto& statement : m_statements) {
-        statement->decomp_optimization_pass(env);
+        if (statement) {
+            statement::check_optimization(&statement, new_env);
+        }
     }
-
-    for (auto& [name, expression] : new_env->m_values) {
-
-        assert(dynamic_cast<ast::variable_declaration*>(expression.m_declareSite->get()));
-
+    for (auto& [name, expression] : new_env.m_values) {
         if (expression.m_uses == 0) {
-            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_declareSite->get());
+            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_original->get());
 
             assert(dynamic_cast<ast::call_expr*>(decl->m_init.get()));
 
-            *expression.m_declareSite = std::make_unique<ast::expression_stmt>(std::move(decl->m_init)); 
+            *expression.m_original = std::make_unique<ast::expression_stmt>(std::move(decl->m_init)); 
         } else if (expression.m_uses == 1) {
-            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_declareSite->get());
+            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_original->get());
+
+            std::unique_ptr<ast::expression>& init = decl->m_init;
+
+            *expression.m_replace = std::move(init);
+            *expression.m_original = nullptr;
         }
     }
+
+    std::vector<stmnt_uptr> new_statements;
+    new_statements.reserve(m_statements.size());
+
+    for (auto& statement : m_statements) {
+        if (statement) {
+            new_statements.emplace_back(std::move(statement));
+        }
+    }
+
+    m_statements = std::move(new_statements);
 
     return false;
 }

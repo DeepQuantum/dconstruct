@@ -13,7 +13,7 @@ namespace dconstruct::compiler {
 
         environment& operator=(const environment& rhs) = delete;
 
-        explicit environment(std::unique_ptr<environment>&& enclosing) noexcept : m_enclosing(std::move(enclosing)) {};
+        explicit environment(environment* enclosing) noexcept : m_enclosing(enclosing) {};
 
         std::unordered_map<std::string, T> m_values;
 
@@ -52,7 +52,7 @@ namespace dconstruct::compiler {
             return nullptr;
         }
 
-        std::unique_ptr<environment> m_enclosing;
+        environment* m_enclosing;
     };
 
 }

@@ -22,10 +22,12 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     return m_expr == rhs_ptr->m_expr;
 }
 
+[[nodiscard]] std::unique_ptr<statement> return_stmt::clone() const noexcept {
+    return std::make_unique<return_stmt>(m_expr->clone());
+}
+
 bool return_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
-    if (m_expr->decomp_optimization_pass(env)) {
-        env->lookup(static_cast<identifier&>(*m_expr).m_name.m_lexeme)->m_firstUsageSite = &m_expr;
-    }
+    expression::check_optimization(&m_expr, env);
     return false;
 }
 

@@ -45,7 +45,7 @@ void grouping::pseudo_racket(std::ostream& os) const {
 
 bool grouping::decomp_optimization_pass(second_pass_env& env) noexcept {
     if (m_expr->decomp_optimization_pass(env)) {
-        env->lookup(static_cast<identifier&>(*m_expr).m_name.m_lexeme)->m_firstUsageSite = &m_expr;
+        env.lookup(static_cast<identifier&>(*m_expr).m_name.m_lexeme)->m_replace = &m_expr;
     }
     return false;
 }

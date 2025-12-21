@@ -5,25 +5,31 @@
 
 namespace dconstruct::ast {
 
-    struct expression;
     struct statement;
+    struct expression;
 
     using ast_index = u64;
 
     struct second_pass_context {
-        std::unique_ptr<statement>* m_declareSite;
-        std::unique_ptr<expression>* m_firstUsageSite;
+        std::unique_ptr<statement>* m_original;
+        std::unique_ptr<expression>* m_replace;
         u32 m_uses;
     };
 
-    using second_pass_env = std::unique_ptr<compiler::environment<second_pass_context>>;
+    using second_pass_env = compiler::environment<second_pass_context>;
+
+    enum class PASS_ACTION {
+        INSERT,
+        REPLACE,
+        NONE,
+    };
     
     struct ast_element {
         virtual ~ast_element() = default;
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
-        [[nodiscard]] virtual bool decomp_optimization_pass(second_pass_env& env) noexcept = 0;
+        
     };
 
     enum class Flags {

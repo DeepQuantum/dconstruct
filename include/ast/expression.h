@@ -19,7 +19,6 @@ namespace dconstruct::ast {
     struct expression;
     struct identifier;
 
-
     struct llvm_error {
         std::string m_message;
         const expression& m_expr;
@@ -47,6 +46,8 @@ namespace dconstruct::ast {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
+        [[nodiscard]] virtual bool decomp_optimization_pass(second_pass_env& env) noexcept = 0;
+        
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {
                 m_type = compute_type(env);
@@ -59,6 +60,8 @@ namespace dconstruct::ast {
         inline void set_type(const full_type& type) noexcept {
             m_type = type;
         }
+
+        static void check_optimization(std::unique_ptr<ast::expression>* expr, second_pass_env& env);
         
     protected:
         full_type m_type;

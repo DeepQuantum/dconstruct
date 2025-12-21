@@ -14,6 +14,7 @@ namespace dconstruct::ast {
         bool decomp_optimization_pass(second_pass_env& env) noexcept final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
+        [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
 
         stmnt_uptr m_init;
         expr_uptr m_condition;
