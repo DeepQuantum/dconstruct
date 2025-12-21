@@ -42,7 +42,7 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
 
 
 bool assign_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
-    //expression::check_optimization(&m_lhs, env);
+    expression::check_optimization(&m_lhs, env);
     expression::check_optimization(&m_rhs, env);
     return false;
 }

@@ -32,6 +32,21 @@
             ],
         },
         {
+            "label": "build_cli_db",
+            "type": "shell",
+            "command": "cmake --build . --target dconstruct_cli --parallel --config Debug",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+        },
+        {
             "label": "build_tests",
             "type": "shell",
             "command": "cmake --build . --target dconstruct_test --parallel --config Debug",
