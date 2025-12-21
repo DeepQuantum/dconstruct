@@ -25,6 +25,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
 
+        [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
+
         [[nodiscard]] inline const expression* get_init_ptr() const noexcept {
             return m_init.get();
         } 

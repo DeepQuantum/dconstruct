@@ -63,6 +63,8 @@ namespace dconstruct::dcompiler {
         void load_expression_into_new_var(const reg_idx dst);
         void load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var);
 
+        void optimize_ast();
+
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_call(const Instruction& istr);
 
         template<ast::primitive_kind kind>

@@ -17,9 +17,7 @@ namespace dconstruct::ast {
         }
 
         inline bool decomp_optimization_pass(second_pass_env& env) noexcept override {
-            if (m_rhs->decomp_optimization_pass(env)) {
-                env->lookup(static_cast<identifier&>(*m_rhs).m_name.m_lexeme)->m_firstUsageSite = &m_rhs;
-            }
+            expression::check_optimization(&m_rhs, env);
             return false;
         }
     };

@@ -10,6 +10,9 @@ namespace dconstruct::ast {
 		void pseudo_racket(std::ostream& os) const final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
+
+        [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
+
         bool decomp_optimization_pass(second_pass_env& env) noexcept;
 
         expr_uptr m_condition;

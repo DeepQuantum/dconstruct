@@ -48,11 +48,17 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
 }
 
+void expression::check_optimization(std::unique_ptr<ast::expression>* expr, second_pass_env& env) {
+    if (expr->get()->decomp_optimization_pass(env)) {
+        env.lookup(dynamic_cast<identifier&>(*expr->get()).m_name.m_lexeme)->m_replace = expr;
+    }
+}
+
 bool identifier::decomp_optimization_pass(second_pass_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {
         return false;
     }
-    auto* ctx = env->lookup(m_name.m_lexeme); 
+    auto* ctx = env.lookup(m_name.m_lexeme); 
     assert(ctx);
     return ctx->m_uses++ == 0;
 }

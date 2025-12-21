@@ -35,12 +35,17 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
     return m_condition == rhs_ptr->m_condition && m_then == rhs_ptr->m_then && m_else == rhs_ptr->m_then;
 }
 
+[[nodiscard]] std::unique_ptr<statement> if_stmt::clone() const noexcept {
+    return std::make_unique<if_stmt>(m_condition->clone(), m_then->clone(), m_else ? m_else->clone() : nullptr);
+}
+
+
 bool if_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
-    if (m_condition->decomp_optimization_pass(env)) {
-        env->lookup(static_cast<identifier&>(*m_condition).m_name.m_lexeme)->m_firstUsageSite = &m_condition;
+    expression::check_optimization(&m_condition, env);
+    statement::check_optimization(&m_then, env);
+    if (m_else) {
+        statement::check_optimization(&m_else, env);
     }
-    m_then->decomp_optimization_pass(env);
-    m_else->decomp_optimization_pass(env);
     return false;
 }
 

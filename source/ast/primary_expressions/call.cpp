@@ -89,7 +89,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
 bool call_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
     for (auto& arg : m_arguments) {
         if (arg->decomp_optimization_pass(env)) {
-            env->lookup(static_cast<identifier&>(*arg).m_name.m_lexeme)->m_firstUsageSite = &arg;
+            env.lookup(static_cast<identifier&>(*arg).m_name.m_lexeme)->m_replace = &arg;
         }
     }
     return false;
