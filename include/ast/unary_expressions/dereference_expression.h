@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/expression.h"
+#include "ast/unary_expression.h"
 
 namespace dconstruct::ast {
     struct dereference_expr : public clonable_unary_expr<dereference_expr>{

@@ -6,10 +6,10 @@
 #include "binary_expressions/mul.h"
 #include "binary_expressions/div.h"
 #include "binary_expressions/mod.h"
-#include "binary_expressions/assign.h"
+#include "assign.h"
 #include "binary_expressions/compare.h"
 #include "binary_expressions/logical.h"
-#include "binary_expressions/cast.h"
+#include "cast.h"
 #include "binary_expressions/bitwise_and.h"
 #include "binary_expressions/bitwise_or.h"
 #include "binary_expressions/bitwise_xor.h"
@@ -32,5 +32,3 @@
 #include "statements/expression_statement.h"
 #include "statements/variable_declaration.h"
 #include "statements/return.h"
-
-using second_pass_env = dconstruct::type_environment<dconstruct::ast::identifier*>;

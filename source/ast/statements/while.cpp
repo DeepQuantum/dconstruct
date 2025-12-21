@@ -24,4 +24,12 @@ void while_stmt::pseudo_racket(std::ostream& os) const {
     return m_condition == rhs_ptr->m_condition && m_body == rhs_ptr->m_body;
 }
 
+bool while_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
+    if (m_condition->decomp_optimization_pass(env)) {
+        env->lookup(static_cast<identifier&>(*m_condition).m_name.m_lexeme)->m_firstUsageSite = &m_condition;
+    }
+    m_body->decomp_optimization_pass(env);
+    return false;
+}
+
 }

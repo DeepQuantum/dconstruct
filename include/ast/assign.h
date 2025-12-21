@@ -17,6 +17,8 @@ namespace dconstruct::ast {
         [[nodiscard]] bool equals(const expression& rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] inline u16 complexity() const noexcept final;
+        bool decomp_optimization_pass(second_pass_env& env) noexcept final;
+        
         expr_uptr m_lhs;
         expr_uptr m_rhs;
     };

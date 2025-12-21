@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <bit>
+#include <cassert>
 
 using sid64 = uint64_t;
 using sid32 = uint32_t;

@@ -12,7 +12,8 @@ namespace dconstruct::ast {
 
         inline static u32 m_emittedStringCount = 0;
 
-        [[nodiscard]] expec_llvm_value emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, type_environment&) const noexcept final;
+        [[nodiscard]] expec_llvm_value emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const noexcept final;
+        bool decomp_optimization_pass(second_pass_env& env) noexcept;
 
         [[nodiscard]] inline primitive_kind get_type() const noexcept {
             return kind_from_primitive_value(m_value);

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ast/type.h"
 
 #include <unordered_map>
@@ -15,11 +17,40 @@ namespace dconstruct::compiler {
 
         std::unordered_map<std::string, T> m_values;
 
-        void define(const std::string& name, T value);
+        void define(const std::string& name, T value) {
+            m_values[name] = value;
+        }
 
-        bool assign(const std::string& name, T value);
+        bool assign(const std::string& name, T value) {
+            if (m_values.contains(name)) {
+                m_values[name] = std::move(value);
+                return true;
+            }
+            if (m_enclosing != nullptr) {
+                m_enclosing->assign(name, std::move(value));
+            }
+            return false;
+        }
 
-        [[nodiscard]] T* lookup(const std::string& name) const;
+        [[nodiscard]] const T* lookup(const std::string& name) const {
+            if (auto it = m_values.find(name); it != m_values.end()) {
+                return &it->second;
+            }
+            if (m_enclosing != nullptr) {
+                return m_enclosing->lookup(name);
+            }
+            return nullptr;
+        }
+
+        [[nodiscard]] T* lookup(const std::string& name) {
+            if (auto it = m_values.find(name); it != m_values.end()) {
+                return &it->second;
+            }
+            if (m_enclosing != nullptr) {
+                return m_enclosing->lookup(name);
+            }
+            return nullptr;
+        }
 
         std::unique_ptr<environment> m_enclosing;
     };

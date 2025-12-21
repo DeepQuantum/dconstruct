@@ -13,9 +13,12 @@
 #include "llvm/IR/Module.h"
 
 
+
 namespace dconstruct::ast {
 
     struct expression;
+    struct identifier;
+
 
     struct llvm_error {
         std::string m_message;
@@ -40,7 +43,7 @@ namespace dconstruct::ast {
             return clone();
         }
         [[nodiscard]] virtual u16 complexity() const noexcept = 0;
-        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, type_environment&) const {
+        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
@@ -149,16 +152,7 @@ namespace dconstruct::ast {
     };
 
 
-    template <typename impl_unary_expr>
-    struct clonable_unary_expr : public unary_expr {
-        using unary_expr::unary_expr;
-
-        [[nodiscard]] std::unique_ptr<expression> clone() const final {
-            auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
-            if (!is_unknown(m_type)) expr->set_type(m_type);
-            return expr;
-        }
-    };
+    
 
     template <typename T> requires (std::is_base_of_v<ast::expression, T>)
     [[nodiscard]] std::unique_ptr<T> clone_cast(const std::unique_ptr<T>& expr) noexcept {
