@@ -13,7 +13,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
-        bool decomp_optimization_pass(second_pass_env& env) noexcept final;
+        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept final;
     private:
         expr_uptr m_expr;
     };

@@ -46,7 +46,7 @@ namespace dconstruct::ast {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
-        [[nodiscard]] virtual bool decomp_optimization_pass(second_pass_env& env) noexcept = 0;
+        [[nodiscard]] virtual VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept = 0;
         
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {

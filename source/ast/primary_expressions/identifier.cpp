@@ -1,4 +1,5 @@
 #include "ast/primary_expressions/identifier.h"
+#include "ast/assign.h"
 
 
 namespace dconstruct::ast {
@@ -49,18 +50,31 @@ void identifier::pseudo_racket(std::ostream& os) const {
 }
 
 void expression::check_optimization(std::unique_ptr<ast::expression>* expr, second_pass_env& env) {
-    if (expr->get()->decomp_optimization_pass(env)) {
-        env.lookup(dynamic_cast<identifier&>(*expr->get()).m_name.m_lexeme)->m_replace = expr;
+    const auto pass_action = expr->get()->decomp_optimization_pass(env);
+    switch (pass_action) {
+        case VAR_FOLDING_ACTION::VAR_READ: {
+            env.lookup(static_cast<identifier&>(*expr->get()).m_name.m_lexeme)->m_reads.push_back(expr);
+            break;
+        } 
+        case VAR_FOLDING_ACTION::VAR_WRITE: {
+            auto* assign = static_cast<assign_expr*>(expr->get());
+            assert(dynamic_cast<identifier*>(assign->m_lhs.get()));
+            env.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)->m_writes.push_back(expr);
+            break;
+        }
+        default: {
+            break;
+        }
     }
 }
 
-bool identifier::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION identifier::decomp_optimization_pass(second_pass_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {
-        return false;
+        return VAR_FOLDING_ACTION::NONE;
     }
     auto* ctx = env.lookup(m_name.m_lexeme); 
     assert(ctx);
-    return ctx->m_uses++ == 0;
+    return VAR_FOLDING_ACTION::VAR_READ;
 }
 
 }

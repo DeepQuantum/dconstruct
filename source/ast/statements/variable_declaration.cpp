@@ -39,23 +39,28 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return std::make_unique<variable_declaration>(m_type, m_identifier, m_init ? m_init->clone() : nullptr);
 }
 
-void statement::check_optimization(std::unique_ptr<ast::statement>* statement, second_pass_env& env) {
-    if (statement->get()->decomp_optimization_pass(env)) {
-        env.lookup(static_cast<variable_declaration&>(*statement->get()).m_identifier)->m_original = statement;
+void statement::check_optimization(std::unique_ptr<ast::statement>* expr, second_pass_env& env) {
+    const auto pass_action = expr->get()->decomp_optimization_pass(env);
+    switch (pass_action) {
+        case VAR_FOLDING_ACTION::VAR_DECLARATION: {
+            env.lookup(static_cast<variable_declaration&>(*expr->get()).m_identifier)->m_declaration = expr;
+            break;
+        }
+        default: {
+            break;
+        }
     }
 }
 
-
-
-bool variable_declaration::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION variable_declaration::decomp_optimization_pass(second_pass_env& env) noexcept {
     if (m_init) {
         expression::check_optimization(&m_init, env);
     }
     if (!m_identifier.starts_with("var") || env.m_values.contains(m_identifier)) {
-        return false;
+        return VAR_FOLDING_ACTION::NONE;
     }
     env.define(m_identifier, {});
-    return true;
+    return VAR_FOLDING_ACTION::VAR_DECLARATION;
 }
 
 }

@@ -86,13 +86,11 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return res;
 }
 
-bool call_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION call_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
     for (auto& arg : m_arguments) {
-        if (arg->decomp_optimization_pass(env)) {
-            env.lookup(static_cast<identifier&>(*arg).m_name.m_lexeme)->m_replace = &arg;
-        }
+        expression::check_optimization(&arg, env);
     }
-    return false;
+    return VAR_FOLDING_ACTION::NONE;
 }
 
 [[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {

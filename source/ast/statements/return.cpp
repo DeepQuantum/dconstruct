@@ -26,9 +26,9 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<return_stmt>(m_expr->clone());
 }
 
-bool return_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION return_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
     expression::check_optimization(&m_expr, env);
-    return false;
+    return VAR_FOLDING_ACTION::NONE;
 }
 
 }

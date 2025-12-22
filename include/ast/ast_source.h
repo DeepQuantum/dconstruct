@@ -10,19 +10,20 @@ namespace dconstruct::ast {
 
     using ast_index = u64;
 
-    struct second_pass_context {
-        std::unique_ptr<statement>* m_original;
-        std::unique_ptr<expression>* m_replace;
-        u32 m_uses;
+    struct variable_folding_context {
+        std::unique_ptr<statement>* m_declaration;
+        std::vector<std::unique_ptr<expression>*> m_reads;
+        std::vector<std::unique_ptr<expression>*> m_writes;
     };
 
-    using second_pass_env = compiler::environment<second_pass_context>;
-
-    enum class PASS_ACTION {
-        INSERT,
-        REPLACE,
+    enum class VAR_FOLDING_ACTION {
+        VAR_DECLARATION,
+        VAR_READ,
+        VAR_WRITE,
         NONE,
     };
+
+    using second_pass_env = compiler::environment<variable_folding_context>;
     
     struct ast_element {
         virtual ~ast_element() = default;
