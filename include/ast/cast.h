@@ -16,7 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const noexcept final;
         [[nodiscard]] bool equals(const expression& other) const noexcept final;
         [[nodiscard]] u16 complexity() const noexcept final;
-        bool decomp_optimization_pass(second_pass_env& env) noexcept final;
+        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept final;
 
 
         ast::full_type m_type;

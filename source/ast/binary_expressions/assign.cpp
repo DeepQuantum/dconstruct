@@ -41,10 +41,15 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
 }
 
 
-bool assign_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
-    expression::check_optimization(&m_lhs, env);
+VAR_FOLDING_ACTION assign_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
+    const auto* lhs = dynamic_cast<const identifier*>(m_lhs.get());
+    if (!lhs || !lhs->m_name.m_lexeme.starts_with("var")) {
+        return VAR_FOLDING_ACTION::NONE;
+    }
+    auto* ctx = env.lookup(lhs->m_name.m_lexeme); 
+    assert(ctx);
     expression::check_optimization(&m_rhs, env);
-    return false;
+    return VAR_FOLDING_ACTION::VAR_WRITE;
 }
 
 }

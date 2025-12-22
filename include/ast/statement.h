@@ -14,7 +14,7 @@ namespace dconstruct::ast {
     struct statement : public ast_element {
         virtual ~statement() = default;
         [[nodiscard]] virtual bool equals(const statement &rhs) const noexcept = 0;
-        [[nodiscard]] virtual bool decomp_optimization_pass(second_pass_env& env) noexcept = 0;
+        [[nodiscard]] virtual VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
 
         static void check_optimization(std::unique_ptr<ast::statement>* statement, second_pass_env& env);

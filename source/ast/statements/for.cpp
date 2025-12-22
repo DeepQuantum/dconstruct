@@ -34,12 +34,12 @@ void for_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 
-bool for_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION for_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
     statement::check_optimization(&m_init, env);
     expression::check_optimization(&m_condition, env);
     expression::check_optimization(&m_incr, env);
     statement::check_optimization(&m_body, env);
-    return false;
+    return VAR_FOLDING_ACTION::NONE;
 }
 
 }

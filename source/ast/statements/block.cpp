@@ -54,30 +54,39 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::make_unique<block>(std::move(new_statements));
 }
 
-bool block::decomp_optimization_pass(second_pass_env& env) noexcept {
+VAR_FOLDING_ACTION block::decomp_optimization_pass(second_pass_env& env) noexcept {
     second_pass_env new_env{&env};
 
    // std::vector<stmnt_uptr> copies;
-
+    static int count {};
     for (auto& statement : m_statements) {
+        std::cout << count++ << "\n";
         if (statement) {
             statement::check_optimization(&statement, new_env);
         }
     }
     for (auto& [name, expression] : new_env.m_values) {
-        if (expression.m_uses == 0) {
-            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_original->get());
+        if (expression.m_reads.size() == 0) {
+            auto* decl = static_cast<ast::variable_declaration*>(expression.m_declaration->get());
 
-            assert(dynamic_cast<ast::call_expr*>(decl->m_init.get()));
+            if (!decl->m_init) {
+                *expression.m_declaration = nullptr;
+            } else{ 
+                *expression.m_declaration = std::make_unique<ast::expression_stmt>(std::move(decl->m_init)); 
+            }
 
-            *expression.m_original = std::make_unique<ast::expression_stmt>(std::move(decl->m_init)); 
-        } else if (expression.m_uses == 1) {
-            ast::variable_declaration* decl = static_cast<ast::variable_declaration*>(expression.m_original->get());
+            for (auto* write : expression.m_writes) {
+                assert(dynamic_cast<ast::assign_expr*>(write->get()));
+                auto* assignment = static_cast<ast::assign_expr*>(write->get()); 
+                *write = std::move(assignment->m_rhs);
+            }
+        } else if (expression.m_reads.size() == 1 && expression.m_writes.size() < 2) {
+            auto* decl = static_cast<ast::variable_declaration*>(expression.m_declaration->get());
 
-            std::unique_ptr<ast::expression>& init = decl->m_init;
+            auto& init = decl->m_init;
 
-            *expression.m_replace = std::move(init);
-            *expression.m_original = nullptr;
+            *expression.m_reads[0] = std::move(init);
+            *expression.m_declaration = nullptr;
         }
     }
 
@@ -92,7 +101,7 @@ bool block::decomp_optimization_pass(second_pass_env& env) noexcept {
 
     m_statements = std::move(new_statements);
 
-    return false;
+    return VAR_FOLDING_ACTION::NONE;
 }
 
 }
