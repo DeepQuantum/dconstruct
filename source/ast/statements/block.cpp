@@ -85,8 +85,10 @@ VAR_FOLDING_ACTION block::decomp_optimization_pass(second_pass_env& env) noexcep
 
             auto& init = decl->m_init;
 
-            *expression.m_reads[0] = std::move(init);
-            *expression.m_declaration = nullptr;
+            if (init) {
+                *expression.m_reads[0] = std::move(init);
+                *expression.m_declaration = nullptr;
+            }
         }
     }
 

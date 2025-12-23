@@ -56,7 +56,7 @@ VAR_FOLDING_ACTION variable_declaration::decomp_optimization_pass(second_pass_en
     if (m_init) {
         expression::check_optimization(&m_init, env);
     }
-    if (!m_identifier.starts_with("var") || env.m_values.contains(m_identifier)) {
+    if (m_identifier.starts_with("arg") || env.m_values.contains(m_identifier)) {
         return VAR_FOLDING_ACTION::NONE;
     }
     env.define(m_identifier, {});

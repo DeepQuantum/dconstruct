@@ -845,7 +845,7 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
         auto dc_func = dcompiler::decomp_function{ *func, file };
-        dc_func.optimize_ast();
+       //dc_func.optimize_ast();
         std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
         std::ostringstream out;
         out << ast::c << dc_func.to_string();
@@ -870,18 +870,20 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, Optimization3) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\accessibility-script-funcs.bin)";
-        const std::string id = "start-accessibility-rumble";
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/player-upgrade-script-funcs-impl.bin)";
+        const std::string id = "can-purchase-any-upgrades-in-branch-points?";
         BinaryFile<> file{ filepath };
-        TLOU2Disassembler da{ &file, &base };
+        FileDisassembler<true> da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\a.asm)", {} };
         da.disassemble();
+        da.dump();
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        auto dc_func = dcompiler::decomp_function{ *func, file };
-        dc_func.optimize_ast();
-        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        auto dc_func = dcompiler::decomp_function{ *func, file,  R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\a.svg)" };
+        ASSERT_NO_FATAL_FAILURE(dc_func.optimize_ast());
+        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\can-purchase-any-upgrades-in-branch-points.dcpl)");
         std::ostringstream out;
+        std::cout << dc_func.to_string();
         out << ast::c << dc_func.to_string();
         file_out << ast::c << out.str();
     }

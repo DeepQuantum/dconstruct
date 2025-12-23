@@ -467,12 +467,12 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_followingNode];
 
     reg_set regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
-    reg_idx alt_loop_var_reg = -1;
+    reg_idx alt_loop_var_reg = -1, loop_var_reg = -1;
     std::unique_ptr<ast::identifier> id = nullptr;
     const Instruction& head_instruction = m_graph[loop.m_headNode].m_lines.front().m_instruction;
     const bool has_loop_variable = head_instruction.opcode == Opcode::Move;
     if (has_loop_variable) {
-        const reg_idx loop_var_reg = head_instruction.operand1;
+        loop_var_reg = head_instruction.operand1;
         alt_loop_var_reg = head_instruction.destination;
         regs_to_emit.reset(loop_var_reg);
         regs_to_emit.reset(alt_loop_var_reg);
@@ -504,6 +504,8 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
     }
     if (has_loop_variable) {
         load_expression_into_existing_var(alt_loop_var_reg, id->copy());
+        m_registersToVars[loop_var_reg].pop();
+        m_registersToVars[alt_loop_var_reg].pop();
     }
     m_blockStack.pop();
     m_loopVar--;
@@ -833,6 +835,8 @@ template<bool is_64_bit>
     const control_flow_node* failure_exit = nullptr;
     const control_flow_node* success_exit = nullptr;
 
+    const node_id ipdom = condition_start.m_ipdom;
+
 	expr_uptr condition = get_expression_as_condition(current_node->m_lines.back().m_instruction.operand1);
     proper_head = current_node->m_index;
     proper_successor = current_node->m_followingNode;
@@ -845,7 +849,7 @@ template<bool is_64_bit>
         const bool is_and = last_line.m_instruction.opcode == Opcode::BranchIfNot;
         const bool is_or = last_line.m_instruction.opcode == Opcode::BranchIf;
 
-        if (!is_and && !is_or)
+        if (!is_and && !is_or || current_node->m_ipdom != ipdom)
             break;
 
         auto& exit_node = is_and ? failure_exit : success_exit;
