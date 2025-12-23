@@ -69,7 +69,7 @@ void expression::check_optimization(std::unique_ptr<ast::expression>* expr, seco
 }
 
 VAR_FOLDING_ACTION identifier::decomp_optimization_pass(second_pass_env& env) noexcept {
-    if (!m_name.m_lexeme.starts_with("var")) {
+    if (m_name.m_lexeme.starts_with("arg")) {
         return VAR_FOLDING_ACTION::NONE;
     }
     auto* ctx = env.lookup(m_name.m_lexeme); 
