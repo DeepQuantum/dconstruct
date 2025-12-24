@@ -43,6 +43,34 @@ using node_set = std::vector<bool>;
 #define SID(str) (dconstruct::ToStringId64(str))
 
 namespace dconstruct {
+
+	static std::string sanitize_dc_string(const std::string &dc_string) {
+		std::string sanitized;
+		sanitized.reserve(dc_string.size());
+		for (char c : dc_string) {
+			switch (c) {
+				case '?':
+				case '>':
+				case '<':
+				case '*':
+				case '\\':
+				case '/':
+				case '|':
+				case '\"':
+				case ':':
+				case '@':
+				case '-': {
+					sanitized += '_';
+					break;
+				}
+				default: {
+					sanitized += c;
+				}
+			}
+		}
+		return sanitized;
+	}
+
 	struct location {
 		const std::byte* m_ptr = nullptr;
 

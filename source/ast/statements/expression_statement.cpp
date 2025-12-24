@@ -26,9 +26,12 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<expression_stmt>(m_expression->clone()); 
 }
 
-VAR_FOLDING_ACTION expression_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
-    expression::check_optimization(&m_expression, env);
-    return VAR_FOLDING_ACTION::NONE;
+OPTIMIZATION_ACTION expression_stmt::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+    const OPTIMIZATION_ACTION action = expression::check_optimization(&m_expression, optimization_ctx);
+    if (action == OPTIMIZATION_ACTION::BEGIN_FOREACH || action == OPTIMIZATION_ACTION::END_FOREACH) {
+        return action;
+    }
+    return OPTIMIZATION_ACTION::NONE;
 }
 
 }

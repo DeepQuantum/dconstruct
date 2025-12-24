@@ -43,9 +43,9 @@ void grouping::pseudo_racket(std::ostream& os) const {
     return m_expr->complexity();
 }
 
-VAR_FOLDING_ACTION grouping::decomp_optimization_pass(second_pass_env& env) noexcept {
-    check_optimization(&m_expr, env);
-    return VAR_FOLDING_ACTION::NONE;
+OPTIMIZATION_ACTION grouping::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+    check_optimization(&m_expr, optimization_ctx);
+    return OPTIMIZATION_ACTION::NONE;
 }
 
 

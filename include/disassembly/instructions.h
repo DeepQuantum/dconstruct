@@ -266,7 +266,7 @@ const char* UP_Instruction<padding>::opcode_to_string() const noexcept {
 template<u8 padding>
 [[nodiscard]] bool UP_Instruction<padding>::destination_is_immediate() const noexcept {
     return opcode == Opcode::Branch || opcode == Opcode::BranchIf
-        || opcode == Opcode::BranchIfNot || opcode == Opcode::Return;
+        || opcode == Opcode::BranchIfNot || opcode == Opcode::Return || opcode == Opcode::AssertPointer;
 }
 template<u8 padding>
 [[nodiscard]] bool UP_Instruction<padding>::operand1_is_immediate() const noexcept {
@@ -361,8 +361,6 @@ struct Register {
         return std::holds_alternative<ast::ptr_type>(m_type);
     }
 };
-
-//using SymbolTable = std::pair<location, std::vector<ast::full_type>>;
 
 struct SymbolTable {
     location m_location;

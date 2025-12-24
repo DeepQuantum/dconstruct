@@ -16,9 +16,9 @@ namespace dconstruct::ast {
             return expr;
         }
 
-        inline VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept override {
-            expression::check_optimization(&m_rhs, env);
-            return VAR_FOLDING_ACTION::NONE;
+        inline OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept override {
+            expression::check_optimization(&m_rhs, optimization_ctx);
+            return OPTIMIZATION_ACTION::NONE;
         }
     };
 }

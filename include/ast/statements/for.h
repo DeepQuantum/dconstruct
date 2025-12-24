@@ -11,7 +11,7 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
 
-        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept final;
+        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;

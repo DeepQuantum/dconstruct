@@ -43,8 +43,8 @@ void literal::pseudo_racket(std::ostream& os) const {
     return 1;
 }
 
-VAR_FOLDING_ACTION literal::decomp_optimization_pass(second_pass_env& env) noexcept {
-    return VAR_FOLDING_ACTION::NONE;
+OPTIMIZATION_ACTION literal::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+    return OPTIMIZATION_ACTION::NONE;
 }
 
 [[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {

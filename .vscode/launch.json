@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build_tests",
             "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-            "args": ["--gtest_filter=DECOMPILER.Optimization3"],
+            "args": ["--gtest_filter=DECOMPILER.Optimization6"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

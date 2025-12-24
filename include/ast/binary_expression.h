@@ -22,10 +22,10 @@ namespace dconstruct::ast {
             return std::make_unique<ast::grouping>(clone());
         }
 
-        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept {
-            expression::check_optimization(&m_lhs, env);
-            expression::check_optimization(&m_rhs, env);
-            return VAR_FOLDING_ACTION::NONE;
+        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+            expression::check_optimization(&m_lhs, optimization_ctx);
+            expression::check_optimization(&m_rhs, optimization_ctx);
+            return OPTIMIZATION_ACTION::NONE;
         }
     };
 }
