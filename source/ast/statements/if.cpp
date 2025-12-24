@@ -40,13 +40,13 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 
-VAR_FOLDING_ACTION if_stmt::decomp_optimization_pass(second_pass_env& env) noexcept {
-    expression::check_optimization(&m_condition, env);
-    statement::check_optimization(&m_then, env);
+OPTIMIZATION_ACTION if_stmt::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+    expression::check_optimization(&m_condition, optimization_ctx);
+    statement::check_optimization(&m_then, optimization_ctx);
     if (m_else) {
-        statement::check_optimization(&m_else, env);
+        statement::check_optimization(&m_else, optimization_ctx);
     }
-    return VAR_FOLDING_ACTION::NONE;
+    return OPTIMIZATION_ACTION::NONE;
 }
 
 }

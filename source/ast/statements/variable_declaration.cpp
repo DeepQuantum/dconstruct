@@ -39,28 +39,35 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return std::make_unique<variable_declaration>(m_type, m_identifier, m_init ? m_init->clone() : nullptr);
 }
 
-void statement::check_optimization(std::unique_ptr<ast::statement>* expr, second_pass_env& env) {
-    const auto pass_action = expr->get()->decomp_optimization_pass(env);
+OPTIMIZATION_ACTION statement::check_optimization(std::unique_ptr<ast::statement>* statement, optimization_pass_context& optimization_ctx) {
+    const auto pass_action = statement->get()->decomp_optimization_pass(optimization_ctx);
     switch (pass_action) {
-        case VAR_FOLDING_ACTION::VAR_DECLARATION: {
-            env.lookup(static_cast<variable_declaration&>(*expr->get()).m_identifier)->m_declaration = expr;
+        case OPTIMIZATION_ACTION::VAR_DECLARATION: {
+            optimization_ctx.m_variables.lookup(static_cast<variable_declaration&>(**statement).m_identifier)->m_declaration = statement;
             break;
+        }
+        case OPTIMIZATION_ACTION::BEGIN_FOREACH: {
+            optimization_ctx.m_foreachBegin = statement;
+        }
+        case OPTIMIZATION_ACTION::END_FOREACH: {
+            optimization_ctx.m_foreachEnd = statement;
         }
         default: {
             break;
         }
     }
+    return OPTIMIZATION_ACTION::NONE;
 }
 
-VAR_FOLDING_ACTION variable_declaration::decomp_optimization_pass(second_pass_env& env) noexcept {
+OPTIMIZATION_ACTION variable_declaration::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
     if (m_init) {
-        expression::check_optimization(&m_init, env);
+        expression::check_optimization(&m_init, optimization_ctx);
     }
-    if (m_identifier.starts_with("arg") || env.m_values.contains(m_identifier)) {
-        return VAR_FOLDING_ACTION::NONE;
+    if (!m_identifier.starts_with("var") || optimization_ctx.m_variables.m_values.contains(m_identifier)) {
+        return OPTIMIZATION_ACTION::NONE;
     }
-    env.define(m_identifier, {});
-    return VAR_FOLDING_ACTION::VAR_DECLARATION;
+    optimization_ctx.m_variables.define(m_identifier, {});
+    return OPTIMIZATION_ACTION::VAR_DECLARATION;
 }
 
 }

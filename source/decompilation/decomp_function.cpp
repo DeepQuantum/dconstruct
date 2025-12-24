@@ -61,13 +61,13 @@ template<bool is_64_bit>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node) {
-#ifdef _DEBUG
+#ifdef _TRACE
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
 
     for (const auto &line : node.m_lines) {
-        #ifdef _DEBUG
+        #ifdef _TRACE
 		std::cout << "parsing instruction " << std::hex << line.m_location << '\n';
         #endif
         const Instruction &istr = line.m_instruction;
@@ -168,10 +168,8 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 u16 call_usage_count = m_graph.get_register_read_count(node, istr.destination, line.m_location - node.m_startLine + 1);
                 if (call_usage_count == 0) {
                     append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(call)));
+                    m_transformableExpressions[istr.destination] = nullptr;
                 }
-                // else if (call_usage_count == 1) {
-                //     generated_expression = std::move(call);
-                // }
                 else {
                     m_transformableExpressions[istr.destination] = std::move(call);
                     load_expression_into_new_var(istr.destination);
@@ -276,7 +274,7 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::emit_node(const control_flow_node& node, const node_id stop_node) {
-#ifdef _DEBUG
+#ifdef _TRACE
     std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
 #endif
 
@@ -327,7 +325,7 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
     while (current_node != target) {
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
-        final_condition = std::make_unique<ast::compare_expr>(token, m_transformableExpressions[check_register]->clone(), std::move(final_condition));
+        final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
         current_node = current_node->m_followingNode ? &m_graph[current_node->m_followingNode] : target;
     }
 
@@ -499,8 +497,10 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
     while (bits != 0) {
         const reg_idx reg = std::countr_zero(bits);
         bits &= bits - 1;
-        auto new_var = m_registersToVars[reg].top()->copy();
-        load_expression_into_existing_var(reg, std::move(new_var));
+        if (m_transformableExpressions[reg]) {
+            auto new_var = m_registersToVars[reg].top()->copy();
+            load_expression_into_existing_var(reg, std::move(new_var));
+        }
     }
     if (has_loop_variable) {
         load_expression_into_existing_var(alt_loop_var_reg, id->copy());
@@ -909,7 +909,7 @@ template<ast::primitive_kind kind>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
-    ast::second_pass_env base{};
+    ast::optimization_pass_context base{};
     m_baseBlock.decomp_optimization_pass(base);
 }
 }

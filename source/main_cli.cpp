@@ -60,11 +60,12 @@ static void decomp_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
     disassembler.disassemble();
+    disassembler.dump();
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
         out << language_type;
-        for (const auto func : funcs) {
+        for (const auto& func : funcs) {
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));

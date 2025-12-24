@@ -680,15 +680,18 @@ namespace dconstruct::testing {
     }
 
 
-	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket) {
+	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false) {
         BinaryFile<> file{ filepath };
-        TLOU2Disassembler da{ &file, &base };
+        FileDisassembler<true> da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dconstruct::sanitize_dc_string(id) + ".asm", {} };
         da.disassemble();
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ *func, file };
-        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + id + ".dcpl");
+        auto dc_func = dcompiler::decomp_function{ *func, file, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dconstruct::sanitize_dc_string(id) + ".svg" };
+        if (optimize) {
+            dc_func.optimize_ast();
+        }
+        std::ofstream file_out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dconstruct::sanitize_dc_string(id) + ".dcpl");
         std::ostringstream out;
         out << stream_lang << dc_func.to_string();
         file_out << stream_lang << out.str();
@@ -886,6 +889,44 @@ namespace dconstruct::testing {
         std::cout << dc_func.to_string();
         out << ast::c << dc_func.to_string();
         file_out << ast::c << out.str();
+    }
+
+    TEST(DECOMPILER, Optimization4) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
+        const std::string id = "npc-ratking?";
+        const std::string expected = 
+            "u64? npc-ratking?(bool arg_0) {\n"
+            "    return !(arg_0 == 0) && is-npc?(arg_0) && npc-get-archetype(arg_0) && *(u64*)(npc-get-archetype(arg_0) + 392) == *infected-ratking-params*;\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Optimization5) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-user-funcs-impl.bin)";
+        const std::string id = "wait-until-anim-fully-faded-in";
+        const std::string expected = 
+            "u64? wait-until-anim-fully-faded-in(u64? arg_0, u64? arg_1) {\n"
+            "    u64? var_1;\n"
+            "    while (get-animation-fade(arg_0, arg_1) < 1.00) {\n"
+            "        wait-one-frame();\n"
+            "    }\n"
+            "    return var_1;\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+    
+    TEST(DECOMPILER, Optimization6) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-transition-line-chooser.bin)";
+        const std::string id = "play-transition-from-bucket";
+        const std::string expected = 
+            "u64? wait-until-anim-fully-faded-in(u64? arg_0, u64? arg_1) {\n"
+            "    u64? var_1;\n"
+            "    while (get-animation-fade(arg_0, arg_1) < 1.00) {\n"
+            "        wait-one-frame();\n"
+            "    }\n"
+            "    return var_1;\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
     }
 
 }

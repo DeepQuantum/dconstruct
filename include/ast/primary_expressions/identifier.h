@@ -18,7 +18,7 @@ namespace dconstruct::ast {
         [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
-        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& ctx) noexcept;
+        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& ctx) noexcept;
 
         compiler::token m_name;
     };

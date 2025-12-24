@@ -16,21 +16,29 @@ namespace dconstruct::ast {
         std::vector<std::unique_ptr<expression>*> m_writes;
     };
 
-    enum class VAR_FOLDING_ACTION {
+    enum class OPTIMIZATION_ACTION : u8 {
         VAR_DECLARATION,
         VAR_READ,
         VAR_WRITE,
+        BEGIN_FOREACH,
+        END_FOREACH,
         NONE,
     };
 
-    using second_pass_env = compiler::environment<variable_folding_context>;
+    struct optimization_pass_context {
+        compiler::environment<variable_folding_context> m_variables;
+        std::unique_ptr<statement>* m_foreachBegin;
+        std::unique_ptr<statement>* m_foreachEnd;
+
+        optimization_pass_context() = default;
+        optimization_pass_context(optimization_pass_context& rhs) : m_variables{&rhs.m_variables}, m_foreachBegin{rhs.m_foreachBegin}, m_foreachEnd{rhs.m_foreachEnd} {};
+    };
     
     struct ast_element {
         virtual ~ast_element() = default;
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
-        
     };
 
     enum class Flags {

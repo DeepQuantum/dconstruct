@@ -35,9 +35,9 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_rhs->complexity();
 }
 
-VAR_FOLDING_ACTION cast_expr::decomp_optimization_pass(second_pass_env& env) noexcept {
-    expression::check_optimization(&m_rhs, env);
-    return VAR_FOLDING_ACTION::NONE;
+OPTIMIZATION_ACTION cast_expr::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+    expression::check_optimization(&m_rhs, optimization_ctx);
+    return OPTIMIZATION_ACTION::NONE;
 }
 
 

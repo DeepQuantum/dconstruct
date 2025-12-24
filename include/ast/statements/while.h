@@ -13,7 +13,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
 
-        VAR_FOLDING_ACTION decomp_optimization_pass(second_pass_env& env) noexcept;
+        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept;
 
         expr_uptr m_condition;
         stmnt_uptr m_body;
