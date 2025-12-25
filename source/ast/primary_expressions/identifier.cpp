@@ -49,41 +49,56 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
 }
 
-OPTIMIZATION_ACTION expression::check_optimization(std::unique_ptr<ast::expression>* expr, optimization_pass_context& optimization_ctx) {
-    const auto pass_action = expr->get()->decomp_optimization_pass(optimization_ctx);
+void expression::check_var_optimization(std::unique_ptr<ast::expression>* expr, var_optimization_env& env) {
+    const auto pass_action = expr->get()->var_optimization_pass(env);
     switch (pass_action) {
-        case OPTIMIZATION_ACTION::VAR_READ: {
-            optimization_ctx.m_variables.lookup(static_cast<identifier&>(**expr).m_name.m_lexeme)->m_reads.push_back(expr);
+        case VAR_OPTIMIZATION_ACTION::VAR_READ: {
+            env.lookup(static_cast<identifier&>(**expr).m_name.m_lexeme)->m_reads.push_back(expr);
             break;
         } 
-        case OPTIMIZATION_ACTION::VAR_WRITE: {
+        case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
             auto* assign = static_cast<assign_expr*>(expr->get());
             assert(dynamic_cast<identifier*>(assign->m_lhs.get()));
-            optimization_ctx.m_variables.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)->m_writes.push_back(expr);
+            env.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)->m_writes.push_back(expr);
             break;
-        }
-        case OPTIMIZATION_ACTION::BEGIN_FOREACH: {
-            return OPTIMIZATION_ACTION::BEGIN_FOREACH;   
-        }
-        case OPTIMIZATION_ACTION::END_FOREACH: {
-            return OPTIMIZATION_ACTION::END_FOREACH;
         }
         default: {
             break;
         }
     }
-    return OPTIMIZATION_ACTION::NONE;
 }
 
-OPTIMIZATION_ACTION identifier::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+// void expression::check_foreach_optimization(expr_uptr* expr, foreach_optimization_env& env) {
+//     const auto pass_action = expr->get()->foreach_optimization_pass(env);
+//     switch (pass_action) {
+//         case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
+//             env = expr;
+//             break;
+//         }
+//         case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {
+//             *env = nullptr;
+//             *expr = nullptr;
+//             break;
+//         }
+//         default: {
+//             break;
+//         }
+//     }
+// }
+
+VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {
-        return OPTIMIZATION_ACTION::NONE;
+        return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    auto* ctx = optimization_ctx.m_variables.lookup(m_name.m_lexeme); 
+    auto* ctx = env.lookup(m_name.m_lexeme); 
     if (!ctx) {
-        return OPTIMIZATION_ACTION::NONE;
+        return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    return OPTIMIZATION_ACTION::VAR_READ;
+    return VAR_OPTIMIZATION_ACTION::VAR_READ;
+}
+
+FOREACH_OPTIMIZATION_ACTION identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

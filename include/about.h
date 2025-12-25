@@ -35,7 +35,7 @@ static void print_about() noexcept {
         "you can always find tons of more info in the README.md file.\n\n"
         "SPECIAL THANKS: \n\n"
         "* icemesh for providing the underlying structures for the DC-files. (https://github.com/icemesh/dc/tree/main/t2), and his disassembler, which largely served as an inspiration for this program\n" 
-        "* Specilizer for his DC-Tool, which was also used as inspiration for this program\n" 
+        "* Speclizer for his DC-Tool, which was also used as inspiration for this program\n" 
         "* uxh for his scripting knowledge\n" 
         "* bigdragon & Wedge for beta testing\n"
         "* the entire modding discord for being friendly & helpful.\n\n"

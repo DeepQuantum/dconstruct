@@ -40,13 +40,25 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 
-OPTIMIZATION_ACTION if_stmt::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
-    expression::check_optimization(&m_condition, optimization_ctx);
-    statement::check_optimization(&m_then, optimization_ctx);
+VAR_OPTIMIZATION_ACTION if_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
+    expression::check_var_optimization(&m_condition, env);
+    statement::check_var_optimization(&m_then, env);
     if (m_else) {
-        statement::check_optimization(&m_else, optimization_ctx);
+        statement::check_var_optimization(&m_else, env);
     }
-    return OPTIMIZATION_ACTION::NONE;
+    return VAR_OPTIMIZATION_ACTION::NONE;
 }
+
+FOREACH_OPTIMIZATION_ACTION if_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+    if (const auto action = m_condition->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
+        return action;
+    }
+    statement::check_foreach_optimization(&m_then, env);
+    if (m_else) {
+        statement::check_foreach_optimization(&m_else, env);
+    }
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
+}
+
 
 }

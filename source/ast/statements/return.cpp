@@ -3,11 +3,19 @@
 namespace dconstruct::ast {
 
 void return_stmt::pseudo_c(std::ostream& os) const {
-    os << "return " << *m_expr << ';';
+    if (m_expr) {
+        os << "return " << *m_expr << ';';
+    } else {
+        os << "return;";
+    }
 }
 
 void return_stmt::pseudo_py(std::ostream& os) const {
-    os << "return " << *m_expr << '\n';
+    if (m_expr) {
+        os << "return " << *m_expr << '\n';
+    } else {
+        os << "return;";
+    }
 }
 
 void return_stmt::pseudo_racket(std::ostream& os) const {
@@ -26,9 +34,13 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<return_stmt>(m_expr->clone());
 }
 
-OPTIMIZATION_ACTION return_stmt::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
-    expression::check_optimization(&m_expr, optimization_ctx);
-    return OPTIMIZATION_ACTION::NONE;
+VAR_OPTIMIZATION_ACTION return_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
+    expression::check_var_optimization(&m_expr, env);
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
+FOREACH_OPTIMIZATION_ACTION return_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+    return m_expr->foreach_optimization_pass(env);
 }
 
 }

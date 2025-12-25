@@ -35,11 +35,13 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_rhs->complexity();
 }
 
-OPTIMIZATION_ACTION cast_expr::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
-    expression::check_optimization(&m_rhs, optimization_ctx);
-    return OPTIMIZATION_ACTION::NONE;
+VAR_OPTIMIZATION_ACTION cast_expr::var_optimization_pass(var_optimization_env& env) noexcept {
+    expression::check_var_optimization(&m_rhs, env);
+    return VAR_OPTIMIZATION_ACTION::NONE;
 }
 
-
+FOREACH_OPTIMIZATION_ACTION cast_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+    return m_rhs->foreach_optimization_pass(env);
+}
 
 }

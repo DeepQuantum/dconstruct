@@ -16,9 +16,13 @@ namespace dconstruct::ast {
             return expr;
         }
 
-        inline OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept override {
-            expression::check_optimization(&m_rhs, optimization_ctx);
-            return OPTIMIZATION_ACTION::NONE;
+        inline VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept override {
+            expression::check_var_optimization(&m_rhs, env);
+            return VAR_OPTIMIZATION_ACTION::NONE;
+        }
+        
+        inline FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept override {
+            return m_rhs->foreach_optimization_pass(env);
         }
     };
 }

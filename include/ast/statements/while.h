@@ -13,7 +13,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
 
-        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept;
+        VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
+        FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;
 
         expr_uptr m_condition;
         stmnt_uptr m_body;

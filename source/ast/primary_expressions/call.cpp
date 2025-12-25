@@ -86,19 +86,23 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return res;
 }
 
-OPTIMIZATION_ACTION call_expr::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
+VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
     for (auto& arg : m_arguments) {
-        expression::check_optimization(&arg, optimization_ctx);
+        expression::check_var_optimization(&arg, env);
     }
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
+FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     assert(dynamic_cast<ast::literal*>(m_callee.get()));
     const ast::literal& callee = static_cast<ast::literal&>(*m_callee); 
     assert(std::holds_alternative<sid64_literal>(callee.m_value));
     if (std::get<sid64_literal>(callee.m_value).first == SID("begin-foreach")) {
-        return OPTIMIZATION_ACTION::BEGIN_FOREACH;
+        return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
     } else if (std::get<sid64_literal>(callee.m_value).first == SID("end-foreach")) {
-        return OPTIMIZATION_ACTION::END_FOREACH;
+        return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
     }
-    return OPTIMIZATION_ACTION::NONE;
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 [[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {

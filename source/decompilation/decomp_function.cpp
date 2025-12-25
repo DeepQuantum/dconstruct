@@ -909,7 +909,9 @@ template<ast::primitive_kind kind>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
-    ast::optimization_pass_context base{};
-    m_baseBlock.decomp_optimization_pass(base);
+    ast::var_optimization_env var_base{};
+    m_baseBlock.var_optimization_pass(var_base);
+    ast::foreach_optimization_env foreach_base{};
+    m_baseBlock.foreach_optimization_pass(foreach_base);
 }
 }

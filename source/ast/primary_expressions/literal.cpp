@@ -43,8 +43,12 @@ void literal::pseudo_racket(std::ostream& os) const {
     return 1;
 }
 
-OPTIMIZATION_ACTION literal::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
-    return OPTIMIZATION_ACTION::NONE;
+VAR_OPTIMIZATION_ACTION literal::var_optimization_pass(var_optimization_env& env)  noexcept {
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
+FOREACH_OPTIMIZATION_ACTION literal::foreach_optimization_pass(foreach_optimization_env& env)  noexcept {
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 [[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
