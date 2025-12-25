@@ -5,13 +5,14 @@
 namespace dconstruct::ast {
     struct for_stmt : public statement {
         explicit for_stmt(stmnt_uptr&& init, expr_uptr&& condition, expr_uptr&& incr, stmnt_uptr&& body) noexcept :
-        m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)) {};
+        m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)), m_asForEach(false) {};
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
 
-        OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept final;
+        VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
+        FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
@@ -20,5 +21,9 @@ namespace dconstruct::ast {
         expr_uptr m_condition;
         expr_uptr m_incr;
         stmnt_uptr m_body;
+        bool m_asForEach;
+    
+    private:
+        std::tuple<const std::string&, const expression&> get_for_each_iterable() const noexcept;
     };
 }

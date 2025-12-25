@@ -929,4 +929,26 @@ namespace dconstruct::testing {
         decomp_test(filepath, id, expected, ast::c, true);
     }
 
+    TEST(DECOMPILER, Optimization7) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-user-funcs-impl.bin)";
+        const std::string id = "bmm-deactivate-all";
+        const std::string expected = 
+            "u64? bmm-deactivate-all(u64? arg_0) {"
+            "    foreach (u64? var_1 : arg_0) {\n"
+            "        u16 var_2;\n"
+            "        if (var_1 && *(u16*)(var_1 + 12) == 7) {\n"
+            "            var_2 = *(u64*)var_1;\n"
+            "        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {\n"
+            "            var_2 = *(u64*)var_1;\n"
+            "        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {\n"
+            "            var_2 = *(u64*)var_1;\n"
+            "        } else {\n"
+            "            var_2 = 0;\n"
+            "        }\n"
+            "        net-send-event-all(deactivate, var_2);\n"
+            "    }\n"
+            "    return end-foreach();\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
 }

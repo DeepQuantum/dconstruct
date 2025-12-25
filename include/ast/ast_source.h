@@ -16,23 +16,21 @@ namespace dconstruct::ast {
         std::vector<std::unique_ptr<expression>*> m_writes;
     };
 
-    enum class OPTIMIZATION_ACTION : u8 {
-        VAR_DECLARATION,
-        VAR_READ,
-        VAR_WRITE,
+    enum class FOREACH_OPTIMIZATION_ACTION : u8 {
         BEGIN_FOREACH,
         END_FOREACH,
         NONE,
     };
 
-    struct optimization_pass_context {
-        compiler::environment<variable_folding_context> m_variables;
-        std::unique_ptr<statement>* m_foreachBegin;
-        std::unique_ptr<statement>* m_foreachEnd;
-
-        optimization_pass_context() = default;
-        optimization_pass_context(optimization_pass_context& rhs) : m_variables{&rhs.m_variables}, m_foreachBegin{rhs.m_foreachBegin}, m_foreachEnd{rhs.m_foreachEnd} {};
+    enum class VAR_OPTIMIZATION_ACTION : u8 {
+        VAR_DECLARATION,
+        VAR_READ,
+        VAR_WRITE,
+        NONE
     };
+
+    using var_optimization_env = compiler::environment<variable_folding_context>;
+    using foreach_optimization_env = std::unique_ptr<statement>*;
     
     struct ast_element {
         virtual ~ast_element() = default;

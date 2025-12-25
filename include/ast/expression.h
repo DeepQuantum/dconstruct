@@ -46,7 +46,8 @@ namespace dconstruct::ast {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
-        [[nodiscard]] virtual OPTIMIZATION_ACTION decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept = 0;
+        [[nodiscard]] virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
+        [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;
         
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {
@@ -61,7 +62,7 @@ namespace dconstruct::ast {
             m_type = type;
         }
 
-        static OPTIMIZATION_ACTION check_optimization(std::unique_ptr<ast::expression>* expr, optimization_pass_context& optimization_ctx);
+        static void check_var_optimization(std::unique_ptr<ast::expression>* statement, var_optimization_env& optimization_ctx);
         
     protected:
         full_type m_type;

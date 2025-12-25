@@ -6,14 +6,32 @@
 namespace dconstruct::ast {
 
 void block::pseudo_c(std::ostream& os) const {
+    static int a{};
     if (m_statements.empty()) {
         os << "{}" << '\n';
     } else {
         os << "{\n";
         os << indent_more;
-        for (const auto& stmnt : m_statements) {
-            os << indent << *stmnt << '\n';
-        } 
+        if (!m_removedStatementsIndices.empty()) {
+            u32 index_counter = 0;
+            u32 removed_index = m_removedStatementsIndices[index_counter];
+            for (u32 i = 0; i < m_statements.size(); ++i) {
+                if (i == removed_index) {
+                    if (index_counter < m_removedStatementsIndices.size() - 1) {
+                        removed_index = m_removedStatementsIndices[index_counter++];
+                    } else {
+                        removed_index = -1;
+                    }
+                    continue;
+                }
+                os << indent << *m_statements[i] << '\n';
+            }
+        } else {
+            for (const auto& stmnt : m_statements) {
+                std::cout << a++ << "\n";
+                os << indent << *stmnt << '\n';
+            } 
+        }
         os << indent_less;
         os << indent << '}';
     }
@@ -54,18 +72,15 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::make_unique<block>(std::move(new_statements));
 }
 
-OPTIMIZATION_ACTION block::decomp_optimization_pass(optimization_pass_context& optimization_ctx) noexcept {
-    optimization_pass_context new_env{optimization_ctx};
+VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
+    var_optimization_env new_env{&env};
 
-   // std::vector<stmnt_uptr> copies;
-    static int count {};
     for (auto& statement : m_statements) {
-        std::cout << count++ << "\n";
         if (statement) {
-            statement::check_optimization(&statement, new_env);
+            statement::check_var_optimization(&statement, new_env);
         }
     }
-    for (auto& [name, expression] : new_env.m_variables.m_values) {
+    for (auto& [name, expression] : new_env.m_values) {
         if (expression.m_reads.size() == 0) {
             auto& decl = static_cast<ast::variable_declaration&>(**expression.m_declaration);
 
@@ -103,7 +118,26 @@ OPTIMIZATION_ACTION block::decomp_optimization_pass(optimization_pass_context& o
 
     m_statements = std::move(new_statements);
 
-    return OPTIMIZATION_ACTION::NONE;
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
+FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+    for (auto& statement : m_statements) {
+        if (statement) {
+            statement::check_foreach_optimization(&statement, env);
+        }
+    }
+    std::vector<stmnt_uptr> new_statements;
+    new_statements.reserve(m_statements.size());
+
+    for (auto& statement : m_statements) {
+        if (statement) {
+            new_statements.emplace_back(std::move(statement));
+        }
+    }
+
+    m_statements = std::move(new_statements);
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 }
