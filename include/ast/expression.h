@@ -41,7 +41,6 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual u16 complexity() const noexcept = 0;
         [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
@@ -56,6 +55,14 @@ namespace dconstruct::ast {
             return m_type;
         }
 
+        [[nodiscard]] u16 get_complexity() const noexcept {
+            if (!m_complexity) {
+                m_complexity = calc_complexity();
+            }
+            return *m_complexity;
+        }
+
+
         [[nodiscard]] virtual full_type compute_type(const type_environment& env) const = 0;
 
         inline void set_type(const full_type& type) noexcept {
@@ -65,7 +72,10 @@ namespace dconstruct::ast {
         static void check_var_optimization(std::unique_ptr<ast::expression>* statement, var_optimization_env& optimization_ctx);
         
     protected:
+        [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;
+
         full_type m_type;
+        mutable std::optional<u16> m_complexity;
     };
 
     [[nodiscard]] inline bool operator==(const expression& lhs, const expression& rhs) noexcept {
@@ -107,8 +117,8 @@ namespace dconstruct::ast {
             return full_type{ std::monostate() };
         }
 
-        [[nodiscard]] inline u16 complexity() const noexcept override {
-            return 1 + m_rhs->complexity();
+        [[nodiscard]] inline u16 calc_complexity() const noexcept override {
+            return 1 + m_rhs->get_complexity();
         }
 
         compiler::token m_operator;
@@ -145,8 +155,8 @@ namespace dconstruct::ast {
             return false;
         }
 
-        [[nodiscard]] inline u16 complexity() const noexcept override {
-            return 1 + m_lhs->complexity() + m_rhs->complexity();
+        [[nodiscard]] inline u16 calc_complexity() const noexcept override {
+            return 1 + m_lhs->get_complexity() + m_rhs->get_complexity();
         }
 
         compiler::token m_operator;

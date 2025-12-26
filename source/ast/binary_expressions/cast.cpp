@@ -31,8 +31,8 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return false;
 }
 
-[[nodiscard]] u16 cast_expr::complexity() const noexcept {
-    return 1 + m_rhs->complexity();
+[[nodiscard]] u16 cast_expr::calc_complexity() const noexcept {
+    return 1 + m_rhs->get_complexity();
 }
 
 VAR_OPTIMIZATION_ACTION cast_expr::var_optimization_pass(var_optimization_env& env) noexcept {

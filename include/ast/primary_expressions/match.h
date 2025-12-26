@@ -3,8 +3,8 @@
 #include "ast/expression.h"
 
 namespace dconstruct::ast {
-    struct call_expr : public expression {
-        call_expr(compiler::token token, expr_uptr&& expr, std::vector<expr_uptr>&& args) noexcept : m_token{std::move(token)}, m_callee{std::move(expr)}, m_arguments{std::move(args)} {};
+    struct match_expr : public expression {
+        match_expr(compiler::token token, expr_uptr&& expr, std::vector<expr_uptr>&& args) noexcept : m_token{std::move(token)}, m_callee{std::move(expr)}, m_arguments{std::move(args)} {};
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;

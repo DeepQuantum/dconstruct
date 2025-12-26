@@ -933,7 +933,7 @@ namespace dconstruct::testing {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/script-user-funcs-impl.bin)";
         const std::string id = "bmm-deactivate-all";
         const std::string expected = 
-            "u64? bmm-deactivate-all(u64? arg_0) {"
+            "u64? bmm-deactivate-all(u64? arg_0) {\n"
             "    foreach (u64? var_1 : arg_0) {\n"
             "        u16 var_2;\n"
             "        if (var_1 && *(u16*)(var_1 + 12) == 7) {\n"
@@ -947,8 +947,37 @@ namespace dconstruct::testing {
             "        }\n"
             "        net-send-event-all(deactivate, var_2);\n"
             "    }\n"
-            "    return end-foreach();\n"
             "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, CallArguments) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-locator-action-pack.bin)";
+        const std::string id = "move-to-entry@main@start@3";
+        const std::string expected = 
+            "void move-to-entry@main@start@3() {\n"
+            "    npc-look-at-point(\n"
+            "        get-symbol(npc, self),\n"
+            "        offset-point(\n"
+            "            get-spawner-position(get-self-id(), 1),\n"
+            "            vector-scale(\n"
+            "                get-locator-distance-y(\n"
+            "                    get-spawner-locator(get-self-id(), 1),\n"
+            "                    get-attach-point-locator(get-symbol(npc, self), targHead)\n"
+            "                ),\n"
+            "                get-world-y-vec()\n"
+            "            )\n"
+            "        ),\n"
+            "        -1.00\n"
+            "    );\n"
+            "}"; 
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Foreach2) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin)";
+        const std::string id = "set-bit";
+        const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
 }

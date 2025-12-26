@@ -41,7 +41,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::monostate();
 }
 
-[[nodiscard]] u16 identifier::complexity() const noexcept {
+[[nodiscard]] u16 identifier::calc_complexity() const noexcept {
     return 1;
 }
 

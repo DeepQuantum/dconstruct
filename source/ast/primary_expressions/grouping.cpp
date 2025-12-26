@@ -39,8 +39,8 @@ void grouping::pseudo_racket(std::ostream& os) const {
     return m_expr->compute_type(env);
 }
 
-[[nodiscard]] u16 grouping::complexity() const noexcept {
-    return m_expr->complexity();
+[[nodiscard]] u16 grouping::calc_complexity() const noexcept {
+    return 1 + m_expr->get_complexity();
 }
 
 VAR_OPTIMIZATION_ACTION grouping::var_optimization_pass(var_optimization_env& env) noexcept {

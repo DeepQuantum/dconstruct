@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
+add_subdirectory(${SOURCE_DIR}/llvm/llvm)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -43,7 +44,6 @@ set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
 set(LLVM_EXPERIMENTAL_TARGETS_TO_BUILD "DirectX" CACHE STRING "" FORCE)
 set(LLVM_ENABLE_ASSERTIONS OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(${SOURCE_DIR}/llvm/llvm)
 
 llvm_map_components_to_libnames(LLVM_LIBS
     core

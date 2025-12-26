@@ -648,7 +648,7 @@ template<ast::primitive_kind kind>
 [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function<is_64_bit>::make_abs(const reg_idx dst) {
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[dst]->clone());
-    auto callee = std::make_unique<ast::identifier>("abs");
+    auto callee = std::make_unique<ast::literal>(sid64_literal{SID("abs"), "abs"});
     auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     call->set_type(make_type(kind));
     return call;
@@ -665,7 +665,7 @@ template<bool is_64_bit>
     ast::function_type func_type = std::get<ast::function_type>(callee_type);
 
     for (reg_idx i = 0; i < istr.operand2; ++i) {
-        if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->complexity() > MAX_EXPRESSION_COMPLEXITY) {
+        if (m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->get_complexity() > MAX_EXPRESSION_COMPLEXITY) {
             load_expression_into_new_var(ARGUMENT_REGISTERS_IDX + i);
         }
         args.push_back(m_transformableExpressions[ARGUMENT_REGISTERS_IDX + i]->clone());

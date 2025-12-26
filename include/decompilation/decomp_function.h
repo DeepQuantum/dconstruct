@@ -129,10 +129,11 @@ namespace dconstruct::dcompiler {
         }
 
         [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_shift(const Instruction& istr) {
-            std::vector<expr_uptr> arg;
-            arg.push_back(m_transformableExpressions[istr.destination]->clone());
-            auto callee = std::make_unique<ast::identifier>("int_ash");
-            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+            std::vector<expr_uptr> args;
+            args.push_back(m_transformableExpressions[istr.operand1]->clone());
+            args.push_back(m_transformableExpressions[istr.operand2]->clone());
+            auto callee = std::make_unique<ast::literal>(sid64_literal{SID("int_ash"), "int_ash"});
+            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
             call->set_type(make_type(ast::primitive_kind::U64));
             return call;
         }
@@ -140,7 +141,7 @@ namespace dconstruct::dcompiler {
         [[nodiscard]] inline std::unique_ptr<ast::call_expr> make_load_symbol_table(const Instruction& istr) {
             std::vector<expr_uptr> arg;
             arg.push_back(m_transformableExpressions[istr.destination]->clone());
-            auto callee = std::make_unique<ast::identifier>("symbol_table_load");
+            auto callee = std::make_unique<ast::literal>(sid64_literal{SID("symbol_table_load"), "symbol_table_load"});
             auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             return call;
         }

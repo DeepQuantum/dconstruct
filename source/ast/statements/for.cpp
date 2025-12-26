@@ -43,7 +43,7 @@ void for_stmt::pseudo_c(std::ostream& os) const {
         os << "for (" << *m_init << ' ' << *m_condition << "; " << *m_incr << ") " << *m_body;
     } else {
         const auto& [var_name, iterable] = get_for_each_iterable();
-        os << "foreach (u64? " << var_name << " : " << iterable << ")" << *m_body;
+        os << "foreach (u64? " << var_name << " : " << iterable << ") " << *m_body;
     }
 }
 
