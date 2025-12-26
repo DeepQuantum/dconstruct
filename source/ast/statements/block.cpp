@@ -28,9 +28,8 @@ void block::pseudo_c(std::ostream& os) const {
             }
         } else {
             for (const auto& stmnt : m_statements) {
-                std::cout << a++ << "\n";
                 os << indent << *stmnt << '\n';
-            } 
+            }
         }
         os << indent_less;
         os << indent << '}';

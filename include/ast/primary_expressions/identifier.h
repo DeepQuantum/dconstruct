@@ -16,7 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] bool equals(const expression &rhs) const noexcept override;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const type_environment& env) const final;
-        [[nodiscard]] u16 complexity() const noexcept final;
+        [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;

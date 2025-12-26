@@ -5,14 +5,27 @@
 namespace dconstruct::ast {
 
 void call_expr::pseudo_c(std::ostream& os) const {
-    os << *m_callee << '(';
-    for (u16 i = 0; i < m_arguments.size(); ++i) {
-        os << *m_arguments[i];
-        if (i != m_arguments.size() - 1) {
-            os << ", ";
+    if (get_complexity() > 5) {
+        os << *m_callee << "(\n";
+        os << indent_more;
+        for (u16 i = 0; i < m_arguments.size(); ++i) {
+            os << indent << *m_arguments[i];
+            if (i != m_arguments.size() - 1) {
+                os << ",\n";
+            }
         }
-    }
-    os << ')';
+        os << indent_less;
+        os << "\n" << indent << ")";
+    } else {
+        os << *m_callee << '(';
+        for (u16 i = 0; i < m_arguments.size(); ++i) {
+            os << *m_arguments[i];
+            if (i != m_arguments.size() - 1) {
+                os << ", ";
+            }
+        }
+        os << ')';
+    } 
 }
 
 void call_expr::pseudo_py(std::ostream& os) const {
@@ -78,10 +91,10 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return std::monostate();
 };
 
-[[nodiscard]] u16 call_expr::complexity() const noexcept {
+[[nodiscard]] u16 call_expr::calc_complexity() const noexcept {
     u16 res = 1;
     for (const auto& arg : m_arguments) {
-        res += arg->complexity();
+        res += arg->get_complexity();
     }
     return res;
 }

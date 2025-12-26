@@ -36,8 +36,8 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     return std::make_unique<assign_expr>(m_lhs->clone(), m_rhs != nullptr ? m_rhs->clone() : nullptr);
 }
 
-[[nodiscard]] inline u16 assign_expr::complexity() const noexcept {
-    return 1 + m_rhs->complexity();
+[[nodiscard]] u16 assign_expr::calc_complexity() const noexcept {
+    return 1 + m_rhs->get_complexity();
 }
 
 

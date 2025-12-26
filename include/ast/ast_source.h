@@ -29,6 +29,11 @@ namespace dconstruct::ast {
         NONE
     };
 
+    enum class MATCH_OPTIMIZATION_ACTION : u8 {
+        MATCH_VAR_DECLARATION,
+        
+    };
+
     using var_optimization_env = compiler::environment<variable_folding_context>;
     using foreach_optimization_env = std::unique_ptr<statement>*;
     
