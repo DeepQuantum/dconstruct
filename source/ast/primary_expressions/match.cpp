@@ -6,19 +6,51 @@ namespace dconstruct::ast {
 
 void match_expr::pseudo_c(std::ostream& os) const {
     os << "match (";
-    for (u32 i = 0; i < m_conditions.size(); ++i) {
-        os << *m_conditions[i];
-        if (i != m_conditions.size() - 1) {
-            os << "; ";
+    bool first = true;
+    for (const auto& condition : m_conditions) {
+        if (!first) {
+            os << " ?? ";
         }
+        first = false;
+        os << *condition;
     }
     os << ") {\n";
     os << indent_more;
-    for (const auto& [pattern, expression] : m_matchPairs) {
-        os << indent << *pattern << " -> " << *expression << "\n";
+
+    const auto grouped = group_patterns();
+
+    for (const auto& [patterns, expression] : grouped) {
+        bool first = true;
+        os << indent;
+        for (const auto& pattern : patterns) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            os << **pattern;
+        }
+        os << " -> " << **expression << "\n";
     }
-    os << indent_less << "}";
+    os << indent << "else -> " << *m_default << "\n";
+    os << indent_less << indent << "}";
 }
+
+[[nodiscard]] std::vector<std::tuple<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
+    std::vector<std::tuple<std::vector<const expr_uptr*>, const expr_uptr*>> res;
+
+    for (const auto& [pattern, match] : m_matchPairs) {
+        auto match_exists = [&match](const auto& pair) -> bool { return *std::get<1>(pair) == match; };
+        
+        if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
+            std::get<0>(*match_group).push_back(&pattern);
+        } else {
+            res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
+        }
+    }
+
+    return res;
+}
+
 
 void match_expr::pseudo_py(std::ostream& os) const {}
 void match_expr::pseudo_racket(std::ostream& os) const {}
@@ -46,7 +78,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
     return complexity;
 }
 
-[[nodiscard]] expr_uptr match_expr::clone() const noexcept {
+[[nodiscard]] expr_uptr match_expr::clone() const {
     std::vector<expr_uptr> new_conditions;
     std::vector<std::tuple<expr_uptr, expr_uptr>> new_matchpairs;
     new_conditions.reserve(m_conditions.size());
@@ -85,6 +117,7 @@ FOREACH_OPTIMIZATION_ACTION match_expr::foreach_optimization_pass(foreach_optimi
             return action;
         }
     }
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

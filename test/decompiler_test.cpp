@@ -980,4 +980,38 @@ namespace dconstruct::testing {
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
+
+    TEST(DECOMPILER, Match1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-misc-defines.bin)";
+        const std::string id = "#C57EE0A64537AE8F";
+        const std::string expected = 
+            "string #C57EE0A64537AE8F(u16 arg_0) {\n"
+            "   string var_0 = match (arg_0) {\n"
+            "       0 -> \"Militia\"\n"
+            "       1 -> \"Scars\"\n"
+            "       2 -> \"Rattlers\"\n"
+            "       3 -> \"Infected\"\n"
+            "       4 -> \"Max Num Factions\"\n"
+            "       else -> \"Invalid\"\n"
+            "   }\n"
+            "   return var_0;";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Match2) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/workbench-script-funcs-impl.bin)";
+        const std::string id = "get-worst-stat";
+        const std::string expected = 
+            "string #C57EE0A64537AE8F(u16 arg_0) {\n"
+            "   string var_0 = match (arg_0) {\n"
+            "       0 -> \"Militia\"\n"
+            "       1 -> \"Scars\"\n"
+            "       2 -> \"Rattlers\"\n"
+            "       3 -> \"Infected\"\n"
+            "       4 -> \"Max Num Factions\"\n"
+            "       else -> \"Invalid\"\n"
+            "   }\n"
+            "   return var_0;";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
 }

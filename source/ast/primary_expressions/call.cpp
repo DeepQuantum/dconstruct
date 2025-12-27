@@ -118,6 +118,10 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
+MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_env& env) noexcept {
+    return MATCH_OPTIMIZATION_ACTION::NONE;
+}
+
 [[nodiscard]] expect_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {

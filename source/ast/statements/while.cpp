@@ -47,4 +47,8 @@ FOREACH_OPTIMIZATION_ACTION while_stmt::foreach_optimization_pass(foreach_optimi
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
+MATCH_OPTIMIZATION_ACTION while_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
+    return m_body->match_optimization_pass(env);
+}
+
 }
