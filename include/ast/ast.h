@@ -23,6 +23,7 @@
 #include "primary_expressions/grouping.h"
 #include "primary_expressions/literal.h"
 #include "primary_expressions/identifier.h"
+#include "primary_expressions/match.h"
 //#include "declarations/function_definition.h"
 //#include "parameter.h"
 #include "statements/block.h"

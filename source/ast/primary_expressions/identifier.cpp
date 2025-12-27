@@ -68,23 +68,15 @@ void expression::check_var_optimization(std::unique_ptr<ast::expression>* expr, 
     }
 }
 
-// void expression::check_foreach_optimization(expr_uptr* expr, foreach_optimization_env& env) {
-//     const auto pass_action = expr->get()->foreach_optimization_pass(env);
-//     switch (pass_action) {
-//         case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
-//             env = expr;
-//             break;
-//         }
-//         case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {
-//             *env = nullptr;
-//             *expr = nullptr;
-//             break;
-//         }
-//         default: {
-//             break;
-//         }
-//     }
-// }
+void expression::check_match_optimization(expr_uptr* expr, match_optimization_env& env) {
+    const auto pass_action = expr->get()->match_optimization_pass(env);
+    switch (pass_action) {
+        case MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT: {
+            env.m_matches.push_back(expr);
+        }
+    }
+}
+
 
 VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {
@@ -95,6 +87,26 @@ VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& 
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
     return VAR_OPTIMIZATION_ACTION::VAR_READ;
+}
+
+MATCH_OPTIMIZATION_ACTION identifier::match_optimization_pass(match_optimization_env& env) noexcept {
+    if (env.m_checkingCondition) {
+        if (env.m_checkIdentifier.empty()) {
+            env.m_checkIdentifier = m_name.m_lexeme;
+            return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_SET;
+        } else if (env.m_checkIdentifier == m_name.m_lexeme) {
+            return MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ;
+        } else {
+            return MATCH_OPTIMIZATION_ACTION::NONE;
+        }
+    }
+    if (!m_name.m_lexeme.starts_with("var")) {
+        return MATCH_OPTIMIZATION_ACTION::NONE;
+    }
+    if (!env.m_resultDeclaration) {
+        return MATCH_OPTIMIZATION_ACTION::NONE;
+    }
+    return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_WRITE;
 }
 
 FOREACH_OPTIMIZATION_ACTION identifier::foreach_optimization_pass(foreach_optimization_env&) noexcept {

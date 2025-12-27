@@ -56,7 +56,7 @@ void block::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] bool block::equals(const statement& rhs) const noexcept {
     const block* rhs_ptr = dynamic_cast<const block*>(&rhs);
-    if (rhs_ptr == nullptr) {
+    if (!rhs_ptr) {
         return false;
     }
     return m_statements == rhs_ptr->m_statements;
@@ -137,6 +137,23 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
 
     m_statements = std::move(new_statements);
     return FOREACH_OPTIMIZATION_ACTION::NONE;
+}
+
+MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {    
+    if (m_statements.size() == 1) {
+        if (m_statements[0]->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::IF) {
+            env.m_outerIf = &m_statements[0];
+            return MATCH_OPTIMIZATION_ACTION::IF;
+        }
+    } else {
+        for (const auto& statement : m_statements) {
+            const auto action = statement->match_optimization_pass(env);
+            if (action != MATCH_OPTIMIZATION_ACTION::IF && env.m_outerIf) {
+
+            }
+        }
+    }
+    return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

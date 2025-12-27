@@ -35,5 +35,9 @@ FOREACH_OPTIMIZATION_ACTION expression_stmt::foreach_optimization_pass(foreach_o
     return m_expression->foreach_optimization_pass(env);
 }
 
+MATCH_OPTIMIZATION_ACTION expression_stmt::match_optimization_pass(match_optimization_env& env) noexcept {
+    return m_expression->match_optimization_pass(env);
+}
+
 
 }

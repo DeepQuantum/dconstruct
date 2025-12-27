@@ -1,5 +1,5 @@
 #include "ast/statement.h"
-
+#include "ast/primary_expressions/match.h"
 
 namespace dconstruct::ast {
     struct if_stmt : public statement {
@@ -14,10 +14,12 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream&) const final;
         void pseudo_racket(std::ostream&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
-        [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final; 
+        [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
+        [[nodiscard]] std::unique_ptr<match_expr> try_convert_match() const noexcept;
         
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
+        MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
 
 
         expr_uptr m_condition;

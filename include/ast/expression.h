@@ -30,7 +30,7 @@ namespace dconstruct::ast {
         POSTFIX,
     };
 
-    using expec_llvm_value = std::expected<llvm::Value*, llvm_error>;
+    using expect_llvm_value = std::expected<llvm::Value*, llvm_error>;
     using type_environment = compiler::environment<ast::full_type>;
 
     struct expression : public ast_element {
@@ -41,12 +41,13 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
+        [[nodiscard]] virtual expect_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
         [[nodiscard]] virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;
+        [[nodiscard]] virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept = 0;
         
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {
@@ -69,7 +70,8 @@ namespace dconstruct::ast {
             m_type = type;
         }
 
-        static void check_var_optimization(std::unique_ptr<ast::expression>* statement, var_optimization_env& optimization_ctx);
+        static void check_var_optimization(std::unique_ptr<ast::expression>* expr, var_optimization_env& env);
+        static void check_match_optimization(std::unique_ptr<ast::expression>* expr, match_optimization_env& env);
         
     protected:
         [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;
