@@ -3,10 +3,10 @@
 #include "ast/expression.h"
 
 namespace dconstruct::ast {
-    struct match_expr : public expression {
-        match_expr(std::vector<expr_uptr>&& conditions, std::vector<std::tuple<expr_uptr, expr_uptr>>&& match_pairs) noexcept : 
-        m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)) {};
-
+    struct ternary_expr : public expression {
+        ternary_expr(expr_uptr&& condition, expr_uptr&& then, expr_uptr&& _else) noexcept : 
+        m_condition(std::move(condition)), m_then(std::move(then)), m_else(std::move(_else)) {};
+        
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
@@ -19,7 +19,8 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
-        std::vector<expr_uptr> m_conditions;
-        std::vector<std::tuple<expr_uptr, expr_uptr>> m_matchPairs;
+        expr_uptr m_condition;
+        expr_uptr m_then;
+        expr_uptr m_else;
     };
 }

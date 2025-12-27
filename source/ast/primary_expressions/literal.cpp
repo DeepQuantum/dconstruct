@@ -51,8 +51,12 @@ FOREACH_OPTIMIZATION_ACTION literal::foreach_optimization_pass(foreach_optimizat
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] expec_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
-   return std::visit([&](auto&& lit) -> expec_llvm_value {
+MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_env& env) noexcept {
+    return MATCH_OPTIMIZATION_ACTION::LITERAL;
+}
+
+[[nodiscard]] expect_llvm_value literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
+   return std::visit([&](auto&& lit) -> expect_llvm_value {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {
             return llvm::ConstantFP::get(ctx, llvm::APFloat(lit));

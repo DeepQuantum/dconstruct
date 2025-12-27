@@ -16,10 +16,12 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual bool equals(const statement &rhs) const noexcept = 0;
         virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept { return FOREACH_OPTIMIZATION_ACTION::NONE; }
+        virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
 
         static void check_var_optimization(std::unique_ptr<statement>* statement, var_optimization_env& optimization_ctx);
         static void check_foreach_optimization(std::unique_ptr<statement>* statement, foreach_optimization_env& optimization_ctx);
+        static void check_match_optimization(std::unique_ptr<statement>* statement, match_optimization_env& optimization_ctx);
     };
 
     [[nodiscard]] inline bool operator==(const statement& lhs, const statement& rhs) noexcept {

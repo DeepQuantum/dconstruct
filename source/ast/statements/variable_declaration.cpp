@@ -67,6 +67,16 @@ void statement::check_foreach_optimization(stmnt_uptr* statement, foreach_optimi
     }
 }
 
+void statement::check_match_optimization(stmnt_uptr* statement, match_optimization_env& env) {
+    const auto pass_action = statement->get()->match_optimization_pass(env);
+    switch (pass_action) {
+        case MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION: {
+            env.m_resultDeclaration = statement;
+            break;
+        }
+    }
+}
+
 VAR_OPTIMIZATION_ACTION variable_declaration::var_optimization_pass(var_optimization_env& env)  noexcept {
     if (m_init) {
         expression::check_var_optimization(&m_init, env);
@@ -83,6 +93,10 @@ FOREACH_OPTIMIZATION_ACTION variable_declaration::foreach_optimization_pass(fore
         return m_init->foreach_optimization_pass(env);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
+}
+
+MATCH_OPTIMIZATION_ACTION variable_declaration::match_optimization_pass(match_optimization_env& env) noexcept {
+    return !m_init ? MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION : MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

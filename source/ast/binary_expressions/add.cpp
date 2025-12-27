@@ -20,12 +20,12 @@ namespace dconstruct::ast {
     return std::make_unique<add_expr>(m_operator, std::move(lhs_ptr), std::move(rhs_ptr));
 }
 
-[[nodiscard]] expec_llvm_value add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const {
-    expec_llvm_value lhs = m_lhs->emit_llvm(ctx, builder, module, env);
+[[nodiscard]] expect_llvm_value add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const {
+    expect_llvm_value lhs = m_lhs->emit_llvm(ctx, builder, module, env);
     if (!lhs) {
         return lhs;
     }
-    expec_llvm_value rhs = m_rhs->emit_llvm(ctx, builder, module, env); 
+    expect_llvm_value rhs = m_rhs->emit_llvm(ctx, builder, module, env); 
     if (!rhs) {
         return rhs;
     }

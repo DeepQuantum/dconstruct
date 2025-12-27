@@ -30,12 +30,30 @@ namespace dconstruct::ast {
     };
 
     enum class MATCH_OPTIMIZATION_ACTION : u8 {
-        MATCH_VAR_DECLARATION,
-        
+        RESULT_VAR_DECLARATION,
+        RESULT_VAR_WRITE,
+        RESULT_VAR_ASSIGNMENT,
+        CHECK_VAR_SET,
+        CHECK_VAR_READ,
+        MATCH_CONDITION_COMPARISON,
+        MATCH_CONDITION_CHECKED_COMPARISON,
+        IF,
+        LITERAL,
+        NONE,
     };
 
     using var_optimization_env = compiler::environment<variable_folding_context>;
     using foreach_optimization_env = std::unique_ptr<statement>*;
+
+    struct match_optimization_env {
+        std::unique_ptr<statement>* m_resultDeclaration;
+        //std::unique_ptr<statement>* m_checkDeclaration;
+        std::string m_checkIdentifier;
+        std::unique_ptr<statement>* m_outerIf;
+        std::vector<std::unique_ptr<expression>*> m_patterns;
+        std::vector<std::unique_ptr<expression>*> m_matches;
+        bool m_checkingCondition;
+    };
     
     struct ast_element {
         virtual ~ast_element() = default;

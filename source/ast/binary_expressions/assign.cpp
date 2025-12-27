@@ -1,4 +1,5 @@
 #include "ast/assign.h"
+#include "ast/statements/variable_declaration.h"
 
 namespace dconstruct::ast {    
 
@@ -47,13 +48,26 @@ VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env&
     if (!lhs || !lhs->m_name.m_lexeme.starts_with("var")) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    auto* ctx = env.lookup(lhs->m_name.m_lexeme); 
-    assert(ctx);
+    assert(env.lookup(lhs->m_name.m_lexeme));
     return VAR_OPTIMIZATION_ACTION::VAR_WRITE;
 }
 
 FOREACH_OPTIMIZATION_ACTION assign_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     return m_rhs->foreach_optimization_pass(env);
+}
+
+MATCH_OPTIMIZATION_ACTION assign_expr::match_optimization_pass(match_optimization_env& env) noexcept {
+    if (env.m_resultDeclaration) {
+        const auto& assign = static_cast<ast::variable_declaration&>(**env.m_resultDeclaration).m_identifier;
+        if (m_lhs->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_WRITE) {
+            const auto& id = static_cast<ast::identifier&>(*m_lhs);
+            if (id.m_name.m_lexeme == assign) {
+                env.m_matches.push_back(&m_rhs);
+                return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
+            }
+        }
+    }
+    return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

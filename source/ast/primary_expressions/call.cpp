@@ -118,7 +118,7 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] expec_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] expect_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};

@@ -13,7 +13,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
-        [[nodiscard]] expec_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const noexcept final;
+        [[nodiscard]] expect_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         compiler::token m_token;
