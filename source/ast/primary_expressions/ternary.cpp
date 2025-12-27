@@ -31,7 +31,7 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_condition->get_complexity() + m_then->get_complexity() + m_else->get_complexity();
 }
 
-[[nodiscard]] expr_uptr ternary_expr::clone() const noexcept {
+[[nodiscard]] expr_uptr ternary_expr::clone() const {
     return std::make_unique<ternary_expr>(m_condition->clone(), m_then->clone(), m_else->clone());
 }
 

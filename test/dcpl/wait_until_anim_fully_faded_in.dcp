@@ -1,7 +1,0 @@
-u64? wait-until-anim-fully-faded-in(u64? arg_0, u64? arg_1) {
-    u64? var_1;
-    while (get-animation-fade(arg_0, arg_1) < 1.00) {
-        wait-one-frame();
-    }
-    return var_1;
-}

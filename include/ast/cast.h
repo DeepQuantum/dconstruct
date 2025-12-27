@@ -19,7 +19,6 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
-
         ast::full_type m_type;
         expr_uptr m_rhs;
     };

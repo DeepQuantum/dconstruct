@@ -65,8 +65,8 @@ MATCH_OPTIMIZATION_ACTION if_stmt::match_optimization_pass(match_optimization_en
     const auto condition_action = m_condition->match_optimization_pass(env);
     if (condition_action == MATCH_OPTIMIZATION_ACTION::MATCH_CONDITION_COMPARISON) {
         if (const auto then_action = m_then->match_optimization_pass(env); then_action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
-            if (m_else->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::IF) {
-                return MATCH_OPTIMIZATION_ACTION::IF;
+            if (m_else->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
+                return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
             }
         }
     }

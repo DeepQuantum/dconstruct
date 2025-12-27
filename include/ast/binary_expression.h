@@ -49,10 +49,13 @@ namespace dconstruct::ast {
             //     // }
             // }
             if (m_operator.m_lexeme == "==") {
-                const auto lhs_action = m_lhs->check_match_optimization(env);
+                env.m_checkingCondition = true;
+                const auto lhs_action = m_lhs->match_optimization_pass(env);
+                env.m_checkingCondition = false;
                 if (lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_SET || lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ) {
-                    const auto rhs_action = m_rhs->check_match_optimization(env);
+                    const auto rhs_action = m_rhs->match_optimization_pass(env);
                     if (rhs_action == MATCH_OPTIMIZATION_ACTION::LITERAL) {
+                        env.m_condition = &m_lhs;
                         env.m_patterns.emplace_back(&m_rhs);
                         return MATCH_OPTIMIZATION_ACTION::MATCH_CONDITION_COMPARISON;
                     }
