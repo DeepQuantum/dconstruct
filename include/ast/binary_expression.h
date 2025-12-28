@@ -40,13 +40,13 @@ namespace dconstruct::ast {
 
         inline MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final {
             // if (m_operator.m_lexeme == "&&") {
-            //     // const auto lhs_action = m_lhs->match_optimization_pass(env);
-            //     // if (lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ) {
-            //     //     const auto rhs_action = m_rhs->match_optimization_pass(env);
-            //     //     if (rhs_action == MATCH_OPTIMIZATION_ACTION::MATCH_CONDITION_COMPARISON) {
-            //     //         env.m_patternPairs.emplace_back(&)
-            //     //     }
-            //     // }
+            //     const auto lhs_action = m_lhs->match_optimization_pass(env);
+            //     if (lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ) {
+            //         const auto rhs_action = m_rhs->match_optimization_pass(env);
+            //         if (rhs_action == MATCH_OPTIMIZATION_ACTION::MATCH_CONDITION_COMPARISON) {
+            //             env.m_patternPairs.emplace_back(&)
+            //         }
+            //     }
             // }
             if (m_operator.m_lexeme == "==") {
                 env.m_checkingCondition = true;
@@ -55,7 +55,7 @@ namespace dconstruct::ast {
                 if (lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_SET || lhs_action == MATCH_OPTIMIZATION_ACTION::CHECK_VAR_READ) {
                     const auto rhs_action = m_rhs->match_optimization_pass(env);
                     if (rhs_action == MATCH_OPTIMIZATION_ACTION::LITERAL) {
-                        env.m_condition = &m_lhs;
+                        env.m_checkVar = &m_lhs;
                         env.m_patterns.emplace_back(&m_rhs);
                         return MATCH_OPTIMIZATION_ACTION::MATCH_CONDITION_COMPARISON;
                     }

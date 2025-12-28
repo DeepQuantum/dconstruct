@@ -33,31 +33,7 @@ namespace dconstruct {
         bool m_emitOnce = false;
     };
 
-    struct anonymous_function_name {
-        std::string m_state;
-        std::string m_track;
-        std::string m_event;
-        std::string m_idx;
-
-        static constexpr std::string_view SEP = "@";
-
-        [[nodiscard]] std::string get() const noexcept {
-            const size_t total_size =
-                m_state.size() + m_track.size() + m_event.size() + m_idx.size() +
-                3 * SEP.size();
-
-            std::string result;
-            result.reserve(total_size);
-            result += m_state;
-            result += SEP;
-            result += m_track;
-            result += SEP;
-            result += m_event;
-            result += SEP;
-            result += m_idx;
-            return result;
-        }
-    };
+    
 
     template <bool is_64_bit = true>
     class Disassembler {
@@ -100,7 +76,6 @@ namespace dconstruct {
 
         std::map<sid64, std::vector<const structs::unmapped*>> m_unmappedEntries;
 
-        bool is_32bit = false;
 
         constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };
         constexpr static TextFormat ENTRY_TYPE_FMT = { TYPE_COLOR, 20 };
@@ -128,7 +103,7 @@ namespace dconstruct {
         void insert_unmapped_struct(const structs::unmapped*, const u32);
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);
-        void insert_on_block(const SsOnBlock* block, const u32, anonymous_function_name& state_name);
+        void insert_on_block(const SsOnBlock* block, const u32, state_script_function_id& state_name);
         void set_register_types(Register&, Register&, const ast::full_type type);
         void process_instruction(const u32, function_disassembly &);
         void insert_function_disassembly_text(const function_disassembly& functionDisassembly, const u32 indent);

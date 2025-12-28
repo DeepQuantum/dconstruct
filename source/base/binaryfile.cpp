@@ -13,45 +13,45 @@ namespace dconstruct {
     template class BinaryFile<false>;
 
     template<bool is_64_bit>
-    BinaryFile<is_64_bit>::BinaryFile(const std::filesystem::path &path) {
-        m_path = path;
+    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_path(const std::filesystem::path &path) {
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {
-            std::cerr << "error: coudln't open " << path << '\n';
-            exit(-1);
+            return std::unexpected{"couldn't open " + path + '\n'};
         }
 
-        m_size = std::filesystem::file_size(path);
-        std::byte* temp_buffer = new std::byte[m_size];
+        size = std::filesystem::file_size(path);
+        std::byte* temp_buffer = new std::byte[size];
 
-        scriptstream.read((char*)temp_buffer, m_size);
-        m_bytes = std::unique_ptr<std::byte[]>(temp_buffer);
+        scriptstream.read((char*)temp_buffer, size);
+        bytes = std::unique_ptr<std::byte[]>(temp_buffer);
 
         constexpr u32 magic = 0x44433030;
         constexpr u32 version = 0x1;
 
-        if (m_size == 0) {
-            std::cerr << "error: " << m_path.string() << " is empty.\n";
+        if (size == 0) {
+            return std::unexpected{m_path.string() + " is empty.\n"};
         }
 
-        m_dcheader = reinterpret_cast<DC_Header*>(m_bytes.get());
+        dcheader = reinterpret_cast<DC_Header*>(bytes.get());
 
-        if (m_dcheader->m_magic != magic) {
-            std::cerr << "error: not a DC-file. magic number doesn't equal 0x44433030: " << *(uint32_t*)m_bytes.get() << '\n';
-            exit(-1);
+        if (dcheader->m_magic != magic) {
+            return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'}
         }
 
-        if (m_dcheader->m_versionNumber != version) {
-            std::cerr << "error: not a DC-file. version number doesn't equal 0x00000001: " << *(uint32_t*)(m_bytes.get() + 8) << '\n';
-            exit(-1);
+        if (dcheader->m_versionNumber != version) {
+            return std::unexpected{"not a DC-file. version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(bytes.get() + 8)) + '\n'};
         }
 
-        read_reloc_table();
+        BinaryFile file{path, size, std::move(bytes), dcheader};
+
+        file.read_reloc_table();
 
         if constexpr (is_64_bit) {
-            replace_newlines_in_stringtable();
+            file.replace_newlines_in_stringtable();
         }
+
+        return file;
     }
 
     template<bool is_64_bit>

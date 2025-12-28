@@ -50,7 +50,8 @@ namespace dconstruct::ast {
         //std::unique_ptr<statement>* m_checkDeclaration;
         std::string m_checkIdentifier;
         std::unique_ptr<statement>* m_outerIf;
-        std::unique_ptr<expression>* m_condition;
+        std::unique_ptr<expression>* m_checkVar;
+        std::unique_ptr<expression>* m_precondition;
         std::vector<std::unique_ptr<expression>*> m_patterns;
         std::vector<std::unique_ptr<expression>*> m_matches;
         bool m_checkingCondition;

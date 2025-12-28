@@ -67,7 +67,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
         } else if constexpr (std::is_same_v<T, sid32_literal> || std::is_same_v<T, sid64_literal>) {
             return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T::first) * 8, lit.first, std::is_signed_v<T>));
         } else if constexpr (std::is_same_v<T, std::string>) {
-            auto gv = new llvm::GlobalVariable(
+            auto* gv = new llvm::GlobalVariable(
                 module,
                 llvm::ArrayType::get(llvm::Type::getInt8Ty(ctx), lit.length() + 1),
                 true,

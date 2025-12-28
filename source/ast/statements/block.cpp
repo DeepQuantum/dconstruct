@@ -147,7 +147,7 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
     } else {
         for (auto& statement : m_statements) {
             const auto action = statement->match_optimization_pass(env);
-            if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
+            if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && m_statements.size() == 1) {
                 assert(env.m_matches.size() - 1 == env.m_patterns.size());
                 std::vector<std::tuple<expr_uptr, expr_uptr>> pairs;
                 pairs.reserve(env.m_patterns.size());
@@ -156,7 +156,7 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
                     pairs.emplace_back(std::move(*env.m_patterns[i]), std::move(*env.m_matches[i]));
                 }
 
-                auto match = std::make_unique<match_expr>(std::move(*env.m_condition), std::move(pairs), std::move(*env.m_matches.back()));
+                auto match = std::make_unique<match_expr>(std::move(*env.m_checkVar), std::move(pairs), std::move(*env.m_matches.back()));
 
                 statement = nullptr;
                 assert(dynamic_cast<variable_declaration*>(env.m_resultDeclaration->get()));

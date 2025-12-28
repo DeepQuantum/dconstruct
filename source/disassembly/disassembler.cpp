@@ -411,7 +411,7 @@ void Disassembler<is_64_bit>::insert_variable(const SsDeclaration *var, const u3
 }
 
 template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 indent, anonymous_function_name& function_name) {
+void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
     switch (block->m_blockType) {
         case 0: {
             function_name.m_event = "start";

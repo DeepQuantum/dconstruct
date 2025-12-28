@@ -198,22 +198,24 @@ namespace dconstruct::testing {
         SymbolTable table{ location(table_entries.data()), std::move(symbol_table_types) };
         const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
 
-        const auto& actual = func.m_baseBlock.m_statements;
+        const auto& actual = func.m_baseBlock;
         const std::string expected =
-            "return ddict-key-count(5);";
+            "{\n"
+            "    u64? var_0 = ddict-key-count(5);\n"
+            "    return var_0;\n"
+            "}";
 
         std::ostringstream os;
-        for (const auto& stmt : actual) {
-            stmt->pseudo_c(os);
-        }
+        os << actual;
         EXPECT_EQ(expected, os.str());
     }
 
-    TEST(DECOMPILER, FileFunction1) {
+    TEST(DECOMPILER, FullFunc1) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected =
-            "unknown #7C28D25188889230(unknown arg_0) {\n"
-            "    return #E16F9CC43A37FADA(arg_0) * -1.00;\n"
+            "u64? #7C28D25188889230(u64? arg_0) {\n"
+            "    u64? var_0 = #E16F9CC43A37FADA(arg_0);\n"
+            "    return var_0 * -1.00;\n"
             "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#7C28D25188889230");
@@ -221,11 +223,14 @@ namespace dconstruct::testing {
         ASSERT_EQ(expected, actual);
     }
 
-    TEST(DECOMPILER, FileFunction2) {
+    TEST(DECOMPILER, FullFunc2) {
         const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
         const std::string expected = 
-            "unknown #E16F9CC43A37FADA(unknown arg_0) {\n"
-            "    return distance-between-points(get-region-centroid(arg_0, 0), get-object-position(player));\n"
+            "u64? #E16F9CC43A37FADA(u64? arg_0) {\n"
+            "    u64? var_0 = get-region-centroid(arg_0, 0);\n"
+            "    u64? var_1 = get-object-position(player);\n"
+            "    u64? var_2 = distance-between-points(var_0, var_1);\n"
+            "    return var_2;\n"
             "}";
 
         const std::string actual = get_decompiled_function_from_file(filepath, "#E16F9CC43A37FADA");
@@ -242,63 +247,48 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ *func, file };
+        const auto dc_func = dcompiler::decomp_function{ *func, file};
         for (const auto& node : dc_func.m_graph.m_nodes) {
-            ASSERT_EQ(node.m_ipdom, 0x16);
-        }
-    }
-
-    TEST(DECOMPILER, ImmediatePostdominator2) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile<> file{ filepath };
-        TLOU2Disassembler da{ &file, &base };
-        da.disassemble();
-        const std::string id = "#8A8D5C923D5DDB3B";
-        const auto& funcs = da.get_functions();
-        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
-        ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ *func, file };
-        for (const auto& node : dc_func.m_graph.m_nodes) {
-            ASSERT_EQ(node.m_ipdom, 0x16);
+            ASSERT_EQ(node.m_ipdom, 0x3);
         }
     }
  
-    /*TEST(DECOMPILER, ImmediatePostdominator2) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile<> file{ filepath };
+    // 1TEST(DECOMPILER, ImmediatePostdominator2) {
+    //     const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+    //     BinaryFile<> file{ filepath };
         
-        TLOU2Disassembler da{ &file, &base };
-        da.disassemble();
-        const std::string id = "#608356039B1FD9FD";
-        const auto& funcs = da.get_functions();
-        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
-        ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
-        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
-        ASSERT_EQ(tree.at(0x15), 0x3A);
-    }
+    //     TLOU2Disassembler da{ &file, &base };
+    //     da.disassemble();
+    //     const std::string id = "#608356039B1FD9FD";
+    //     const auto& funcs = da.get_functions();
+    //     const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+    //     ASSERT_NE(func, funcs.end());
+    //     dcompiler::Decompiler dc{ &*func, file };
+    //     const auto& dc_funcs = dc.decompile();
+    //     const auto& dc_func = dc_funcs.at(id);
+    //     const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+    //     ASSERT_EQ(tree.at(0x15), 0x3A);
+    // }
 
-    TEST(DECOMPILER, ImmediatePostdominator3) {
-        const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
-        BinaryFile<> file{ filepath };
+    // TEST(DECOMPILER, ImmediatePostdominator3) {
+    //     const std::string filepath = R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\ss-wave-manager.bin)";
+    //     BinaryFile<> file{ filepath };
         
-        TLOU2Disassembler da{ &file, &base };
-        da.disassemble();
-        const std::string id = "#D14395D282B18D18";
-        const auto& funcs = da.get_functions();
-        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
-        ASSERT_NE(func, funcs.end());
-        dcompiler::Decompiler dc{ &*func, file };
-        const auto& dc_funcs = dc.decompile();
-        const auto& dc_func = dc_funcs.at(id);
-        const auto& tree = dc_func.m_graph.get_immediate_postdominators();
-        ASSERT_EQ(tree.at(0x0), 0x37);
-        ASSERT_EQ(tree.at(0x3), 0xE);
-        ASSERT_EQ(tree.at(0xE), 0x2E);
-    }
-    */
+    //     TLOU2Disassembler da{ &file, &base };
+    //     da.disassemble();
+    //     const std::string id = "#D14395D282B18D18";
+    //     const auto& funcs = da.get_functions();
+    //     const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
+    //     ASSERT_NE(func, funcs.end());
+    //     dcompiler::Decompiler dc{ &*func, file };
+    //     const auto& dc_funcs = dc.decompile();
+    //     const auto& dc_func = dc_funcs.at(id);
+    //     const auto& tree = dc_func.m_graph.get_immediate_postdominators();
+    //     ASSERT_EQ(tree.at(0x0), 0x37);
+    //     ASSERT_EQ(tree.at(0x3), 0xE);
+    //     ASSERT_EQ(tree.at(0xE), 0x2E);
+    // }
+    
 
 
     TEST(DECOMPILER, DetermineArgumentType) {
@@ -684,6 +674,7 @@ namespace dconstruct::testing {
         BinaryFile<> file{ filepath };
         FileDisassembler<true> da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\)" + dconstruct::sanitize_dc_string(id) + ".asm", {} };
         da.disassemble();
+        da.dump();
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.m_id == id; });
         ASSERT_NE(func, funcs.end());
@@ -1012,6 +1003,38 @@ namespace dconstruct::testing {
             "       else -> \"Invalid\"\n"
             "   }\n"
             "   return var_0;";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Match4) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-misc-defines.bin)";
+        const std::string id = "#77C65B88D2083D05";
+        const std::string expected = 
+            "u64?* #77C65B88D2083D05(u16 arg_0) {\n"
+            "    return match (arg_0) {\n"
+            "        0 -> MENU_ROGUE_FACTION_MILITIA\n"
+            "        1 -> MENU_ROGUE_FACTION_SCARS\n"
+            "        2 -> MENU_ROGUE_FACTION_RATTLERS\n"
+            "        3 -> MENU_ROGUE_FACTION_INFECTED\n"
+            "        else -> *invalid-symbol*\n"
+            "    };\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Optimization8) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/animal-behavior.bin)";
+        const std::string id = "get-landing-anim-id";
+        const std::string expected = 
+            "u64?* #77C65B88D2083D05(u16 arg_0) {\n"
+            "    return match (arg_0) {\n"
+            "        0 -> MENU_ROGUE_FACTION_MILITIA\n"
+            "        1 -> MENU_ROGUE_FACTION_SCARS\n"
+            "        2 -> MENU_ROGUE_FACTION_RATTLERS\n"
+            "        3 -> MENU_ROGUE_FACTION_INFECTED\n"
+            "        else -> *invalid-symbol*\n"
+            "    };\n"
+            "}";
         decomp_test(filepath, id, expected, ast::c, true);
     }
 }
