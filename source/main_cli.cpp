@@ -51,7 +51,14 @@ static void decomp_file(
     const dconstruct::ast::print_fn_type language_type,
     const std::vector<std::string> &edits = {}) {
     
-    dconstruct::BinaryFile file(inpath.string());
+    auto file_res = dconstruct::BinaryFile<true>::from_path(inpath.string());
+
+    if (!file_res) {
+        std::cerr << file_res.error() << "\n";
+        std::terminate();
+    }
+
+    auto& file = *file_res;
 
     if (!edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, options, edits);
@@ -91,7 +98,14 @@ static void disasm_file(
     const dconstruct::DisassemblerOptions &options,
     const std::vector<std::string> &edits = {}) {
     
-    dconstruct::BinaryFile file(inpath.string());
+    auto file_res = dconstruct::BinaryFile<true>::from_path(inpath.string());
+
+    if (!file_res) {
+        std::cerr << file_res.error() << "\n";
+        std::terminate();
+    }
+
+    auto& file = *file_res;
 
     if (!edits.empty()) {
         dconstruct::EditDisassembler ed(&file, &base, options, edits);

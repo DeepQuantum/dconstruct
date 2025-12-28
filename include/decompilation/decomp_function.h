@@ -9,6 +9,10 @@
 constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
+
+    //struct state;
+
+
     template<bool is_64_bit = true>
     struct decomp_function {
         explicit decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);

@@ -400,11 +400,35 @@ struct StackFrame {
     }
 };
 
+struct state_script_function_id {
+    std::string m_state;
+    std::string m_track;
+    std::string m_event;
+    std::string m_idx;
+
+    // static constexpr std::string_view SEP = "@";
+
+    // [[nodiscard]] std::string get() const noexcept {
+    //     const size_t total_size =
+    //         m_state.size() + m_track.size() + m_event.size() + m_idx.size() +
+    //         3 * SEP.size();
+    //     std::string result;
+    //     result.reserve(total_size);
+    //     result += m_state;
+    //     result += SEP;
+    //     result += m_track;
+    //     result += SEP;
+    //     result += m_event;
+    //     result += SEP;
+    //     result += m_idx;
+    //     return result;
+    // }
+};
 
 struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
-    std::string m_id;
+    std::variant<std::string, state_script_function_id> m_id;
     bool m_isScriptFunction;
 }; 
 
