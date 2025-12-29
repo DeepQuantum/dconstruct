@@ -269,15 +269,15 @@ void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr,
         }
         case SID("script-lambda"): {
             std::string name;
-            if (name_id == 0) {
-                std::stringstream ss;
-                ss << "anonymous@";
-                ss << std::hex << offset;
-                name = ss.str();
-            }
-            else {
+            // if (name_id == 0) {
+            //     std::stringstream ss;
+            //     ss << "anonymous@";
+            //     ss << std::hex << offset;
+            //     name = ss.str();
+            // }
+            // else {
                 name = lookup(name_id);
-            }
+            //}
             function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
@@ -446,7 +446,7 @@ void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 
         insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, function_name.m_track.c_str());
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
-            function_name.m_idx = std::to_string(j);
+            function_name.m_idx = j;
             function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name.get(), true);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
             m_functions.push_back(std::move(function));
@@ -480,7 +480,7 @@ void Disassembler<is_64_bit>::insert_state_script(const StateScript *stateScript
             }
         }
     }
-    anonymous_function_name anon_name;
+    state_script_function_id anon_name;
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
         anon_name.m_state = lookup(state_ptr->m_stateId);
@@ -503,7 +503,7 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
-[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, const std::string& name, const bool is_script_function) {
+[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, std::variant<std::string, state_script_function_id> name, const bool is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -513,7 +513,7 @@ template<bool is_64_bit>
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(location(lambda->m_pSymbols)),
-        name,
+        std::move(name),
         is_script_function
     };
 

@@ -404,25 +404,25 @@ struct state_script_function_id {
     std::string m_state;
     std::string m_track;
     std::string m_event;
-    std::string m_idx;
+    u64 m_idx;
 
-    // static constexpr std::string_view SEP = "@";
+    static constexpr std::string_view SEP = "@";
 
-    // [[nodiscard]] std::string get() const noexcept {
-    //     const size_t total_size =
-    //         m_state.size() + m_track.size() + m_event.size() + m_idx.size() +
-    //         3 * SEP.size();
-    //     std::string result;
-    //     result.reserve(total_size);
-    //     result += m_state;
-    //     result += SEP;
-    //     result += m_track;
-    //     result += SEP;
-    //     result += m_event;
-    //     result += SEP;
-    //     result += m_idx;
-    //     return result;
-    // }
+    [[nodiscard]] std::string to_string() const noexcept {
+        const std::string idx_str = std::to_string(m_idx);
+        const size_t total_size =
+            m_state.size() + m_track.size() + m_event.size() + idx_str.size() + 3 * SEP.size();
+        std::string result;
+        result.reserve(total_size);
+        result += m_state;
+        result += SEP;
+        result += m_track;
+        result += SEP;
+        result += m_event;
+        result += SEP;
+        result += idx_str;
+        return result;
+    }
 };
 
 struct function_disassembly {
@@ -430,6 +430,20 @@ struct function_disassembly {
     StackFrame m_stackFrame;
     std::variant<std::string, state_script_function_id> m_id;
     bool m_isScriptFunction;
+    
+    [[nodiscard]] const std::string& get_id() const noexcept {
+        if (!m_isScriptFunction) {
+            std::get<std::string>(m_id);
+        } else {
+            if (m_stateScriptId.empty()) {
+                m_stateScriptId = std::get<state_script_function_id>(m_id).to_string();
+            }
+            return m_stateScriptId;
+        }
+    }
+
+private:
+    mutable std::string m_stateScriptId;
 }; 
 
 

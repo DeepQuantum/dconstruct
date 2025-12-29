@@ -198,7 +198,8 @@ namespace dconstruct {
         return result;
     }
 
-    ControlFlowGraph::ControlFlowGraph(const function_disassembly &func) : m_func(func)  {
+
+    [[nodiscard]] ControlFlowGraph ControlFlowGraph::build(const function_disassembly& func) noexcept {
         const std::vector<u32> &labels = func.m_stackFrame.m_labels;
         std::map<node_id, control_flow_node> nodes;
         nodes.emplace(0, 0);
@@ -241,7 +242,8 @@ namespace dconstruct {
                 current_node = following_node;
             } 
         }
-        m_nodes.resize(nodes.size());
+        std::vector<control_flow_node> ordered_nodes;
+        ordered_nodes.resize(nodes.size());
         std::unordered_map<node_id, node_id> nodes_to_index;
         u16 i = 0;
         for (auto& [id, node] : nodes) {
@@ -256,17 +258,19 @@ namespace dconstruct {
             for (auto& pred : node.m_predecessors) {
                 pred = nodes_to_index.at(pred);
             }
-            m_nodes[node.m_index] = node;
-            m_nodes[node.m_index].determine_register_nature();
+            ordered_nodes[node.m_index] = node;
+            ordered_nodes[node.m_index].determine_register_nature();
         }
-        // we say return is a READ by DEFAULT
-        // are we a script function? -> run get_register_nature_starting_at(0, false), because we need to overwrite the return being a read
-        // no ? -> regs should already be gucci, no need to do anything
-        if (m_func.m_isScriptFunction) {
-            m_nodes.back().m_regs = m_nodes.back().get_register_nature_starting_at(0, false);
+        if (func.m_isScriptFunction) {
+            ordered_nodes.back().m_regs = ordered_nodes.back().get_register_nature_starting_at(0, false);
         }
-        compute_postdominators();
-        find_loops();
+
+        ControlFlowGraph res(func, std::move(ordered_nodes));
+
+        res.compute_postdominators();
+        res.find_loops();
+
+        return res;
     }
 
     void ControlFlowGraph::write_to_txt_file(const std::string& path) const {
