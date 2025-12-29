@@ -65,11 +65,10 @@ namespace dconstruct {
 
         const function_disassembly &m_func;
 
-        ControlFlowGraph() = default;
-        explicit ControlFlowGraph(const function_disassembly& fn);
-        explicit ControlFlowGraph(const function_disassembly& func, std::vector<control_flow_node> nodes) : ControlFlowGraph(func) {
-            m_nodes = std::move(nodes);
-        };
+        
+        [[nodiscard]] static ControlFlowGraph build(const function_disassembly& func) noexcept;
+
+
         void find_loops();
         void write_to_txt_file(const std::string& path = "graph.txt") const;
         void write_image(const std::string &path = "graph.svg") const;
@@ -91,8 +90,10 @@ namespace dconstruct {
         u8 get_register_read_count(const control_flow_node& start_node, const reg_idx reg_to_check, const istr_line start_line = 0) const noexcept;
         [[nodiscard]] const control_flow_node& get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept;
     
-        private:
-
+    private:
+        ControlFlowGraph() = default;
+        explicit ControlFlowGraph(const function_disassembly& fn) noexcept : m_func(fn) {};
+        explicit ControlFlowGraph(const function_disassembly& func, std::vector<control_flow_node> nodes) : m_func(func), m_nodes(std::move(nodes)) {};
         void compute_postdominators();
 
         [[nodiscard]] std::vector<Agnode_t*> insert_graphviz_nodes(Agraph_t* g) const;

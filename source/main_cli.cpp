@@ -71,23 +71,27 @@ static void decomp_file(
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
+        std::vector<dconstruct::dcompiler::decomp_function<>> decompiled;
+        decompiled.reserve(funcs.size());
         out << language_type;
         for (const auto& func : funcs) {
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));
                 std::filesystem::create_directories(graph_dir);
-                graph_path = get_sanitized_graph_path(graph_dir, func->m_id);
+                graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
             try {
                 auto dcompiled = dconstruct::dcompiler::decomp_function{ *func, file, std::move(graph_path) };
                 dcompiled.optimize_ast();
-                out << dcompiled.to_string() << "\n\n";
+                //out << dcompiled.to_string() << "\n\n";
+                decompiled.push_back(std::move(dcompiled));
             }
             catch (const std::exception& e) {
-                std::cout << "warning: couldn't decompile <" << func->m_id << ">: " << e.what() << "\n";
+                std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
             }
         }
+        
     }
 }
 

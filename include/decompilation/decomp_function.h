@@ -9,29 +9,27 @@
 constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
-
-    //struct state;
-
-
     template<bool is_64_bit = true>
     struct decomp_function {
-        explicit decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
+        //explicit decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
+        [[nodiscard]] static ast::function_definition decompile(const function_disassembly& func, const BinaryFile<is_64_bit> &file, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept;
 
         [[nodiscard]] std::string to_string() const;
         
         ControlFlowGraph m_graph;
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
-        std::vector<expr_uptr> m_transformableExpressions;
+        std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
         ast::type_environment m_env;
         const function_disassembly& m_disassembly;
         const BinaryFile<is_64_bit>& m_file;
         std::optional<std::filesystem::path> m_graphPath;
-        ast::full_type m_returnType;
+        ast::function_definition m_functionDefinition;
+        //ast::full_type m_returnType;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
-        ast::block m_baseBlock;
+        //ast::block m_baseBlock;
         char m_loopVar = 'i';
 		u16 m_varCount = 0;
 
@@ -148,6 +146,50 @@ namespace dconstruct::dcompiler {
             auto callee = std::make_unique<ast::literal>(sid64_literal{SID("symbol_table_load"), "symbol_table_load"});
             auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             return call;
+        }
+    };
+
+    template<bool is_64_bit = true>
+    struct state_script_functions {
+        using track = std::vector<const decomp_function<is_64_bit>&>;
+
+        using block = std::unordered_map<std::string, track>;
+
+        using states = std::unordered_map<std::string, block>;
+
+        states m_states;
+
+        std::vector<const decomp_function<is_64_bit>&> m_nonStateScriptFuncs;
+
+        state_script_functions(const std::vector<decomp_function<is_64_bit>>& funcs) noexcept {
+            for (const auto& func : funcs) {
+                if (!func.isScriptFunc) {
+                    m_nonStateScriptFuncs.push_back(func);
+                }
+                else {
+                    const state_script_function_id& id = std::get<state_script_function_id>(func.m_disassembly.m_id);
+                    m_states[id.m_state][id.m_event][id.m_track].push_back(func);
+                }
+            }
+        }
+
+        [[nodiscard]] std::string to_string() const noexcept {
+            std::ostringstream os;
+            for (const auto& [state, blocks] : m_states) {
+                os << "state " << state << "{\n";
+                for (const auto& [block, tracks] : blocks) {
+                    os << "block " << block << "{\n";
+                    for (const auto& [track, functions] : tracks) {
+                        os << "track " << track << "{\n";
+                        for (const auto& function : functions) {
+                            os << function
+                        }
+                        os << "}\n";
+                    }
+                    os << "}\n";
+                }
+                os << "}\n";
+            }
         }
     };
 

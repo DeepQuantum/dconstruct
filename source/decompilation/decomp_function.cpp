@@ -13,25 +13,28 @@ template class decomp_function<true>;
 template class decomp_function<false>;
 
 template<bool is_64_bit>
-decomp_function<is_64_bit>::decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path) :
-    m_disassembly{func}, 
-    m_file{current_file}, 
-    m_graph{func}, 
-    m_parsedNodes(m_graph.m_nodes.size(), false), 
-    m_ipdomsEmitted(m_graph.m_nodes.size(), false),
-    m_graphPath(graph_path)
+[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const function_disassembly& func, const BinaryFile<is_64_bit> &file, std::optional<std::filesystem::path> graph_path) noexcept {
+//decomp_function<is_64_bit>::decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path) :
+    // m_disassembly{func}, 
+    // m_file{current_file}, 
+    // m_graph{func}, 
+    // m_parsedNodes(m_graph.m_nodes.size(), false), 
+    // m_ipdomsEmitted(m_graph.m_nodes.size(), false),
+    // m_graphPath(graph_path)
 {
-    if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
-        m_graph.write_image(m_graphPath->string());
+    decomp_function dc_function{func, file};
+
+    if (graph_path && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
+        m_graph.write_image(graph_path->string());
     }
 
-    m_blockStack.push(std::ref(m_baseBlock));
+    m_blockStack.push(std::ref(m_functionDefinition.m_body));
     m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
     for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
-        m_transformableExpressions.emplace_back(std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)}));
+        m_transformableExpressions[i] = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)});
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
 
@@ -42,22 +45,24 @@ decomp_function<is_64_bit>::decomp_function(const function_disassembly &func, co
 
     emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
     parse_basic_block(m_graph.m_nodes.back());
+
+    return m_functionDefinition;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] std::string decomp_function<is_64_bit>::to_string() const {
-    std::ostringstream out;
-    const std::string return_type = m_disassembly.m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
-    out << return_type << ' ' << m_disassembly.m_id << '(';
-    for (u8 i = 0; i < m_arguments.size(); ++i) {
-        out << type_to_declaration_string(m_arguments[i].m_type) << ' ' << m_arguments[i].m_identifier;
-        if (i != m_arguments.size() - 1) {
-            out << ", ";
-        }
-    }
-    out << ") " << m_baseBlock;
-    return out.str();
-}
+// template<bool is_64_bit>
+// [[nodiscard]] std::string decomp_function<is_64_bit>::to_string() const {
+//     std::ostringstream out;
+//     const std::string return_type = m_disassembly.m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
+//     out << return_type << ' ' << m_disassembly.m_id << '(';
+//     for (u8 i = 0; i < m_arguments.size(); ++i) {
+//         out << type_to_declaration_string(m_arguments[i].m_type) << ' ' << m_arguments[i].m_identifier;
+//         if (i != m_arguments.size() - 1) {
+//             out << ", ";
+//         }
+//     }
+//     out << ") " << m_baseBlock;
+//     return out.str();
+// }
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node) {
