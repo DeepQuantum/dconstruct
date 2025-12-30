@@ -41,12 +41,10 @@ namespace dconstruct {
     {
     public:
 
-        //BinaryFile(const std::filesystem::path &path);
         BinaryFile(std::filesystem::path path, const u64 size, std::unique_ptr<std::byte[]>&& bytes, DC_Header* dcheader) noexcept : 
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
-        [[nodiscard]] static std::expected<BinaryFile, std::string> from_path(const std::filesystem::path& path) const noexcept;
-
+        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
         const StateScript* m_dcscript = nullptr;

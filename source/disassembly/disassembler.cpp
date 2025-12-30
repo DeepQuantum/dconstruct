@@ -447,7 +447,7 @@ void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
             function_name.m_idx = j;
-            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name.get(), true);
+            function_disassembly function = create_function_disassembly(track_ptr->m_pSsLambda[j].m_pScriptLambda, function_name, true);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 3);
             m_functions.push_back(std::move(function));
             insert_span("}\n", indent + m_options.m_indentPerLevel * 2);
@@ -503,7 +503,7 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
-[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, std::variant<std::string, state_script_function_id> name, const bool is_script_function) {
+[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -538,7 +538,7 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
-[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(std::vector<Instruction>&& instructions, const std::string &name, const location& symbol_table, const bool is_script_function) {
+[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(std::vector<Instruction>&& instructions, function_name_variant name, const location& symbol_table, const bool is_script_function) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
 
@@ -549,7 +549,7 @@ template<bool is_64_bit>
     function_disassembly functionDisassembly {
         std::move(lines),
         StackFrame(symbol_table),
-        name,
+        std::move(name),
         is_script_function
     };
 

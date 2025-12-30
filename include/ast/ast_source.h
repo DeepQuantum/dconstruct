@@ -64,6 +64,12 @@ namespace dconstruct::ast {
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
+
+        [[nodiscard]] std::string to_c_string() const noexcept {
+            std::ostringstream oss;
+            pseudo_c(oss);
+            return oss.str();
+        }
     };
 
     enum class Flags {

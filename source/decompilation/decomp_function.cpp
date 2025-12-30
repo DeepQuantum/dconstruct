@@ -13,23 +13,13 @@ template class decomp_function<true>;
 template class decomp_function<false>;
 
 template<bool is_64_bit>
-[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const function_disassembly& func, const BinaryFile<is_64_bit> &file, std::optional<std::filesystem::path> graph_path) noexcept {
-//decomp_function<is_64_bit>::decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path) :
-    // m_disassembly{func}, 
-    // m_file{current_file}, 
-    // m_graph{func}, 
-    // m_parsedNodes(m_graph.m_nodes.size(), false), 
-    // m_ipdomsEmitted(m_graph.m_nodes.size(), false),
-    // m_graphPath(graph_path)
+[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) noexcept
 {
-    decomp_function dc_function{func, file};
-
-    if (graph_path && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
-        m_graph.write_image(graph_path->string());
+    if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
+        m_graph.write_image(m_graphPath->string());
     }
 
     m_blockStack.push(std::ref(m_functionDefinition.m_body));
-    m_transformableExpressions.resize(ARGUMENT_REGISTERS_IDX);
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
@@ -38,13 +28,17 @@ template<bool is_64_bit>
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
 
-    for (reg_idx i = 0; i < func.m_stackFrame.m_registerArgs.size(); ++i) {
-        const auto& arg_type = func.m_stackFrame.m_registerArgs.at(i);
+    for (reg_idx i = 0; i < m_disassembly.m_stackFrame.m_registerArgs.size(); ++i) {
+        const auto& arg_type = m_disassembly.m_stackFrame.m_registerArgs.at(i);
         m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
     }
 
     emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
     parse_basic_block(m_graph.m_nodes.back());
+
+    if (optimization_passes) {
+        optimize_ast();
+    }
 
     return m_functionDefinition;
 }
@@ -898,7 +892,7 @@ template<bool is_64_bit>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::insert_return(const reg_idx dest) {
-    m_returnType = m_transformableExpressions[dest]->get_type(m_env);
+    *m_functionDefinition.m_type.m_return = m_transformableExpressions[dest]->get_type(m_env);
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 
@@ -915,12 +909,12 @@ template<ast::primitive_kind kind>
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
     ast::var_optimization_env var_base{};
-    m_baseBlock.var_optimization_pass(var_base);
+    m_functionDefinition.m_body.var_optimization_pass(var_base);
     ast::foreach_optimization_env foreach_base{};
-    m_baseBlock.foreach_optimization_pass(foreach_base);
+    m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
     ast::match_optimization_env match_base{};
-    m_baseBlock.match_optimization_pass(match_base);
+    m_functionDefinition.m_body.match_optimization_pass(match_base);
     ast::var_optimization_env var_base1{};
-    m_baseBlock.var_optimization_pass(var_base1);
+    m_functionDefinition.m_body.var_optimization_pass(var_base1);
 }
 }

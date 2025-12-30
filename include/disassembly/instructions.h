@@ -425,15 +425,17 @@ struct state_script_function_id {
     }
 };
 
+using function_name_variant = std::variant<std::string, state_script_function_id>;
+
 struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
-    std::variant<std::string, state_script_function_id> m_id;
+    function_name_variant m_id;
     bool m_isScriptFunction;
     
     [[nodiscard]] const std::string& get_id() const noexcept {
         if (!m_isScriptFunction) {
-            std::get<std::string>(m_id);
+            return std::get<std::string>(m_id);
         } else {
             if (m_stateScriptId.empty()) {
                 m_stateScriptId = std::get<state_script_function_id>(m_id).to_string();

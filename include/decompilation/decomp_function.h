@@ -11,8 +11,10 @@ constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 namespace dconstruct::dcompiler {
     template<bool is_64_bit = true>
     struct decomp_function {
-        //explicit decomp_function(const function_disassembly &func, const BinaryFile<is_64_bit> &current_file, std::optional<std::filesystem::path> graph_path = std::nullopt);
-        [[nodiscard]] static ast::function_definition decompile(const function_disassembly& func, const BinaryFile<is_64_bit> &file, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept;
+        decomp_function(const function_disassembly& func, const BinaryFile<is_64_bit>& file, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept : 
+        m_disassembly(func), m_file(file), m_graphPath(graph_path), m_graph(graph), m_parsedNodes(graph.m_nodes.size(), false), m_ipdomsEmitted(m_graph.m_nodes.size(), false) {}
+
+        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = true) noexcept;
 
         [[nodiscard]] std::string to_string() const;
         
@@ -147,6 +149,7 @@ namespace dconstruct::dcompiler {
             auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             return call;
         }
+        
     };
 
     template<bool is_64_bit = true>
@@ -182,7 +185,7 @@ namespace dconstruct::dcompiler {
                     for (const auto& [track, functions] : tracks) {
                         os << "track " << track << "{\n";
                         for (const auto& function : functions) {
-                            os << function
+                            os << function;
                         }
                         os << "}\n";
                     }
