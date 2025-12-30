@@ -35,14 +35,14 @@ void match_expr::pseudo_c(std::ostream& os) const {
     os << indent_less << indent << "}";
 }
 
-[[nodiscard]] std::vector<std::tuple<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
-    std::vector<std::tuple<std::vector<const expr_uptr*>, const expr_uptr*>> res;
+[[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
+    std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> res;
 
     for (const auto& [pattern, match] : m_matchPairs) {
-        auto match_exists = [&match](const auto& pair) -> bool { return *std::get<1>(pair) == match; };
+        auto match_exists = [&match](const auto& pair) -> bool { return *pair.second == match; };
         
         if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
-            std::get<0>(*match_group).push_back(&pattern);
+            match_group->first.push_back(&pattern);
         } else {
             res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
         }
@@ -80,7 +80,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
 
 [[nodiscard]] expr_uptr match_expr::clone() const {
     std::vector<expr_uptr> new_conditions;
-    std::vector<std::tuple<expr_uptr, expr_uptr>> new_matchpairs;
+    std::vector<std::pair<expr_uptr, expr_uptr>> new_matchpairs;
     new_conditions.reserve(m_conditions.size());
     new_matchpairs.reserve(m_matchPairs.size());
     for (const auto& condition : m_conditions) {

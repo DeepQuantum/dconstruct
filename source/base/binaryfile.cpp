@@ -13,37 +13,37 @@ namespace dconstruct {
     template class BinaryFile<false>;
 
     template<bool is_64_bit>
-    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_path(const std::filesystem::path &path) {
+    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_path(const std::filesystem::path &path) noexcept {
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {
-            return std::unexpected{"couldn't open " + path + '\n'};
+            return std::unexpected{"couldn't open " + path.string() + '\n'};
         }
 
-        size = std::filesystem::file_size(path);
+        const u64 size = std::filesystem::file_size(path);
         std::byte* temp_buffer = new std::byte[size];
 
         scriptstream.read((char*)temp_buffer, size);
-        bytes = std::unique_ptr<std::byte[]>(temp_buffer);
+        const auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
 
         constexpr u32 magic = 0x44433030;
         constexpr u32 version = 0x1;
 
         if (size == 0) {
-            return std::unexpected{m_path.string() + " is empty.\n"};
+            return std::unexpected{path.string() + " is empty.\n"};
         }
 
-        dcheader = reinterpret_cast<DC_Header*>(bytes.get());
+        const auto* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
 
         if (dcheader->m_magic != magic) {
-            return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'}
+            return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'};
         }
 
         if (dcheader->m_versionNumber != version) {
             return std::unexpected{"not a DC-file. version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(bytes.get() + 8)) + '\n'};
         }
 
-        BinaryFile file{path, size, std::move(bytes), dcheader};
+        auto file = BinaryFile<is_64_bit>(path, size, std::move(bytes), dcheader);
 
         file.read_reloc_table();
 

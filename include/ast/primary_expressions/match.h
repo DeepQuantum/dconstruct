@@ -4,18 +4,18 @@
 
 namespace dconstruct::ast {
     struct match_expr : public expression {
-        match_expr(std::vector<std::tuple<expr_uptr, expr_uptr>>&& match_pairs) noexcept : 
+        match_expr(std::vector<std::pair<expr_uptr, expr_uptr>>&& match_pairs) noexcept : 
         m_matchPairs(std::move(match_pairs)) {};
 
-        match_expr(std::vector<std::tuple<expr_uptr, expr_uptr>>&& match_pairs, expr_uptr&& _default) noexcept : 
+        match_expr(std::vector<std::pair<expr_uptr, expr_uptr>>&& match_pairs, expr_uptr&& _default) noexcept : 
         m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {};
 
-        match_expr(expr_uptr&& condition, std::vector<std::tuple<expr_uptr, expr_uptr>>&& match_pairs, expr_uptr&& _default) noexcept : 
+        match_expr(expr_uptr&& condition, std::vector<std::pair<expr_uptr, expr_uptr>>&& match_pairs, expr_uptr&& _default) noexcept : 
         m_conditions(1), m_matchPairs(std::move(match_pairs)), m_default(std::move(_default)) {
             m_conditions[0] = std::move(condition);
         };
 
-        match_expr(std::vector<expr_uptr>&& conditions, std::vector<std::tuple<expr_uptr, expr_uptr>>&& match_pairs) noexcept : 
+        match_expr(std::vector<expr_uptr>&& conditions, std::vector<std::pair<expr_uptr, expr_uptr>>&& match_pairs) noexcept : 
         m_conditions(std::move(conditions)), m_matchPairs(std::move(match_pairs)) {};
 
         void pseudo_c(std::ostream& os) const final;
@@ -31,9 +31,9 @@ namespace dconstruct::ast {
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
         std::vector<expr_uptr> m_conditions;
-        std::vector<std::tuple<expr_uptr, expr_uptr>> m_matchPairs;
+        std::vector<std::pair<expr_uptr, expr_uptr>> m_matchPairs;
         expr_uptr m_default;
     private:
-        [[nodiscard]] std::vector<std::tuple<std::vector<const expr_uptr*>, const expr_uptr*>> group_patterns() const noexcept;
+        [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> group_patterns() const noexcept;
     };
 }
