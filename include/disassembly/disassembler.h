@@ -57,7 +57,7 @@ namespace dconstruct {
         [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept {
             std::vector<const function_disassembly*> funcs;
             for (const auto& func : m_functions) {
-                if (!func.m_id.starts_with("anonymous")) {
+                if (!func.get_id().starts_with("anonymous")) {
                     funcs.push_back(&func);
                 }
             }

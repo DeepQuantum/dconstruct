@@ -74,6 +74,30 @@ namespace dconstruct::testing {
         return "";
     }
 
+    static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false) {
+        auto file_res = BinaryFile<>::from_path(filepath);
+        if (!file_res) {
+            std::cerr << file_res.error() << "\n";
+            std::terminate();
+        }
+        auto& file = *file_res;
+        FileDisassembler<true> da{ &file, &base, DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", {} };
+        da.disassemble();
+        da.dump();
+        const auto& funcs = da.get_functions();
+        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.get_id() == id; });
+        ASSERT_NE(func, funcs.end());
+        auto dc_func = dcompiler::decomp_function{ *func, file,  ControlFlowGraph::build(*func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
+        if (optimize) {
+            dc_func.optimize_ast();
+        }
+        std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
+        std::ostringstream out;
+        out << stream_lang << dc_func.m_functionDefinition;
+        file_out << stream_lang << out.str();
+        ASSERT_EQ(expected, out.str());
+    }
+
     TEST(DECOMPILER, BasicLoadImmediate) {
         compiler::environment<ast::full_type> env{};
         std::vector<Instruction> istrs = {
@@ -527,29 +551,7 @@ namespace dconstruct::testing {
     }
 
 
-	static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false) {
-        auto file_res = BinaryFile<>::from_path(filepath);
-        if (!file_res) {
-            std::cerr << file_res.error() << "\n";
-            std::terminate();
-        }
-        auto& file = *file_res;
-        FileDisassembler<true> da{ &file, &base, DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", {} };
-        da.disassemble();
-        da.dump();
-        const auto& funcs = da.get_functions();
-        const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.get_id() == id; });
-        ASSERT_NE(func, funcs.end());
-        auto dc_func = dcompiler::decomp_function{ *func, file,  ControlFlowGraph::build(*func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
-        if (optimize) {
-            dc_func.optimize_ast();
-        }
-        std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
-        std::ostringstream out;
-        out << stream_lang << dc_func.m_functionDefinition;
-        file_out << stream_lang << out.str();
-        ASSERT_EQ(expected, out.str());
-    }
+	
 
     TEST(DECOMPILER_RACKET, Racket0) {
         const std::string filepath = TEST_DIR + R"(\behaviors.bin)";

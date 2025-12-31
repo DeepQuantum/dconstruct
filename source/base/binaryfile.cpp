@@ -24,7 +24,7 @@ namespace dconstruct {
         std::byte* temp_buffer = new std::byte[size];
 
         scriptstream.read((char*)temp_buffer, size);
-        const auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
+        auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
 
         constexpr u32 magic = 0x44433030;
         constexpr u32 version = 0x1;
@@ -33,7 +33,7 @@ namespace dconstruct {
             return std::unexpected{path.string() + " is empty.\n"};
         }
 
-        const auto* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
+        auto* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
 
         if (dcheader->m_magic != magic) {
             return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'};

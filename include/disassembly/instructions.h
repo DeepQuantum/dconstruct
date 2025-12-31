@@ -432,6 +432,9 @@ struct function_disassembly {
     StackFrame m_stackFrame;
     function_name_variant m_id;
     bool m_isScriptFunction;
+
+    function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept :
+    m_lines(std::move(lines)), m_stackFrame(std::move(stack_frame)), m_id(std::move(id)), m_isScriptFunction(is_script_function) {};
     
     [[nodiscard]] const std::string& get_id() const noexcept {
         if (!m_isScriptFunction) {
