@@ -6,4 +6,8 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
+[[nodiscard]] full_type compare_expr::compute_type(const type_environment&) const {
+    return make_type(primitive_kind::BOOL);
+}
+
 }

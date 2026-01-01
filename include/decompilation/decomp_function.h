@@ -12,7 +12,13 @@ namespace dconstruct::dcompiler {
     template<bool is_64_bit = true>
     struct decomp_function {
         decomp_function(const function_disassembly& func, const BinaryFile<is_64_bit>& file, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept : 
-        m_disassembly(func), m_file(file), m_graphPath(graph_path), m_graph(graph), m_parsedNodes(graph.m_nodes.size(), false), m_ipdomsEmitted(m_graph.m_nodes.size(), false) {}
+        m_disassembly(func), 
+        m_file(file), 
+        m_graphPath(graph_path), 
+        m_graph(graph), 
+        m_parsedNodes(graph.m_nodes.size(), false), 
+        m_ipdomsEmitted(m_graph.m_nodes.size(), false),
+        m_functionDefinition{} {};
 
         [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = true) noexcept;
 

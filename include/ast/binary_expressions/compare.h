@@ -8,6 +8,7 @@ namespace dconstruct::ast {
         using clonable_binary_expr::clonable_binary_expr;
 
         [[nodiscard]] expr_uptr simplify() const final;
+        [[nodiscard]] full_type compute_type(const type_environment&) const override;
 
     };
 }
