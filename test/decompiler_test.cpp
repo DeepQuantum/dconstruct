@@ -27,7 +27,7 @@ namespace dconstruct::testing {
         return fd;
     }
 
-    static dcompiler::TLOU2decomp_function decompile_instructions_with_disassembly(
+    static ast::function_definition decompile_instructions_with_disassembly(
         std::vector<Instruction>&& istrs, 
         const std::string& name = "Test",
         const SymbolTable& table = {}
@@ -35,10 +35,12 @@ namespace dconstruct::testing {
         BinaryFile<> file = *BinaryFile<>::from_path(TEST_DIR + R"(\dummy.bin)");
         TLOU2Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, table.m_location);
-        return dconstruct::dcompiler::TLOU2decomp_function(fd, file, ControlFlowGraph::build(fd));
+        auto dc_func = dconstruct::dcompiler::TLOU2decomp_function(fd, file, ControlFlowGraph::build(fd));
+        auto& test = const_cast<ast::function_definition&>(dc_func.decompile(false));
+        return std::move(test);
     }
 
-    static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id) {
+    static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id, const bool optimize = false) {
         auto file_res = BinaryFile<>::from_path(path);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
@@ -50,7 +52,7 @@ namespace dconstruct::testing {
         for (const auto& func : da.get_functions()) {
             if (func.get_id() == function_id) {
                 auto fd = dcompiler::decomp_function{func, file, ControlFlowGraph::build(func)};
-                return fd.decompile().to_c_string();
+                return fd.decompile(optimize).to_c_string();
             }
         }
         return "";
@@ -104,12 +106,12 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
         };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate");
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediate");
 
-        ASSERT_EQ(func.m_functionDefinition.m_body.m_statements.size(), 1);
+        ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_functionDefinition.m_body.m_statements[0].get());
-        const auto rhs = actual.m_expr->compute_type(env);
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements[0].get());
+        const auto& rhs = actual.m_expr->compute_type(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 
@@ -122,14 +124,14 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
         compiler::environment<ast::full_type> env{};
-        const auto func = decompile_instructions_with_disassembly({
+        const auto& func = decompile_instructions_with_disassembly({
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
         }, "BasicLoadImmediateString");
-        ASSERT_EQ(func.m_functionDefinition.m_body.m_statements.size(), 1);
+        ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_functionDefinition.m_body.m_statements[0].get());
-        const auto rhs = actual.m_expr->compute_type(env);
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements[0].get());
+        const auto& rhs = actual.m_expr->compute_type(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 
@@ -149,9 +151,9 @@ namespace dconstruct::testing {
             {Opcode::LoadU16Imm, 2, 5, 5},
             {Opcode::Return, 0, 0, 0}
         };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString");
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicLoadImmediatesString");
 
-        const auto& actual = func.m_functionDefinition.m_body.m_statements;
+        const auto& actual = func.m_body.m_statements;
         const std::string expected = "return 1;";
         std::ostringstream os;
         for (const auto& stmt : actual) {
@@ -169,9 +171,9 @@ namespace dconstruct::testing {
             {Opcode::IAdd, dest, 0, 1},
             {Opcode::Return, dest, 0, 0}
         };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_functionDefinition.m_body.m_statements[0].get());
+        const auto& actual = static_cast<const ast::return_stmt&>(*func.m_body.m_statements[0]);
         const std::string expected = "return 1 + 1285;";
         std::ostringstream os;
         os << actual;
@@ -187,15 +189,13 @@ namespace dconstruct::testing {
             {Opcode::IAdd, dest, 2, 2}, 
             {Opcode::Return, dest, 0, 0}
         };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
 
-        const auto& actual = func.m_functionDefinition.m_body.m_statements;
+        const auto& actual = func.m_body.m_statements[0];
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
         std::ostringstream os;
-        for (const auto& stmt : actual) {
-            stmt->pseudo_c(os);
-        }
+        os << *actual;
         EXPECT_EQ(expected, os.str());
     }
 
@@ -212,9 +212,9 @@ namespace dconstruct::testing {
         std::vector<ast::full_type> symbol_table_types;
         symbol_table_types.push_back(ast::make_function(ast::make_type(ast::primitive_kind::I32), { {"ddict", ast::make_type(ast::primitive_kind::I32) } }));
         SymbolTable table{ location(table_entries.data()), std::move(symbol_table_types) };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
 
-        const auto& actual = func.m_functionDefinition.m_body;
+        const auto& actual = func.m_body;
         const std::string expected =
             "{\n"
             "    u64? var_0 = ddict-key-count(5);\n"
@@ -274,15 +274,15 @@ namespace dconstruct::testing {
         }
     }
 
-    TEST(DECOMPILER, DetermineArgumentType) {
+    TEST(DECOMPILER, ArgumentType) {
         std::vector<Instruction> istrs = {
             {Opcode::Move, 0, 49, 0},
             {Opcode::LoadU16Imm, 1, 5, 0},
             {Opcode::IEqual, 2, 0, 1},
             {Opcode::Return, 2, 0, 0}
         };
-        const auto func = decompile_instructions_with_disassembly(std::move(istrs), "DetermineArgumentType");
-        const auto& actual = func.to_string();
+        const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "DetermineArgumentType");
+        const auto& actual = func.to_c_string();
 
         const std::string expected =
             "bool DetermineArgumentType(u16 arg_0) {\n"
@@ -351,7 +351,7 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) };
+        const auto& dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile();
         const std::string expected =
             "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
             "    string var_0;\n"
@@ -371,8 +371,8 @@ namespace dconstruct::testing {
             "    return var_0;\n"
             "}";
         std::ofstream out(DCPL_PATH + id + ".dcpl");
-        out << dc_func.to_string();
-        ASSERT_EQ(dc_func.to_string(), expected);
+        out << dc_func;
+        ASSERT_EQ(dc_func.to_c_string(), expected);
     }
 
     TEST(DECOMPILER, Loop1) {
@@ -539,9 +539,9 @@ namespace dconstruct::testing {
                 }
                 emitted.insert(func.get_id());
                 try {
-                    const auto dc_func = dcompiler::decomp_function{ func, file, ControlFlowGraph::build(func) };
+                    const auto& dc_func = dcompiler::decomp_function{ func, file, ControlFlowGraph::build(func) }.decompile();
                     std::ofstream out(new_path, std::ios::app);
-                    out << dc_func.to_string() << "\n\n";
+                    out << dc_func << "\n\n";
                 }
                 catch (const std::exception& e) {
                     std::cout << e.what() << '\n';

@@ -13,5 +13,6 @@ namespace dconstruct::ast {
         std::vector<ast::parameter> m_parameters;
         ast::block m_body;
         ast::function_type m_type;
+        std::string m_name;
     };
 }

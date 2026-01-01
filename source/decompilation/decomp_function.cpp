@@ -19,6 +19,8 @@ template<bool is_64_bit>
         m_graph.write_image(m_graphPath->string());
     }
 
+    m_functionDefinition.m_name = m_disassembly.get_id();
+
     m_blockStack.push(std::ref(m_functionDefinition.m_body));
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
@@ -31,6 +33,7 @@ template<bool is_64_bit>
     for (reg_idx i = 0; i < m_disassembly.m_stackFrame.m_registerArgs.size(); ++i) {
         const auto& arg_type = m_disassembly.m_stackFrame.m_registerArgs.at(i);
         m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
+        m_functionDefinition.m_parameters.emplace_back(arg_type, "arg_" + std::to_string(i));
     }
 
     emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
