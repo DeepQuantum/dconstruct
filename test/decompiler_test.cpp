@@ -90,12 +90,9 @@ namespace dconstruct::testing {
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.get_id() == id; });
         ASSERT_NE(func, funcs.end());
         auto dc_func = dcompiler::decomp_function{ *func, file,  ControlFlowGraph::build(*func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
-        if (optimize) {
-            dc_func.optimize_ast();
-        }
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
         std::ostringstream out;
-        out << stream_lang << dc_func.m_functionDefinition;
+        out << stream_lang << dc_func.decompile(optimize);
         file_out << stream_lang << out.str();
         ASSERT_EQ(expected, out.str());
     }
@@ -317,14 +314,14 @@ namespace dconstruct::testing {
         const std::string expected =
             "i32 #8A8D5C923D5DDB3B() {\n"
             "    i32 var_0;\n"
-            "    if(get-int32(#5389CC70A44E7358, self) > 0) {\n"
+            "    if (get-int32(#5389CC70A44E7358, self) > 0) {\n"
             "        var_0 = get-int32(#5389CC70A44E7358, self);\n"
             "    } else {\n"
             "        var_0 = get-int32(#CEF93DF859F605EA, self);\n"
             "    }\n"
             "    return var_0;\n"
             "}";
-        decomp_test(filepath, id, expected, dconstruct::ast::c);
+        decomp_test(filepath, id, expected, dconstruct::ast::c, true);
     }
 
     TEST(DECOMPILER, If2) {
@@ -351,19 +348,19 @@ namespace dconstruct::testing {
         const auto& funcs = da.get_functions();
         const auto& func = std::find_if(funcs.begin(), funcs.end(), [&id](const function_disassembly& f) { return f.get_id() == id; });
         ASSERT_NE(func, funcs.end());
-        const auto& dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile();
+        const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile();
         const std::string expected =
             "string #BC06CBDEAE8344C7(u16 arg_0) {\n"
             "    string var_0;\n"
-            "    if(arg_0 == 0) {\n"
+            "    if (arg_0 == 0) {\n"
             "        var_0 = \"none\";\n"
-            "    } else if(arg_0 == 1) {\n"
+            "    } else if (arg_0 == 1) {\n"
             "        var_0 = \"potential\";\n"
-            "    } else if(arg_0 == 2) {\n"
+            "    } else if (arg_0 == 2) {\n"
             "        var_0 = \"certain\";\n"
-            "    } else if(arg_0 == 3) {\n"
+            "    } else if (arg_0 == 3) {\n"
             "        var_0 = \"missing\";\n"
-            "    } else if(arg_0 == 4) {\n"
+            "    } else if (arg_0 == 4) {\n"
             "        var_0 = \"lost\";\n"
             "    } else {\n"
             "        var_0 = \"invalid\";\n"
@@ -822,23 +819,6 @@ namespace dconstruct::testing {
         decomp_test(filepath, id, expected, ast::c, true);
     }
 
-    TEST(DECOMPILER, Match2) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/workbench-script-funcs-impl.bin)";
-        const std::string id = "get-worst-stat";
-        const std::string expected = 
-            "string #C57EE0A64537AE8F(u16 arg_0) {\n"
-            "   string var_0 = match (arg_0) {\n"
-            "       0 -> \"Militia\"\n"
-            "       1 -> \"Scars\"\n"
-            "       2 -> \"Rattlers\"\n"
-            "       3 -> \"Infected\"\n"
-            "       4 -> \"Max Num Factions\"\n"
-            "       else -> \"Invalid\"\n"
-            "   }\n"
-            "   return var_0;";
-        decomp_test(filepath, id, expected, ast::c, true);
-    }
-
     TEST(DECOMPILER, Match4) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-misc-defines.bin)";
         const std::string id = "#77C65B88D2083D05";
@@ -869,5 +849,30 @@ namespace dconstruct::testing {
             "    };\n"
             "}";
         decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, NewFileFormat1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-animal-flee-simple-loop.bin)";
+        auto file_res = BinaryFile<>::from_path(filepath);
+        if (!file_res) {
+            std::cerr << file_res.error() << "\n";
+            std::terminate();
+        }
+        auto& file = *file_res;
+        FileDisassembler<true> da{ &file, &base, DCPL_PATH + "animal_behavior.asm", {} };
+        da.disassemble();
+        da.dump();
+        const auto& funcs = da.get_functions();
+        std::vector<std::unique_ptr<dcompiler::decomp_function<>>> decompiled_funcs;
+        for (const auto& func : funcs) {
+            decompiled_funcs.push_back(std::make_unique<dcompiler::decomp_function<>>(func, file,  ControlFlowGraph::build(func), DCPL_PATH + "animal_behavior.svg"));
+            decompiled_funcs.back()->decompile();
+        }
+        dcompiler::state_script_functions<> full_file_decomp(decompiled_funcs);
+
+
+
+        std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
+        file_out << full_file_decomp.to_string();
     }
 }

@@ -13,13 +13,13 @@ template class decomp_function<true>;
 template class decomp_function<false>;
 
 template<bool is_64_bit>
-[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) noexcept
+[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) & noexcept
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
     }
 
-    m_functionDefinition.m_name = m_disassembly.get_id();
+    m_functionDefinition.m_name = m_disassembly.m_id;
 
     m_blockStack.push(std::ref(m_functionDefinition.m_body));
     for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
@@ -44,6 +44,39 @@ template<bool is_64_bit>
     }
 
     return m_functionDefinition;
+}
+
+template<bool is_64_bit>
+[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const bool optimization_passes) && noexcept
+{
+    if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
+        m_graph.write_image(m_graphPath->string());
+    }
+
+    m_functionDefinition.m_name = m_disassembly.m_id;
+
+    m_blockStack.push(std::ref(m_functionDefinition.m_body));
+    for (reg_idx i = 0; i < ARGUMENT_REGISTERS_IDX; ++i) {
+        m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
+    }
+    for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
+        m_transformableExpressions[i] = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)});
+        m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
+    }
+
+    for (reg_idx i = 0; i < m_disassembly.m_stackFrame.m_registerArgs.size(); ++i) {
+        const auto& arg_type = m_disassembly.m_stackFrame.m_registerArgs.at(i);
+        m_arguments.push_back(ast::variable_declaration(arg_type, "arg_" + std::to_string(i)));
+        m_functionDefinition.m_parameters.emplace_back(arg_type, "arg_" + std::to_string(i));
+    }
+
+    emit_node(m_graph[0], m_graph.m_nodes.back().m_index);
+    parse_basic_block(m_graph.m_nodes.back());
+
+    if (optimization_passes) {
+        optimize_ast();
+    }
+    return std::move(m_functionDefinition);
 }
 
 // template<bool is_64_bit>

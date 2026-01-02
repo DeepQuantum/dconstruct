@@ -3,6 +3,7 @@
 #include "ast/ast.h"
 #include "binaryfile.h"
 #include "decompilation/control_flow_graph.h"
+#include "ast/ast_source.h"
 #include <set>
 #include <stack>
 
@@ -20,9 +21,23 @@ namespace dconstruct::dcompiler {
         m_ipdomsEmitted(m_graph.m_nodes.size(), false),
         m_functionDefinition{} {};
 
-        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = true) noexcept;
+        // struct allocator {
 
-        [[nodiscard]] std::string to_string() const;
+        // };
+
+
+        // template<node_t, Args... args> requires (std::is_base_of<node_t, ast::ast_element>)
+        // [[nodiscard]] expr_uptr create_node(Args ...args)  {
+        //     return new (m_arena) node_t(std::forward(args)...);
+        // }
+
+        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = true) & noexcept;
+        [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = true) && noexcept;
+
+        decomp_function& operator=(decomp_function&&) noexcept = default;
+
+        decomp_function(const decomp_function&) = delete;
+        decomp_function& operator=(const decomp_function&) = delete;
         
         ControlFlowGraph m_graph;
         std::unordered_map<reg_idx, std::stack<std::unique_ptr<ast::identifier>>> m_registersToVars;
@@ -160,45 +175,56 @@ namespace dconstruct::dcompiler {
 
     template<bool is_64_bit = true>
     struct state_script_functions {
-        using track = std::vector<const decomp_function<is_64_bit>&>;
 
-        using block = std::unordered_map<std::string, track>;
+        using track = std::vector<const decomp_function<is_64_bit>*>;
 
-        using states = std::unordered_map<std::string, block>;
+        using tracks = std::map<std::string, track>;
+
+        using blocks = std::map<std::string, tracks>;
+
+        using states = std::map<std::string, blocks>;
 
         states m_states;
 
-        std::vector<const decomp_function<is_64_bit>&> m_nonStateScriptFuncs;
+        std::vector<const decomp_function<is_64_bit>*> m_nonStateScriptFuncs;
 
-        state_script_functions(const std::vector<decomp_function<is_64_bit>>& funcs) noexcept {
+        state_script_functions(const std::vector<std::unique_ptr<decomp_function<is_64_bit>>>& funcs) noexcept {
             for (const auto& func : funcs) {
-                if (!func.isScriptFunc) {
-                    m_nonStateScriptFuncs.push_back(func);
+                if (!func->m_disassembly.m_isScriptFunction) {
+                    m_nonStateScriptFuncs.push_back(&*func);
                 }
                 else {
-                    const state_script_function_id& id = std::get<state_script_function_id>(func.m_disassembly.m_id);
-                    m_states[id.m_state][id.m_event][id.m_track].push_back(func);
+                    const state_script_function_id& id = std::get<state_script_function_id>(func->m_disassembly.m_id);
+                    m_states[id.m_state][id.m_event][id.m_track].push_back(&*func);
                 }
             }
         }
 
         [[nodiscard]] std::string to_string() const noexcept {
             std::ostringstream os;
-            for (const auto& [state, blocks] : m_states) {
-                os << "state " << state << "{\n";
-                for (const auto& [block, tracks] : blocks) {
-                    os << "block " << block << "{\n";
-                    for (const auto& [track, functions] : tracks) {
-                        os << "track " << track << "{\n";
+            for (const auto& [state_name, blocks] : m_states) {
+                os << "state " << state_name << " {\n";
+                os << ast::indent_more;
+                for (const auto& [block_name, tracks] : blocks) {
+                    os << ast::indent << "block " << block_name << " {\n";
+                    os << ast::indent_more;
+                    for (const auto& [track_name, functions] : tracks) {
+                        os << ast::indent << "track " << track_name << " {\n";
+                        os << ast::indent_more;
                         for (const auto& function : functions) {
-                            os << function;
+                            os << ast::indent << function->m_functionDefinition;
+                            os << "\n";
                         }
-                        os << "}\n";
+                        os << ast::indent_less;
+                        os << ast::indent << "}\n";
                     }
-                    os << "}\n";
+                    os << ast::indent_less;
+                    os << ast::indent << "}\n";
                 }
+                os << ast::indent_less;
                 os << "}\n";
             }
+            return os.str();
         }
     };
 
