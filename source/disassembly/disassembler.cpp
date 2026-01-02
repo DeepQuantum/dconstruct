@@ -422,7 +422,7 @@ void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 
             break;
         }
         case 2: {
-            function_name.m_event = std::string("event_").append(lookup(block->m_blockEventId));
+            function_name.m_event = std::string("event ").append(lookup(block->m_blockEventId));
             break;
         }
         case 3: {

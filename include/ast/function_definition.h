@@ -3,6 +3,7 @@
 #include "ast_source.h"
 #include "statements/block.h"
 #include "parameter.h"
+#include "disassembly/instructions.h"
 
 namespace dconstruct::ast {
     struct function_definition : ast_element {
@@ -13,6 +14,6 @@ namespace dconstruct::ast {
         std::vector<ast::parameter> m_parameters;
         ast::block m_body;
         ast::function_type m_type;
-        std::string m_name;
+        function_name_variant m_name;
     };
 }

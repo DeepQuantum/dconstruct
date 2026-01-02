@@ -3,16 +3,19 @@
 namespace dconstruct::ast {
 
 void function_definition::pseudo_c(std::ostream& os) const {
-    os << type_to_declaration_string(*m_type.m_return) << " " << m_name << "(";
-    bool first = true;
-    for (const auto& param : m_parameters) {
-        if (!first) {
-            os << ", ";
-        }
-        first = false;
-        os << param;
-    } 
-    os << ") " << m_body;
+    if (!std::holds_alternative<state_script_function_id>(m_name)) {
+        os << type_to_declaration_string(*m_type.m_return) << " " << std::get<std::string>(m_name) << "(";
+        bool first = true;
+        for (const auto& param : m_parameters) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            os << param;
+        } 
+        os << ") ";
+    }
+    os << m_body;
 }
 
 void function_definition::pseudo_py(std::ostream& os) const {

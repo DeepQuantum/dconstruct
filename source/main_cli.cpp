@@ -117,6 +117,7 @@ static void disasm_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
     disassembler.disassemble();
+    disassembler.dump();
 }
 
 static void decompile_multiple(
