@@ -139,7 +139,7 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
-MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {    
+MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {
     if (m_statements.size() == 1) {
         if (m_statements[0]->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
             return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
@@ -149,7 +149,7 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
             const auto action = statement->match_optimization_pass(env);
             if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && m_statements.size() == 1) {
                 assert(env.m_matches.size() - 1 == env.m_patterns.size());
-                std::vector<std::tuple<expr_uptr, expr_uptr>> pairs;
+                std::vector<std::pair<expr_uptr, expr_uptr>> pairs;
                 pairs.reserve(env.m_patterns.size());
 
                 for (u32 i = 0; i < env.m_patterns.size(); ++i) {

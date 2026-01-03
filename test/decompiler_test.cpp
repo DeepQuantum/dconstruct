@@ -863,16 +863,20 @@ namespace dconstruct::testing {
         da.disassemble();
         da.dump();
         const auto& funcs = da.get_functions();
-        std::vector<std::unique_ptr<dcompiler::decomp_function<>>> decompiled_funcs;
+        std::vector<ast::function_definition> decompiled_funcs;
         for (const auto& func : funcs) {
-            decompiled_funcs.push_back(std::make_unique<dcompiler::decomp_function<>>(func, file,  ControlFlowGraph::build(func), DCPL_PATH + "animal_behavior.svg"));
-            decompiled_funcs.back()->decompile();
+            decompiled_funcs.push_back(dcompiler::decomp_function{func, file,  ControlFlowGraph::build(func), DCPL_PATH + "animal_behavior.svg"}.decompile());
         }
         dcompiler::state_script_functions<> full_file_decomp(decompiled_funcs);
 
-
-
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
         file_out << full_file_decomp.to_string();
+    }
+
+    TEST(DECOMPILER, Optimization10) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/anim-gas-mask-impl.bin)";
+        const std::string id = "internal-put-on-gas-mask";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
     }
 }
