@@ -49,10 +49,8 @@ namespace dconstruct::dcompiler {
         const BinaryFile<is_64_bit>& m_file;
         std::optional<std::filesystem::path> m_graphPath;
         ast::function_definition m_functionDefinition;
-        //ast::full_type m_returnType;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
-        //ast::block m_baseBlock;
         char m_loopVar = 'i';
 		u16 m_varCount = 0;
 
@@ -176,7 +174,7 @@ namespace dconstruct::dcompiler {
     template<bool is_64_bit = true>
     struct state_script_functions {
 
-        using track = std::vector<const decomp_function<is_64_bit>*>;
+        using track = std::vector<const ast::function_definition*>;
 
         using tracks = std::map<std::string, track>;
 
@@ -186,22 +184,27 @@ namespace dconstruct::dcompiler {
 
         states m_states;
 
-        std::vector<const decomp_function<is_64_bit>*> m_nonStateScriptFuncs;
+        std::vector<const ast::function_definition*> m_nonStateScriptFuncs;
 
-        state_script_functions(const std::vector<std::unique_ptr<decomp_function<is_64_bit>>>& funcs) noexcept {
+        state_script_functions(const std::vector<ast::function_definition>& funcs) noexcept {
             for (const auto& func : funcs) {
-                if (!func->m_disassembly.m_isScriptFunction) {
-                    m_nonStateScriptFuncs.push_back(&*func);
+                if (std::holds_alternative<std::string>(func.m_name)) {
+                    m_nonStateScriptFuncs.push_back(&func);
                 }
                 else {
-                    const state_script_function_id& id = std::get<state_script_function_id>(func->m_disassembly.m_id);
-                    m_states[id.m_state][id.m_event][id.m_track].push_back(&*func);
+                    const state_script_function_id& id = std::get<state_script_function_id>(func.m_name);
+                    m_states[id.m_state][id.m_event][id.m_track].push_back(&func);
                 }
             }
         }
 
         [[nodiscard]] std::string to_string() const noexcept {
             std::ostringstream os;
+
+            for (const auto& func : m_nonStateScriptFuncs) {
+                os << *func << "\n\n"; 
+            }
+
             for (const auto& [state_name, blocks] : m_states) {
                 os << "state " << state_name << " {\n";
                 os << ast::indent_more;
@@ -211,8 +214,8 @@ namespace dconstruct::dcompiler {
                     for (const auto& [track_name, functions] : tracks) {
                         os << ast::indent << "track " << track_name << " {\n";
                         os << ast::indent_more;
-                        for (const auto& function : functions) {
-                            os << ast::indent << function->m_functionDefinition;
+                        for (const auto* function : functions) {
+                            os << ast::indent << *function;
                             os << "\n";
                         }
                         os << ast::indent_less;

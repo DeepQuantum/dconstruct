@@ -269,16 +269,15 @@ void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr,
         }
         case SID("script-lambda"): {
             std::string name;
-            // if (name_id == 0) {
-            //     std::stringstream ss;
-            //     ss << "anonymous@";
-            //     ss << std::hex << offset;
-            //     name = ss.str();
-            // }
-            // else {
+            if (name_id == 0) {
+                std::stringstream ss;
+                ss << "anonymous@";
+                ss << std::hex << offset;
+                name = ss.str();
+            } else {
                 name = lookup(name_id);
-            //}
-            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), name);
+            }
+            function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), std::move(name));
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
             break;

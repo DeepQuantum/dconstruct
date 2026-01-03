@@ -40,7 +40,14 @@ void literal::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] u16 literal::calc_complexity() const noexcept {
-    return 1;
+    return std::visit([&](auto&& lit) -> u16 {
+        using T = std::decay_t<decltype(lit)>;
+        if constexpr (std::is_arithmetic_v<T>) {
+            return static_cast<u16>(lit != 0);
+        } else {
+            return 1;
+        }
+    }, m_value);
 }
 
 VAR_OPTIMIZATION_ACTION literal::var_optimization_pass(var_optimization_env& env)  noexcept {

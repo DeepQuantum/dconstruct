@@ -71,7 +71,7 @@ static void decomp_file(
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
-        std::vector<const dconstruct::ast::function_definition*> functions;
+        std::vector<dconstruct::ast::function_definition> functions;
         functions.reserve(funcs.size());
         out << language_type;
         for (const auto& func : funcs) {
@@ -82,14 +82,14 @@ static void decomp_file(
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
             try {
-                auto dc_func = dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) };
-                functions.push_back(&dc_func.decompile());
+                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile());
             }
             catch (const std::exception& e) {
                 std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
             }
         }
-        
+        dconstruct::dcompiler::state_script_functions<> output_functions{functions};
+        out << output_functions.to_string();
     }
 }
 
