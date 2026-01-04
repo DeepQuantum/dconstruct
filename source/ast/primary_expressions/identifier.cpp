@@ -77,6 +77,10 @@ void expression::check_match_optimization(expr_uptr* expr, match_optimization_en
     }
 }
 
+[[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
+    return name == m_name.m_lexeme;
+}
+
 
 VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {

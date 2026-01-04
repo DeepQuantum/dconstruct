@@ -18,6 +18,7 @@ namespace dconstruct::ast {
         virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept { return FOREACH_OPTIMIZATION_ACTION::NONE; }
         virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
+        [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
 
         static void check_var_optimization(std::unique_ptr<statement>* statement, var_optimization_env& optimization_ctx);
         static void check_foreach_optimization(std::unique_ptr<statement>* statement, foreach_optimization_env& optimization_ctx);

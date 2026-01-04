@@ -71,6 +71,13 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::make_unique<block>(std::move(new_statements));
 }
 
+[[nodiscard]] const statement* block::inlineable_else_statement() const noexcept {
+    if (m_statements.size() == 1) {
+        return m_statements[0].get();
+    }
+    return nullptr;
+}
+
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
     var_optimization_env new_env{&env};
 
@@ -140,14 +147,22 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
 }
 
 MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {
+    //if (m_statements.size() == env.m_resultDeclarations.size()) {
     if (m_statements.size() == 1) {
+        // for (u32 i = 0; i < m_statements.size(); ++i) {
+        //     env.m_currentAssignIdx = i;
+        //     if (m_statements[i]->match_optimization_pass(env) != MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
+        //         break;
+        //     }
+        // }
+        // return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
         if (m_statements[0]->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
             return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
         }
     } else {
         for (auto& statement : m_statements) {
             const auto action = statement->match_optimization_pass(env);
-            if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && m_statements.size() == 1) {
+            if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
                 assert(env.m_matches.size() - 1 == env.m_patterns.size());
                 std::vector<std::pair<expr_uptr, expr_uptr>> pairs;
                 pairs.reserve(env.m_patterns.size());
@@ -162,10 +177,14 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
                 assert(dynamic_cast<variable_declaration*>(env.m_resultDeclaration->get()));
                 static_cast<variable_declaration&>(**env.m_resultDeclaration).m_init = std::move(match);
             } else if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION) {
+                //env.m_resultDeclarations.push_back(&statement);
                 env.m_resultDeclaration = &statement;
             }
         }
     }
+
+    //env.m_resultDeclarations.clear();
+    env.m_resultDeclaration = nullptr;
 
     std::vector<stmnt_uptr> new_statements;
     new_statements.reserve(m_statements.size());

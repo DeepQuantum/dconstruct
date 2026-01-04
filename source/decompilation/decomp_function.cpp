@@ -228,18 +228,18 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 break;
             }
 
-            case Opcode::CastInteger: generated_expression = make_cast<f32, i32>(istr, make_type(ast::primitive_kind::I32)); break;
-            case Opcode::CastFloat: generated_expression = make_cast<i32, f32>(istr, make_type(ast::primitive_kind::F32)); break;
+            case Opcode::CastInteger: generated_expression = make_cast<i32>(istr, make_type(ast::primitive_kind::I32)); break;
+            case Opcode::CastFloat: generated_expression = make_cast<f32>(istr, make_type(ast::primitive_kind::F32)); break;
 
             case Opcode::Move: generated_expression = m_transformableExpressions[istr.operand1]->clone(); break;
 
-            case Opcode::LoadFloat: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::F32 })); break;
-            case Opcode::LoadI32: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::I32 })); break;
-            case Opcode::LoadU64: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U64 })); break;
-            case Opcode::LoadU8: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U8 })); break;
-            case Opcode::LoadU32: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U32 })); break;
-            case Opcode::LoadU16: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::U16 })); break;
-            case Opcode::LoadI64: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ ast::primitive_kind::I64 })); break;
+            case Opcode::LoadFloat: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::F32 })); break;
+            case Opcode::LoadI32: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::I32 })); break;
+            case Opcode::LoadU64: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::U64 })); break;
+            case Opcode::LoadU8: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::U8 })); break;
+            case Opcode::LoadU32: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::U32 })); break;
+            case Opcode::LoadU16: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::U16 })); break;
+            case Opcode::LoadI64: generated_expression = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ ast::primitive_kind::I64 })); break;
             case Opcode::LoadPointer: generated_expression = apply_unary_op<ast::dereference_expr>(istr); break;
 
             case Opcode::StoreU8 : generated_expression = make_store<ast::primitive_kind::U8>(istr); break;
@@ -584,7 +584,7 @@ void decomp_function<is_64_bit>::emit_if_else(const control_flow_node &node, nod
     }
 
     stmnt_uptr _else = nullptr;
-    if (else_block->m_statements.size() == 1 && dynamic_cast<ast::if_stmt*>(else_block->m_statements[0].get())) {
+    if (else_block->inlineable_else_statement()) {
         _else = std::move(else_block->m_statements[0]);
     }
     else if (!else_block->m_statements.empty()) {
@@ -638,8 +638,7 @@ void decomp_function<is_64_bit>::load_expression_into_existing_var(const reg_idx
         throw std::runtime_error("error: expressions was empty at " + std::to_string(dst));
     }
     auto& expr = m_transformableExpressions[dst];
-    auto rhs_ptr = dynamic_cast<ast::identifier*>(expr.get());
-    if (rhs_ptr && rhs_ptr->m_name == var->m_name) {
+    if (expr->identifier_name_equals(var->m_name.m_lexeme)) {
         return;
     }
     const auto type_temp = expr->get_type(m_env);
@@ -687,20 +686,12 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
-template<typename from, typename to>
+template<typename to>
 [[nodiscard]] expr_uptr decomp_function<is_64_bit>::make_cast(const Instruction& istr, const ast::full_type& type) {
-    const ast::literal* old_lit = dynamic_cast<ast::literal*>(m_transformableExpressions[istr.operand1].get());
+    const ast::literal* old_lit = m_transformableExpressions[istr.operand1]->as_literal();
     if (!old_lit) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
-        const ast::cast_expr* old_cast = dynamic_cast<ast::cast_expr*>(op2.get());
-        if (old_cast) {
-            auto new_cast = std::make_unique<ast::cast_expr>(type, old_cast->m_rhs->clone());
-            return new_cast;
-        }
-        else {
-            auto cast = std::make_unique<ast::cast_expr>(type, op2->get_grouped());
-            return cast;
-        }
+        return op2->new_cast(type, *op2->get_grouped());
     }
     else {
         return std::visit([&type, &old_lit](auto&& arg) -> expr_uptr {
@@ -909,7 +900,7 @@ void decomp_function<is_64_bit>::insert_return(const reg_idx dest) {
 template<bool is_64_bit>
 template<ast::primitive_kind kind>
 [[nodiscard]] std::unique_ptr<ast::assign_expr> decomp_function<is_64_bit>::make_store(const Instruction& istr) {
-    auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64, u64>(istr, ast::ptr_type{ kind }));
+    auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ kind }));
     auto rhs = m_transformableExpressions[istr.operand2]->clone();
     auto res = std::make_unique<ast::assign_expr>(std::move(lhs), std::move(rhs));
     append_to_current_block(res->clone());
