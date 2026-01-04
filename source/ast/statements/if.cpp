@@ -7,7 +7,11 @@ namespace dconstruct::ast {
 void if_stmt::pseudo_c(std::ostream& os) const {
     os << "if (" << *m_condition << ") " << *m_then;
     if (m_else) {
-        os << " else " << *m_else;
+        if (const auto* statement = m_else->inlineable_else_statement()) {
+            os << " else " << *statement;
+        } else {
+            os << " else " << *m_else;
+        }
     }
 }
 

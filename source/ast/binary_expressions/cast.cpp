@@ -35,6 +35,14 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_rhs->get_complexity();
 }
 
+[[nodiscard]] expr_uptr expression::new_cast(const ast::full_type& type, const expression& expr) const noexcept { 
+    return std::make_unique<cast_expr>(type, expr.get_grouped());
+}
+
+[[nodiscard]] expr_uptr cast_expr::new_cast(const ast::full_type& type, const expression&) const noexcept {
+    return std::make_unique<cast_expr>(type, m_rhs->clone());
+}
+
 VAR_OPTIMIZATION_ACTION cast_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     expression::check_var_optimization(&m_rhs, env);
     return VAR_OPTIMIZATION_ACTION::NONE;

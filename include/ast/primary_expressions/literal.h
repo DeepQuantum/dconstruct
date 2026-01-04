@@ -29,6 +29,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const type_environment& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] const literal* as_literal() const noexcept final;
         
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;

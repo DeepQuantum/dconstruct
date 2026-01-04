@@ -18,6 +18,8 @@ namespace dconstruct::ast {
 
     struct expression;
     struct identifier;
+    struct cast_expr;
+    struct literal;
 
     struct llvm_error {
         std::string m_message;
@@ -48,6 +50,12 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
+
+        [[nodiscard]] virtual bool identifier_name_equals(const std::string& name) const noexcept { return false; }
+        
+        [[nodiscard]] virtual std::unique_ptr<expression> new_cast(const ast::full_type& type, const expression& expr) const noexcept;
+
+        [[nodiscard]] virtual const literal* as_literal() const noexcept { return nullptr; }
         
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {

@@ -5,7 +5,8 @@
 namespace dconstruct::ast {
 
 void call_expr::pseudo_c(std::ostream& os) const {
-    if (get_complexity() > MAX_NON_SPLIT_COMPLEXITY) {
+    //if (get_complexity() > MAX_NON_SPLIT_COMPLEXITY) {
+    if (m_arguments.size() > 5) {
         os << *m_callee << "(\n";
         os << indent_more;
         for (u16 i = 0; i < m_arguments.size(); ++i) {

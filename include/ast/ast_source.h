@@ -46,6 +46,7 @@ namespace dconstruct::ast {
     
 
     struct match_optimization_env {
+        //std::vector<std::unique_ptr<statement>*> m_resultDeclarations;
         std::unique_ptr<statement>* m_resultDeclaration;
         //std::unique_ptr<statement>* m_checkDeclaration;
         std::string m_checkIdentifier;
@@ -55,6 +56,7 @@ namespace dconstruct::ast {
         std::vector<std::unique_ptr<expression>*> m_patterns;
         std::vector<std::unique_ptr<expression>*> m_matches;
         bool m_checkingCondition;
+        u16 m_currentAssignIdx;
     };
 
     using foreach_optimization_env = std::unique_ptr<statement>*;

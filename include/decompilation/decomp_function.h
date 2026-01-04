@@ -93,7 +93,7 @@ namespace dconstruct::dcompiler {
         template<ast::primitive_kind kind>
         [[nodiscard]] std::unique_ptr<ast::call_expr> make_abs(const reg_idx dst);
 
-        template<typename from, typename to>
+        template<typename to>
         [[nodiscard]] expr_uptr make_cast(const Instruction& istr, const ast::full_type& type);
 
         template<ast::primitive_kind kind>

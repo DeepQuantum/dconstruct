@@ -848,7 +848,7 @@ namespace dconstruct::testing {
             "        else -> *invalid-symbol*\n"
             "    };\n"
             "}";
-        decomp_test(filepath, id, expected, ast::c, true);
+        decomp_test(filepath, id, expected, ast::c, false);
     }
 
     TEST(DECOMPILER, NewFileFormat1) {
@@ -876,6 +876,20 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, Optimization10) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/anim-gas-mask-impl.bin)";
         const std::string id = "internal-put-on-gas-mask";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Optimization11) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/player-upgrade-script-funcs-impl.bin)";
+        const std::string id = "get-spent-upgrade-points";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Optimization12) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-survival-manager.bin)";
+        const std::string id = "survival-setup-level@main@start@36";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }

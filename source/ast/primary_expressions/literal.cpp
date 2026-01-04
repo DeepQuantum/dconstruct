@@ -50,6 +50,10 @@ void literal::pseudo_racket(std::ostream& os) const {
     }, m_value);
 }
 
+[[nodiscard]] const literal* literal::as_literal() const noexcept {
+    return this;
+}
+
 VAR_OPTIMIZATION_ACTION literal::var_optimization_pass(var_optimization_env& env)  noexcept {
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
