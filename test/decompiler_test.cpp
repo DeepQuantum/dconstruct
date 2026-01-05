@@ -881,8 +881,8 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, Optimization11) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/player-upgrade-script-funcs-impl.bin)";
-        const std::string id = "get-spent-upgrade-points";
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/animal-behavior.bin)";
+        const std::string id = "get-landing-anim-id";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
@@ -890,6 +890,13 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, Optimization12) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/ss-survival-manager.bin)";
         const std::string id = "survival-setup-level@main@start@36";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+    
+    TEST(DECOMPILER, Optimization13) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-abby-fights-militia/ss-afm-horse-chase-combat.bin)";
+        const std::string id = "start-chase@militia-1@start@6";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }

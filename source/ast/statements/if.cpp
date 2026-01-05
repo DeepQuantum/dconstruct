@@ -45,6 +45,10 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 
+[[nodiscard]] const statement* if_stmt::inlineable_else_statement() const noexcept {
+    return this;
+}
+
 VAR_OPTIMIZATION_ACTION if_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
     expression::check_var_optimization(&m_condition, env);
     statement::check_var_optimization(&m_then, env);

@@ -82,7 +82,7 @@ VAR_OPTIMIZATION_ACTION for_stmt::var_optimization_pass(var_optimization_env& en
 }
 
 FOREACH_OPTIMIZATION_ACTION for_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    if (env) {
+    if (!env.empty()) {
         m_asForEach = true;
     }
     statement::check_foreach_optimization(&m_init, env);

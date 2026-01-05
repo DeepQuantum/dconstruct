@@ -56,11 +56,14 @@ void statement::check_foreach_optimization(stmnt_uptr* statement, foreach_optimi
     const auto pass_action = statement->get()->foreach_optimization_pass(env);
     switch (pass_action) {
         case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
-            env = statement;
+            env.push_back(statement);
+            std::cout << env.size() << "\n";
+            std::cout << "herhehrhehrhrehrehreh";
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {
-            *env = nullptr;
+            *env.back() = nullptr;
+            env.pop_back();
             *statement = nullptr;
             break;
         }
