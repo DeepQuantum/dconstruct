@@ -59,7 +59,7 @@ namespace dconstruct::ast {
         u16 m_currentAssignIdx;
     };
 
-    using foreach_optimization_env = std::unique_ptr<statement>*;
+    using foreach_optimization_env = std::vector<std::unique_ptr<statement>*>;
     
     struct ast_element {
         virtual ~ast_element() = default;

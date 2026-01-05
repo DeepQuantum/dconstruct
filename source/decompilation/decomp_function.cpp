@@ -381,11 +381,12 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
 
     reg_idx loop_var_reg = head_node.m_lines[0].m_instruction.operand1;
     reg_idx loop_alternative_reg = head_node.m_lines.back().m_instruction.operand1;
+    const std::string var_name = std::string(1, m_loopVar++);
     regs_to_emit.set(loop_var_reg, false);
     regs_to_emit.set(loop_alternative_reg, false);
-    auto id = std::make_unique<ast::identifier>("i");
+    auto id = std::make_unique<ast::identifier>(var_name);
 
-    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), "i", std::move(m_transformableExpressions[loop_var_reg]));
+    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), var_name, std::move(m_transformableExpressions[loop_var_reg]));
     auto increment = std::make_unique<ast::increment_expression>(id->clone());
 
     m_transformableExpressions[loop_var_reg] = id->clone();
@@ -417,6 +418,7 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
         }
     }
     m_blockStack.pop();
+    m_loopVar--;
 
     bits = regs_to_emit.to_ullong();
     while (bits != 0) {
@@ -515,9 +517,9 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
         load_expression_into_existing_var(alt_loop_var_reg, id->copy());
         m_registersToVars[loop_var_reg].pop();
         m_registersToVars[alt_loop_var_reg].pop();
+        m_loopVar--;
     }
     m_blockStack.pop();
-    m_loopVar--;
 
     bits = regs_to_emit.to_ullong();
     while (bits != 0) {
