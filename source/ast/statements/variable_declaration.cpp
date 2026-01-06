@@ -57,8 +57,6 @@ void statement::check_foreach_optimization(stmnt_uptr* statement, foreach_optimi
     switch (pass_action) {
         case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
             env.push_back(statement);
-            std::cout << env.size() << "\n";
-            std::cout << "herhehrhehrhrehrehreh";
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {

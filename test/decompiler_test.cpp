@@ -478,7 +478,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = TEST_DIR + R"(\\ss-faq-lightning-flash-manager.bin)";
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
         auto file_res = BinaryFile<>::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
@@ -487,21 +487,22 @@ namespace dconstruct::testing {
         auto& file = *file_res;
         FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.asm)", {} };
         da.disassemble();
-        const auto& funcs = da.get_functions();
+        da.dump();
+        const auto& funcs = da.get_named_functions();
         std::set<std::string> emitted{};
         std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.dcpl)");
 		out << dconstruct::ast::c;
         const auto start = std::chrono::high_resolution_clock::now();
-        for (const auto& func : funcs) {
-            if (emitted.contains(func.get_id())) {
+        for (const auto* func : funcs) {
+            if (emitted.contains(func->get_id())) {
                 continue;
             }
-            emitted.insert(func.get_id());
+            emitted.insert(func->get_id());
             try {
-                const auto dc_func = dcompiler::decomp_function{ func, file, ControlFlowGraph::build(func) };
-                out << dc_func.m_functionDefinition << "\n\n";
+                std::cout << func->get_id() << "\n";
+                const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile();
             }
-            catch (const std::runtime_error& e) {
+            catch (const std::exception& e) {
                 std::cout << e.what();
             }
         }
@@ -517,26 +518,27 @@ namespace dconstruct::testing {
                 continue;
             }
             std::filesystem::path new_path = base_path / entry.path().filename().replace_extension(".dcpl");
-            std::cout << new_path;
             std::filesystem::path disassembly_path = base_path / entry.path().filename().replace_extension(".asm");
             std::set<std::string> emitted{};
 
-            auto file_res = BinaryFile<>::from_path(base_path);
+            auto file_res = BinaryFile<>::from_path(entry.path());
             if (!file_res) {
                 std::cerr << file_res.error() << "\n";
                 std::terminate();
             }
             auto& file = *file_res;
+            std::cout << file.m_path << "\n";
             TLOU2Disassembler da{ &file, &base };
             da.disassemble();
-            const auto& funcs = da.get_functions();
-            for (const auto& func : funcs) {
-                if (emitted.contains(func.get_id())) {
+            const auto& funcs = da.get_named_functions();
+            for (const auto* func : funcs) {
+                if (emitted.contains(func->get_id())) {
                     continue;
                 }
-                emitted.insert(func.get_id());
+                emitted.insert(func->get_id());
                 try {
-                    const auto& dc_func = dcompiler::decomp_function{ func, file, ControlFlowGraph::build(func) }.decompile();
+                    //std::cout << func->get_id() << "\n";
+                    const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(false);
                     std::ofstream out(new_path, std::ios::app);
                     out << dc_func << "\n\n";
                 }
@@ -899,5 +901,13 @@ namespace dconstruct::testing {
         const std::string id = "start-chase@militia-1@start@6";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    
+    TEST(DECOMPILER, Optimization14) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
+        const std::string id = "npc-contextual-parry-cooldown";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, false);
     }
 }
