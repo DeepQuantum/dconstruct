@@ -12,8 +12,9 @@ static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "
 template class decomp_function<true>;
 template class decomp_function<false>;
 
+
 template<bool is_64_bit>
-[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) & noexcept
+[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
@@ -47,7 +48,7 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
-[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const bool optimization_passes) && noexcept
+[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const bool optimization_passes) &&
 {
     decompile(optimization_passes);
     return std::move(m_functionDefinition);
@@ -334,6 +335,9 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
     while (current_node != target) {
         parse_basic_block(*current_node);
         const auto& token = current_node->m_lines.back().m_instruction.opcode == Opcode::BranchIf ? or_token : and_token;
+        if (!m_transformableExpressions[check_register]) {
+            throw std::runtime_error{"check register empty"};
+        }
         final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
         current_node = current_node->m_followingNode ? &m_graph[current_node->m_followingNode] : target;
     }
@@ -479,7 +483,7 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
     reg_idx alt_loop_var_reg = -1, loop_var_reg = -1;
     std::unique_ptr<ast::identifier> id = nullptr;
     const Instruction& head_instruction = m_graph[loop.m_headNode].m_lines.front().m_instruction;
-    const bool has_loop_variable = head_instruction.opcode == Opcode::Move;
+    const bool has_loop_variable = head_instruction.opcode == Opcode::Move && m_graph[loop.m_latchNode].m_lines.size() > 2 && (m_graph[loop.m_latchNode].m_lines.end() - 2)->m_instruction.destination == head_instruction.operand1;
     if (has_loop_variable) {
         loop_var_reg = head_instruction.operand1;
         alt_loop_var_reg = head_instruction.destination;

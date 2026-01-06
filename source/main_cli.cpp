@@ -58,6 +58,8 @@ static void decomp_file(
         std::terminate();
     }
 
+    //std::cout << inpath << std::endl;
+
     auto& file = *file_res;
 
     if (!edits.empty()) {
@@ -82,7 +84,7 @@ static void decomp_file(
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
             try {
-                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile());
+                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile(false));
             }
             catch (const std::exception& e) {
                 std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";

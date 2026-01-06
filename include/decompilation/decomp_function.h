@@ -31,8 +31,8 @@ namespace dconstruct::dcompiler {
         //     return new (m_arena) node_t(std::forward(args)...);
         // }
 
-        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = true) & noexcept;
-        [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = true) && noexcept;
+        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = false) & ;
+        [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = false) && ;
 
         decomp_function& operator=(decomp_function&&) noexcept = default;
 
@@ -79,8 +79,8 @@ namespace dconstruct::dcompiler {
             m_blockStack.top().get().m_statements.push_back(std::move(statement));
         }
 
-        inline void append_to_current_block(expr_uptr&& statement) {
-            append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(statement)));
+        inline void append_to_current_block(expr_uptr&& expr) {
+            append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(expr)));
         }
 
         void load_expression_into_new_var(const reg_idx dst);
