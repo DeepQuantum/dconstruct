@@ -1,11 +1,12 @@
 #pragma once
 
 #include "ast/statement.h"
+#include "ast/parameter.h"
 
 namespace dconstruct::ast {
-    struct for_stmt : public statement {
-        explicit for_stmt(stmnt_uptr&& init, expr_uptr&& condition, expr_uptr&& incr, stmnt_uptr&& body) noexcept :
-        m_init(std::move(init)), m_condition(std::move(condition)), m_incr(std::move(incr)), m_body(std::move(body)) {};
+    struct foreach_stmt : public statement {
+        explicit foreach_stmt(parameter var, expr_uptr&& iterable, stmnt_uptr&& body) noexcept :
+        m_var(std::move(var)), m_iterable(std::move(iterable)), m_body(std::move(body)) {};
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
@@ -14,23 +15,11 @@ namespace dconstruct::ast {
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
-
-
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
 
-        stmnt_uptr m_init;
-        expr_uptr m_condition;
-        expr_uptr m_incr;
+        parameter m_var;
+        expr_uptr m_iterable;
         stmnt_uptr m_body;
-
-        struct foreach_values {
-            stmnt_uptr array_at_declaration;
-        };
-
-        std::optional<foreach_values> m_foreachValues = std::nullopt;
-    
-    private:
-        std::tuple<const std::string&, const expression&> get_for_each_iterable() const noexcept;
     };
 }

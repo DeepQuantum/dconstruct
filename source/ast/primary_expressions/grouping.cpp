@@ -50,7 +50,8 @@ VAR_OPTIMIZATION_ACTION grouping::var_optimization_pass(var_optimization_env& en
 
 
 FOREACH_OPTIMIZATION_ACTION grouping::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    return m_expr->foreach_optimization_pass(env);
+    expression::check_foreach_optimization(&m_expr, env);
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

@@ -43,15 +43,10 @@ VAR_OPTIMIZATION_ACTION ternary_expr::var_optimization_pass(var_optimization_env
 }
 
 FOREACH_OPTIMIZATION_ACTION ternary_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    if (const auto action = m_condition->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-        return action;
-    }
-    if (const auto action = m_then->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-        return action;
-    }
-    if (const auto action = m_else->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-        return action;
-    }
+    expression::check_foreach_optimization(&m_condition, env);
+    expression::check_foreach_optimization(&m_then, env);
+    expression::check_foreach_optimization(&m_else, env);
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 }

@@ -9,7 +9,7 @@ namespace dconstruct::ast {
 
 
         explicit bitwise_and_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : clonable_binary_expr(compiler::token{ compiler::token_type::AMPERSAND, "&" }, std::move(lhs), std::move(rhs)) {};
-        [[nodiscard]] expect_llvm_value emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const final;
+        [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const final;
         
         [[nodiscard]] expr_uptr simplify() const final;
     };

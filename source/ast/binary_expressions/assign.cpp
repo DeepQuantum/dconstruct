@@ -53,7 +53,9 @@ VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env&
 }
 
 FOREACH_OPTIMIZATION_ACTION assign_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    return m_rhs->foreach_optimization_pass(env);
+    expression::check_foreach_optimization(&m_lhs, env);
+    expression::check_foreach_optimization(&m_rhs, env);
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 MATCH_OPTIMIZATION_ACTION assign_expr::match_optimization_pass(match_optimization_env& env) noexcept {

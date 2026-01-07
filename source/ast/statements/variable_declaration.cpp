@@ -40,7 +40,7 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
 }
 
 void statement::check_var_optimization(stmnt_uptr* statement, var_optimization_env& env) {
-    const auto pass_action = statement->get()->var_optimization_pass(env);
+    const VAR_OPTIMIZATION_ACTION pass_action = statement->get()->var_optimization_pass(env);
     switch (pass_action) {
         case VAR_OPTIMIZATION_ACTION::VAR_DECLARATION: {
             env.lookup(static_cast<variable_declaration&>(**statement).m_identifier)->m_declaration = statement;
@@ -56,13 +56,19 @@ void statement::check_foreach_optimization(stmnt_uptr* statement, foreach_optimi
     const auto pass_action = statement->get()->foreach_optimization_pass(env);
     switch (pass_action) {
         case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
-            env.push_back(statement);
+            env.m_beginForeach.push_back(statement);
+            break;
+        }
+        case FOREACH_OPTIMIZATION_ACTION::DARRAY_AT: {
+            env.m_darrayAt.push_back(statement);
+            break;
+        }
+        case FOREACH_OPTIMIZATION_ACTION::FOR: {
+            env.m_for.push_back(statement);
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {
-            *env.back() = nullptr;
-            env.pop_back();
-            *statement = nullptr;
+            env.m_endForeach.push_back(statement);
             break;
         }
     }

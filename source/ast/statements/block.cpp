@@ -1,5 +1,6 @@
 #include "ast/statements/block.h"
 #include "ast/statements/variable_declaration.h"
+#include "ast/statements/foreach.h"
 
 #include <iostream>
 
@@ -129,7 +130,38 @@ VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) 
 FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     for (auto& statement : m_statements) {
         if (statement) {
-            statement::check_foreach_optimization(&statement, env);
+            const auto action = statement->foreach_optimization_pass(env);
+            if (action == FOREACH_OPTIMIZATION_ACTION::END_FOREACH) {
+
+                auto& old_for = static_cast<for_stmt&>(**env.m_for.back());
+                auto& old_body = static_cast<block&>(*old_for.m_body);
+
+                auto& decl = static_cast<ast::binary_expr&>(*old_for.m_condition);
+                auto& count = static_cast<call_expr&>(*decl.m_lhs);
+                auto& iterable = count.m_arguments[0];
+
+                std::string iter_var;
+                iter_var.reserve(sizeof("element"));
+
+                if (std::holds_alternative<expr_uptr*>(env.m_darrayAt.back())) {
+                    iter_var = "element";
+                } else {
+                    auto& loop_decl = static_cast<variable_declaration&>(**std::get<stmnt_uptr*>(env.m_darrayAt.back()));
+                    iter_var = loop_decl.m_identifier;
+                }
+
+                old_body.m_statements.erase(old_body.m_statements.begin());
+
+                auto for_each = std::make_unique<foreach_stmt>(parameter{std::monostate(), std::move(iter_var)}, std::move(iterable), std::move(old_body));
+
+                *env.m_beginForeach.back() = nullptr;
+                env.m_beginForeach.pop_back();
+                *env.m_endForeach.back() = nullptr;
+                env.m_endForeach.pop_back();
+                env.m_darrayAt.pop_back();
+                *env.m_for.back() = std::move(for_each);
+                env.m_for.pop_back();
+            }
         }
     }
     std::vector<stmnt_uptr> new_statements;

@@ -111,10 +111,23 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
     assert(dynamic_cast<ast::literal*>(m_callee.get()));
     const ast::literal& callee = static_cast<ast::literal&>(*m_callee); 
     assert(std::holds_alternative<sid64_literal>(callee.m_value));
-    if (std::get<sid64_literal>(callee.m_value).first == SID("begin-foreach")) {
-        return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
-    } else if (std::get<sid64_literal>(callee.m_value).first == SID("end-foreach")) {
-        return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
+    const auto id = std::get<sid64_literal>(callee.m_value).first;
+    switch (id) {
+        case SID("begin-foreach"): {
+            return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
+        } 
+        case SID("end-foreach"): {
+            return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
+        }  
+        case SID("darray-at"): {
+            return FOREACH_OPTIMIZATION_ACTION::DARRAY_AT;
+        }  
+        case SID("darray-count"): {
+            return FOREACH_OPTIMIZATION_ACTION::DARRAY_COUNT;
+        }  
+    }
+    for (auto& arg : m_arguments) {
+        expression::check_foreach_optimization(&arg, env);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
@@ -123,7 +136,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] expect_llvm_value call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};
