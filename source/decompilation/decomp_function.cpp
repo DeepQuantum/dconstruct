@@ -14,7 +14,7 @@ template class decomp_function<false>;
 
 
 template<bool is_64_bit>
-[[nodiscard]] const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
+const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());

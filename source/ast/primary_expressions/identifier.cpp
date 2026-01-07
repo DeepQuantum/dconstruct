@@ -49,25 +49,6 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
 }
 
-void expression::check_var_optimization(std::unique_ptr<ast::expression>* expr, var_optimization_env& env) {
-    const auto pass_action = expr->get()->var_optimization_pass(env);
-    switch (pass_action) {
-        case VAR_OPTIMIZATION_ACTION::VAR_READ: {
-            env.lookup(static_cast<identifier&>(**expr).m_name.m_lexeme)->m_reads.push_back(expr);
-            break;
-        } 
-        case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
-            auto* assign = static_cast<assign_expr*>(expr->get());
-            assert(dynamic_cast<identifier*>(assign->m_lhs.get()));
-            env.lookup(static_cast<identifier&>(*assign->m_lhs).m_name.m_lexeme)->m_writes.push_back(expr);
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-}
-
 void expression::check_match_optimization(expr_uptr* expr, match_optimization_env& env) {
     const auto pass_action = expr->get()->match_optimization_pass(env);
     switch (pass_action) {
@@ -86,7 +67,7 @@ VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& 
     if (!m_name.m_lexeme.starts_with("var")) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    auto* ctx = env.lookup(m_name.m_lexeme); 
+    auto* ctx = env.m_env.lookup(m_name.m_lexeme); 
     if (!ctx) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }

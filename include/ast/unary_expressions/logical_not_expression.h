@@ -8,7 +8,7 @@ namespace dconstruct::ast {
         
         explicit logical_not_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compiler::token{ compiler::token_type::BANG, "!" }, std::move(rhs)) {};
 
-        [[nodiscard]] expect_llvm_value emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const noexcept final;
+        [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const noexcept final;
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;

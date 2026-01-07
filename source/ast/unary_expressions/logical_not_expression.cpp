@@ -45,8 +45,8 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     return std::make_unique<logical_not_expr>(m_operator, std::move(rhs));
 }
 
-[[nodiscard]] expect_llvm_value logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
-    expect_llvm_value rhs = m_rhs->emit_llvm(ctx, builder, module, env);
+[[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+    llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;
     }

@@ -31,7 +31,7 @@ namespace dconstruct::dcompiler {
         //     return new (m_arena) node_t(std::forward(args)...);
         // }
 
-        [[nodiscard]] const ast::function_definition& decompile(const bool optimization_passes = false) & ;
+        const ast::function_definition& decompile(const bool optimization_passes = false) & ;
         [[nodiscard]] ast::function_definition decompile(const bool optimization_passes = false) && ;
 
         decomp_function& operator=(decomp_function&&) noexcept = default;

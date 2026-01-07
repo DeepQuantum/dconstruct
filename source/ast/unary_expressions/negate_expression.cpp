@@ -27,7 +27,7 @@ namespace dconstruct::ast {
     return std::make_unique<negate_expr>(m_operator, std::move(rhs));
 }
 
-[[nodiscard]] expect_llvm_value negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] llvm_res negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;

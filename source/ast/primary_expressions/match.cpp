@@ -104,18 +104,12 @@ VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& 
 }
 
 FOREACH_OPTIMIZATION_ACTION match_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    for (const auto& condition : m_conditions) {
-        if (const auto action = condition->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-            return action;
-        }
+    for (auto& condition : m_conditions) {
+        expression::check_foreach_optimization(&condition, env);
     }
-    for (const auto& [pattern, expression] : m_matchPairs) {
-        if (const auto action = pattern->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-            return action;
-        }
-        if (const auto action = expression->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-            return action;
-        }
+    for (auto& [pattern, expression] : m_matchPairs) {
+        expression::check_foreach_optimization(&pattern, env);
+        expression::check_foreach_optimization(&expression, env);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }

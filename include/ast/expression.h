@@ -32,7 +32,7 @@ namespace dconstruct::ast {
         POSTFIX,
     };
 
-    using expect_llvm_value = std::expected<llvm::Value*, llvm_error>;
+    using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using type_environment = compiler::environment<ast::full_type>;
 
     struct expression : public ast_element {
@@ -43,7 +43,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual expect_llvm_value emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
+        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
@@ -80,6 +80,7 @@ namespace dconstruct::ast {
 
         static void check_var_optimization(std::unique_ptr<ast::expression>* expr, var_optimization_env& env);
         static void check_match_optimization(std::unique_ptr<ast::expression>* expr, match_optimization_env& env);
+        static void check_foreach_optimization(std::unique_ptr<ast::expression>* expr, foreach_optimization_env& env);
         
     protected:
         [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;

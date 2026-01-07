@@ -19,6 +19,9 @@ namespace dconstruct::ast {
     enum class FOREACH_OPTIMIZATION_ACTION : u8 {
         BEGIN_FOREACH,
         END_FOREACH,
+        DARRAY_COUNT,
+        DARRAY_AT,
+        FOR,
         NONE,
     };
 
@@ -41,8 +44,6 @@ namespace dconstruct::ast {
         LITERAL,
         NONE,
     };
-
-    using var_optimization_env = compiler::environment<variable_folding_context>;
     
 
     struct match_optimization_env {
@@ -58,8 +59,6 @@ namespace dconstruct::ast {
         bool m_checkingCondition;
         u16 m_currentAssignIdx;
     };
-
-    using foreach_optimization_env = std::vector<std::unique_ptr<statement>*>;
     
     struct ast_element {
         virtual ~ast_element() = default;

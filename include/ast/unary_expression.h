@@ -22,7 +22,8 @@ namespace dconstruct::ast {
         }
         
         inline FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept override {
-            return m_rhs->foreach_optimization_pass(env);
+            expression::check_foreach_optimization(&m_rhs, env);
+            return FOREACH_OPTIMIZATION_ACTION::NONE;
         }
     };
 }

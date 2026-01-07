@@ -29,12 +29,8 @@ namespace dconstruct::ast {
         }
 
         inline FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final {
-            if (const auto action = m_lhs->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-                return action;
-            }
-            if (const auto action = m_rhs->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-                return action;
-            }
+            expression::check_foreach_optimization(&m_lhs, env);
+            expression::check_foreach_optimization(&m_rhs, env);
             return FOREACH_OPTIMIZATION_ACTION::NONE;
         }
 
