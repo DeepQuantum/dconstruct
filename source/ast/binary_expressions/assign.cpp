@@ -43,18 +43,18 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
 
 
 VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
-    expression::check_var_optimization(&m_rhs, env);
+    env.check_action(&m_rhs);
     const auto* lhs = dynamic_cast<const identifier*>(m_lhs.get());
     if (!lhs || !lhs->m_name.m_lexeme.starts_with("var")) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    assert(env.lookup(lhs->m_name.m_lexeme));
+    assert(env.m_env.lookup(lhs->m_name.m_lexeme));
     return VAR_OPTIMIZATION_ACTION::VAR_WRITE;
 }
 
 FOREACH_OPTIMIZATION_ACTION assign_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    expression::check_foreach_optimization(&m_lhs, env);
-    expression::check_foreach_optimization(&m_rhs, env);
+    env.check_action(&m_lhs);
+    env.check_action(&m_rhs);
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 

@@ -1,5 +1,6 @@
 #include "ast/statements/variable_declaration.h"
 
+
 #include <iostream>
 
 namespace dconstruct::ast {
@@ -39,59 +40,14 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return std::make_unique<variable_declaration>(m_type, m_identifier, m_init ? m_init->clone() : nullptr);
 }
 
-void statement::check_var_optimization(stmnt_uptr* statement, var_optimization_env& env) {
-    const VAR_OPTIMIZATION_ACTION pass_action = statement->get()->var_optimization_pass(env);
-    switch (pass_action) {
-        case VAR_OPTIMIZATION_ACTION::VAR_DECLARATION: {
-            env.lookup(static_cast<variable_declaration&>(**statement).m_identifier)->m_declaration = statement;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-}
-
-void statement::check_foreach_optimization(stmnt_uptr* statement, foreach_optimization_env& env) {
-    const auto pass_action = statement->get()->foreach_optimization_pass(env);
-    switch (pass_action) {
-        case FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH: {
-            env.m_beginForeach.push_back(statement);
-            break;
-        }
-        case FOREACH_OPTIMIZATION_ACTION::DARRAY_AT: {
-            env.m_darrayAt.push_back(statement);
-            break;
-        }
-        case FOREACH_OPTIMIZATION_ACTION::FOR: {
-            env.m_for.push_back(statement);
-            break;
-        }
-        case FOREACH_OPTIMIZATION_ACTION::END_FOREACH: {
-            env.m_endForeach.push_back(statement);
-            break;
-        }
-    }
-}
-
-void statement::check_match_optimization(stmnt_uptr* statement, match_optimization_env& env) {
-    const auto pass_action = statement->get()->match_optimization_pass(env);
-    switch (pass_action) {
-        case MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION: {
-            env.m_resultDeclaration = statement;
-            break;
-        }
-    }
-}
-
 VAR_OPTIMIZATION_ACTION variable_declaration::var_optimization_pass(var_optimization_env& env)  noexcept {
     if (m_init) {
-        expression::check_var_optimization(&m_init, env);
+        env.check_action(&m_init);
     }
-    if (!m_identifier.starts_with("var") || env.m_values.contains(m_identifier)) {
+    if (!m_identifier.starts_with("var") || env.m_env.m_values.contains(m_identifier)) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    env.define(m_identifier, {});
+    env.m_env.define(m_identifier, {});
     return VAR_OPTIMIZATION_ACTION::VAR_DECLARATION;
 }
 

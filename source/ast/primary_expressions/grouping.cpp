@@ -44,13 +44,13 @@ void grouping::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION grouping::var_optimization_pass(var_optimization_env& env) noexcept {
-    expression::check_var_optimization(&m_expr, env);
+    env.check_action(&m_expr);
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
 
 
 FOREACH_OPTIMIZATION_ACTION grouping::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    expression::check_foreach_optimization(&m_expr, env);
+    env.check_action(&m_expr);
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 

@@ -5,16 +5,6 @@
 
 namespace dconstruct::ast {
 
-    struct statement;
-    struct expression;
-
-    using ast_index = u64;
-
-    struct variable_folding_context {
-        std::unique_ptr<statement>* m_declaration;
-        std::vector<std::unique_ptr<expression>*> m_reads;
-        std::vector<std::unique_ptr<expression>*> m_writes;
-    };
 
     enum class FOREACH_OPTIMIZATION_ACTION : u8 {
         BEGIN_FOREACH,
@@ -44,22 +34,8 @@ namespace dconstruct::ast {
         LITERAL,
         NONE,
     };
-    
 
-    struct match_optimization_env {
-        //std::vector<std::unique_ptr<statement>*> m_resultDeclarations;
-        std::unique_ptr<statement>* m_resultDeclaration;
-        //std::unique_ptr<statement>* m_checkDeclaration;
-        std::string m_checkIdentifier;
-        std::unique_ptr<statement>* m_outerIf;
-        std::unique_ptr<expression>* m_checkVar;
-        std::unique_ptr<expression>* m_precondition;
-        std::vector<std::unique_ptr<expression>*> m_patterns;
-        std::vector<std::unique_ptr<expression>*> m_matches;
-        bool m_checkingCondition;
-        u16 m_currentAssignIdx;
-    };
-    
+
     struct ast_element {
         virtual ~ast_element() = default;
         virtual void pseudo_c(std::ostream&) const = 0;

@@ -80,13 +80,13 @@ void block::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
-    var_optimization_env new_env{&env};
+    var_optimization_env new_env{&env.m_env};
     for (auto& statement : m_statements) {
         if (statement) {
-            statement::check_var_optimization(&statement, new_env);
+            new_env.check_action(&statement);
         }
     }
-    for (auto& [name, expression] : new_env.m_values) {
+    for (auto& [name, expression] : new_env.m_env.m_values) {
         if (expression.m_reads.size() == 0) {
             auto& decl = static_cast<ast::variable_declaration&>(**expression.m_declaration);
 
@@ -130,14 +130,15 @@ VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) 
 FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     for (auto& statement : m_statements) {
         if (statement) {
-            const auto action = statement->foreach_optimization_pass(env);
-            if (action == FOREACH_OPTIMIZATION_ACTION::END_FOREACH) {
-
+            const auto prev_size = env.m_endForeach.size();
+            env.check_action(&statement);
+            if (env.m_endForeach.size() > prev_size) {
                 auto& old_for = static_cast<for_stmt&>(**env.m_for.back());
+                auto& old_body_ptr = old_for.m_body;
                 auto& old_body = static_cast<block&>(*old_for.m_body);
 
                 auto& decl = static_cast<ast::binary_expr&>(*old_for.m_condition);
-                auto& count = static_cast<call_expr&>(*decl.m_lhs);
+                auto& count = static_cast<call_expr&>(*decl.m_rhs);
                 auto& iterable = count.m_arguments[0];
 
                 std::string iter_var;
@@ -145,14 +146,15 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
 
                 if (std::holds_alternative<expr_uptr*>(env.m_darrayAt.back())) {
                     iter_var = "element";
+                    *std::get<expr_uptr*>(env.m_darrayAt.back()) = std::make_unique<identifier>(iter_var);
                 } else {
                     auto& loop_decl = static_cast<variable_declaration&>(**std::get<stmnt_uptr*>(env.m_darrayAt.back()));
                     iter_var = loop_decl.m_identifier;
+                    old_body.m_statements.erase(old_body.m_statements.begin());
                 }
 
-                old_body.m_statements.erase(old_body.m_statements.begin());
 
-                auto for_each = std::make_unique<foreach_stmt>(parameter{std::monostate(), std::move(iter_var)}, std::move(iterable), std::move(old_body));
+                auto for_each = std::make_unique<foreach_stmt>(parameter{std::monostate(), std::move(iter_var)}, std::move(iterable), std::move(old_body_ptr));
 
                 *env.m_beginForeach.back() = nullptr;
                 env.m_beginForeach.pop_back();

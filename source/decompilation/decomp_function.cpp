@@ -917,6 +917,7 @@ template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);
+    std::cout << m_functionDefinition.to_c_string();
     ast::foreach_optimization_env foreach_base{};
     m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
     ast::match_optimization_env match_base{};

@@ -35,7 +35,7 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION return_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
-    expression::check_var_optimization(&m_expr, env);
+    env.check_action(&m_expr);
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
 

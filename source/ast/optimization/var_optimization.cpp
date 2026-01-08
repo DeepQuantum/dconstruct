@@ -1,5 +1,6 @@
 #include "ast/optimization/var_optimization.h"
 #include "ast/assign.h"
+#include "ast/statements/variable_declaration.h"
 
 
 namespace dconstruct::ast {
@@ -29,12 +30,12 @@ void var_optimization_env::check_action(stmnt_uptr* stmt) {
         case VAR_OPTIMIZATION_ACTION::VAR_DECLARATION: {
             auto& decl = static_cast<variable_declaration&>(**stmt);
             auto context = variable_folding_context{stmt, {}, {}};
-            m_env.define(decl.m_name.m_lexeme, std::move(context));
+            m_env.define(decl.m_identifier, std::move(context));
             break;
         }
         default: {
             break;
         }
     }
-
+}
 }

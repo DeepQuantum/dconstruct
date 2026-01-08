@@ -44,12 +44,12 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION cast_expr::var_optimization_pass(var_optimization_env& env) noexcept {
-    expression::check_var_optimization(&m_rhs, env);
+    env.check_action(&m_rhs);
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
 
 FOREACH_OPTIMIZATION_ACTION cast_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    expression::check_foreach_optimization(&m_rhs, env);
+    env.check_action(&m_rhs);
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 

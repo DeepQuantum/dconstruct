@@ -102,7 +102,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
 
 VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
     for (auto& arg : m_arguments) {
-        expression::check_var_optimization(&arg, env);
+        env.check_action(&arg);
     }
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
@@ -127,7 +127,7 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
         }  
     }
     for (auto& arg : m_arguments) {
-        expression::check_foreach_optimization(&arg, env);
+        env.check_action(&arg);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }

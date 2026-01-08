@@ -1,5 +1,7 @@
 #include "ast/statements/expression_statement.h"
 
+
+
 namespace dconstruct::ast {
 
 void expression_stmt::pseudo_c(std::ostream& os) const {
@@ -27,7 +29,7 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION expression_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
-    expression::check_var_optimization(&m_expression, env);
+    env.check_action(&m_expression);
     return VAR_OPTIMIZATION_ACTION::NONE; 
 }
 
