@@ -1,6 +1,10 @@
 #pragma once
 
 #include "ast/expression.h"
+#include "ast/optimization/var_optimization.h"
+#include "ast/optimization/match_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
+
 
 namespace dconstruct::ast {
     struct match_expr : public expression {

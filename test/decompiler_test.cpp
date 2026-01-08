@@ -914,7 +914,12 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, Optimization15) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/nd-script-funcs.bin)";
         const std::string id = "darray-extend";
-        const std::string expected = "";
+        const std::string expected = 
+        "u64? darray-extend(u64? arg_0, u64? arg_1) {\n"
+        "    foreach (u64? element : arg_1) {\n"
+        "        darray-append(arg_0, element, 0);\n"
+        "    }\n"
+        "}";
         decomp_test(filepath, id, expected, ast::c, true);
     }
 }

@@ -2,6 +2,9 @@
 
 #include "base.h"
 #include "ast/ast.h"
+#include "ast/optimization/var_optimization.h"
+#include "ast/optimization/match_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
 
 namespace dconstruct::ast {
     struct variable_declaration : public statement {

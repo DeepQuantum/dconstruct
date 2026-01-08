@@ -11,7 +11,7 @@ namespace dconstruct::ast {
         virtual void pseudo_racket(std::ostream&) const final;
 
         [[nodiscard]] bool operator==(const parameter& rhs) const noexcept {
-            return m_name == rhs.m_name && m_type == rhs.m_type;
+            return m_name == rhs.m_name;
         }
 
         [[nodiscard]] bool operator!=(const parameter& rhs) const noexcept {

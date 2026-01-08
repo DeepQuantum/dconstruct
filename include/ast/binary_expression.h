@@ -2,6 +2,9 @@
 #include "expression.h"
 #include "primary_expressions/grouping.h"
 #include "primary_expressions/identifier.h"
+#include "ast/optimization/var_optimization.h"
+#include "ast/optimization/match_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
 
 namespace dconstruct::ast {
     template <typename impl_binary_expr>
@@ -23,14 +26,14 @@ namespace dconstruct::ast {
         }
 
         inline VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final {
-            expression::check_var_optimization(&m_lhs, env);
-            expression::check_var_optimization(&m_rhs, env);
+            env.check_action(&m_lhs);
+            env.check_action(&m_rhs);
             return VAR_OPTIMIZATION_ACTION::NONE;
         }
 
         inline FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final {
-            expression::check_foreach_optimization(&m_lhs, env);
-            expression::check_foreach_optimization(&m_rhs, env);
+            env.check_action(&m_lhs);
+            env.check_action(&m_rhs);
             return FOREACH_OPTIMIZATION_ACTION::NONE;
         }
 

@@ -1,6 +1,8 @@
 #include "ast/statements/variable_declaration.h"
 #include "ast/statements/for.h"
-
+#include "ast/optimization/var_optimization.h"
+#include "ast/optimization/match_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
 
 namespace dconstruct::ast {
 
@@ -71,22 +73,17 @@ void for_stmt::pseudo_racket(std::ostream& os) const {
 
 
 VAR_OPTIMIZATION_ACTION for_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
-    statement::check_var_optimization(&m_init, env);
-    expression::check_var_optimization(&m_condition, env);
-    expression::check_var_optimization(&m_incr, env);
-    statement::check_var_optimization(&m_body, env);
+    env.check_action(&m_init);
+    env.check_action(&m_condition);
+    env.check_action(&m_incr);
+    env.check_action(&m_body);
+
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
 
 FOREACH_OPTIMIZATION_ACTION for_stmt::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    // statement::check_foreach_optimization(&m_init, env);
-    // if (auto action = m_condition->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-    //     return action;
-    // }
-    // if (auto action = m_incr->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
-    //     return action;
-    // }
-    statement::check_foreach_optimization(&m_body, env);
+    env.check_action(&m_condition);
+    env.check_action(&m_body);
     return FOREACH_OPTIMIZATION_ACTION::FOR;
 }
 

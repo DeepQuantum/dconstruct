@@ -2,6 +2,8 @@
 #include "ast/statements/block.h"
 #include "ast/assign.h"
 
+
+
 namespace dconstruct::ast {
 
 void if_stmt::pseudo_c(std::ostream& os) const {
@@ -50,10 +52,10 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 VAR_OPTIMIZATION_ACTION if_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
-    expression::check_var_optimization(&m_condition, env);
-    statement::check_var_optimization(&m_then, env);
+    env.check_action(&m_condition);
+    env.check_action(&m_then);
     if (m_else) {
-        statement::check_var_optimization(&m_else, env);
+        env.check_action(&m_else);
     }
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
@@ -62,9 +64,9 @@ FOREACH_OPTIMIZATION_ACTION if_stmt::foreach_optimization_pass(foreach_optimizat
     if (const auto action = m_condition->foreach_optimization_pass(env); action != FOREACH_OPTIMIZATION_ACTION::NONE) {
         return action;
     }
-    statement::check_foreach_optimization(&m_then, env);
+    env.check_action(&m_then);
     if (m_else) {
-        statement::check_foreach_optimization(&m_else, env);
+        env.check_action(&m_else);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }

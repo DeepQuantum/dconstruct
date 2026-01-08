@@ -94,22 +94,22 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
 
 VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     for (auto& condition : m_conditions) {
-        expression::check_var_optimization(&condition, env);
+        env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
-        expression::check_var_optimization(&pattern, env);
-        expression::check_var_optimization(&expression, env);
+        env.check_action(&pattern);
+        env.check_action(&expression);
     }
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
 
 FOREACH_OPTIMIZATION_ACTION match_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     for (auto& condition : m_conditions) {
-        expression::check_foreach_optimization(&condition, env);
+        env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
-        expression::check_foreach_optimization(&pattern, env);
-        expression::check_foreach_optimization(&expression, env);
+        env.check_action(&pattern);
+        env.check_action(&expression);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }

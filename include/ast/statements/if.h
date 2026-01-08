@@ -1,5 +1,8 @@
 #include "ast/statement.h"
 #include "ast/primary_expressions/match.h"
+#include "ast/optimization/var_optimization.h"
+#include "ast/optimization/match_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
 
 namespace dconstruct::ast {
     struct if_stmt : public statement {

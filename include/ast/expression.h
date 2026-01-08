@@ -21,6 +21,10 @@ namespace dconstruct::ast {
     struct cast_expr;
     struct literal;
 
+    struct var_optimization_env;
+    struct foreach_optimization_env;
+    struct match_optimization_env;
+
     struct llvm_error {
         std::string m_message;
         const expression& m_expr;
@@ -78,10 +82,6 @@ namespace dconstruct::ast {
             m_type = type;
         }
 
-        static void check_var_optimization(std::unique_ptr<ast::expression>* expr, var_optimization_env& env);
-        static void check_match_optimization(std::unique_ptr<ast::expression>* expr, match_optimization_env& env);
-        static void check_foreach_optimization(std::unique_ptr<ast::expression>* expr, foreach_optimization_env& env);
-        
     protected:
         [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;
 

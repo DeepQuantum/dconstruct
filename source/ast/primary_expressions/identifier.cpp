@@ -49,14 +49,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
 }
 
-void expression::check_match_optimization(expr_uptr* expr, match_optimization_env& env) {
-    const auto pass_action = expr->get()->match_optimization_pass(env);
-    switch (pass_action) {
-        case MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT: {
-            env.m_matches.push_back(expr);
-        }
-    }
-}
+
 
 [[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
     return name == m_name.m_lexeme;
