@@ -17,8 +17,5 @@ namespace dconstruct::ast {
         std::vector<std::unique_ptr<expression>*> m_matches;
         bool m_checkingCondition;
         u16 m_currentAssignIdx;
-
-        void check_action(std::unique_ptr<expression>* expr);
-        void check_action(std::unique_ptr<statement>* stmt);
     };
 }

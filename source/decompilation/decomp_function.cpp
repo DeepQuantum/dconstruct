@@ -13,6 +13,8 @@ template class decomp_function<true>;
 template class decomp_function<false>;
 
 
+#define _TRACE
+
 template<bool is_64_bit>
 const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
 {
@@ -54,31 +56,16 @@ template<bool is_64_bit>
     return std::move(m_functionDefinition);
 }
 
-// template<bool is_64_bit>
-// [[nodiscard]] std::string decomp_function<is_64_bit>::to_string() const {
-//     std::ostringstream out;
-//     const std::string return_type = m_disassembly.m_isScriptFunction ? "void" : ast::type_to_declaration_string(m_returnType);
-//     out << return_type << ' ' << m_disassembly.m_id << '(';
-//     for (u8 i = 0; i < m_arguments.size(); ++i) {
-//         out << type_to_declaration_string(m_arguments[i].m_type) << ' ' << m_arguments[i].m_identifier;
-//         if (i != m_arguments.size() - 1) {
-//             out << ", ";
-//         }
-//     }
-//     out << ") " << m_baseBlock;
-//     return out.str();
-// }
-
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node) {
 #ifdef _TRACE
-    std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
+    std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")" << std::endl;
 #endif
 
 
     for (const auto &line : node.m_lines) {
         #ifdef _TRACE
-		std::cout << "parsing instruction " << std::hex << line.m_location << '\n';
+		std::cout << "parsing instruction " << std::hex << line.m_location << std::dec << std::endl;
         #endif
         const Instruction &istr = line.m_instruction;
 
@@ -272,7 +259,7 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 return;
             }
             default: {
-				std::cerr << "unhandled opcode " << static_cast<u64>(istr.opcode) << " at " << std::hex << line.m_location << std::dec << '\n';
+				std::cerr << "unhandled opcode " << static_cast<u64>(istr.opcode) << " at " << std::hex << line.m_location << std::dec << std::endl;
                 std::terminate();
             }
         }
@@ -285,7 +272,7 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::emit_node(const control_flow_node& node, const node_id stop_node) {
 #ifdef _TRACE
-    std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")\n";
+    std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")" << std::endl;
 #endif
 
     const node_id current_node_id = node.m_index;
@@ -326,6 +313,7 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
     const reg_idx check_register = node.m_lines.back().m_instruction.operand1;
 
     assert(node.has_target());
+    assert(node.has_following());
     const control_flow_node* target = &m_graph[node.m_targetNode];
 
     const control_flow_node* current_node = &m_graph[node.m_followingNode];
@@ -917,12 +905,11 @@ template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);
-    std::cout << m_functionDefinition.to_c_string();
     ast::foreach_optimization_env foreach_base{};
     m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
     ast::match_optimization_env match_base{};
     m_functionDefinition.m_body.match_optimization_pass(match_base);
-    ast::var_optimization_env var_base1{};
-    m_functionDefinition.m_body.var_optimization_pass(var_base1);
+    //ast::var_optimization_env var_base1{};
+    //m_functionDefinition.m_body.var_optimization_pass(var_base1);
 }
 }

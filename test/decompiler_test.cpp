@@ -478,19 +478,19 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/melee-script-funcs-impl.bin)";
+        const std::string filepath =  R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss-test\ss-test-bcollinsworth\ss-paint-test-ver2.bin)";
         auto file_res = BinaryFile<>::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.asm)", {} };
+        FileDisassembler da{ &file, &base, R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\blbl.asm)", {} };
         da.disassemble();
         da.dump();
         const auto& funcs = da.get_named_functions();
         std::set<std::string> emitted{};
-        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\ss-faq-lightning-flash-manager.dcpl)");
+        std::ofstream out(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dcpl\\asdad.dcpl)");
 		out << dconstruct::ast::c;
         const auto start = std::chrono::high_resolution_clock::now();
         for (const auto* func : funcs) {
@@ -500,7 +500,7 @@ namespace dconstruct::testing {
             emitted.insert(func->get_id());
             try {
                 std::cout << func->get_id() << "\n";
-                const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile();
+                const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(true);
             }
             catch (const std::exception& e) {
                 std::cout << e.what();
@@ -809,15 +809,15 @@ namespace dconstruct::testing {
         const std::string id = "#C57EE0A64537AE8F";
         const std::string expected = 
             "string #C57EE0A64537AE8F(u16 arg_0) {\n"
-            "   string var_0 = match (arg_0) {\n"
-            "       0 -> \"Militia\"\n"
-            "       1 -> \"Scars\"\n"
-            "       2 -> \"Rattlers\"\n"
-            "       3 -> \"Infected\"\n"
-            "       4 -> \"Max Num Factions\"\n"
-            "       else -> \"Invalid\"\n"
-            "   }\n"
-            "   return var_0;";
+            "    return match (arg_0) {\n"
+            "        0 -> \"Militia\"\n"
+            "        1 -> \"Scars\"\n"
+            "        2 -> \"Rattlers\"\n"
+            "        3 -> \"Infected\"\n"
+            "        4 -> \"Max Num Factions\"\n"
+            "        else -> \"Invalid\"\n"
+            "    };\n"
+            "}";
         decomp_test(filepath, id, expected, ast::c, true);
     }
 
@@ -920,6 +920,20 @@ namespace dconstruct::testing {
         "        darray-append(arg_0, element, 0);\n"
         "    }\n"
         "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Optimization16) {
+        const std::string filepath = R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss-forwardbase\ss-fob-on-foot-defend-v2.bin)";
+        const std::string id = "fallback-gas@push@start@1";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, WhileFix1) {
+        const std::string filepath = R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss\ss-flocking-bird-loop.bin)";
+        const std::string id = "setup@main@start@0";
+        const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
 }

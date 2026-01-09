@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build_tests",
             "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-            "args": ["--gtest_filter=DECOMPILER.Optimization15"],
+            "args": ["--gtest_filter=DECOMPILER.Optimization16"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -24,7 +24,7 @@
         //     "environment": [],
         //     "console": "internalConsole",
         // },
-        // // {
+        // {
         //     "name": "cli test",
         //     "type": "cppvsdbg",
         //     "request": "launch",

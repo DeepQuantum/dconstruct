@@ -30,7 +30,6 @@ namespace dconstruct::ast {
         CHECK_VAR_READ,
         MATCH_CONDITION_COMPARISON,
         MATCH_CONDITION_CHECKED_COMPARISON,
-        IF,
         LITERAL,
         NONE,
     };

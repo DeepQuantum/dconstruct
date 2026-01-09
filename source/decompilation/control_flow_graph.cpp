@@ -249,11 +249,13 @@ namespace dconstruct {
         for (auto& [id, node] : nodes) {
             nodes_to_index[id] = i;
             node.m_index = i++;
-            node.m_followingNode = node.m_followingNode ? i : 0;
         }
         for (auto& [id, node] : nodes) {
             if (node.has_target()) {
                 node.m_targetNode = nodes_to_index.at(node.m_targetNode);
+            }
+            if (node.has_following()) {
+                node.m_followingNode = nodes_to_index.at(node.m_followingNode);
             }
             for (auto& pred : node.m_predecessors) {
                 pred = nodes_to_index.at(pred);
@@ -312,7 +314,7 @@ namespace dconstruct {
         Agraph_t* returng = agsubg(g, const_cast<char*>("return"), 1);
         Agnode_t* return_node = agnode(returng, const_cast<char*>(std::to_string(m_nodes.back().m_index).c_str()), 1);
 
-        insert_loop_subgraphs(g);
+        //insert_loop_subgraphs(g);
 
         agsafeset(return_node, const_cast<char*>("peripheries"), "1", "");
         agsafeset(returng, const_cast<char*>("rank"), "max", "");
@@ -373,7 +375,7 @@ namespace dconstruct {
             const auto node_start = node.m_index;
             const bool is_conditional = node.m_lines.back().m_instruction.opcode == Opcode::BranchIf || node.m_lines.back().m_instruction.opcode == Opcode::BranchIfNot;
 
-            if (node.m_followingNode) {
+            if (node.has_following()) {
                 Agedge_t* edge = agedge(g, graph_nodes[node_start], graph_nodes[node.m_followingNode], const_cast<char*>(""), 1);
                 agsafeset(edge, const_cast<char*>("color"), is_conditional ? conditional_false_color : fallthrough_color, "");
             }
@@ -453,7 +455,7 @@ namespace dconstruct {
                 const auto dir_s = node.m_followingNode;
                 const auto tar_s = node.m_targetNode;
 
-                if (dir_s && ipdom.at(dir_s) != control_flow_node::invalid_node) {
+                if (dir_s != control_flow_node::invalid_node && ipdom.at(dir_s) != control_flow_node::invalid_node) {
                     new_ipdom = dir_s;
                 }
                 else if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node) {
@@ -463,7 +465,7 @@ namespace dconstruct {
                     continue;
                 }
 
-                if (dir_s && ipdom.at(dir_s) != control_flow_node::invalid_node && dir_s != new_ipdom) {
+                if (dir_s != control_flow_node::invalid_node && ipdom.at(dir_s) != control_flow_node::invalid_node && dir_s != new_ipdom) {
                     new_ipdom = intersect(dir_s, new_ipdom, m_nodes).m_index;
                 }
                 if (tar_s != control_flow_node::invalid_node && ipdom.at(tar_s) != control_flow_node::invalid_node && tar_s != new_ipdom) {
@@ -546,7 +548,7 @@ namespace dconstruct {
                 continue;
             }
 
-            if (node.m_followingNode && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
+            if (node.has_following() && !checked[node.m_followingNode] && node.m_followingNode != stop_node) {
                 node_stack.emplace_back(m_nodes[node.m_followingNode], local_check_regs);
             }
             if (node.has_target() && !checked[node.m_targetNode] && node.m_targetNode != stop_node) {
@@ -589,7 +591,7 @@ namespace dconstruct {
             already_read = read_once[reg_to_check];
 
             checked[start_node.m_index] = true;
-            if (start_node.m_followingNode) {
+            if (start_node.has_following()) {
                 node_stack.push_back(m_nodes[start_node.m_followingNode]);
             }
             if (start_node.has_target()) {
@@ -629,7 +631,7 @@ namespace dconstruct {
             std::cout << "already read after: " << std::boolalpha << already_read << '\n';
 #endif
 
-            if (node.m_followingNode && !checked[node.m_followingNode]) {
+            if (node.has_following() && !checked[node.m_followingNode]) {
                 node_stack.push_back(m_nodes[node.m_followingNode]);
             }
             if (node.has_target() && !checked[node.m_targetNode]) {
@@ -651,7 +653,7 @@ namespace dconstruct {
             checked[current_node.m_index] = true;
             result |= current_node.m_regs.m_written;
             
-            if (current_node.m_followingNode && !checked[current_node.m_followingNode] && current_node.m_followingNode != stop) {
+            if (current_node.has_following() && !checked[current_node.m_followingNode] && current_node.m_followingNode != stop) {
                 node_stack.push_back(m_nodes[current_node.m_followingNode]);
             }
             if (current_node.has_target() && !checked[current_node.m_targetNode] && current_node.m_targetNode != stop) {

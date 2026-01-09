@@ -108,23 +108,23 @@ VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& e
 }
 
 FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    assert(dynamic_cast<ast::literal*>(m_callee.get()));
-    const ast::literal& callee = static_cast<ast::literal&>(*m_callee); 
-    assert(std::holds_alternative<sid64_literal>(callee.m_value));
-    const auto id = std::get<sid64_literal>(callee.m_value).first;
-    switch (id) {
-        case SID("begin-foreach"): {
-            return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
-        } 
-        case SID("end-foreach"): {
-            return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
-        }  
-        case SID("darray-at"): {
-            return FOREACH_OPTIMIZATION_ACTION::DARRAY_AT;
-        }  
-        case SID("darray-count"): {
-            return FOREACH_OPTIMIZATION_ACTION::DARRAY_COUNT;
-        }  
+    if (const auto* literal = m_callee->as_literal()) {
+        const auto id = std::get<sid64_literal>(literal->m_value).first;
+        switch (id) {
+            case SID("begin-foreach"): {
+                return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
+            } 
+            case SID("end-foreach"): {
+                return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
+            }
+            case SID("ddict-key-at"):
+            case SID("darray-at"): {
+                return FOREACH_OPTIMIZATION_ACTION::DARRAY_AT;
+            }  
+            case SID("darray-count"): {
+                return FOREACH_OPTIMIZATION_ACTION::DARRAY_COUNT;
+            }  
+        }
     }
     for (auto& arg : m_arguments) {
         env.check_action(&arg);
