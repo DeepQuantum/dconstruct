@@ -25,7 +25,7 @@ namespace dconstruct {
         std::vector<function_disassembly_line> m_lines;
         std::vector<node_id> m_predecessors;
         register_nature m_regs;
-        node_id m_followingNode = 0;
+        node_id m_followingNode = invalid_node;
         node_id m_targetNode = invalid_node;
         istr_line m_startLine = 0;
         istr_line m_endLine = 0;
@@ -39,6 +39,10 @@ namespace dconstruct {
 
         [[nodiscard]] bool has_target() const noexcept {
             return m_targetNode != invalid_node;
+        }
+
+        [[nodiscard]] bool has_following() const noexcept {
+            return m_followingNode != invalid_node;
         }
 
         [[nodiscard]] bool operator==(const control_flow_node& rhs) const noexcept;

@@ -48,7 +48,11 @@ VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env&
     if (!lhs || !lhs->m_name.m_lexeme.starts_with("var")) {
         return VAR_OPTIMIZATION_ACTION::NONE;
     }
-    assert(env.m_env.lookup(lhs->m_name.m_lexeme));
+    if (dynamic_cast<const identifier*>(m_rhs.get())) {
+        if (env.m_env.lookup(lhs->m_name.m_lexeme)) {
+            return VAR_OPTIMIZATION_ACTION::NONE;
+        }
+    }
     return VAR_OPTIMIZATION_ACTION::VAR_WRITE;
 }
 

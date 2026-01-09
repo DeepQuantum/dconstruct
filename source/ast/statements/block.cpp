@@ -81,6 +81,8 @@ void block::pseudo_racket(std::ostream& os) const {
 
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
     var_optimization_env new_env{&env.m_env};
+    static size_t pass_count = 0;
+    std::cout << pass_count++ << std::endl;
     for (auto& statement : m_statements) {
         if (statement) {
             new_env.check_action(&statement);
@@ -148,9 +150,8 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
                     iter_var = "element";
                     *std::get<expr_uptr*>(env.m_darrayAt.back()) = std::make_unique<identifier>(iter_var);
                 } else {
-                    auto& loop_decl = static_cast<variable_declaration&>(**std::get<stmnt_uptr*>(env.m_darrayAt.back()));
+                    auto& loop_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_darrayAt.back()));
                     iter_var = loop_decl.m_identifier;
-                    old_body.m_statements.erase(old_body.m_statements.begin());
                 }
 
 
@@ -180,19 +181,12 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
 }
 
 MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {
-    //if (m_statements.size() == env.m_resultDeclarations.size()) {
     if (m_statements.size() == 1) {
-        // for (u32 i = 0; i < m_statements.size(); ++i) {
-        //     env.m_currentAssignIdx = i;
-        //     if (m_statements[i]->match_optimization_pass(env) != MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
-        //         break;
-        //     }
-        // }
-        // return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
         if (m_statements[0]->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
             return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
         }
     } else {
+        env = match_optimization_env{};
         for (auto& statement : m_statements) {
             const auto action = statement->match_optimization_pass(env);
             if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && env.m_matches.size() > 2 && env.m_matches.size() - 1 == env.m_patterns.size()) {
@@ -204,12 +198,10 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
                 }
 
                 auto match = std::make_unique<match_expr>(std::move(*env.m_checkVar), std::move(pairs), std::move(*env.m_matches.back()));
-
                 statement = nullptr;
                 assert(dynamic_cast<variable_declaration*>(env.m_resultDeclaration->get()));
                 static_cast<variable_declaration&>(**env.m_resultDeclaration).m_init = std::move(match);
             } else if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_DECLARATION) {
-                //env.m_resultDeclarations.push_back(&statement);
                 env.m_resultDeclaration = &statement;
             }
         }

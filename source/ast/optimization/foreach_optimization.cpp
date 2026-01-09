@@ -27,7 +27,8 @@ void foreach_optimization_env::check_action(stmnt_uptr* stmt) {
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::DARRAY_AT: {
-            m_darrayAt.emplace_back(stmt);
+            m_darrayAt.emplace_back(std::move(*stmt));
+            *stmt = nullptr;
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::FOR: {
