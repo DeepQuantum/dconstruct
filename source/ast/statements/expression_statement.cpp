@@ -41,5 +41,9 @@ MATCH_OPTIMIZATION_ACTION expression_stmt::match_optimization_pass(match_optimiz
     return m_expression->match_optimization_pass(env);
 }
 
+[[nodiscard]] bool expression_stmt::is_dead_code() const noexcept {
+    return m_expression->is_dead_code();
+}
+
 
 }

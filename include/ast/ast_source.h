@@ -9,8 +9,8 @@ namespace dconstruct::ast {
     enum class FOREACH_OPTIMIZATION_ACTION : u8 {
         BEGIN_FOREACH,
         END_FOREACH,
-        DARRAY_COUNT,
-        DARRAY_AT,
+        ITERABLE_COUNT,
+        ITERABLE_AT,
         FOR,
         NONE,
     };
@@ -40,6 +40,7 @@ namespace dconstruct::ast {
         virtual void pseudo_c(std::ostream&) const = 0;
         virtual void pseudo_py(std::ostream&) const = 0;
         virtual void pseudo_racket(std::ostream&) const = 0;
+        virtual bool is_dead_code() const noexcept { return false; }
 
         [[nodiscard]] std::string to_c_string() const noexcept {
             std::ostringstream oss;

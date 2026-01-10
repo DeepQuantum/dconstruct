@@ -12,7 +12,7 @@ namespace dconstruct::ast {
     struct variable_folding_context {
         std::unique_ptr<statement>* m_declaration;
         std::vector<std::unique_ptr<expression>*> m_reads;
-        std::vector<std::unique_ptr<expression>*> m_writes;
+        std::vector<std::unique_ptr<expression>*> m_assigns;
     };
 
     struct var_optimization_env {

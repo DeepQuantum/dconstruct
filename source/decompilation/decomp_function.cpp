@@ -13,7 +13,7 @@ template class decomp_function<true>;
 template class decomp_function<false>;
 
 
-#define _TRACE
+//#define _TRACE
 
 template<bool is_64_bit>
 const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
@@ -327,7 +327,7 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
             throw std::runtime_error{"check register empty"};
         }
         final_condition = std::make_unique<ast::compare_expr>(token, std::move(final_condition), m_transformableExpressions[check_register]->clone());
-        current_node = current_node->m_followingNode ? &m_graph[current_node->m_followingNode] : target;
+        current_node = current_node->has_following() ? &m_graph[current_node->m_followingNode] : target;
     }
 
     auto id = std::make_unique<ast::identifier>(get_next_var());
@@ -903,13 +903,15 @@ template<ast::primitive_kind kind>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
+    std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);
+    std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::foreach_optimization_env foreach_base{};
     m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
     ast::match_optimization_env match_base{};
     m_functionDefinition.m_body.match_optimization_pass(match_base);
-    //ast::var_optimization_env var_base1{};
-    //m_functionDefinition.m_body.var_optimization_pass(var_base1);
+    ast::var_optimization_env var_base1{};
+    m_functionDefinition.m_body.var_optimization_pass(var_base1);
 }
 }

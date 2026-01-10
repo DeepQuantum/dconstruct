@@ -7,7 +7,6 @@
 namespace dconstruct::ast {
 
 void block::pseudo_c(std::ostream& os) const {
-    static int a{};
     if (m_statements.empty()) {
         os << "{}" << '\n';
     } else {
@@ -81,8 +80,6 @@ void block::pseudo_racket(std::ostream& os) const {
 
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
     var_optimization_env new_env{&env.m_env};
-    static size_t pass_count = 0;
-    std::cout << pass_count++ << std::endl;
     for (auto& statement : m_statements) {
         if (statement) {
             new_env.check_action(&statement);
@@ -98,12 +95,12 @@ VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) 
                 *expression.m_declaration = std::make_unique<ast::expression_stmt>(std::move(decl.m_init)); 
             }
 
-            for (auto* write : expression.m_writes) {
-                assert(dynamic_cast<ast::assign_expr*>(write->get()));
-                auto& assignment = static_cast<ast::assign_expr&>(**write); 
-                *write = std::move(assignment.m_rhs);
+            for (auto* assign : expression.m_assigns) {
+                assert(dynamic_cast<ast::assign_expr*>(assign->get()));
+                auto& assignment = static_cast<ast::assign_expr&>(**assign); 
+                *assign = std::move(assignment.m_rhs);
             }
-        } else if (expression.m_reads.size() == 1 && expression.m_writes.size() < 2) {
+        } else if (expression.m_reads.size() == 1 && expression.m_assigns.size() < 2) {
             auto& decl = static_cast<ast::variable_declaration&>(**expression.m_declaration);
 
             auto& init = decl.m_init;
@@ -119,7 +116,7 @@ VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) 
     new_statements.reserve(m_statements.size());
 
     for (auto& statement : m_statements) {
-        if (statement) {
+        if (statement && !statement->is_dead_code()) {
             new_statements.emplace_back(std::move(statement));
         }
     }
@@ -139,18 +136,37 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
                 auto& old_body_ptr = old_for.m_body;
                 auto& old_body = static_cast<block&>(*old_for.m_body);
 
-                auto& decl = static_cast<ast::binary_expr&>(*old_for.m_condition);
-                auto& count = static_cast<call_expr&>(*decl.m_rhs);
-                auto& iterable = count.m_arguments[0];
+                expression* count_expr;
+
+                if (std::holds_alternative<stmnt_uptr>(env.m_iterableCount.back())) {
+                    // e.g. u64? var_x = darray-count(arr);
+                    assert(dynamic_cast<variable_declaration*>(std::get<stmnt_uptr>(env.m_iterableCount.back()).get()));
+                    auto& count_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_iterableCount.back()));
+                    assert(dynamic_cast<call_expr*>(count_decl.m_init.get()));
+                    count_expr = count_decl.m_init.get();
+                } else {
+                    // e.g. for (u64 i = 0; i < darray-count(arr); i++) { ... }
+                    assert(std::holds_alternative<expr_uptr*>(env.m_iterableCount.back()));
+                    count_expr = std::get<expr_uptr*>(env.m_iterableCount.back())->get();
+                }
+
+                assert(dynamic_cast<call_expr*>(count_expr));
+                auto& count_call = static_cast<call_expr&>(*count_expr);
+                assert(!count_call.m_arguments.empty());
+                expr_uptr iterable = std::move(count_call.m_arguments[0]);
 
                 std::string iter_var;
                 iter_var.reserve(sizeof("element"));
 
-                if (std::holds_alternative<expr_uptr*>(env.m_darrayAt.back())) {
+                if (std::holds_alternative<expr_uptr*>(env.m_iterableAt.back())) {
+                    // when i dont have a variable delcaration because the var pass already optimized it out because it was only read in one spot
                     iter_var = "element";
-                    *std::get<expr_uptr*>(env.m_darrayAt.back()) = std::make_unique<identifier>(iter_var);
+                    *std::get<expr_uptr*>(env.m_iterableAt.back()) = std::make_unique<identifier>(iter_var);
                 } else {
-                    auto& loop_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_darrayAt.back()));
+                    // when there's a dedicated variable declaration for the loop variable
+                    assert(std::holds_alternative<stmnt_uptr>(env.m_iterableAt.back()));
+                    assert(dynamic_cast<variable_declaration*>(std::get<stmnt_uptr>(env.m_iterableAt.back()).get()));
+                    auto& loop_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_iterableAt.back()));
                     iter_var = loop_decl.m_identifier;
                 }
 
@@ -161,7 +177,7 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
                 env.m_beginForeach.pop_back();
                 *env.m_endForeach.back() = nullptr;
                 env.m_endForeach.pop_back();
-                env.m_darrayAt.pop_back();
+                env.m_iterableAt.pop_back();
                 *env.m_for.back() = std::move(for_each);
                 env.m_for.pop_back();
             }

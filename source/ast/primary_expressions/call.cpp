@@ -118,11 +118,12 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
                 return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
             }
             case SID("ddict-key-at"):
+            case SID("ddict-value-at"):
             case SID("darray-at"): {
-                return FOREACH_OPTIMIZATION_ACTION::DARRAY_AT;
+                return FOREACH_OPTIMIZATION_ACTION::ITERABLE_AT;
             }  
             case SID("darray-count"): {
-                return FOREACH_OPTIMIZATION_ACTION::DARRAY_COUNT;
+                return FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT;
             }  
         }
     }
