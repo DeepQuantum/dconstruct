@@ -5,8 +5,12 @@ namespace dconstruct::ast {
 void foreach_optimization_env::check_action(expr_uptr* expr) {
     const auto pass_action = expr->get()->foreach_optimization_pass(*this);
     switch (pass_action) {
-        case FOREACH_OPTIMIZATION_ACTION::DARRAY_AT: {
-            m_darrayAt.emplace_back(expr);
+        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_AT: {
+            m_iterableAt.emplace_back(expr);
+            break;
+        }
+        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
+            m_iterableCount.emplace_back(expr);
             break;
         }
         default: {
@@ -26,8 +30,13 @@ void foreach_optimization_env::check_action(stmnt_uptr* stmt) {
             m_endForeach.push_back(stmt);
             break;
         }
-        case FOREACH_OPTIMIZATION_ACTION::DARRAY_AT: {
-            m_darrayAt.emplace_back(std::move(*stmt));
+        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_AT: {
+            m_iterableAt.emplace_back(std::move(*stmt));
+            *stmt = nullptr;
+            break;
+        }
+        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
+            m_iterableCount.emplace_back(std::move(*stmt));
             *stmt = nullptr;
             break;
         }

@@ -924,15 +924,8 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, Optimization16) {
-        const std::string filepath = R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss-forwardbase\ss-fob-on-foot-defend-v2.bin)";
-        const std::string id = "fallback-gas@push@start@1";
-        const std::string expected = "";
-        decomp_test(filepath, id, expected, ast::c, true);
-    }
-
-    TEST(DECOMPILER, WhileFix1) {
-        const std::string filepath = R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss\ss-flocking-bird-loop.bin)";
-        const std::string id = "setup@main@start@0";
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss-test\ss-test-cwohlwend\ss-npc-begs-for-life-tester.bin)";
+        const std::string id = "main@begs-for-life@start@0";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
