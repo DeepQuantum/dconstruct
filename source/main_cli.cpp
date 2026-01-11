@@ -77,6 +77,9 @@ static void decomp_file(
         functions.reserve(funcs.size());
         out << language_type;
         for (const auto& func : funcs) {
+            // if (func->get_id() != "assign-to-hardpoint@main@start@0") {
+            //     continue;
+            // }
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));

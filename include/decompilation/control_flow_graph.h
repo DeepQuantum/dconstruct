@@ -87,7 +87,7 @@ namespace dconstruct {
 
         [[nodiscard]] reg_set get_registers_written_to(const control_flow_node& node, const node_id stop) const;
         [[nodiscard]] reg_set get_branch_phi_registers(const control_flow_node& start_node) const noexcept;
-        [[nodiscard]] reg_set get_loop_phi_registers(const control_flow_node& head_node) const noexcept;
+        [[nodiscard]] reg_set get_loop_phi_registers(const control_flow_node& fist_head_node, const control_flow_node& last_head_node) const noexcept;
 
         [[nodiscard]] reg_set get_read_registers(const control_flow_node& start_node, reg_set check_regs, const node_id stop_node, istr_line start_line = 0) const noexcept;
         

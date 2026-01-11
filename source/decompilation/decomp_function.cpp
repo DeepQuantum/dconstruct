@@ -367,7 +367,7 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
     const node_id loop_entry = head_node.m_followingNode;
     const node_id loop_tail = head_node.m_targetNode;
     auto loop_block = std::make_unique<ast::block>();
-    reg_set regs_to_emit = m_graph.get_loop_phi_registers(head_node);
+    reg_set regs_to_emit = m_graph.get_loop_phi_registers(head_node, head_node);
     const node_id idom = m_graph[loop_tail].m_ipdom;
     std::unordered_map<reg_idx, ast::full_type> regs_to_type;
 
@@ -467,11 +467,25 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
 
     const control_flow_node& loop_entry = m_graph[m_graph[proper_loop_head].m_followingNode];
 
-    reg_set regs_to_emit = m_graph.get_loop_phi_registers(m_graph[proper_loop_head]);
+    reg_set regs_to_emit = m_graph.get_loop_phi_registers(m_graph[loop.m_headNode], m_graph[proper_loop_head]);
     reg_idx alt_loop_var_reg = -1, loop_var_reg = -1;
     std::unique_ptr<ast::identifier> id = nullptr;
     const Instruction& head_instruction = m_graph[loop.m_headNode].m_lines.front().m_instruction;
-    const bool has_loop_variable = head_instruction.opcode == Opcode::Move && m_graph[loop.m_latchNode].m_lines.size() > 2 && (m_graph[loop.m_latchNode].m_lines.end() - 2)->m_instruction.destination == head_instruction.operand1;
+    bool has_loop_variable = false;
+
+    if (m_graph[loop.m_latchNode].m_lines.size() == 2) {
+        const auto& instr = (m_graph[loop.m_latchNode].m_lines.end() - 2)->m_instruction;
+        if (instr.opcode == Opcode::Move && (instr.destination == head_instruction.operand1 || instr.destination == head_instruction.operand2)) {
+            has_loop_variable = true;
+        }
+    } else if (m_graph[loop.m_latchNode].m_lines.size() > 2) {
+        const auto& istr_a = (m_graph[loop.m_latchNode].m_lines.end() - 3)->m_instruction;
+        const auto& istr_b = (m_graph[loop.m_latchNode].m_lines.end() - 2)->m_instruction;
+        if (istr_a.opcode == Opcode::Move && (istr_a.destination == head_instruction.operand1 || istr_a.destination == head_instruction.operand2)) {
+            has_loop_variable = true;
+        }
+    }
+
     if (has_loop_variable) {
         loop_var_reg = head_instruction.operand1;
         alt_loop_var_reg = head_instruction.destination;
@@ -579,7 +593,7 @@ void decomp_function<is_64_bit>::emit_if_else(const control_flow_node &node, nod
 
     stmnt_uptr _else = nullptr;
     if (else_block->inlineable_else_statement()) {
-        _else = std::move(else_block->m_statements[0]);
+        _else = std::move(else_block->m_statements.front());
     }
     else if (!else_block->m_statements.empty()) {
         _else = std::move(else_block);
@@ -903,15 +917,17 @@ template<ast::primitive_kind kind>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::optimize_ast() {
-    std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
+    //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);
-    std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
+    // std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::foreach_optimization_env foreach_base{};
     m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
+    // //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::match_optimization_env match_base{};
     m_functionDefinition.m_body.match_optimization_pass(match_base);
     ast::var_optimization_env var_base1{};
     m_functionDefinition.m_body.var_optimization_pass(var_base1);
+    //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
 }
 }

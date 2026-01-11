@@ -11,7 +11,7 @@ void var_optimization_env::check_action(expr_uptr* expr) {
         case VAR_OPTIMIZATION_ACTION::VAR_READ: {
             m_env.lookup(static_cast<identifier&>(**expr).m_name.m_lexeme)->m_reads.push_back(expr);
             break;
-        } 
+        }
         case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
             auto* assign = static_cast<assign_expr*>(expr->get());
             assert(dynamic_cast<identifier*>(assign->m_lhs.get()));

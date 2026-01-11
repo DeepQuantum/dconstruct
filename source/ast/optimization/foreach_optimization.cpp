@@ -9,10 +9,14 @@ void foreach_optimization_env::check_action(expr_uptr* expr) {
             m_iterableAt.emplace_back(expr);
             break;
         }
-        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
-            m_iterableCount.emplace_back(expr);
-            break;
-        }
+        // case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
+        //     if (m_iterableCount.size() - 1 == m_beginForeach.size()) {
+        //         m_iterableCount.back() = expr;
+        //     } else {
+        //         m_iterableCount.emplace_back(expr);
+        //     }
+        //     break;
+        // }
         default: {
             break;
         }
@@ -31,15 +35,13 @@ void foreach_optimization_env::check_action(stmnt_uptr* stmt) {
             break;
         }
         case FOREACH_OPTIMIZATION_ACTION::ITERABLE_AT: {
-            m_iterableAt.emplace_back(std::move(*stmt));
-            *stmt = nullptr;
+            m_iterableAt.push_back(stmt);
             break;
         }
-        case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
-            m_iterableCount.emplace_back(std::move(*stmt));
-            *stmt = nullptr;
-            break;
-        }
+        // case FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT: {
+        //     m_iterableCount.push_back(stmt);
+        //     break;
+        // }
         case FOREACH_OPTIMIZATION_ACTION::FOR: {
             m_for.push_back(stmt);
             break;

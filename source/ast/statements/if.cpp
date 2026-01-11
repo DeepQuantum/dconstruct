@@ -1,16 +1,16 @@
 #include "ast/statements/if.h"
 #include "ast/statements/block.h"
 #include "ast/assign.h"
-
+#include <iostream>
 
 
 namespace dconstruct::ast {
 
 void if_stmt::pseudo_c(std::ostream& os) const {
     os << "if (" << *m_condition << ") " << *m_then;
-    if (m_else) {
+    if (m_else && !m_else->is_dead_code()) {
         if (const auto* statement = m_else->inlineable_else_statement()) {
-            os << " else " << *statement;
+        os << " else " << *statement;
         } else {
             os << " else " << *m_else;
         }

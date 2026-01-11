@@ -56,7 +56,7 @@ namespace dconstruct::testing {
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
         const ast::block* block = static_cast<const ast::block*>(statements[0].get());
-        const ast::expression_stmt* expr = static_cast<const ast::expression_stmt*>(block->m_statements[0].get());
+        const ast::expression_stmt* expr = static_cast<const ast::expression_stmt*>(block->m_statements.front().get());
         const ast::binary_expr* bin_expr = dynamic_cast<const ast::binary_expr*>(expr->m_expression.get());
 
         EXPECT_EQ(bin_expr, nullptr);
