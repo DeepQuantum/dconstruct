@@ -100,6 +100,11 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return res;
 }
 
+[[nodiscard]] expr_uptr* call_expr::get_first_argument() noexcept {
+    assert(m_arguments.size() > 0);
+    return &m_arguments[0];
+}
+
 VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
     for (auto& arg : m_arguments) {
         env.check_action(&arg);
@@ -122,6 +127,7 @@ FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimiz
             case SID("darray-at"): {
                 return FOREACH_OPTIMIZATION_ACTION::ITERABLE_AT;
             }  
+            case SID("ddict-key-count"): 
             case SID("darray-count"): {
                 return FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT;
             }  

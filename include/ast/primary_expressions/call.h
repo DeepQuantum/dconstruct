@@ -16,6 +16,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type(const type_environment& env) const final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 8;
 

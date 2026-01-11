@@ -683,11 +683,11 @@ namespace dconstruct {
         return result;
     }
 
-    [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& head_node) const noexcept {
+    [[nodiscard]] reg_set ControlFlowGraph::get_loop_phi_registers(const control_flow_node& first_head_node, const control_flow_node& last_head_node) const noexcept {
         node_set checked(m_nodes.size(), false);
 
-        const reg_set written = head_node.m_regs.m_written | get_registers_written_to(m_nodes[head_node.m_followingNode], head_node.m_index);
-        const reg_set res = get_read_registers(m_nodes[head_node.m_targetNode], written, m_nodes.back().m_index);
+        const reg_set written = get_registers_written_to(m_nodes[last_head_node.m_followingNode], first_head_node.m_index);
+        const reg_set res = get_read_registers(m_nodes[last_head_node.m_targetNode], written, m_nodes.back().m_index);
 
         return res;
     }

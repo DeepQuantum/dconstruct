@@ -979,6 +979,14 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
         }
         case Opcode::Branch: {
             u32 target = dest | (op2 << 8);
+            while (fn.m_lines[target].m_instruction.opcode == Opcode::Branch) {
+                const u32 new_target = fn.m_lines[target].m_instruction.destination | (fn.m_lines[target].m_instruction.operand2 << 8);
+                if (new_target > target) {
+                    target = new_target;
+                } else {
+                    break;
+                }
+            }
             std::snprintf(varying, disassembly_text_size,"0x%X", target);
             std::snprintf(interpreted, interpreted_buffer_size, "GOTO ");
             frame.add_target_label(target);

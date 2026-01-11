@@ -60,6 +60,8 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> new_cast(const ast::full_type& type, const expression& expr) const noexcept;
 
         [[nodiscard]] virtual const literal* as_literal() const noexcept { return nullptr; }
+
+        [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
         
         [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
             if (is_unknown(m_type)) {

@@ -12,28 +12,34 @@ void block::pseudo_c(std::ostream& os) const {
     } else {
         os << "{\n";
         os << indent_more;
-        if (!m_removedStatementsIndices.empty()) {
-            u32 index_counter = 0;
-            u32 removed_index = m_removedStatementsIndices[index_counter];
-            for (u32 i = 0; i < m_statements.size(); ++i) {
-                if (i == removed_index) {
-                    if (index_counter < m_removedStatementsIndices.size() - 1) {
-                        removed_index = m_removedStatementsIndices[index_counter++];
-                    } else {
-                        removed_index = -1;
-                    }
-                    continue;
-                }
-                os << indent << *m_statements[i] << '\n';
-            }
-        } else {
+        // if (!m_removedStatementsIndices.empty()) {
+        //     u32 index_counter = 0;
+        //     u32 removed_index = m_removedStatementsIndices[index_counter];
+        //     for (u32 i = 0; i < m_statements.size(); ++i) {
+        //         if (i == removed_index) {
+        //             if (index_counter < m_removedStatementsIndices.size() - 1) {
+        //                 removed_index = m_removedStatementsIndices[index_counter++];
+        //             } else {
+        //                 removed_index = -1;
+        //             }
+        //             continue;
+        //         }
+        //         os << indent << *m_statements[i] << '\n';
+        //     }
+        // } else {
             for (const auto& stmnt : m_statements) {
                 os << indent << *stmnt << '\n';
             }
-        }
+       // }
         os << indent_less;
         os << indent << '}';
     }
+}
+
+void block::clear_dead_statements() noexcept {
+    m_statements.remove_if([](const auto& stmt) {
+        return !stmt || stmt->is_dead_code();
+    });
 }
 
 
@@ -73,9 +79,13 @@ void block::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] const statement* block::inlineable_else_statement() const noexcept {
     if (m_statements.size() == 1) {
-        return m_statements[0]->inlineable_else_statement();
+        return m_statements.front()->inlineable_else_statement();
     }
     return nullptr;
+}
+
+[[nodiscard]] bool block::is_dead_code() const noexcept {
+    return std::all_of(m_statements.begin(), m_statements.end(), [](const auto& stmnt) { return stmnt->is_dead_code(); });
 }
 
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
@@ -112,16 +122,7 @@ VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) 
         }
     }
 
-    std::vector<stmnt_uptr> new_statements;
-    new_statements.reserve(m_statements.size());
-
-    for (auto& statement : m_statements) {
-        if (statement && !statement->is_dead_code()) {
-            new_statements.emplace_back(std::move(statement));
-        }
-    }
-
-    m_statements = std::move(new_statements);
+    clear_dead_statements();
 
     return VAR_OPTIMIZATION_ACTION::NONE;
 }
@@ -136,38 +137,43 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
                 auto& old_body_ptr = old_for.m_body;
                 auto& old_body = static_cast<block&>(*old_for.m_body);
 
-                expression* count_expr;
+                auto& decl = static_cast<ast::binary_expr&>(*old_for.m_condition);
+                // auto& count = static_cast<call_expr&>(*decl.m_rhs);
+                // auto& iterable = count.m_arguments[0];
 
-                if (std::holds_alternative<stmnt_uptr>(env.m_iterableCount.back())) {
-                    // e.g. u64? var_x = darray-count(arr);
-                    assert(dynamic_cast<variable_declaration*>(std::get<stmnt_uptr>(env.m_iterableCount.back()).get()));
-                    auto& count_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_iterableCount.back()));
-                    assert(dynamic_cast<call_expr*>(count_decl.m_init.get()));
-                    count_expr = count_decl.m_init.get();
+                expr_uptr iterable;
+                if (auto* arg_ptr = decl.m_rhs->get_first_argument()) {
+                    iterable = std::move(*arg_ptr);
                 } else {
-                    // e.g. for (u64 i = 0; i < darray-count(arr); i++) { ... }
-                    assert(std::holds_alternative<expr_uptr*>(env.m_iterableCount.back()));
-                    count_expr = std::get<expr_uptr*>(env.m_iterableCount.back())->get();
+                    for (auto& statement : m_statements) {
+                        if (statement->foreach_optimization_pass(env) == FOREACH_OPTIMIZATION_ACTION::ITERABLE_COUNT) {
+                            assert(dynamic_cast<variable_declaration*>(statement.get()));
+                            auto& count_decl = static_cast<variable_declaration&>(*statement);
+                            auto& init = count_decl.m_init;
+                            assert(dynamic_cast<call_expr*>(init.get()));
+                            auto* arg_ptr = init->get_first_argument();
+                            assert(arg_ptr);
+                            iterable = arg_ptr->get()->clone();
+                            break;
+                        }
+                    }
                 }
-
-                assert(dynamic_cast<call_expr*>(count_expr));
-                auto& count_call = static_cast<call_expr&>(*count_expr);
-                assert(!count_call.m_arguments.empty());
-                expr_uptr iterable = std::move(count_call.m_arguments[0]);
+                assert(iterable && "should have an iterable here...");
 
                 std::string iter_var;
                 iter_var.reserve(sizeof("element"));
 
                 if (std::holds_alternative<expr_uptr*>(env.m_iterableAt.back())) {
-                    // when i dont have a variable delcaration because the var pass already optimized it out because it was only read in one spot
+                    // e.g. foo(var_x, darray-at(arr, i));
                     iter_var = "element";
                     *std::get<expr_uptr*>(env.m_iterableAt.back()) = std::make_unique<identifier>(iter_var);
                 } else {
-                    // when there's a dedicated variable declaration for the loop variable
-                    assert(std::holds_alternative<stmnt_uptr>(env.m_iterableAt.back()));
-                    assert(dynamic_cast<variable_declaration*>(std::get<stmnt_uptr>(env.m_iterableAt.back()).get()));
-                    auto& loop_decl = static_cast<variable_declaration&>(*std::get<stmnt_uptr>(env.m_iterableAt.back()));
+                    // e.g. u64 element = darray-at(arr, i);
+                    assert(std::holds_alternative<stmnt_uptr*>(env.m_iterableAt.back()));
+                    assert(dynamic_cast<variable_declaration*>(std::get<stmnt_uptr*>(env.m_iterableAt.back())->get()));
+                    auto& loop_decl = static_cast<variable_declaration&>(**std::get<stmnt_uptr*>(env.m_iterableAt.back()));
                     iter_var = loop_decl.m_identifier;
+                    *std::get<stmnt_uptr*>(env.m_iterableAt.back()) = nullptr;
                 }
 
 
@@ -175,35 +181,35 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
 
                 *env.m_beginForeach.back() = nullptr;
                 env.m_beginForeach.pop_back();
+
                 *env.m_endForeach.back() = nullptr;
                 env.m_endForeach.pop_back();
+
+
                 env.m_iterableAt.pop_back();
+
                 *env.m_for.back() = std::move(for_each);
                 env.m_for.pop_back();
             }
         }
     }
-    std::vector<stmnt_uptr> new_statements;
-    new_statements.reserve(m_statements.size());
 
-    for (auto& statement : m_statements) {
-        if (statement) {
-            new_statements.emplace_back(std::move(statement));
-        }
-    }
+    clear_dead_statements();
 
-    m_statements = std::move(new_statements);
     return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env& env) noexcept {
     if (m_statements.size() == 1) {
-        if (m_statements[0]->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
+        if (m_statements.front()->match_optimization_pass(env) == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT) {
             return MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT;
         }
     } else {
         env = match_optimization_env{};
         for (auto& statement : m_statements) {
+            if (!statement) {
+                continue;
+            }
             const auto action = statement->match_optimization_pass(env);
             if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && env.m_matches.size() > 2 && env.m_matches.size() - 1 == env.m_patterns.size()) {
                 std::vector<std::pair<expr_uptr, expr_uptr>> pairs;
@@ -226,16 +232,7 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
     //env.m_resultDeclarations.clear();
     env.m_resultDeclaration = nullptr;
 
-    std::vector<stmnt_uptr> new_statements;
-    new_statements.reserve(m_statements.size());
-
-    for (auto& statement : m_statements) {
-        if (statement) {
-            new_statements.emplace_back(std::move(statement));
-        }
-    }
-
-    m_statements = std::move(new_statements);
+    clear_dead_statements();
 
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }

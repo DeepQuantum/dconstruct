@@ -107,7 +107,7 @@ namespace dconstruct::testing {
 
         ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
         const auto& rhs = actual.m_expr->compute_type(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
@@ -127,7 +127,7 @@ namespace dconstruct::testing {
         }, "BasicLoadImmediateString");
         ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
-        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements[0].get());
+        const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
         const auto& rhs = actual.m_expr->compute_type(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
@@ -170,7 +170,7 @@ namespace dconstruct::testing {
         };
         const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "BasicIdentifierAdd");
 
-        const auto& actual = static_cast<const ast::return_stmt&>(*func.m_body.m_statements[0]);
+        const auto& actual = static_cast<const ast::return_stmt&>(*func.m_body.m_statements.front());
         const std::string expected = "return 1 + 1285;";
         std::ostringstream os;
         os << actual;
@@ -188,7 +188,7 @@ namespace dconstruct::testing {
         };
         const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "TwoAdds");
 
-        const auto& actual = func.m_body.m_statements[0];
+        const auto& actual = func.m_body.m_statements.front();
         const std::string expected = "return (1 + 1285) + (1 + 1285);";
 
         std::ostringstream os;
@@ -478,7 +478,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, AllFuncs) {
-        const std::string filepath =  R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss-test\ss-test-bcollinsworth\ss-paint-test-ver2.bin)";
+        const std::string filepath =  R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss\ss-ground-animal-flee.bin)";
         auto file_res = BinaryFile<>::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
@@ -501,6 +501,7 @@ namespace dconstruct::testing {
             try {
                 std::cout << func->get_id() << "\n";
                 const auto dc_func = dcompiler::decomp_function{ *func, file, ControlFlowGraph::build(*func) }.decompile(true);
+                out << dc_func;
             }
             catch (const std::exception& e) {
                 std::cout << e.what();
@@ -926,6 +927,41 @@ namespace dconstruct::testing {
     TEST(DECOMPILER, Optimization16) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss-test\ss-test-cwohlwend\ss-npc-begs-for-life-tester.bin)";
         const std::string id = "main@begs-for-life@start@0";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, WhileFix1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
+        const std::string id = "setup@main@start@2";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, false);
+    }
+
+    TEST(DECOMPILER, WhileFix2) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\ss/ss-ground-animal-flee.bin)";
+        const std::string id = "setup@main@start@0";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Crash1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\npc-script-funcs.bin)";
+        const std::string id = "wait-npc-play-feather-blend-with-turn-to";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Crash2) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\nd-script-funcs.bin)";
+        const std::string id = "ddict-print";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, Crash3) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\ss-watchtower\\ss-wat-infected-tunnels-station-combat-hardpoint.bin)";
+        const std::string id = "assign-to-hardpoint@main@start@0";
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
