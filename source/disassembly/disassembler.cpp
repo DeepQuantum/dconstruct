@@ -5,6 +5,7 @@
 #include <cstring>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 static constexpr char ENTRY_SEP[] = "##############################";
 
@@ -413,36 +414,36 @@ template<bool is_64_bit>
 void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
     switch (block->m_blockType) {
         case 0: {
-            function_name.m_event = "start";
+            function_name.m_event.m_name = "start";
             break;
         }
         case 1: {
-            function_name.m_event = "end";
+            function_name.m_event.m_name = "end";
             break;
         }
         case 2: {
-            function_name.m_event = std::string("event ").append(lookup(block->m_blockEventId));
+            function_name.m_event.m_name = std::string("event ").append(lookup(block->m_blockEventId));
             break;
         }
         case 3: {
-            function_name.m_event = "update";
+            function_name.m_event.m_name = "update";
             break;
         }
         case 4: {
-            function_name.m_event = "virtual";
+            function_name.m_event.m_name= "virtual";
             break;
         }
         default: {
-            function_name.m_event = "unknown";
+            function_name.m_event.m_name = "unknown";
             break;
         }
     }
-    insert_span_indent("%*sON %s {\n", indent, function_name.m_event.c_str());
+    insert_span_indent("%*sON %s {\n", indent, function_name.m_event.m_name.c_str());
 
     for (i16 i = 0; i < block->m_trackGroup.m_numTracks; ++i) {
         SsTrack *track_ptr = block->m_trackGroup.m_aTracks + i;
-        function_name.m_track = lookup(track_ptr->m_trackId);
-        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, function_name.m_track.c_str());
+        function_name.m_track = {lookup(track_ptr->m_trackId), static_cast<u32>(i)};
+        insert_span_indent("%*sTRACK %s {\n", indent + m_options.m_indentPerLevel, function_name.m_track.m_name.c_str());
         for (i16 j = 0; j < track_ptr->m_totalLambdaCount; ++j) {
             insert_span("{\n", indent + m_options.m_indentPerLevel * 2);
             function_name.m_idx = j;
@@ -453,7 +454,6 @@ void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 
         }
         insert_span("}\n\n", indent + m_options.m_indentPerLevel);
     }
-
     insert_span("}\n", indent);
 }
 
@@ -482,12 +482,13 @@ void Disassembler<is_64_bit>::insert_state_script(const StateScript *stateScript
     state_script_function_id anon_name;
     for (i16 i = 0; i < stateScript->m_stateCount; ++i) {
         SsState *state_ptr = stateScript->m_pSsStateTable + i;
-        anon_name.m_state = lookup(state_ptr->m_stateId);
-        insert_span_indent("%*sSTATE %s {\n", indent + m_options.m_indentPerLevel, anon_name.m_state.c_str());
+        anon_name.m_state = {lookup(state_ptr->m_stateId), static_cast<u32>(i)};
+        insert_span_indent("%*sSTATE %s {\n", indent + m_options.m_indentPerLevel, anon_name.m_state.m_name.c_str());
         for (i64 j = 0; j < state_ptr->m_numSsOnBlocks; ++j) {
+            anon_name.m_event.m_idx = j;
             insert_on_block(state_ptr->m_pSsOnBlocks + j, indent + m_options.m_indentPerLevel * 2, anon_name);
         }
-        insert_span_indent("%*s} END STATE %s\n\n", indent + m_options.m_indentPerLevel, anon_name.m_state.c_str());
+        insert_span_indent("%*s} END STATE %s\n\n", indent + m_options.m_indentPerLevel, anon_name.m_state.m_name.c_str());
     }
 }
 
@@ -680,7 +681,11 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
     if (!istr.destination_is_immediate()) {
         frame.to_string(dst_str, interpreted_buffer_size, dest, lookup(frame[dest].m_value));
         if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
-            frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
+            if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
+                frame.m_registerArgs[frame[dest].m_argNum] = *std::get<ast::function_type>(frame[dest].m_type).m_return;
+            } else {
+                frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
+            }
         }
         if (dest != op1 && dest != op2 && istr.operand1_is_used()) {
             frame[dest].m_containsArg = false;
@@ -915,6 +920,8 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
                 for (const auto& [name, type] : builtin->second.m_arguments) {
                     frame[ARGUMENT_REGISTERS_IDX + i++].m_type = *type;
                 }
+            } else if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
+                frame[dest].m_type = std::move(*std::get<ast::function_type>(frame[dest].m_type).m_return);
             }
             frame[dest].m_isReturn = true;
             frame[dest].m_pointerOffset = 0;

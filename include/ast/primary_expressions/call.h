@@ -18,7 +18,7 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
 
-        static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 8;
+        static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;
 
         [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;

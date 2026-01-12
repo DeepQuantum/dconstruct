@@ -12,25 +12,9 @@ void block::pseudo_c(std::ostream& os) const {
     } else {
         os << "{\n";
         os << indent_more;
-        // if (!m_removedStatementsIndices.empty()) {
-        //     u32 index_counter = 0;
-        //     u32 removed_index = m_removedStatementsIndices[index_counter];
-        //     for (u32 i = 0; i < m_statements.size(); ++i) {
-        //         if (i == removed_index) {
-        //             if (index_counter < m_removedStatementsIndices.size() - 1) {
-        //                 removed_index = m_removedStatementsIndices[index_counter++];
-        //             } else {
-        //                 removed_index = -1;
-        //             }
-        //             continue;
-        //         }
-        //         os << indent << *m_statements[i] << '\n';
-        //     }
-        // } else {
-            for (const auto& stmnt : m_statements) {
-                os << indent << *stmnt << '\n';
-            }
-       // }
+        for (const auto& stmnt : m_statements) {
+            os << indent << *stmnt << '\n';
+        }
         os << indent_less;
         os << indent << '}';
     }
@@ -138,8 +122,6 @@ FOREACH_OPTIMIZATION_ACTION block::foreach_optimization_pass(foreach_optimizatio
                 auto& old_body = static_cast<block&>(*old_for.m_body);
 
                 auto& decl = static_cast<ast::binary_expr&>(*old_for.m_condition);
-                // auto& count = static_cast<call_expr&>(*decl.m_rhs);
-                // auto& iterable = count.m_arguments[0];
 
                 expr_uptr iterable;
                 if (auto* arg_ptr = decl.m_rhs->get_first_argument()) {

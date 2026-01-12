@@ -965,4 +965,27 @@ namespace dconstruct::testing {
         const std::string expected = "";
         decomp_test(filepath, id, expected, ast::c, true);
     }
+
+    TEST(DECOMPILER, MaxMatchTest) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\workbench-script-funcs-impl.bin)";
+        const std::string id = "get-worst-stat";
+        const std::string expected = "";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, ArgumentType1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1\\script-user-funcs-impl.bin)";
+        const std::string id = "absf";
+        const std::string expected = 
+            "u64? absf(u64? arg_0) {\n"
+            "    u64? var_0;\n"
+            "    if (arg_0 < 0.00) {\n"
+            "        var_0 = negf(arg_0);\n"
+            "    } else {\n"
+            "        var_0 = arg_0;\n"
+            "    }\n"
+            "    return var_0;\n"
+            "}";
+        decomp_test(filepath, id, expected, ast::c, true);
+    }
 }

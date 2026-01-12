@@ -57,6 +57,23 @@ template<bool is_64_bit>
 }
 
 template<bool is_64_bit>
+void decomp_function<is_64_bit>::set_binary_types(expr_uptr& lhs, expr_uptr& rhs) const noexcept {
+    const auto& lhs_type = lhs->get_type(m_env);
+    const auto& rhs_type = rhs->get_type(m_env);
+    const bool lhs_unknown = ast::is_unknown(lhs_type);
+    const bool rhs_unknown = ast::is_unknown(rhs_type);
+
+    if (lhs_unknown == rhs_unknown) {
+        return;
+    }
+    if (lhs_unknown) {
+        lhs->set_type(rhs_type);
+    } else if (rhs_unknown) {
+        rhs->set_type(lhs_type);
+    }
+}
+
+template<bool is_64_bit>
 void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node) {
 #ifdef _TRACE
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")" << std::endl;
