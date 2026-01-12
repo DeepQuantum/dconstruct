@@ -400,10 +400,25 @@ struct StackFrame {
     }
 };
 
+struct ss_state {
+    std::string m_name;
+    u32 m_idx;
+};
+
+struct ss_track {
+    std::string m_name;
+    u32 m_idx;
+};
+
+struct ss_event {
+    std::string m_name;
+    u32 m_idx;
+};
+
 struct state_script_function_id {
-    std::string m_state;
-    std::string m_track;
-    std::string m_event;
+    ss_state m_state;
+    ss_track m_track;
+    ss_event m_event;
     u64 m_idx;
 
     static constexpr std::string_view SEP = "@";
@@ -411,14 +426,14 @@ struct state_script_function_id {
     [[nodiscard]] std::string to_string() const noexcept {
         const std::string idx_str = std::to_string(m_idx);
         const size_t total_size =
-            m_state.size() + m_track.size() + m_event.size() + idx_str.size() + 3 * SEP.size();
+            m_state.m_name.size() + m_track.m_name.size() + m_event.m_name.size() + idx_str.size() + 3 * SEP.size();
         std::string result;
         result.reserve(total_size);
-        result += m_state;
+        result += m_state.m_name;
         result += SEP;
-        result += m_track;
+        result += m_track.m_name;
         result += SEP;
-        result += m_event;
+        result += m_event.m_name;
         result += SEP;
         result += idx_str;
         return result;

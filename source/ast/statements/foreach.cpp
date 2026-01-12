@@ -33,7 +33,8 @@ void foreach_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 
-VAR_OPTIMIZATION_ACTION foreach_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
+VAR_OPTIMIZATION_ACTION foreach_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
+    env.check_action(&m_iterable);
     env.check_action(&m_body);
     return VAR_OPTIMIZATION_ACTION::NONE;
 }

@@ -1,5 +1,6 @@
 #include "ast/primary_expressions/match.h"
 
+#include <iomanip>
 
 namespace dconstruct::ast {
 
@@ -18,6 +19,20 @@ void match_expr::pseudo_c(std::ostream& os) const {
     os << indent_more;
 
     const auto grouped = group_patterns();
+    std::vector<u64> pattern_lengths;
+    pattern_lengths.resize(grouped.size());
+
+    std::transform(grouped.cbegin(), grouped.cend(), pattern_lengths.begin(), [](const auto& pair) -> u64 {
+        std::stringstream os;
+        for (const auto& pattern : pair.first) {
+            os << **pattern;
+        }
+        return os.str().length() + 2 * (pair.first.size() - 1);
+    });
+
+    const auto max_size_iter = std::max_element(pattern_lengths.begin(), pattern_lengths.end());
+
+    const u64 max_size = *max_size_iter;
 
     for (const auto& [patterns, expression] : grouped) {
         bool first = true;
@@ -27,11 +42,11 @@ void match_expr::pseudo_c(std::ostream& os) const {
                 os << ", ";
             }
             first = false;
-            os << **pattern;
+            os << std::left << std::setw(max_size) << **pattern;
         }
         os << " -> " << **expression << "\n";
     }
-    os << indent << "else -> " << *m_default << "\n";
+    os << indent << std::left << std::setw(max_size) << "else" << " -> " << *m_default << "\n";
     os << indent_less << indent << "}";
 }
 

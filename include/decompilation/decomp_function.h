@@ -108,10 +108,13 @@ namespace dconstruct::dcompiler {
 
         void insert_return(const reg_idx dest);
 
+        void set_binary_types(expr_uptr& lhs, expr_uptr& rhs) const noexcept;
+
         template <typename T>
         [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr) {
-            const auto& op1 = m_transformableExpressions[istr.operand1];
-            const auto& op2 = m_transformableExpressions[istr.operand2];
+            auto& op1 = m_transformableExpressions[istr.operand1];
+            auto& op2 = m_transformableExpressions[istr.operand2];
+            set_binary_types(op1, op2);
             return std::make_unique<T>(
                 op1->get_grouped(),
                 op2->get_grouped()
@@ -120,8 +123,9 @@ namespace dconstruct::dcompiler {
 
         template <typename T>
         [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr, compiler::token op) {
-            const auto& op1 = m_transformableExpressions[istr.operand1];
-            const auto& op2 = m_transformableExpressions[istr.operand2];
+            auto& op1 = m_transformableExpressions[istr.operand1];
+            auto& op2 = m_transformableExpressions[istr.operand2];
+            set_binary_types(op1, op2);
             auto expr = std::make_unique<T>(
                 std::move(op),
                 op1->get_grouped(),
@@ -129,7 +133,7 @@ namespace dconstruct::dcompiler {
             );
             if constexpr (std::is_same_v<T, ast::compare_expr>) {
                 const bool is_comp = expr->m_operator.m_lexeme == "==" || expr->m_operator.m_lexeme == "!=";
-                if (is_comp && dynamic_cast<ast::literal*>(expr->m_lhs.get()) != nullptr) {
+                if (is_comp && expr->m_lhs->as_literal()) {
                     std::swap(expr->m_lhs, expr->m_rhs);
                 }
             }
@@ -176,11 +180,19 @@ namespace dconstruct::dcompiler {
 
         using track = std::vector<const ast::function_definition*>;
 
-        using tracks = std::map<std::string, track>;
+        // using tracks = std::map<std::string, track>;
 
-        using blocks = std::map<std::string, tracks>;
+        // using blocks = std::map<std::string, tracks>;
 
-        using states = std::map<std::string, blocks>;
+        // using states = std::map<std::string, blocks>;
+
+        // states m_states;
+
+        using tracks = std::vector<std::pair<std::string, track>>;
+
+        using blocks = std::vector<std::pair<std::string, tracks>>;
+
+        using states = std::vector<std::pair<std::string, blocks>>;
 
         states m_states;
 
@@ -193,7 +205,31 @@ namespace dconstruct::dcompiler {
                 }
                 else {
                     const state_script_function_id& id = std::get<state_script_function_id>(func.m_name);
-                    m_states[id.m_state][id.m_event][id.m_track].push_back(&func);
+                    auto& states = m_states;
+                    const u32 state_idx = id.m_state.m_idx;
+                    const u32 event_idx = id.m_event.m_idx;
+                    const u32 track_idx = id.m_track.m_idx;
+
+                    if (states.size() <= state_idx) {
+                        states.resize(state_idx + 1);
+                        states[state_idx].first = id.m_state.m_name;
+                    }
+
+                    auto& state_entry = states[state_idx].second;
+
+                    if (state_entry.size() <= event_idx) {
+                        state_entry.resize(event_idx + 1);
+                        state_entry[event_idx].first = id.m_event.m_name;
+                    }
+
+                    auto& event_entry = state_entry[event_idx].second;
+
+                    if (event_entry.size() <= track_idx) {
+                        event_entry.resize(track_idx + 1);
+                        event_entry[track_idx].first = id.m_track.m_name;
+                    }
+
+                    event_entry[track_idx].second.push_back(&func);
                 }
             }
         }
@@ -205,8 +241,14 @@ namespace dconstruct::dcompiler {
                 os << *func << "\n\n"; 
             }
 
+            if (m_states.empty()) {
+                return os.str();
+            }
+
+            os << "statescript {\n" << ast::indent_more;
+
             for (const auto& [state_name, blocks] : m_states) {
-                os << "state " << state_name << " {\n";
+                os << ast::indent <<  "state " << state_name << " {\n";
                 os << ast::indent_more;
                 for (const auto& [block_name, tracks] : blocks) {
                     os << ast::indent << "block " << block_name << " {\n";
@@ -215,7 +257,7 @@ namespace dconstruct::dcompiler {
                         os << ast::indent << "track " << track_name << " {\n";
                         os << ast::indent_more;
                         for (const auto* function : functions) {
-                            os << ast::indent << *function;
+                            os << ast::indent << "lambda " << *function;
                             os << "\n";
                         }
                         os << ast::indent_less;
@@ -225,8 +267,10 @@ namespace dconstruct::dcompiler {
                     os << ast::indent << "}\n";
                 }
                 os << ast::indent_less;
-                os << "}\n";
+                os << ast::indent << "}\n";
             }
+
+            os << "}\n" << ast::indent_less;
             return os.str();
         }
     };
