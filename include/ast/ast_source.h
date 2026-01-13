@@ -49,10 +49,12 @@ namespace dconstruct::ast {
         }
     };
 
-    enum class Flags {
+    enum class LANGUAGE_FLAGS {
         C = 0x1,
         PY = 0x2,
         RACKET = 0x4,
+        FUNCTION_NAMES_PASCAL = 0x8,
+        IDENTIFIER_PASCAL = 0x10,
     };
 
     inline i32 get_flag_index() {
@@ -61,17 +63,32 @@ namespace dconstruct::ast {
     }
     
     inline std::ostream& c(std::ostream& os) {
-        os.iword(get_flag_index()) |= static_cast<i32>(Flags::C);
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::C);
         return os;
     }
 
     inline std::ostream& py(std::ostream& os) {
-        os.iword(get_flag_index()) |= static_cast<i32>(Flags::PY);
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::PY);
         return os;
     }
 
     inline std::ostream& racket(std::ostream& os) {
-        os.iword(get_flag_index()) |= static_cast<i32>(Flags::RACKET);
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::RACKET);
+        return os;
+    }
+
+    inline std::ostream& func_pascal_case(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+        return os;
+    }
+
+    inline std::ostream& id_pascal_case(std::ostream& os) {
+        os.iword(get_flag_index()) |= static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
+        return os;
+    }
+
+    inline std::ostream& remove_id_pascal_case(std::ostream& os) {
+        os.iword(get_flag_index()) &= ~static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL);
         return os;
     }
 
@@ -99,9 +116,9 @@ namespace dconstruct::ast {
     }
 
     inline std::ostream& operator<<(std::ostream& os, const ast_element &expr) {
-        if (os.iword(get_flag_index()) & static_cast<i32>(Flags::RACKET)) {
+        if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::RACKET)) {
             expr.pseudo_racket(os);
-        } else if (os.iword(get_flag_index()) & static_cast<i32>(Flags::PY)) {
+        } else if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::PY)) {
             expr.pseudo_py(os);
         } else {
             expr.pseudo_c(os);

@@ -49,7 +49,10 @@ static void decomp_file(
     const dconstruct::DisassemblerOptions &options,
     const bool write_graphs,
     const dconstruct::ast::print_fn_type language_type,
-    const std::vector<std::string> &edits = {}) {
+    const bool show_warnings,
+    const bool optimize,
+    const std::vector<std::string> &edits = {}, 
+    const bool use_pascal_case = false) {
     
     auto file_res = dconstruct::BinaryFile<true>::from_path(inpath.string());
 
@@ -58,7 +61,6 @@ static void decomp_file(
         std::terminate();
     }
 
-    //std::cout << inpath << std::endl;
 
     auto& file = *file_res;
 
@@ -76,10 +78,10 @@ static void decomp_file(
         std::vector<dconstruct::ast::function_definition> functions;
         functions.reserve(funcs.size());
         out << language_type;
+        if (use_pascal_case) {
+            out << dconstruct::ast::func_pascal_case;
+        }
         for (const auto& func : funcs) {
-            // if (func->get_id() != "#1FC229BC2C667E2D") {
-            //     continue;
-            // }
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
                 auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));
@@ -87,14 +89,16 @@ static void decomp_file(
                 graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
             }
             try {
-                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile(true));
+                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile(optimize));
             }
             catch (const std::exception& e) {
-                std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
+                if (show_warnings) {
+                    std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
+                }
             }
         }
         dconstruct::dcompiler::state_script_functions<> output_functions{functions};
-        out << output_functions.to_string();
+        output_functions.to_string(out);
     }
 }
 
@@ -131,7 +135,10 @@ static void decompile_multiple(
     const dconstruct::SIDBase &sidbase, 
     const dconstruct::DisassemblerOptions &options,
     const bool generate_graphs,
-    const dconstruct::ast::print_fn_type language_print
+    const bool show_warnings,
+    const bool optimize,
+    const dconstruct::ast::print_fn_type language_print,
+    const bool pascal_case
 ) {
 
     std::vector<std::filesystem::path> filepaths;
@@ -155,7 +162,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, {});
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
         }
     );
 
@@ -272,14 +279,17 @@ int main(int argc, char *argv[]) {
         ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), DEFAULT_OUT)
         ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>");
     options.add_options("configuration")
-        ("decompile", "will also emit a file containing the decompiled (named) functions in the file", cxxopts::value<bool>()->default_value("false"))
-        ("indent", "number of spaces per indentation level in the output file", cxxopts::value<u8>()->default_value("2"), "n")
-        ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
-        ("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
-        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation..", cxxopts::value<bool>()->default_value("false"))
-        ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
+        ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
+        ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", 
             cxxopts::value<bool>()->default_value("false"))
-        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead", cxxopts::value<bool>()->default_value("false"));
+        ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
+        ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
+        //("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
+        //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
+        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
+        ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
+            cxxopts::value<bool>()->default_value("false"));
+        //("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
@@ -322,9 +332,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (opts.count("shader") > 0) {
-       return disassemble_shader(filepath);
-    }
+    // if (opts.count("shader") > 0) {
+    //    return disassemble_shader(filepath);
+    // }
 
     std::vector<std::string> edits{};
     if (opts.count("edit_file") > 0) {
@@ -361,18 +371,21 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    const u8 indent_per_level = opts["indent"].as<u8>();
+    constexpr u8 indent_per_level = 2;// opts["indent"].as<u8>();
     const bool emit_once = opts["emit_once"].as<bool>();
-    const bool decompile = opts["decompile"].as<bool>();
+    const bool decompile = !opts["no_decompile"].as<bool>();
+    const bool optimize = !opts["no_optimize"].as<bool>();
     const bool generate_graphs = opts["graphs"].as<bool>();
-    const std::string language_type = opts["language"].as<std::string>();
+    const bool use_pascal_case = opts["pascal_case"].as<bool>();
+    const bool show_warnings = opts["show_warnings"].as<bool>();
+    // const std::string language_type = "C"; // opts["language"].as<std::string>();
 
-    const auto opt_print_func = get_print_type(language_type);
-    if (!opt_print_func) {
-        std::cerr << "error: unknown language type: '" << language_type << "'\n";
-        return -1;
-    }
-    const auto& print_func = *opt_print_func;
+    // const auto opt_print_func = get_print_type(language_type);
+    // if (!opt_print_func) {
+    //     std::cerr << "error: unknown language type: '" << language_type << "'\n";
+    //     return -1;
+    // }
+    const auto& print_func = dconstruct::ast::c;;
     
 
     if (opts.count("e") > 0) {
@@ -403,7 +416,7 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            decompile_multiple(filepath, output, base, disassember_options, generate_graphs, print_func);
+            decompile_multiple(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
         }
         else {
             disassemble_multiple(filepath, output, base, disassember_options);
@@ -412,7 +425,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, edits);
+            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";

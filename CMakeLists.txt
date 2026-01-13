@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dconstruct LANGUAGES CXX)
 
-set(VERSION_NUMBER "0.41.0")
+set(VERSION_NUMBER "1.52.0")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

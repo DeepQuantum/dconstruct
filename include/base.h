@@ -71,6 +71,34 @@ namespace dconstruct {
 		return sanitized;
 	}
 
+	[[nodiscard]] static inline std::optional<std::string> try_convert_pascal_case(const std::string& orig) noexcept {
+		if (orig.size() < 3) {
+			return std::nullopt;
+		}
+
+		std::string res;
+		res.reserve(orig.size());
+
+		// foo-bar -> FooBar
+
+		if (orig[0] >= 97 && orig[0] <= 122) {
+			res += orig[0] - 32;
+		} else {
+			res += orig[0];
+		}
+
+		for (u64 i = 1; i < orig.size(); ++i) {
+			if (orig[i] == '-' && orig[i + 1] >= 97 && orig[i + 1] <= 122) {
+				res += orig[i + 1] - 32;
+				i += 1;
+			} else {
+				res += orig[i];
+			}
+		}
+
+		return res;
+	}
+
 	struct location {
 		const std::byte* m_ptr = nullptr;
 
