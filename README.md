@@ -3,17 +3,18 @@
 
 # dconstruct
 
-`dconstruct` is a reverse engineering tool for the DC-Script files used in The Last of Us Part II. It features a disassembler as well as an experimental decompiler.
+`dconstruct` is a reverse engineering tool for the DC-Script files used in The Last of Us Part II. It features a disassembler and a decompiler.
 
-It outputs `.asm` files containing the disassembled structures and bytecode, and optionally `.dcpl` (DC Pseudo Language) files containing C-like pseudo code.
+It outputs `.asm` files containing the disassembled structures and bytecode, aswell as `.dcpl` (DC Pseudo Language) files containing C-like pseudo code.
 
 You can also make edits to files via the command line, including replacing entire structures with little effort. This makes creating mods that simply change a couple values inside the .bin files extremely easy.
 
 # Main feautures
 
 - Optimized for speed. Disassembling & decompiling files is blazingly fast.
+- Accurate reconstruction of the original source code, especially control flow
 - Accurate automatic interpretation of all structures in the disassembly
-- Disassembling & decompiling multiple files at the same time. Disassembling every single .bin file in the game takes only a couple seconds
+- Disassembling & decompiling multiple files at the same time. Decompiling every single .bin file in the game takes only a couple seconds
 - Making edits via the `-e` flag, creating new files that you can use for mods
 - Loading custom sidbases to use for disassembly
 
@@ -54,11 +55,13 @@ To decompile a file, add the `--decompile` flag when running the command.
 
 - `-s` - specify a path the the sidbase. By default, the program will look in path for the directory.
 
-- `--decompile` - emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file.
+- `--no_decompile` - don'T emit decompiled pseudo code into a .dcpl file. The file will be placed next to the .asm file. This is false by default.
 
-- `--graphs` - emit .svg files containing control flow graphs for all decompiled functions. Each .bin file gets its own folder containing all of its graphs. This **significantly** slows down decompilation speed, so it is not recommended when decompiling a large number of files at the same time. Does nothing if `--decompile` is not passed as well.
+- `--no_optimize` - don't optimize and cleanup the dcpl code. involves inlining function calls, removing unused variables, transforming compatible for loops into foreach loops, and turning some if-else chains into match expressions.
 
-- `--indent` - specify the number of spaces used to indent the disassembly output. 2 by default.
+- `--pascal_case` - convert the games function names into pascal case in the dcpl output, e.g. get-boolean -> GetBoolean.
+
+- `--graphs` - emit .svg files containing control flow graphs for all decompiled functions. Each .bin file gets its own folder containing all of its graphs. This **significantly** slows down decompilation speed, so it is not recommended when decompiling a large number of files at the same time.
 
 - `--emit_once` - prohibits the same structure from being emitted twice in the disassembly. If a structure shows up multiple times, only the first instance will be fully emitted, and all other occasions will be replaced by a `ALREADY_EMITTED` tag. This can significantly reduce file size.
 
@@ -176,19 +179,136 @@ Without going into too much detail here, a [Control Flow Graph (CFG)](https://en
 
 ```rust
 u64? sqrt-sign(f32 arg_0) {
-    u64? var_0 = absf(arg_0);
     f32 var_1;
     if (arg_0 >= 0.00) {
         var_1 = 1.00;
     } else {
         var_1 = -1.00;
     }
-    u64? var_2 = sqrt(var_0);
-    return var_1 * var_2;
+    return var_1 * sqrt(absf(arg_0));
 }
 ```
 
 The purpose of the function is now very clear, we take the absolute value of the argument, take the square root of that value and then mulitply it with the original sign of the argument. So for example, `sqrt-sign(-9) = -3`.
+
+## Optimization passes
+
+dconstruct automatically applies optimization passes to the pseudo code. Here are some examples:
+
+### Function call inlining
+
+#### Before
+
+```c
+u64? set-arrow-explosive-handle-rootvars() {
+    u64? var_0 = get-uint64(fx-handle, self);
+    u64? var_1 = get-float(kill, self);
+    set-effect-float(var_0, killradius, var_1);
+    u64? var_2 = get-uint64(fx-handle, self);
+    u64? var_3 = get-float(strong, self);
+    set-effect-float(var_2, strongradius, var_3);
+    u64? var_4 = get-uint64(fx-handle, self);
+    u64? var_5 = get-float(weak, self);
+    u64? var_6 = set-effect-float(var_4, weakradius, var_5);
+    return var_6;
+}
+```
+
+### After
+
+```c
+u64? set-arrow-explosive-handle-rootvars() {
+    set-effect-float(get-uint64(fx-handle, self), killradius, get-float(kill, self));
+    set-effect-float(get-uint64(fx-handle, self), strongradius, get-float(strong, self));
+    return set-effect-float(get-uint64(fx-handle, self), weakradius, get-float(weak, self));
+}
+```
+
+### Foreach loops
+
+### Before
+
+```c#
+u64? bmm-deactivate-all(u64? arg_0) {
+    u64? var_0 = darray-count(arg_0);
+    begin-foreach();
+    for (u64 i = 0; i < var_0; i++) {
+        u64? var_1 = darray-at(arg_0, i);
+        u16 var_2;
+        if (var_1 && *(u16*)(var_1 + 12) == 7) {
+            var_2 = *(u64*)var_1;
+        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
+            var_2 = *(u64*)var_1;
+        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
+            var_2 = *(u64*)var_1;
+        } else {
+            var_2 = 0;
+        }
+        net-send-event-all(deactivate, var_2);
+    }
+    u64? var_3 = end-foreach();
+    return var_3;
+}
+```
+
+### After
+
+```c#
+u64? bmm-deactivate-all(u64? arg_0) {
+    foreach (u64? var_1 : arg_0) {
+        u16 var_2;
+        if (var_1 && *(u16*)(var_1 + 12) == 7) {
+            var_2 = *(u64*)var_1;
+        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
+            var_2 = *(u64*)var_1;
+        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
+            var_2 = *(u64*)var_1;
+        } else {
+            var_2 = 0;
+        }
+        net-send-event-all(deactivate, var_2);
+    }
+}
+```
+
+### Match expressions
+
+### Before
+
+```scala
+string #C57EE0A64537AE8F(u16 arg_0) {
+    string var_0;
+    if (arg_0 == 0) {
+        var_0 = "Militia";
+    } else if (arg_0 == 1) {
+        var_0 = "Scars";
+    } else if (arg_0 == 2) {
+        var_0 = "Rattlers";
+    } else if (arg_0 == 3) {
+        var_0 = "Infected";
+    } else if (arg_0 == 4) {
+        var_0 = "Max Num Factions";
+    } else {
+        var_0 = "Invalid";
+    }
+    return var_0;
+}
+```
+
+### After
+
+```scala
+string #C57EE0A64537AE8F(u16 arg_0) {
+    return match (arg_0) {
+        0 -> "Militia"
+        1 -> "Scars"
+        2 -> "Rattlers"
+        3 -> "Infected"
+        4 -> "Max Num Factions"
+        else -> "Invalid"
+    };
+}
+```
 
 ## Example of a disassembled structure
 

@@ -76,7 +76,7 @@ namespace dconstruct::testing {
         return "";
     }
 
-    static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false) {
+    static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false, const bool use_pascal = false) {
         auto file_res = BinaryFile<>::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
@@ -92,6 +92,9 @@ namespace dconstruct::testing {
         auto dc_func = dcompiler::decomp_function{ *func, file,  ControlFlowGraph::build(*func), DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".svg" };
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".dcpl");
         std::ostringstream out;
+        if (use_pascal) {
+            out << ast::func_pascal_case;
+        }
         out << stream_lang << dc_func.decompile(optimize);
         file_out << stream_lang << out.str();
         ASSERT_EQ(expected, out.str());
@@ -987,5 +990,22 @@ namespace dconstruct::testing {
             "    return var_0;\n"
             "}";
         decomp_test(filepath, id, expected, ast::c, true);
+    }
+
+    TEST(DECOMPILER, PascalCase1) {
+        const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue-ui-funcs.bin)";
+        const std::string id = "#025F02BAF8891C15";
+        const std::string expected = 
+            "u16 #025F02BAF8891C15() {\n"
+            "    u16 var_2;\n"
+            "    if (!Gui2WidgetExists?(#B24D085F0897DBDD())) {\n"
+            "        #124853C9AAD97175(\"t2r-hud-rogue/t2r-hud-challenge\", \"hud-challenge\");\n"
+            "        var_2 = Gui2AssignToCategory(#B24D085F0897DBDD(), 65536);\n"
+            "    } else {\n"
+            "        var_2 = 0;\n"
+            "    }\n"
+            "    return var_2;\n"
+            "}\n";
+        decomp_test(filepath, id, expected, ast::c, true, true);
     }
 }

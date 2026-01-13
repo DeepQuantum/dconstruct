@@ -5,10 +5,16 @@
 namespace dconstruct::ast {
 
 void call_expr::pseudo_c(std::ostream& os) const {
-    //if (get_complexity() > MAX_NON_SPLIT_COMPLEXITY) {
+    const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+    if (func_name_as_pascal) {
+        os << id_pascal_case;
+    }
+    os << *m_callee << "(";
+    if (func_name_as_pascal) {
+        os << remove_id_pascal_case;
+    }
     if (m_arguments.size() > 8 || get_complexity() > MAX_NON_SPLIT_COMPLEXITY && m_arguments.size() > 3) {
-        os << *m_callee << "(\n";
-        os << indent_more;
+        os << "\n" << indent_more;
         for (u16 i = 0; i < m_arguments.size(); ++i) {
             os << indent << *m_arguments[i];
             if (i != m_arguments.size() - 1) {
@@ -18,7 +24,6 @@ void call_expr::pseudo_c(std::ostream& os) const {
         os << indent_less;
         os << "\n" << indent << ")";
     } else {
-        os << *m_callee << '(';
         for (u16 i = 0; i < m_arguments.size(); ++i) {
             os << *m_arguments[i];
             if (i != m_arguments.size() - 1) {
@@ -26,7 +31,7 @@ void call_expr::pseudo_c(std::ostream& os) const {
             }
         }
         os << ')';
-    } 
+    }
 }
 
 void call_expr::pseudo_py(std::ostream& os) const {

@@ -234,15 +234,13 @@ namespace dconstruct::dcompiler {
             }
         }
 
-        [[nodiscard]] std::string to_string() const noexcept {
-            std::ostringstream os;
-
+        [[nodiscard]] void to_string(std::ostream& os) const noexcept {
             for (const auto& func : m_nonStateScriptFuncs) {
                 os << *func << "\n\n"; 
             }
 
             if (m_states.empty()) {
-                return os.str();
+                return;
             }
 
             os << "statescript {\n" << ast::indent_more;
@@ -271,7 +269,6 @@ namespace dconstruct::dcompiler {
             }
 
             os << "}\n" << ast::indent_less;
-            return os.str();
         }
     };
 
