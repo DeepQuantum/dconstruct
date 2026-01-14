@@ -1398,7 +1398,7 @@ void Disassembler<is_64_bit>::disassemble_functions_from_bin_file() {
                 instr_ptr++;
             }
             
-            auto function_disassembly = create_function_disassembly(std::move(istrs), "anonymous@" + std::to_string(i), location(instr_ptr), false);
+            auto function_disassembly = create_function_disassembly(std::move(istrs), "0x" + std::to_string(i), location(instr_ptr), false);
             m_functions.push_back(std::move(function_disassembly));
             insert_function_disassembly_text(m_functions[0], 4);
         }

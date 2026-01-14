@@ -119,11 +119,14 @@ VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& e
 
 FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
     if (const auto* literal = m_callee->as_literal()) {
+        if (!std::holds_alternative<sid64_literal>(literal->m_value)) {
+            return FOREACH_OPTIMIZATION_ACTION::NONE;
+        }
         const auto id = std::get<sid64_literal>(literal->m_value).first;
         switch (id) {
             case SID("begin-foreach"): {
                 return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
-            } 
+            }
             case SID("end-foreach"): {
                 return FOREACH_OPTIMIZATION_ACTION::END_FOREACH;
             }

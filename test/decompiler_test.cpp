@@ -876,7 +876,7 @@ namespace dconstruct::testing {
         dcompiler::state_script_functions<> full_file_decomp(decompiled_funcs);
 
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
-        file_out << full_file_decomp.to_string();
+        full_file_decomp.to_string(file_out);
     }
 
     TEST(DECOMPILER, Optimization10) {
