@@ -125,13 +125,13 @@ namespace dconstruct {
     using UC4Disassembler = Disassembler<false>;
 
     const static std::unordered_map<sid64, ast::function_type> builtinFunctions = {
-        {SID("get-int32"), ast::make_function(make_type(ast::primitive_kind::I32), {
-            {"symbol", make_type(ast::primitive_kind::SID)},
-            {"location", make_type(ast::primitive_kind::SID)}
+        {SID("get-int32"), ast::make_function(make_type_from_prim(ast::primitive_kind::I32), {
+            {"symbol", make_type_from_prim(ast::primitive_kind::SID)},
+            {"location", make_type_from_prim(ast::primitive_kind::SID)}
         })},
-        {SID("get-boolean"), ast::make_function(make_type(ast::primitive_kind::BOOL), {
-            {"symbol", make_type(ast::primitive_kind::SID)},
-            {"location", make_type(ast::primitive_kind::SID)}
+        {SID("get-boolean"), ast::make_function(make_type_from_prim(ast::primitive_kind::BOOL), {
+            {"symbol", make_type_from_prim(ast::primitive_kind::SID)},
+            {"location", make_type_from_prim(ast::primitive_kind::SID)}
         })}
     };
 }

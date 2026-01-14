@@ -9,7 +9,7 @@ namespace dconstruct::compiler {
         LEFT_PAREN, RIGHT_PAREN, 
         LEFT_BRACE, RIGHT_BRACE, 
         LEFT_SQUARE, RIGHT_SQUARE,
-        COMMA, DOT, SEMICOLON,
+        COMMA, DOT, SEMICOLON, COLON,
 
         PLUS, PLUS_EQUAL, PLUS_PLUS,
         MINUS, MINUS_EQUAL, MINUS_MINUS,
@@ -31,7 +31,7 @@ namespace dconstruct::compiler {
         
         STRING, INT, DOUBLE, HEX, SID, _NULL,
 
-        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, FOR,
+        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, FOR, FOREACH, MATCH,
         
         _EOF, EMPTY
     };

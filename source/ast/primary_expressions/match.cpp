@@ -10,7 +10,7 @@ void match_expr::pseudo_c(std::ostream& os) const {
     bool first = true;
     for (const auto& condition : m_conditions) {
         if (!first) {
-            os << " ?? ";
+            os << "; ";
         }
         first = false;
         os << *condition;
@@ -44,7 +44,7 @@ void match_expr::pseudo_c(std::ostream& os) const {
             first = false;
             os << std::left << std::setw(max_size) << **pattern;
         }
-        os << " -> " << **expression << "\n";
+        os << " -> " << **expression << ",\n";
     }
     os << indent << std::left << std::setw(max_size) << "else" << " -> " << *m_default << "\n";
     os << indent_less << indent << "}";

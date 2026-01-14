@@ -250,12 +250,12 @@ namespace dconstruct::testing {
             "}";
         
         const std::vector<compiler::token> expected = {
-            compiler::token(compiler::token_type::INT, "int", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "int", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "main", 0, 1),
             compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 1),
             compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 1),
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 2),
-            compiler::token(compiler::token_type::INT, "int", 0, 3),
+            compiler::token(compiler::token_type::IDENTIFIER, "int", 0, 3),
             compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 3),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 3),
             compiler::token(compiler::token_type::INT, "0", 0, 3),
@@ -272,10 +272,27 @@ namespace dconstruct::testing {
         };
     }
 
+    TEST(COMPILER, LexerComplexSids) {
+        const std::string chars = "#simple_sid #%alloc-array? #=f(test123)";
+        const auto [tokens, errors] = get_tokens(chars);
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::SID, "#simple_sid", "simple_sid", 1),
+            compiler::token(compiler::token_type::SID, "#%alloc-array?", "%alloc-array?", 1),
+            compiler::token(compiler::token_type::SID, "#=f", "=f", 1),
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "test123", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 1),
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
+        };
+
+        ASSERT_EQ(tokens, expected);
+        EXPECT_EQ(errors.size(), 0);
+    }
+
     TEST(COMPILER, LexerProgramWithExtendedFeatures) {
         const std::string chars = 
             "struct Person {\n"
-            "\tSID name = #ellie;\n"
+            "\tsid name = #ellie;\n"
             "\tdouble damage = 5.9;\n"
             "\tint hexVal = 0x1A3F;\n"
             "\tstring msg = \"Hello, world!\";\n"
@@ -292,7 +309,7 @@ namespace dconstruct::testing {
             compiler::token(compiler::token_type::IDENTIFIER, "Person", 0, 1),
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
 
-            compiler::token(compiler::token_type::IDENTIFIER, "SID", 0, 2),
+            compiler::token(compiler::token_type::IDENTIFIER, "sid", 0, 2),
             compiler::token(compiler::token_type::IDENTIFIER, "name", 0, 2),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 2),
             compiler::token(compiler::token_type::SID, "#ellie", "ellie", 2),
@@ -489,7 +506,7 @@ namespace dconstruct::testing {
 
         const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
 
-        const ast::variable_declaration expected{ast::make_type(ast::primitive_kind::U16), "number"};
+        const ast::variable_declaration expected{ast::make_type_from_prim(ast::primitive_kind::U16), "number"};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -510,7 +527,7 @@ namespace dconstruct::testing {
 
         const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
 
-        const ast::variable_declaration expected{ast::make_type(ast::primitive_kind::U16), "number", 2};
+        const ast::variable_declaration expected{ast::make_type_from_prim(ast::primitive_kind::U16), "number", 2};
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -592,8 +609,8 @@ namespace dconstruct::testing {
                 )
             )
         ));
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "x", 0));
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "y", 1));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x", 0));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", 1));
         expected.push_back(std::make_unique<ast::while_stmt>(
             std::make_unique<ast::compare_expr>(
                 compiler::token(compiler::token_type::LESS, "<", 0, 1),
@@ -621,7 +638,7 @@ namespace dconstruct::testing {
 
         std::vector<stmnt_uptr> expected;
 
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type(ast::primitive_kind::U32), "x",
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x",
             std::make_unique<ast::sub_expr>(
                 compiler::token(compiler::token_type::MINUS, "-", 0, 1),
                 std::make_unique<ast::add_expr>(
@@ -641,6 +658,34 @@ namespace dconstruct::testing {
             )
         ));
 
+        EXPECT_EQ(expected, statements);
+    }
+
+    TEST(COMPILER, Foreach1) {
+        const std::string code = "u32 y = 0; foreach (u32 item : iterable) { y = y + item; }";
+        const auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 2);
+        std::vector<stmnt_uptr> expected;
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", 0));
+        std::vector<stmnt_uptr> block_stmnts;
+        block_stmnts.push_back(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::assign_expr>(
+                std::make_unique<ast::identifier>("y"),
+                std::make_unique<ast::add_expr>(
+                    compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+                    std::make_unique<ast::identifier>("y"),
+                    std::make_unique<ast::identifier>("item")
+                )
+            )
+        ));
+        expected.push_back(std::make_unique<ast::foreach_stmt>(
+            ast::parameter{ast::make_type_from_prim(ast::primitive_kind::U32),"item",},
+            std::make_unique<ast::identifier>("iterable"),
+            std::make_unique<ast::block>(std::move(block_stmnts))
+        ));
         EXPECT_EQ(expected, statements);
     }
 }

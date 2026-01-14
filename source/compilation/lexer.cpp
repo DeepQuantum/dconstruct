@@ -78,12 +78,18 @@ char Lexer::advance() {
     return token(token_type::STRING, lexeme, literal, m_line);
 }
 
-[[nodiscard]] bool Lexer::is_sid_char(const char c) const noexcept {
-    return std::isdigit(c) || std::isalpha(c) || c == '-' || c == '_';
+[[nodiscard]] bool Lexer::is_valid_sid_char(const char c) const noexcept {
+    // https://docs.racket-lang.org/guide/syntax-overview.html#%28part._.Identifiers%29
+
+    return c < 127 && c > 32 && c != '#' && 
+        c != '(' && c != ')' && c != '{' && c != '}' &&
+        c != '[' && c != ']' && c != ',' && c != '"' &&
+        c != '`' && c != '\n' && c != ';' && c != '|' &&
+        c != '\\';  
 }
 
 [[nodiscard]] token Lexer::make_sid() {
-    while (is_sid_char(peek())) {
+    while (is_valid_sid_char(peek())) {
         advance();
     }
     const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 1);
@@ -144,6 +150,7 @@ char Lexer::advance() {
         case '[': return make_current_token(token_type::LEFT_SQUARE); 
         case ']': return make_current_token(token_type::RIGHT_SQUARE); 
         case ',': return make_current_token(token_type::COMMA); 
+        case ':': return make_current_token(token_type::COLON);
         case '.': return make_current_token(token_type::DOT); 
         case ';': return make_current_token(token_type::SEMICOLON); 
         case '+': return make_current_token(match('=') ? token_type::PLUS_EQUAL : match('+') ? token_type::PLUS_PLUS : token_type::PLUS); 

@@ -45,7 +45,7 @@ namespace dconstruct::ast {
 
     using ref_full_type = std::shared_ptr<full_type>;
 
-    [[nodiscard]] static full_type make_type(const primitive_kind kind);
+    [[nodiscard]] static full_type make_type_from_prim(const primitive_kind kind);
 
     struct primitive_type {
         primitive_kind m_type;
@@ -78,13 +78,13 @@ namespace dconstruct::ast {
         ref_full_type m_pointedAt;
         explicit ptr_type() noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::monostate())}{};
 
-        explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(make_type(kind))}{};
+        explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(make_type_from_prim(kind))}{};
 
         bool operator==(const ptr_type&) const = default;
     };
 
 
-    [[nodiscard]] inline static full_type make_type(const primitive_kind kind) {
+    [[nodiscard]] inline static full_type make_type_from_prim(const primitive_kind kind) {
         return full_type{primitive_type{kind}};
     }
 

@@ -161,7 +161,7 @@ namespace dconstruct::dcompiler {
             args.push_back(m_transformableExpressions[istr.operand2]->clone());
             auto callee = std::make_unique<ast::literal>(sid64_literal{SID("int_ash"), "int_ash"});
             auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
-            call->set_type(make_type(ast::primitive_kind::U64));
+            call->set_type(make_type_from_prim(ast::primitive_kind::U64));
             return call;
         }
 

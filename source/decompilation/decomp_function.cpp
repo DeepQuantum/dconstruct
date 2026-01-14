@@ -138,8 +138,8 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
 
             case Opcode::LoadU16Imm: generated_expression = std::make_unique<ast::literal>(static_cast<u16>(istr.operand1 | static_cast<u16>(istr.operand2) << 8)); break;
 
-            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::cast_expr>(make_type(ast::primitive_kind::U64), make_load_symbol_table(istr)); break;
-            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::cast_expr>(make_type(ast::primitive_kind::F32), make_load_symbol_table(istr)); break;
+            case Opcode::LoadStaticInt: generated_expression = std::make_unique<ast::cast_expr>(make_type_from_prim(ast::primitive_kind::U64), make_load_symbol_table(istr)); break;
+            case Opcode::LoadStaticFloat: generated_expression = std::make_unique<ast::cast_expr>(make_type_from_prim(ast::primitive_kind::F32), make_load_symbol_table(istr)); break;
             case Opcode::LoadStaticPointer: generated_expression = std::make_unique<ast::cast_expr>(ast::ptr_type{}, make_load_symbol_table(istr)); break;
 
 			case Opcode::LoadStaticI8Imm: generated_expression = std::make_unique<ast::literal>(symbol_table.get<i8>(istr.operand1)); break;
@@ -233,8 +233,8 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
                 break;
             }
 
-            case Opcode::CastInteger: generated_expression = make_cast<i32>(istr, make_type(ast::primitive_kind::I32)); break;
-            case Opcode::CastFloat: generated_expression = make_cast<f32>(istr, make_type(ast::primitive_kind::F32)); break;
+            case Opcode::CastInteger: generated_expression = make_cast<i32>(istr, make_type_from_prim(ast::primitive_kind::I32)); break;
+            case Opcode::CastFloat: generated_expression = make_cast<f32>(istr, make_type_from_prim(ast::primitive_kind::F32)); break;
 
             case Opcode::Move: generated_expression = m_transformableExpressions[istr.operand1]->clone(); break;
 
@@ -349,7 +349,7 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
 
     auto id = std::make_unique<ast::identifier>(get_next_var());
 
-    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::BOOL), id->m_name.m_lexeme, std::move(final_condition));
+    auto declaration = std::make_unique<ast::variable_declaration>(make_type_from_prim(ast::primitive_kind::BOOL), id->m_name.m_lexeme, std::move(final_condition));
 
     m_transformableExpressions[check_register] = std::move(id);
     append_to_current_block(std::move(declaration));
@@ -395,11 +395,11 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
     regs_to_emit.set(loop_alternative_reg, false);
     auto id = std::make_unique<ast::identifier>(var_name);
 
-    auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), var_name, std::move(m_transformableExpressions[loop_var_reg]));
+    auto declaration = std::make_unique<ast::variable_declaration>(make_type_from_prim(ast::primitive_kind::U64), var_name, std::move(m_transformableExpressions[loop_var_reg]));
     auto increment = std::make_unique<ast::increment_expression>(id->clone());
 
     m_transformableExpressions[loop_var_reg] = id->clone();
-    m_transformableExpressions[loop_var_reg]->set_type(make_type(ast::primitive_kind::U64));
+    m_transformableExpressions[loop_var_reg]->set_type(make_type_from_prim(ast::primitive_kind::U64));
     m_registersToVars[loop_var_reg].push(id->copy());
 
     parse_basic_block(head_node);
@@ -510,10 +510,10 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
         regs_to_emit.reset(alt_loop_var_reg);
         const std::string loop_var_name = std::string(1, m_loopVar++);
         id = std::make_unique<ast::identifier>(loop_var_name);
-        auto declaration = std::make_unique<ast::variable_declaration>(make_type(ast::primitive_kind::U64), loop_var_name, std::move(m_transformableExpressions[loop_var_reg]));
+        auto declaration = std::make_unique<ast::variable_declaration>(make_type_from_prim(ast::primitive_kind::U64), loop_var_name, std::move(m_transformableExpressions[loop_var_reg]));
         append_to_current_block(std::move(declaration));
         m_transformableExpressions[loop_var_reg] = id->copy();
-        id->set_type(make_type(ast::primitive_kind::U64));
+        id->set_type(make_type_from_prim(ast::primitive_kind::U64));
         m_registersToVars[loop_var_reg].push(id->copy());
         m_registersToVars[alt_loop_var_reg].push(id->copy());
     }
@@ -683,7 +683,7 @@ template<ast::primitive_kind kind>
     arg.push_back(m_transformableExpressions[dst]->clone());
     auto callee = std::make_unique<ast::literal>(sid64_literal{SID("abs"), "abs"});
     auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
-    call->set_type(make_type(kind));
+    call->set_type(make_type_from_prim(kind));
     return call;
 }
 
