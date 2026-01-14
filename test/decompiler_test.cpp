@@ -210,7 +210,7 @@ namespace dconstruct::testing {
         std::vector<u64> table_entries;
         table_entries.push_back(SID("ddict-key-count"));
         std::vector<ast::full_type> symbol_table_types;
-        symbol_table_types.push_back(ast::make_function(ast::make_type(ast::primitive_kind::I32), { {"ddict", ast::make_type(ast::primitive_kind::I32) } }));
+        symbol_table_types.push_back(ast::make_function(ast::make_type_from_prim(ast::primitive_kind::I32), { {"ddict", ast::make_type_from_prim(ast::primitive_kind::I32) } }));
         SymbolTable table{ location(table_entries.data()), std::move(symbol_table_types) };
         const auto& func = decompile_instructions_with_disassembly(std::move(istrs), "Call1", std::move(table));
 

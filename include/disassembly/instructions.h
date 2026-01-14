@@ -353,7 +353,7 @@ struct Register {
 
     inline void set_first_type(const ast::primitive_kind& type) noexcept {
         if (is_unknown(m_type)) {
-            m_type = make_type(type);
+            m_type = make_type_from_prim(type);
         }
     }
 

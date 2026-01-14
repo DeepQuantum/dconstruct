@@ -53,6 +53,11 @@ private:
         {"struct", token_type::STRUCT},
         {"true", token_type::TRUE},
         {"while", token_type::WHILE},
+        {"foreach", token_type::FOREACH},
+        {"for", token_type::FOR},
+        {"match", token_type::MATCH},
+        {"and", token_type::AND},
+        {"or", token_type::OR},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;
@@ -74,7 +79,7 @@ private:
     [[nodiscard]] token make_hex();
     [[nodiscard]] token make_identifier();
     [[nodiscard]] token make_sid();
-    [[nodiscard]] bool is_sid_char(const char) const noexcept;
+    [[nodiscard]] bool is_valid_sid_char(const char) const noexcept;
     [[nodiscard]] bool is_hex_char(const char) const noexcept;
     [[nodiscard]] bool match(const char);
     [[nodiscard]] char peek() const;

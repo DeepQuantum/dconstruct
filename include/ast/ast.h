@@ -29,6 +29,7 @@
 #include "statements/block.h"
 #include "statements/if.h"
 #include "statements/for.h"
+#include "statements/foreach.h"
 #include "statements/while.h"
 #include "statements/expression_statement.h"
 #include "statements/variable_declaration.h"
