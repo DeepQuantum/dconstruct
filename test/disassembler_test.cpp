@@ -48,10 +48,10 @@ namespace dconstruct::testing {
     TEST(DISASSEMBLER, UC4Funcs) {
         const std::string filepath = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/ss-isl-cave-get-piton.bin";
         const std::string graph = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/graph.svg";
-        auto file_res = BinaryFile<true>::from_path(filepath);
+        auto file_res = BinaryFile<false>::from_path(filepath);
         ASSERT_TRUE(file_res.has_value());
         auto& file = *file_res;
-        dconstruct::FileDisassembler<true> dis{&file, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/ss-isl-cave-get-piton.asm", {}};
+        dconstruct::FileDisassembler<false> dis{&file, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/ss-isl-cave-get-piton.asm", {}};
 
         dis.disassemble_functions_from_bin_file();
 
@@ -59,8 +59,8 @@ namespace dconstruct::testing {
         std::ofstream out("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/ss-isl-cave-get-piton.dcpl");
 
         for (const auto& func : dis.get_functions()) {
-            auto decomp = dconstruct::dcompiler::decomp_function{func, file, ControlFlowGraph::build(func)};
-            out << decomp.m_functionDefinition << "\n\n";
+            auto decomp = dconstruct::dcompiler::decomp_function{func, file, ControlFlowGraph::build(func)}.decompile(true);
+            out << decomp << "\n\n";
         }
 
         ASSERT_GT(dis.get_functions().size(), 0);

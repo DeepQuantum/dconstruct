@@ -27,7 +27,7 @@ void match_expr::pseudo_c(std::ostream& os) const {
         for (const auto& pattern : pair.first) {
             os << **pattern;
         }
-        return os.str().length() + 2 * (pair.first.size() - 1);
+        return std::max(os.str().length() + 2 * (pair.first.size() - 1), sizeof("else") - 1);
     });
 
     const auto max_size_iter = std::max_element(pattern_lengths.begin(), pattern_lengths.end());

@@ -41,6 +41,8 @@ static constexpr char DEFAULT_OUT[] = "<input_path.asm>";
     return (graph_dir / sanitized_func_id).replace_extension(".svg");
 } 
 
+
+template <bool is_64_bit = true>
 static void decomp_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_disasm_filename, 
@@ -54,7 +56,7 @@ static void decomp_file(
     const std::vector<std::string> &edits = {}, 
     const bool use_pascal_case = false) {
     
-    auto file_res = dconstruct::BinaryFile<true>::from_path(inpath.string());
+    auto file_res = dconstruct::BinaryFile<is_64_bit>::from_path(inpath.string());
 
     if (!file_res) {
         std::cerr << file_res.error() << "\n";
@@ -64,13 +66,21 @@ static void decomp_file(
 
     auto& file = *file_res;
 
-    if (!edits.empty()) {
-        dconstruct::EditDisassembler ed(&file, &base, options, edits);
-        ed.apply_file_edits();
+    if constexpr (is_64_bit) {
+        if (!edits.empty()) {
+            dconstruct::EditDisassembler ed(&file, &base, options, edits);
+            ed.apply_file_edits();
+        }
     }
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
-    disassembler.disassemble();
+    
+    if constexpr (is_64_bit) {
+        disassembler.disassemble();
+    } else {
+        disassembler.disassemble_functions_from_bin_file();
+    }
+
     disassembler.dump();
     const auto funcs = disassembler.get_named_functions();
     if (!funcs.empty()) {
@@ -129,6 +139,7 @@ static void disasm_file(
     disassembler.dump();
 }
 
+template <bool is_64_bit = true>
 static void decompile_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
@@ -162,7 +173,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
+            decomp_file<is_64_bit>(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
         }
     );
 
@@ -288,8 +299,8 @@ int main(int argc, char *argv[]) {
         //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
-            cxxopts::value<bool>()->default_value("false"));
-        //("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"));
+            cxxopts::value<bool>()->default_value("false"))
+        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
@@ -378,6 +389,7 @@ int main(int argc, char *argv[]) {
     const bool generate_graphs = opts["graphs"].as<bool>();
     const bool use_pascal_case = opts["pascal_case"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
+    const bool uc4 = opts["uc4"].as<bool>();
     // const std::string language_type = "C"; // opts["language"].as<std::string>();
 
     // const auto opt_print_func = get_print_type(language_type);
@@ -416,7 +428,11 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            decompile_multiple(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
+            if (uc4) {
+                decompile_multiple<false>(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
+            } else {
+                decompile_multiple<true>(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
+            }
         }
         else {
             disassemble_multiple(filepath, output, base, disassember_options);
@@ -425,7 +441,11 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
+            if (uc4) {
+                decomp_file<false>(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
+            } else {
+                decomp_file<true>(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
+            }
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";
