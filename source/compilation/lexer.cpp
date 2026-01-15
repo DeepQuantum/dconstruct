@@ -154,7 +154,7 @@ char Lexer::advance() {
         case '.': return make_current_token(token_type::DOT); 
         case ';': return make_current_token(token_type::SEMICOLON); 
         case '+': return make_current_token(match('=') ? token_type::PLUS_EQUAL : match('+') ? token_type::PLUS_PLUS : token_type::PLUS); 
-        case '-': return make_current_token(match('=') ? token_type::MINUS_EQUAL :  match('-') ? token_type::MINUS_MINUS : token_type::MINUS); 
+        case '-': return make_current_token(match('=') ? token_type::MINUS_EQUAL : match('-') ? token_type::MINUS_MINUS : match('>') ? token_type::ARROW : token_type::MINUS); 
         case '*': return make_current_token(match('=') ? token_type::STAR_EQUAL : token_type::STAR);
         case '!': return make_current_token(match('=') ? token_type::BANG_EQUAL : token_type::BANG);
         case '=': return make_current_token(match('=') ? token_type::EQUAL_EQUAL : token_type::EQUAL);

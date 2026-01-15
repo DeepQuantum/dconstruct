@@ -53,13 +53,17 @@ void match_expr::pseudo_c(std::ostream& os) const {
 [[nodiscard]] std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> match_expr::group_patterns() const noexcept {
     std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> res;
 
-    for (const auto& [pattern, match] : m_matchPairs) {
+    for (const auto& [patterns, match] : m_matchPairs) {
+        //assert(pattern.size() == 1 && "used in decomp only so by default there should only ever be one expression per pattern");
+        
         auto match_exists = [&match](const auto& pair) -> bool { return *pair.second == match; };
         
-        if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
+        for (const auto& pattern : patterns) {
+            if (auto match_group = std::find_if(res.begin(), res.end(), match_exists); match_group != res.end()) {
             match_group->first.push_back(&pattern);
-        } else {
-            res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
+            } else {
+                res.emplace_back(std::vector<const expr_uptr*>{&pattern}, &match);
+            }
         }
     }
 
@@ -79,32 +83,52 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
     if (!rhs_ptr) {
         return false;
     }
-    return m_conditions == rhs_ptr->m_conditions && m_matchPairs == rhs_ptr->m_matchPairs;
+    return m_conditions == rhs_ptr->m_conditions && m_matchPairs == rhs_ptr->m_matchPairs && m_default == rhs_ptr->m_default;
 }
 
 [[nodiscard]] u16 match_expr::calc_complexity() const noexcept {
-    u16 complexity = 1;
-    for (const auto& condition : m_conditions) {
-        complexity += condition->get_complexity();
-    }
-    for (const auto& [pattern, expression] : m_matchPairs) {
-        complexity += pattern->get_complexity() + expression->get_complexity();
-    }
-    return complexity;
+    const u16 conditions_complexity =
+        std::accumulate(
+            m_conditions.begin(),
+            m_conditions.end(),
+            u16{0},
+            [](u16 acc, const auto& cond) {
+                return acc + cond->get_complexity();
+            }
+        );
+
+    const u16 match_pairs_complexity =
+        std::accumulate(
+            m_matchPairs.begin(),
+            m_matchPairs.end(),
+            u16{0},
+            [](u16 acc, const auto& pair) {
+                return acc + pair.first.size() + pair.second->get_complexity();
+            }
+        );
+
+    return static_cast<u16>(1 + conditions_complexity + match_pairs_complexity);
 }
 
 [[nodiscard]] expr_uptr match_expr::clone() const {
     std::vector<expr_uptr> new_conditions;
-    std::vector<std::pair<expr_uptr, expr_uptr>> new_matchpairs;
+    std::vector<matches_t> new_matchpairs;
     new_conditions.reserve(m_conditions.size());
     new_matchpairs.reserve(m_matchPairs.size());
     for (const auto& condition : m_conditions) {
         new_conditions.emplace_back(condition->clone());
     }
-    for (const auto& [pattern, expression] : m_matchPairs) {
-        new_matchpairs.emplace_back(pattern->clone(), expression->clone());
+    for (const auto& [patterns, expression] : m_matchPairs) {
+        std::vector<expr_uptr> new_patterns;
+        new_patterns.reserve(patterns.size());
+
+        for (const auto& pattern : patterns) {
+            new_patterns.emplace_back(pattern->clone());
+        }
+
+        new_matchpairs.emplace_back(std::move(new_patterns), expression->clone());
     }
-    return std::make_unique<match_expr>(std::move(new_conditions), std::move(new_matchpairs));
+    return std::make_unique<match_expr>(std::move(new_conditions), std::move(new_matchpairs), m_default->clone());
 }
 
 VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& env) noexcept {
@@ -112,7 +136,6 @@ VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& 
         env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
-        env.check_action(&pattern);
         env.check_action(&expression);
     }
     return VAR_OPTIMIZATION_ACTION::NONE;
@@ -123,7 +146,6 @@ FOREACH_OPTIMIZATION_ACTION match_expr::foreach_optimization_pass(foreach_optimi
         env.check_action(&condition);
     }
     for (auto& [pattern, expression] : m_matchPairs) {
-        env.check_action(&pattern);
         env.check_action(&expression);
     }
     return FOREACH_OPTIMIZATION_ACTION::NONE;

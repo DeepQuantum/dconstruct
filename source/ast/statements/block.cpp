@@ -194,11 +194,13 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
             }
             const auto action = statement->match_optimization_pass(env);
             if (action == MATCH_OPTIMIZATION_ACTION::RESULT_VAR_ASSIGNMENT && env.m_matches.size() > 2 && env.m_matches.size() - 1 == env.m_patterns.size()) {
-                std::vector<std::pair<expr_uptr, expr_uptr>> pairs;
+                std::vector<std::pair<std::vector<expr_uptr>, expr_uptr>> pairs;
                 pairs.reserve(env.m_patterns.size());
 
                 for (u32 i = 0; i < env.m_patterns.size(); ++i) {
-                    pairs.emplace_back(std::move(*env.m_patterns[i]), std::move(*env.m_matches[i]));
+                    std::vector<expr_uptr> new_pairs;
+                    new_pairs.push_back(std::move(*env.m_patterns[i]));
+                    pairs.emplace_back(std::move(new_pairs), std::move(*env.m_matches[i]));
                 }
 
                 auto match = std::make_unique<match_expr>(std::move(*env.m_checkVar), std::move(pairs), std::move(*env.m_matches.back()));

@@ -9,7 +9,7 @@ namespace dconstruct::compiler {
         LEFT_PAREN, RIGHT_PAREN, 
         LEFT_BRACE, RIGHT_BRACE, 
         LEFT_SQUARE, RIGHT_SQUARE,
-        COMMA, DOT, SEMICOLON, COLON,
+        COMMA, DOT, SEMICOLON, COLON, ARROW,
 
         PLUS, PLUS_EQUAL, PLUS_PLUS,
         MINUS, MINUS_EQUAL, MINUS_MINUS,

@@ -30,6 +30,11 @@ namespace dconstruct::ast {
         const expression& m_expr;
     };
 
+    struct semantic_check_error {
+        std::string m_message;
+        const expression& m_expr;
+    };
+
     enum class OP_KIND {
         PREFIX,
         INFIX,
@@ -37,6 +42,7 @@ namespace dconstruct::ast {
     };
 
     using llvm_res = std::expected<llvm::Value*, llvm_error>;
+    using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
     using type_environment = compiler::environment<ast::full_type>;
 
     struct expression : public ast_element {
@@ -63,9 +69,11 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
         
-        [[nodiscard]] inline const full_type& get_type(const type_environment& env) {
+        [[nodiscard]] virtual semantic_check_res compute_type(type_environment& env) const noexcept = 0;
+        
+        [[nodiscard]] inline const full_type& get_type(type_environment& env) {
             if (is_unknown(m_type)) {
-                m_type = compute_type(env);
+                m_type = compute_type(env).or_else;
             }
             return m_type;
         }
@@ -76,9 +84,6 @@ namespace dconstruct::ast {
             }
             return *m_complexity;
         }
-
-
-        [[nodiscard]] virtual full_type compute_type(const type_environment& env) const = 0;
 
         inline void set_type(const full_type& type) noexcept {
             m_type = type;
