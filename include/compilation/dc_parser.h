@@ -63,6 +63,7 @@ namespace dconstruct::compiler {
         [[nodiscard]] std::unique_ptr<ast::block> make_block();
         [[nodiscard]] std::unique_ptr<ast::if_stmt> make_if();
         [[nodiscard]] std::unique_ptr<ast::while_stmt> make_while();
+        [[nodiscard]] std::unique_ptr<ast::return_stmt> make_return();
         [[nodiscard]] stmnt_uptr make_for();
         [[nodiscard]] stmnt_uptr make_foreach();
         [[nodiscard]] std::unique_ptr<ast::expression_stmt> make_expression_statement();
@@ -76,6 +77,7 @@ namespace dconstruct::compiler {
         [[nodiscard]] expr_uptr make_factor();
         [[nodiscard]] expr_uptr make_unary();
         [[nodiscard]] expr_uptr make_primary();
+        [[nodiscard]] expr_uptr make_literal();
         [[nodiscard]] expr_uptr make_match();
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
     };

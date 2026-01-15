@@ -251,6 +251,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return make_foreach();
     } else if (match({token_type::LEFT_BRACE})) {
         return make_block();
+    } else if (match({token_type::RETURN})) {
+        return make_return();
     } else {
         return make_expression_statement();
     }
@@ -293,13 +295,26 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return std::make_unique<ast::block>(std::move(statements));
 }
 
+[[nodiscard]] std::unique_ptr<ast::return_stmt> Parser::make_return() {
+    if (match({token_type::SEMICOLON})) {
+        return std::make_unique<ast::return_stmt>(nullptr); 
+    }
+    expr_uptr expression = make_expression();
+
+    if (!consume(token_type::SEMICOLON, "expected ';' after return value.")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::return_stmt>(std::move(expression));
+}
+
 [[nodiscard]] std::unique_ptr<ast::expression_stmt> Parser::make_expression_statement() {
     expr_uptr expr = make_expression();
     if (!expr) {
+        m_errors.emplace_back(peek(), "expected expression.");
         return nullptr;
     }
-    const token *matched = consume(token_type::SEMICOLON, "expected ';' after expression.");
-    if (!matched) {
+    if (!consume(token_type::SEMICOLON, "expected ';' after expression.")) {
         return nullptr;
     }
     return std::make_unique<ast::expression_stmt>(std::move(expr));
@@ -340,7 +355,6 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (match({token_type::EQUAL})) {
         const token equals = previous();
         expr_uptr value = make_assignment();
-        // todo fix
         const ast::identifier* expr_ptr = dynamic_cast<const ast::identifier*>(expr.get());
         if (expr_ptr) {
             return std::make_unique<ast::assign_expr>(std::move(expr), std::move(value));
@@ -486,28 +500,75 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] expr_uptr Parser::make_match() {
-    if (!consume(token_type::RIGHT_PAREN, "expected '(' after match")) {
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after match")) {
         return nullptr;
     }
 
     std::vector<expr_uptr> conditions;
-    expr_uptr match_expr;
 
-    while (auto cond = make_expression()) {
-        if (match({token_type::SEMICOLON})) {
-            conditions.push_back(std::move(cond));
-        } else {
-            match_expr = std::move(cond);
+    while (expr_uptr cond = make_expression()) {
+        conditions.push_back(std::move(cond));
+        if (!match({token_type::SEMICOLON})) {
             break;
         }
+    }
+    
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after match conditions")) {
+        return nullptr;
     }
 
     if (!consume(token_type::LEFT_BRACE, "expected '{' after match header")) {
         return nullptr;
     }
+    
+    std::vector<ast::match_expr::matches_t> matches;
+    std::vector<expr_uptr> patterns;
+    expr_uptr default_pattern = nullptr;
+    bool default_pattern_reached = false;
+    while (!default_pattern) {
+        do {
+            if (match({token_type::ELSE})) {
+                default_pattern_reached = true;
+            } else {
+                expr_uptr literal = make_literal();
+                if (!literal) {
+                    m_errors.emplace_back(peek(), "expected a literal");
+                    return nullptr;
+                } else {
+                    patterns.push_back(std::move(literal)); 
+                }
+            }
+        } while (match({token_type::COMMA}));
+
+        if (!consume({token_type::ARROW}, "expected '->' after pattern list")) {
+            return nullptr;
+        }
+
+        expr_uptr matched_expression = make_expression();
+        if (!matched_expression) {
+            m_errors.emplace_back(peek(), "expected expression after '->'");
+        }
+
+        if (!default_pattern_reached && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
+            return nullptr;
+        }
+        
+        if (default_pattern_reached) {
+            default_pattern = std::move(matched_expression);
+        } else {
+            matches.emplace_back(std::move(patterns), std::move(matched_expression));
+        }
+        patterns.clear();
+    }
+
+    if (!consume(token_type::RIGHT_BRACE, "expected '}' after match patterns")) {
+        return nullptr;
+    }
+    
+    return std::make_unique<ast::match_expr>(std::move(conditions), std::move(matches), std::move(default_pattern));
 }
 
-[[nodiscard]] expr_uptr Parser::make_primary() {
+[[nodiscard]] expr_uptr Parser::make_literal() {
     if (match({token_type::TRUE})) {
         return std::make_unique<ast::literal>(true);
     } else if (match({token_type::FALSE})) {
@@ -526,6 +587,13 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (match({token_type::SID})) {
         const sid64_literal sid = { 0, std::get<std::string>(previous().m_literal) };
         return std::make_unique<ast::literal>(sid);
+    }
+    return nullptr;
+}
+
+[[nodiscard]] expr_uptr Parser::make_primary() {
+    if (expr_uptr literal = make_literal()) {
+        return literal;
     } else if (match({token_type::IDENTIFIER})) {
         return std::make_unique<ast::identifier>(previous());
     } else if (match({token_type::MATCH})) {

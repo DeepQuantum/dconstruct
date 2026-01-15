@@ -72,6 +72,11 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return MATCH_OPTIMIZATION_ACTION::LITERAL;
 }
 
+[[nodiscard]] std::optional<semantic_check_error> literal::check_semantics(type_environment& env) const noexcept {
+    return std::nullopt;
+}
+
+
 [[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
    return std::visit([&](auto&& lit) -> llvm_res {
         using T = std::decay_t<decltype(lit)>;

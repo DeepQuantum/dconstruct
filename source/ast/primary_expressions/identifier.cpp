@@ -55,6 +55,14 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return name == m_name.m_lexeme;
 }
 
+[[nodiscard]] std::optional<semantic_check_error> identifier::check_semantics(type_environment& env) const noexcept {
+    std::optional<semantic_check_error> res;
+    if (env.lookup(m_name.m_lexeme)) {
+        res = std::nullopt;
+    } else {
+        res.emplace(("unknown variable " + m_name.m_lexeme), *this);
+    }
+}
 
 VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {

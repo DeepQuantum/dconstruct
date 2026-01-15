@@ -688,4 +688,40 @@ namespace dconstruct::testing {
         ));
         EXPECT_EQ(expected, statements);
     }
+
+    TEST(COMPILER, Match1) {
+        const std::string code = "return match (var_0; var_1; var_2) { 0, 1 -> \"Cool\", 2 -> \"Not cool\", else -> \"Default\" };";
+        const auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 1);
+        
+        std::vector<expr_uptr> vars;
+        vars.push_back(std::make_unique<ast::identifier>("var_0"));
+        vars.push_back(std::make_unique<ast::identifier>("var_1"));
+        vars.push_back(std::make_unique<ast::identifier>("var_2"));
+
+        std::vector<expr_uptr> case1_vals;
+        case1_vals.push_back(std::make_unique<ast::literal>(0));
+        case1_vals.push_back(std::make_unique<ast::literal>(1));
+
+        std::vector<expr_uptr> case2_vals;
+        case2_vals.push_back(std::make_unique<ast::literal>(2));
+
+        std::vector<ast::match_expr::matches_t> outer;
+        outer.emplace_back(std::move(case1_vals), std::make_unique<ast::literal>("Cool"));
+        outer.emplace_back(std::move(case2_vals), std::make_unique<ast::literal>("Not cool"));
+
+        std::vector<stmnt_uptr> expected;
+        expected.push_back(std::make_unique<ast::return_stmt>(
+            std::make_unique<ast::match_expr>(
+                std::move(vars),
+                std::move(outer),
+                std::make_unique<ast::literal>("Default")
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
+    }
 }
