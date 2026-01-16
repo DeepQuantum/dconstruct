@@ -14,13 +14,30 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     os << "(not " << *m_rhs << ')';
 }
 
-// [[nodiscard]] bool logical_not_expr::equals(const expression &rhs) const noexcept {
-//     const logical_not_expr* rhs_ptr = dynamic_cast<const logical_not_expr*>(&rhs);
-//     if (rhs_ptr == nullptr) {
-//         return false;
-//     }
-//     return m_rhs == rhs_ptr->m_rhs;
-// }
+[[nodiscard]] semantic_check_res logical_not_expr::compute_type_checked(type_environment& env) const noexcept {
+    const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
+
+    if (!rhs_type) {
+        return rhs_type;
+    }
+
+    const std::optional<std::string> invalid_logical_not = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
+        using T = std::decay_t<decltype(rhs_type)>;
+
+        if constexpr (!std::is_integral_v<T>) {
+            return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
+        } else {
+            return std::nullopt;
+        }
+    }, *rhs_type);
+
+
+    if (!invalid_logical_not) {
+        return make_type_from_prim(primitive_kind::BOOL);
+    }
+
+    return std::unexpected{semantic_check_error{*invalid_logical_not, this}};
+}
 
 [[nodiscard]] expr_uptr logical_not_expr::simplify() const {
     expr_uptr rhs = m_rhs->simplify();

@@ -27,6 +27,34 @@ namespace dconstruct::ast {
     return std::make_unique<negate_expr>(m_operator, std::move(rhs));
 }
 
+[[nodiscard]] full_type negate_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+    return m_rhs->get_type_unchecked(env);
+}
+
+[[nodiscard]] semantic_check_res negate_expr::compute_type_checked(type_environment& env) const noexcept {
+    const semantic_check_res rhs_res = m_rhs->get_type_checked(env);
+
+    if (!rhs_res) {
+        return rhs_res;
+    }
+
+    const std::optional<std::string> invalid_negate = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
+        using T = std::decay_t<decltype(rhs_type)>;
+
+        if constexpr (!std::is_arithmetic_v<T>) {
+            return "cannot negate non-arithemtic type " + type_to_declaration_string(rhs_type);
+        } else {
+            return std::nullopt;
+        }
+    }, *rhs_res);
+
+    if (!invalid_negate) {
+        return *rhs_res;
+    }
+    
+    return std::unexpected{semantic_check_error{*invalid_negate, this}};
+}
+
 [[nodiscard]] llvm_res negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {

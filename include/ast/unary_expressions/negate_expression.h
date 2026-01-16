@@ -11,7 +11,10 @@ namespace dconstruct::ast {
 
         [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const noexcept final;
 
-        [[nodiscard]] expr_uptr simplify() const final;       
+        [[nodiscard]] expr_uptr simplify() const final;
+        
+        [[nodiscard]] full_type compute_type_unchecked(const type_environment&) const noexcept override;
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment&) const noexcept override;
 
     };
 }
