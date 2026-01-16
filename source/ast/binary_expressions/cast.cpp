@@ -4,28 +4,56 @@
 namespace dconstruct::ast {
 
 void cast_expr::pseudo_c(std::ostream& os) const {
-    os << '(' << type_to_declaration_string(m_type) << ')' << *m_rhs; 
+    os << '(' << type_to_declaration_string(m_castType) << ')' << *m_rhs; 
 }
 
 void cast_expr::pseudo_py(std::ostream& os) const {
-    os << type_to_declaration_string(m_type) << '(' << *m_rhs << ')';
+    os << type_to_declaration_string(m_castType) << '(' << *m_rhs << ')';
 }
 
 void cast_expr::pseudo_racket(std::ostream& os) const {
-	os << type_to_declaration_string(m_type) << "-> " << *m_rhs;  
+	os << type_to_declaration_string(m_castType) << "-> " << *m_rhs;  
 }
 
 [[nodiscard]] expr_uptr cast_expr::simplify() const {
-    return std::make_unique<cast_expr>(m_type, m_rhs->simplify());
+    return std::make_unique<cast_expr>(m_castType, m_rhs->simplify());
 }
 
 [[nodiscard]] expr_uptr cast_expr::clone() const noexcept {
-    return std::make_unique<cast_expr>(m_type, m_rhs->clone());
+    return std::make_unique<cast_expr>(m_castType, m_rhs->clone());
 }
 
-[[nodiscard]] full_type cast_expr::compute_type(const type_environment& env) const {
-    return m_type;
+[[nodiscard]] full_type cast_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+    return m_castType;
 };
+
+[[nodiscard]] semantic_check_res cast_expr::compute_type_checked(type_environment& env) const noexcept {
+    semantic_check_res expr_type = m_rhs->get_type_checked(env);
+    if (!expr_type) {
+        return expr_type;
+    }
+
+    const std::optional<std::string> invalid_cast = std::visit([](auto&& cast_type, auto&& expr_type) -> std::optional<std::string> {
+        using cast_t = std::decay_t<decltype(cast_type)>;
+        using expr_t = std::decay_t<decltype(expr_type)>;
+
+        if constexpr (std::is_same_v<cast_t, expr_t>) {
+            return std::nullopt;
+        } else if constexpr (std::is_integral_v<cast_t> && std::is_integral_v<expr_t>) {
+            return std::nullopt;
+        } else if constexpr (std::is_floating_point_v<cast_t> && std::is_floating_point_v<expr_t> || std::is_floating_point_v<expr_t> && std::is_floating_point_v<cast_t>) {
+            return std::nullopt;
+        } else {
+            return "cannot cast expression type " + type_to_declaration_string(expr_type) + " to " + type_to_declaration_string(cast_type);
+        }
+
+    }, m_castType, *expr_type);
+
+    if (!invalid_cast) {
+        return m_castType;
+    }
+    return std::unexpected{semantic_check_error{*invalid_cast, this}};
+}
 
 [[nodiscard]] bool cast_expr::equals(const expression& other) const noexcept {
     return false;

@@ -9,6 +9,7 @@ namespace dconstruct::ast {
         explicit dereference_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compiler::token{ compiler::token_type::STAR, "*" }, std::move(rhs)) {};
 
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] full_type compute_type(const type_environment&) const override;
+        [[nodiscard]] full_type compute_type_unchecked(const type_environment&) const noexcept override;
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment&) const noexcept override;
     };
 }

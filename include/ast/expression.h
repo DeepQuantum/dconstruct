@@ -32,7 +32,7 @@ namespace dconstruct::ast {
 
     struct semantic_check_error {
         std::string m_message;
-        const expression& m_expr;
+        const expression* m_expr;
     };
 
     enum class OP_KIND {
@@ -68,14 +68,25 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual const literal* as_literal() const noexcept { return nullptr; }
 
         [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
-        
-        [[nodiscard]] virtual semantic_check_res compute_type(type_environment& env) const noexcept = 0;
-        
-        [[nodiscard]] inline const full_type& get_type(type_environment& env) {
-            if (is_unknown(m_type)) {
-                m_type = compute_type(env).or_else;
+
+        [[nodiscard]] virtual full_type compute_type_unchecked(const type_environment& env) const noexcept = 0;
+        [[nodiscard]] virtual semantic_check_res compute_type_checked(type_environment& env) const noexcept = 0;
+
+        [[nodiscard]] virtual semantic_check_res get_type_checked(type_environment& env) const noexcept {
+            if (!m_type) {
+                auto type_res = compute_type_unchecked(env);
+                if (is_unknown(type_res)) {
+                    return std::unexpected{semantic_check_error{"type was unknown", this}};
+                }
             }
-            return m_type;
+            return *m_type;
+        }
+
+        [[nodiscard]] virtual ast::full_type get_type_unchecked(const type_environment& env) const noexcept {
+            if (!m_type) {
+                m_type = compute_type_unchecked(env);
+            }
+            return *m_type;
         }
 
         [[nodiscard]] u16 get_complexity() const noexcept {
@@ -92,7 +103,7 @@ namespace dconstruct::ast {
     protected:
         [[nodiscard]] virtual u16 calc_complexity() const noexcept = 0;
 
-        full_type m_type;
+        mutable std::optional<full_type> m_type;
         mutable std::optional<u16> m_complexity;
     };
 
@@ -131,8 +142,8 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
-            return full_type{ std::monostate() };
+        [[nodiscard]] inline full_type compute_type_unchecked(const type_environment& env) const noexcept override {
+            return m_rhs->compute_type_unchecked(env);
         }
 
         [[nodiscard]] inline u16 calc_complexity() const noexcept override {
@@ -160,9 +171,9 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
-            return full_type{ std::monostate() };
-        }
+        // [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
+        //     return full_type{ std::monostate() };
+        // }
 
         // for testing ! stupid and expensive.
         [[nodiscard]] inline bool equals(const expression& rhs) const noexcept final {

@@ -9,6 +9,7 @@ namespace dconstruct::ast {
         explicit bitwise_not_expr(expr_uptr&& rhs) noexcept : clonable_unary_expr(compiler::token{ compiler::token_type::TILDE, "~" }, std::move(rhs)) {};
 
         [[nodiscard]] expr_uptr simplify() const final;       
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
         [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment&) const noexcept final;
     };
 }
