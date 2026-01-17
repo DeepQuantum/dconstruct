@@ -51,6 +51,7 @@ private:
         {"null", token_type::_NULL},
         {"return", token_type::RETURN},
         {"struct", token_type::STRUCT},
+        {"enum", token_type::ENUM},
         {"true", token_type::TRUE},
         {"while", token_type::WHILE},
         {"foreach", token_type::FOREACH},
@@ -58,6 +59,7 @@ private:
         {"match", token_type::MATCH},
         {"and", token_type::AND},
         {"or", token_type::OR},
+        {"auto", token_type::AUTO},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

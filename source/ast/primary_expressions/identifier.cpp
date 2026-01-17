@@ -31,7 +31,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr identifier::clone() const {
     auto expr = std::make_unique<identifier>(m_name);
-    if (!is_unknown(m_type)) expr->set_type(m_type);
+    if (!m_type) expr->set_type(*m_type);
     return expr;
 }
 

@@ -31,6 +31,53 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_condition->get_complexity() + m_then->get_complexity() + m_else->get_complexity();
 }
 
+[[nodiscard]] full_type ternary_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+    return make_type_from_prim(primitive_kind::BOOL);
+}
+
+[[nodiscard]] semantic_check_res ternary_expr::compute_type_checked(type_environment& env) const noexcept {
+    const semantic_check_res condition_type = m_condition->get_type_checked(env);
+    
+    if (!condition_type) {
+        return condition_type;
+    }
+
+    const std::optional<std::string> invalid_condition = std::visit([](auto&& cond) -> std::optional<std::string> {
+        using cond_t = std::decay_t<decltype(cond)>;
+
+        if constexpr (is_primitive<cond_t>) {
+            if constexpr (is_arithmethic(cond)) {
+                return std::nullopt;
+            }
+            return "ternary condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+        }
+        return "ternary condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+
+    }, *condition_type);
+
+    if (invalid_condition) {
+        return std::unexpected{semantic_check_error{*invalid_condition, m_condition.get()}};
+    }
+
+    const semantic_check_res then_type = m_then->get_type_checked(env);
+
+    if (!then_type) {
+        return then_type;
+    }
+
+    const semantic_check_res else_type = m_else->get_type_checked(env);
+
+    if (!else_type) {
+        return else_type;
+    }
+
+    if (*then_type != *else_type) {
+        return std::unexpected{semantic_check_error{"else type of ternary expression " + type_to_declaration_string(*else_type) + " must equal then type " + type_to_declaration_string(*then_type), m_else.get()}};
+    }
+
+    return *then_type;
+}
+
 [[nodiscard]] expr_uptr ternary_expr::clone() const {
     return std::make_unique<ternary_expr>(m_condition->clone(), m_then->clone(), m_else->clone());
 }

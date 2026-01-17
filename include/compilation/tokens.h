@@ -28,10 +28,12 @@ namespace dconstruct::compiler {
         AND, OR,
 
         IDENTIFIER, 
+
+        AUTO,
         
         STRING, INT, DOUBLE, HEX, SID, _NULL,
 
-        ELSE, FALSE, IF, RETURN, STRUCT, TRUE, WHILE, FOR, FOREACH, MATCH,
+        ELSE, FALSE, IF, RETURN, STRUCT, ENUM, TRUE, WHILE, FOR, FOREACH, MATCH,
         
         _EOF, EMPTY
     };

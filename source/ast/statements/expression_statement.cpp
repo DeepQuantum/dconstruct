@@ -28,6 +28,18 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<expression_stmt>(m_expression->clone()); 
 }
 
+[[nodiscard]] std::vector<semantic_check_error> expression_stmt::check_semantics(type_environment& env) const noexcept {
+    semantic_check_res expr_type = m_expression->get_type_checked(env);
+
+    if (!expr_type) {
+        std::vector<semantic_check_error> res;
+        res.push_back(std::move(expr_type.error()));
+        return res;
+    }
+
+    return {};
+}
+
 VAR_OPTIMIZATION_ACTION expression_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
     env.check_action(&m_expression);
     return VAR_OPTIMIZATION_ACTION::NONE; 

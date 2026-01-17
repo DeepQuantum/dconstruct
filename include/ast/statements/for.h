@@ -23,14 +23,5 @@ namespace dconstruct::ast {
         expr_uptr m_condition;
         expr_uptr m_incr;
         stmnt_uptr m_body;
-
-        struct foreach_values {
-            stmnt_uptr array_at_declaration;
-        };
-
-        std::optional<foreach_values> m_foreachValues = std::nullopt;
-    
-    private:
-        std::tuple<const std::string&, const expression&> get_for_each_iterable() const noexcept;
     };
 }

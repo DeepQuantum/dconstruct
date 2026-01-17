@@ -72,6 +72,17 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::all_of(m_statements.begin(), m_statements.end(), [](const auto& stmnt) { return stmnt->is_dead_code(); });
 }
 
+[[nodiscard]] std::vector<semantic_check_error> block::check_semantics(type_environment& env) const noexcept {
+    std::vector<semantic_check_error> final_errors;
+    for (const auto& stmnt : m_statements) {
+        std::vector<semantic_check_error> errors = stmnt->check_semantics(env); 
+        if (!errors.empty()) {
+            final_errors.insert(final_errors.end(), errors.begin(), errors.end());
+        }
+    }
+    return final_errors;
+}
+
 VAR_OPTIMIZATION_ACTION block::var_optimization_pass(var_optimization_env& env) noexcept {
     var_optimization_env new_env{&env.m_env};
     for (auto& statement : m_statements) {
