@@ -47,6 +47,8 @@ namespace dconstruct::ast {
 
     [[nodiscard]] static full_type make_type_from_prim(const primitive_kind kind);
 
+    [[nodiscard]] static full_type get_common_type(const full_type& lhs, const full_type& rhs);
+
     struct primitive_type {
         primitive_kind m_type;
         bool operator==(const primitive_type&) const = default;
@@ -72,6 +74,8 @@ namespace dconstruct::ast {
 
         explicit function_type() noexcept : m_return{ std::make_shared<ast::full_type>(std::monostate()) } {};
         explicit function_type(ref_full_type return_type, t_arg_list args) noexcept : m_return{ std::move(return_type) }, m_arguments{args} {};
+
+        bool operator==(const function_type&) const = default;
     };
     
     struct ptr_type {
@@ -128,4 +132,29 @@ namespace dconstruct::ast {
     [[nodiscard]] std::string primitive_to_string(const primitive_value& prim);
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;
+
+    [[nodiscard]] constexpr bool is_integral(primitive_kind k) noexcept {
+        return
+            k == primitive_kind::U8  ||
+            k == primitive_kind::U16 ||
+            k == primitive_kind::U32 ||
+            k == primitive_kind::U64 ||
+            k == primitive_kind::I8  ||
+            k == primitive_kind::I16 ||
+            k == primitive_kind::I32 ||
+            k == primitive_kind::I64 ||
+            k == primitive_kind::CHAR ||
+            k == primitive_kind::BOOL;
+    }
+
+    [[nodiscard]] constexpr bool is_floating_point(primitive_kind k) noexcept {
+        return k == primitive_kind::F32 || k == primitive_kind::F64;
+    }
+
+    [[nodiscard]] constexpr bool is_arithmethic(primitive_kind k) noexcept {
+        return is_integral(k) || is_floating_point(k);
+    }
+
+    template<typename T> inline constexpr bool is_primitive = std::is_same_v<T, primitive_kind>;
+    template<typename T> inline constexpr bool is_pointer = std::is_same_v<T, ptr_type>;
 }

@@ -24,10 +24,14 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     const std::optional<std::string> invalid_logical_not = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
         using T = std::decay_t<decltype(rhs_type)>;
 
-        if constexpr (!std::is_integral_v<T>) {
-            return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
+        if constexpr (is_primitive<T>) {
+            if constexpr (is_integral(rhs_type)) {
+                return std::nullopt;
+            } else {
+                return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);
+            }
         } else {
-            return std::nullopt;
+            return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);
         }
     }, *rhs_type);
 

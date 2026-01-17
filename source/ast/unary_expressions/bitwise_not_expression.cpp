@@ -15,15 +15,18 @@ namespace dconstruct::ast {
     const std::optional<std::string> invalid_bitwise_not = std::visit([](auto&& arg) -> std::optional<std::string> {
         using T = std::decay_t<decltype(arg)>;
 
-        if constexpr (!std::is_integral_v<T>) {
+        if constexpr (is_primitive<T>) {
+            if constexpr (is_integral(arg)) {
+                return std::nullopt;
+            }
             return "cannot negate expression with non-integral type " + type_to_declaration_string(arg);
         } else {
-            return std::nullopt;
+            return "cannot negate expression with non-integral type " + type_to_declaration_string(arg);
         }
     }, *rhs_type);
 
     if (!invalid_bitwise_not) {
-        return *rhs_type; 
+        return make_type_from_prim(primitive_kind::U64);
     }
     return std::unexpected{semantic_check_error{*invalid_bitwise_not, this}};
 }

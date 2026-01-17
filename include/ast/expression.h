@@ -72,7 +72,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual full_type compute_type_unchecked(const type_environment& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(type_environment& env) const noexcept = 0;
 
-        [[nodiscard]] virtual semantic_check_res get_type_checked(type_environment& env) const noexcept {
+        [[nodiscard]] semantic_check_res get_type_checked(type_environment& env) const noexcept {
             if (!m_type) {
                 auto type_res = compute_type_unchecked(env);
                 if (is_unknown(type_res)) {
@@ -82,7 +82,7 @@ namespace dconstruct::ast {
             return *m_type;
         }
 
-        [[nodiscard]] virtual ast::full_type get_type_unchecked(const type_environment& env) const noexcept {
+        [[nodiscard]] ast::full_type get_type_unchecked(const type_environment& env) const noexcept {
             if (!m_type) {
                 m_type = compute_type_unchecked(env);
             }
@@ -156,6 +156,17 @@ namespace dconstruct::ast {
 
     struct binary_expr : public expression {
     public:
+        enum class BINARY_OP_KIND {
+            INT_INT,
+            INT_FLOAT,
+            FLOAT_INT,
+            FLOAT_FLOAT,
+            PTR_INT,
+            INT_PTR,
+        };
+
+        
+
         binary_expr(compiler::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
