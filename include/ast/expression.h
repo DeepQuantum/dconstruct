@@ -32,7 +32,7 @@ namespace dconstruct::ast {
 
     struct semantic_check_error {
         std::string m_message;
-        const expression* m_expr;
+        const ast_element* m_expr;
     };
 
     enum class OP_KIND {

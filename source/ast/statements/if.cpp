@@ -51,6 +51,47 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
     return this;
 }
 
+[[nodiscard]] std::vector<semantic_check_error> if_stmt::check_semantics(type_environment& env) const noexcept {
+    std::vector<semantic_check_error> errors;
+    
+    semantic_check_res cond_type = m_condition->get_type_checked(env);
+
+    if (!cond_type) {
+        errors.push_back(std::move(cond_type.error()));
+    }
+
+    std::optional<std::string> invalid_condition = std::visit([](auto&& cond) -> std::optional<std::string> {
+        using cond_t = std::decay_t<decltype(cond)>;
+
+        if constexpr (is_primitive<cond_t>) {
+            if constexpr (is_arithmethic(cond)) {
+                return std::nullopt;
+            }
+            return "if condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+        }
+        return "if condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+
+    }, *cond_type);
+
+    if (invalid_condition) {
+        errors.push_back(semantic_check_error{std::move(*invalid_condition), m_condition.get()});
+    } else {
+        std::vector<semantic_check_error> then_errors = m_then->check_semantics(env);
+        if (!then_errors.empty()) {
+            errors.insert(errors.end(), then_errors.begin(), then_errors.end());
+        }
+        if (m_else) {
+            std::vector<semantic_check_error> else_errors = m_else->check_semantics(env);
+            if (!else_errors.empty()) {
+                errors.insert(errors.end(), else_errors.begin(), else_errors.end());
+            }
+        }
+    }
+
+    return errors;
+}
+
+
 VAR_OPTIMIZATION_ACTION if_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
     env.check_action(&m_condition);
     env.check_action(&m_then);

@@ -16,6 +16,7 @@ namespace dconstruct::ast {
         virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
         [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
+        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(type_environment& env) const noexcept = 0;
     };
 
     [[nodiscard]] inline bool operator==(const statement& lhs, const statement& rhs) noexcept {

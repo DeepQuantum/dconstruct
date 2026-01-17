@@ -17,7 +17,8 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
+        [[nodiscard]] full_type compute_type_unchecked(const type_environment& env) const noexcept final;
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
