@@ -107,4 +107,17 @@ namespace dconstruct::ast {
 }
 
 
+[[nodiscard]] full_type get_common_type(const full_type& lhs, const full_type& rhs) {
+    return std::visit([](auto&& lhs, auto&& rhs) -> full_type {
+        using lhs_t = std::decay_t<decltype(lhs)>;
+        using rhs_t = std::decay_t<decltype(rhs)>;
+
+        if constexpr (std::is_same_v<lhs_t, rhs_t>) {
+            return lhs;
+        } else if constexpr (!is_primitive(lhs) || )
+    },
+    lhs, rhs);
+}
+
+
 }

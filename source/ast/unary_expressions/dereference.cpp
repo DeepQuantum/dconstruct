@@ -24,7 +24,7 @@ namespace dconstruct::ast {
         const std::optional<std::string> invalid_dereference = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
             using T = std::decay_t<decltype(rhs_type)>;
 
-            if constexpr (std::is_same_v<T, ptr_type>) {
+            if constexpr (is_pointer<T>) {
                 if (is_unknown(*rhs_type.m_pointedAt)) {
                     return "cannot dereference void pointer";
                 } else{ 

@@ -8,7 +8,7 @@ namespace dconstruct::ast {
         using clonable_binary_expr::clonable_binary_expr;
 
         explicit mul_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : clonable_binary_expr(compiler::token{ compiler::token_type::STAR, "*" }, std::move(lhs), std::move(rhs)) {};
-
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
 
         [[nodiscard]] expr_uptr simplify() const final;
     };

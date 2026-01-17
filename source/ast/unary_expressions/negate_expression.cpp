@@ -41,15 +41,19 @@ namespace dconstruct::ast {
     const std::optional<std::string> invalid_negate = std::visit([](auto&& rhs_type) -> std::optional<std::string> {
         using T = std::decay_t<decltype(rhs_type)>;
 
-        if constexpr (!std::is_arithmetic_v<T>) {
-            return "cannot negate non-arithemtic type " + type_to_declaration_string(rhs_type);
+        if constexpr (is_primitive<T>) {
+            if constexpr (is_arithmethic(rhs_type)) {
+                return std::nullopt;
+            } else {
+                return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
+            }
         } else {
-            return std::nullopt;
+            return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
         }
     }, *rhs_res);
 
     if (!invalid_negate) {
-        return *rhs_res;
+        return make_type_from_prim(primitive_kind::U64);
     }
     
     return std::unexpected{semantic_check_error{*invalid_negate, this}};
