@@ -9,7 +9,8 @@ namespace dconstruct::ast {
 
 [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept {
     return std::visit([](auto&& arg) -> std::optional<primitive_number> {
-        if constexpr (std::is_arithmetic_v<std::decay_t<decltype(arg)>>) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_arithmetic_v<T>) {
             return static_cast<primitive_number>(arg);
         } else {
             return std::nullopt;
@@ -107,17 +108,17 @@ namespace dconstruct::ast {
 }
 
 
-[[nodiscard]] full_type get_common_type(const full_type& lhs, const full_type& rhs) {
-    return std::visit([](auto&& lhs, auto&& rhs) -> full_type {
-        using lhs_t = std::decay_t<decltype(lhs)>;
-        using rhs_t = std::decay_t<decltype(rhs)>;
+// [[nodiscard]] full_type get_common_type(const full_type& lhs, const full_type& rhs) {
+//     return std::visit([](auto&& lhs, auto&& rhs) -> full_type {
+//         using lhs_t = std::decay_t<decltype(lhs)>;
+//         using rhs_t = std::decay_t<decltype(rhs)>;
 
-        if constexpr (std::is_same_v<lhs_t, rhs_t>) {
-            return lhs;
-        } else if constexpr (!is_primitive(lhs) || )
-    },
-    lhs, rhs);
-}
+//         if constexpr (std::is_same_v<lhs_t, rhs_t>) {
+//             return lhs;
+//         } else if constexpr (!is_primitive(lhs) || )
+//     },
+//     lhs, rhs);
+// }
 
 
 }

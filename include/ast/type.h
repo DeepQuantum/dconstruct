@@ -26,9 +26,12 @@ namespace dconstruct::ast {
         BOOL,
         STRING,
         SID,
+        SID32,
         NULLPTR,
         NOTHING
     };
+
+    static_assert(std::variant_size_v<primitive_value> == static_cast<u64>(primitive_kind::NOTHING) + 1);
 
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;
 
@@ -157,4 +160,35 @@ namespace dconstruct::ast {
 
     template<typename T> inline constexpr bool is_primitive = std::is_same_v<T, primitive_kind>;
     template<typename T> inline constexpr bool is_pointer = std::is_same_v<T, ptr_type>;
+
+    // template<typename>
+    // struct primitive_kind_of;
+
+    // template<> struct primitive_kind_of<u8>  : std::integral_constant<primitive_kind, primitive_kind::U8> {};
+    // template<> struct primitive_kind_of<u16> : std::integral_constant<primitive_kind, primitive_kind::U16> {};
+    // template<> struct primitive_kind_of<u32> : std::integral_constant<primitive_kind, primitive_kind::U32> {};
+    // template<> struct primitive_kind_of<u64> : std::integral_constant<primitive_kind, primitive_kind::U64> {};
+
+    // template<> struct primitive_kind_of<i8>  : std::integral_constant<primitive_kind, primitive_kind::I8> {};
+    // template<> struct primitive_kind_of<i16> : std::integral_constant<primitive_kind, primitive_kind::I16> {};
+    // template<> struct primitive_kind_of<i32> : std::integral_constant<primitive_kind, primitive_kind::I32> {};
+    // template<> struct primitive_kind_of<i64> : std::integral_constant<primitive_kind, primitive_kind::I64> {};
+
+    // template<> struct primitive_kind_of<f32> : std::integral_constant<primitive_kind, primitive_kind::F32> {};
+    // template<> struct primitive_kind_of<f64> : std::integral_constant<primitive_kind, primitive_kind::F64> {};
+
+    // template<> struct primitive_kind_of<char> : std::integral_constant<primitive_kind, primitive_kind::CHAR> {};
+    // template<> struct primitive_kind_of<bool> : std::integral_constant<primitive_kind, primitive_kind::BOOL> {};
+
+    // template<> struct primitive_kind_of<std::string> : std::integral_constant<primitive_kind, primitive_kind::STRING> {};
+    // template<> struct primitive_kind_of<sid64_literal> : std::integral_constant<primitive_kind, primitive_kind::SID> {};
+
+    // template<> struct primitive_kind_of<std::nullptr_t> : std::integral_constant<primitive_kind, primitive_kind::NULLPTR> {};
+    // template<> struct primitive_kind_of<std::monostate> : std::integral_constant<primitive_kind, primitive_kind::NOTHING> {};
+
+    // template<typename T>
+    // inline constexpr primitive_kind type_to_primitive_kind()
+    // {
+    //     return primitive_kind_of<std::decay_t<T>>::value;
+    // }
 }
