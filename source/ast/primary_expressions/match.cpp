@@ -131,6 +131,114 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
     return std::make_unique<match_expr>(std::move(new_conditions), std::move(new_matchpairs), m_default->clone());
 }
 
+[[nodiscard]] full_type match_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+    for (const auto& [patterns, expression] : m_matchPairs) {
+        if (const auto type_res = expression->get_type_unchecked(env); !is_unknown(type_res)) {
+            return type_res;
+        }
+    }
+    return std::monostate();
+}
+
+[[nodiscard]] semantic_check_res match_expr::compute_type_checked(type_environment& env) const noexcept {
+    for (auto cond_it = m_conditions.begin(); cond_it < m_conditions.end() - 1; ++cond_it) {
+        const expr_uptr& condition = *cond_it;
+
+        const semantic_check_res cond_type = condition->compute_type_checked(env);
+
+        if (!cond_type) {
+            return cond_type;
+        }
+
+        const std::optional<std::string> invalid_type = std::visit([](auto&& cond) -> std::optional<std::string> {
+            using T = std::decay_t<decltype(cond)>;
+
+            if constexpr (is_primitive<T>) {
+                if constexpr (is_arithmethic(cond)) {
+                    return std::nullopt;
+                }
+                return "precondition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+            }
+            return "precondition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+        }, *cond_type);
+
+        if (invalid_type) {
+            return std::unexpected{semantic_check_error{*invalid_type, condition.get()}};
+        }
+    }
+
+    const semantic_check_res match_var_type = m_conditions.back()->get_type_checked(env);
+
+    if (!match_var_type) {
+        return match_var_type;
+    } 
+
+    const std::optional<std::string> invalid_match_var_type = std::visit([](auto&& arg) -> std::optional<std::string> {
+        using match_var_t = std::decay_t<decltype(arg)>;
+
+        if constexpr (is_primitive<match_var_t>) {
+            if constexpr (arg.m_kind != primitive_kind::NULLPTR && arg.m_kind != primitive_kind::NOTHING) {
+                return std::nullopt;
+            }
+            return "match variable must be of complete primitive type, but got " + type_to_declaration_string(arg);
+        }
+        return "match variable must be of primitive type, but got " + type_to_declaration_string(arg);
+    }, *match_var_type);
+
+    if (invalid_match_var_type) {
+        return std::unexpected{semantic_check_error{*invalid_match_var_type, m_conditions.back().get()}};
+    }
+
+    bool result_type_set;
+    full_type result_type = std::monostate();
+
+    for (const auto& [patterns, expression] : m_matchPairs) {
+        for (const auto& pattern : patterns) {
+            const semantic_check_res pattern_type = pattern->get_type_checked(env);
+
+            if (!pattern_type) {
+                return pattern_type;
+            }
+
+            if (*pattern_type != *match_var_type) {
+                return std::unexpected{semantic_check_error{
+                    "pattern type must equal match expression type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
+                }};
+            }
+        }
+
+        const semantic_check_res expr_type = expression->get_type_checked(env);
+        
+        if (!expr_type) {
+            return expr_type;
+        }
+
+        if (!result_type_set) {
+            result_type = *expr_type;
+            result_type_set = true;
+        } else if (*expr_type != result_type) {
+            return std::unexpected{semantic_check_error{"result type must equal first result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*expr_type), expression.get()}};
+        }
+    }
+
+    assert(result_type_set && !std::holds_alternative<std::monostate>(result_type));
+
+    const semantic_check_res default_type = m_default->get_type_checked(env);
+
+    if (!default_type) {
+        return default_type;
+    }
+
+    if (*default_type != result_type) {
+        return std::unexpected{semantic_check_error{
+            "default expression type must equal first result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*default_type), m_default.get()
+        }};
+    }
+
+    return result_type;
+}
+
+
 VAR_OPTIMIZATION_ACTION match_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     for (auto& condition : m_conditions) {
         env.check_action(&condition);

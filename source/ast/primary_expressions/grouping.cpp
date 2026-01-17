@@ -31,12 +31,16 @@ void grouping::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr grouping::clone() const {
     auto expr = std::make_unique<grouping>(m_expr != nullptr ? m_expr->clone() : nullptr);
-    if (!is_unknown(m_type)) expr->set_type(m_type);
+    if (!m_type) expr->set_type(*m_type);
     return expr;
 }
 
-[[nodiscard]] full_type grouping::compute_type(const type_environment& env) const {
-    return m_expr->compute_type(env);
+[[nodiscard]] full_type grouping::compute_type_unchecked(const type_environment& env) const noexcept {
+    return m_expr->compute_type_unchecked(env);
+}
+
+[[nodiscard]] semantic_check_res grouping::compute_type_checked(type_environment& env) const noexcept {
+    return m_expr->get_type_checked(env);
 }
 
 [[nodiscard]] u16 grouping::calc_complexity() const noexcept {

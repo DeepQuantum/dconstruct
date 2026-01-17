@@ -37,11 +37,11 @@ void literal::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr literal::clone() const {
     auto expr = std::make_unique<literal>(m_value);
-    if (!is_unknown(m_type)) expr->set_type(m_type);
+    if (m_type) expr->set_type(*m_type);
     return expr;
 }
 
-[[nodiscard]] full_type literal::compute_type(const type_environment& env) const noexcept {
+[[nodiscard]] full_type literal::compute_type_unchecked(const type_environment& env) const noexcept {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
@@ -72,9 +72,21 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return MATCH_OPTIMIZATION_ACTION::LITERAL;
 }
 
-[[nodiscard]] std::optional<semantic_check_error> literal::check_semantics(type_environment& env) const noexcept {
-    return std::nullopt;
+[[nodiscard]] semantic_check_res literal::compute_type_checked(type_environment& env) const noexcept {
+    const std::optional<full_type> res_type = std::visit([](auto&& lit) -> std::optional<full_type> {
+        using T = std::decay_t<decltype(lit)>;
+        
+        if constexpr (is_primitive<T>) {
+            return kind_from_primitive_value(lit);
+        } 
+        return std::nullopt;
+    }, m_value);
+
+    assert(res_type && "res_type was empty, probably because it wasn't a primitive or a primitive kind coulnd't be created. type: ");
+
+    return *res_type;
 }
+
 
 
 [[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {

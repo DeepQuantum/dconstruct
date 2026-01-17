@@ -32,7 +32,7 @@ namespace dconstruct::ast {
                 return make_type_from_prim(primitive_kind::U64);
             }
             return std::unexpected{"cannot multiply integral type " + type_to_declaration_string(lhs_type) + " with non-integral type " + type_to_declaration_string(rhs_type)};
-        } else if constexpr(is_floating_point<lhs_t>) {
+        } else if constexpr(is_floating_point(lhs_type)) {
             if constexpr (is_floating_point(rhs_type)) {
                 return make_type_from_prim(primitive_kind::F32);
             }

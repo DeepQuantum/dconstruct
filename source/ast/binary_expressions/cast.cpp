@@ -33,16 +33,21 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
         return expr_type;
     }
 
+    if (m_castType == *expr_type) {
+        return m_castType;
+    }
+
     const std::optional<std::string> invalid_cast = std::visit([](auto&& cast_type, auto&& expr_type) -> std::optional<std::string> {
         using cast_t = std::decay_t<decltype(cast_type)>;
         using expr_t = std::decay_t<decltype(expr_type)>;
 
-        if constexpr (std::is_same_v<cast_t, expr_t>) {
+        if constexpr (is_pointer<cast_t> && is_pointer<expr_t>) {
             return std::nullopt;
-        } else if constexpr (std::is_integral_v<cast_t> && std::is_integral_v<expr_t>) {
-            return std::nullopt;
-        } else if constexpr (std::is_floating_point_v<cast_t> && std::is_floating_point_v<expr_t> || std::is_floating_point_v<expr_t> && std::is_floating_point_v<cast_t>) {
-            return std::nullopt;
+        } else if constexpr (is_primitive<cast_t> && is_primitive<expr_t>) {
+            if (is_arithmethic<cast_t> && is_arithmetic<expr_t>) {
+                return std::nullopt;
+            }
+            return "cannot cast between primitive types " + type_to_declaration_string(lhs_type) + " and " + type_to_declaration_string(rhs_type);
         } else {
             return "cannot cast expression type " + type_to_declaration_string(expr_type) + " to " + type_to_declaration_string(cast_type);
         }

@@ -10,6 +10,7 @@ namespace dconstruct::ast {
 
 
     [[nodiscard]] expr_uptr simplify() const final;
+    [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
 
     };
 }

@@ -33,13 +33,14 @@ namespace dconstruct::ast {
         using lhs_t = std::decay_t<decltype(lhs_type)>;
         using rhs_t = std::decay_t<decltype(rhs_type)>;
         
-        if constexpr (is_primitive<lhs_t> && is_primitive<rhs_t>) {
-            if constexpr (is_integral(lhs_type) && is_integral(rhs_type)) {
-                return std::nullopt;
-            } else if constexpr (is_floating_point(lhs_type) && is_floating_point(rhs_type)) {
-                return std::nullopt;
-            }
-            return "cannot compare left hand side type " + type_to_declaration_string(lhs_type) + " with right and side type " + type_to_declaration_string(rhs_type);
+        if constexpr (!is_primitive<lhs_t>) {
+            return "cannot compare non-primitive left hand side type " + type_to_declaration_string(lhs_type);
+        } else if constexpr (!is_primitive<rhs_t>) {
+            return "cannot compare non-primitive right hand side type " + type_to_declaration_string(lhs_type);
+        } else if constexpr (is_integral(lhs_type) && is_integral(rhs_type)) {
+            return std::nullopt;
+        } else if constexpr (is_floating_point(lhs_type) && is_floating_point(rhs_type)) {
+            return std::nullopt;
         } else { 
             return "cannot compare left hand side type " + type_to_declaration_string(lhs_type) + " with right and side type " + type_to_declaration_string(rhs_type);
         }
