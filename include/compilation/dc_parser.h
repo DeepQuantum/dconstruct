@@ -79,6 +79,8 @@ namespace dconstruct::compiler {
         [[nodiscard]] expr_uptr make_primary();
         [[nodiscard]] expr_uptr make_literal();
         [[nodiscard]] expr_uptr make_match();
+        [[nodiscard]] expr_uptr make_call();
+        [[nodiscard]] expr_uptr finish_call(expr_uptr&& expr);
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
     };
 }

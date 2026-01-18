@@ -46,7 +46,7 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
         using cond_t = std::decay_t<decltype(cond)>;
 
         if constexpr (is_primitive<cond_t>) {
-            if constexpr (is_arithmethic(cond)) {
+            if (is_arithmetic(cond.m_type)) {
                 return std::nullopt;
             }
             return "ternary condition must be of arithmetic type, but got " + type_to_declaration_string(cond);

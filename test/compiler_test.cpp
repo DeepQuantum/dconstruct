@@ -751,10 +751,11 @@ namespace dconstruct::testing {
             )
         );
 
-        EXPECT_EQ(expected_if, *dynamic_cast<ast::if_stmt*>(statements[0].get()));
+        const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements[0].get());
+        EXPECT_EQ(expected_if, rhs);
 
         ast::type_environment type_env{};
-        const auto errors = expected_if.check_semantics(type_env);
+        const auto errors = statements[0]->check_semantics(type_env);
 
         EXPECT_EQ(errors.size(), 0);
     }

@@ -517,7 +517,37 @@ const token* Parser::consume(const token_type type, const std::string& message) 
             }
         }
     }
-    return make_primary();
+    return make_call();
+}
+
+[[nodiscard]] expr_uptr Parser::make_call() {
+    expr_uptr expr = make_primary();
+
+    while (true) {
+        if (match({token_type::LEFT_PAREN})) {
+            expr = finish_call(std::move(expr));
+        } else {
+            break;
+        }
+    }
+
+    return expr;
+}
+
+[[nodiscard]] expr_uptr Parser::finish_call(expr_uptr&& callee) {
+    std::vector<expr_uptr> args;
+
+    if (!check(token_type::RIGHT_PAREN)) {
+        do {
+            args.push_back(make_expression());
+        } while (match({token_type::COMMA}));
+    }
+
+    if (const token* t = consume({token_type::RIGHT_PAREN}, "expcected ')' at end of function call")) {
+        return std::make_unique<ast::call_expr>(*t, std::move(callee), std::move(args));
+    }
+
+    return nullptr;
 }
 
 [[nodiscard]] expr_uptr Parser::make_match() {

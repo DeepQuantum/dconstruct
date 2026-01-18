@@ -42,7 +42,7 @@ namespace dconstruct::ast {
         using T = std::decay_t<decltype(rhs_type)>;
 
         if constexpr (is_primitive<T>) {
-            if constexpr (is_arithmethic(rhs_type)) {
+            if (is_arithmetic(rhs_type.m_type)) {
                 return std::nullopt;
             } else {
                 return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);

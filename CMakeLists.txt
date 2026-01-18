@@ -158,6 +158,8 @@ else()
     message("Not applying MSVC")
 endif()
 
+
+
 target_link_libraries(dconstruct_cli PRIVATE dconstruct)
 
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
@@ -169,6 +171,24 @@ add_custom_command(
     "${SOURCE_DIR}/main_cli.cpp"
     COMMENT "Generating build info header by running buildinfo.py with compiler version"
 )
+
+
+target_compile_options(dconstruct PRIVATE 
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
+target_compile_options(dconstruct_cli PRIVATE 
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct_cli PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
 
 add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 

@@ -39,7 +39,7 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
     if (rhs_ptr == nullptr) {
         return false;
     }
-    return m_condition == rhs_ptr->m_condition && m_then == rhs_ptr->m_then && m_else == rhs_ptr->m_then;
+    return m_condition == rhs_ptr->m_condition && m_then == rhs_ptr->m_then && m_else ? (m_else == rhs_ptr->m_else) : !rhs_ptr->m_else;
 }
 
 [[nodiscard]] std::unique_ptr<statement> if_stmt::clone() const noexcept {
@@ -64,7 +64,7 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
         using cond_t = std::decay_t<decltype(cond)>;
 
         if constexpr (is_primitive<cond_t>) {
-            if constexpr (is_arithmethic(cond)) {
+            if (is_arithmetic(cond.m_type)) {
                 return std::nullopt;
             }
             return "if condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
