@@ -34,7 +34,11 @@ namespace dconstruct::ast {
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_shift.value_or(std::unexpected{semantic_check_error{valid_shift.error(), this}});
+    if (!valid_shift) {
+        return std::unexpected{semantic_check_error{valid_shift.error(), this}};
+    }
+
+    return *valid_shift;
 }
 
 

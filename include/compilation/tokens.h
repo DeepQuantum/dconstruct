@@ -31,7 +31,7 @@ namespace dconstruct::compiler {
 
         AUTO,
         
-        STRING, INT, DOUBLE, HEX, SID, _NULL,
+        STRING, INT, DOUBLE, HEX, SID_NUM, SID, _NULL,
 
         ELSE, FALSE, IF, RETURN, STRUCT, ENUM, TRUE, WHILE, FOR, FOREACH, MATCH,
         

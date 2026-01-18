@@ -14,7 +14,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] std::unique_ptr<expression> clone() const final {
             auto expr = std::make_unique<impl_unary_expr>(m_operator, m_rhs != nullptr ? m_rhs->clone() : nullptr);
-            if (!is_unknown(m_type)) expr->set_type(m_type);
+            if (m_type) expr->set_type(*m_type);
             return expr;
         }
 

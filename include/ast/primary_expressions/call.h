@@ -14,7 +14,8 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
+        [[nodiscard]] full_type compute_type_unchecked(const type_environment& env) const noexcept final { return std::monostate(); }
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final { return std::monostate(); }
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
 

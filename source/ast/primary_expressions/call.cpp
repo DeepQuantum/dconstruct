@@ -80,7 +80,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         args.push_back(arg->clone());
     }
     auto expr = std::make_unique<call_expr>(m_token, m_callee->clone(), std::move(args));
-    if (!is_unknown(m_type)) expr->set_type(m_type);
+    if (m_type) expr->set_type(*m_type);
     return expr;
 }
 
@@ -93,9 +93,6 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return m_callee == rhs_ptr->m_callee && m_arguments == rhs_ptr->m_arguments;
 }
 
-[[nodiscard]] full_type call_expr::compute_type(const type_environment& env) const {
-    return std::monostate();
-};
 
 [[nodiscard]] u16 call_expr::calc_complexity() const noexcept {
     u16 res = 1;

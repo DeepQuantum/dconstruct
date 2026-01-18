@@ -724,4 +724,38 @@ namespace dconstruct::testing {
 
         EXPECT_EQ(expected, statements);
     }
+
+    TEST(COMPILER, Semantics1) {
+        const std::string code = "if (1) { 2 / 1; }";
+        const auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 1);
+
+        std::vector<stmnt_uptr> block;
+        block.push_back(
+            std::make_unique<ast::expression_stmt>(
+                std::make_unique<ast::div_expr>(
+                    compiler::token(compiler::token_type::SLASH, "/", 0, 1),
+                    std::make_unique<ast::literal>(2),
+                    std::make_unique<ast::literal>(1)
+                )
+            )
+        );
+
+        ast::if_stmt expected_if(
+            std::make_unique<ast::literal>(1),
+            std::make_unique<ast::block>(
+                std::move(block)
+            )
+        );
+
+        EXPECT_EQ(expected_if, *dynamic_cast<ast::if_stmt*>(statements[0].get()));
+
+        ast::type_environment type_env{};
+        const auto errors = expected_if.check_semantics(type_env);
+
+        EXPECT_EQ(errors.size(), 0);
+    }
 }

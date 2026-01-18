@@ -44,10 +44,10 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
         if constexpr (is_pointer<cast_t> && is_pointer<expr_t>) {
             return std::nullopt;
         } else if constexpr (is_primitive<cast_t> && is_primitive<expr_t>) {
-            if (is_arithmethic<cast_t> && is_arithmetic<expr_t>) {
+            if (is_arithmetic(cast_type) && is_arithmetic(expr_type)) {
                 return std::nullopt;
             }
-            return "cannot cast between primitive types " + type_to_declaration_string(lhs_type) + " and " + type_to_declaration_string(rhs_type);
+            return "cannot cast between primitive types " + type_to_declaration_string(cast_type) + " and " + type_to_declaration_string(expr_type);
         } else {
             return "cannot cast expression type " + type_to_declaration_string(expr_type) + " to " + type_to_declaration_string(cast_type);
         }

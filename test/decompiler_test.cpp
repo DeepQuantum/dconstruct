@@ -111,7 +111,7 @@ namespace dconstruct::testing {
         ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
         const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
-        const auto& rhs = actual.m_expr->compute_type(env);
+        const auto& rhs = actual.m_expr->get_type_unchecked(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 
@@ -131,7 +131,7 @@ namespace dconstruct::testing {
         ASSERT_EQ(func.m_body.m_statements.size(), 1);
 
         const auto& actual = *static_cast<const ast::return_stmt*>(func.m_body.m_statements.front().get());
-        const auto& rhs = actual.m_expr->compute_type(env);
+        const auto& rhs = actual.m_expr->get_type_unchecked(env);
 
         ASSERT_FALSE(std::holds_alternative<std::monostate>(rhs));
 

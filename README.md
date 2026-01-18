@@ -454,11 +454,8 @@ After this, your .dcpl code should look something like this:
 The decompiler is currently not 100% complete and therefore in an "experimental" state. If you get warnings during the decompilation, don't worry as these functions are currently not supported, but will hopefully be in the future. Along with these, there are more known issues at the moment:
 
 - single-expression functions with heavy short-circuiting (particularly those within structs) are not implemented yet. I've started work on the algorithm for these but I don't know how long it will take to finish, although this is high on the list of priorities
-- every function call is immediately emitted into a variable. this is a temporary workaround because ND's compiler unfortunately emits many garbage instructions that break the logic i use to detect when function values are _truly_ needed, so right now I have to assume that they all are.
 - certain types are incorrect, particularly argument types
-- empty if blocks in if/else statements can cause weird indentation. this is again not always my fault, as there are certain branches that actually don't do any real work, which is difficult to detect.
-- nested loops are somtimes broken
-- function pointers are sometimes emitted instead of the function call
+- empty if blocks in if/else statements can cause weird indentation. this is again not always my fault, as there are certain branches that actually don't do any real work, which is difficult to detect
 
 Along with these, there are some issues that will probably not be fixed:
 
@@ -468,7 +465,6 @@ Along with these, there are some issues that will probably not be fixed:
 # Planned features
 
 - a complete Racket and Python output format
-- built-in pattern optimizations, such as for-each loops instead of `begin-foreach()` and `end-foreach()` function calls.
 
 # Special Thanks
 
