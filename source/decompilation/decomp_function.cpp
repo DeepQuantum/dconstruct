@@ -58,10 +58,10 @@ template<bool is_64_bit>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::set_binary_types(expr_uptr& lhs, expr_uptr& rhs) const noexcept {
-    const auto& lhs_type = lhs->get_type(m_env);
-    const auto& rhs_type = rhs->get_type(m_env);
-    const bool lhs_unknown = ast::is_unknown(lhs_type);
-    const bool rhs_unknown = ast::is_unknown(rhs_type);
+    const auto& lhs_type = lhs->get_type_unchecked(m_env);
+    const auto& rhs_type = rhs->get_type_unchecked(m_env);
+    const bool lhs_unknown = is_unknown(lhs_type);
+    const bool rhs_unknown = is_unknown(rhs_type);
 
     if (lhs_unknown == rhs_unknown) {
         return;
@@ -422,8 +422,8 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
         bits &= bits - 1;
         auto new_var = std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(m_registersToVars[reg].top()->clone().release()) };
         load_expression_into_existing_var(reg, std::move(new_var));
-        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
-            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+        if (!is_unknown(m_transformableExpressions[reg]->get_type_unchecked(m_env))) {
+            regs_to_type[reg] = m_transformableExpressions[reg]->get_type_unchecked(m_env);
         }
     }
     m_blockStack.pop();
@@ -635,8 +635,8 @@ void decomp_function<is_64_bit>::emit_branch(ast::block &else_block, const node_
             throw std::runtime_error("error: register_to_vars is empty");
         }
         load_expression_into_existing_var(reg, m_registersToVars[reg].top()->copy());
-        if (!is_unknown(m_transformableExpressions[reg]->get_type(m_env))) {
-            regs_to_type[reg] = m_transformableExpressions[reg]->get_type(m_env);
+        if (!is_unknown(m_transformableExpressions[reg]->get_type_unchecked(m_env))) {
+            regs_to_type[reg] = m_transformableExpressions[reg]->get_type_unchecked(m_env);
         }
     }
     m_blockStack.pop();
@@ -648,7 +648,7 @@ void decomp_function<is_64_bit>::load_expression_into_new_var(const reg_idx dst)
     auto& expr = m_transformableExpressions[dst];
     auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var()});
     const std::string name = id->m_name.m_lexeme;
-    const ast::full_type type = expr->get_type(m_env);
+    const ast::full_type type = expr->get_type_unchecked(m_env);
 
     auto var_declaration = std::make_unique<ast::variable_declaration>(type, name, std::move(expr));
 
@@ -666,7 +666,7 @@ void decomp_function<is_64_bit>::load_expression_into_existing_var(const reg_idx
     if (expr->identifier_name_equals(var->m_name.m_lexeme)) {
         return;
     }
-    const auto type_temp = expr->get_type(m_env);
+    const auto type_temp = expr->get_type_unchecked(m_env);
     auto assign_expr = std::make_unique<ast::assign_expr>(var->clone(), std::move(expr));
 
     auto assign_statement = std::make_unique<ast::expression_stmt>(std::move(assign_expr));
@@ -691,7 +691,7 @@ template<bool is_64_bit>
 [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function<is_64_bit>::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
-    const auto& callee_type = callee->get_type(m_env);
+    const auto& callee_type = callee->get_type_unchecked(m_env);
     if (!std::holds_alternative<ast::function_type>(callee_type)) {
         throw std::runtime_error("error: trying to call non-function");
     }
@@ -737,7 +737,7 @@ template<bool is_64_bit>
         throw std::runtime_error("error: empty expression at " + std::to_string(src));
     }
     expr_uptr condition = m_transformableExpressions[src]->clone();
-    if (std::holds_alternative<ast::ptr_type>(condition->get_type(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type(m_env))) {
+    if (std::holds_alternative<ast::ptr_type>(condition->get_type_unchecked(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type_unchecked(m_env))) {
         condition = std::make_unique<ast::compare_expr>(compiler::token{ compiler::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
     }
     return condition;
@@ -918,7 +918,7 @@ template<bool is_64_bit>
 
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::insert_return(const reg_idx dest) {
-    *m_functionDefinition.m_type.m_return = m_transformableExpressions[dest]->get_type(m_env);
+    *m_functionDefinition.m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 

@@ -180,14 +180,6 @@ namespace dconstruct::dcompiler {
 
         using track = std::vector<const ast::function_definition*>;
 
-        // using tracks = std::map<std::string, track>;
-
-        // using blocks = std::map<std::string, tracks>;
-
-        // using states = std::map<std::string, blocks>;
-
-        // states m_states;
-
         using tracks = std::vector<std::pair<std::string, track>>;
 
         using blocks = std::vector<std::pair<std::string, tracks>>;
@@ -198,7 +190,9 @@ namespace dconstruct::dcompiler {
 
         std::vector<const ast::function_definition*> m_nonStateScriptFuncs;
 
-        state_script_functions(const std::vector<ast::function_definition>& funcs) noexcept {
+        const BinaryFile<is_64_bit>* m_binFile = nullptr;
+
+        state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile<is_64_bit>* binary_file = nullptr) noexcept : m_binFile(binary_file) {
             for (const auto& func : funcs) {
                 if (std::holds_alternative<std::string>(func.m_name)) {
                     m_nonStateScriptFuncs.push_back(&func);
@@ -243,7 +237,11 @@ namespace dconstruct::dcompiler {
                 return;
             }
 
+            assert(m_binFile->m_dcscript != nullptr);
+
             os << "statescript {\n" << ast::indent_more;
+
+            emit_script_metadata(os);
 
             for (const auto& [state_name, blocks] : m_states) {
                 os << ast::indent <<  "state " << state_name << " {\n";
@@ -269,6 +267,152 @@ namespace dconstruct::dcompiler {
             }
 
             os << "}\n" << ast::indent_less;
+        }
+
+
+        void emit_script_metadata(std::ostream &os) const
+        {
+            if (m_binFile->m_dcscript->m_pSsOptions && m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray) {
+                const SymbolArray *array = m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray;
+                os << ast::indent << "options {\n" << ast::indent_more;
+                for (i32 i = 0; i < array->m_numEntries; ++i){
+                    os << ast::indent << m_binFile->m_sidCache.at(array->m_pSymbols[i]) << "\n";
+                }
+                os << ast::indent_less << ast::indent << "}\n";
+            }
+            
+            os << std::fixed << std::setprecision(2);
+
+            if (m_binFile->m_dcscript->m_pSsDeclList) {
+                os << ast::indent << "declarations {\n" << ast::indent_more;
+                for (i32 i = 0; i < m_binFile->m_dcscript->m_pSsDeclList->m_numDeclarations; ++i) {
+                    const SsDeclaration *decl = m_binFile->m_dcscript->m_pSsDeclList->m_pDeclarations + i;
+                    const bool is_nullptr = decl->m_pDeclValue == nullptr;
+                    if (decl->m_isVar) {
+                        os << ast::indent;
+                        std::string decl_name = m_binFile->m_sidCache.at(decl->m_declId);
+                        switch (decl->m_declTypeId) {
+                            case SID("boolean"): {
+                                os << "bool " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << std::boolalpha << *reinterpret_cast<const bool*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("vector"): {
+                                const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);  
+                                os << "vector " << decl_name << " = " ;
+                                if (!is_nullptr)
+                                os << "(" 
+                                    << val[0] << ", "
+                                    << val[1] << ", "
+                                    << val[2] << ", "
+                                    << val[3] << ")";
+                                else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("quat"): {
+                                const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);  
+                                os << "quaternion " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                os
+                                    << "(" << val[0] << ", " 
+                                    << val[1] << ", "
+                                    << val[2] << ", "
+                                    << val[3] << ")";
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("float"): {
+                                os << "f32 " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("string"): {
+                                os << "string " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const char**>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("symbol"): {
+                                os << "symbol " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << m_binFile->m_sidCache.at(*reinterpret_cast<const sid64*>(decl->m_pDeclValue));
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("int32"): {
+                                os << "i32 " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const i32*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("uint64"): {
+                                os << "u64 " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const u64*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("timer"): {
+                                os << "timer " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("point"): {
+                                const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                                os << "point " << decl_name << " = "; 
+                                if (!is_nullptr) {
+                                    os << "(" << val[0] << ", "
+                                       << "(" << val[1] << ", "
+                                       << "(" << val[2] << ")";
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            case SID("bound-frame"): {
+                                os << "bound-frame " << decl_name << " = ";
+                                if (!is_nullptr) {
+                                    os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                                } else {
+                                    os << "nullptr";
+                                }
+                                break;
+                            }
+                            default: {
+                                os << "u64? " << decl_name << " = ???";
+                            }
+                        }
+                        os << "\n";
+                    }
+                }
+                os << ast::indent_less << ast::indent << "}\n";
+            }
         }
     };
 

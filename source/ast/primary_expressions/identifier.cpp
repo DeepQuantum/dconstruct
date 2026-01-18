@@ -31,15 +31,10 @@ void identifier::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr identifier::clone() const {
     auto expr = std::make_unique<identifier>(m_name);
-    if (!m_type) expr->set_type(*m_type);
+    if (m_type) expr->set_type(*m_type);
     return expr;
 }
 
-[[nodiscard]] full_type identifier::compute_type(const type_environment& env) const {
-    if (auto opt = env.lookup(m_name.m_lexeme))
-        return *opt;
-    return std::monostate();
-}
 
 [[nodiscard]] u16 identifier::calc_complexity() const noexcept {
     return 1;
@@ -53,15 +48,6 @@ void identifier::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
     return name == m_name.m_lexeme;
-}
-
-[[nodiscard]] std::optional<semantic_check_error> identifier::check_semantics(type_environment& env) const noexcept {
-    std::optional<semantic_check_error> res;
-    if (env.lookup(m_name.m_lexeme)) {
-        res = std::nullopt;
-    } else {
-        res.emplace(("unknown variable " + m_name.m_lexeme), *this);
-    }
 }
 
 VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {

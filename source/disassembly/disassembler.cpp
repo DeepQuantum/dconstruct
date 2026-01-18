@@ -265,6 +265,7 @@ void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr,
 
     switch (struct_ptr->typeID) {
         case SID("state-script"): {
+            m_currentFile->m_dcscript = reinterpret_cast<const StateScript*>(&struct_ptr->m_data);
             insert_state_script(reinterpret_cast<const StateScript*>(&struct_ptr->m_data), indent + m_options.m_indentPerLevel);
             break;
         }
@@ -326,7 +327,7 @@ void Disassembler<is_64_bit>::insert_variable(const SsDeclaration *var, const u3
     bool is_nullptr = var->m_pDeclValue == nullptr;
 
 
-    insert_span_indent("%*s[0x%06X] ",  indent, get_offset(var));
+    insert_span_indent("%*s[0x%06X] ", indent, var->m_pDeclValue ? get_offset(var->m_pDeclValue) : get_offset(var));
     insert_span_fmt("%-8s ", lookup(var->m_declTypeId));
     insert_span_fmt("%-20s = ", lookup(var->m_declId));
 
@@ -462,8 +463,9 @@ void Disassembler<is_64_bit>::insert_state_script(const StateScript *stateScript
 
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
-        insert_span("OPTIONS: ", indent);
+        insert_span("OPTIONS: \n", indent);
         for (i32 i = 0; i < s_array->m_numEntries; ++i) {
+            insert_span_indent("%*s[0x%06X] ", indent + m_options.m_indentPerLevel, get_offset(s_array->m_pSymbols + i));
             insert_span(lookup(s_array->m_pSymbols[i]), indent + m_options.m_indentPerLevel);
             insert_span("\n");
         }

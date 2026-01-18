@@ -17,7 +17,7 @@ namespace dconstruct::ast {
                 m_lhs ? m_lhs->clone() : nullptr,
                 m_rhs ? m_rhs->clone() : nullptr
             );
-            if (!is_unknown(m_type)) expr->set_type(m_type);
+            if (m_type) expr->set_type(*m_type);
             return expr;
         }
 

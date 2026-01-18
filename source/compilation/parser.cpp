@@ -480,7 +480,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] expr_uptr Parser::make_unary() {
-    if (match({token_type::BANG, token_type::MINUS})) {
+    if (match({token_type::BANG, token_type::PLUS, token_type::MINUS, token_type::TILDE, token_type::PLUS_PLUS, token_type::MINUS_MINUS, token_type::STAR, token_type::AMPERSAND})) {
         const token& op = previous();
         expr_uptr right = make_unary();
         if (!right) {
@@ -489,6 +489,27 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         switch (op.m_type) {
             case token_type::BANG: {
                 return std::make_unique<ast::logical_not_expr>(op, std::move(right));
+            }
+            case token_type::PLUS: {
+                return right;
+            }
+            case token_type::MINUS: {
+                return std::make_unique<ast::negate_expr>(op, std::move(right));
+            }
+            case token_type::TILDE: {
+                return std::make_unique<ast::bitwise_not_expr>(op, std::move(right));
+            }
+            case token_type::PLUS_PLUS: {
+                return std::make_unique<ast::increment_expression>(op, std::move(right));
+            }
+            case token_type::MINUS_MINUS: {
+                //return std::make_unique<ast::decrement_expression>(op, std::move(right));
+            }
+            case token_type::STAR: {
+                return std::make_unique<ast::dereference_expr>(op, std::move(right));
+            }
+            case token_type::AMPERSAND: {
+                //return std::make_unique<ast::address_of_expr>(op, std::move(right));
             }
             default: {
                 m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
@@ -585,7 +606,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
     } else if (match({token_type::SID})) {
-        const sid64_literal sid = { 0, std::get<std::string>(previous().m_literal) };
+        const sid64 val = std::get<sid64>(previous().m_literal);
+        const sid64_literal sid = { val, previous().m_lexeme };
         return std::make_unique<ast::literal>(sid);
     }
     return nullptr;
@@ -598,8 +620,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::identifier>(previous());
     } else if (match({token_type::MATCH})) {
         return make_match();
-    }
-    if (match({token_type::LEFT_PAREN})) {
+    } else if (match({token_type::LEFT_PAREN})) {
         std::unique_ptr expr = make_expression();
         if(!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
             return nullptr;

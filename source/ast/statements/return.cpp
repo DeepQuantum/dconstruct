@@ -14,7 +14,7 @@ void return_stmt::pseudo_py(std::ostream& os) const {
     if (m_expr) {
         os << "return " << *m_expr << '\n';
     } else {
-        os << "return;";
+        os << "return;\n";
     }
 }
 

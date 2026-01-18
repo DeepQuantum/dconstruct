@@ -107,7 +107,7 @@ static void decomp_file(
                 }
             }
         }
-        dconstruct::dcompiler::state_script_functions<> output_functions{functions};
+        dconstruct::dcompiler::state_script_functions<is_64_bit> output_functions{functions, &file};
         output_functions.to_string(out);
     }
 }

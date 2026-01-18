@@ -31,7 +31,7 @@ void grouping::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] expr_uptr grouping::clone() const {
     auto expr = std::make_unique<grouping>(m_expr != nullptr ? m_expr->clone() : nullptr);
-    if (!m_type) expr->set_type(*m_type);
+    if (m_type) expr->set_type(*m_type);
     return expr;
 }
 

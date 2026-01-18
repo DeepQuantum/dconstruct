@@ -28,8 +28,8 @@ namespace dconstruct::ast {
             return "cannot bitwise-or non-primitive type " + type_to_declaration_string(lhs_type);
         } else if constexpr (!is_primitive<rhs_t>) {
             return "cannot bitwise-or non-primitive type " + type_to_declaration_string(rhs_type);
-        } else if constexpr (is_integral(lhs_type))) {
-            if constexpr (is_integral(rhs_type))) {
+        } else if constexpr (is_integral(lhs_type)) {
+            if constexpr (is_integral(rhs_type)) {
                 return std::nullopt;
             }
             return "cannot bitwise-or right hand side non-integral type " + type_to_declaration_string(rhs_type);

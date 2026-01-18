@@ -18,12 +18,12 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept override;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type(const type_environment& env) const final;
+        [[nodiscard]] full_type compute_type_unchecked(const type_environment& env) const noexcept final { return std::monostate(); }
+        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final { return std::monostate(); }
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
         [[nodiscard]] bool identifier_name_equals(const std::string& name) const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept override { return true; }
-        [[nodiscard]] std::optional<semantic_check_error> check_semantics(type_environment& env) const noexcept final;
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;

@@ -42,7 +42,11 @@ namespace dconstruct::ast {
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_mul.value_or(std::unexpected{semantic_check_error{valid_mul.error(), this}});
+    if (!valid_mul) {
+        return std::unexpected{semantic_check_error{valid_mul.error(), this}};
+    }
+
+    return *valid_mul;
 }
 
 }

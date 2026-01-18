@@ -199,14 +199,24 @@ namespace dconstruct::ast {
             return 1 + m_lhs->get_complexity() + m_rhs->get_complexity();
         }
 
+        [[nodiscard]] inline full_type compute_type_unchecked(const type_environment& env) const noexcept override {
+            const full_type lhs_type = m_lhs->get_type_unchecked(env);
+            const full_type rhs_type = m_rhs->get_type_unchecked(env);
+
+            if (is_unknown(lhs_type) && is_unknown(rhs_type)) {
+                return std::monostate();
+            } else if (is_unknown(lhs_type)) {
+                return rhs_type;
+            } else {
+                return rhs_type;
+            }
+        }
+
         compiler::token m_operator;
         std::unique_ptr<expression> m_lhs;
         std::unique_ptr<expression> m_rhs;
         OP_KIND m_opkind;
     };
-
-
-    
 
     template <std::derived_from<expression> T>
     [[nodiscard]] std::unique_ptr<T> clone_cast(const std::unique_ptr<T>& expr) noexcept {

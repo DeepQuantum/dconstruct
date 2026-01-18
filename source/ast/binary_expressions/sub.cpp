@@ -25,8 +25,8 @@ namespace dconstruct::ast {
 
         if constexpr (!is_primitive<lhs_t>) {
             return std::unexpected{"cannot subtract non-primitive type " + type_to_declaration_string(lhs_type)};
-        } else if constexpr (!is_primitive<subtract>) {
-            return std::unexpected{"cannot add non-primitive type " + type_to_declaration_string(rhs_type)};
+        } else if constexpr (!is_primitive<rhs_t>) {
+            return std::unexpected{"cannot subtract non-primitive type " + type_to_declaration_string(rhs_type)};
         } else if constexpr (is_integral(lhs_type)) {
             if constexpr (is_integral(rhs_type)) {
                 return make_type_from_prim(primitive_kind::U64);
@@ -49,7 +49,11 @@ namespace dconstruct::ast {
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_sub.value_or(std::unexpected{semantic_check_error{valid_sub.error(), this}});
+    if (!valid_sub) {
+        return std::unexpected{semantic_check_error{valid_sub.error(), this}};
+    }
+
+    return *valid_sub;
 }
 
 }

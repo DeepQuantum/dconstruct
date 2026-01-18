@@ -43,7 +43,11 @@ namespace dconstruct::ast {
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_div.value_or(std::unexpected{semantic_check_error{valid_div.error(), this}});
+    if (!valid_div) {
+        return std::unexpected{semantic_check_error{valid_div.error(), this}};
+    }
+
+    return *valid_div;
 }
 
 }

@@ -43,7 +43,11 @@ namespace dconstruct::ast {
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_mod.value_or(std::unexpected{semantic_check_error{valid_mod.error(), this}});
+    if (!valid_mod) {
+        return std::unexpected{semantic_check_error{valid_mod.error(), this}};
+    }
+
+    return *valid_mod;
 }
 
 }

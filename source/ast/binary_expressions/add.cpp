@@ -66,7 +66,10 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         }
     }, *lhs_type, *rhs_type);
 
-    return valid_add.value_or(std::unexpected{semantic_check_error{valid_add.error(), this}});
+    if (!valid_add) {
+        return std::unexpected{semantic_check_error{valid_add.error(), this}};
+    }
+    return *valid_add;
 }
 
 [[nodiscard]] llvm_res add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const {
