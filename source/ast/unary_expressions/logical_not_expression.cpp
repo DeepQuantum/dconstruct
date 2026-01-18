@@ -25,7 +25,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
         using T = std::decay_t<decltype(rhs_type)>;
 
         if constexpr (is_primitive<T>) {
-            if constexpr (is_integral(rhs_type)) {
+            if (is_integral(rhs_type.m_type)) {
                 return std::nullopt;
             } else {
                 return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);

@@ -74,9 +74,11 @@ namespace dconstruct::ast {
 
         [[nodiscard]] semantic_check_res get_type_checked(type_environment& env) const noexcept {
             if (!m_type) {
-                auto type_res = compute_type_unchecked(env);
-                if (is_unknown(type_res)) {
-                    return std::unexpected{semantic_check_error{"type was unknown", this}};
+                auto type_res = compute_type_checked(env);
+                if (!type_res) {
+                    return type_res;
+                } else {
+                    m_type = *type_res;
                 }
             }
             return *m_type;

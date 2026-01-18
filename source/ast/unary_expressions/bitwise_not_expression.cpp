@@ -16,7 +16,7 @@ namespace dconstruct::ast {
         using T = std::decay_t<decltype(arg)>;
 
         if constexpr (is_primitive<T>) {
-            if constexpr (is_integral(arg)) {
+            if (is_integral(arg.m_type)) {
                 return std::nullopt;
             }
             return "cannot negate expression with non-integral type " + type_to_declaration_string(arg);

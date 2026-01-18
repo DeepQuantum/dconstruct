@@ -73,21 +73,12 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 [[nodiscard]] semantic_check_res literal::compute_type_checked(type_environment& env) const noexcept {
-    const std::optional<full_type> res_type = std::visit([](auto&& lit) -> std::optional<full_type> {
-        using T = std::decay_t<decltype(lit)>;
-        
-        if constexpr (is_primitive<T>) {
-            return kind_from_primitive_value(lit);
-        } 
-        return std::nullopt;
-    }, m_value);
-
-    assert(res_type && "res_type was empty, probably because it wasn't a primitive or a primitive kind coulnd't be created. type: ");
-
-    return *res_type;
+    const primitive_kind type = kind_from_primitive_value(m_value);
+    if (type == primitive_kind::NOTHING) {
+        return std::unexpected{semantic_check_error{"literal has unknown type", this}};
+    }
+    return primitive_type{type};
 }
-
-
 
 [[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
    return std::visit([&](auto&& lit) -> llvm_res {

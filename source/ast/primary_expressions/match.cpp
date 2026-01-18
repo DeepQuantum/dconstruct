@@ -154,7 +154,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
             using T = std::decay_t<decltype(cond)>;
 
             if constexpr (is_primitive<T>) {
-                if constexpr (is_arithmethic(cond)) {
+                if (is_arithmetic(cond.m_type)) {
                     return std::nullopt;
                 }
                 return "precondition must be of arithmetic type, but got " + type_to_declaration_string(cond);
@@ -177,7 +177,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
         using match_var_t = std::decay_t<decltype(arg)>;
 
         if constexpr (is_primitive<match_var_t>) {
-            if constexpr (arg.m_kind != primitive_kind::NULLPTR && arg.m_kind != primitive_kind::NOTHING) {
+            if (arg.m_type != primitive_kind::NULLPTR && arg.m_type != primitive_kind::NOTHING) {
                 return std::nullopt;
             }
             return "match variable must be of complete primitive type, but got " + type_to_declaration_string(arg);
@@ -189,7 +189,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
         return std::unexpected{semantic_check_error{*invalid_match_var_type, m_conditions.back().get()}};
     }
 
-    bool result_type_set;
+    bool result_type_set = false;
     full_type result_type = std::monostate();
 
     for (const auto& [patterns, expression] : m_matchPairs) {

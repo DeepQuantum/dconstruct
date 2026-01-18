@@ -44,15 +44,15 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
             return std::unexpected{"cannot add non-primitive type " + type_to_declaration_string(lhs_type)};
         } else if constexpr (!is_primitive<rhs_t>) {
             return std::unexpected{"cannot add non-primitive type " + type_to_declaration_string(rhs_type)};
-        } else if constexpr (is_integral(lhs_type)) {
-            if constexpr (is_integral(rhs_type)) {
+        } else if (is_integral(lhs_type.m_type)) {
+            if (is_integral(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::U64);
             } else if constexpr (is_pointer<rhs_t>) {
                 return rhs_type;
             }
             return std::unexpected{"cannot add integral type " + type_to_declaration_string(lhs_type) + " to non-integral type " + type_to_declaration_string(rhs_type)};
-        } else if constexpr (is_floating_point(lhs_type)) {
-            if constexpr (is_floating_point(rhs_type)) {
+        } else if (is_floating_point(lhs_type.m_type)) {
+            if (is_floating_point(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::F32);
             }
             return std::unexpected{"cannot add floating point type " + type_to_declaration_string(lhs_type) + " to non-floating point type " + type_to_declaration_string(rhs_type)};
