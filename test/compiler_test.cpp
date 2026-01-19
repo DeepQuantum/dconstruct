@@ -725,6 +725,34 @@ namespace dconstruct::testing {
         EXPECT_EQ(expected, statements);
     }
 
+    TEST(COMPILER, Call1) {
+        const std::string code = "doSomething(1, 2 + 3);";
+        const auto [tokens, lex_errors] = get_tokens(code);
+        const auto [statements, parse_errors] = get_statements(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(statements.size(), 1);
+
+        std::vector<expr_uptr> args;
+        args.push_back(std::make_unique<ast::literal>(1));
+        args.push_back(std::make_unique<ast::add_expr>(
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            std::make_unique<ast::literal>(2),
+            std::make_unique<ast::literal>(3)
+        ));
+
+        std::vector<stmnt_uptr> expected;
+        expected.push_back(std::make_unique<ast::expression_stmt>(
+            std::make_unique<ast::call_expr>(
+                compiler::token(compiler::token_type::IDENTIFIER, "doSomething", 0, 1),
+                std::make_unique<ast::identifier>("doSomething"),
+                std::move(args)
+            )
+        ));
+
+        EXPECT_EQ(expected, statements);
+    }
+
     TEST(COMPILER, Semantics1) {
         const std::string code = "if (1) { 2 / 1; }";
         const auto [tokens, lex_errors] = get_tokens(code);
@@ -758,5 +786,43 @@ namespace dconstruct::testing {
         const auto errors = statements[0]->check_semantics(type_env);
 
         EXPECT_EQ(errors.size(), 0);
+    }
+
+    TEST(COMPILER, LexError1) {
+        const std::string chars = "@";
+        const auto [tokens, errors] = get_tokens(chars);
+
+        const std::vector<compiler::token> expected = {
+            compiler::token(compiler::token_type::_EOF, "", 0, 1),
+        };
+
+        const std::vector<compiler::lexing_error> expected_errors = {
+            compiler::lexing_error(1, "invalid token '@'")
+        };
+
+        EXPECT_EQ(tokens, expected);
+        EXPECT_EQ(expected_errors, errors);
+    }
+
+    TEST(COMPILER, ParseError1) {
+        const std::vector<compiler::token> tokens = {
+            compiler::token(compiler::token_type::INT, "1", 1, 1),
+            compiler::token(compiler::token_type::PLUS, "+", 0, 1),
+            compiler::token(compiler::token_type::_EOF, ";", 0, 1)
+        };
+
+        const auto [statements, errors] = get_statements(tokens);
+
+        ASSERT_EQ(errors.size(), 1);
+
+        const std::vector<stmnt_uptr> expected_statements = {
+        };
+
+        const std::vector<compiler::parsing_error> expected_errors = {
+            compiler::parsing_error(compiler::token(compiler::token_type::PLUS, "+", 0, 1), "expected expression after '+'")
+        };
+
+        EXPECT_EQ(statements, expected_statements);
+        EXPECT_EQ(expected_errors, errors);
     }
 }

@@ -37,7 +37,7 @@ using istr_line = u16;
 constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
 constexpr reg_idx MAX_REGISTER = 128;
 
-using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX>;
+using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
 using node_set = std::vector<bool>;
 
 #define SID(str) (dconstruct::ToStringId64(str))
