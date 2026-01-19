@@ -86,6 +86,7 @@ namespace dconstruct::ast {
     struct ptr_type {
         ref_full_type m_pointedAt;
         explicit ptr_type() noexcept : m_pointedAt{std::make_shared<ast::full_type>(std::monostate())}{};
+        explicit ptr_type(ref_full_type&& type) noexcept : m_pointedAt{std::move(type)}{};
 
         explicit ptr_type(const ast::primitive_kind& kind) noexcept : m_pointedAt{std::make_shared<ast::full_type>(make_type_from_prim(kind))}{};
 
