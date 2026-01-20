@@ -17,10 +17,14 @@ namespace dconstruct::compiler {
     class Parser {
     public:
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
-        [[nodiscard]] std::vector<stmnt_uptr> parse();
+        [[nodiscard]] std::vector<ast::function_definition> parse();
         
         inline const std::vector<parsing_error>& get_errors() const noexcept {
             return m_errors;
+        }
+
+        inline const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept {
+            return m_knownTypes;
         }
     
     private:
@@ -47,7 +51,8 @@ namespace dconstruct::compiler {
 
         u32 m_current = 0;
 
-        void synchronize();
+        void synchronize_statements();
+        void synchronize_external_definitions();
 
         const token& advance();
         const token* consume(const token_type, const std::string&);
@@ -57,7 +62,10 @@ namespace dconstruct::compiler {
         [[nodiscard]] bool check(const token_type) const;
         [[nodiscard]] bool match(const std::initializer_list<token_type>& types);
         [[nodiscard]] std::optional<ast::full_type> make_type();
-        [[nodiscard]] std::optional<ast::full_type> peek_type() const;
+        [[nodiscard]] std::optional<ast::full_type> peek_type();
+        [[nodiscard]] std::optional<ast::function_type> make_function_type();
+        [[nodiscard]] std::optional<ast::function_type> peek_function_type();
+
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);
@@ -86,8 +94,9 @@ namespace dconstruct::compiler {
         [[nodiscard]] expr_uptr finish_call(expr_uptr&& expr);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
-        [[nodiscard]] std::variant<ast::full_type, ast::function_definition> make_external_definition();
-        [[nodiscard]] const ast::full_type& make_type_from_string(const std::string&);
+        [[nodiscard]] std::optional<ast::function_definition> make_function_definition();
+        [[nodiscard]] std::optional<std::variant<ast::full_type, ast::function_definition>> make_external_definition();
+        [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
     };
 
     [[nodiscard]] inline bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {

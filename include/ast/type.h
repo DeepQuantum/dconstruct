@@ -52,6 +52,8 @@ namespace dconstruct::ast {
 
     using ref_full_type = std::shared_ptr<full_type>;
 
+    
+
     [[nodiscard]] static full_type make_type_from_prim(const primitive_kind kind);
 
     struct primitive_type {
@@ -163,4 +165,18 @@ namespace dconstruct::ast {
 
     template<typename T> inline constexpr bool is_primitive = std::is_same_v<T, primitive_type>;
     template<typename T> inline constexpr bool is_pointer = std::is_same_v<T, ptr_type>;
+
+    [[nodiscard]] inline bool operator==(const ref_full_type& lhs, const ref_full_type& rhs) noexcept {
+        if (lhs == nullptr && rhs == nullptr) {
+            return true;
+        } else if (lhs == nullptr || rhs == nullptr) {
+            return false;
+        } else {
+            return *lhs == *rhs;
+        }
+    }
+
+    [[nodiscard]] inline bool operator!=(const ref_full_type& lhs, const ref_full_type& rhs) noexcept {
+        return !(lhs == rhs);
+    }
 }

@@ -10,10 +10,36 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    static std::pair<std::vector<stmnt_uptr>, std::vector<compiler::parsing_error>> get_statements(const std::vector<compiler::token> &tokens) {
+    static std::tuple<std::vector<ast::function_definition>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_parse_results(const std::vector<compiler::token> &tokens) {
         compiler::Parser parser{tokens};
-        return { parser.parse(), parser.get_errors() };
+        return { parser.parse(), parser.get_known_types(), parser.get_errors() };
     }
+
+    static std::pair<std::list<stmnt_uptr>, std::vector<compiler::parsing_error>> get_statements(std::vector<compiler::token> &tokens) {
+        if (tokens.back().m_type == compiler::token_type::_EOF) {
+            tokens.pop_back();
+        }
+
+        std::vector<compiler::token> function_def_tokens {
+            compiler::token(compiler::token_type::IDENTIFIER, "i32", 0, 1),
+            compiler::token(compiler::token_type::IDENTIFIER, "main", 0, 1),
+            compiler::token(compiler::token_type::LEFT_PAREN, "(", 0, 1),
+            compiler::token(compiler::token_type::RIGHT_PAREN, ")", 0, 1),
+            compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
+        };
+
+        function_def_tokens.insert(function_def_tokens.end(), tokens.begin(), tokens.end());
+
+
+        function_def_tokens.push_back(compiler::token(compiler::token_type::RIGHT_BRACE, "}", 0, 1));
+        function_def_tokens.push_back(compiler::token(compiler::token_type::_EOF, "", 0, 1));
+
+        compiler::Parser parser{function_def_tokens};
+
+        auto [functions, _, errors] = get_parse_results(function_def_tokens);
+
+        return { !functions.empty() ? std::move(functions[0].m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
+    } 
 
     TEST(COMPILER, LexerEmpty) {
         const std::string empty = "";
@@ -25,7 +51,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, WrongStatementCast) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
@@ -38,12 +64,12 @@ namespace dconstruct::testing {
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
 
-        const ast::variable_declaration* actual = dynamic_cast<const ast::variable_declaration*>(statements[0].get());
+        const ast::variable_declaration* actual = dynamic_cast<const ast::variable_declaration*>(statements.front().get());
         EXPECT_EQ(actual, nullptr);
     }
 
     TEST(COMPILER, WrongExpressionCast) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
@@ -55,7 +81,7 @@ namespace dconstruct::testing {
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
-        const ast::block* block = static_cast<const ast::block*>(statements[0].get());
+        const ast::block* block = static_cast<const ast::block*>(statements.front().get());
         const ast::expression_stmt* expr = static_cast<const ast::expression_stmt*>(block->m_statements.front().get());
         const ast::binary_expr* bin_expr = dynamic_cast<const ast::binary_expr*>(expr->m_expression.get());
 
@@ -370,7 +396,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleNumParse1) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 1, 1),
             compiler::token(compiler::token_type::_EOF, "", 0, 1) 
@@ -380,7 +406,7 @@ namespace dconstruct::testing {
         
         const ast::literal expected = ast::literal(1);
 
-        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
 
         EXPECT_EQ(statements.size(), 1);
         EXPECT_EQ(errors.size(), 0);
@@ -388,7 +414,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleNumParse2) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
             compiler::token(compiler::token_type::INT, "2", 2, 1),
@@ -398,7 +424,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
         
         const ast::add_expr expected{
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
@@ -412,7 +438,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleNumParse3) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
             compiler::token(compiler::token_type::INT, "2", 2, 1),
@@ -424,7 +450,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
         
         expr_uptr left = std::make_unique<ast::mul_expr>(
             compiler::token(compiler::token_type::STAR, "*", 0, 1),
@@ -444,7 +470,7 @@ namespace dconstruct::testing {
     }
 
     /*TEST(COMPILER, SimpleNumParseError1) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
             compiler::token(compiler::token_type::INT, "2", 2, 1),
@@ -461,7 +487,7 @@ namespace dconstruct::testing {
     }*/
 
     TEST(COMPILER, GroupNumParse) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::LEFT_PAREN, "(", 1, 1),
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
@@ -475,7 +501,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements[0].get())->m_expression;
+        const ast::expression& actual = *dynamic_cast<const ast::expression_stmt*>(statements.front().get())->m_expression;
         
         auto left = std::make_unique<ast::grouping>(std::make_unique<ast::add_expr>(
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
@@ -495,7 +521,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, VariableDeclaration0) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::IDENTIFIER, "u16", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "number", 0, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
@@ -504,7 +530,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
+        const auto& actual = *static_cast<const ast::variable_declaration*>(statements.front().get());
 
         const ast::variable_declaration expected{ast::make_type_from_prim(ast::primitive_kind::U16), "number"};
 
@@ -514,7 +540,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, VariableDeclaration1) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::IDENTIFIER, "u16", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "number", 0, 1),
             compiler::token(compiler::token_type::EQUAL, "=", 0, 1),
@@ -525,7 +551,7 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const auto& actual = *static_cast<const ast::variable_declaration*>(statements[0].get());
+        const auto& actual = *static_cast<const ast::variable_declaration*>(statements.front().get());
 
         const ast::variable_declaration expected{ast::make_type_from_prim(ast::primitive_kind::U16), "number", 2};
 
@@ -535,7 +561,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleBlock) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
@@ -545,9 +571,9 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::block& actual = *dynamic_cast<const ast::block*>(statements[0].get());
+        const ast::block& actual = *dynamic_cast<const ast::block*>(statements.front().get());
 
-        std::vector<stmnt_uptr> expected_statements{};
+        std::list<stmnt_uptr> expected_statements{};
         expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::identifier>(compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1))
         )));
@@ -560,7 +586,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, SimpleBlockError) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::LEFT_BRACE, "{", 0, 1),
             compiler::token(compiler::token_type::IDENTIFIER, "b", 0, 1),
             compiler::token(compiler::token_type::SEMICOLON, ";", 0, 1),
@@ -570,9 +596,9 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        const ast::block& actual = *dynamic_cast<const ast::block*>(statements[0].get());
+        const ast::block& actual = *dynamic_cast<const ast::block*>(statements.front().get());
 
-        std::vector<stmnt_uptr> expected_statements{};
+        std::list<stmnt_uptr> expected_statements{};
         expected_statements.push_back(std::move(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::identifier>(compiler::token(compiler::token_type::IDENTIFIER, "a", 0, 1))
         )));
@@ -587,7 +613,7 @@ namespace dconstruct::testing {
     TEST(COMPILER, Program1) {
         const std::string code = "i32 x = 0; i32 y = 1; while (x < y) { x = x + y; }";
 
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
 
         const auto [statements, parse_errors] = get_statements(tokens);
 
@@ -595,9 +621,9 @@ namespace dconstruct::testing {
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
 
-        std::vector<stmnt_uptr> expected;
+        std::list<stmnt_uptr> expected;
 
-        std::vector<stmnt_uptr> block_stmnt;
+        std::list<stmnt_uptr> block_stmnt;
 
         block_stmnt.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::assign_expr>(
@@ -628,7 +654,7 @@ namespace dconstruct::testing {
     TEST(COMPILER, OrderOfOperationsProgram) {
         const std::string code = "i32 x = 1 + 2 * 3 - 4 / 5;";
 
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
 
         const auto [statements, parse_errors] = get_statements(tokens);
 
@@ -636,7 +662,7 @@ namespace dconstruct::testing {
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
 
-        std::vector<stmnt_uptr> expected;
+        std::list<stmnt_uptr> expected;
 
         expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x",
             std::make_unique<ast::sub_expr>(
@@ -663,14 +689,14 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Foreach1) {
         const std::string code = "u32 y = 0; foreach (u32 item : iterable) { y = y + item; }";
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
         const auto [statements, parse_errors] = get_statements(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
         EXPECT_EQ(statements.size(), 2);
-        std::vector<stmnt_uptr> expected;
+        std::list<stmnt_uptr> expected;
         expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", 0));
-        std::vector<stmnt_uptr> block_stmnts;
+        std::list<stmnt_uptr> block_stmnts;
         block_stmnts.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::assign_expr>(
                 std::make_unique<ast::identifier>("y"),
@@ -691,7 +717,7 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Match1) {
         const std::string code = "return match (var_0; var_1; var_2) { 0, 1 -> \"Cool\", 2 -> \"Not cool\", else -> \"Default\" };";
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
         const auto [statements, parse_errors] = get_statements(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
@@ -713,7 +739,7 @@ namespace dconstruct::testing {
         outer.emplace_back(std::move(case1_vals), std::make_unique<ast::literal>("Cool"));
         outer.emplace_back(std::move(case2_vals), std::make_unique<ast::literal>("Not cool"));
 
-        std::vector<stmnt_uptr> expected;
+        std::list<stmnt_uptr> expected;
         expected.push_back(std::make_unique<ast::return_stmt>(
             std::make_unique<ast::match_expr>(
                 std::move(vars),
@@ -727,7 +753,7 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Call1) {
         const std::string code = "doSomething(1, 2 + 3);";
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
         const auto [statements, parse_errors] = get_statements(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
@@ -741,7 +767,7 @@ namespace dconstruct::testing {
             std::make_unique<ast::literal>(3)
         ));
 
-        std::vector<stmnt_uptr> expected;
+        std::list<stmnt_uptr> expected;
         expected.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::call_expr>(
                 compiler::token(compiler::token_type::IDENTIFIER, "doSomething", 0, 1),
@@ -755,13 +781,13 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Semantics1) {
         const std::string code = "if (1) { 2 / 1; }";
-        const auto [tokens, lex_errors] = get_tokens(code);
+        auto [tokens, lex_errors] = get_tokens(code);
         const auto [statements, parse_errors] = get_statements(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
         EXPECT_EQ(statements.size(), 1);
 
-        std::vector<stmnt_uptr> block;
+        std::list<stmnt_uptr> block;
         block.push_back(
             std::make_unique<ast::expression_stmt>(
                 std::make_unique<ast::div_expr>(
@@ -779,11 +805,11 @@ namespace dconstruct::testing {
             )
         );
 
-        const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements[0].get());
+        const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements.front().get());
         EXPECT_EQ(expected_if, rhs);
 
         ast::type_environment type_env{};
-        const auto errors = statements[0]->check_semantics(type_env);
+        const auto errors = statements.front()->check_semantics(type_env);
 
         EXPECT_EQ(errors.size(), 0);
     }
@@ -805,7 +831,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, ParseError1) {
-        const std::vector<compiler::token> tokens = {
+        std::vector<compiler::token> tokens = {
             compiler::token(compiler::token_type::INT, "1", 1, 1),
             compiler::token(compiler::token_type::PLUS, "+", 0, 1),
             compiler::token(compiler::token_type::_EOF, ";", 0, 1)
@@ -813,16 +839,58 @@ namespace dconstruct::testing {
 
         const auto [statements, errors] = get_statements(tokens);
 
-        ASSERT_EQ(errors.size(), 1);
+        ASSERT_EQ(errors.size(), 2);
 
-        const std::vector<stmnt_uptr> expected_statements = {
+        const std::list<stmnt_uptr> expected_statements = {
         };
-
-        const std::vector<compiler::parsing_error> expected_errors = {
-            compiler::parsing_error(compiler::token(compiler::token_type::PLUS, "+", 0, 1), "expected expression after '+'")
-        };
-
         EXPECT_EQ(statements, expected_statements);
-        EXPECT_EQ(expected_errors, errors);
+    }
+
+    TEST(COMPILER, ParseStructType) {
+        const std::string code = 
+        "struct Vector3 {\n"
+        "\tf32 x;\n"
+        "\tf32 y;\n"
+        "\tf32 z;\n"
+        "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(functions.size(), 0);
+        ast::struct_type expected_type;
+        expected_type.m_name = "Vector3";
+        expected_type.m_members["x"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        expected_type.m_members["y"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        expected_type.m_members["z"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
+        EXPECT_TRUE(types.contains("Vector3"));
+        EXPECT_TRUE(std::holds_alternative<ast::struct_type>(types.at("Vector3")));
+        auto type = std::get<ast::struct_type>(types.at("Vector3"));
+        EXPECT_EQ(type, expected_type);
+    }
+
+    TEST(COMPILER, ParseEnumType) {
+        const std::string code = 
+        "enum Color {\n"
+        "\tRed,\n"
+        "\tGreen,\n"
+        "\tBlue\n"
+        "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(functions.size(), 0);
+        ast::enum_type expected_type;
+        expected_type.m_name = "Color";
+        expected_type.m_enumerators.push_back("Red");
+        expected_type.m_enumerators.push_back("Green");
+        expected_type.m_enumerators.push_back("Blue");
+        EXPECT_TRUE(types.contains("Color"));
+        EXPECT_TRUE(std::holds_alternative<ast::enum_type>(types.at("Color")));
+        auto type = std::get<ast::enum_type>(types.at("Color"));
+        EXPECT_EQ(type, expected_type);
     }
 }
