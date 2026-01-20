@@ -35,3 +35,9 @@
 #include "statements/variable_declaration.h"
 #include "statements/return.h"
 #include "function_definition.h"
+
+namespace dconstruct::compiler {
+
+    using external_definition = std::variant<ast::full_type, ast::function_definition>;
+
+}

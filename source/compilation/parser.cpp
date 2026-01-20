@@ -3,7 +3,7 @@
 
 namespace dconstruct::compiler {
 
-void Parser::synchronize() {
+void Parser::synchronize_statements() {
     advance();
     while (!is_at_end()) {
         if (previous().m_type == token_type::SEMICOLON) {
@@ -11,6 +11,9 @@ void Parser::synchronize() {
         }
         switch (peek().m_type) {
             case token_type::STRUCT:
+            case token_type::ENUM:
+            case token_type::FOR:
+            case token_type::FOREACH:
             case token_type::WHILE:
             case token_type::IF:
             case token_type::RETURN: return;
@@ -18,6 +21,23 @@ void Parser::synchronize() {
         }
     }
 }
+
+void Parser::synchronize_external_definitions() {
+    advance();
+    while (!is_at_end()) {
+        if (previous().m_type == token_type::SEMICOLON) {
+            return;
+        }
+        switch (peek().m_type) {
+            case token_type::STRUCT:
+            case token_type::ENUM:
+            case token_type::IDENTIFIER:
+            case token_type::LEFT_PAREN: return;
+            default: advance();
+        }
+    }
+}
+
 
 [[nodiscard]] const token& Parser::peek() const {
     return m_tokens[m_current];
@@ -63,35 +83,53 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return false;
 }
 
-[[nodiscard]] std::optional<ast::full_type> Parser::peek_type() const {
-    if (!check(token_type::IDENTIFIER)) {
+[[nodiscard]] std::optional<ast::function_type> Parser::peek_function_type() {
+    // e.g. (u32, f32*) -> bool
+    if (!check(token_type::LEFT_PAREN)) {
         return std::nullopt;
+    }
+
+    u32 temp_current = m_current;
+    m_current = temp_current + 1;
+    std::vector<ast::full_type> param_types;
+
+    do {
+        std::optional<ast::full_type> param_type = peek_type();
+        if (!param_type) {
+            m_current = temp_current;
+            return std::nullopt;
+        }
+        param_types.push_back(*param_type); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
+    }
+    while (match({token_type::COMMA}) && !is_at_end());
+
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
+        return std::nullopt;
+    }
+
+    if (!consume(token_type::ARROW, "expected '->' after function parameter types")) {
+        return std::nullopt;
+    }
+
+    std::optional<ast::full_type> return_type = make_type();
+    if (!return_type) {
+        return std::nullopt;
+    }
+    ast::function_type func_type;
+    func_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
+    for (auto& param_type : param_types) {
+        func_type.m_arguments.emplace_back("", std::make_unique<ast::full_type>(std::move(param_type)));
+    }
+    return func_type;
+}
+
+[[nodiscard]] std::optional<ast::full_type> Parser::peek_type() {
+    if (!check(token_type::IDENTIFIER)) {
+        return peek_function_type();
     }
 
     const std::string type_name = peek().m_lexeme;
-    if (m_knownTypes.contains(type_name)) {
-        return std::nullopt;
-    }
-
-    ast::full_type res = m_knownTypes.at(type_name);
-
-    u32 i = 0;
-    while (m_tokens[m_current + i].m_type == token_type::STAR) {
-        res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
-    }
-
-    return res;
-}
-
-[[nodiscard]] std::optional<ast::full_type> Parser::make_type() {
-    const token* type_token = consume(token_type::IDENTIFIER, "expected type name");
-    if (!type_token) {
-        return std::nullopt;
-    }
-
-    const std::string type_name = type_token->m_lexeme;
-    if (m_knownTypes.contains(type_name)) {
-        m_errors.emplace_back("unknown type " + type_name);
+    if (!m_knownTypes.contains(type_name)) {
         return std::nullopt;
     }
 
@@ -104,12 +142,51 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return res;
 }
 
-[[nodiscard]] std::variant<ast::full_type, ast::function_definition> Parser::make_external_definition() {
-    if (match({token_type::STRUCT})) {
-        return *make_struct_type();
-    } else if (match({token_type::ENUM})) {
-        return *make_enum_type();
+[[nodiscard]] std::optional<ast::full_type> Parser::make_type() {
+    // when we require a type and always error out if we don't get one
+
+    if (std::optional<ast::function_type> fty = peek_function_type()) {
+        return std::move(*fty);
     }
+
+    const token* type_token = consume(token_type::IDENTIFIER, "expected type name");
+    if (!type_token) {
+        return std::nullopt;
+    }
+
+    const std::string type_name = type_token->m_lexeme;
+    if (!m_knownTypes.contains(type_name)) {
+        m_errors.emplace_back(*type_token, "unknown type " + type_name);
+        return std::nullopt;
+    }
+
+    ast::full_type res = m_knownTypes.at(type_name);
+
+    while (match({token_type::STAR}) && !is_at_end()) {
+        res = ast::ptr_type{std::make_unique<ast::full_type>(std::move(res))};
+    }
+    
+    return res;
+}
+
+[[nodiscard]] std::optional<std::variant<ast::full_type, ast::function_definition>> Parser::make_external_definition() {
+    std::optional<std::variant<ast::full_type, ast::function_definition>> res;
+    if (match({token_type::STRUCT})) {
+        res = make_struct_type();
+    } else if (match({token_type::ENUM})) {
+        res = make_enum_type();
+    } else if (std::optional<ast::function_definition> func_def = make_function_definition()) {
+        res = std::move(*func_def);
+    } else {
+        //m_errors.emplace_back(peek(), "expected struct, enum, or function definition");
+        synchronize_external_definitions();
+        return std::nullopt;
+    }
+    if (!res) {
+        synchronize_external_definitions();
+        return std::nullopt;
+    }
+    return res;
 }
 
 [[nodiscard]] std::optional<ast::struct_type> Parser::make_struct_type() {
@@ -137,6 +214,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::nullopt;
     }
 
+    m_knownTypes[struct_t.m_name] = struct_t;
+
     return struct_t;
 }
 
@@ -153,34 +232,90 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     ast::enum_type enum_t;
     enum_t.m_name = enum_name->m_lexeme;
 
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+    do {
         const token* enum_value = consume(token_type::IDENTIFIER, "expected enumeration name");
         if (!enum_value) {
             return std::nullopt;
         }
         enum_t.m_enumerators.push_back(enum_value->m_lexeme);
-    }
+    } while (match({token_type::COMMA}));
 
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after struct definition")) {
+    if (!consume(token_type::RIGHT_BRACE, "expected '}' after enum definition")) {
         return std::nullopt;
     }
+
+    m_knownTypes[enum_t.m_name] = enum_t;
 
     return enum_t;
 }
 
-[[nodiscard]] std::vector<stmnt_uptr> Parser::parse() {
-    std::vector<stmnt_uptr> statements;
-    while (!is_at_end()) {
-        stmnt_uptr declaration = make_declaration();
-        if (declaration) {
-            statements.push_back(std::move(declaration));
+[[nodiscard]] std::optional<ast::function_definition> Parser::make_function_definition() {
+    std::optional<ast::full_type> return_type = make_type();
+    if (!return_type) {
+        return std::nullopt;
+    }
+
+    const token* func_name = consume(token_type::IDENTIFIER, "expected function name");
+    if (!func_name) {
+        return std::nullopt;
+    }
+
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after function name")) {
+        return std::nullopt;
+    }
+
+    ast::function_definition func_def;
+    func_def.m_name = func_name->m_lexeme;
+    func_def.m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
+
+    while (!check(token_type::RIGHT_PAREN) && !is_at_end()) {
+        std::optional<ast::full_type> param_type = make_type();
+        if (!param_type) {
+            return std::nullopt;
+        }
+        const token* param_name = consume(token_type::IDENTIFIER, "expected parameter name");
+        if (!param_name) {
+            return std::nullopt;
+        }
+        func_def.m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
+
+        if (!check(token_type::RIGHT_PAREN)) {
+            if (!consume(token_type::COMMA, "expected ',' between parameters")) {
+                return std::nullopt;
+            }
         }
     }
-    return statements;
+
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
+        return std::nullopt;
+    }
+
+    if (!consume(token_type::LEFT_BRACE, "expected '{' before function body")) {
+        return std::nullopt;
+    }
+
+    std::unique_ptr<ast::block> body = make_block();
+    if (!body) {
+        return std::nullopt;
+    }
+    func_def.m_body = std::move(*body);
+
+    return func_def;
+}
+
+[[nodiscard]] std::vector<ast::function_definition> Parser::parse() {
+    std::vector<ast::function_definition> definitions;
+    while (!is_at_end()) {
+        auto declaration = make_external_definition();
+        if (declaration && std::holds_alternative<ast::function_definition>(*declaration)) {
+            definitions.push_back(std::move(std::get<ast::function_definition>(*declaration)));
+        }
+    }
+    return definitions;
 }
 
 
-[[nodiscard]] const ast::full_type& Parser::make_type_from_string(const std::string& type_str) {
+[[nodiscard]] ast::full_type Parser::make_type_from_string(const std::string& type_str) {
     if (!m_knownTypes.contains(type_str)) {
         return ast::full_type{std::monostate()};
     }
@@ -215,6 +350,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
+    advance();
     const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
     if (!name) {
         return nullptr;
@@ -244,7 +380,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         res = make_statement();
     }
     if (!res) {
-        synchronize();
+        synchronize_statements();
         return nullptr;
     }
     return res;
@@ -407,7 +543,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 [[nodiscard]] std::unique_ptr<ast::block> Parser::make_block() {
     std::vector<stmnt_uptr> statements{};
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        statements.push_back(make_declaration());
+        auto decl = make_declaration();
+        statements.push_back(std::move(decl));
     }
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after block.")) {
         return nullptr;
