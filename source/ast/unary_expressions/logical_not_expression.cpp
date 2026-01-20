@@ -14,7 +14,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     os << "(not " << *m_rhs << ')';
 }
 
-[[nodiscard]] semantic_check_res logical_not_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res logical_not_expr::compute_type_checked(compiler::scope& env) const noexcept {
     const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
 
     if (!rhs_type) {
@@ -66,7 +66,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     return std::make_unique<logical_not_expr>(m_operator, std::move(rhs));
 }
 
-[[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;

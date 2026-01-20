@@ -41,7 +41,7 @@ void literal::pseudo_racket(std::ostream& os) const {
     return expr;
 }
 
-[[nodiscard]] full_type literal::compute_type_unchecked(const type_environment& env) const noexcept {
+[[nodiscard]] full_type literal::compute_type_unchecked(const compiler::scope& env) const noexcept {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
@@ -72,7 +72,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return MATCH_OPTIMIZATION_ACTION::LITERAL;
 }
 
-[[nodiscard]] semantic_check_res literal::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res literal::compute_type_checked(compiler::scope& env) const noexcept {
     const primitive_kind type = kind_from_primitive_value(m_value);
     if (type == primitive_kind::NOTHING) {
         return std::unexpected{semantic_check_error{"literal has unknown type", this}};
@@ -80,7 +80,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return primitive_type{type};
 }
 
-[[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compiler::scope& env) const noexcept {
    return std::visit([&](auto&& lit) -> llvm_res {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {

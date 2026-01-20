@@ -8,7 +8,7 @@ namespace dconstruct::ast {
         using clonable_binary_expr::clonable_binary_expr;
 
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
-        [[nodiscard]] full_type compute_type_unchecked(const type_environment&) const noexcept final;
+        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final;
+        [[nodiscard]] full_type compute_type_unchecked(const compiler::scope&) const noexcept final;
     };
 }

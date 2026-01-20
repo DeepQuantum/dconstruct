@@ -35,11 +35,11 @@ void grouping::pseudo_racket(std::ostream& os) const {
     return expr;
 }
 
-[[nodiscard]] full_type grouping::compute_type_unchecked(const type_environment& env) const noexcept {
+[[nodiscard]] full_type grouping::compute_type_unchecked(const compiler::scope& env) const noexcept {
     return m_expr->compute_type_unchecked(env);
 }
 
-[[nodiscard]] semantic_check_res grouping::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res grouping::compute_type_checked(compiler::scope& env) const noexcept {
     return m_expr->get_type_checked(env);
 }
 

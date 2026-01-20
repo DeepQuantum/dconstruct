@@ -23,11 +23,11 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return std::make_unique<cast_expr>(m_castType, m_rhs->clone());
 }
 
-[[nodiscard]] full_type cast_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+[[nodiscard]] full_type cast_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
     return m_castType;
 };
 
-[[nodiscard]] semantic_check_res cast_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res cast_expr::compute_type_checked(compiler::scope& env) const noexcept {
     semantic_check_res expr_type = m_rhs->get_type_checked(env);
     if (!expr_type) {
         return expr_type;

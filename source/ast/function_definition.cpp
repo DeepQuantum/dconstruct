@@ -1,3 +1,4 @@
+#include "ast/type.h"
 #include "ast/function_definition.h"
 
 namespace dconstruct::ast {
@@ -36,6 +37,12 @@ void function_definition::pseudo_py(std::ostream& os) const {
 }
 
 void function_definition::pseudo_racket(std::ostream& os) const {
+}
+
+
+[[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compiler::scope& scope) const noexcept {
+    scope.m_returnType = m_type.m_return.get();
+    return m_body.check_semantics(scope);
 }
 
 }

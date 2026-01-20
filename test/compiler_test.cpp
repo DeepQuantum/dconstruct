@@ -808,7 +808,7 @@ namespace dconstruct::testing {
         const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements.front().get());
         EXPECT_EQ(expected_if, rhs);
 
-        ast::type_environment type_env{};
+        dconstruct::compiler::scope type_env{};
         const auto errors = statements.front()->check_semantics(type_env);
 
         EXPECT_EQ(errors.size(), 0);
@@ -892,5 +892,21 @@ namespace dconstruct::testing {
         EXPECT_TRUE(std::holds_alternative<ast::enum_type>(types.at("Color")));
         auto type = std::get<ast::enum_type>(types.at("Color"));
         EXPECT_EQ(type, expected_type);
+    }
+
+    TEST(COMPILER, FullFunc1) {
+        const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1; }";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(functions.size(), 1);
+        
+        compiler::scope scope{};
+        scope.n_namesToTypes = types;
+        const auto semantic_errors = functions[0].check_semantics(scope);
+
+        std::vector<ast::semantic_check_error> empty{};
+        EXPECT_EQ(semantic_errors, empty);
     }
 }

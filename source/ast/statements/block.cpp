@@ -72,7 +72,7 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::all_of(m_statements.begin(), m_statements.end(), [](const auto& stmnt) { return stmnt->is_dead_code(); });
 }
 
-[[nodiscard]] std::vector<semantic_check_error> block::check_semantics(type_environment& env) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> block::check_semantics(compiler::scope& env) const noexcept {
     std::vector<semantic_check_error> final_errors;
     for (const auto& stmnt : m_statements) {
         std::vector<semantic_check_error> errors = stmnt->check_semantics(env); 

@@ -36,8 +36,12 @@ inline std::ostream& operator<<(std::ostream& os, const token &t) {
 
 class Lexer {
 public:
-    Lexer(const std::string &source) : m_source(source) {};
-    const std::vector<token>& scan_tokens();
+    Lexer(std::string source) : m_source(std::move(source)) {};
+    [[nodiscard]] const std::vector<token>& scan_tokens();
+    [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results() {
+        const auto& tokens = scan_tokens();
+        return { tokens, m_errors };
+    }
 
     [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept {
         return m_errors;

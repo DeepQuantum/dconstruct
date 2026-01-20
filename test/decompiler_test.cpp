@@ -101,7 +101,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, BasicLoadImmediate) {
-        compiler::environment<ast::full_type> env{};
+        compiler::scope env{};
         std::vector<Instruction> istrs = {
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}
@@ -123,7 +123,7 @@ namespace dconstruct::testing {
     }
 
     TEST(DECOMPILER, BasicLoadImmediateString) {
-        compiler::environment<ast::full_type> env{};
+        dconstruct::compiler::scope env{};
         const auto& func = decompile_instructions_with_disassembly({
             {Opcode::LoadU16Imm, 0, 1, 0},
             {Opcode::Return, 0, 0, 0}

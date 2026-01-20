@@ -6,12 +6,12 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] full_type compare_expr::compute_type_unchecked(const type_environment&) const noexcept {
+[[nodiscard]] full_type compare_expr::compute_type_unchecked(const compiler::scope&) const noexcept {
     return make_type_from_prim(primitive_kind::BOOL);
 }
 
 
-[[nodiscard]] semantic_check_res compare_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res compare_expr::compute_type_checked(compiler::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {

@@ -6,7 +6,7 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] semantic_check_res mul_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res mul_expr::compute_type_checked(compiler::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {

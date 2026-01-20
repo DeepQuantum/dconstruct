@@ -1,12 +1,11 @@
 #pragma once
 
 #include "ast/expression.h"
-#include "ast/primary_expressions/identifier.h"
 
 namespace dconstruct::ast {
-    struct cast_expr : expression {
+    struct subscript_expr : expression {
 
-        explicit cast_expr(const ast::full_type& type, expr_uptr&& rhs) noexcept : m_castType(type), m_rhs(std::move(rhs)) { };
+        explicit subscript_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) { };
 
 
         void pseudo_c(std::ostream& os) const final;
@@ -18,14 +17,10 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const noexcept final;   
         [[nodiscard]] bool equals(const expression& other) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
-        [[nodiscard]] expr_uptr new_cast(const ast::full_type& type, const expression&) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
-        ast::full_type m_castType;
+        expr_uptr m_lhs;
         expr_uptr m_rhs;
-
-    //private:
-       // mutable std::optional<CAST_KIND> m_kind;
     };
 }

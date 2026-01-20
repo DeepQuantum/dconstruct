@@ -18,6 +18,10 @@ namespace dconstruct::compiler {
     public:
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
         [[nodiscard]] std::vector<ast::function_definition> parse();
+
+        [[nodiscard]] std::tuple<std::vector<ast::function_definition>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
+            return { parse(), get_known_types(), get_errors() };
+        }
         
         inline const std::vector<parsing_error>& get_errors() const noexcept {
             return m_errors;
@@ -63,8 +67,7 @@ namespace dconstruct::compiler {
         [[nodiscard]] bool match(const std::initializer_list<token_type>& types);
         [[nodiscard]] std::optional<ast::full_type> make_type();
         [[nodiscard]] std::optional<ast::full_type> peek_type();
-        [[nodiscard]] std::optional<ast::function_type> make_function_type();
-        [[nodiscard]] std::optional<ast::function_type> peek_function_type();
+        [[nodiscard]] std::optional<ast::function_type> match_function_type();
 
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
@@ -91,7 +94,8 @@ namespace dconstruct::compiler {
         [[nodiscard]] expr_uptr make_literal();
         [[nodiscard]] expr_uptr make_match();
         [[nodiscard]] expr_uptr make_call();
-        [[nodiscard]] expr_uptr finish_call(expr_uptr&& expr);
+        [[nodiscard]] std::unique_ptr<ast::call_expr> finish_call(expr_uptr&& expr);
+        [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
         [[nodiscard]] std::optional<ast::function_definition> make_function_definition();

@@ -148,7 +148,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const noexcept {
+[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};

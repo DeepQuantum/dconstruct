@@ -17,7 +17,7 @@ namespace dconstruct::ast {
         [[nodiscard]] bool operator!=(const parameter& rhs) const noexcept {
             return !(*this == rhs);
         }
-
+        
         ast::full_type m_type;
         std::string m_name;
     };

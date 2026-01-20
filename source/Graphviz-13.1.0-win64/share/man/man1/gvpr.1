@@ -209,7 +209,7 @@ the line is ignored.
 .PP
 A statement can be a declaration of a function, a variable
 or an array, or an executable statement. For declarations, there
-is a single scope. Array declarations have the form: 
+is a single compiler::scope. Array declarations have the form: 
 .PP
 .RS
 .nf
@@ -1167,10 +1167,10 @@ traversal requires new functions ending in "_sg", which also take
 a subgraph argument. The versions without that suffix will always
 traverse the root graph.
 .PP
-There is a single global scope, except for formal function parameters,
+There is a single global compiler::scope, except for formal function parameters,
 and even these can interfere with the type system. Also, the 
 extent of all variables is the entire life of the program. 
-It might be preferable for scope
+It might be preferable for compiler::scope
 to reflect the natural nesting of the clauses, or for the program
 to at least reset locally declared variables.
 For now, it is advisable to use distinct names for all variables.

@@ -7,7 +7,7 @@ namespace dconstruct::ast {
         return std::make_unique<ast::dereference_expr>(m_operator, m_rhs->simplify());
     }
 
-    [[nodiscard]] full_type dereference_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+    [[nodiscard]] full_type dereference_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
         const full_type rhs_type = m_rhs->compute_type_unchecked(env);
         if (std::holds_alternative<ast::ptr_type>(rhs_type)) {
             return *std::get<ast::ptr_type>(rhs_type).m_pointedAt;
@@ -15,7 +15,7 @@ namespace dconstruct::ast {
         return ast::full_type{std::monostate()};
     }
 
-    [[nodiscard]] semantic_check_res dereference_expr::compute_type_checked(type_environment& env) const noexcept {
+    [[nodiscard]] semantic_check_res dereference_expr::compute_type_checked(compiler::scope& env) const noexcept {
         const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
         if (!rhs_type) {
             return rhs_type;

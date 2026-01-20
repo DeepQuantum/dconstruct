@@ -7,7 +7,7 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] semantic_check_res bitwise_and_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res bitwise_and_expr::compute_type_checked(compiler::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {
@@ -45,7 +45,7 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_bitwise_and, this}};
 }
 
-[[nodiscard]] llvm_res bitwise_and_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const type_environment& env) const {
+[[nodiscard]] llvm_res bitwise_and_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const {
     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
     if (!lhs) {
         return lhs;

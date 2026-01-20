@@ -131,7 +131,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
     return std::make_unique<match_expr>(std::move(new_conditions), std::move(new_matchpairs), m_default->clone());
 }
 
-[[nodiscard]] full_type match_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+[[nodiscard]] full_type match_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
     for (const auto& [patterns, expression] : m_matchPairs) {
         if (const auto type_res = expression->get_type_unchecked(env); !is_unknown(type_res)) {
             return type_res;
@@ -140,7 +140,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
     return std::monostate();
 }
 
-[[nodiscard]] semantic_check_res match_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res match_expr::compute_type_checked(compiler::scope& env) const noexcept {
     for (auto cond_it = m_conditions.begin(); cond_it < m_conditions.end() - 1; ++cond_it) {
         const expr_uptr& condition = *cond_it;
 

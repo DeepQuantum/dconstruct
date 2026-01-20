@@ -31,11 +31,11 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_condition->get_complexity() + m_then->get_complexity() + m_else->get_complexity();
 }
 
-[[nodiscard]] full_type ternary_expr::compute_type_unchecked(const type_environment& env) const noexcept {
+[[nodiscard]] full_type ternary_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
     return make_type_from_prim(primitive_kind::BOOL);
 }
 
-[[nodiscard]] semantic_check_res ternary_expr::compute_type_checked(type_environment& env) const noexcept {
+[[nodiscard]] semantic_check_res ternary_expr::compute_type_checked(compiler::scope& env) const noexcept {
     const semantic_check_res condition_type = m_condition->get_type_checked(env);
     
     if (!condition_type) {
