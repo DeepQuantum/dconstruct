@@ -33,6 +33,9 @@ namespace dconstruct::ast {
     struct semantic_check_error {
         std::string m_message;
         const ast_element* m_expr;
+
+        [[nodiscard]] bool operator==(const semantic_check_error&) const noexcept = default;
+        [[nodiscard]] bool operator!=(const semantic_check_error&) const noexcept = default;
     };
 
     enum class OP_KIND {
@@ -43,7 +46,6 @@ namespace dconstruct::ast {
 
     using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
-    using type_environment = compiler::environment<ast::full_type>;
 
     struct expression : public ast_element {
         virtual ~expression() = default;
@@ -53,7 +55,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const type_environment&) const {
+        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
@@ -69,10 +71,10 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
 
-        [[nodiscard]] virtual full_type compute_type_unchecked(const type_environment& env) const noexcept = 0;
-        [[nodiscard]] virtual semantic_check_res compute_type_checked(type_environment& env) const noexcept = 0;
+        [[nodiscard]] virtual full_type compute_type_unchecked(const compiler::scope& env) const noexcept = 0;
+        [[nodiscard]] virtual semantic_check_res compute_type_checked(compiler::scope& env) const noexcept = 0;
 
-        [[nodiscard]] semantic_check_res get_type_checked(type_environment& env) const noexcept {
+        [[nodiscard]] semantic_check_res get_type_checked(compiler::scope& env) const noexcept {
             if (!m_type) {
                 auto type_res = compute_type_checked(env);
                 if (!type_res) {
@@ -84,7 +86,7 @@ namespace dconstruct::ast {
             return *m_type;
         }
 
-        [[nodiscard]] ast::full_type get_type_unchecked(const type_environment& env) const noexcept {
+        [[nodiscard]] ast::full_type get_type_unchecked(const compiler::scope& env) const noexcept {
             if (!m_type) {
                 m_type = compute_type_unchecked(env);
             }
@@ -144,7 +146,7 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type_unchecked(const type_environment& env) const noexcept override {
+        [[nodiscard]] inline full_type compute_type_unchecked(const compiler::scope& env) const noexcept override {
             return m_rhs->compute_type_unchecked(env);
         }
 
@@ -184,7 +186,7 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_lhs << ' ' << *m_rhs << ')';
         }
 
-        // [[nodiscard]] inline full_type compute_type(const type_environment&) const override {
+        // [[nodiscard]] inline full_type compute_type(const compiler::scope&) const override {
         //     return full_type{ std::monostate() };
         // }
 
@@ -201,7 +203,7 @@ namespace dconstruct::ast {
             return 1 + m_lhs->get_complexity() + m_rhs->get_complexity();
         }
 
-        [[nodiscard]] inline full_type compute_type_unchecked(const type_environment& env) const noexcept override {
+        [[nodiscard]] inline full_type compute_type_unchecked(const compiler::scope& env) const noexcept override {
             const full_type lhs_type = m_lhs->get_type_unchecked(env);
             const full_type rhs_type = m_rhs->get_type_unchecked(env);
 

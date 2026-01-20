@@ -18,7 +18,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
-        [[nodiscard]] std::vector<semantic_check_error> check_semantics(type_environment& env) const noexcept final { return {}; }
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept final { return {}; }
 
 
         stmnt_uptr m_init;

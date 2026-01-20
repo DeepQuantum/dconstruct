@@ -12,6 +12,6 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] semantic_check_res compute_type_checked(type_environment& env) const noexcept final;
+        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final;
     };
 }

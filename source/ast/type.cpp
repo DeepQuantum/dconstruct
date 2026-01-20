@@ -101,24 +101,13 @@ namespace dconstruct::ast {
             return os.str();
         } else if constexpr(std::is_same_v<T, std::monostate>) {
             return "u64?";
+        } else if constexpr(std::is_same_v<T, darray>) {
+            return "darray<" + type_to_declaration_string(*arg.m_arrType) + ">";
         } else {
             return kind_to_string(arg.m_type);
         }
     }, type);
 }
-
-
-// [[nodiscard]] full_type get_common_type(const full_type& lhs, const full_type& rhs) {
-//     return std::visit([](auto&& lhs, auto&& rhs) -> full_type {
-//         using lhs_t = std::decay_t<decltype(lhs)>;
-//         using rhs_t = std::decay_t<decltype(rhs)>;
-
-//         if constexpr (std::is_same_v<lhs_t, rhs_t>) {
-//             return lhs;
-//         } else if constexpr (!is_primitive(lhs) || )
-//     },
-//     lhs, rhs);
-// }
 
 
 }

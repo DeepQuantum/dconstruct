@@ -83,7 +83,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return false;
 }
 
-[[nodiscard]] std::optional<ast::function_type> Parser::peek_function_type() {
+[[nodiscard]] std::optional<ast::function_type> Parser::match_function_type() {
     // e.g. (u32, f32*) -> bool
     if (!check(token_type::LEFT_PAREN)) {
         return std::nullopt;
@@ -125,7 +125,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
 [[nodiscard]] std::optional<ast::full_type> Parser::peek_type() {
     if (!check(token_type::IDENTIFIER)) {
-        return peek_function_type();
+        return match_function_type();
     }
 
     const std::string type_name = peek().m_lexeme;
@@ -145,7 +145,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 [[nodiscard]] std::optional<ast::full_type> Parser::make_type() {
     // when we require a type and always error out if we don't get one
 
-    if (std::optional<ast::function_type> fty = peek_function_type()) {
+    if (std::optional<ast::function_type> fty = match_function_type()) {
         return std::move(*fty);
     }
 
@@ -794,6 +794,12 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     while (true) {
         if (match({token_type::LEFT_PAREN})) {
             expr = finish_call(std::move(expr));
+        } else if (match({token_type::PLUS_PLUS})) {
+            expr = std::make_unique<ast::increment_expression>(std::move(expr));
+        } else if (match({token_type::PLUS_PLUS})) {
+            expr = std::make_unique<ast::increment_expression>(std::move(expr));
+        } else if (match({token_type::LEFT_SQUARE})) {
+            expr = finish_subscript(std::move(expr));
         } else {
             break;
         }
@@ -802,7 +808,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return expr;
 }
 
-[[nodiscard]] expr_uptr Parser::finish_call(expr_uptr&& callee) {
+[[nodiscard]] std::unique_ptr<ast::call_expr> Parser::finish_call(expr_uptr&& callee) {
     std::vector<expr_uptr> args;
 
     if (!check(token_type::RIGHT_PAREN)) {
@@ -815,6 +821,19 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::call_expr>(*t, std::move(callee), std::move(args));
     }
 
+    return nullptr;
+}
+
+[[nodiscard]] std::unique_ptr<ast::subscript_expr> Parser::finish_subscript(expr_uptr&& subscriptee) {
+    expr_uptr index = make_expression();
+    if (!index) {
+        return nullptr;
+    }
+    
+    if (const token* t = consume({token_type::RIGHT_SQUARE}, "expected ']' at end of subscript")) {
+        return std::make_unique<ast::subscript_expr>(std::move(subscriptee), std::move(index));
+    }
+    
     return nullptr;
 }
 

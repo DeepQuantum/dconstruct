@@ -47,12 +47,12 @@ namespace dconstruct::ast {
     struct enum_type;
     struct ptr_type;
     struct function_type;
+    struct darray;
 
     using full_type = std::variant<std::monostate, primitive_type, struct_type, enum_type, ptr_type, function_type>;
 
     using ref_full_type = std::shared_ptr<full_type>;
 
-    
 
     [[nodiscard]] static full_type make_type_from_prim(const primitive_kind kind);
 
@@ -84,6 +84,16 @@ namespace dconstruct::ast {
 
         bool operator==(const function_type&) const = default;
     };
+
+    // struct darray {
+    //     ref_full_type m_arrType;
+
+    //     explicit darray(ref_full_type&& type) noexcept : m_arrType{std::move(type)}{};
+
+    //     explicit darray(const ast::primitive_kind& kind) noexcept : m_arrType{std::make_shared<ast::full_type>(make_type_from_prim(kind))}{};
+
+    //     bool operator==(const darray&) const = default;
+    // };
     
     struct ptr_type {
         ref_full_type m_pointedAt;
@@ -178,5 +188,12 @@ namespace dconstruct::ast {
 
     [[nodiscard]] inline bool operator!=(const ref_full_type& lhs, const ref_full_type& rhs) noexcept {
         return !(lhs == rhs);
+    }
+
+    [[nodiscard]] static inline const full_type* get_dominating_type(const full_type& lhs, const full_type& rhs) {
+        std::optional<full_type> res;
+        if (lhs == rhs) {
+            return &lhs;
+        }
     }
 }

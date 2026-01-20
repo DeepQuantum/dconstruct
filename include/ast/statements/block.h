@@ -32,7 +32,7 @@ namespace dconstruct::ast {
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;
         [[nodiscard]] const statement* inlineable_else_statement() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final;
-        [[nodiscard]] std::vector<semantic_check_error> check_semantics(type_environment& env) const noexcept final;
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept final;
 
         void clear_dead_statements() noexcept;
 

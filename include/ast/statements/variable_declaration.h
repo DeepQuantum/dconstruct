@@ -18,7 +18,7 @@ namespace dconstruct::ast {
         explicit variable_declaration(ast::full_type type, std::string id_name, const ast::primitive_value& init) noexcept :
         m_type(std::move(type)), m_identifier(std::move(id_name)), m_init(std::make_unique<ast::literal>(init)) {};
 
-        [[nodiscard]] std::vector<semantic_check_error> check_semantics(type_environment& env) const noexcept final { return {}; }
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept final { return {}; }
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;

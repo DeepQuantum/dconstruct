@@ -55,4 +55,9 @@ namespace dconstruct::compiler {
         environment* m_enclosing;
     };
 
+    struct scope : public environment<ast::full_type> {
+        std::unordered_map<std::string, ast::full_type> n_namesToTypes;
+        const ast::full_type* m_returnType;
+    };
+
 }

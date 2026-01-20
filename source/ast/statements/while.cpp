@@ -31,7 +31,7 @@ void while_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<while_stmt>(m_condition->clone(), m_body->clone());
 }
 
-[[nodiscard]] std::vector<semantic_check_error> while_stmt::check_semantics(type_environment& env) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> while_stmt::check_semantics(compiler::scope& env) const noexcept {
     std::vector<semantic_check_error> errors;
     
     semantic_check_res cond_type = m_condition->get_type_checked(env);
