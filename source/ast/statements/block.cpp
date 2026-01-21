@@ -224,7 +224,6 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
         }
     }
 
-    //env.m_resultDeclarations.clear();
     env.m_resultDeclaration = nullptr;
 
     clear_dead_statements();

@@ -12,7 +12,7 @@ namespace dconstruct {
     {
         sid64			    m_nameID;				///< <c>0x00</c>: StringId64 of the script name
         sid64				m_typeId;				///< <c>0x08</c>: StringId64 of the script type eg SID("state-script")
-        const void* m_entryPtr;				///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
+        const void*         m_entryPtr;				///< <c>0x10</c>: ptr to the scriptType cast this to the IdGroup || StateScript etc..
     };
 
     struct DC_Header
@@ -24,7 +24,7 @@ namespace dconstruct {
 
         uint32_t				field_10;				///< <c>0x10</c>: always 1
         int32_t					m_numEntries;			///< <c>0x14</c>: num of entries
-        Entry* m_pStartOfData;			///< <c>0x18</c>: ptr to the start of data/state script(s)
+        Entry*                  m_pStartOfData;			///< <c>0x18</c>: ptr to the start of data/state script(s)
     };
 
     

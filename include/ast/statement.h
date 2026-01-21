@@ -8,6 +8,8 @@
 
 namespace dconstruct::ast {
 
+    using emission_err = std::optional<std::string>;
+
     struct statement : public ast_element {
         virtual ~statement() = default;
         [[nodiscard]] virtual bool equals(const statement &rhs) const noexcept = 0;
@@ -17,7 +19,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
         [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual void emit_dc(compiler::function& fn, compiler::global_state& gen) const noexcept {};
+        [[nodiscard]] virtual emission_err emit_dc(compiler::function& fn, compiler::global_state& gen) const noexcept { return "not implmenented"; };
     };
 
     [[nodiscard]] inline bool operator==(const statement& lhs, const statement& rhs) noexcept {

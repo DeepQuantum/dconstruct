@@ -4,7 +4,8 @@
 #include "DCScript.h"
 #include "sidbase.h"
 #include "disassembly/instructions.h"
-#include "compilation/dc_code_generator.h"
+#include "compilation/global_state.h"
+#include "compilation/function.h"
 
 #include <memory>
 #include <string>
@@ -46,7 +47,7 @@ namespace dconstruct {
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
-        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(compiler::dc_code_generator& gen) noexcept;
+        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) noexcept;
 
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
@@ -63,9 +64,15 @@ namespace dconstruct {
         [[nodiscard]] bool is_string(const location) const noexcept;
         [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const;
 
+        static constexpr u32 MAGIC = 0x44433030;
+        static constexpr u32 VERSION = 0x1;
+
     private:
         void read_reloc_table();
         void replace_newlines_in_stringtable() noexcept;
+        
+        template<typename T>
+        void insert_into_bytestream(std::vector<std::byte>& out, const T& obj) noexcept;
     };
 
     extern template class BinaryFile<true>;

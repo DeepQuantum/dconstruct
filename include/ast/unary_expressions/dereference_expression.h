@@ -11,5 +11,6 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compiler::scope&) const noexcept override;
         [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope&) const noexcept override;
+        [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }
     };
 }

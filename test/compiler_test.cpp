@@ -909,4 +909,20 @@ namespace dconstruct::testing {
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
     }
+
+    TEST(COMPILER, Declaration1) {
+        const std::string code = "i32 main () { i32 x = 0; i32 y = 0; return x = y; }";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(functions.size(), 1);
+        
+        compiler::scope scope{};
+        scope.n_namesToTypes = types;
+        const auto semantic_errors = functions[0].check_semantics(scope);
+
+        std::vector<ast::semantic_check_error> empty{};
+        EXPECT_EQ(semantic_errors, empty);
+    }
 }
