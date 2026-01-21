@@ -895,7 +895,7 @@ namespace dconstruct::testing {
     }
 
     TEST(COMPILER, FullFunc1) {
-        const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1; }";
+        const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1.0; }";
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [functions, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
