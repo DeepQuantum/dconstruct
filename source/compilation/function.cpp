@@ -1,0 +1,34 @@
+#pragma once
+
+#include "compilation/function.h"
+
+
+namespace dconstruct::compiler {
+[[nodiscard]] std::optional<reg_idx> function::get_next_unused_register() noexcept {
+    const u64 reg_set_num = m_usedRegisters.to_ullong();
+
+    if (reg_set_num >= 0x3FFFFFFFFFFFFull) {
+        return std::nullopt;
+    }
+
+    reg_idx next_unused = std::countr_zero(reg_set_num);
+    m_usedRegisters.set(next_unused, true);
+    return next_unused;
+}
+
+void function::free_register(const reg_idx reg) noexcept {
+    m_usedRegisters.set(reg, false);
+}
+
+void function::emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1, const u8 operand2) noexcept {
+    m_instructions.emplace_back(opcode, destination, operand1, operand2);
+}
+
+
+[[nodiscard]] u8 function::add_to_symbol_table(const u64 value) noexcept {
+    const u8 current_size = m_symbolTable.size();
+    m_symbolTable.push_back(value);
+    return current_size;
+}
+
+}

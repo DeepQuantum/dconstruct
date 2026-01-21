@@ -55,6 +55,11 @@ namespace dconstruct {
     }
 
     template<bool is_64_bit>
+    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_codegen(compiler::dc_code_generator& gen) noexcept {
+        // 
+    }
+
+    template<bool is_64_bit>
     void BinaryFile<is_64_bit>::replace_newlines_in_stringtable() noexcept {
         constexpr u8 table_size_offset = 4;
         const u64 table_size = m_relocTable.num() - table_size_offset - m_strings.num();

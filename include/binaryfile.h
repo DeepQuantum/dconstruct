@@ -4,6 +4,7 @@
 #include "DCScript.h"
 #include "sidbase.h"
 #include "disassembly/instructions.h"
+#include "compilation/dc_code_generator.h"
 
 #include <memory>
 #include <string>
@@ -45,6 +46,8 @@ namespace dconstruct {
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
+        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(compiler::dc_code_generator& gen) noexcept;
+
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
         const StateScript* m_dcscript = nullptr;

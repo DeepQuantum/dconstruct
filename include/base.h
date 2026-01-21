@@ -27,22 +27,25 @@ using f32 = float;
 using f64 = double;
 using p64 = uintptr_t;
 
-using sid64_literal = std::pair<sid64, std::string>;
-using sid32_literal = std::pair<sid32, std::string>;
 
-using reg_idx = u8;
-using node_id = u16;
-using istr_line = u16;
-
-constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
-constexpr reg_idx MAX_REGISTER = 128;
-
-using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
-using node_set = std::vector<bool>;
-
-#define SID(str) (dconstruct::ToStringId64(str))
 
 namespace dconstruct {
+
+	using sid64_literal = std::pair<sid64, std::string>;
+	using sid32_literal = std::pair<sid32, std::string>;
+
+	using reg_idx = u8;
+	using node_id = u16;
+	using istr_line = u16;
+
+	constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
+	constexpr reg_idx MAX_REGISTER = 128;
+
+	using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
+	using argument_reg_set = std::bitset<MAX_REGISTER - reg_set().count()>;
+	using node_set = std::vector<bool>;
+
+	#define SID(str) (dconstruct::ToStringId64(str))
 
 	static std::string sanitize_dc_string(const std::string &dc_string) {
 		std::string sanitized;
