@@ -81,12 +81,14 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] std::optional<reg_idx> literal::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
-    return std::visit([&](auto&& lit) -> std::optional<reg_idx> {
+[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
         const std::optional<reg_idx> reg = fn.get_next_unused_register();
-
+        if (!reg) {
+            return std::unexpected{"out of registers compiling expression " + to_c_string()};
+        }
 
         if constexpr (std::is_same_v<T, std::string>) {
             const u64 placeholder_value = global.add_string_as_placeholder(std::move(lit));
@@ -97,19 +99,23 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             if (lit == 0) {
                 fn.emit_instruction(Opcode::OpBitXor, *reg, *reg);
             } else {
-                const u8 lo = lit & 0xFF;
-                const u8 hi = (lit >> 8) & 0xFF;
+                const u8 lo = static_cast<u16>(lit) & 0xFF;
+                const u8 hi = (static_cast<u16>(lit) >> 8) & 0xFF;
                 fn.emit_instruction(Opcode::LoadU16Imm, *reg, lo, hi);
             }
         } else if constexpr (std::is_same_v<T, f32>) {
             if (lit == 0) {
                 fn.emit_instruction(Opcode::OpBitXor, *reg, *reg);
-            } else {    
+            } else {
                 const u64 value = std::bit_cast<u32>(lit);
                 const u8 table_idx = fn.add_to_symbol_table(value);
                 fn.emit_instruction(Opcode::LoadStaticFloatImm, *reg, table_idx);
             }
+        } else {
+            return std::unexpected{"can't compile type " + to_c_string()};
         }
+
+        return *reg;
 
     }, m_value);
 }

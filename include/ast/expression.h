@@ -48,6 +48,7 @@ namespace dconstruct::ast {
 
     using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
+    using emission_res = std::expected<reg_idx, std::string>;
 
     struct expression : public ast_element {
         virtual ~expression() = default;
@@ -75,7 +76,9 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual full_type compute_type_unchecked(const compiler::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual std::optional<reg_idx> emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept { return 0; }
+        [[nodiscard]] virtual emission_res emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept { return 0; }
+        [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
+        [[nodiscard]] virtual emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept { return std::unexpected{"not implemented"}; }
 
         [[nodiscard]] semantic_check_res get_type_checked(compiler::scope& env) const noexcept {
             if (!m_type) {

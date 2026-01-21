@@ -16,14 +16,17 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
         [[nodiscard]] expr_uptr simplify() const final;
-        [[nodiscard]] bool equals(const expression &rhs) const noexcept override;
+        [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
         [[nodiscard]] full_type compute_type_unchecked(const compiler::scope& env) const noexcept final { return std::monostate(); }
-        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final { return std::monostate(); }
+        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<identifier> copy() const noexcept;
         [[nodiscard]] bool identifier_name_equals(const std::string& name) const noexcept final;
-        [[nodiscard]] bool is_dead_code() const noexcept override { return true; }
+        [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
+        [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }
+        [[nodiscard]] emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept final;
+        [[nodiscard]] emission_res emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept final;
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept;

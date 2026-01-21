@@ -6,6 +6,7 @@
 #include <immintrin.h>
 #include <cstring>
 #include <chrono>
+#include <algorithm>
 
 namespace dconstruct {
 
@@ -26,8 +27,7 @@ namespace dconstruct {
         scriptstream.read((char*)temp_buffer, size);
         auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
 
-        constexpr u32 magic = 0x44433030;
-        constexpr u32 version = 0x1;
+        
 
         if (size == 0) {
             return std::unexpected{path.string() + " is empty.\n"};
@@ -35,11 +35,11 @@ namespace dconstruct {
 
         auto* dcheader = reinterpret_cast<DC_Header*>(bytes.get());
 
-        if (dcheader->m_magic != magic) {
+        if (dcheader->m_magic != MAGIC) {
             return std::unexpected{"not a DC-file. magic number doesn't equal 0x44433030: " + std::to_string(*(uint32_t*)bytes.get()) + '\n'};
         }
 
-        if (dcheader->m_versionNumber != version) {
+        if (dcheader->m_versionNumber != VERSION) {
             return std::unexpected{"not a DC-file. version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(bytes.get() + 8)) + '\n'};
         }
 
@@ -55,8 +55,67 @@ namespace dconstruct {
     }
 
     template<bool is_64_bit>
-    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_codegen(compiler::dc_code_generator& gen) noexcept {
-        // 
+    template<typename T>
+    void BinaryFile<is_64_bit>::insert_into_bytestream(std::vector<std::byte>& out, const T& obj) noexcept {
+        const std::byte* p = reinterpret_cast<const std::byte*>(std::adressof(obj));
+        out.insert(out.end(), p, p + sizeof(*p));
+    }
+
+    template<bool is_64_bit>
+    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) noexcept {
+        constexpr sid64 type_name = SID("script-lambda");
+        constexpr sid64 array_sid = SID("array");
+        constexpr u8 text_size_offset = 0xC;
+        constexpr reloc_table_size_offset = 0x4;
+
+        const u64 entry_size = std::accumulate(funcs.begin(), funcs.end(), u64{0}, [](u64 acc, const compiler::function& fn) {
+            return fn.m_instructions.size() * sizeof(Instruction) + fn.m_symbolTable.size() * sizeof(u64);
+        });
+
+        const u64 stringtable_size = std::accumulate(global.m_strings.begin(), global.m_strings.end(), u64{0}, [](u64 acc, const std::string& s) {
+            return s.size() + 1;
+        });
+
+        std::vector<char> stringtable;
+        stringtable.reserve(stringtable_size);
+
+        for (const auto& s : global.m_strings) {
+            stringtable.insert(stringtable.end(), s.begin(), s.end());
+            stringtable.push_back('\0');
+        }
+
+        const u64 data_size = sizeof(DC_Header) + sizeof(array_sid) + entry_size + stringtable_size;
+        const u64 text_size = data_size - text_size_offset;
+
+        std::vector<std::byte> out;
+
+        DC_Header header {
+            MAGIC,
+            VERSION,
+            0,
+            0,
+            1,
+            funcs.size(),
+            nullptr
+        };
+
+        insert_into_bytestream(out, header);
+        insert_into_bytestream(out, array_sid);
+
+        
+
+
+        u64 text_size = 0;
+       
+        for (const auto& fn : funcs) {
+            const sid64 function_name = SID(fn.m_name);
+            text_size += 
+            Entry entry{function_name, type_name, nullptr};
+        }
+
+        for (const auto& str : global.m_strings) { 
+            stringtable.
+        }
     }
 
     template<bool is_64_bit>

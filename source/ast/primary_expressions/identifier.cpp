@@ -44,11 +44,38 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return std::unique_ptr<ast::identifier>{ static_cast<ast::identifier*>(this->clone().release()) };
 }
 
-
-
 [[nodiscard]] bool identifier::identifier_name_equals(const std::string& name) const noexcept {
     return name == m_name.m_lexeme;
 }
+
+[[nodiscard]] semantic_check_res identifier::compute_type_checked(compiler::scope& scope) const noexcept {
+    const full_type *type = scope.lookup(m_name.m_lexeme);
+    if (!type) {
+        return std::unexpected{semantic_check_error{"undeclared identifier: " + m_name.m_lexeme, this}};
+    }
+    return *type;
+}
+
+[[nodiscard]] emission_res identifier::emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept {
+    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
+
+    if (!var_location) {
+        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+    }
+
+    return *var_location;
+}
+
+[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
+
+    if (!var_location) {
+        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+    }
+
+    return *var_location;
+}
+
 
 VAR_OPTIMIZATION_ACTION identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     if (!m_name.m_lexeme.starts_with("var")) {

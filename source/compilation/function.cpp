@@ -1,13 +1,16 @@
 #pragma once
 
 #include "compilation/function.h"
+#include "ast/expression.h"
 
 
 namespace dconstruct::compiler {
 [[nodiscard]] std::optional<reg_idx> function::get_next_unused_register() noexcept {
     const u64 reg_set_num = m_usedRegisters.to_ullong();
 
-    if (reg_set_num >= 0x3FFFFFFFFFFFFull) {
+    constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
+
+    if (reg_set_num >= all_50_bits_used) {
         return std::nullopt;
     }
 
@@ -16,8 +19,10 @@ namespace dconstruct::compiler {
     return next_unused;
 }
 
-void function::free_register(const reg_idx reg) noexcept {
-    m_usedRegisters.set(reg, false);
+void function::free_register(const ast::expression& expr, const reg_idx reg) noexcept {
+    if (!expr.is_l_evaluable()) {
+        m_usedRegisters.set(reg, false);
+    }
 }
 
 void function::emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1, const u8 operand2) noexcept {

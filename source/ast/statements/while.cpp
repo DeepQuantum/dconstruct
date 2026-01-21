@@ -65,26 +65,34 @@ void while_stmt::pseudo_racket(std::ostream& os) const {
     return errors;
 }
 
-[[nodiscard]] void while_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_err while_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
 
     fn.emit_instruction(Opcode::Branch, 00, 00, 00);
 
-    u8& head_branch_lo = fn.m_instructions.back().destination;
-    u8& head_branch_hi = fn.m_instructions.back().operand2;
+    u16 head_branch_location = fn.m_instructions.size();
 
     const u16 loop_start = fn.m_instructions.size();
-    m_body->emit_dc(fn, global);
-    const u16 loop_head = fn.m_instructions.size();
-    head_branch_lo = loop_head & 0xFF;
-    head_branch_hi = (loop_head >> 8) & 0xFF;
+    const emission_err body_err = m_body->emit_dc(fn, global);
+    if (body_err) {
+        return body_err;
+    }
 
-    const std::optional<dconstruct::reg_idx> condition_reg = m_condition->emit_dc(fn, global);
+    const u16 loop_head = fn.m_instructions.size();
+    fn.m_instructions[head_branch_location].destination = loop_head & 0xFF;
+    fn.m_instructions[head_branch_location].operand2 = (loop_head >> 8) & 0xFF;
+
+    const emission_res condition_reg = m_condition->emit_dc(fn, global);
+    if (!condition_reg) {
+        return condition_reg.error();
+    }
 
     const u8 start_branch_lo = loop_start & 0xFF;
     const u8 start_branch_hi = (loop_start >> 8) & 0xFF; 
 
     fn.emit_instruction(Opcode::BranchIfNot, start_branch_lo, *condition_reg, start_branch_hi);
-    fn.free_register(*condition_reg);
+    fn.free_register(*m_condition, *condition_reg);
+
+    return std::nullopt;
 }
 
 VAR_OPTIMIZATION_ACTION while_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {

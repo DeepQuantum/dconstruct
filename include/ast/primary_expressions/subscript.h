@@ -17,6 +17,7 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr clone() const noexcept final;   
         [[nodiscard]] bool equals(const expression& other) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
+        [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 

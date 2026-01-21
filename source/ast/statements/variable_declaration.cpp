@@ -40,6 +40,33 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return std::make_unique<variable_declaration>(m_type, m_identifier, m_init ? m_init->clone() : nullptr);
 }
 
+[[nodiscard]] std::vector<semantic_check_error> variable_declaration::check_semantics(compiler::scope& scope) const noexcept {
+    if (m_init) {
+        const semantic_check_res init_type = m_init->get_type_checked(scope);
+        if (!init_type) {
+            return {init_type.error()};
+        }
+
+        if (*init_type != m_type) {
+            return {semantic_check_error{"declaration expected " + type_to_declaration_string(m_type) + " but got " + type_to_declaration_string(*init_type), m_init.get()}};
+        }
+    }
+    
+    scope.define(m_identifier, m_type);
+
+    return {};
+}
+
+[[nodiscard]] emission_err variable_declaration::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    const std::optional<reg_idx> new_var_reg = fn.get_next_unused_register();
+    if (!new_var_reg) {
+        return "couldn't get register for variable " + m_identifier;
+    }
+    assert(!fn.m_varsToRegs.lookup(m_identifier));
+    fn.m_varsToRegs.define(m_identifier, *new_var_reg);
+    return std::nullopt;
+}
+
 VAR_OPTIMIZATION_ACTION variable_declaration::var_optimization_pass(var_optimization_env& env)  noexcept {
     if (m_init) {
         env.check_action(&m_init);

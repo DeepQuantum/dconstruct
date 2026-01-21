@@ -36,7 +36,7 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] std::vector<semantic_check_error> return_stmt::check_semantics(compiler::scope& scope) const noexcept {
     if (m_expr) {
-        const semantic_check_res expr_type = m_expr->compute_type_checked(scope);
+        const semantic_check_res expr_type = m_expr->get_type_checked(scope);
         if (!expr_type) {
             return {expr_type.error()};
         }
