@@ -72,7 +72,7 @@ namespace dconstruct {
         void replace_newlines_in_stringtable() noexcept;
         
         template<typename T>
-        void insert_into_bytestream(std::vector<std::byte>& out, const T& obj) noexcept;
+        static void insert_into_bytestream(std::unique_ptr<std::byte[]>& out, u64& size, const T& obj) noexcept;
     };
 
     extern template class BinaryFile<true>;

@@ -23,7 +23,7 @@ namespace dconstruct {
         uint32_t				m_stringsOffset;		///< <c>0x0C</c>: strings offset ?
 
         uint32_t				field_10;				///< <c>0x10</c>: always 1
-        int32_t					m_numEntries;			///< <c>0x14</c>: num of entries
+        uint32_t				m_numEntries;			///< <c>0x14</c>: num of entries
         Entry*                  m_pStartOfData;			///< <c>0x18</c>: ptr to the start of data/state script(s)
     };
 

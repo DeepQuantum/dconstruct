@@ -134,6 +134,7 @@ add_executable(
     ${CMAKE_CURRENT_TEST_DIR}/disassembler_test.cpp
     ${CMAKE_CURRENT_TEST_DIR}/compiler_test.cpp
     ${CMAKE_CURRENT_TEST_DIR}/decompiler_test.cpp
+    ${CMAKE_CURRENT_TEST_DIR}/binaryfile_test.cpp
 )
 
 if(MSVC)

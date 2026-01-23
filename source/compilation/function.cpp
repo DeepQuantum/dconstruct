@@ -36,4 +36,8 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
     return current_size;
 }
 
+[[nodiscard]] u64 function::get_size_in_bytes() const noexcept {
+    return m_instructions.size() * sizeof(Instruction) + m_symbolTable.size() * sizeof(u64);
+}
+
 }

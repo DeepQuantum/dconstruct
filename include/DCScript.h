@@ -115,18 +115,21 @@ namespace dconstruct {
         uint64_t				m_unkNumber;			///< <c>0x08</c>: UNSURE: size maybe ?
     };
 
-    struct ScriptLambda //0x40 || 0x48 unsure
+    struct ScriptLambda //0x50
     {
-        uint8_t* m_pOpcode;				///< <c>0x00</c>: ptr to the first opcode of the script
-        uint64_t* m_pSymbols;				///< <c>0x08</c>: ptr to the symbol table
-        sid64				    m_typeId;				///< <c>0x10</c>: usually SID("function")
-        uint64_t				m_unkNumber;			///< <c>0x18</c>: no idea what this is used for
-        uint64_t				m_unk;					///< <c>0x20</c>: always 0?
-        uint64_t				m_instructionFlag;		///< <c>0x28</c>: 0xDEADBEEF1337F00D
-        uint8_t					m_unk2;					///< <c>0x2C</c>: always 0 ?
-        uint32_t				m_unkNumber3;			///< <c>0x34</c>: alwasy 0x10 ?
-        uint64_t				m_unkSid;				///< <c>0x38</c>: Unknown StringId64
+        u64* m_pInstruction;				                ///< <c>0x00</c>: ptr to the first opcode of the script
+        u64*         m_pSymbols;				            ///< <c>0x08</c>: ptr to the symbol table
+        sid64	     m_typeId;				///< <c>0x10</c>: usually SID("function")
+        u64			 m_unknown;			///< <c>0x18</c>: no idea what this is used for
+        u64			 m_unk;					///< <c>0x20</c>: always 0?
+        u64			 m_instructionFlag;		///< <c>0x28</c>: 0xDEADBEEF1337F00D
+        u32			 m_always0;					///< <c>0x2C</c>: always 0 ?
+        u32			 m_numInstructions;			///< <c>0x34</c>: alwasy 0x10 ?
+        i64          m_neg1;
+        u64		     m_sidGlobal;				///< <c>0x38</c>: Unknown StringId64
+        u64          m_always0_2;
     };
+    constexpr auto x = sizeof(ScriptLambda);
 
 #endif // DCSCRIPT_H
 

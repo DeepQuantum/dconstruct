@@ -18,6 +18,8 @@ namespace dconstruct::compiler {
         
         [[nodiscard]] u8 add_to_symbol_table(const u64 value) noexcept;
 
+        [[nodiscard]] u64 get_size_in_bytes() const noexcept;
+
         std::vector<Instruction> m_instructions;
         std::vector<u64> m_symbolTable;
         environment<reg_idx> m_varsToRegs;
