@@ -506,7 +506,7 @@ template<bool is_64_bit>
 
 template<bool is_64_bit>
 [[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
-    Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pOpcode);
+    Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pInstruction);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
     std::vector<function_disassembly_line> lines;

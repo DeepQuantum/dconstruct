@@ -6,7 +6,7 @@
 #include <immintrin.h>
 #include <cstring>
 #include <chrono>
-#include <algorithm>
+#include <numeric>
 
 namespace dconstruct {
 
@@ -56,25 +56,39 @@ namespace dconstruct {
 
     template<bool is_64_bit>
     template<typename T>
-    void BinaryFile<is_64_bit>::insert_into_bytestream(std::vector<std::byte>& out, const T& obj) noexcept {
-        const std::byte* p = reinterpret_cast<const std::byte*>(std::adressof(obj));
-        out.insert(out.end(), p, p + sizeof(*p));
+    void BinaryFile<is_64_bit>::insert_into_bytestream(std::unique_ptr<std::byte[]>& out, u64& size, const T& obj) noexcept {
+        const std::byte* p = reinterpret_cast<const std::byte*>(std::addressof(obj));
+        std::memcpy(out.get() + size, p, sizeof(T));
+        size += sizeof(T);
     }
 
     template<bool is_64_bit>
     [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) noexcept {
-        constexpr sid64 type_name = SID("script-lambda");
-        constexpr sid64 array_sid = SID("array");
-        constexpr u8 text_size_offset = 0xC;
-        constexpr reloc_table_size_offset = 0x4;
+        constexpr sid64 script_lambda_sid = SID("script-lambda");
+        constexpr sid64 array_sid         = SID("array");
+        constexpr sid64 global_sid        = SID("global");
+        constexpr sid64 function_sid      = SID("function");
+        constexpr u64   deadbeef          = 0xDEAD'BEEF'1337'F00D;
+        
+        constexpr u8  text_size_offset        = 0xC;
+        constexpr u64 reloc_table_size_offset = 0x4;
+        constexpr u64 first_entry_offset      = 0x28;
 
-        const u64 entry_size = std::accumulate(funcs.begin(), funcs.end(), u64{0}, [](u64 acc, const compiler::function& fn) {
-            return fn.m_instructions.size() * sizeof(Instruction) + fn.m_symbolTable.size() * sizeof(u64);
+        constexpr u32 header_size = sizeof(DC_Header) + sizeof(array_sid);
+        
+        const u64 num_funcs = funcs.size();
+
+        const u32 entries_size = sizeof(Entry) * num_funcs;
+
+        const u64 raw_function_size = std::accumulate(funcs.begin(), funcs.end(), u64{0}, [](u64 acc, const compiler::function& fn) {
+            return acc + fn.get_size_in_bytes();
         });
 
         const u64 stringtable_size = std::accumulate(global.m_strings.begin(), global.m_strings.end(), u64{0}, [](u64 acc, const std::string& s) {
-            return s.size() + 1;
+            return acc + s.size() + 1;
         });
+
+        const u32 functions_size = (sizeof(script_lambda_sid) + sizeof(ScriptLambda)) * num_funcs + raw_function_size;
 
         std::vector<char> stringtable;
         stringtable.reserve(stringtable_size);
@@ -84,38 +98,81 @@ namespace dconstruct {
             stringtable.push_back('\0');
         }
 
-        const u64 data_size = sizeof(DC_Header) + sizeof(array_sid) + entry_size + stringtable_size;
-        const u64 text_size = data_size - text_size_offset;
+        const u32 data_size = header_size + entries_size + functions_size;
+        const u32 stringtable_reloctable_padding = stringtable_size % 4 == 0 ? 0 : 4 - (stringtable_size % 4);
 
-        std::vector<std::byte> out;
+        const u32 relocatable_data_size = data_size + stringtable_size;
+        const u32 reloc_table_size = static_cast<u32>(std::ceil(relocatable_data_size / 64.f));
+        const u32 non_reloctable_size = stringtable_reloctable_padding + reloc_table_size;
+        const u32 total_size = relocatable_data_size + reloc_table_size_offset + non_reloctable_size;
+
+        std::unique_ptr<std::byte[]> out = std::make_unique<std::byte[]>(total_size);
+        u64 current_size = 0;
+        
+        const p64 base_ptr = reinterpret_cast<p64>(out.get());
 
         DC_Header header {
             MAGIC,
             VERSION,
-            0,
-            0,
-            1,
-            funcs.size(),
-            nullptr
+            relocatable_data_size + stringtable_reloctable_padding,
+            data_size,
+            0x1,
+            static_cast<u32>(funcs.size()),
+            reinterpret_cast<Entry*>(first_entry_offset)
         };
 
-        insert_into_bytestream(out, header);
-        insert_into_bytestream(out, array_sid);
+        insert_into_bytestream(out, current_size, header);
+        insert_into_bytestream(out, current_size, array_sid);
 
-        
+        const u64 first_function_start = header_size + funcs.size() * sizeof(Entry);
 
+        u64 prev_function_size = sizeof(function_sid);
 
-        u64 text_size = 0;
-       
         for (const auto& fn : funcs) {
-            const sid64 function_name = SID(fn.m_name);
-            text_size += 
-            Entry entry{function_name, type_name, nullptr};
+            const sid64 function_name = SID(fn.m_name.c_str());
+            Entry entry{function_name, script_lambda_sid, reinterpret_cast<const Entry*>(first_function_start + prev_function_size)};
+            insert_into_bytestream(out, current_size, entry);
+            prev_function_size = sizeof(function_sid) + fn.get_size_in_bytes();
         }
 
-        for (const auto& str : global.m_strings) { 
-            stringtable.
+        for (const auto& fn : funcs) {
+            insert_into_bytestream(out, current_size, script_lambda_sid);
+            const ScriptLambda lambda = {
+                reinterpret_cast<u64*>(current_size + sizeof(ScriptLambda)) ,
+                reinterpret_cast<u64*>(current_size + sizeof(ScriptLambda) + fn.m_instructions.size() * sizeof(Instruction)),
+                function_sid,
+                0xB0,
+                0x0,
+                deadbeef,
+                0ul,
+                static_cast<u32>(fn.m_instructions.size()),
+                -1,
+                global_sid,
+                0ull
+            };
+            insert_into_bytestream(out, current_size, lambda);
+            for (const Instruction& istr : fn.m_instructions) {
+                insert_into_bytestream(out, current_size, istr);
+            }
+            for (const u64 symb : fn.m_symbolTable) {
+                insert_into_bytestream(out, current_size, symb);
+            }
         }
+
+        std::memcpy(out.get() + current_size, stringtable.data(), stringtable.size());
+        current_size += stringtable.size();
+
+        std::memset(out.get() + current_size, 0, stringtable_reloctable_padding);
+        current_size += stringtable_reloctable_padding;
+
+        insert_into_bytestream(out, current_size, reloc_table_size);
+
+        assert(current_size == total_size);
+
+        std::ofstream of("out.bin", std::ios_base::binary);
+        of.write(reinterpret_cast<const char*>(out.get()), total_size);
+
+        return BinaryFile::from_path("out.bin");
     }
 
     template<bool is_64_bit>
