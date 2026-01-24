@@ -47,7 +47,7 @@ namespace dconstruct {
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
-        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) noexcept;
+        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) ;
 
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
@@ -73,6 +73,10 @@ namespace dconstruct {
         
         template<typename T>
         static void insert_into_bytestream(std::unique_ptr<std::byte[]>& out, u64& size, const T& obj) noexcept;
+        // template<typename ...bits>
+        // static void insert_into_reloctable(std::unique_ptr<std::byte[]>& out, const u64 reloc_offset, u64& bit_offset, bits ...bits) noexcept;
+
+        static void insert_into_reloctable(u8* reloc_table, u64& byte_offset, u64& bit_offset, const u8 bits, const u64 num_bits) noexcept;
     };
 
     extern template class BinaryFile<true>;

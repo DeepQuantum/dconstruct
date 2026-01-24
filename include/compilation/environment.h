@@ -13,6 +13,9 @@ namespace dconstruct::compiler {
 
         environment& operator=(const environment& rhs) = delete;
 
+        environment& operator=(environment&& rhs) = default;
+        environment(environment&& rhs) = default;
+
         explicit environment(environment* enclosing) noexcept : m_enclosing(enclosing) {};
 
         std::unordered_map<std::string, T> m_values;

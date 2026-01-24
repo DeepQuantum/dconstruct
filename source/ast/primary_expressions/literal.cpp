@@ -91,8 +91,8 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
         }
 
         if constexpr (std::is_same_v<T, std::string>) {
-            const u64 placeholder_value = global.add_string_as_placeholder(std::move(lit));
-            const u8 table_idx = fn.add_to_symbol_table(placeholder_value);
+            const u64 size = global.add_string(std::move(lit));
+            const u8 table_idx = fn.add_to_symbol_table(size, compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING);
             fn.emit_instruction(Opcode::LoadStaticPointerImm, *reg, table_idx);
             return *reg;
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {

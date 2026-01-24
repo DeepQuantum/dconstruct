@@ -117,19 +117,19 @@ namespace dconstruct {
 
     struct ScriptLambda //0x50
     {
-        u64* m_pInstruction;				                ///< <c>0x00</c>: ptr to the first opcode of the script
-        u64*         m_pSymbols;				            ///< <c>0x08</c>: ptr to the symbol table
-        sid64	     m_typeId;				///< <c>0x10</c>: usually SID("function")
-        u64			 m_unknown;			///< <c>0x18</c>: no idea what this is used for
-        u64			 m_unk;					///< <c>0x20</c>: always 0?
-        u64			 m_instructionFlag;		///< <c>0x28</c>: 0xDEADBEEF1337F00D
-        u32			 m_always0;					///< <c>0x2C</c>: always 0 ?
-        u32			 m_numInstructions;			///< <c>0x34</c>: alwasy 0x10 ?
+        u64*         m_pInstruction;				                
+        u64*         m_pSymbols;				            
+        sid64	     m_typeId;				
+        u64			 m_sum; // 12 + (4 * number of instructions) + (4 * number of symbol table entries)			
+        u64			 m_always0_1;					
+        u64			 m_instructionFlag;		
+        u32			 m_always0_2;
+        u32			 m_numInstructions;
         i64          m_neg1;
-        u64		     m_sidGlobal;				///< <c>0x38</c>: Unknown StringId64
-        u64          m_always0_2;
+        u64		     m_sidGlobal;				
+        u64          m_always0_3;
     };
-    constexpr auto x = sizeof(ScriptLambda);
+    
 
 #endif // DCSCRIPT_H
 
