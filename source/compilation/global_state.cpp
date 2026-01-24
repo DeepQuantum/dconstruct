@@ -21,4 +21,9 @@ namespace dconstruct::compiler {
     return hex_value;
 }
 
+[[nodiscard]] u64 global_state::add_string(std::string str) noexcept {
+    const u64 size = m_strings.size();
+    m_strings.push_back(std::move(str));
+    return size;
+}
 }

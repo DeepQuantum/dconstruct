@@ -536,6 +536,7 @@ template<bool is_64_bit>
             }
         }
     }
+
     return functionDisassembly;
 }
 
