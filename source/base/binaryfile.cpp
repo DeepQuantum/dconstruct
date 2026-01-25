@@ -79,7 +79,7 @@ namespace dconstruct {
     }
 
     template<bool is_64_bit>
-    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) {
+    [[nodiscard]] void BinaryFile<is_64_bit>::from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global, const std::filesystem::path& output) noexcept {
         constexpr sid64     script_lambda_sid    = SID("script-lambda");
         constexpr sid64     array_sid            = SID("array");
         constexpr sid64     global_sid           = SID("global");
@@ -200,8 +200,6 @@ namespace dconstruct {
             for (u32 i = 0; i < fn.m_symbolTable.size(); ++i) {
                 if (fn.m_symbolTableEntryPointers[i] == compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
                     push_bytes(get_string_offset(fn.m_symbolTable[i]), 1, 0b1);
-                } else if (fn.m_symbolTableEntryPointers[i] == compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL) {
-                    push_bytes(fn.m_symbolTable[i], 1, 0b1);
                 } else {
                     push_bytes(fn.m_symbolTable[i], 1, 0b0);
                 }
@@ -220,11 +218,9 @@ namespace dconstruct {
 
         assert(current_size == total_size);
 
-        std::ofstream of("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/out.bin", std::ios_base::binary);
+        std::ofstream of(output, std::ios_base::binary);
         of.write(reinterpret_cast<const char*>(out.get()), total_size);
         of.flush();
-
-        return BinaryFile::from_path("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/out.bin");
     }
 
     template<bool is_64_bit>
@@ -272,7 +268,7 @@ namespace dconstruct {
     // }
 
     template<bool is_64_bit>
-    void BinaryFile<is_64_bit>::read_reloc_table() {
+    void BinaryFile<is_64_bit>::read_reloc_table() noexcept {
 
         std::byte *reloc_data = m_bytes.get() + m_dcheader->m_textSize;
 

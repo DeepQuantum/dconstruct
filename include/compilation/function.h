@@ -20,7 +20,7 @@ namespace dconstruct::compiler {
 
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
 
-        [[nodiscard]] std::optional<reg_idx> get_next_unused_register() noexcept;
+        [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register(const bool argument) noexcept;
         void free_register(const ast::expression& expr, const reg_idx reg) noexcept;
         
         [[nodiscard]] u8 add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind = SYMBOL_TABLE_POINTER_KIND::NONE) noexcept;
@@ -33,7 +33,7 @@ namespace dconstruct::compiler {
         std::vector<SYMBOL_TABLE_POINTER_KIND> m_symbolTableEntryPointers;
         environment<reg_idx> m_varsToRegs;
         std::variant<std::string, sid64> m_name;
-        argument_reg_set m_argumentUsedRegisters = 0;
+        argument_reg_set m_usedArgumentRegisters = 0;
         reg_set m_usedRegisters = 0;
     };
 }

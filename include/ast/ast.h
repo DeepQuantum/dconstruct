@@ -25,6 +25,8 @@
 #include "primary_expressions/identifier.h"
 #include "primary_expressions/match.h"
 #include "primary_expressions/subscript.h"
+#include "external_declaration.h"
+#include "using_declaration.h"
 //#include "declarations/function_definition.h"
 //#include "parameter.h"
 #include "statements/block.h"
@@ -39,6 +41,6 @@
 
 namespace dconstruct::compiler {
 
-    using external_definition = std::variant<ast::full_type, ast::function_definition>;
+    using global = std::variant<ast::full_type, ast::global_decl_uptr>;
 
 }

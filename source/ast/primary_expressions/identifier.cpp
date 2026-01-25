@@ -66,7 +66,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *var_location;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {

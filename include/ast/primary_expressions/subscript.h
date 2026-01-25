@@ -3,7 +3,7 @@
 #include "ast/expression.h"
 
 namespace dconstruct::ast {
-    struct subscript_expr : expression {
+    struct subscript_expr : public expression {
 
         explicit subscript_expr(expr_uptr&& lhs, expr_uptr&& rhs) noexcept : m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) { };
 

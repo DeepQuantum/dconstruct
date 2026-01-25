@@ -22,8 +22,13 @@ namespace dconstruct::compiler {
 }
 
 [[nodiscard]] u64 global_state::add_string(std::string str) noexcept {
-    const u64 size = m_strings.size();
-    m_strings.push_back(std::move(str));
-    return size;
+    const auto existing = std::find(m_strings.begin(), m_strings.end(), str);
+    if (existing != m_strings.end()) {
+        return std::distance(m_strings.begin(), existing);
+    } else {
+        const u64 size = m_strings.size();
+        m_strings.push_back(std::move(str));
+        return size;
+    }
 }
 }

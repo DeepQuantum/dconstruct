@@ -107,6 +107,38 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return &m_arguments[0];
 }
 
+[[nodiscard]] full_type call_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
+    const full_type callee_type = m_callee->get_type_unchecked(env);
+    assert(std::holds_alternative<function_type>(callee_type));
+    return *std::get<function_type>(callee_type).m_return;
+}
+
+[[nodiscard]] semantic_check_res call_expr::compute_type_checked(compiler::scope& env) const noexcept {
+    const semantic_check_res callee_type = m_callee->get_type_checked(env);
+    if (!callee_type) {
+        return callee_type;
+    }
+    if (!std::holds_alternative<function_type>(*callee_type)) {
+        return std::unexpected{semantic_check_error{"callee is not of callable type: " + type_to_declaration_string(*callee_type)}};
+    }
+    const function_type func_type = std::get<function_type>(*callee_type);
+
+    for (u32 i = 0; i < m_arguments.size(); ++i) {
+        const expr_uptr& arg = m_arguments[i];
+        const semantic_check_res arg_type = arg->get_type_checked(env);
+        if (!arg_type) {
+            return arg_type;
+        }
+        if (*arg_type != *func_type.m_arguments[i].second) {
+            return std::unexpected{semantic_check_error{
+                "expected argument of type " + type_to_declaration_string(*func_type.m_arguments[i].second) + " at position " + std::to_string(i) + " but got " + type_to_declaration_string(*arg_type)
+            , arg.get()}};
+        }
+    }
+
+    return *func_type.m_return;
+}
+
 VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
     for (auto& arg : m_arguments) {
         env.check_action(&arg);

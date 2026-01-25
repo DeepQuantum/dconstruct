@@ -446,6 +446,7 @@ struct function_disassembly {
     std::vector<function_disassembly_line> m_lines;
     StackFrame m_stackFrame;
     function_name_variant m_id;
+    u64 m_originalOffset;
     bool m_isScriptFunction;
 
     function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept :

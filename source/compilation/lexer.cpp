@@ -92,8 +92,19 @@ char Lexer::advance() {
     while (is_valid_sid_char(peek())) {
         advance();
     }
-    const std::string literal = m_source.substr(m_start + 1, m_current - m_start - 1);
-    return make_current_token(token_type::SID, literal);
+    std::string literal = m_source.substr(m_start + 1, m_current - m_start - 1);
+
+    sid64 sid_hex_value = 0;
+    sid64_literal result = {0, ""};
+
+    auto [ptr, ec] = std::from_chars(literal.data(), literal.data() + literal.size(), sid_hex_value, 16);
+    if (ec == std::errc{} && ptr == literal.data() + literal.size()) {
+        result.first = sid_hex_value;
+    } else {
+        result.second = std::move(literal);
+    }
+
+    return make_current_token(token_type::SID, std::move(result));
 }
 
 [[nodiscard]] token Lexer::make_number() {

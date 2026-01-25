@@ -4,7 +4,7 @@
 #include "ast/primary_expressions/identifier.h"
 
 namespace dconstruct::ast {
-    struct cast_expr : expression {
+    struct cast_expr : public expression {
 
         explicit cast_expr(const ast::full_type& type, expr_uptr&& rhs) noexcept : m_castType(type), m_rhs(std::move(rhs)) { };
 

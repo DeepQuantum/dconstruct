@@ -17,9 +17,9 @@ namespace dconstruct::compiler {
     class Parser {
     public:
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
-        [[nodiscard]] std::vector<ast::function_definition> parse();
+        [[nodiscard]] std::vector<ast::global_decl_uptr> parse();
 
-        [[nodiscard]] std::tuple<std::vector<ast::function_definition>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
+        [[nodiscard]] std::tuple<std::vector<ast::global_decl_uptr>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
             return { parse(), get_known_types(), get_errors() };
         }
         
@@ -97,9 +97,10 @@ namespace dconstruct::compiler {
         [[nodiscard]] std::unique_ptr<ast::call_expr> finish_call(expr_uptr&& expr);
         [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
+        [[nodiscard]] std::unique_ptr<ast::using_declaration> make_using_declaration(); 
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
-        [[nodiscard]] std::optional<ast::function_definition> make_function_definition();
-        [[nodiscard]] std::optional<std::variant<ast::full_type, ast::function_definition>> make_external_definition();
+        [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition();
+        [[nodiscard]] std::optional<global> make_global();
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
     };
 

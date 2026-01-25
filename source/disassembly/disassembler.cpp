@@ -280,6 +280,7 @@ void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr,
                 name = lookup(name_id);
             }
             function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), std::move(name));
+            function.m_originalOffset = get_offset(&struct_ptr->m_data);
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
             break;

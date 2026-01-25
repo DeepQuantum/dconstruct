@@ -5,17 +5,24 @@
 
 
 namespace dconstruct::compiler {
-[[nodiscard]] std::optional<reg_idx> function::get_next_unused_register() noexcept {
-    const u64 reg_set_num = m_usedRegisters.to_ullong();
+[[nodiscard]] std::expected<reg_idx, std::string> function::get_next_unused_register(const bool argument) noexcept {
+    reg_set* regs = nullptr;
+    if (argument) {
+        regs = &m_usedArgumentRegisters;
+    } else {
+        regs = &m_usedRegisters;
+    }
+
+    const u64 reg_set_num = regs->to_ullong();
 
     constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
 
     if (reg_set_num >= all_50_bits_used) {
-        return std::nullopt;
+        return std::unexpected{"no more free registers"};
     }
 
     reg_idx next_unused = std::countr_zero(reg_set_num);
-    m_usedRegisters.set(next_unused, true);
+    regs->set(next_unused, true);
     return next_unused;
 }
 
@@ -42,7 +49,7 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
 }
 
 [[nodiscard]] u64 function::get_scriptlambda_sum() const noexcept {
-    return 12 + (4 * m_instructions.size()) + (4 * m_symbolTable.size());
+    return 12 + 4 * (m_instructions.size() + m_symbolTable.size());
 }
 
 }
