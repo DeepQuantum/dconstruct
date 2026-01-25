@@ -39,10 +39,10 @@ namespace dconstruct {
 	using istr_line = u16;
 
 	constexpr reg_idx ARGUMENT_REGISTERS_IDX = 49;
-	constexpr reg_idx MAX_REGISTER = 128;
+	constexpr reg_idx MAX_REGISTER = ARGUMENT_REGISTERS_IDX * 2;
 
 	using reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
-	using argument_reg_set = std::bitset<MAX_REGISTER - reg_set().count()>;
+	using argument_reg_set = std::bitset<ARGUMENT_REGISTERS_IDX + 1>;
 	using node_set = std::vector<bool>;
 
 	#define SID(str) (dconstruct::ToStringId64(str))

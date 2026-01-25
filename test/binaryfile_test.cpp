@@ -9,41 +9,35 @@ namespace dconstruct::testing {
 
     static SIDBase base = *SIDBase::from_binary(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)");
 
-
-    TEST(BINARYFILE, Read1) {
-        std::vector<Instruction> istrs = {
-            {Opcode::LoadStaticPointerImm, 0, 0, 0},
-            {Opcode::Return, 0, 0, 0},
-        };
-
-        std::vector<u64> symbol_table = {0x0};
-        
-
-        std::vector<compiler::function> funcs(2);
-        for (auto& fn : funcs) {
-            fn.m_instructions = istrs;
-            fn.m_symbolTable = symbol_table;
-            fn.m_symbolTableEntryPointers.push_back(compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING);
-        }
-        compiler::global_state gs;
-        gs.m_strings.push_back("test");
-        gs.m_strings.push_back("testasdasd");
-
-        auto b = *BinaryFile<>::from_codegen(funcs, gs);
-        FileDisassembler<true> disassembler(&b, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/stuff.bin", {});
-        disassembler.disassemble();
-        disassembler.dump();
-    }
-
     TEST(BINARYFILE, Transplant1) {
-        BinaryFile<> file = *BinaryFile<>::from_path("C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-encounter-defines.bin");
+        std::filesystem::path input = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-encounter-defines.bin";
+
+        std::filesystem::path result = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/test/bin/dc1/";
+        bool take = false;
+
+        for (const auto& part : input) {
+            if (take) {
+                result /= part;
+            }
+            if (part == "dc1") {
+                take = true;
+            }
+        }
+        std::filesystem::create_directories(result.parent_path());
+
+        BinaryFile<> file = *BinaryFile<>::from_path(input);
         FileDisassembler<true> disassembler(&file, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/transplant_check.bin", {});
         disassembler.disassemble();
 
         std::vector<compiler::function> converted;
         compiler::global_state global;
 
-        for (const auto& f : disassembler.get_functions()) {
+        std::vector<function_disassembly> funcs = disassembler.get_functions();
+        std::ranges::sort(funcs, [](const function_disassembly& a, const function_disassembly& b) {
+            return a.m_originalOffset < b.m_originalOffset;
+        });
+
+        for (const auto& f : funcs) {
             compiler::function cf;
             const std::string id = f.get_id();
             if (id.starts_with("#")) {
@@ -75,11 +69,7 @@ namespace dconstruct::testing {
             }
             converted.push_back(std::move(cf));
         }
-        auto b = *BinaryFile<>::from_codegen(converted, global);
-        FileDisassembler<true> new_disassembler(& b, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/transplant_check.bin", {});
-        new_disassembler.disassemble();
-        new_disassembler.dump();
-        
+        BinaryFile<>::from_codegen(converted, global, result);
     }
 
 

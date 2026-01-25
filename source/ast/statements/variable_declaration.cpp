@@ -58,9 +58,9 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_err variable_declaration::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
-    const std::optional<reg_idx> new_var_reg = fn.get_next_unused_register();
+    const emission_res new_var_reg = fn.get_next_unused_register(false);
     if (!new_var_reg) {
-        return "couldn't get register for variable " + m_identifier;
+        return new_var_reg.error();
     }
     assert(!fn.m_varsToRegs.lookup(m_identifier));
     fn.m_varsToRegs.define(m_identifier, *new_var_reg);

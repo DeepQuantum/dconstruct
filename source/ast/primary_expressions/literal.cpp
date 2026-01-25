@@ -81,13 +81,13 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
-        const std::optional<reg_idx> reg = fn.get_next_unused_register();
+        const emission_res reg = fn.get_next_unused_register(as_argument);
         if (!reg) {
-            return std::unexpected{"out of registers compiling expression " + to_c_string()};
+            return reg;
         }
 
         if constexpr (std::is_same_v<T, std::string>) {

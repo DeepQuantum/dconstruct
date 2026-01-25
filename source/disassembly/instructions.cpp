@@ -18,7 +18,7 @@ namespace dconstruct {
                 case ast::primitive_kind::STRING: {
                     std::snprintf(buffer, buffer_size, "\"%s\"", reinterpret_cast<const char*>(reg.m_value));
                     break;
-                }         
+                }
                 case ast::primitive_kind::F32: {
                     const f32 float_value = std::bit_cast<f32>(static_cast<u32>(reg.m_value));
                     std::snprintf(buffer, buffer_size, "%f", float_value);

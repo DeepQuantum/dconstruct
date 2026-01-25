@@ -31,6 +31,7 @@ void Parser::synchronize_external_definitions() {
         switch (peek().m_type) {
             case token_type::STRUCT:
             case token_type::ENUM:
+            case token_type::USING:
             case token_type::IDENTIFIER:
             case token_type::LEFT_PAREN: return;
             default: advance();
@@ -94,7 +95,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     std::vector<ast::full_type> param_types;
 
     do {
-        std::optional<ast::full_type> param_type = peek_type();
+        std::optional<ast::full_type> param_type = make_type();
         if (!param_type) {
             m_current = temp_current;
             return std::nullopt;
@@ -169,14 +170,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return res;
 }
 
-[[nodiscard]] std::optional<std::variant<ast::full_type, ast::function_definition>> Parser::make_external_definition() {
-    std::optional<std::variant<ast::full_type, ast::function_definition>> res;
+[[nodiscard]] std::optional<global> Parser::make_global() {
+    std::optional<global> res;
     if (match({token_type::STRUCT})) {
         res = make_struct_type();
     } else if (match({token_type::ENUM})) {
         res = make_enum_type();
-    } else if (std::optional<ast::function_definition> func_def = make_function_definition()) {
-        res = std::move(*func_def);
+    } else if (match({token_type::USING})) {
+        res = make_using_declaration();
+    } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
+        res = std::move(func_def);
     } else {
         //m_errors.emplace_back(peek(), "expected struct, enum, or function definition");
         synchronize_external_definitions();
@@ -249,66 +252,95 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return enum_t;
 }
 
-[[nodiscard]] std::optional<ast::function_definition> Parser::make_function_definition() {
+[[nodiscard]] std::unique_ptr<ast::function_definition> Parser::make_function_definition() {
     std::optional<ast::full_type> return_type = make_type();
     if (!return_type) {
-        return std::nullopt;
+        return nullptr;
     }
 
     const token* func_name = consume(token_type::IDENTIFIER, "expected function name");
     if (!func_name) {
-        return std::nullopt;
+        return nullptr;
     }
 
     if (!consume(token_type::LEFT_PAREN, "expected '(' after function name")) {
-        return std::nullopt;
+        return nullptr;
     }
 
-    ast::function_definition func_def;
-    func_def.m_name = func_name->m_lexeme;
-    func_def.m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
+    std::unique_ptr<ast::function_definition> func_def = std::make_unique<ast::function_definition>();
+    func_def->m_name = func_name->m_lexeme;
+    func_def->m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
 
     while (!check(token_type::RIGHT_PAREN) && !is_at_end()) {
         std::optional<ast::full_type> param_type = make_type();
         if (!param_type) {
-            return std::nullopt;
+            return nullptr;
         }
         const token* param_name = consume(token_type::IDENTIFIER, "expected parameter name");
         if (!param_name) {
-            return std::nullopt;
+            return nullptr;
         }
-        func_def.m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
+        func_def->m_parameters.emplace_back(std::move(*param_type), param_name->m_lexeme);
 
         if (!check(token_type::RIGHT_PAREN)) {
             if (!consume(token_type::COMMA, "expected ',' between parameters")) {
-                return std::nullopt;
+                return nullptr;
             }
         }
     }
 
     if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameters")) {
-        return std::nullopt;
+        return nullptr;
     }
 
     if (!consume(token_type::LEFT_BRACE, "expected '{' before function body")) {
-        return std::nullopt;
+        return nullptr;
     }
 
     std::unique_ptr<ast::block> body = make_block();
     if (!body) {
-        return std::nullopt;
+        return nullptr;
     }
-    func_def.m_body = std::move(*body);
+    func_def->m_body = std::move(*body);
 
     return func_def;
 }
 
-[[nodiscard]] std::vector<ast::function_definition> Parser::parse() {
-    std::vector<ast::function_definition> definitions;
+[[nodiscard]] std::unique_ptr<ast::using_declaration> Parser::make_using_declaration() {
+    const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
+    if (!old_sid) {
+        return nullptr;
+    }
+    assert(std::holds_alternative<sid64_literal>(old_sid->m_literal));
+    sid64_literal old_sid_val = std::get<sid64_literal>(old_sid->m_literal);
+
+    if (!consume(token_type::AS, "expected 'as'")) {
+        return nullptr;
+    }
+
+    std::optional<ast::full_type> new_type = make_type();
+    if (!new_type) {
+        return nullptr;
+    }
+
+    std::string new_name = "";
+    if (match({token_type::IDENTIFIER})) {
+        new_name = previous().m_lexeme;
+    }
+
+    if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::using_declaration>(std::move(old_sid_val), std::move(*new_type), !new_name.empty() ? std::move(new_name) : old_sid_val.second);
+}
+
+[[nodiscard]] std::vector<ast::global_decl_uptr> Parser::parse() {
+    std::vector<ast::global_decl_uptr> definitions;
     while (!is_at_end()) {
-        auto declaration = make_external_definition();
-        if (declaration && std::holds_alternative<ast::function_definition>(*declaration)) {
-            definitions.push_back(std::move(std::get<ast::function_definition>(*declaration)));
+        auto declaration = make_global();
+        if (declaration && !std::holds_alternative<ast::full_type>(*declaration)) {
+            definitions.push_back(std::move(std::get<ast::global_decl_uptr>(*declaration)));
         }
     }
     return definitions;

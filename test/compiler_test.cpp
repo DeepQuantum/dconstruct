@@ -10,7 +10,7 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    static std::tuple<std::vector<ast::function_definition>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_parse_results(const std::vector<compiler::token> &tokens) {
+    static std::tuple<std::vector<ast::global_decl_uptr>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_parse_results(const std::vector<compiler::token> &tokens) {
         compiler::Parser parser{tokens};
         return { parser.parse(), parser.get_known_types(), parser.get_errors() };
     }
@@ -38,7 +38,7 @@ namespace dconstruct::testing {
 
         auto [functions, _, errors] = get_parse_results(function_def_tokens);
 
-        return { !functions.empty() ? std::move(functions[0].m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
+        return { !functions.empty() ? std::move(static_cast<ast::function_definition*>(functions[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
     } 
 
     TEST(COMPILER, LexerEmpty) {
@@ -904,7 +904,7 @@ namespace dconstruct::testing {
         
         compiler::scope scope{};
         scope.n_namesToTypes = types;
-        const auto semantic_errors = functions[0].check_semantics(scope);
+        const auto semantic_errors = functions[0]->check_semantics(scope);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
@@ -920,7 +920,35 @@ namespace dconstruct::testing {
         
         compiler::scope scope{};
         scope.n_namesToTypes = types;
-        const auto semantic_errors = functions[0].check_semantics(scope);
+        const auto semantic_errors = functions[0]->check_semantics(scope);
+
+        std::vector<ast::semantic_check_error> empty{};
+        EXPECT_EQ(semantic_errors, empty);
+    }
+
+    TEST(COMPILER, Using1) {
+        const std::string code = 
+        "using #display as (string, i32) -> void;"
+        "using #5445173390656D6D as (string, i32, i32) -> string sprintf;"
+        "i32 main() {"
+        "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
+        "    display(message, 19);"
+        "    return 0;"
+        "}";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(functions.size(), 3);
+
+        compiler::scope scope{};
+        scope.n_namesToTypes = types;
+        std::vector<ast::semantic_check_error> semantic_errors;
+        for (const auto& decl : functions) {
+            const auto new_errors = decl->check_semantics(scope);
+            semantic_errors.insert(semantic_errors.end(), new_errors.begin(), new_errors.end());
+        }
+        ASSERT_EQ(scope.m_sidAliases["sprintf"].first, 0x5445173390656D6D);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);

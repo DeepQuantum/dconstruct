@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast/type.h"
+#include "sidbase.h"
 
 #include <unordered_map>
 
@@ -60,7 +61,9 @@ namespace dconstruct::compiler {
 
     struct scope : public environment<ast::full_type> {
         std::unordered_map<std::string, ast::full_type> n_namesToTypes;
+        std::unordered_map<std::string, sid64_literal> m_sidAliases;
         const ast::full_type* m_returnType;
+        const SIDBase* m_sidbase;
     };
 
 }

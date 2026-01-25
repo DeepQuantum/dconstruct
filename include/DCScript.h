@@ -117,16 +117,16 @@ namespace dconstruct {
 
     struct ScriptLambda //0x50
     {
-        u64*         m_pInstruction;				                
-        u64*         m_pSymbols;				            
-        sid64	     m_typeId;				
+        u64*         m_pInstruction; // instruction ptr                
+        u64*         m_pSymbols; // symbol table ptr				            
+        sid64	     m_typeId; // SID("function")
         u64			 m_sum; // 12 + (4 * number of instructions) + (4 * number of symbol table entries)			
         u64			 m_always0_1;					
-        u64			 m_instructionFlag;		
+        u64			 m_instructionFlag; // 0xDEADBEEF1337FOOD
         u32			 m_always0_2;
-        u32			 m_numInstructions;
+        u32			 m_numInstructions; // number of instructions 
         i64          m_neg1;
-        u64		     m_sidGlobal;				
+        u64		     m_sidGlobal; // either SID("global") if in global scope or something else if inside state-script 
         u64          m_always0_3;
     };
     

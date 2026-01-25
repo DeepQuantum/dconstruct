@@ -31,6 +31,10 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_bitwise_not, this}};
 }
 
+// [[nodiscard]] emission_res bitwise_not_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
+
+// }
+
 
 [[nodiscard]] llvm_res bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);

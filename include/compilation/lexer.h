@@ -64,6 +64,8 @@ private:
         {"and", token_type::AND},
         {"or", token_type::OR},
         {"auto", token_type::AUTO},
+        {"using", token_type::USING},
+        {"as", token_type::AS},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

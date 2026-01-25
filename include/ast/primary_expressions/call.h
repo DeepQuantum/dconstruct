@@ -14,10 +14,11 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] bool equals(const expression &rhs) const noexcept final;
         [[nodiscard]] expr_uptr clone() const final;
-        [[nodiscard]] full_type compute_type_unchecked(const compiler::scope& env) const noexcept final { return std::monostate(); }
-        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final { return std::monostate(); }
+        [[nodiscard]] full_type compute_type_unchecked(const compiler::scope& env) const noexcept final;
+        [[nodiscard]] semantic_check_res compute_type_checked(compiler::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
+        //[[nodiscard]] emission_res emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept final;
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;
 

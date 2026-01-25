@@ -47,7 +47,7 @@ namespace dconstruct {
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
-        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global) ;
+        [[nodiscard]] static void from_codegen(const std::vector<compiler::function>& funcs, const compiler::global_state& global, const std::filesystem::path& output) noexcept;
 
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
@@ -68,7 +68,7 @@ namespace dconstruct {
         static constexpr u32 VERSION = 0x1;
 
     private:
-        void read_reloc_table();
+        void read_reloc_table() noexcept;
         void replace_newlines_in_stringtable() noexcept;
         
         template<typename T>
