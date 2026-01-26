@@ -81,20 +81,26 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
+[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
-        const emission_res reg = fn.get_next_unused_register(as_argument);
-        if (!reg) {
-            return reg;
+        reg_idx reg;
+        if (destination) {
+            reg = *destination;
+        } else {
+            const emission_res new_destination = fn.get_next_unused_register();
+            if (!new_destination) {
+                return new_destination;
+            }
+            reg = *new_destination;
         }
 
         if constexpr (std::is_same_v<T, std::string>) {
             const u64 size = global.add_string(std::move(lit));
             const u8 table_idx = fn.add_to_symbol_table(size, compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING);
-            fn.emit_instruction(Opcode::LoadStaticPointerImm, *reg, table_idx);
-            return *reg;
+            fn.emit_instruction(Opcode::LoadStaticPointerImm, reg, table_idx);
+            return reg;
         } else if constexpr (std::is_same_v<T, sid64_literal>) {
             const auto& [numeric, name] = lit;
             sid64 table_entry = 0;
@@ -105,28 +111,28 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
                 table_entry = SID(name.c_str());
             }
             const u8 table_idx = fn.add_to_symbol_table(numeric, compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
-            fn.emit_instruction(Opcode::LookupPointer, *reg, table_idx);
+            fn.emit_instruction(Opcode::LookupPointer, reg, table_idx);
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {
             if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, *reg, *reg);
+                fn.emit_instruction(Opcode::OpBitXor, reg, reg);
             } else {
                 const u8 lo = static_cast<u16>(lit) & 0xFF;
                 const u8 hi = (static_cast<u16>(lit) >> 8) & 0xFF;
-                fn.emit_instruction(Opcode::LoadU16Imm, *reg, lo, hi);
+                fn.emit_instruction(Opcode::LoadU16Imm, reg, lo, hi);
             }
         } else if constexpr (std::is_same_v<T, f32>) {
             if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, *reg, *reg);
+                fn.emit_instruction(Opcode::OpBitXor, reg, reg);
             } else {
                 const u64 value = std::bit_cast<u32>(lit);
                 const u8 table_idx = fn.add_to_symbol_table(value);
-                fn.emit_instruction(Opcode::LoadStaticFloatImm, *reg, table_idx);
+                fn.emit_instruction(Opcode::LoadStaticFloatImm, reg, table_idx);
             }
         } else {
             return std::unexpected{"can't compile type " + to_c_string()};
         }
 
-        return *reg;
+        return reg;
 
     }, m_value);
 }

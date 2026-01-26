@@ -965,11 +965,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (match({token_type::_NULL})) {
         return std::make_unique<ast::literal>(nullptr);
     } else if (match({token_type::INT})) {
-        const i32 num = std::get<i32>(previous().m_literal);
-        return std::make_unique<ast::literal>(num);
+        return std::make_unique<ast::literal>(previous().m_literal);
     } else if (match({token_type::DOUBLE})) {
-        const f64 num = std::get<f64>(previous().m_literal);
-        return std::make_unique<ast::literal>(num);
+        return std::make_unique<ast::literal>(previous().m_literal);
     } else if (match({token_type::STRING})) {
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);

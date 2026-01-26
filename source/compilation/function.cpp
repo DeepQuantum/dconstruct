@@ -27,6 +27,10 @@ namespace dconstruct::compiler {
     return next_unused;
 }
 
+void function::free_register(const reg_idx reg) noexcept {
+    m_usedRegisters.set(reg, false);
+}
+
 void function::free_register(const ast::expression& expr, const reg_idx reg) noexcept {
     if (!expr.is_l_evaluable()) {
         m_usedRegisters.set(reg, false);

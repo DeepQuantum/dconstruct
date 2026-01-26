@@ -47,23 +47,31 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
             return {init_type.error()};
         }
 
-        if (*init_type != m_type) {
-            return {semantic_check_error{"declaration expected " + type_to_declaration_string(m_type) + " but got " + type_to_declaration_string(*init_type), m_init.get()}};
+        const std::optional<std::string> assign_err = is_assignable(m_type, *init_type);
+
+        if (assign_err) {
+            return {semantic_check_error{*assign_err}};
         }
     }
-    
     scope.define(m_identifier, m_type);
 
     return {};
 }
 
 [[nodiscard]] emission_err variable_declaration::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
-    const emission_res new_var_reg = fn.get_next_unused_register(false);
+    const emission_res new_var_reg = fn.get_next_unused_register();
     if (!new_var_reg) {
         return new_var_reg.error();
     }
     assert(!fn.m_varsToRegs.lookup(m_identifier));
     fn.m_varsToRegs.define(m_identifier, *new_var_reg);
+
+    if (m_init) {
+        const emission_res init_emit = m_init->emit_dc(fn, global, *new_var_reg);
+        if (!init_emit) {
+            return init_emit.error();
+        }
+    }
     return std::nullopt;
 }
 
