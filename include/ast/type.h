@@ -78,6 +78,7 @@ namespace dconstruct::ast {
 
         ref_full_type m_return;
         t_arg_list m_arguments;
+        bool m_isFarCall = false;
 
         explicit function_type() noexcept : m_return{ std::make_shared<ast::full_type>(std::monostate()) } {};
         explicit function_type(ref_full_type return_type, t_arg_list args) noexcept : m_return{ std::move(return_type) }, m_arguments{args} {};

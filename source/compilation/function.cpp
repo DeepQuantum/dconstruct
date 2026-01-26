@@ -13,7 +13,7 @@ namespace dconstruct::compiler {
         regs = &m_usedRegisters;
     }
 
-    const u64 reg_set_num = regs->to_ullong();
+    u64 reg_set_num = regs->to_ullong();
 
     constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
 
@@ -21,7 +21,8 @@ namespace dconstruct::compiler {
         return std::unexpected{"no more free registers"};
     }
 
-    reg_idx next_unused = std::countr_zero(reg_set_num);
+
+    reg_idx next_unused = std::countr_one(reg_set_num);
     regs->set(next_unused, true);
     return next_unused;
 }
@@ -31,6 +32,11 @@ void function::free_register(const ast::expression& expr, const reg_idx reg) noe
         m_usedRegisters.set(reg, false);
     }
 }
+
+void function::free_argument_register(const reg_idx reg) noexcept {
+    m_usedArgumentRegisters.set(reg, false);
+}
+
 
 void function::emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1, const u8 operand2) noexcept {
     m_instructions.emplace_back(opcode, destination, operand1, operand2);

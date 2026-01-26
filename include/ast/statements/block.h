@@ -33,6 +33,7 @@ namespace dconstruct::ast {
         [[nodiscard]] const statement* inlineable_else_statement() const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final;
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept final;
+        [[nodiscard]] emission_err emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept final;
 
         void clear_dead_statements() noexcept;
 

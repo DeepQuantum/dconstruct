@@ -45,4 +45,8 @@ void function_definition::pseudo_racket(std::ostream& os) const {
     return m_body.check_semantics(scope);
 }
 
+[[nodiscard]] emission_err function_definition::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    return m_body.emit_dc(fn, global);
+}
+
 }

@@ -66,6 +66,8 @@ private:
         {"auto", token_type::AUTO},
         {"using", token_type::USING},
         {"as", token_type::AS},
+        {"far", token_type::FAR},
+        {"near", token_type::NEAR},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

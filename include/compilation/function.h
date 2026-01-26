@@ -22,6 +22,7 @@ namespace dconstruct::compiler {
 
         [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register(const bool argument) noexcept;
         void free_register(const ast::expression& expr, const reg_idx reg) noexcept;
+        void free_argument_register(const reg_idx reg) noexcept;
         
         [[nodiscard]] u8 add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind = SYMBOL_TABLE_POINTER_KIND::NONE) noexcept;
 

@@ -27,7 +27,8 @@ namespace dconstruct {
         Entry*                  m_pStartOfData;			///< <c>0x18</c>: ptr to the start of data/state script(s)
     };
 
-    
+    static constexpr u32 DC_MAGIC = 0x44433030;
+    static constexpr u32 DC_VERSION = 0x1;
 }
 
 

@@ -69,7 +69,8 @@ namespace dconstruct::testing {
             }
             converted.push_back(std::move(cf));
         }
-        BinaryFile<>::from_codegen(converted, global, result);
+    
+        ast::program::make_binary(converted, global);
     }
 
 

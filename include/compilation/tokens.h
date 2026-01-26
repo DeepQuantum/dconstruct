@@ -29,7 +29,7 @@ namespace dconstruct::compiler {
 
         IDENTIFIER, 
 
-        AUTO, USING, AS,
+        AUTO, USING, AS, FAR, NEAR,
         
         STRING, INT, DOUBLE, HEX, SID_NUM, SID, _NULL,
 
