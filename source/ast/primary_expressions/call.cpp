@@ -139,6 +139,37 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return *func_type.m_return;
 }
 
+[[nodiscard]] emission_res call_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
+    for (const expr_uptr& arg : m_arguments) {
+        const emission_res arg_reg = arg->emit_dc(fn, global, true);
+        if (!arg_reg) {
+            return arg_reg;
+        }
+    }
+    
+    const emission_res destination = fn.get_next_unused_register(as_argument);
+    if (!destination) {
+        return destination;
+    }
+
+    const emission_res callee = m_callee->emit_dc_lvalue(fn, global);
+
+    if (!callee) {
+        return callee;
+    }
+    
+    const Opcode call_opcode = std::get<function_type>(*m_type).m_isFarCall ? Opcode::CallFf : Opcode::Call;
+
+
+    fn.emit_instruction(call_opcode, *destination, *callee, m_arguments.size());
+
+    for (u16 i = 0; i < m_arguments.size(); ++i) {
+        fn.free_argument_register(i);
+    }
+
+    return *destination;
+}
+
 VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
     for (auto& arg : m_arguments) {
         env.check_action(&arg);

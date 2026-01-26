@@ -38,6 +38,7 @@
 #include "statements/variable_declaration.h"
 #include "statements/return.h"
 #include "function_definition.h"
+#include "program.h"
 
 namespace dconstruct::compiler {
 

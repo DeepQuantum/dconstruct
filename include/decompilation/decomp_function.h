@@ -44,7 +44,7 @@ namespace dconstruct::dcompiler {
         std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
-        compiler::scope m_env;
+        compiler::scope m_env{{}};
         const function_disassembly& m_disassembly;
         const BinaryFile<is_64_bit>& m_file;
         std::optional<std::filesystem::path> m_graphPath;

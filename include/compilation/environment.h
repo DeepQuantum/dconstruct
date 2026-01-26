@@ -60,10 +60,30 @@ namespace dconstruct::compiler {
     };
 
     struct scope : public environment<ast::full_type> {
-        std::unordered_map<std::string, ast::full_type> n_namesToTypes;
+
+        explicit scope(std::unordered_map<std::string, ast::full_type> names_to_types) noexcept : 
+            m_namesToTypes(std::move(names_to_types)){};
+
+        explicit scope(scope* enclosing) noexcept {
+            m_enclosing = enclosing;
+        }
+
+        scope() noexcept {
+            m_enclosing = nullptr;
+        };
+        
+        scope(const scope& rhs) = delete;
+
+        scope& operator=(const scope& rhs) = delete;
+
+        scope& operator=(scope&& rhs) = default;
+        scope(scope&& rhs) = default;
+
+        
+
+        std::unordered_map<std::string, ast::full_type> m_namesToTypes;
         std::unordered_map<std::string, sid64_literal> m_sidAliases;
         const ast::full_type* m_returnType;
-        const SIDBase* m_sidbase;
     };
 
 }

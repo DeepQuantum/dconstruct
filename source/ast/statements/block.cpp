@@ -1,7 +1,7 @@
 #include "ast/statements/block.h"
 #include "ast/statements/variable_declaration.h"
 #include "ast/statements/foreach.h"
-
+#include "compilation/environment.h"
 #include <iostream>
 
 namespace dconstruct::ast {
@@ -73,7 +73,10 @@ void block::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] std::vector<semantic_check_error> block::check_semantics(compiler::scope& env) const noexcept {
+    compiler::scope new_scope(&env);
+    
     std::vector<semantic_check_error> final_errors;
+
     for (const auto& stmnt : m_statements) {
         std::vector<semantic_check_error> errors = stmnt->check_semantics(env); 
         if (!errors.empty()) {
@@ -229,6 +232,24 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
     clear_dead_statements();
 
     return MATCH_OPTIMIZATION_ACTION::NONE;
+}
+
+[[nodiscard]] emission_err block::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    compiler::environment<reg_idx> old_saved = std::move(fn.m_varsToRegs);
+    compiler::environment<reg_idx> new_env(&old_saved);
+    fn.m_varsToRegs = std::move(new_env);
+    
+
+    for (const auto& statement : m_statements) {
+        const emission_err err = statement->emit_dc(fn, global);
+        if (err) {
+            return err;
+        }
+    }
+
+    fn.m_varsToRegs = std::move(old_saved);
+
+    return std::nullopt;
 }
 
 }

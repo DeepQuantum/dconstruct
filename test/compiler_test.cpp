@@ -3,6 +3,7 @@
 #include "compilation/dc_parser.h"
 #include "ast/ast.h"
 #include <vector>
+#include <fstream>
 
 namespace dconstruct::testing {
     static std::pair<std::vector<compiler::token>, std::vector<compiler::lexing_error>> get_tokens(const std::string &string) {
@@ -10,7 +11,7 @@ namespace dconstruct::testing {
         return { lexer.scan_tokens(), lexer.get_errors() };
     } 
 
-    static std::tuple<std::vector<ast::global_decl_uptr>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_parse_results(const std::vector<compiler::token> &tokens) {
+    static std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_parse_results(const std::vector<compiler::token> &tokens) {
         compiler::Parser parser{tokens};
         return { parser.parse(), parser.get_known_types(), parser.get_errors() };
     }
@@ -36,9 +37,9 @@ namespace dconstruct::testing {
 
         compiler::Parser parser{function_def_tokens};
 
-        auto [functions, _, errors] = get_parse_results(function_def_tokens);
+        auto [program, _, errors] = get_parse_results(function_def_tokens);
 
-        return { !functions.empty() ? std::move(static_cast<ast::function_definition*>(functions[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
+        return { !program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
     } 
 
     TEST(COMPILER, LexerEmpty) {
@@ -808,7 +809,7 @@ namespace dconstruct::testing {
         const auto& rhs = *dynamic_cast<ast::if_stmt*>(statements.front().get());
         EXPECT_EQ(expected_if, rhs);
 
-        dconstruct::compiler::scope type_env{};
+        dconstruct::compiler::scope type_env{{}};
         const auto errors = statements.front()->check_semantics(type_env);
 
         EXPECT_EQ(errors.size(), 0);
@@ -855,10 +856,10 @@ namespace dconstruct::testing {
         "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
-        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(functions.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 0);
         ast::struct_type expected_type;
         expected_type.m_name = "Vector3";
         expected_type.m_members["x"] = std::move(std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::F32)));
@@ -879,10 +880,10 @@ namespace dconstruct::testing {
         "}";
 
         auto [tokens, lex_errors] = get_tokens(code);
-        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(functions.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 0);
         ast::enum_type expected_type;
         expected_type.m_name = "Color";
         expected_type.m_enumerators.push_back("Red");
@@ -897,14 +898,13 @@ namespace dconstruct::testing {
     TEST(COMPILER, FullFunc1) {
         const std::string code = "struct Vector3 { f32 x; f32 y; f32 z; } enum Opcode { MOVE, LOAD, PUSH } i32 vector3_dist(Vector3 a) { return 1.0; }";
         auto [tokens, lex_errors] = get_tokens(code);
-        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(functions.size(), 1);
+        EXPECT_EQ(program.m_declarations.size(), 1);
         
-        compiler::scope scope{};
-        scope.n_namesToTypes = types;
-        const auto semantic_errors = functions[0]->check_semantics(scope);
+        compiler::scope scope{types};
+        const auto semantic_errors = program.m_declarations[0]->check_semantics(scope);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
@@ -913,14 +913,13 @@ namespace dconstruct::testing {
     TEST(COMPILER, Declaration1) {
         const std::string code = "i32 main () { i32 x = 0; i32 y = 0; return x = y; }";
         auto [tokens, lex_errors] = get_tokens(code);
-        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(functions.size(), 1);
+        EXPECT_EQ(program.m_declarations.size(), 1);
         
-        compiler::scope scope{};
-        scope.n_namesToTypes = types;
-        const auto semantic_errors = functions[0]->check_semantics(scope);
+        compiler::scope scope{types};
+        const auto semantic_errors = program.m_declarations[0]->check_semantics(scope);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
@@ -928,29 +927,49 @@ namespace dconstruct::testing {
 
     TEST(COMPILER, Using1) {
         const std::string code = 
-        "using #display as (string, i32) -> void;"
-        "using #5445173390656D6D as (string, i32, i32) -> string sprintf;"
+        "using far #display as (string, i32) -> void;"
+        "using far #5445173390656D6D as (string, i32, i32) -> string sprintf;"
         "i32 main() {"
         "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
         "    display(message, 19);"
         "    return 0;"
         "}";
         auto [tokens, lex_errors] = get_tokens(code);
-        const auto [functions, types, parse_errors] = get_parse_results(tokens);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(functions.size(), 3);
+        EXPECT_EQ(program.m_declarations.size(), 3);
 
-        compiler::scope scope{};
-        scope.n_namesToTypes = types;
-        std::vector<ast::semantic_check_error> semantic_errors;
-        for (const auto& decl : functions) {
-            const auto new_errors = decl->check_semantics(scope);
-            semantic_errors.insert(semantic_errors.end(), new_errors.begin(), new_errors.end());
-        }
-        ASSERT_EQ(scope.m_sidAliases["sprintf"].first, 0x5445173390656D6D);
+        compiler::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(scope.m_sidAliases.at("sprintf").first, 0x5445173390656D6D);
 
         std::vector<ast::semantic_check_error> empty{};
         EXPECT_EQ(semantic_errors, empty);
+    }
+
+    TEST(COMPILER, FullCompile1) {
+        const std::string code = 
+            "i32 main() {"
+            "   u64 x = 1;"
+            "   u64 y = x * 2;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 1);
+
+        compiler::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile();
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
     }
 }

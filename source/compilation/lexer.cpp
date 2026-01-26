@@ -120,9 +120,17 @@ char Lexer::advance() {
         }
     }
     if (is_double) {
-        return make_current_token(token_type::DOUBLE, std::stod(make_current_lexeme()));
+        return make_current_token(token_type::DOUBLE, std::stof(make_current_lexeme()));
     }
-    return make_current_token(token_type::INT, std::stoi(make_current_lexeme()));
+    const u64 number = std::stoull(make_current_lexeme());
+
+    if (number <= std::numeric_limits<u16>::max()) {
+        return make_current_token(token_type::INT, static_cast<u16>(number));
+    } else if (number <= std::numeric_limits<u32>::max()) {
+        return make_current_token(token_type::INT, static_cast<u32>(number));
+    } else {
+        return make_current_token(token_type::INT, static_cast<u64>(number));
+    }
 }
 
 [[nodiscard]] bool Lexer::is_hex_char(const char c) const noexcept {

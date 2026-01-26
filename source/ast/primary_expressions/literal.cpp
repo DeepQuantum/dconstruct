@@ -95,6 +95,17 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             const u8 table_idx = fn.add_to_symbol_table(size, compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING);
             fn.emit_instruction(Opcode::LoadStaticPointerImm, *reg, table_idx);
             return *reg;
+        } else if constexpr (std::is_same_v<T, sid64_literal>) {
+            const auto& [numeric, name] = lit;
+            sid64 table_entry = 0;
+            if (numeric != 0) {
+                table_entry = numeric;
+            } else {
+                assert(!name.empty());
+                table_entry = SID(name.c_str());
+            }
+            const u8 table_idx = fn.add_to_symbol_table(numeric, compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
+            fn.emit_instruction(Opcode::LookupPointer, *reg, table_idx);
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {
             if (lit == 0) {
                 fn.emit_instruction(Opcode::OpBitXor, *reg, *reg);

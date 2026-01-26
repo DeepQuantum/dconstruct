@@ -17,9 +17,9 @@ namespace dconstruct::compiler {
     class Parser {
     public:
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
-        [[nodiscard]] std::vector<ast::global_decl_uptr> parse();
+        [[nodiscard]] ast::program parse();
 
-        [[nodiscard]] std::tuple<std::vector<ast::global_decl_uptr>, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
+        [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
             return { parse(), get_known_types(), get_errors() };
         }
         

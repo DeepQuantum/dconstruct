@@ -307,6 +307,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::using_declaration> Parser::make_using_declaration() {
+    const token* far_spec = nullptr;
+    if (match({token_type::FAR, token_type::NEAR})) {
+        far_spec = &previous();
+    }
+
     const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
     if (!old_sid) {
         return nullptr;
@@ -323,6 +328,20 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
 
+    if (std::holds_alternative<ast::function_type>(*new_type)) {
+        if (!far_spec) {
+            m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias.");
+            return nullptr;
+        } else {
+            std::get<ast::function_type>(*new_type).m_isFarCall = far_spec->m_type == token_type::FAR;
+        }
+    } else { 
+        if (far_spec) {
+            m_errors.emplace_back(previous(), far_spec->m_lexeme + " specification was unexpected on non-function alias.");
+            return nullptr;
+        }
+    }
+
     std::string new_name = "";
     if (match({token_type::IDENTIFIER})) {
         new_name = previous().m_lexeme;
@@ -335,7 +354,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return std::make_unique<ast::using_declaration>(std::move(old_sid_val), std::move(*new_type), !new_name.empty() ? std::move(new_name) : old_sid_val.second);
 }
 
-[[nodiscard]] std::vector<ast::global_decl_uptr> Parser::parse() {
+[[nodiscard]] ast::program Parser::parse() {
     std::vector<ast::global_decl_uptr> definitions;
     while (!is_at_end()) {
         auto declaration = make_global();
@@ -343,7 +362,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
             definitions.push_back(std::move(std::get<ast::global_decl_uptr>(*declaration)));
         }
     }
-    return definitions;
+    return ast::program{std::move(definitions)};
 }
 
 
