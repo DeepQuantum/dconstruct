@@ -5,6 +5,7 @@
 #include <optional>
 #include <variant>
 #include <vector>
+#include <expected>
 
 namespace dconstruct::ast {
 
@@ -166,12 +167,123 @@ namespace dconstruct::ast {
             k == primitive_kind::BOOL;
     }
 
+    
     [[nodiscard]] constexpr bool is_floating_point(primitive_kind k) noexcept {
         return k == primitive_kind::F32 || k == primitive_kind::F64;
     }
-
+    
     [[nodiscard]] constexpr bool is_arithmetic(primitive_kind k) noexcept {
         return is_integral(k) || is_floating_point(k);
+    }
+
+    [[nodiscard]] constexpr bool is_unsigned(const primitive_kind k) noexcept {
+        return  k == primitive_kind::U8  ||
+                k == primitive_kind::U16 ||
+                k == primitive_kind::U32 ||
+                k == primitive_kind::U64;
+    }
+
+    [[nodiscard]] constexpr bool is_signed(const primitive_kind k) noexcept {
+        return  k == primitive_kind::I8  ||
+                k == primitive_kind::I16 ||
+                k == primitive_kind::I32 ||
+                k == primitive_kind::I64;
+    }
+    
+
+    [[nodiscard]] constexpr std::optional<primitive_kind> get_dominating_prim(const primitive_kind lhs, const primitive_kind rhs) {
+        auto int_rank = [](primitive_kind k) -> u32 {
+            switch (k) {
+                case primitive_kind::U8:
+                case primitive_kind::I8:  return 8;
+                case primitive_kind::U16:
+                case primitive_kind::I16: return 16;
+                case primitive_kind::U32:
+                case primitive_kind::I32: return 32;
+                case primitive_kind::U64:
+                case primitive_kind::I64: return 64;
+                default: return -1;
+            }
+        };
+
+        auto float_rank = [](primitive_kind k) -> u32 {
+            switch (k) {
+                case primitive_kind::F32: return 32;
+                case primitive_kind::F64: return 64;
+                default: return -1;
+            }
+        };
+
+        const bool lhs_unsigned = is_unsigned(lhs);
+        const bool rhs_unsigned = is_unsigned(rhs);
+        const bool lhs_signed   = is_signed(lhs);
+        const bool rhs_signed   = is_signed(rhs);
+
+        if ((lhs_unsigned || lhs_signed) && (rhs_unsigned || rhs_signed)) {
+            if (lhs_unsigned != rhs_unsigned) {
+                return std::nullopt;
+            }
+
+            const u32 l = int_rank(lhs);
+            const u32 r = int_rank(rhs);
+
+            if (l < 0 || r < 0) {
+                return std::nullopt;
+            }
+
+            return l >= r ? lhs : rhs;
+        }
+
+        const u32 lf = float_rank(lhs);
+        const u32 rf = float_rank(rhs);
+
+        if (lf >= 0 && rf >= 0) {
+            return lf >= rf ? lhs : rhs;
+        }
+
+        return std::nullopt;
+    }
+
+    [[nodiscard]] static std::optional<std::string> is_assignable(const full_type& assignee, const full_type& assign_value) {
+        return std::visit([](auto&& lhs, auto&& rhs) -> std::optional<std::string> {
+            using lhs_t = std::decay_t<decltype(lhs)>;
+            using rhs_t = std::decay_t<decltype(rhs)>;
+            if constexpr (std::is_same_v<lhs_t, primitive_type>) {
+                if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
+                    return "cannot assign primitive of type " + type_to_declaration_string(rhs) + " to variable declared as " + type_to_declaration_string(lhs); 
+                } else {
+                    const auto new_kind = get_dominating_prim(lhs.m_type, rhs.m_type);
+                    if (!new_kind) {
+                        return "cannot assign primitive of type " + type_to_declaration_string(rhs) + " to primitive of type " + type_to_declaration_string(lhs); 
+                    }
+                    return std::nullopt;
+                }
+            } else if constexpr (std::is_same_v<lhs_t, rhs_t>) {
+                return std::nullopt;
+            } else {
+                return "cannot assign expression of type " + type_to_declaration_string(rhs) + " to variable declared as " + type_to_declaration_string(lhs);
+            }
+        }, assignee, assign_value);
+    }
+
+    [[nodiscard]] static std::expected<full_type, std::string> is_valid_binary_op(const full_type& lhs, const full_type& rhs, const std::string& op) {
+        return std::visit([&op](auto&& lhs, auto rhs) -> std::expected<full_type, std::string> {
+            using lhs_t = std::decay_t<decltype(lhs)>;
+            using rhs_t = std::decay_t<decltype(rhs)>;
+
+            if constexpr (!std::is_same_v<lhs_t, primitive_type>) {
+                return std::unexpected{"expected lhs of '" + op + "' to be primitive value"};
+            } else if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
+                return std::unexpected{"expected rhs of '" + op + "' to be primitive value"};
+            } else {
+                const std::optional<primitive_kind> new_prim = get_dominating_prim(lhs.m_type, rhs.m_type);
+                if (!new_prim) {
+                    return std::unexpected{"cannot perform operation '" + op + "' of type " + type_to_declaration_string(lhs) + " and " + type_to_declaration_string(rhs)};
+                } else {
+                    return make_type_from_prim(*new_prim);
+                }
+            }
+        }, lhs, rhs);
     }
 
     template<typename T> inline constexpr bool is_primitive = std::is_same_v<T, primitive_type>;

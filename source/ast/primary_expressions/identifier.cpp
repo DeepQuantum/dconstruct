@@ -66,11 +66,11 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *var_location;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const bool as_argument) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx>) const noexcept {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
     }
 
     return *var_location;

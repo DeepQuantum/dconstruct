@@ -20,7 +20,8 @@ namespace dconstruct::compiler {
 
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
 
-        [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register(const bool argument) noexcept;
+        [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register(const bool argument = false) noexcept;
+        void free_register(const reg_idx reg) noexcept;
         void free_register(const ast::expression& expr, const reg_idx reg) noexcept;
         void free_argument_register(const reg_idx reg) noexcept;
         

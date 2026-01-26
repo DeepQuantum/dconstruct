@@ -19,34 +19,45 @@ namespace dconstruct::ast {
         return rhs_type;
     }
 
-    const std::expected<full_type, std::string> valid_mul = std::visit([](auto&& lhs_type, auto&& rhs_type) -> std::expected<full_type, std::string> {
-        using lhs_t = std::decay_t<decltype(lhs_type)>;
-        using rhs_t = std::decay_t<decltype(rhs_type)>;
-        
-        if constexpr (!is_primitive<lhs_t>) {
-            return std::unexpected{"cannot multiply non-primitive type " + type_to_declaration_string(lhs_type)};
-        } else if constexpr (!is_primitive<rhs_t>) {
-            return std::unexpected{"cannot multiply non-primitive type " + type_to_declaration_string(rhs_type)};
-        } else if (is_integral(lhs_type.m_type)) {
-            if (is_integral(rhs_type.m_type)) {
-                return make_type_from_prim(primitive_kind::U64);
-            }
-            return std::unexpected{"cannot multiply integral type " + type_to_declaration_string(lhs_type) + " with non-integral type " + type_to_declaration_string(rhs_type)};
-        } else if (is_floating_point(lhs_type.m_type)) {
-            if (is_floating_point(rhs_type.m_type)) {
-                return make_type_from_prim(primitive_kind::F32);
-            }
-            return std::unexpected{"cannot multiply floating point type " + type_to_declaration_string(lhs_type) + " with non-floating point type " + type_to_declaration_string(rhs_type)};
-        } else {
-            return std::unexpected{"cannot multiply " + type_to_declaration_string(lhs_type)};
-        }
-    }, *lhs_type, *rhs_type);
+    const std::expected<full_type, std::string> valid_mul = is_valid_binary_op(*lhs_type, *rhs_type, "*");
 
     if (!valid_mul) {
         return std::unexpected{semantic_check_error{valid_mul.error(), this}};
     }
 
     return *valid_mul;
+}
+
+[[nodiscard]] emission_res mul_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (!lhs) {
+        return lhs;
+    }
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    assert(std::holds_alternative<primitive_type>(*m_type));
+    const Opcode mul_opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMul : Opcode::FMul;
+    
+    reg_idx mul_destination;
+    if (destination) {
+        mul_destination = *destination;
+    } else {
+        const emission_res new_destination = fn.get_next_unused_register();
+        if (!new_destination) {
+            return new_destination;
+        }
+        mul_destination = *new_destination;
+    }
+
+    fn.emit_instruction(mul_opcode, mul_destination, *lhs, *rhs);
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return mul_destination;
 }
 
 }
