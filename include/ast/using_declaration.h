@@ -14,6 +14,7 @@ namespace dconstruct::ast {
         
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope&) const noexcept final;
         [[nodiscard]] emission_err emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept final {return {};};
+        [[nodiscard]] virtual bool emittable() const noexcept { return false; }
 
         sid64_literal m_originalName;
         parameter m_newIdentifier;

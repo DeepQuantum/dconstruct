@@ -5,15 +5,8 @@
 
 
 namespace dconstruct::compiler {
-[[nodiscard]] std::expected<reg_idx, std::string> function::get_next_unused_register(const bool argument) noexcept {
-    reg_set* regs = nullptr;
-    if (argument) {
-        regs = &m_usedArgumentRegisters;
-    } else {
-        regs = &m_usedRegisters;
-    }
-
-    u64 reg_set_num = regs->to_ullong();
+[[nodiscard]] std::expected<reg_idx, std::string> function::get_next_unused_register() noexcept {
+    u64 reg_set_num = m_usedRegisters.to_ullong();
 
     constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
 
@@ -21,9 +14,8 @@ namespace dconstruct::compiler {
         return std::unexpected{"no more free registers"};
     }
 
-
     reg_idx next_unused = std::countr_one(reg_set_num);
-    regs->set(next_unused, true);
+    m_usedRegisters.set(next_unused, true);
     return next_unused;
 }
 
@@ -37,8 +29,28 @@ void function::free_register(const ast::expression& expr, const reg_idx reg) noe
     }
 }
 
-void function::free_argument_register(const reg_idx reg) noexcept {
-    m_usedArgumentRegisters.set(reg, false);
+std::optional<std::string> function::save_used_argument_registers(const u8 count) noexcept {
+    reg_set saved;
+    for (u32 i = 0; i < count; ++i) {
+        const std::expected<reg_idx, std::string> reg = get_next_unused_register();
+        if (!reg) {
+            return reg.error();
+        }
+        emit_instruction(Opcode::Move, *reg, ARGUMENT_REGISTERS_IDX + i);
+        saved.set(*reg, true);
+    }
+    return std::nullopt;
+}
+
+void function::restore_used_argument_registers() noexcept {
+    const reg_set regs = m_savedArgumentsStack.back();
+    u64 num = regs.to_ullong();
+    u8 start = ARGUMENT_REGISTERS_IDX;
+    while (num != 0) {
+        const u8 next_reg = std::countr_zero(num);
+        num &= ~next_reg;
+        emit_instruction(Opcode::Move, start, next_reg);
+    }
 }
 
 

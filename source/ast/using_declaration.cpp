@@ -19,7 +19,9 @@ void using_declaration::pseudo_racket(std::ostream& os) const {
     if (!m_originalName.second.empty()) {
         if (m_originalName.second != m_newIdentifier.m_name) {
             scope.m_sidAliases[m_newIdentifier.m_name] = m_originalName;
-        }        
+        } else {
+            scope.m_sidAliases[m_originalName.second] = {SID(m_originalName.second.c_str()), m_originalName.second};
+        }
         scope.define(m_newIdentifier.m_name, m_newIdentifier.m_type);
     } else {
         scope.m_sidAliases[m_newIdentifier.m_name] = m_originalName;

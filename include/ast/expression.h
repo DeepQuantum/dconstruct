@@ -78,7 +78,9 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compiler::scope& env) const noexcept = 0;
         [[nodiscard]] virtual emission_res emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
-        [[nodiscard]] virtual emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept { return std::unexpected{"not implemented"}; }
+        [[nodiscard]] virtual emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept { 
+            return std::unexpected{"asdd"}; 
+        }
 
         [[nodiscard]] semantic_check_res get_type_checked(compiler::scope& env) const noexcept {
             if (!m_type) {
@@ -97,6 +99,9 @@ namespace dconstruct::ast {
                 m_type = compute_type_unchecked(env);
             }
             return *m_type;
+        }
+        [[nodiscard]] std::optional<full_type> get_type() const noexcept {
+            return m_type;
         }
 
         [[nodiscard]] u16 get_complexity() const noexcept {

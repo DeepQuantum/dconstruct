@@ -40,6 +40,15 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return {};
 }
 
+[[nodiscard]] emission_err expression_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    const emission_res expr_res = m_expression->emit_dc(fn, global);
+    if (!expr_res){ 
+        return expr_res.error();
+    }
+    fn.free_register(*m_expression, *expr_res);
+    return std::nullopt;
+}
+
 VAR_OPTIMIZATION_ACTION expression_stmt::var_optimization_pass(var_optimization_env& env) noexcept {
     env.check_action(&m_expression);
     return VAR_OPTIMIZATION_ACTION::NONE; 
