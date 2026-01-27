@@ -40,8 +40,8 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
         if (!expr_type) {
             return {expr_type.error()};
         }
-        if (*expr_type != *scope.m_returnType) {
-            return {semantic_check_error{"expected return type " + type_to_declaration_string(*scope.m_returnType) + " but expression is of type " + type_to_declaration_string(*expr_type)}};
+        if (const std::optional<std::string> err = is_assignable(*scope.m_returnType, *expr_type)) {
+            return {semantic_check_error{*err}};
         }
         return {};
     } else {
@@ -50,6 +50,15 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
         }
         return {};
     }
+}
+
+[[nodiscard]] emission_err return_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+    const emission_res expr_res = m_expr->emit_dc(fn, global);
+    if (!expr_res) {
+        return expr_res.error();
+    }
+    fn.emit_instruction(Opcode::Return, *expr_res, *expr_res);
+    return std::nullopt;
 }
 
 VAR_OPTIMIZATION_ACTION return_stmt::var_optimization_pass(var_optimization_env& env) noexcept {

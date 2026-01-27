@@ -965,7 +965,35 @@ namespace dconstruct::testing {
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile();
+        const auto binary = program.compile(scope);
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+    }
+
+    TEST(COMPILER, FullCompile2) {
+        const std::string code = 
+            "using far #display as (string, u64) -> void;"
+            "using far #5445173390656D6D as (string, u64, u64) -> string sprintf;"
+            "u32 main() {"
+            "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
+            "    display(message, 19);"
+            "    return 0;"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 1);
+
+        compiler::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);

@@ -66,7 +66,30 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *var_location;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx>) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const auto function_sid = global.m_sidAliases.find(m_name.m_lexeme);
+    if (function_sid != global.m_sidAliases.end()) {
+        const u8 index = fn.add_to_symbol_table(function_sid->second.second);
+
+        reg_idx true_destination;
+        if (!destination) {
+            const emission_res next_destination = fn.get_next_unused_register();
+            if (!next_destination) {
+                return next_destination;
+            }
+            true_destination = *next_destination;
+        } else {
+            true_destination = *destination;
+        }
+
+        if (std::holds_alternative<function_type>(function_sid->second.first)) {
+            fn.emit_instruction(Opcode::LookupPointer, true_destination, index);
+        } else { 
+            fn.emit_instruction(Opcode::LoadStaticU64Imm, true_destination, index);
+        }
+        return true_destination;
+    }
+
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {

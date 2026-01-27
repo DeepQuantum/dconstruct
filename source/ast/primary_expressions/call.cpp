@@ -129,7 +129,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         if (!arg_type) {
             return arg_type;
         }
-        if (*arg_type != *func_type.m_arguments[i].second) {
+        if (is_assignable(*func_type.m_arguments[i].second, *arg_type)) {
             return std::unexpected{semantic_check_error{
                 "expected argument of type " + type_to_declaration_string(*func_type.m_arguments[i].second) + " at position " + std::to_string(i) + " but got " + type_to_declaration_string(*arg_type)
             , arg.get()}};
@@ -140,40 +140,48 @@ void call_expr::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res call_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    for (const expr_uptr& arg : m_arguments) {
-        const emission_res arg_reg = arg->emit_dc(fn, global, true);
-        if (!arg_reg) {
-            return arg_reg;
-        }
-    }
-    
-    reg_idx reg;
-    if (destination) {
-        reg = *destination;
-    } else {
-        const emission_res new_destination = fn.get_next_unused_register();
-        if (!new_destination) {
-            return new_destination;
-        }
-        reg = *new_destination;
-    }
+    //fn.save_used_argument_registers(m_arguments.size());
 
-    const emission_res callee = m_callee->emit_dc_lvalue(fn, global);
+    const emission_res callee = m_callee->emit_dc(fn, global, destination);
 
     if (!callee) {
         return callee;
     }
-    
-    const Opcode call_opcode = std::get<function_type>(*m_type).m_isFarCall ? Opcode::CallFf : Opcode::Call;
 
-
-    fn.emit_instruction(call_opcode, reg, *callee, m_arguments.size());
-
-    for (u16 i = 0; i < m_arguments.size(); ++i) {
-        fn.free_argument_register(i);
+    for (u32 i = 0; i < m_arguments.size(); ++i) {
+        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i);
+        if (!arg_reg) {
+            return arg_reg;
+        }
+        if (*arg_reg != ARGUMENT_REGISTERS_IDX + i) {
+            fn.emit_instruction(Opcode::Move, ARGUMENT_REGISTERS_IDX + i, *arg_reg);
+        }
     }
+    
+    // reg_idx reg;
+    // if (destination) {
+    //     reg = *destination;
+    // } else {
+    //     const emission_res new_destination = fn.get_next_unused_register();
+    //     if (!new_destination) {
+    //         return new_destination;
+    //     }
+    //     reg = *new_destination;
+    // }
 
-    return reg;
+    
+    const std::optional<full_type> callee_type = m_callee->get_type();
+    assert(callee_type);
+    assert(std::holds_alternative<function_type>(*callee_type));
+    const function_type& ftype = std::get<function_type>(*callee_type);
+
+    const Opcode call_opcode = ftype.m_isFarCall ? Opcode::CallFf : Opcode::Call;
+
+    fn.emit_instruction(call_opcode, *callee, *callee, m_arguments.size());
+
+   // fn.restore_used_argument_registers();
+
+    return *callee;
 }
 
 VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& env)  noexcept {

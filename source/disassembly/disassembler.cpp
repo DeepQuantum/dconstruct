@@ -687,7 +687,7 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
         if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
             if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
                 frame.m_registerArgs[frame[dest].m_argNum] = *std::get<ast::function_type>(frame[dest].m_type).m_return;
-            } else {
+            } else if (frame[dest].m_argNum < frame.m_registerArgs.size()) {
                 frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
             }
         }
@@ -708,7 +708,7 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
             for (const auto& reg : fn.m_stackFrame.m_registers) {
-                if (reg.m_containsArg && !is_unknown(reg.m_type)) {
+                if (reg.m_containsArg && !is_unknown(reg.m_type) && reg.m_argNum < fn.m_stackFrame.m_registerArgs.size()) {
                     fn.m_stackFrame.m_registerArgs[reg.m_argNum] = reg.m_type;
                 }
             }
@@ -909,7 +909,8 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
                 }
                 else {
                     const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
-                    auto& ftype = frame.m_symbolTable.m_types[frame[dest].m_fromSymbolTable];
+                    const auto test = frame[dest].m_fromSymbolTable;
+                    auto& ftype = frame.m_symbolTable.m_types[test];
                     if (!std::holds_alternative<ast::function_type>(ftype)) {
                         ftype = ast::function_type{};
                     }

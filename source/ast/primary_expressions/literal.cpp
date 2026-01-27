@@ -114,7 +114,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             fn.emit_instruction(Opcode::LookupPointer, reg, table_idx);
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {
             if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, reg, reg);
+                fn.emit_instruction(Opcode::OpBitXor, reg, reg, reg);
             } else {
                 const u8 lo = static_cast<u16>(lit) & 0xFF;
                 const u8 hi = (static_cast<u16>(lit) >> 8) & 0xFF;
@@ -122,7 +122,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             }
         } else if constexpr (std::is_same_v<T, f32>) {
             if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, reg, reg);
+                fn.emit_instruction(Opcode::OpBitXor, reg, reg, reg);
             } else {
                 const u64 value = std::bit_cast<u32>(lit);
                 const u8 table_idx = fn.add_to_symbol_table(value);

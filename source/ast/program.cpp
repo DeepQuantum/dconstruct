@@ -173,15 +173,27 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     return result;
 }
 
-[[nodiscard]] program::compile_res program::compile() const noexcept { 
+[[nodiscard]] program::compile_res program::compile(const compiler::scope& scope) const noexcept { 
     compiler::global_state global;
+
+    for (const auto& [name, sid_literal] : scope.m_sidAliases) {
+        const full_type* type = scope.lookup(name);
+        //const std::pair pair = std::make_pair<full_type, sid64>(type, sid_literal.first);
+        global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
+    }
+
     std::vector<compiler::function> functions;
-    functions.resize(m_declarations.size());
+    functions.reserve(m_declarations.size());
     for (u32 i = 0; i < m_declarations.size(); ++i) {
-        const emission_err res = m_declarations[i]->emit_dc(functions[i], global);
+        if (!m_declarations[i]->emittable()) {
+            continue;
+        }
+        compiler::function fn;
+        const emission_err res = m_declarations[i]->emit_dc(fn, global);
         if (res) {
             return std::unexpected{*res};
         }
+        functions.push_back(std::move(fn));
     }
     return make_binary(functions, global);
 }
