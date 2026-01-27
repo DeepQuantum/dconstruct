@@ -38,18 +38,21 @@ std::optional<std::string> function::save_used_argument_registers(const u8 count
         }
         emit_instruction(Opcode::Move, *reg, ARGUMENT_REGISTERS_IDX + i);
         saved.set(*reg, true);
+        m_savedArgumentsTemporaryRegs.push_back(saved);
     }
     return std::nullopt;
 }
 
 void function::restore_used_argument_registers() noexcept {
-    const reg_set regs = m_savedArgumentsStack.back();
+    const reg_set regs = m_savedArgumentsTemporaryRegs.back();
+    m_savedArgumentsTemporaryRegs.pop_back();
     u64 num = regs.to_ullong();
     u8 start = ARGUMENT_REGISTERS_IDX;
+    u8 i = 0;
     while (num != 0) {
         const u8 next_reg = std::countr_zero(num);
-        num &= ~next_reg;
-        emit_instruction(Opcode::Move, start, next_reg);
+        num &= num - 1;
+        emit_instruction(Opcode::Move, start + i++, next_reg);
     }
 }
 

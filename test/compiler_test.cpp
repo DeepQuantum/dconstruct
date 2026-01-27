@@ -978,8 +978,7 @@ namespace dconstruct::testing {
             "using far #display as (string, u64) -> void;"
             "using far #5445173390656D6D as (string, u64, u64) -> string sprintf;"
             "u32 main() {"
-            "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
-            "    display(message, 19);"
+            "    display(\"test\", sprintf(\"Hello World from DC version %d.%d\", 0, 0), 19);"
             "    return 0;"
             "}";
 

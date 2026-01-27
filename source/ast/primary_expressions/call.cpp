@@ -123,6 +123,10 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     }
     const function_type func_type = std::get<function_type>(*callee_type);
 
+    if (func_type.m_arguments.size() < m_arguments.size()) {
+        return std::unexpected{semantic_check_error{"function expects " + std::to_string(func_type.m_arguments.size()) + " arguments but " + std::to_string(m_arguments.size()) + " were passed"}};
+    }
+
     for (u32 i = 0; i < m_arguments.size(); ++i) {
         const expr_uptr& arg = m_arguments[i];
         const semantic_check_res arg_type = arg->get_type_checked(env);
@@ -139,17 +143,36 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return *func_type.m_return;
 }
 
-[[nodiscard]] emission_res call_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    //fn.save_used_argument_registers(m_arguments.size());
+[[nodiscard]] emission_res call_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+    // if we are already emitting a function, we need to save the previously used registers to some temp registers
+    // so the current function needs to know about the last function's args (stack)
+    // we need to save all previously used argument registers
+    // display(x, y, format(y, get_string(), 0), something)
+    // display has 3 args, we save that
+    // format call sees that previous call is on stack and needs 3 arguments, so it needs to make sure to save all of those to local registers
+    // it pushes onto the stack in which temporaries it stores them
 
-    const emission_res callee = m_callee->emit_dc(fn, global, destination);
+    if (arg_pos && *arg_pos != 0) {
+        fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
+    }
+
+    emission_res callee;
+    if (destination) {
+        const emission_res callee_destination = (*destination >= ARGUMENT_REGISTERS_IDX) ? fn.get_next_unused_register() : *destination;
+        if (!callee_destination) {
+            return callee_destination;
+        }
+        callee = m_callee->emit_dc(fn, global, *callee_destination);
+    } else { 
+        callee = m_callee->emit_dc(fn, global);
+    }
 
     if (!callee) {
         return callee;
     }
 
     for (u32 i = 0; i < m_arguments.size(); ++i) {
-        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i);
+        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i, i);
         if (!arg_reg) {
             return arg_reg;
         }
@@ -157,18 +180,6 @@ void call_expr::pseudo_racket(std::ostream& os) const {
             fn.emit_instruction(Opcode::Move, ARGUMENT_REGISTERS_IDX + i, *arg_reg);
         }
     }
-    
-    // reg_idx reg;
-    // if (destination) {
-    //     reg = *destination;
-    // } else {
-    //     const emission_res new_destination = fn.get_next_unused_register();
-    //     if (!new_destination) {
-    //         return new_destination;
-    //     }
-    //     reg = *new_destination;
-    // }
-
     
     const std::optional<full_type> callee_type = m_callee->get_type();
     assert(callee_type);
@@ -179,7 +190,9 @@ void call_expr::pseudo_racket(std::ostream& os) const {
 
     fn.emit_instruction(call_opcode, *callee, *callee, m_arguments.size());
 
-   // fn.restore_used_argument_registers();
+    if (arg_pos && *arg_pos != 0) {
+        fn.restore_used_argument_registers();
+    }
 
     return *callee;
 }

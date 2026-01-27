@@ -34,7 +34,8 @@ namespace dconstruct::compiler {
         std::vector<Instruction> m_instructions;
         std::vector<u64> m_symbolTable;
         std::vector<SYMBOL_TABLE_POINTER_KIND> m_symbolTableEntryPointers;
-        std::vector<reg_set> m_savedArgumentsStack;
+        std::vector<u8> m_numberSavedArgumentsStack;
+        std::vector<reg_set> m_savedArgumentsTemporaryRegs;
         environment<reg_idx> m_varsToRegs;
         std::variant<std::string, sid64> m_name;
         u8 m_usedArgumentRegisters = 0;
