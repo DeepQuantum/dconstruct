@@ -76,7 +76,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual full_type compute_type_unchecked(const compiler::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual emission_res emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
+        [[nodiscard]] virtual emission_res emit_dc( compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination = std::nullopt, const std::optional<u8> arg_pos = std::nullopt) const noexcept { return 0; }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
         [[nodiscard]] virtual emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept { 
             return std::unexpected{"asdd"}; 

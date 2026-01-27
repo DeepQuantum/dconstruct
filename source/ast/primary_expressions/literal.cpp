@@ -81,7 +81,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
@@ -113,16 +113,12 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             const u8 table_idx = fn.add_to_symbol_table(numeric, compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
             fn.emit_instruction(Opcode::LookupPointer, reg, table_idx);
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {
-            if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, reg, reg, reg);
-            } else {
-                const u8 lo = static_cast<u16>(lit) & 0xFF;
-                const u8 hi = (static_cast<u16>(lit) >> 8) & 0xFF;
-                fn.emit_instruction(Opcode::LoadU16Imm, reg, lo, hi);
-            }
+            const u8 lo = static_cast<u16>(lit) & 0xFF;
+            const u8 hi = (static_cast<u16>(lit) >> 8) & 0xFF;
+            fn.emit_instruction(Opcode::LoadU16Imm, reg, lo, hi);
         } else if constexpr (std::is_same_v<T, f32>) {
             if (lit == 0) {
-                fn.emit_instruction(Opcode::OpBitXor, reg, reg, reg);
+                fn.emit_instruction(Opcode::LoadU16Imm, reg, 0, 0);
             } else {
                 const u64 value = std::bit_cast<u32>(lit);
                 const u8 table_idx = fn.add_to_symbol_table(value);

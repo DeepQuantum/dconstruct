@@ -66,7 +66,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *var_location;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     const auto function_sid = global.m_sidAliases.find(m_name.m_lexeme);
     if (function_sid != global.m_sidAliases.end()) {
         const u8 index = fn.add_to_symbol_table(function_sid->second.second);

@@ -109,7 +109,7 @@ u8 Disassembler<is_64_bit>::insert_struct_or_arraylike(const location struct_loc
 template<bool is_64_bit>
 void Disassembler<is_64_bit>::insert_anonymous_array(const location anon_array, const u32 indent) {
     const u32 anonymous_array_size = anon_array.get<u32>(8);
-    if (anonymous_array_size > 1024) {
+    if (anonymous_array_size > 100'000) {
         insert_span_fmt("anonymous array with invalid size %u, returning\n", anonymous_array_size);
         return;
     }
@@ -123,7 +123,7 @@ template<bool is_64_bit>
     u32 size_array_front = array.get<u32>(8);
     u32 size_array_back = array.get<u32>(-8);
     u32 size_array;
-    constexpr u32 max_allowed_size_array = 512;
+    constexpr u32 max_allowed_size_array = 100'000;
     if (size_array_front > max_allowed_size_array) {
         if (size_array_back > max_allowed_size_array) {
             insert_span_fmt("array [0x%x] {size: (%u, %u) (*invalid*)} {", 

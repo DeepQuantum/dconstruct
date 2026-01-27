@@ -28,7 +28,7 @@ namespace dconstruct::ast {
     return *valid_mul;
 }
 
-[[nodiscard]] emission_res mul_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+[[nodiscard]] emission_res mul_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     const emission_res lhs = m_lhs->emit_dc(fn, global);
     if (!lhs) {
         return lhs;
