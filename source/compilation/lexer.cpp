@@ -1,7 +1,7 @@
 #include "compilation/lexer.h"
 #include <iostream>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
 
 [[nodiscard]] const std::vector<token>& Lexer::scan_tokens() {
     while (!reached_eof()) {

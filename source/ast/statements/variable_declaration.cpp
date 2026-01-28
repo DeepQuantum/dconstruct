@@ -40,7 +40,7 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return std::make_unique<variable_declaration>(m_type, m_identifier, m_init ? m_init->clone() : nullptr);
 }
 
-[[nodiscard]] std::vector<semantic_check_error> variable_declaration::check_semantics(compiler::scope& scope) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> variable_declaration::check_semantics(compilation::scope& scope) const noexcept {
     if (m_init) {
         const semantic_check_res init_type = m_init->get_type_checked(scope);
         if (!init_type) {
@@ -58,7 +58,7 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
     return {};
 }
 
-[[nodiscard]] emission_err variable_declaration::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_err variable_declaration::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     const emission_res new_var_reg = fn.get_next_unused_register();
     if (!new_var_reg) {
         return new_var_reg.error();

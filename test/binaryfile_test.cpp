@@ -29,8 +29,8 @@ namespace dconstruct::testing {
         FileDisassembler<true> disassembler(&file, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/transplant_check.bin", {});
         disassembler.disassemble();
 
-        std::vector<compiler::function> converted;
-        compiler::global_state global;
+        std::vector<compilation::function> converted;
+        compilation::global_state global;
 
         std::vector<function_disassembly> funcs = disassembler.get_functions();
         std::ranges::sort(funcs, [](const function_disassembly& a, const function_disassembly& b) {
@@ -38,7 +38,7 @@ namespace dconstruct::testing {
         });
 
         for (const auto& f : funcs) {
-            compiler::function cf;
+            compilation::function cf;
             const std::string id = f.get_id();
             if (id.starts_with("#")) {
                 cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
@@ -49,17 +49,17 @@ namespace dconstruct::testing {
                 cf.m_instructions.push_back(line.m_instruction);
             }
             for (u32 i = 0; i < f.m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                const compiler::function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
+                const compilation::function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
                     using T = std::decay_t<decltype(type)>;
                     if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                        return type.m_type == ast::primitive_kind::STRING ? compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING : compiler::function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                        return type.m_type == ast::primitive_kind::STRING ? compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING : compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE;
                     } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                        return compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
+                        return compilation::function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
                     } else {
-                        return compiler::function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                        return compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE;
                     }
                 }, f.m_stackFrame.m_symbolTable.m_types[i]);
-                if (kind == compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+                if (kind == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
                     const u32 size = global.add_string(f.m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {

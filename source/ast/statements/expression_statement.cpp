@@ -28,7 +28,7 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<expression_stmt>(m_expression->clone()); 
 }
 
-[[nodiscard]] std::vector<semantic_check_error> expression_stmt::check_semantics(compiler::scope& env) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> expression_stmt::check_semantics(compilation::scope& env) const noexcept {
     semantic_check_res expr_type = m_expression->get_type_checked(env);
 
     if (!expr_type) {
@@ -40,12 +40,12 @@ void expression_stmt::pseudo_racket(std::ostream& os) const {
     return {};
 }
 
-[[nodiscard]] emission_err expression_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_err expression_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     const emission_res expr_res = m_expression->emit_dc(fn, global);
     if (!expr_res){ 
         return expr_res.error();
     }
-    fn.free_register(*m_expression, *expr_res);
+    fn.free_register(*expr_res);
     return std::nullopt;
 }
 

@@ -72,8 +72,8 @@ void block::pseudo_racket(std::ostream& os) const {
     return std::all_of(m_statements.begin(), m_statements.end(), [](const auto& stmnt) { return stmnt->is_dead_code(); });
 }
 
-[[nodiscard]] std::vector<semantic_check_error> block::check_semantics(compiler::scope& env) const noexcept {
-    compiler::scope new_scope(&env);
+[[nodiscard]] std::vector<semantic_check_error> block::check_semantics(compilation::scope& env) const noexcept {
+    compilation::scope new_scope(&env);
     
     std::vector<semantic_check_error> final_errors;
 
@@ -234,9 +234,9 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] emission_err block::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
-    compiler::environment<reg_idx> old_saved = std::move(fn.m_varsToRegs);
-    compiler::environment<reg_idx> new_env(&old_saved);
+[[nodiscard]] emission_err block::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
+    compilation::environment<reg_idx> old_saved = std::move(fn.m_varsToRegs);
+    compilation::environment<reg_idx> new_env(&old_saved);
     fn.m_varsToRegs = std::move(new_env);
     
 

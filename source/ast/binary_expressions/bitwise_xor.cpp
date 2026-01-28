@@ -3,7 +3,7 @@
 
 namespace dconstruct::ast {
 
-[[nodiscard]] semantic_check_res bitwise_xor_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res bitwise_xor_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {
@@ -39,6 +39,31 @@ namespace dconstruct::ast {
     }
     
     return std::unexpected{semantic_check_error{*invalid_bitwise_xor, this}};
+}
+
+[[nodiscard]] emission_res bitwise_xor_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (lhs) {
+        return lhs;
+    }
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    assert(std::holds_alternative<primitive_type>(*m_type));
+    
+    const emission_res xor_destination = destination ? *destination : fn.get_next_unused_register();
+    if (!xor_destination) {
+        return xor_destination;
+    }
+
+    fn.emit_instruction(Opcode::OpBitXor, *xor_destination, *lhs, *rhs);
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return xor_destination;
 }
 
 

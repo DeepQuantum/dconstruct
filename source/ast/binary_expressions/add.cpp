@@ -23,7 +23,7 @@ namespace dconstruct::ast {
 template<typename T, typename U>
 using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 
-[[nodiscard]] semantic_check_res add_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res add_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {
@@ -72,7 +72,34 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
     return *valid_add;
 }
 
-[[nodiscard]] llvm_res add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const {
+[[nodiscard]] emission_res add_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (lhs) {
+        return lhs;
+    }
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    assert(std::holds_alternative<primitive_type>(*m_type));
+    const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMul : Opcode::FMul;
+
+    const emission_res add_destination = fn.get_destination(destination);
+    if (!add_destination) {
+        return add_destination;
+    }
+
+    fn.emit_instruction(opcode, *add_destination, *lhs, *rhs);
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return add_destination;
+}
+
+
+[[nodiscard]] llvm_res add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const {
     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
     if (!lhs) {
         return lhs;

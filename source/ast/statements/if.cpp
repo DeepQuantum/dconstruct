@@ -51,7 +51,7 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
     return this;
 }
 
-[[nodiscard]] std::vector<semantic_check_error> if_stmt::check_semantics(compiler::scope& env) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> if_stmt::check_semantics(compilation::scope& env) const noexcept {
     std::vector<semantic_check_error> errors;
     
     semantic_check_res cond_type = m_condition->get_type_checked(env);

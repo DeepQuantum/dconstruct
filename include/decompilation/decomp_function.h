@@ -44,7 +44,7 @@ namespace dconstruct::dcompiler {
         std::array<expr_uptr, MAX_REGISTER> m_transformableExpressions;
         std::vector<ast::variable_declaration> m_arguments;
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
-        compiler::scope m_env{{}};
+        compilation::scope m_env{{}};
         const function_disassembly& m_disassembly;
         const BinaryFile<is_64_bit>& m_file;
         std::optional<std::filesystem::path> m_graphPath;
@@ -122,7 +122,7 @@ namespace dconstruct::dcompiler {
         }
 
         template <typename T>
-        [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr, compiler::token op) {
+        [[nodiscard]] inline std::unique_ptr<T> apply_binary_op(const Instruction& istr, compilation::token op) {
             auto& op1 = m_transformableExpressions[istr.operand1];
             auto& op2 = m_transformableExpressions[istr.operand2];
             set_binary_types(op1, op2);
@@ -160,7 +160,7 @@ namespace dconstruct::dcompiler {
             args.push_back(m_transformableExpressions[istr.operand1]->clone());
             args.push_back(m_transformableExpressions[istr.operand2]->clone());
             auto callee = std::make_unique<ast::literal>(sid64_literal{SID("int_ash"), "int_ash"});
-            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));
+            auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(args));
             call->set_type(make_type_from_prim(ast::primitive_kind::U64));
             return call;
         }
@@ -169,7 +169,7 @@ namespace dconstruct::dcompiler {
             std::vector<expr_uptr> arg;
             arg.push_back(m_transformableExpressions[istr.destination]->clone());
             auto callee = std::make_unique<ast::literal>(sid64_literal{SID("symbol_table_load"), "symbol_table_load"});
-            auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+            auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
             return call;
         }
         

@@ -13,9 +13,9 @@ namespace dconstruct::ast {
         
         using compile_res = std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string>;
 
-        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope&) const noexcept;
-        [[nodiscard]] compile_res compile(const compiler::scope& scope) const noexcept;
-        [[nodiscard]] static compile_res make_binary(const std::vector<compiler::function>& functions, const compiler::global_state& global) noexcept;
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept;
+        [[nodiscard]] compile_res compile(const compilation::scope& scope) const noexcept;
+        [[nodiscard]] static compile_res make_binary(const std::vector<compilation::function>& functions, const compilation::global_state& global) noexcept;
 
         std::vector<ast::global_decl_uptr> m_declarations;
 

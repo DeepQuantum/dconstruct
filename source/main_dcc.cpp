@@ -8,7 +8,7 @@
 
 int run_compilation(const std::string& source_code) {
     const auto start_time = std::chrono::high_resolution_clock::now();
-    dconstruct::compiler::Lexer lexer{source_code};
+    dconstruct::compilation::Lexer lexer{source_code};
     const auto [tokens, lex_errors] = lexer.get_results();
 
     if (!lex_errors.empty()) {
@@ -18,7 +18,7 @@ int run_compilation(const std::string& source_code) {
         return -1;
     }
 
-    dconstruct::compiler::Parser parser{tokens};
+    dconstruct::compilation::Parser parser{tokens};
     const auto [functions, types, parse_errors] = parser.get_results();
     if (!parse_errors.empty()) {
         for (const auto& err : parse_errors) {
@@ -27,7 +27,7 @@ int run_compilation(const std::string& source_code) {
         return -1;
     }
 
-    dconstruct::compiler::scope base_scope{};
+    dconstruct::compilation::scope base_scope{};
     base_scope.n_namesToTypes = types;
 
     for (const auto& func : functions) {

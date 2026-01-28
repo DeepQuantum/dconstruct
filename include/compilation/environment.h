@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
     template<typename T = ast::typed_value>
     struct environment {
         environment() noexcept : m_enclosing(nullptr) {};
@@ -54,6 +54,15 @@ namespace dconstruct::compiler {
                 return m_enclosing->lookup(name);
             }
             return nullptr;
+        }
+
+        [[nodiscard]] bool value_used(const T& value) {
+            for (const auto& [key, stored_value] : m_values) {
+                if (value == stored_value) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         environment* m_enclosing;

@@ -910,7 +910,7 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
                 else {
                     const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
                     const auto test = frame[dest].m_fromSymbolTable;
-                    auto& ftype = frame.m_symbolTable.m_types[test];
+                    auto& ftype = frame.m_symbolTable.get_type(test);
                     if (!std::holds_alternative<ast::function_type>(ftype)) {
                         ftype = ast::function_type{};
                     }

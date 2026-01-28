@@ -40,7 +40,7 @@
 #include "function_definition.h"
 #include "program.h"
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
 
     using global = std::variant<ast::full_type, ast::global_decl_uptr>;
 

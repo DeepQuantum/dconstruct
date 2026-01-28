@@ -370,6 +370,13 @@ struct SymbolTable {
     [[nodiscard]] const T& get(const u64 offset) const noexcept {
         return m_location.get<T>(offset * 8);
     }
+
+    [[nodiscard]] ast::full_type& get_type(const u64 idx) noexcept {
+        if (idx > m_types.size()) {
+            m_types.resize(idx + 1);
+        }
+        return m_types[idx];
+    }
 };
 
 

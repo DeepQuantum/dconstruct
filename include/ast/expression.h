@@ -2,7 +2,6 @@
 
 #include "ast_source.h"
 #include <expected>
-#include "compilation/dc_register.h"
 #include "compilation/tokens.h"
 #include "ast/type.h"
 #include "compilation/environment.h"
@@ -48,7 +47,6 @@ namespace dconstruct::ast {
 
     using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
-    using emission_res = std::expected<reg_idx, std::string>;
 
     struct expression : public ast_element {
         virtual ~expression() = default;
@@ -58,7 +56,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compiler::scope&) const {
+        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const {
             return std::unexpected{llvm_error{"not implemented", *this}};
         };
         
@@ -74,15 +72,15 @@ namespace dconstruct::ast {
 
         [[nodiscard]] virtual std::unique_ptr<expression>* get_first_argument() noexcept { return nullptr; }
 
-        [[nodiscard]] virtual full_type compute_type_unchecked(const compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual semantic_check_res compute_type_checked(compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual emission_res emit_dc( compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination = std::nullopt, const std::optional<u8> arg_pos = std::nullopt) const noexcept { return 0; }
+        [[nodiscard]] virtual full_type compute_type_unchecked(const compilation::scope& env) const noexcept = 0;
+        [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
+        [[nodiscard]] virtual emission_res emit_dc( compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt, const std::optional<u8> arg_pos = std::nullopt) const noexcept { return 0; }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
-        [[nodiscard]] virtual emission_res emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept { 
+        [[nodiscard]] virtual emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept { 
             return std::unexpected{"asdd"}; 
         }
 
-        [[nodiscard]] semantic_check_res get_type_checked(compiler::scope& env) const noexcept {
+        [[nodiscard]] semantic_check_res get_type_checked(compilation::scope& env) const noexcept {
             if (!m_type) {
                 auto type_res = compute_type_checked(env);
                 if (!type_res) {
@@ -94,7 +92,7 @@ namespace dconstruct::ast {
             return *m_type;
         }
 
-        [[nodiscard]] ast::full_type get_type_unchecked(const compiler::scope& env) const noexcept {
+        [[nodiscard]] ast::full_type get_type_unchecked(const compilation::scope& env) const noexcept {
             if (!m_type) {
                 m_type = compute_type_unchecked(env);
             }
@@ -134,7 +132,7 @@ namespace dconstruct::ast {
     }
 
     struct unary_expr : public expression {
-        unary_expr(compiler::token op, std::unique_ptr<expression>&& rhs) noexcept : m_operator(std::move(op)), m_rhs(std::move(rhs)) {};
+        unary_expr(compilation::token op, std::unique_ptr<expression>&& rhs) noexcept : m_operator(std::move(op)), m_rhs(std::move(rhs)) {};
 
         // for testing ! stupid and expensive.
         [[nodiscard]] inline bool equals(const expression& rhs) const noexcept final {
@@ -157,7 +155,7 @@ namespace dconstruct::ast {
             os << '(' << m_operator.m_lexeme << ' ' << *m_rhs << ')';
         }
 
-        [[nodiscard]] inline full_type compute_type_unchecked(const compiler::scope& env) const noexcept override {
+        [[nodiscard]] inline full_type compute_type_unchecked(const compilation::scope& env) const noexcept override {
             return m_rhs->compute_type_unchecked(env);
         }
 
@@ -165,7 +163,7 @@ namespace dconstruct::ast {
             return 1 + m_rhs->get_complexity();
         }
 
-        compiler::token m_operator;
+        compilation::token m_operator;
         std::unique_ptr<expression> m_rhs;
     };
 
@@ -182,7 +180,7 @@ namespace dconstruct::ast {
 
         
 
-        binary_expr(compiler::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
+        binary_expr(compilation::token op, std::unique_ptr<expression>&& lhs, std::unique_ptr<expression>&& rhs) noexcept
             : m_operator(std::move(op)), m_lhs(std::move(lhs)), m_rhs(std::move(rhs)) {}
 
         inline void pseudo_c(std::ostream& os) const override {
@@ -214,7 +212,7 @@ namespace dconstruct::ast {
             return 1 + m_lhs->get_complexity() + m_rhs->get_complexity();
         }
 
-        [[nodiscard]] inline full_type compute_type_unchecked(const compiler::scope& env) const noexcept override {
+        [[nodiscard]] inline full_type compute_type_unchecked(const compilation::scope& env) const noexcept override {
             const full_type lhs_type = m_lhs->get_type_unchecked(env);
             const full_type rhs_type = m_rhs->get_type_unchecked(env);
 
@@ -227,10 +225,10 @@ namespace dconstruct::ast {
             }
         }
 
-        compiler::token m_operator;
+        compilation::token m_operator;
         std::unique_ptr<expression> m_lhs;
         std::unique_ptr<expression> m_rhs;
-        OP_KIND m_opkind;
+        BINARY_OP_KIND m_opkind;
     };
 
     template <std::derived_from<expression> T>

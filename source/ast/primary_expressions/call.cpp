@@ -107,13 +107,13 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return &m_arguments[0];
 }
 
-[[nodiscard]] full_type call_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
+[[nodiscard]] full_type call_expr::compute_type_unchecked(const compilation::scope& env) const noexcept {
     const full_type callee_type = m_callee->get_type_unchecked(env);
     assert(std::holds_alternative<function_type>(callee_type));
     return *std::get<function_type>(callee_type).m_return;
 }
 
-[[nodiscard]] semantic_check_res call_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res call_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res callee_type = m_callee->get_type_checked(env);
     if (!callee_type) {
         return callee_type;
@@ -123,7 +123,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     }
     const function_type func_type = std::get<function_type>(*callee_type);
 
-    if (func_type.m_arguments.size() < m_arguments.size()) {
+    if (func_type.m_arguments.size() != m_arguments.size()) {
         return std::unexpected{semantic_check_error{"function expects " + std::to_string(func_type.m_arguments.size()) + " arguments but " + std::to_string(m_arguments.size()) + " were passed"}};
     }
 
@@ -143,18 +143,11 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return *func_type.m_return;
 }
 
-[[nodiscard]] emission_res call_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
-    // if we are already emitting a function, we need to save the previously used registers to some temp registers
-    // so the current function needs to know about the last function's args (stack)
-    // we need to save all previously used argument registers
-    // display(x, y, format(y, get_string(), 0), something)
-    // display has 3 args, we save that
-    // format call sees that previous call is on stack and needs 3 arguments, so it needs to make sure to save all of those to local registers
-    // it pushes onto the stack in which temporaries it stores them
-
-    if (arg_pos && *arg_pos != 0) {
-        fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
-    }
+[[nodiscard]] emission_res call_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+    // if (arg_pos && *arg_pos != 0) {
+    //     fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
+    // }
+    fn.m_deferred.push_back({});
 
     emission_res callee;
     if (destination) {
@@ -172,7 +165,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     }
 
     for (u32 i = 0; i < m_arguments.size(); ++i) {
-        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i, i);
+        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i, true);
         if (!arg_reg) {
             return arg_reg;
         }
@@ -189,10 +182,11 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     const Opcode call_opcode = ftype.m_isFarCall ? Opcode::CallFf : Opcode::Call;
 
     fn.emit_instruction(call_opcode, *callee, *callee, m_arguments.size());
+    fn.pop_deferred();
 
-    if (arg_pos && *arg_pos != 0) {
-        fn.restore_used_argument_registers();
-    }
+    // if (arg_pos && *arg_pos != 0) {
+    //     fn.restore_used_argument_registers();
+    // }
 
     return *callee;
 }
@@ -238,7 +232,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
+[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};

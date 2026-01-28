@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <sstream>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
 
 struct lexing_error {
     u32 m_line;

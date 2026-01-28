@@ -41,11 +41,11 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_rhs->get_complexity();
 }
 
-[[nodiscard]] full_type assign_expr::compute_type_unchecked(const compiler::scope& scope) const noexcept {
+[[nodiscard]] full_type assign_expr::compute_type_unchecked(const compilation::scope& scope) const noexcept {
     return m_rhs->compute_type_unchecked(scope);
 }
 
-[[nodiscard]] semantic_check_res assign_expr::compute_type_checked(compiler::scope& scope) const noexcept {
+[[nodiscard]] semantic_check_res assign_expr::compute_type_checked(compilation::scope& scope) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(scope);
     if (!lhs_type) {
         return lhs_type;
@@ -66,7 +66,7 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     return *rhs_type;
 }
 
-[[nodiscard]] emission_res assign_expr::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_res assign_expr::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     const emission_res lvalue = m_lhs->emit_dc_lvalue(fn, global);
     if (!lvalue) {
         return lvalue;
@@ -76,7 +76,7 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
         return rvalue;
     }
     fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
-    fn.free_register(*m_rhs, *rvalue);
+    fn.free_register(*rvalue);
     return *lvalue;
 }
 

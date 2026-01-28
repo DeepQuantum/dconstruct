@@ -48,7 +48,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return name == m_name.m_lexeme;
 }
 
-[[nodiscard]] semantic_check_res identifier::compute_type_checked(compiler::scope& scope) const noexcept {
+[[nodiscard]] semantic_check_res identifier::compute_type_checked(compilation::scope& scope) const noexcept {
     const full_type *type = scope.lookup(m_name.m_lexeme);
     if (!type) {
         return std::unexpected{semantic_check_error{"undeclared identifier: " + m_name.m_lexeme, this}};
@@ -56,7 +56,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *type;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc_lvalue(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {
@@ -66,7 +66,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *var_location;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res identifier::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     const auto function_sid = global.m_sidAliases.find(m_name.m_lexeme);
     if (function_sid != global.m_sidAliases.end()) {
         const u8 index = fn.add_to_symbol_table(function_sid->second.second);

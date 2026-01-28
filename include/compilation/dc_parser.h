@@ -7,7 +7,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
 
     struct parsing_error {
         token m_token;
@@ -19,7 +19,7 @@ namespace dconstruct::compiler {
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
         [[nodiscard]] ast::program parse();
 
-        [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compiler::parsing_error>> get_results() {
+        [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_results() {
             return { parse(), get_known_types(), get_errors() };
         }
         

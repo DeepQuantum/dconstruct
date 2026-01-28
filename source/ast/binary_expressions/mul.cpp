@@ -6,7 +6,7 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] semantic_check_res mul_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res mul_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {
@@ -28,7 +28,7 @@ namespace dconstruct::ast {
     return *valid_mul;
 }
 
-[[nodiscard]] emission_res mul_expr::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res mul_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     const emission_res lhs = m_lhs->emit_dc(fn, global);
     if (!lhs) {
         return lhs;
@@ -42,22 +42,16 @@ namespace dconstruct::ast {
     assert(std::holds_alternative<primitive_type>(*m_type));
     const Opcode mul_opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMul : Opcode::FMul;
     
-    reg_idx mul_destination;
-    if (destination) {
-        mul_destination = *destination;
-    } else {
-        const emission_res new_destination = fn.get_next_unused_register();
-        if (!new_destination) {
-            return new_destination;
-        }
-        mul_destination = *new_destination;
+    const emission_res mul_destination = fn.get_destination(destination);
+    if (!mul_destination) {
+        return mul_destination;
     }
 
-    fn.emit_instruction(mul_opcode, mul_destination, *lhs, *rhs);
+    fn.emit_instruction(mul_opcode, *mul_destination, *lhs, *rhs);
     fn.free_register(*lhs);
     fn.free_register(*rhs);
 
-    return mul_destination;
+    return *mul_destination;
 }
 
 }
