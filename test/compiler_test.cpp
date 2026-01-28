@@ -1,11 +1,20 @@
 #include <gtest/gtest.h>
 #include "compilation/lexer.h"
 #include "compilation/dc_parser.h"
+#include "disassembly/file_disassembler.h"
+#include "decompilation/decomp_function.h"
+#include "binaryfile.h"
 #include "ast/ast.h"
 #include <vector>
 #include <fstream>
 
 namespace dconstruct::testing {
+    
+const std::string TEST_DIR = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/";
+const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dcpl/";
+
+    static SIDBase base = *SIDBase::from_binary(TEST_DIR + R"(\test_sidbase.bin)");
+
     static std::pair<std::vector<compilation::token>, std::vector<compilation::lexing_error>> get_tokens(const std::string &string) {
         dconstruct::compilation::Lexer lexer = dconstruct::compilation::Lexer(string);
         return { lexer.scan_tokens(), lexer.get_errors() };
@@ -973,6 +982,7 @@ namespace dconstruct::testing {
         out.flush();
     }
 
+
     TEST(COMPILER, FullCompile2) {
         const std::string code = 
             "using far #display as (string, string, u64) -> void;"
@@ -981,8 +991,115 @@ namespace dconstruct::testing {
             "    display(\"test\", sprintf(\"Hello World from DC version %d.%d\", 0, 0), 19);"
             "    return 0;"
             "}";
+        
+        const std::string decomp_code = 
+            "u16 #CBF29CE484222325() {\n"
+            "    display(\"test\", #5445173390656D6D(\"Hello World from DC version %d.%d\", 0, 0), 19);\n"
+            "    return 0;\n"
+            "}";
 
-            
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 3);
+
+        compilation::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile(scope);
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+
+        auto check_file = *BinaryFile<>::from_path("compiled.bin");
+        TLOU2Disassembler da{ &check_file, &base };
+        da.disassemble();
+        const auto& function = da.get_functions()[0];
+        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
+        const std::string res = fd.decompile(true).to_c_string();
+        ASSERT_EQ(res, decomp_code);
+    }
+
+    TEST(COMPILER, FullCompile3) {
+        const std::string code = 
+            "u32 main() {"
+            "    u64 i = 1;\n"
+            "    u64 res = 1;\n"
+            "    while (i < 10) {\n"
+            "        res = res * i;\n"
+            "        i = i + 1;\n"
+            "        while (i < 10) {"
+            "           i = i + 2 * 3;"
+            "        }"
+            "    }\n"
+            "    return res;\n"
+            "}";
+        
+        const std::string decomp_code = 
+            "u16 main() {"
+            "    u16 var_0 = 1;\n"
+            "    u64 var_1 = 1;\n"
+            "    while (i < 10) {\n"
+            "        res = res * i;\n"
+            "        i = i + 1;\n"
+            "    }\n"
+            "    return i;\n"
+            "}";
+
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 3);
+
+        compilation::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile(scope);
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+
+        auto check_file = *BinaryFile<>::from_path("compiled.bin");
+        TLOU2Disassembler da{ &check_file, &base };
+        da.disassemble();
+        const auto& function = da.get_functions()[0];
+        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
+        const std::string res = fd.decompile(true).to_c_string();
+        ASSERT_EQ(res, decomp_code);
+    }
+
+    TEST(COMPILER, FullCompile4) {
+        const std::string code = 
+            "u32 threexplusone(u64 x) {"
+            "        if (x > 2) {"
+            "            x = x / 2;"
+            "        } else {"
+            "            x = 3 * x + 1;"
+            "        }"
+            "}";
+        
+        const std::string decomp_code = 
+            "u32 threexplusone(u64 x) {"
+            "    while (x != 1) {\n"
+            "        if (x % 2 == 0) {"
+            "            x = x / 2;"
+            "        } else {"
+            "            x = 3 * i + 1;"
+            "        }"
+            "    }\n"
+            "    return res;\n"
+            "}";
+
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
         EXPECT_EQ(lex_errors.size(), 0);
@@ -999,5 +1116,13 @@ namespace dconstruct::testing {
         std::ofstream out("compiled.bin", std::ios::binary);
         out.write(reinterpret_cast<const char*>(bytes.get()), size);
         out.flush();
+
+        auto check_file = *BinaryFile<>::from_path("compiled.bin");
+        TLOU2Disassembler da{ &check_file, &base };
+        da.disassemble();
+        const auto& function = da.get_functions()[0];
+        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
+        const std::string res = fd.decompile(true).to_c_string();
+        ASSERT_EQ(res, decomp_code);
     }
 }

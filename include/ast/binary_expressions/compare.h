@@ -10,5 +10,6 @@ namespace dconstruct::ast {
         [[nodiscard]] expr_uptr simplify() const final;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope&) const noexcept final;
+        [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
     };
 }

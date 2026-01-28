@@ -72,9 +72,9 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
     return *valid_add;
 }
 
-[[nodiscard]] emission_res add_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res add_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     const emission_res lhs = m_lhs->emit_dc(fn, global);
-    if (lhs) {
+    if (!lhs) {
         return lhs;
     }
 
@@ -84,7 +84,7 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
     }
 
     assert(std::holds_alternative<primitive_type>(*m_type));
-    const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMul : Opcode::FMul;
+    const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IAdd : Opcode::FAdd;
 
     const emission_res add_destination = fn.get_destination(destination);
     if (!add_destination) {

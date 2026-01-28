@@ -62,6 +62,9 @@ namespace dconstruct::compilation {
                     return true;
                 }
             }
+            if (m_enclosing != nullptr) {
+                return m_enclosing->value_used(value);
+            }
             return false;
         }
 

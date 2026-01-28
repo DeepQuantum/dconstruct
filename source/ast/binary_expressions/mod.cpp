@@ -50,4 +50,31 @@ namespace dconstruct::ast {
     return *valid_mod;
 }
 
+[[nodiscard]] emission_res mod_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (!lhs) {
+        return lhs;
+    }
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    assert(std::holds_alternative<primitive_type>(*m_type));
+    const Opcode mod_opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IMod : Opcode::FMod;
+
+    const emission_res mod_destination = fn.get_destination(destination);
+    if (!mod_destination) {
+        return mod_destination;
+    }
+
+    fn.emit_instruction(mod_opcode, *mod_destination, *lhs, *rhs);
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return *mod_destination;
+}
+
+
 }

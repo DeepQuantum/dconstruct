@@ -66,17 +66,17 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     return *rhs_type;
 }
 
-[[nodiscard]] emission_res assign_expr::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
+[[nodiscard]] emission_res assign_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     const emission_res lvalue = m_lhs->emit_dc_lvalue(fn, global);
     if (!lvalue) {
         return lvalue;
     }
-    const emission_res rvalue = m_rhs->emit_dc(fn, global);
+    const emission_res rvalue = m_rhs->emit_dc(fn, global, *lvalue);
     if (!rvalue) {
         return rvalue;
     }
-    fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
-    fn.free_register(*rvalue);
+    //fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
+    //fn.free_register(*rvalue);
     return *lvalue;
 }
 

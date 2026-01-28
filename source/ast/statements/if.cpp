@@ -91,6 +91,50 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
     return errors;
 }
 
+[[nodiscard]] emission_err if_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
+    // condition
+    // branch if not -> else
+    // then: ...
+    // branch -> end
+    // else: ...
+    // end: ...
+    constexpr u8 BRANCH_PLACEHOLDER = 0xFF;
+
+    const emission_res condition = m_condition->emit_dc(fn, global);
+    if (!condition) {
+        return condition.error();
+    }
+
+    const u64 conditional_branch_location = fn.m_instructions.size();
+    fn.emit_instruction(Opcode::BranchIfNot, BRANCH_PLACEHOLDER, *condition, BRANCH_PLACEHOLDER);
+
+    const emission_err then_err = m_then->emit_dc(fn, global);
+    if (then_err) {
+        return then_err;
+    }
+
+    u64 else_skip_location = 0;
+    if (m_else) {
+        else_skip_location = fn.m_instructions.size();
+        fn.emit_instruction(Opcode::Branch, BRANCH_PLACEHOLDER, 00, BRANCH_PLACEHOLDER);
+
+        const emission_err else_err = m_else->emit_dc(fn, global);
+        if (else_err) {
+            return else_err;
+        }
+    }
+
+    const u64 end_location = fn.m_instructions.size();
+    if (else_skip_location == 0) {
+        fn.m_instructions[conditional_branch_location].set_lo_hi(end_location);
+    } else {
+        fn.m_instructions[conditional_branch_location].set_lo_hi(else_skip_location + 1);
+        fn.m_instructions[else_skip_location].set_lo_hi(end_location);
+    }
+
+    return std::nullopt;
+}
+
 
 VAR_OPTIMIZATION_ACTION if_stmt::var_optimization_pass(var_optimization_env& env)  noexcept {
     env.check_action(&m_condition);

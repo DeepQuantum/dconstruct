@@ -41,7 +41,7 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_bitwise_xor, this}};
 }
 
-[[nodiscard]] emission_res bitwise_xor_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res bitwise_xor_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     const emission_res lhs = m_lhs->emit_dc(fn, global);
     if (lhs) {
         return lhs;

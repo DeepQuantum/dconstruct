@@ -143,7 +143,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     return *func_type.m_return;
 }
 
-[[nodiscard]] emission_res call_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res call_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     // if (arg_pos && *arg_pos != 0) {
     //     fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
     // }
@@ -165,7 +165,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     }
 
     for (u32 i = 0; i < m_arguments.size(); ++i) {
-        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i, true);
+        const emission_res arg_reg = m_arguments[i]->emit_dc(fn, global, ARGUMENT_REGISTERS_IDX + i);
         if (!arg_reg) {
             return arg_reg;
         }

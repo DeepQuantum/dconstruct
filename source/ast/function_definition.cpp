@@ -49,7 +49,24 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_err function_definition::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
-    return m_body.emit_dc(fn, global);
+    for (u32 i = 0; i < m_parameters.size(); ++i) {
+        const parameter& param = m_parameters[i];
+        const emission_res new_var_reg = fn.get_next_unused_register();
+        if (!new_var_reg) {
+            return new_var_reg.error();
+        }
+        assert(!fn.m_varsToRegs.lookup(param.m_name));
+        fn.m_varsToRegs.define(param.m_name, *new_var_reg);
+        fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
+    }
+    const emission_err body_err = m_body.emit_dc(fn, global);
+    if (body_err) {
+        return body_err;
+    }
+    if (fn.m_instructions.back().opcode != Opcode::Return) {
+        fn.emit_instruction(Opcode::Return, 00);
+    }
+    return std::nullopt;
 }
 
 }
