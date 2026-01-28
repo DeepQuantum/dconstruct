@@ -18,7 +18,7 @@ namespace dconstruct::ast {
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] expr_uptr* get_first_argument() noexcept final;
-        [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept final;
+        [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, std::optional<reg_idx> destination) const noexcept final;
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;
 

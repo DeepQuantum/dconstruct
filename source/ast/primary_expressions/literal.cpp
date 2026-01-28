@@ -81,7 +81,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] emission_res literal::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res literal::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 

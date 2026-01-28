@@ -123,7 +123,6 @@ struct UP_Instruction {
 
     [[nodiscard]] bool destination_is_immediate() const noexcept;
 
-
     [[nodiscard]] bool operand1_is_immediate() const noexcept;
     [[nodiscard]] bool operand2_is_immediate() const noexcept;
     [[nodiscard]] bool operand1_is_used() const noexcept;
@@ -131,6 +130,11 @@ struct UP_Instruction {
 
     [[nodiscard]] bool op1_is_reg() const noexcept;
     [[nodiscard]] bool op2_is_reg() const noexcept;
+
+    void set_lo_hi(const u16 value) noexcept {
+        destination = value & 0xFF;
+        operand2 = (value >> 8) & 0xFF;
+    }
 
 
     const char* opcode_to_string() const noexcept;

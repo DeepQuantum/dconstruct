@@ -53,4 +53,41 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_compare, this}};
 }
 
+[[nodiscard]] emission_res compare_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (!lhs) {
+        return lhs;
+    }
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+    
+    const emission_res comp_destination = destination ? *destination : fn.get_next_unused_register();
+    if (!comp_destination) {
+        return comp_destination;
+    }
+
+    const bool integral = is_integral(std::get<primitive_type>(*m_type).m_type);
+
+    Opcode opcode;
+    if (m_operator.m_lexeme == ">") {
+        opcode = integral ? Opcode::IGreaterThan : Opcode::FGreaterThan;
+    } else if (m_operator.m_lexeme == "<") {
+        opcode = integral ? Opcode::ILessThan : Opcode::FLessThan;
+    } else if (m_operator.m_lexeme == ">=") {
+        opcode = integral ? Opcode::IGreaterThanEqual : Opcode::FGreaterThanEqual;
+    } else if (m_operator.m_lexeme == "<=") {
+        opcode = integral ? Opcode::ILessThanEqual : Opcode::FLessThanEqual;
+    }
+
+    fn.emit_instruction(opcode, *comp_destination, *lhs, *rhs);
+    
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return comp_destination;
+}
+
 }
