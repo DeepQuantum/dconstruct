@@ -7,7 +7,7 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] semantic_check_res bitwise_or_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res bitwise_or_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res lhs_type = m_lhs->get_type_checked(env);
 
     if (!lhs_type) {
@@ -45,8 +45,32 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_bitwise_or, this}};
 }
 
+[[nodiscard]] emission_res bitwise_or_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (lhs) {
+        return lhs;
+    }
 
-[[nodiscard]] llvm_res bitwise_or_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    assert(std::holds_alternative<primitive_type>(*m_type));
+    
+    const emission_res or_destination = destination ? *destination : fn.get_next_unused_register();
+    if (!or_destination) {
+        return or_destination;
+    }
+
+    fn.emit_instruction(Opcode::OpBitOr, *or_destination, *lhs, *rhs);
+    fn.free_register(*lhs);
+    fn.free_register(*rhs);
+
+    return or_destination;
+}
+
+[[nodiscard]] llvm_res bitwise_or_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
     if (!lhs) {
         return lhs;

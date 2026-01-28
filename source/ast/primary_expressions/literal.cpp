@@ -41,7 +41,7 @@ void literal::pseudo_racket(std::ostream& os) const {
     return expr;
 }
 
-[[nodiscard]] full_type literal::compute_type_unchecked(const compiler::scope& env) const noexcept {
+[[nodiscard]] full_type literal::compute_type_unchecked(const compilation::scope& env) const noexcept {
     return primitive_type { kind_from_primitive_value(m_value) };
 }
 
@@ -72,7 +72,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     return MATCH_OPTIMIZATION_ACTION::LITERAL;
 }
 
-[[nodiscard]] semantic_check_res literal::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res literal::compute_type_checked(compilation::scope& env) const noexcept {
     const primitive_kind type = kind_from_primitive_value(m_value);
     if (type == primitive_kind::NOTHING) {
         return std::unexpected{semantic_check_error{"literal has unknown type", this}};
@@ -81,7 +81,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 }
 
 
-[[nodiscard]] emission_res literal::emit_dc(compiler::function& fn, compiler::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
+[[nodiscard]] emission_res literal::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination, const std::optional<u8> arg_pos) const noexcept {
     return std::visit([&](auto&& lit) -> emission_res {
         using T = std::decay_t<decltype(lit)>;
 
@@ -98,7 +98,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
 
         if constexpr (std::is_same_v<T, std::string>) {
             const u64 size = global.add_string(std::move(lit));
-            const u8 table_idx = fn.add_to_symbol_table(size, compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING);
+            const u8 table_idx = fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
             fn.emit_instruction(Opcode::LoadStaticPointerImm, reg, table_idx);
             return reg;
         } else if constexpr (std::is_same_v<T, sid64_literal>) {
@@ -110,7 +110,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
                 assert(!name.empty());
                 table_entry = SID(name.c_str());
             }
-            const u8 table_idx = fn.add_to_symbol_table(numeric, compiler::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
+            const u8 table_idx = fn.add_to_symbol_table(numeric, compilation::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
             fn.emit_instruction(Opcode::LookupPointer, reg, table_idx);
         } else if constexpr (std::is_integral_v<T> && sizeof(T) <= 2) {
             const u8 lo = static_cast<u16>(lit) & 0xFF;
@@ -133,7 +133,7 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     }, m_value);
 }
 
-[[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compiler::scope& env) const noexcept {
+[[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compilation::scope& env) const noexcept {
    return std::visit([&](auto&& lit) -> llvm_res {
         using T = std::decay_t<decltype(lit)>;
         if constexpr (std::is_floating_point_v<T>) {

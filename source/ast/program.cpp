@@ -20,7 +20,7 @@ void program::pseudo_racket(std::ostream& os) const {
     }
 }
 
-[[nodiscard]] std::vector<semantic_check_error> program::check_semantics(compiler::scope& env) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> program::check_semantics(compilation::scope& env) const noexcept {
     std::vector<semantic_check_error> res;
     for (const auto& decl : m_declarations) {
         const std::vector<semantic_check_error> new_errors = decl->check_semantics(env);
@@ -53,7 +53,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     }
 }
 
-[[nodiscard]] program::compile_res program::make_binary(const std::vector<compiler::function>& funcs, const compiler::global_state& global) noexcept {
+[[nodiscard]] program::compile_res program::make_binary(const std::vector<compilation::function>& funcs, const compilation::global_state& global) noexcept {
     constexpr sid64     script_lambda_sid    = SID("script-lambda");
     constexpr sid64     array_sid            = SID("array");
     constexpr sid64     global_sid           = SID("global");
@@ -68,7 +68,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     constexpr u32 header_size = sizeof(DC_Header) + sizeof(array_sid);
     const u64 num_funcs = funcs.size();
     const u32 entries_size = sizeof(Entry) * num_funcs;
-    const u64 raw_function_size = std::accumulate(funcs.begin(), funcs.end(), u64{0}, [](u64 acc, const compiler::function& fn) {
+    const u64 raw_function_size = std::accumulate(funcs.begin(), funcs.end(), u64{0}, [](u64 acc, const compilation::function& fn) {
         return acc + fn.get_size_in_bytes();
     });
     const u64 stringtable_size = std::accumulate(global.m_strings.begin(), global.m_strings.end(), u64{0}, [](u64 acc, const std::string& s) {
@@ -153,7 +153,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
             push_bytes(istr, 1, 0b0);
         }
         for (u32 i = 0; i < fn.m_symbolTable.size(); ++i) {
-            if (fn.m_symbolTableEntryPointers[i] == compiler::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+            if (fn.m_symbolTableEntryPointers[i] == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
                 push_bytes(get_string_offset(fn.m_symbolTable[i]), 1, 0b1);
             } else {
                 push_bytes(fn.m_symbolTable[i], 1, 0b0);
@@ -173,8 +173,8 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     return result;
 }
 
-[[nodiscard]] program::compile_res program::compile(const compiler::scope& scope) const noexcept { 
-    compiler::global_state global;
+[[nodiscard]] program::compile_res program::compile(const compilation::scope& scope) const noexcept { 
+    compilation::global_state global;
 
     for (const auto& [name, sid_literal] : scope.m_sidAliases) {
         const full_type* type = scope.lookup(name);
@@ -182,13 +182,13 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
     }
 
-    std::vector<compiler::function> functions;
+    std::vector<compilation::function> functions;
     functions.reserve(m_declarations.size());
     for (u32 i = 0; i < m_declarations.size(); ++i) {
         if (!m_declarations[i]->emittable()) {
             continue;
         }
-        compiler::function fn;
+        compilation::function fn;
         const emission_err res = m_declarations[i]->emit_dc(fn, global);
         if (res) {
             return std::unexpected{*res};

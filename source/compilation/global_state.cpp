@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace dconstruct::compiler { 
+namespace dconstruct::compilation { 
 
 [[nodiscard]] u64 global_state::add_string_as_placeholder(std::string str) noexcept {
     const u32 current_size = m_strings.size();

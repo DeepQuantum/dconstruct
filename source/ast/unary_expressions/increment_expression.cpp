@@ -19,7 +19,7 @@ void increment_expression::pseudo_racket(std::ostream& os) const {
     return std::make_unique<ast::increment_expression>(m_operator, m_rhs->simplify());
 }
 
-[[nodiscard]] semantic_check_res increment_expression::compute_type_checked(compiler::scope& env) const noexcept {  
+[[nodiscard]] semantic_check_res increment_expression::compute_type_checked(compilation::scope& env) const noexcept {  
     const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
 
     if (!rhs_type) {

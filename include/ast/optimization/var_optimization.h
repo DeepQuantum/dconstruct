@@ -16,9 +16,9 @@ namespace dconstruct::ast {
     };
 
     struct var_optimization_env {
-        compiler::environment<variable_folding_context> m_env;
+        compilation::environment<variable_folding_context> m_env;
 
-        explicit var_optimization_env(compiler::environment<variable_folding_context>* enclosing = nullptr) noexcept
+        explicit var_optimization_env(compilation::environment<variable_folding_context>* enclosing = nullptr) noexcept
             : m_env(enclosing) {}
 
         void check_action(std::unique_ptr<expression>* expr);

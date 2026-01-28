@@ -4,7 +4,7 @@
 #include "ast/type.h"
 #include <variant>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
     enum class token_type {
         LEFT_PAREN, RIGHT_PAREN, 
         LEFT_BRACE, RIGHT_BRACE, 

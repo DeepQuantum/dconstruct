@@ -34,7 +34,7 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     return std::make_unique<return_stmt>(m_expr->clone());
 }
 
-[[nodiscard]] std::vector<semantic_check_error> return_stmt::check_semantics(compiler::scope& scope) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> return_stmt::check_semantics(compilation::scope& scope) const noexcept {
     if (m_expr) {
         const semantic_check_res expr_type = m_expr->get_type_checked(scope);
         if (!expr_type) {
@@ -52,7 +52,7 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     }
 }
 
-[[nodiscard]] emission_err return_stmt::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_err return_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     const emission_res expr_res = m_expr->emit_dc(fn, global);
     if (!expr_res) {
         return expr_res.error();

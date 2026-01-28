@@ -38,7 +38,7 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
     return 1 + m_lhs->get_complexity() + m_rhs->get_complexity();
 }
 
-[[nodiscard]] full_type subscript_expr::compute_type_unchecked(const compiler::scope& env) const noexcept {
+[[nodiscard]] full_type subscript_expr::compute_type_unchecked(const compilation::scope& env) const noexcept {
     const std::optional<full_type> lhs_type = m_lhs->compute_type_unchecked(env);
     if (!lhs_type) {
         return std::monostate();
@@ -50,7 +50,7 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
     }
 }
 
-[[nodiscard]] semantic_check_res subscript_expr::compute_type_checked(compiler::scope& scope) const noexcept {
+[[nodiscard]] semantic_check_res subscript_expr::compute_type_checked(compilation::scope& scope) const noexcept {
     const std::optional<full_type> lhs_type = m_lhs->compute_type_unchecked(scope);
     return {};
 }

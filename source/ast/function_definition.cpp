@@ -40,12 +40,15 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 }
 
 
-[[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compiler::scope& scope) const noexcept {
+[[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compilation::scope& scope) const noexcept {
     scope.m_returnType = m_type.m_return.get();
+    for (const auto& param : m_parameters) {
+        scope.define(param.m_name, param.m_type);
+    }
     return m_body.check_semantics(scope);
 }
 
-[[nodiscard]] emission_err function_definition::emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept {
+[[nodiscard]] emission_err function_definition::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     return m_body.emit_dc(fn, global);
 }
 

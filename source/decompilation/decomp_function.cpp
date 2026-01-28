@@ -6,8 +6,8 @@ namespace dconstruct::dcompiler {
 
 static constexpr u8 MIN_GRAPH_SIZE = 0;
 
-static const auto and_token = compiler::token{ compiler::token_type::AMPERSAND_AMPERSAND, "&&" };
-static const auto or_token = compiler::token{ compiler::token_type::PIPE_PIPE, "||" };
+static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
+static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
 
 template class decomp_function<true>;
 template class decomp_function<false>;
@@ -29,7 +29,7 @@ const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
     for (reg_idx i = ARGUMENT_REGISTERS_IDX; i < MAX_REGISTER; ++i) {
-        m_transformableExpressions[i] = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)});
+        m_transformableExpressions[i] = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, "arg_" + std::to_string(i - ARGUMENT_REGISTERS_IDX)});
         m_registersToVars.emplace(i, std::stack<std::unique_ptr<ast::identifier>>());
     }
 
@@ -110,17 +110,17 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
             case Opcode::IDivImm: generated_expression = apply_binary_op_imm<ast::div_expr>(istr); break;
 
             case Opcode::IEqual:
-            case Opcode::FEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::EQUAL_EQUAL, "=="}); break;
+            case Opcode::FEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::EQUAL_EQUAL, "=="}); break;
             case Opcode::INotEqual:
-            case Opcode::FNotEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::BANG_EQUAL, "!="}); break;
+            case Opcode::FNotEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::BANG_EQUAL, "!="}); break;
             case Opcode::ILessThan:
-            case Opcode::FLessThan: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS, "<"}); break;
+            case Opcode::FLessThan: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::LESS, "<"}); break;
             case Opcode::ILessThanEqual:
-            case Opcode::FLessThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::LESS_EQUAL, "<="}); break;
+            case Opcode::FLessThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::LESS_EQUAL, "<="}); break;
             case Opcode::IGreaterThan:
-            case Opcode::FGreaterThan: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER, ">"}); break;
+            case Opcode::FGreaterThan: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::GREATER, ">"}); break;
             case Opcode::IGreaterThanEqual:
-            case Opcode::FGreaterThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compiler::token{compiler::token_type::GREATER_EQUAL, ">="}); break;
+            case Opcode::FGreaterThanEqual: generated_expression = apply_binary_op<ast::compare_expr>(istr, compilation::token{compilation::token_type::GREATER_EQUAL, ">="}); break;
 			
             case Opcode::OpBitAnd: generated_expression = apply_binary_op<ast::bitwise_and_expr>(istr); break;
 			case Opcode::OpBitOr: generated_expression = apply_binary_op<ast::bitwise_or_expr>(istr); break;
@@ -646,7 +646,7 @@ void decomp_function<is_64_bit>::emit_branch(ast::block &else_block, const node_
 template<bool is_64_bit>
 void decomp_function<is_64_bit>::load_expression_into_new_var(const reg_idx dst) {
     auto& expr = m_transformableExpressions[dst];
-    auto id = std::make_unique<ast::identifier>(compiler::token{ compiler::token_type::IDENTIFIER, get_next_var()});
+    auto id = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, get_next_var()});
     const std::string name = id->m_name.m_lexeme;
     const ast::full_type type = expr->get_type_unchecked(m_env);
 
@@ -682,7 +682,7 @@ template<ast::primitive_kind kind>
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[dst]->clone());
     auto callee = std::make_unique<ast::literal>(sid64_literal{SID("abs"), "abs"});
-    auto call = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+    auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     call->set_type(make_type_from_prim(kind));
     return call;
 }
@@ -705,7 +705,7 @@ template<bool is_64_bit>
         args[i]->set_type(*func_type.m_arguments[i].second);
     }
 
-    auto expr = std::make_unique<ast::call_expr>(compiler::token{ compiler::token_type::_EOF, "" }, std::move(callee), std::move(args));;
+    auto expr = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(args));;
     expr->set_type(*func_type.m_return);
     return expr;
 }
@@ -738,7 +738,7 @@ template<bool is_64_bit>
     }
     expr_uptr condition = m_transformableExpressions[src]->clone();
     if (std::holds_alternative<ast::ptr_type>(condition->get_type_unchecked(m_env)) || std::holds_alternative<ast::function_type>(condition->get_type_unchecked(m_env))) {
-        condition = std::make_unique<ast::compare_expr>(compiler::token{ compiler::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
+        condition = std::make_unique<ast::compare_expr>(compilation::token{ compilation::token_type::BANG_EQUAL, "!=" }, std::move(condition), std::make_unique<ast::literal>(nullptr));
     }
     return condition;
 }

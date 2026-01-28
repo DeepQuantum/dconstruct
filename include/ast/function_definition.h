@@ -8,8 +8,8 @@ namespace dconstruct::ast {
         virtual void pseudo_py(std::ostream&) const final;
         virtual void pseudo_racket(std::ostream&) const final;
 
-        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compiler::scope&) const noexcept final;
-        [[nodiscard]] emission_err emit_dc(compiler::function& fn, compiler::global_state& global) const noexcept final;
+        [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
+        [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
 
         std::vector<ast::parameter> m_parameters;
         ast::block m_body;

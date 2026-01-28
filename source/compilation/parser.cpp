@@ -1,7 +1,7 @@
 #include "compilation/dc_parser.h"
 #include <vector>
 
-namespace dconstruct::compiler {
+namespace dconstruct::compilation {
 
 void Parser::synchronize_statements() {
     advance();

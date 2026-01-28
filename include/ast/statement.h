@@ -8,7 +8,6 @@
 
 namespace dconstruct::ast {
 
-    using emission_err = std::optional<std::string>;
 
     struct statement : public ast_element {
         virtual ~statement() = default;
@@ -18,8 +17,8 @@ namespace dconstruct::ast {
         virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
         [[nodiscard]] virtual std::unique_ptr<statement> clone() const noexcept = 0;
         [[nodiscard]] virtual const statement* inlineable_else_statement() const noexcept { return nullptr; }
-        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compiler::scope& env) const noexcept = 0;
-        [[nodiscard]] virtual emission_err emit_dc(compiler::function& fn, compiler::global_state& gen) const noexcept { return "not implmenented"; };
+        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope& env) const noexcept = 0;
+        [[nodiscard]] virtual emission_err emit_dc(compilation::function& fn, compilation::global_state& gen) const noexcept { return "not implmenented"; };
     };
 
     [[nodiscard]] inline bool operator==(const statement& lhs, const statement& rhs) noexcept {

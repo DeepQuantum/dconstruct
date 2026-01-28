@@ -6,7 +6,7 @@ namespace dconstruct::ast {
     return nullptr;
 }
 
-[[nodiscard]] semantic_check_res bitwise_not_expr::compute_type_checked(compiler::scope& env) const noexcept {
+[[nodiscard]] semantic_check_res bitwise_not_expr::compute_type_checked(compilation::scope& env) const noexcept {
     const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
     if (!rhs_type) {
         return rhs_type;
@@ -36,7 +36,7 @@ namespace dconstruct::ast {
 // }
 
 
-[[nodiscard]] llvm_res bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compiler::scope& env) const noexcept {
+[[nodiscard]] llvm_res bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
         return rhs;
