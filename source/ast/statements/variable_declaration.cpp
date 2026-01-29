@@ -47,7 +47,7 @@ void variable_declaration::pseudo_racket(std::ostream& os) const {
             return {init_type.error()};
         }
 
-        const std::optional<std::string> assign_err = is_assignable(m_type, *init_type);
+        const std::optional<std::string> assign_err = not_assignable_reason(m_type, *init_type);
 
         if (assign_err) {
             return {semantic_check_error{*assign_err}};

@@ -25,6 +25,10 @@ void function::free_register(const reg_idx reg) noexcept {
     }
 }
 
+void function::free_lvalue_register(const reg_idx reg) noexcept {
+    m_usedRegisters.set(reg, false);
+}
+
 std::optional<std::string> function::save_used_argument_registers(const u8 count) noexcept {
     reg_set saved;
     for (u32 i = 0; i < count; ++i) {
@@ -83,6 +87,17 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
     } else {
         return get_next_unused_register();
     }
+}
+
+void function::push_deferred() noexcept {
+    m_deferred.push_back({});
+}
+
+void function::pop_deferred() noexcept {
+    std::vector<Instruction> back = std::move(m_deferred.back());
+    m_deferred.pop_back();
+    std::vector<Instruction>& next_back = m_deferred.empty() ? m_instructions : m_deferred.back();
+    next_back.insert(next_back.begin(), back.begin(), back.end());
 }
 
 }

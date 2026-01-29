@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build_tests",
             "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-            "args": ["--gtest_filter=COMPILER.FullCompile4"],
+            "args": ["--gtest_filter=BINARYFILE.Transplant1"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

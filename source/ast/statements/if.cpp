@@ -92,12 +92,6 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_err if_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
-    // condition
-    // branch if not -> else
-    // then: ...
-    // branch -> end
-    // else: ...
-    // end: ...
     constexpr u8 BRANCH_PLACEHOLDER = 0xFF;
 
     const emission_res condition = m_condition->emit_dc(fn, global);

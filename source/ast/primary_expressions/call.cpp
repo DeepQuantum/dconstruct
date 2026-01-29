@@ -133,7 +133,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         if (!arg_type) {
             return arg_type;
         }
-        if (is_assignable(*func_type.m_arguments[i].second, *arg_type)) {
+        if (not_assignable_reason(*func_type.m_arguments[i].second, *arg_type)) {
             return std::unexpected{semantic_check_error{
                 "expected argument of type " + type_to_declaration_string(*func_type.m_arguments[i].second) + " at position " + std::to_string(i) + " but got " + type_to_declaration_string(*arg_type)
             , arg.get()}};
@@ -147,7 +147,7 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     // if (arg_pos && *arg_pos != 0) {
     //     fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
     // }
-    fn.m_deferred.push_back({});
+    fn.push_deferred();
 
     emission_res callee;
     if (destination) {
@@ -182,11 +182,8 @@ void call_expr::pseudo_racket(std::ostream& os) const {
     const Opcode call_opcode = ftype.m_isFarCall ? Opcode::CallFf : Opcode::Call;
 
     fn.emit_instruction(call_opcode, *callee, *callee, m_arguments.size());
+    
     fn.pop_deferred();
-
-    // if (arg_pos && *arg_pos != 0) {
-    //     fn.restore_used_argument_registers();
-    // }
 
     return *callee;
 }

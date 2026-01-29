@@ -40,7 +40,7 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
         if (!expr_type) {
             return {expr_type.error()};
         }
-        if (const std::optional<std::string> err = is_assignable(*scope.m_returnType, *expr_type)) {
+        if (const std::optional<std::string> err = not_assignable_reason(*scope.m_returnType, *expr_type)) {
             return {semantic_check_error{*err}};
         }
         return {};

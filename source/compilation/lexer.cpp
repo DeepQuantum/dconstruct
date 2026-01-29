@@ -141,8 +141,15 @@ char Lexer::advance() {
     while (is_hex_char(peek())) {
         advance();
     }
-    const i32 literal = std::stoi(make_current_lexeme(), 0, 16);
-    return make_current_token(token_type::HEX, literal);
+    const u64 number = std::stoull(make_current_lexeme(), nullptr, 16);
+
+    if (number <= std::numeric_limits<u16>::max()) {
+        return make_current_token(token_type::INT, static_cast<u16>(number));
+    } else if (number <= std::numeric_limits<u32>::max()) {
+        return make_current_token(token_type::INT, static_cast<u32>(number));
+    } else {
+        return make_current_token(token_type::INT, static_cast<u64>(number));
+    }
 }
 
 [[nodiscard]] token Lexer::make_identifier() {

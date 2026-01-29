@@ -10,7 +10,7 @@ namespace dconstruct::testing {
     static SIDBase base = *SIDBase::from_binary(R"(C:\Users\damix\Documents\GitHub\TLOU2Modding\dconstruct\test\dc_test_files\test_sidbase.bin)");
 
     TEST(BINARYFILE, Transplant1) {
-        std::filesystem::path input = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss-rogue/rogue-encounter-defines.bin";
+        std::filesystem::path input = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin";
 
         std::filesystem::path result = "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/test/bin/dc1/";
         bool take = false;
@@ -70,7 +70,12 @@ namespace dconstruct::testing {
             converted.push_back(std::move(cf));
         }
     
-        ast::program::make_binary(converted, global);
+        const auto compiled = ast::program::make_binary(converted, global);
+        if (compiled) {
+            std::ofstream out(result, std::ios::binary);
+            out.write(reinterpret_cast<const char*>(compiled->first.get()), compiled->second);
+            out.flush();
+        }
     }
 
 

@@ -244,7 +244,7 @@ namespace dconstruct::ast {
         return std::nullopt;
     }
 
-    [[nodiscard]] static std::optional<std::string> is_assignable(const full_type& assignee, const full_type& assign_value) {
+    [[nodiscard]] static std::optional<std::string> not_assignable_reason(const full_type& assignee, const full_type& assign_value) {
         return std::visit([](auto&& lhs, auto&& rhs) -> std::optional<std::string> {
             using lhs_t = std::decay_t<decltype(lhs)>;
             using rhs_t = std::decay_t<decltype(rhs)>;

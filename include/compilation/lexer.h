@@ -68,6 +68,9 @@ private:
         {"as", token_type::AS},
         {"far", token_type::FAR},
         {"near", token_type::NEAR},
+        {"break", token_type::BREAK},
+        {"continue", token_type::CONTINUE},
+        {"breakpoint", token_type::BREAKPOINT},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

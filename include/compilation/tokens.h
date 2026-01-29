@@ -30,11 +30,15 @@ namespace dconstruct::compilation {
         IDENTIFIER, 
 
         AUTO, USING, AS, FAR, NEAR,
+
+        BREAK, CONTINUE,
         
         STRING, INT, DOUBLE, HEX, SID_NUM, SID, _NULL,
 
         ELSE, FALSE, IF, RETURN, STRUCT, ENUM, TRUE, WHILE, FOR, FOREACH, MATCH,
         
+        BREAKPOINT,
+
         _EOF, EMPTY
     };
 

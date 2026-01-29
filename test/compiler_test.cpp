@@ -1125,4 +1125,47 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::string res = fd.decompile(true).to_c_string();
         ASSERT_EQ(res, decomp_code);
     }
+
+    TEST(COMPILER, FullCompile5) {
+        const std::string code =
+            "u64 sum_upto(u64 x) {"
+            "    u64 acc = 0;"
+            "    for (u64 i = 0; i <= x; i++) {"
+            "        acc = acc + i;"
+            "    }"
+            "    if (acc > 0xFFFFFFFF) {"
+            "        acc = 0.0;"
+            "    } else {"
+            "        acc = 1.0;"
+            "    }"
+            "    return acc;"
+            "}";
+        
+        const std::string decomp_code = "";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 1);
+
+        compilation::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile(scope);
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+
+        auto check_file = *BinaryFile<>::from_path("compiled.bin");
+        TLOU2Disassembler da{ &check_file, &base };
+        da.disassemble();
+        const auto& function = da.get_functions()[0];
+        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
+        const std::string res = fd.decompile(true).to_c_string();
+        ASSERT_EQ(res, decomp_code);
+    }
 }
