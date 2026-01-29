@@ -42,7 +42,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compilation::scope& scope) const noexcept {
     scope.m_returnType = m_type.m_return.get();
-    for (const auto& param : m_parameters) {
+    for (const parameter& param : m_parameters) {
         scope.define(param.m_name, param.m_type);
     }
     return m_body.check_semantics(scope);
@@ -59,10 +59,24 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         fn.m_varsToRegs.define(param.m_name, *new_var_reg);
         fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
     }
+
+    if (!std::holds_alternative<std::monostate>(*m_type.m_return)) {
+        const emission_res return_reg = fn.get_next_unused_register();
+        if (!return_reg) {
+            return return_reg.error();
+        }
+        fn.m_returnRegister = *return_reg;
+    }
+
     const emission_err body_err = m_body.emit_dc(fn, global);
     if (body_err) {
         return body_err;
     }
+
+    for (const reg_idx return_branch_location : fn.m_returnBranchLocations) {
+        fn.m_instructions[return_branch_location].set_lo_hi(fn.m_instructions.size());
+    }
+
     if (fn.m_instructions.back().opcode != Opcode::Return) {
         fn.emit_instruction(Opcode::Return, 00);
     }

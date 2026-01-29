@@ -247,6 +247,10 @@ MATCH_OPTIMIZATION_ACTION block::match_optimization_pass(match_optimization_env&
         }
     }
 
+    for (const auto& [_, reg] : fn.m_varsToRegs.m_values) {
+        fn.free_lvalue_register(reg);
+    }
+
     fn.m_varsToRegs = std::move(old_saved);
 
     return std::nullopt;

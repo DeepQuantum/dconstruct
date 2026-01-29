@@ -1,5 +1,7 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
+
+disassembled
 CHANGELOG.md
 sidbase.bin
 test/dc_test_files

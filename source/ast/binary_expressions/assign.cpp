@@ -60,8 +60,10 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{semantic_check_error{"cannot assign to rvalue", m_lhs.get()}};
     }
 
-    if (*rhs_type != *lhs_type) {
-        return std::unexpected{semantic_check_error{"cannot assign value of type " + type_to_declaration_string(*rhs_type) + " to lvalue of type " + type_to_declaration_string(*lhs_type), m_lhs.get()}};
+    std::optional<std::string> assignable_err = not_assignable_reason(*lhs_type, *rhs_type);
+
+    if (assignable_err) {
+        return std::unexpected{semantic_check_error{std::move(*assignable_err)}};
     }
     return *rhs_type;
 }
@@ -75,8 +77,6 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     if (!rvalue) {
         return rvalue;
     }
-    //fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
-    //fn.free_register(*rvalue);
     return *lvalue;
 }
 

@@ -90,13 +90,7 @@ void identifier::pseudo_racket(std::ostream& os) const {
         return true_destination;
     }
 
-    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
-
-    if (!var_location) {
-        return std::unexpected{"variable " + m_name.m_lexeme + " doesn't have a register."};
-    }
-
-    return *var_location;
+    return emit_dc_lvalue(fn, global);
 }
 
 
