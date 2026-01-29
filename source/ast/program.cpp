@@ -53,7 +53,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     }
 }
 
-[[nodiscard]] program::compile_res program::make_binary(const std::vector<compilation::function>& funcs, const compilation::global_state& global) noexcept {
+[[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::make_binary(const std::vector<compilation::function>& funcs, const compilation::global_state& global) noexcept {
     constexpr sid64     script_lambda_sid    = SID("script-lambda");
     constexpr sid64     array_sid            = SID("array");
     constexpr sid64     global_sid           = SID("global");
@@ -168,12 +168,12 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     current_size += sizeof(reloc_table_size);
     current_size += reloc_table_size;
     assert(current_size == total_size);
-    compile_res result;
+    std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> result;
     result.emplace(std::move(out), total_size);
     return result;
 }
 
-[[nodiscard]] program::compile_res program::compile(const compilation::scope& scope) const noexcept { 
+[[nodiscard]] std::expected<program::compile_res, std::string> program::compile(const compilation::scope& scope) const noexcept { 
     compilation::global_state global;
 
     for (const auto& [name, sid_literal] : scope.m_sidAliases) {
@@ -189,13 +189,17 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
             continue;
         }
         compilation::function fn;
-        const emission_err res = m_declarations[i]->emit_dc(fn, global);
-        if (res) {
-            return std::unexpected{*res};
+        const emission_err err = m_declarations[i]->emit_dc(fn, global);
+        if (err) {
+            return std::unexpected{*err};
         }
         functions.push_back(std::move(fn));
     }
-    return make_binary(functions, global);
+    auto binary = make_binary(functions, global);
+    if (!binary) {
+        return std::unexpected{binary.error()};
+    }
+    return std::tuple{std::move(functions), std::move(binary->first), binary->second};
 }
 
 }

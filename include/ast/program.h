@@ -11,11 +11,11 @@ namespace dconstruct::ast {
         void pseudo_py(std::ostream&) const final;
         void pseudo_racket(std::ostream&) const final;
         
-        using compile_res = std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string>;
+        using compile_res = std::tuple<std::vector<compilation::function>, std::unique_ptr<std::byte[]>, u64>;
 
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept;
-        [[nodiscard]] compile_res compile(const compilation::scope& scope) const noexcept;
-        [[nodiscard]] static compile_res make_binary(const std::vector<compilation::function>& functions, const compilation::global_state& global) noexcept;
+        [[nodiscard]] std::expected<program::compile_res, std::string> compile(const compilation::scope& scope) const noexcept;
+        [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> make_binary(const std::vector<compilation::function>& functions, const compilation::global_state& global) noexcept;
 
         std::vector<ast::global_decl_uptr> m_declarations;
 

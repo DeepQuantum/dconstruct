@@ -61,5 +61,20 @@
                 "$msCompile"
             ],
         },
+        {
+            "label": "build_dcc",
+            "type": "shell",
+            "command": "cmake --build . --target dcc --parallel --config Release",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+        },
     ]
 }
