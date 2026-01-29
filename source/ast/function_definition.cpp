@@ -49,6 +49,11 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_err function_definition::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
+    if (std::holds_alternative<std::string>(m_name)) {
+        const auto id = global.m_sidAliases.at(std::get<std::string>(m_name));
+        fn.m_name = id.second;
+    }
+
     for (u32 i = 0; i < m_parameters.size(); ++i) {
         const parameter& param = m_parameters[i];
         const emission_res new_var_reg = fn.get_next_unused_register();
@@ -60,7 +65,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
     }
 
-    if (!std::holds_alternative<std::monostate>(*m_type.m_return)) {
+    if (!(std::holds_alternative<primitive_type>(*m_type.m_return) && std::get<primitive_type>(*m_type.m_return).m_type == primitive_kind::NOTHING)) {
         const emission_res return_reg = fn.get_next_unused_register();
         if (!return_reg) {
             return return_reg.error();

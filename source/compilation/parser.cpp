@@ -94,20 +94,22 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     m_current = temp_current + 1;
     std::vector<ast::full_type> param_types;
 
-    do {
-        std::optional<ast::full_type> param_type = make_type();
-        if (!param_type) {
-            m_current = temp_current;
+    if (!match({token_type::RIGHT_PAREN})) {
+        do {
+            std::optional<ast::full_type> param_type = make_type();
+            if (!param_type) {
+                m_current = temp_current;
+                return std::nullopt;
+            }
+            param_types.push_back(*param_type); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
+        }
+        while (match({token_type::COMMA}) && !is_at_end());
+
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
             return std::nullopt;
         }
-        param_types.push_back(*param_type); // starting here we can be sure we're parsing a function type because there's no other construct like '(type...'
     }
-    while (match({token_type::COMMA}) && !is_at_end());
-
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after function parameter types")) {
-        return std::nullopt;
-    }
-
+    
     if (!consume(token_type::ARROW, "expected '->' after function parameter types")) {
         return std::nullopt;
     }

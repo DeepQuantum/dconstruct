@@ -89,29 +89,29 @@ target_link_libraries(dxbc_shader_decomp
     ${LLVM_LIBS}
 )
 
-add_library(dconstruct ${BASE_SOURCE_FILES})
+add_library(dconstruct_lib ${BASE_SOURCE_FILES})
 
 if(WIN32)
     target_link_libraries(
-        dconstruct
+        dconstruct_lib
         ${LLVM_LIBS}
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvc.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/cgraph.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_core.lib
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/lib/gvplugin_pango.lib
     )
-    target_include_directories(dconstruct PRIVATE
+    target_include_directories(dconstruct_lib PRIVATE
         ${SOURCE_DIR}/Graphviz-13.1.0-win64/include
     )
 else()
     target_link_libraries(
-        dconstruct
+        dconstruct_lib
         gvc
         cgraph
     )
 endif()
 
-target_link_libraries(dconstruct
+target_link_libraries(dconstruct_lib
     $<$<CXX_COMPILER_ID:GNU>: tbb12>
     $<$<CONFIG:CreateProfile>: gcov>
     dxbc_shader_decomp
@@ -143,13 +143,13 @@ else()
     message("Not applying MSVC")
 endif()
 
-target_link_libraries(dconstruct_test PRIVATE dconstruct GTest::gtest_main)
+target_link_libraries(dconstruct_test PRIVATE dconstruct_lib GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(dconstruct_test)
 
 add_executable(
-    dconstruct_cli
+    dconstruct
     ${SOURCE_DIR}/main_cli.cpp
 )
 
@@ -161,7 +161,7 @@ endif()
 
 
 
-target_link_libraries(dconstruct_cli PRIVATE dconstruct)
+target_link_libraries(dconstruct PRIVATE dconstruct_lib)
 
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
@@ -174,6 +174,14 @@ add_custom_command(
 )
 
 
+target_compile_options(dconstruct_lib PRIVATE 
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct_lib PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
 target_compile_options(dconstruct PRIVATE 
     $<$<CONFIG:Release>:/GL>
 )
@@ -182,16 +190,35 @@ target_link_options(dconstruct PRIVATE
     $<$<CONFIG:Release>:/LTCG>
 )
 
-target_compile_options(dconstruct_cli PRIVATE 
-    $<$<CONFIG:Release>:/GL>
-)
-
-target_link_options(dconstruct_cli PRIVATE
-    $<$<CONFIG:Release>:/LTCG>
-)
-
 
 add_custom_target(generate_buildinfo ALL DEPENDS ${BUILDINFO_H})
 
-add_dependencies(dconstruct_cli generate_buildinfo)
+add_dependencies(dconstruct generate_buildinfo)
 
+add_executable(
+    dcc
+    ${SOURCE_DIR}/main_dcc.cpp
+)
+
+
+target_link_libraries(dcc PRIVATE dconstruct_lib)
+
+set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
+add_custom_command(
+    OUTPUT ${BUILDINFO_H}
+    COMMAND python ${PROJECT_SOURCE_DIR}/buildinfo.py "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION};${VERSION_NUMBER}"
+    DEPENDS
+    ${BASE_SOURCE_FILES}
+    "${SOURCE_DIR}/main_cli.cpp"
+    COMMENT "Generating build info header by running buildinfo.py with compiler version"
+)
+
+target_compile_options(dcc PRIVATE 
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dcc PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)
+
+add_dependencies(dconstruct generate_buildinfo)
