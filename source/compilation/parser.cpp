@@ -309,10 +309,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::using_declaration> Parser::make_using_declaration() {
-    const token* far_spec = nullptr;
-    if (match({token_type::FAR, token_type::NEAR})) {
-        far_spec = &previous();
-    }
+    
 
     const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
     if (!old_sid) {
@@ -323,6 +320,11 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     if (!consume(token_type::AS, "expected 'as'")) {
         return nullptr;
+    }
+
+    const token* far_spec = nullptr;
+    if (match({token_type::FAR, token_type::NEAR})) {
+        far_spec = &previous();
     }
 
     std::optional<ast::full_type> new_type = make_type();

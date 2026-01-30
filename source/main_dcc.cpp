@@ -27,13 +27,13 @@ int main(int argc, char* argv[]) {
     
     std::string source = input.str();
 
-    const std::expected<dconstruct::compilation::required_options, std::string> filepaths = dconstruct::compilation::required_options::parse(opts, source);
-    if (!filepaths) {
-        std::cerr << filepaths.error() << "\n";
+    const std::expected<dconstruct::compilation::compiler_options, std::string> compiler_options_res = dconstruct::compilation::compiler_options::parse(opts, source);
+    if (!compiler_options_res) {
+        std::cerr << compiler_options_res.error() << "\n";
         return -1;
     }
 
-    const std::expected<dconstruct::SIDBase, std::string> sidbase_res = dconstruct::SIDBase::from_binary(filepaths->m_sidbase);
+    const std::expected<dconstruct::SIDBase, std::string> sidbase_res = dconstruct::SIDBase::from_binary(compiler_options_res->m_sidbase);
     if (!sidbase_res) {
         std::cerr << sidbase_res.error() << "\n";
         return -1;
@@ -49,9 +49,19 @@ int main(int argc, char* argv[]) {
     }
 
     const auto& functions = *function_res;
-    if (create_output(filepaths, sidbase, functions, global) != 0) {
+    if (create_output(compiler_options_res, sidbase, functions, global) != 0) {
         return -1;
     }
+
+
+    if (compiler_options_res->m_repackage) {
+        const std::optional<std::string> repackage_err = dconstruct::compilation::repackage_psarc(*compiler_options_res->m_repackage);
+        if (repackage_err) {
+            std::cerr << *repackage_err << "\n";
+            return -1;
+        }
+    }
+    return 0;
 }
 
 
