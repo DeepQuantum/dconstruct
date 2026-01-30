@@ -55,13 +55,7 @@
             "preLaunchTask": "build_dcc",
             "program": "${workspaceFolder}/build/Debug/dcc.exe",
             "args": [
-                "test/compiler/first_insert.dcpl", 
-                "-s", 
-                "test/dc_test_files/test_sidbase.bin", 
-                "-t", 
-                "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin",
-                "-o",
-                "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/test/bin/dc1/rogue/script-callbacks.bin"
+                "test/compiler/first_insert.dcpl"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

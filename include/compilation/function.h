@@ -23,6 +23,26 @@ namespace dconstruct::compilation {
             GENERAL,
         };
 
+        function() noexcept = default; 
+
+        function(const function& rhs) noexcept : 
+            m_instructions(rhs.m_instructions),
+            m_symbolTable(rhs.m_symbolTable),
+            m_symbolTableEntryPointers(rhs.m_symbolTableEntryPointers),
+            m_name(rhs.m_name) {}
+
+        function& operator=(const function& rhs) noexcept {
+            m_instructions = rhs.m_instructions;
+            m_symbolTable = rhs.m_symbolTable;
+            m_symbolTableEntryPointers = rhs.m_symbolTableEntryPointers;
+            m_name = rhs.m_name;
+            return *this;
+        }
+
+        function(function&& rhs) noexcept = default;
+        function& operator=(function&& rhs) noexcept = default;
+
+
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
 
         [[nodiscard]] std::expected<reg_idx, std::string> get_next_unused_register() noexcept;
@@ -46,11 +66,11 @@ namespace dconstruct::compilation {
         std::vector<u8> m_numberSavedArgumentsStack;
         std::vector<reg_set> m_savedArgumentsTemporaryRegs;
         std::vector<u16> m_returnBranchLocations;
+        std::vector<std::vector<Instruction>> m_deferred;
         environment<reg_idx> m_varsToRegs;
         reg_idx m_returnRegister;
         std::variant<std::string, sid64> m_name;
         u8 m_usedArgumentRegisters = 0;
         reg_set m_usedRegisters = 0;
-        std::vector<std::vector<Instruction>> m_deferred;
     };
 }

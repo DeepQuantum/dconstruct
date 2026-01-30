@@ -64,7 +64,7 @@
         {
             "label": "build_dcc",
             "type": "shell",
-            "command": "cmake --build . --target dcc --parallel --config Release",
+            "command": "cmake --build . --target dcc --parallel --config Debug",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}/build"

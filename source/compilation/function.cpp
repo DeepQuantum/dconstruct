@@ -67,10 +67,15 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
 
 
 [[nodiscard]] u8 function::add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind) noexcept {
-    const u8 current_size = m_symbolTable.size();
-    m_symbolTable.push_back(value);
-    m_symbolTableEntryPointers.push_back(pointer_kind);
-    return current_size;
+    const auto existing = std::find(m_symbolTable.begin(), m_symbolTable.end(), value);
+    if (existing != m_symbolTable.end()) {
+        return std::distance(m_symbolTable.begin(), existing);
+    } else {
+        const u8 current_size = m_symbolTable.size();
+        m_symbolTable.push_back(value);
+        m_symbolTableEntryPointers.push_back(pointer_kind);
+        return current_size;
+    }
 }
 
 [[nodiscard]] u64 function::get_size_in_bytes() const noexcept {
