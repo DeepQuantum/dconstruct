@@ -120,6 +120,7 @@ namespace dconstruct::compilation {
         ("t,target",  "the original binary file that will be recompiled", cxxopts::value<std::string>(), "<path>")
         ("o,output",  "output location of the recompiled binary", cxxopts::value<std::string>(), "<path>")
         ("m,modules",  "the modules.bin file that maps this file (either from the original game or from a mod that you're using, like starlight)", cxxopts::value<std::string>(), "<path>")
+        ("r,repackage", "path to a the directory containing the .bin files. if provided, the compiler will automatically repackage the directory into a new .psarc file.", cxxopts::value<std::string>(), "<path>")
         ("s,sidbase",  "path to the sidbase", cxxopts::value<std::string>(), "sidbase.bin");
 
     options.parse_positional({"i"});
@@ -172,7 +173,12 @@ namespace dconstruct::compilation {
     return std::nullopt;
 }
 
-static i32 create_output(const std::expected<dconstruct::compilation::required_options, std::string> &filepaths, const dconstruct::SIDBase &sidbase, const std::vector<dconstruct::compilation::function> &functions, dconstruct::compilation::global_state &global) {
+static i32 create_output(
+    const std::expected<dconstruct::compilation::compiler_options, std::string> &filepaths, 
+    const dconstruct::SIDBase &sidbase, 
+    const std::vector<dconstruct::compilation::function> &functions, 
+    dconstruct::compilation::global_state &global
+) {
     const auto binary_res = dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
     if (!binary_res) {
         std::cerr << binary_res.error() << "\n";
@@ -195,6 +201,19 @@ static i32 create_output(const std::expected<dconstruct::compilation::required_o
     }
 
     return 0;
+}
+
+[[nodiscard]] static std::optional<std::string> repackage_psarc(const std::filesystem::path& directory_path) {
+    if (!directory_path.string().ends_with("_unpacked/") && !directory_path.string().ends_with("_unpacked")) {
+        return "the unpacked directory must end with '_unpacked'";
+    }
+
+    std::filesystem::path psarc_path = directory_path.string().substr(0, directory_path.string().size() - sizeof("_unpacked") + 1) + ".psarc"; 
+
+
+    const std::string command = "ndarc -c \"" + directory_path.string() + "\" -o \"" + psarc_path.string() + "\"";
+    std::system(command.c_str());
+    return std::nullopt;
 }
 
 }

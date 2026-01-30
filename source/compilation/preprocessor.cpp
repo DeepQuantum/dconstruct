@@ -5,7 +5,7 @@
 
 namespace dconstruct::compilation {
 
-[[nodiscard]] std::expected<required_options, std::string> required_options::from_args(const cxxopts::ParseResult& args) noexcept {
+[[nodiscard]] std::expected<compiler_options, std::string> compiler_options::from_args(const cxxopts::ParseResult& args) noexcept {
     std::filesystem::path target_binary_filepath;
     if (args.count("t") == 1) {
         target_binary_filepath = args["t"].as<std::string>();
@@ -26,13 +26,18 @@ namespace dconstruct::compilation {
        sidbase_filepath = args["s"].as<std::string>();
     }
 
-    return required_options{std::move(target_binary_filepath), std::move(output_filepath), std::move(modules_filepath), std::move(sidbase_filepath)}; 
+    std::filesystem::path repackage_filepath;
+    if (args.count("r") == 1) {
+       repackage_filepath = args["r"].as<std::string>();
+    }
+
+    return compiler_options{std::move(target_binary_filepath), std::move(output_filepath), std::move(modules_filepath), std::move(sidbase_filepath), std::move(repackage_filepath)}; 
 }
 
-[[nodiscard]] std::expected<required_options, std::string> required_options::from_dcpl(std::string& source) noexcept {
+[[nodiscard]] std::expected<compiler_options, std::string> compiler_options::from_dcpl(std::string& source) noexcept {
     std::istringstream iss(source);
 
-    required_options out;
+    compiler_options out;
     std::string stripped_source;
     stripped_source.reserve(source.size());
 
@@ -42,7 +47,6 @@ namespace dconstruct::compilation {
             stripped_source += '\n';
             continue;
         }
-
         const u64 first_space = line.find_first_of(' ', 1);
         if (first_space == std::string::npos) {
             return std::unexpected{"malformed precompiler directive"};
@@ -59,6 +63,8 @@ namespace dconstruct::compilation {
             out.m_modules = path;
         } else if (directive_name == "sidbase") {
             out.m_sidbase = path;
+        } else if (directive_name == "repackage") {
+            out.m_repackage = path;
         } else {
             return std::unexpected{
                 "unknown precompiler directive: " + std::string(directive_name)
@@ -91,12 +97,12 @@ namespace dconstruct::compilation {
     }
 }
 
-[[nodiscard]] std::expected<required_options, std::string> required_options::parse(const cxxopts::ParseResult& args, std::string& source) noexcept {
-    std::expected<required_options, std::string> from_args = required_options::from_args(args);
+[[nodiscard]] std::expected<compiler_options, std::string> compiler_options::parse(const cxxopts::ParseResult& args, std::string& source) noexcept {
+    std::expected<compiler_options, std::string> from_args = compiler_options::from_args(args);
     if (!from_args) {
         return from_args;
     }
-    std::expected<required_options, std::string> from_dcpl = required_options::from_dcpl(source);
+    std::expected<compiler_options, std::string> from_dcpl = compiler_options::from_dcpl(source);
     if (!from_dcpl) {
         return from_dcpl;
     }
@@ -121,7 +127,19 @@ namespace dconstruct::compilation {
         return std::unexpected{std::move(sidbase_res.error())};
     }
 
-    return required_options{std::move(*output_res), std::move(*target_res), std::move(*modules_res), std::move(*sidbase_res)};
+    std::optional<std::filesystem::path> repackage_res = std::nullopt;
+    if (from_args->m_repackage || from_dcpl->m_repackage) {
+        std::expected<std::filesystem::path, std::string> repackage_exp = check_single_path_provided(*from_args->m_repackage, *from_dcpl->m_repackage, "repackage");
+        if (!repackage_exp) {
+            return std::unexpected{std::move(repackage_exp.error())};
+        } else if (!std::filesystem::is_directory(*repackage_exp)) {
+            return std::unexpected{"repackage path must be a directory"};
+        }
+        repackage_res = std::move(*repackage_exp);
+    }
+    
+
+    return compiler_options{std::move(*target_res), std::move(*output_res), std::move(*modules_res), std::move(*sidbase_res), std::move(repackage_res)};
 }
 
 
