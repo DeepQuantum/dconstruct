@@ -974,7 +974,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile(scope);
+        const auto binary = program.compile_to_file(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);
@@ -1009,7 +1009,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile(scope);
+        const auto binary = program.compile_to_file(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);
@@ -1062,7 +1062,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile(scope);
+        const auto binary = program.compile_to_file(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);
@@ -1110,7 +1110,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile(scope);
+        const auto binary = program.compile_to_file(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);
@@ -1153,7 +1153,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
         ASSERT_EQ(semantic_errors.size(), 0);
 
-        const auto binary = program.compile(scope);
+        const auto binary = program.compile_to_file(scope);
         ASSERT_TRUE(binary.has_value());
         const auto& [bytes, size] = *binary;
         std::ofstream out("compiled.bin", std::ios::binary);

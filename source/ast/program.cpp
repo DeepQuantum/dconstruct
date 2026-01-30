@@ -173,12 +173,26 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     return result;
 }
 
-[[nodiscard]] std::expected<program::compile_res, std::string> program::compile(const compilation::scope& scope) const noexcept { 
-    compilation::global_state global;
+[[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(const compilation::scope& scope) const noexcept {
+    compilation::global_state global{};
+    const auto functions = compile_to_functions(scope, global);
+    if (!functions) {
+        return std::unexpected{functions.error()};
+    }
+    return make_binary(*functions, global);
+}
 
+[[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(const compilation::scope& scope, compilation::global_state& global) const noexcept {
+    const auto functions = compile_to_functions(scope, global);
+    if (!functions) {
+        return std::unexpected{functions.error()};
+    }
+    return make_binary(*functions, global);
+}
+
+[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_to_functions(const compilation::scope& scope, compilation::global_state& global) const noexcept {     
     for (const auto& [name, sid_literal] : scope.m_sidAliases) {
         const full_type* type = scope.lookup(name);
-        //const std::pair pair = std::make_pair<full_type, sid64>(type, sid_literal.first);
         global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
     }
 
@@ -195,11 +209,12 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         }
         functions.push_back(std::move(fn));
     }
-    auto binary = make_binary(functions, global);
-    if (!binary) {
-        return std::unexpected{binary.error()};
-    }
-    return std::tuple{std::move(functions), std::move(binary->first), binary->second};
+    return functions;
 }
 
+[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_to_functions(const compilation::scope& scope) const noexcept {
+    compilation::global_state global{};
+    return compile_to_functions(scope, global);
 }
+
+} 
