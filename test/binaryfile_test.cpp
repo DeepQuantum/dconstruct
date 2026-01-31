@@ -25,7 +25,7 @@ namespace dconstruct::testing {
         }
         std::filesystem::create_directories(result.parent_path());
 
-        BinaryFile<> file = *BinaryFile<>::from_path(input);
+        BinaryFile file = *BinaryFile::from_path(input);
         FileDisassembler<true> disassembler(&file, &base, "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/transplant_check.bin", {});
         disassembler.disassemble();
 

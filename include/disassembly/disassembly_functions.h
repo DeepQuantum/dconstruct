@@ -44,7 +44,6 @@ static constexpr char DEFAULT_OUT[] = "<input_path.asm>";
 } 
 
 
-template <bool is_64_bit = true>
 static void decomp_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_disasm_filename, 
@@ -56,9 +55,10 @@ static void decomp_file(
     const bool show_warnings,
     const bool optimize,
     const std::vector<std::string> &edits = {}, 
-    const bool use_pascal_case = false) {
+    const bool use_pascal_case = false,
+    const bool is_64_bit = true) {
     
-    auto file_res = dconstruct::BinaryFile<is_64_bit>::from_path(inpath.string());
+    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
     if (!file_res) {
         std::cerr << file_res.error() << "\n";
@@ -68,7 +68,7 @@ static void decomp_file(
 
     auto& file = *file_res;
 
-    if constexpr (is_64_bit) {
+    if (is_64_bit) {
         if (!edits.empty()) {
             dconstruct::EditDisassembler ed(&file, &base, options, edits);
             ed.apply_file_edits();
@@ -77,7 +77,7 @@ static void decomp_file(
 
     dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
     
-    if constexpr (is_64_bit) {
+    if (is_64_bit) {
         disassembler.disassemble();
     } else {
         disassembler.disassemble_functions_from_bin_file();
@@ -109,7 +109,7 @@ static void decomp_file(
                 }
             }
         }
-        dconstruct::dcompiler::state_script_functions<is_64_bit> output_functions{functions, &file};
+        dconstruct::dcompiler::state_script_functions output_functions{functions, &file};
         output_functions.to_string(out);
     }
 }
@@ -121,7 +121,7 @@ static void disasm_file(
     const dconstruct::DisassemblerOptions &options,
     const std::vector<std::string> &edits = {}) {
     
-    auto file_res = dconstruct::BinaryFile<true>::from_path(inpath.string());
+    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
     if (!file_res) {
         std::cerr << file_res.error() << "\n";
@@ -175,7 +175,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file<is_64_bit>(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
         }
     );
 

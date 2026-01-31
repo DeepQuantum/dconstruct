@@ -12,11 +12,8 @@ static constexpr char ENTRY_SEP[] = "##############################";
 
 namespace dconstruct {
 
-template class Disassembler<true>;
-template class Disassembler<false>;
 
-template <bool is_64_bit>
-[[nodiscard]] const char *Disassembler<is_64_bit>::lookup(const sid_t sid) {
+[[nodiscard]] const char *Disassembler::lookup(const sid64 sid) {
     auto res = m_currentFile->m_sidCache.find(sid);
     if (res != m_currentFile->m_sidCache.end()) {
         return res->second.c_str();
@@ -24,7 +21,23 @@ template <bool is_64_bit>
 
     const char *hash_string = m_sidbase->search(sid);
     if (hash_string == nullptr) {
-        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id<sid_t>(sid));
+        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id<sid64>(sid));
+        hash_string = iter->second.c_str();
+    } else {
+        m_currentFile->m_sidCache.emplace(sid, hash_string);
+    }
+    return hash_string;
+}
+
+[[nodiscard]] const char *Disassembler::lookup(const sid32 sid) {
+    auto res = m_currentFile->m_sidCache.find(sid);
+    if (res != m_currentFile->m_sidCache.end()) {
+        return res->second.c_str();
+    }
+
+    const char *hash_string = m_sidbase->search(sid);
+    if (hash_string == nullptr) {
+        auto [iter, inserted] = m_currentFile->m_sidCache.emplace(sid, int_to_string_id<sid32>(sid));
         hash_string = iter->second.c_str();
     } else {
         m_currentFile->m_sidCache.emplace(sid, hash_string);
@@ -33,37 +46,37 @@ template <bool is_64_bit>
 }
 
 
-template<bool is_64_bit>
+
 template<TextFormat text_format, typename... Args>
-void Disassembler<is_64_bit>::insert_span_fmt(const char *format, Args ...args) {
+void Disassembler::insert_span_fmt(const char *format, Args ...args) {
     char buffer[512];
     std::snprintf(buffer, sizeof(buffer), format, args...);
     insert_span(buffer, 0, text_format);
 }
 
-template<bool is_64_bit>
+
 template<TextFormat text_format, typename... Args>
-void Disassembler<is_64_bit>::insert_span_indent(const char* format, const u32 indent, Args ...args) {
+void Disassembler::insert_span_indent(const char* format, const u32 indent, Args ...args) {
     char buffer[512];
     std::snprintf(buffer, sizeof(buffer), format, indent, "", args...);
     insert_span(buffer, 0, text_format);
 }
 
-template<bool is_64_bit>
-[[nodiscard]] bool Disassembler<is_64_bit>::is_unmapped_sid(const location loc) const noexcept {
+
+[[nodiscard]] bool Disassembler::is_unmapped_sid(const location loc) const noexcept {
     const bool in_range = loc.get<sid64>() >= m_sidbase->m_lowestSid && loc.get<sid64>() <= m_sidbase->m_highestSid;
     const bool is_fileptr = m_currentFile->is_file_ptr(loc);
     return loc.is_aligned() && in_range && !is_fileptr;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] bool Disassembler<is_64_bit>::is_possible_float(const f32 *val) const noexcept {
+
+[[nodiscard]] bool Disassembler::is_possible_float(const f32 *val) const noexcept {
     f32 rounded = std::roundf(*val * 1e4f) / 1e4f;
     return std::fabsf(*val - rounded) < 1e-4f && *val > -1e4f && *val < 1e4f && rounded != 0.f;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] bool Disassembler<is_64_bit>::is_possible_i32(const i32 *val) const noexcept {
+
+[[nodiscard]] bool Disassembler::is_possible_i32(const i32 *val) const noexcept {
     return std::abs(*val) < 50000;
 }
 
@@ -75,8 +88,8 @@ template<bool is_64_bit>
     array structs may contain arbitrarily sized members though, so we must check each member individually.
 
 */  
-template<bool is_64_bit>
-u8 Disassembler<is_64_bit>::insert_struct_or_arraylike(const location struct_location, const u32 indent) {
+
+u8 Disassembler::insert_struct_or_arraylike(const location struct_location, const u32 indent) {
     u8 bytes_inserted = 0;
     if (m_currentFile->is_file_ptr(struct_location)) {
         if (m_currentFile->is_string(location().from(struct_location))) {
@@ -106,8 +119,8 @@ u8 Disassembler<is_64_bit>::insert_struct_or_arraylike(const location struct_loc
     return bytes_inserted;
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_anonymous_array(const location anon_array, const u32 indent) {
+
+void Disassembler::insert_anonymous_array(const location anon_array, const u32 indent) {
     const u32 anonymous_array_size = anon_array.get<u32>(8);
     if (anonymous_array_size > 100'000) {
         insert_span_fmt("anonymous array with invalid size %u, returning\n", anonymous_array_size);
@@ -118,8 +131,8 @@ void Disassembler<is_64_bit>::insert_anonymous_array(const location anon_array, 
     insert_array(anon_array, anonymous_array_size, indent);
 }
 
-template<bool is_64_bit>
-[[nodiscard]] u32 Disassembler<is_64_bit>::get_size_array(const location array, const u32 indent) {
+
+[[nodiscard]] u32 Disassembler::get_size_array(const location array, const u32 indent) {
     u32 size_array_front = array.get<u32>(8);
     u32 size_array_back = array.get<u32>(-8);
     u32 size_array;
@@ -142,8 +155,8 @@ template<bool is_64_bit>
     return size_array;
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_array(const location array, const u32 array_size, const u32 indent) {
+
+void Disassembler::insert_array(const location array, const u32 array_size, const u32 indent) {
     
     if (array_size == 0) {
         insert_span("}\n", indent);
@@ -181,8 +194,8 @@ void Disassembler<is_64_bit>::insert_array(const location array, const u32 array
     insert_span("}\n", indent);
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_unmapped_struct(const structs::unmapped *struct_ptr, const u32 indent) {
+
+void Disassembler::insert_unmapped_struct(const structs::unmapped *struct_ptr, const u32 indent) {
     u64 member_offset = 0;
     bool offset_gets_pointed_at = false;
     u64 last_member_size = 0;
@@ -198,8 +211,8 @@ void Disassembler<is_64_bit>::insert_unmapped_struct(const structs::unmapped *st
     }
 }
 
-template<bool is_64_bit>
-u8 Disassembler<is_64_bit>::insert_next_struct_member(const location member, const u32 indent) {
+
+u8 Disassembler::insert_next_struct_member(const location member, const u32 indent) {
     u8 member_size;
     const char *str_ptr = nullptr;
     if (m_currentFile->is_file_ptr(member)) {
@@ -235,8 +248,8 @@ u8 Disassembler<is_64_bit>::insert_next_struct_member(const location member, con
     return member_size;
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::disassemble() {
+
+void Disassembler::disassemble() {
     insert_header_line();
     for (i32 i = 0; i < m_currentFile->m_dcheader->m_numEntries; ++i) {
         insert_span("\n\n");
@@ -248,16 +261,16 @@ void Disassembler<is_64_bit>::disassemble() {
     }
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_entry(const Entry *entry) {
+
+void Disassembler::insert_entry(const Entry *entry) {
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
     insert_span_fmt("%s = ", lookup(entry->m_nameID));
     insert_struct(struct_ptr, 0, entry->m_nameID);
 }
 
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id) {
+
+void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id) {
 
     const u64 offset = get_offset(&struct_ptr->m_data);
 
@@ -313,18 +326,18 @@ void Disassembler<is_64_bit>::insert_struct(const structs::unmapped *struct_ptr,
     }
 }
 
-template<bool is_64_bit>
-[[nodiscard]] u32 Disassembler<is_64_bit>::get_offset(const location loc) const noexcept {
+
+[[nodiscard]] u32 Disassembler::get_offset(const location loc) const noexcept {
     return loc.num() - reinterpret_cast<p64>(m_currentFile->m_dcheader);
 }
 
-template<bool is_64_bit>
-[[nodiscard]] u32 Disassembler<is_64_bit>::get_offset(const void* loc) const noexcept {
+
+[[nodiscard]] u32 Disassembler::get_offset(const void* loc) const noexcept {
     return reinterpret_cast<p64>(loc) - reinterpret_cast<p64>(m_currentFile->m_dcheader);
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_variable(const SsDeclaration *var, const u32 indent) {
+
+void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
     bool is_nullptr = var->m_pDeclValue == nullptr;
 
 
@@ -412,8 +425,8 @@ void Disassembler<is_64_bit>::insert_variable(const SsDeclaration *var, const u3
     insert_span("\n");
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
+
+void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
     switch (block->m_blockType) {
         case 0: {
             function_name.m_event.m_name = "start";
@@ -459,8 +472,8 @@ void Disassembler<is_64_bit>::insert_on_block(const SsOnBlock *block, const u32 
     insert_span("}\n", indent);
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_state_script(const StateScript *stateScript, const u32 indent) {
+
+void Disassembler::insert_state_script(const StateScript *stateScript, const u32 indent) {
 
     if (stateScript->m_pSsOptions != nullptr && stateScript->m_pSsOptions->m_pSymbolArray != nullptr) {
         SymbolArray *s_array = stateScript->m_pSsOptions->m_pSymbolArray;
@@ -495,8 +508,8 @@ void Disassembler<is_64_bit>::insert_state_script(const StateScript *stateScript
     }
 }
 
-template<bool is_64_bit>
-[[nodiscard]] bool Disassembler<is_64_bit>::pointer_gets_called(const u32 dst, const u32 start_idx, const function_disassembly& fn) const {
+
+[[nodiscard]] bool Disassembler::pointer_gets_called(const u32 dst, const u32 start_idx, const function_disassembly& fn) const {
     for (auto it = fn.m_lines.begin() + start_idx; it != fn.m_lines.end(); ++it) {
         if (it->m_instruction.destination == dst) {
             return it->m_instruction.opcode == Opcode::Call || it->m_instruction.opcode == Opcode::CallFf;
@@ -505,8 +518,8 @@ template<bool is_64_bit>
     return false;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
+
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(const ScriptLambda *lambda, function_name_variant name, const bool is_script_function) {
     Instruction *instructionPtr = reinterpret_cast<Instruction*>(lambda->m_pInstruction);
     const u64 instructionCount = reinterpret_cast<Instruction*>(lambda->m_pSymbols) - instructionPtr;
 
@@ -541,8 +554,8 @@ template<bool is_64_bit>
     return functionDisassembly;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] function_disassembly Disassembler<is_64_bit>::create_function_disassembly(std::vector<Instruction>&& instructions, function_name_variant name, const location& symbol_table, const bool is_script_function) {
+
+[[nodiscard]] function_disassembly Disassembler::create_function_disassembly(std::vector<Instruction>&& instructions, function_name_variant name, const location& symbol_table, const bool is_script_function) {
     std::vector<function_disassembly_line> lines;
     lines.reserve(instructions.size());
 
@@ -572,8 +585,8 @@ template<bool is_64_bit>
     return functionDisassembly;
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::set_register_types(Register &op1, Register &op2, ast::full_type type) {
+
+void Disassembler::set_register_types(Register &op1, Register &op2, ast::full_type type) {
     if (is_unknown(op1.m_type) && is_unknown(op2.m_type)) {
         op1.set_first_type(std::move(type));
         op2.set_first_type(std::move(type));
@@ -585,7 +598,7 @@ void Disassembler<is_64_bit>::set_register_types(Register &op1, Register &op2, a
     }
 }
 
-template<typename T, bool is_64_bit, ast::primitive_kind kind>
+template<typename T, ast::primitive_kind kind>
 void load_static_imm(
     const u32 dest, 
     const u32 op1, 
@@ -598,7 +611,7 @@ void load_static_imm(
     const char* type_str) 
 {
     std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
-    const T value = frame.m_symbolTable.get<T, is_64_bit>(op1);
+    const T value = frame.m_symbolTable.get<T>(op1);
     const auto new_type = make_type_from_prim(kind);
     frame[dest].m_type = new_type;
     frame[dest].m_fromSymbolTable = op1;
@@ -650,8 +663,8 @@ void store_nonstatic(
     std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_disassembly &fn) {
+
+void Disassembler::process_instruction(const u32 istr_idx, function_disassembly &fn) {
     function_disassembly_line& line = fn.m_lines[istr_idx];
     StackFrame& frame = fn.m_stackFrame;
 
@@ -750,7 +763,7 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
         }
         case Opcode::LoadStaticInt: {
             //const i64 table_value = frame.m_symbolTable.first.get<i64>(op1 * 8);
-            const max_signed_int_t table_value = frame.m_symbolTable.get<max_signed_int_t, is_64_bit>(op1); 
+            const i32 table_value = frame.m_symbolTable.get<i32>(op1); 
             table_entry = make_type_from_prim(ast::primitive_kind::I32);
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             frame[dest].m_value = table_value;
@@ -768,7 +781,7 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
             break;
         }
         case Opcode::LoadStaticPointer: {
-            const p64 table_value = frame.m_symbolTable.get<p64, is_64_bit>(op1);
+            const p64 table_value = frame.m_symbolTable.get<p64>(op1);
             table_entry = ast::ptr_type{};
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             frame[dest].m_type = ast::ptr_type();
@@ -827,23 +840,36 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
         }
         case Opcode::LookupInt: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-            const max_signed_int_t value = frame.m_symbolTable.get<max_signed_int_t, is_64_bit>(op1);
-            frame[dest].m_type = make_type_from_prim(max_signed_int_kind_t);
-            table_entry = make_type_from_prim(max_signed_int_kind_t);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
+            if (m_is64Bit) {
+                const i64 value = frame.m_symbolTable.get<i64>(op1);
+                frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
+                table_entry = make_type_from_prim(ast::primitive_kind::I64);
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid64>(value)));
+            } else {
+                const i32 value = frame.m_symbolTable.get<i32>(op1);
+                frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
+                table_entry = make_type_from_prim(ast::primitive_kind::I32);
+                std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid32>(value)));
+            }
             break;
         }
         case Opcode::LookupFloat: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-            const i64 value = frame.m_symbolTable.get<i64, is_64_bit>(op1);
+            const f32 value = frame.m_symbolTable.get<f32>(op1);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
             table_entry = make_type_from_prim(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(value));
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, lookup(static_cast<sid64>(value)));
             break;
         }
         case Opcode::LookupPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-            const p64 value = frame.m_symbolTable.get<max_signed_int_t, is_64_bit>(op1);
+            p64 value = 0;
+            if (m_is64Bit) {
+                value = frame.m_symbolTable.get<p64>(op1);
+                
+            } else {
+                value = frame.m_symbolTable.get<u32>(op1);
+            }
             frame[dest].m_value = value;
             frame[dest].m_fromSymbolTable = op1;
             const bool is_function = pointer_gets_called(dest, istr_idx + 1, fn);
@@ -1149,19 +1175,19 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
             break;
         }
         case Opcode::LoadStaticI32Imm: {
-            load_static_imm<i32, is_64_bit, ast::primitive_kind::I32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i32, ast::primitive_kind::I32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticFloatImm: {
-            load_static_imm<f32, is_64_bit, ast::primitive_kind::F32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%f>");
+            load_static_imm<f32, ast::primitive_kind::F32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%f>");
             break;
         }
         case Opcode::LoadStaticPointerImm: {
-            load_static_imm<p64, is_64_bit, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
+            load_static_imm<p64, ast::primitive_kind::STRING>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> \"%s\"");
             break;
         }
         case Opcode::LoadStaticI64Imm: {
-            load_static_imm<i64, is_64_bit, ast::primitive_kind::I64>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%lli>");
+            load_static_imm<i64, ast::primitive_kind::I64>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%lli>");
             break;
         }
         case Opcode::LoadStaticU64Imm: {
@@ -1190,9 +1216,9 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
             break;
         }
         case Opcode::LoadStaticU32Imm: {
-            if constexpr (!is_64_bit) {
+            if (!m_is64Bit) {
                 std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-                const sid32 value = frame.m_symbolTable.get<sid32, false>(op1);
+                const sid32 value = frame.m_symbolTable.get<sid32>(op1);
                 const char *hash_str = lookup(value);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::SID);
                 frame[dest].m_value = value;
@@ -1201,20 +1227,20 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
                 std::snprintf(interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%s>", dest, op1, dst_str);
                 break;
             } else {
-                load_static_imm<u32, is_64_bit, ast::primitive_kind::U32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+                load_static_imm<u32, ast::primitive_kind::U32>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
             }
             break;
         }
         case Opcode::LoadStaticI8Imm: {
-            load_static_imm<i8, is_64_bit, ast::primitive_kind::I8>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i8, ast::primitive_kind::I8>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticI16Imm: {
-            load_static_imm<i16, is_64_bit, ast::primitive_kind::I16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
+            load_static_imm<i16, ast::primitive_kind::I16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%d>");
             break;
         }
         case Opcode::LoadStaticU16Imm: {
-            load_static_imm<u16, is_64_bit, ast::primitive_kind::U16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
+            load_static_imm<u16, ast::primitive_kind::U16>(dest, op1, frame, table_entry, varying, disassembly_text_size, interpreted, interpreted_buffer_size, "r%d = ST[%d] -> <%u>");
             break;
         }
         case Opcode::LoadI8: {
@@ -1289,8 +1315,8 @@ void Disassembler<is_64_bit>::process_instruction(const u32 istr_idx, function_d
     line.m_comment = std::string(interpreted);
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const u32 indent) {
+
+void Disassembler::insert_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const u32 indent) {
     auto label_location = std::find(labels.begin(), labels.end(), line.m_location);
     if (label_location != labels.end()) {
         const u32 label_index = std::distance(labels.begin(), label_location);
@@ -1304,8 +1330,8 @@ void Disassembler<is_64_bit>::insert_label(const std::vector<u32> &labels, const
     }
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_goto_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const std::vector<function_disassembly_line> &lines) {
+
+void Disassembler::insert_goto_label(const std::vector<u32> &labels, const function_disassembly_line &line, const u32 func_size, const std::vector<function_disassembly_line> &lines) {
     if (line.m_target != std::numeric_limits<u16>::max()) {
         u32 target = std::distance(labels.begin(), std::find(labels.begin(), labels.end(), line.m_target));
         if (line.m_target == func_size) {
@@ -1318,8 +1344,8 @@ void Disassembler<is_64_bit>::insert_goto_label(const std::vector<u32> &labels, 
     }
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_function_disassembly_text(const function_disassembly &functionDisassembly, const u32 indent) {
+
+void Disassembler::insert_function_disassembly_text(const function_disassembly &functionDisassembly, const u32 indent) {
     auto labels = functionDisassembly.m_stackFrame.m_labels;
     char buffer[512] = {0};
     
@@ -1386,8 +1412,8 @@ void Disassembler<is_64_bit>::insert_function_disassembly_text(const function_di
     }
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::disassemble_functions_from_bin_file() {
+
+void Disassembler::disassemble_functions_from_bin_file() {
     constexpr sid32 function_sid = 0xAB3EB31F;
     const location start = location(m_currentFile->m_bytes.get());
     for (u64 i = 0; i < m_currentFile->m_size; i += 4) {
@@ -1410,8 +1436,8 @@ void Disassembler<is_64_bit>::disassemble_functions_from_bin_file() {
     }
 }
 
-template<bool is_64_bit>
-void Disassembler<is_64_bit>::insert_header_line() {
+
+void Disassembler::insert_header_line() {
     constexpr int BOX_WIDTH = 100;
     insert_span_fmt("%.*s\n", BOX_WIDTH, "####################################################################################################");
     insert_span_fmt("#%-*s#\n", BOX_WIDTH - 2, " ");

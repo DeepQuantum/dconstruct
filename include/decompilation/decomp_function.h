@@ -10,9 +10,8 @@
 constexpr u8 MAX_EXPRESSION_COMPLEXITY = 4;
 
 namespace dconstruct::dcompiler {
-    template<bool is_64_bit = true>
     struct decomp_function {
-        decomp_function(const function_disassembly& func, const BinaryFile<is_64_bit>& file, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept : 
+        decomp_function(const function_disassembly& func, const BinaryFile& file, ControlFlowGraph graph, std::optional<std::filesystem::path> graph_path = std::nullopt) noexcept : 
         m_disassembly(func), 
         m_file(file), 
         m_graphPath(graph_path), 
@@ -46,13 +45,14 @@ namespace dconstruct::dcompiler {
         std::stack<std::reference_wrapper<ast::block>> m_blockStack;
         compilation::scope m_env{{}};
         const function_disassembly& m_disassembly;
-        const BinaryFile<is_64_bit>& m_file;
+        const BinaryFile& m_file;
         std::optional<std::filesystem::path> m_graphPath;
         ast::function_definition m_functionDefinition;
         node_set m_parsedNodes;
         node_set m_ipdomsEmitted;
         char m_loopVar = 'i';
 		u16 m_varCount = 0;
+        bool m_is64Bit = true;
 
         void emit_node(const control_flow_node &node, const node_id stop_node);
 
@@ -175,7 +175,6 @@ namespace dconstruct::dcompiler {
         
     };
 
-    template<bool is_64_bit = true>
     struct state_script_functions {
 
         using track = std::vector<const ast::function_definition*>;
@@ -190,9 +189,9 @@ namespace dconstruct::dcompiler {
 
         std::vector<const ast::function_definition*> m_nonStateScriptFuncs;
 
-        const BinaryFile<is_64_bit>* m_binFile = nullptr;
+        const BinaryFile* m_binFile = nullptr;
 
-        state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile<is_64_bit>* binary_file = nullptr) noexcept : m_binFile(binary_file) {
+        state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file = nullptr) noexcept : m_binFile(binary_file) {
             for (const auto& func : funcs) {
                 if (std::holds_alternative<std::string>(func.m_name)) {
                     m_nonStateScriptFuncs.push_back(&func);
@@ -416,9 +415,5 @@ namespace dconstruct::dcompiler {
         }
     };
 
-    extern template struct decomp_function<true>;
-    extern template struct decomp_function<false>;
 
-    using TLOU2decomp_function = decomp_function<true>;
-    using UC4decomp_function = decomp_function<false>;
 } 

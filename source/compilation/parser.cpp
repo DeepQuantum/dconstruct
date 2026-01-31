@@ -564,9 +564,19 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return make_block();
     } else if (match({token_type::RETURN})) {
         return make_return();
+    } else if (match({token_type::BREAKPOINT})) {
+        return make_breakpoint();
     } else {
         return make_expression_statement();
     }
+}
+
+[[nodiscard]] std::unique_ptr<ast::breakpoint> Parser::make_breakpoint() {
+    if (!consume(token_type::SEMICOLON, "expected ';' after breakpoint value")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::breakpoint>();
 }
 
 [[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {

@@ -38,7 +38,6 @@ namespace dconstruct {
         };
     };
 
-    template<bool is_64_bit = true>
     class BinaryFile
     {
     public:
@@ -46,7 +45,7 @@ namespace dconstruct {
         BinaryFile(std::filesystem::path path, const u64 size, std::unique_ptr<std::byte[]>&& bytes, DC_Header* dcheader) noexcept : 
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
-        [[nodiscard]] static std::expected<BinaryFile<is_64_bit>, std::string> from_path(const std::filesystem::path& path) noexcept;
+        [[nodiscard]] static std::expected<BinaryFile, std::string> from_path(const std::filesystem::path& path) noexcept;
 
         std::filesystem::path m_path;
         const DC_Header* m_dcheader = nullptr;
@@ -56,7 +55,7 @@ namespace dconstruct {
         std::unique_ptr<std::byte[]> m_pointedAtTable;
         location m_strings;
         location m_relocTable;
-        std::map<std::conditional_t<is_64_bit, sid64, sid32>, const std::string> m_sidCache;
+        std::map<sid64, const std::string> m_sidCache;
         std::set<p64> m_emittedStructs;
         [[nodiscard]] bool is_file_ptr(const location) const noexcept;
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
@@ -70,6 +69,4 @@ namespace dconstruct {
         void replace_newlines_in_stringtable() noexcept;
     };
 
-    extern template class BinaryFile<true>;
-    extern template class BinaryFile<false>;
 }

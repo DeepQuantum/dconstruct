@@ -9,14 +9,11 @@ static constexpr u8 MIN_GRAPH_SIZE = 0;
 static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
 
-template class decomp_function<true>;
-template class decomp_function<false>;
-
 
 //#define _TRACE
 
-template<bool is_64_bit>
-const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool optimization_passes) &
+
+const ast::function_definition& decomp_function::decompile(const bool optimization_passes) &
 {
     if (m_graphPath && m_graph.m_nodes.size() > MIN_GRAPH_SIZE) {
         m_graph.write_image(m_graphPath->string());
@@ -49,15 +46,15 @@ const ast::function_definition& decomp_function<is_64_bit>::decompile(const bool
     return m_functionDefinition;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] ast::function_definition decomp_function<is_64_bit>::decompile(const bool optimization_passes) &&
+
+[[nodiscard]] ast::function_definition decomp_function::decompile(const bool optimization_passes) &&
 {
     decompile(optimization_passes);
     return std::move(m_functionDefinition);
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::set_binary_types(expr_uptr& lhs, expr_uptr& rhs) const noexcept {
+
+void decomp_function::set_binary_types(expr_uptr& lhs, expr_uptr& rhs) const noexcept {
     const auto& lhs_type = lhs->get_type_unchecked(m_env);
     const auto& rhs_type = rhs->get_type_unchecked(m_env);
     const bool lhs_unknown = is_unknown(lhs_type);
@@ -73,8 +70,8 @@ void decomp_function<is_64_bit>::set_binary_types(expr_uptr& lhs, expr_uptr& rhs
     }
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node) {
+
+void decomp_function::parse_basic_block(const control_flow_node &node) {
 #ifdef _TRACE
     std::cout << "parsing block " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")" << std::endl;
 #endif
@@ -151,7 +148,7 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
 
 
 			case Opcode::LoadStaticU32Imm: {
-                if constexpr (is_64_bit) {
+                if (m_is64Bit) {
                     generated_expression = std::make_unique<ast::literal>(symbol_table.get<u32>(istr.operand1)); break;
                 } else {
                     const sid32 sid = symbol_table.get<sid32>(istr.operand1);
@@ -204,14 +201,14 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
             }
 
             case Opcode::LoadStaticU64Imm: {
-                if constexpr (!is_64_bit) {
+                if (m_is64Bit) {
                     break;
                 }
             }
 
             case Opcode::LookupPointer: {
                 expr_uptr lit = nullptr;
-                if constexpr (is_64_bit) {
+                if (m_is64Bit) {
                     const sid64 sid = symbol_table.get<sid64>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
                     lit = std::make_unique<ast::literal>(sid64_literal{ sid, name });
@@ -286,8 +283,8 @@ void decomp_function<is_64_bit>::parse_basic_block(const control_flow_node &node
     }
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_node(const control_flow_node& node, const node_id stop_node) {
+
+void decomp_function::emit_node(const control_flow_node& node, const node_id stop_node) {
 #ifdef _TRACE
     std::cout << "emitting node " << std::hex << node.m_startLine << std::dec << " (" << node.m_index << ")" << std::endl;
 #endif
@@ -322,8 +319,8 @@ void decomp_function<is_64_bit>::emit_node(const control_flow_node& node, const 
     }
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const node_id stop_node) {
+
+void decomp_function::emit_if(const control_flow_node& node, const node_id stop_node) {
     const node_id idom = node.m_ipdom;
     m_ipdomsEmitted[idom] = true;
 
@@ -357,8 +354,8 @@ void decomp_function<is_64_bit>::emit_if(const control_flow_node& node, const no
     emit_node(m_graph[idom], stop_node);
 }
 
-template<bool is_64_bit>
-[[nodiscard]] bool decomp_function<is_64_bit>::is_for_loop(const control_flow_loop& loop) const noexcept {
+
+[[nodiscard]] bool decomp_function::is_for_loop(const control_flow_loop& loop) const noexcept {
     constexpr Opcode standard_for_loop_pattern[] = {
         Opcode::Move,
         Opcode::Move,
@@ -378,8 +375,8 @@ template<bool is_64_bit>
 }
 
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, const node_id stop_node) {
+
+void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id stop_node) {
     const control_flow_node& head_node = m_graph[loop.m_headNode];
     const node_id loop_entry = head_node.m_followingNode;
     const node_id loop_tail = head_node.m_targetNode;
@@ -446,8 +443,8 @@ void decomp_function<is_64_bit>::emit_for_loop(const control_flow_loop& loop, co
 }
 
 
-template<bool is_64_bit>
-[[nodiscard]] expr_uptr decomp_function<is_64_bit>::make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit) {
+
+[[nodiscard]] expr_uptr decomp_function::make_loop_condition(const node_id head_start, const node_id head_end, const node_id loop_entry, const node_id loop_exit) {
     expr_uptr condition = nullptr;
     for (u32 i = head_start; i != loop_entry; ++i) {
         const auto& current_node = m_graph[i];
@@ -473,8 +470,8 @@ template<bool is_64_bit>
     return condition;
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, const node_id stop_node) {
+
+void decomp_function::emit_while_loop(const control_flow_loop& loop, const node_id stop_node) {
     const node_id loop_tail = m_graph[loop.m_headNode].has_target() ? m_graph[loop.m_headNode].m_targetNode : m_graph[loop.m_headNode].m_followingNode;
     auto loop_block = std::make_unique<ast::block>();
     const node_id head_ipdom = m_graph[loop.m_headNode].m_ipdom;
@@ -559,8 +556,8 @@ void decomp_function<is_64_bit>::emit_while_loop(const control_flow_loop& loop, 
     emit_node(m_graph[exit_node], stop_node);
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_loop(const control_flow_loop &loop, const node_id stop_node) {
+
+void decomp_function::emit_loop(const control_flow_loop &loop, const node_id stop_node) {
     if (is_for_loop(loop)) {
         emit_for_loop(loop, stop_node);
     } else {
@@ -569,8 +566,8 @@ void decomp_function<is_64_bit>::emit_loop(const control_flow_loop &loop, const 
 }
 
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_if_else(const control_flow_node &node, node_id stop_node) {
+
+void decomp_function::emit_if_else(const control_flow_node &node, node_id stop_node) {
     const node_id idom = node.m_ipdom;
     const bool idom_already_emitted = m_ipdomsEmitted[idom];
     m_ipdomsEmitted[idom] = true;
@@ -623,8 +620,8 @@ void decomp_function<is_64_bit>::emit_if_else(const control_flow_node &node, nod
     emit_node(m_graph[idom], stop_node);
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::emit_branch(ast::block &else_block, const node_id target, const node_id idom, reg_set regs_to_emit, std::unordered_map<reg_idx, ast::full_type> &regs_to_type) {
+
+void decomp_function::emit_branch(ast::block &else_block, const node_id target, const node_id idom, reg_set regs_to_emit, std::unordered_map<reg_idx, ast::full_type> &regs_to_type) {
     m_blockStack.push(else_block);
     emit_node(m_graph[target], idom);
     auto bits = regs_to_emit.to_ullong();
@@ -643,8 +640,8 @@ void decomp_function<is_64_bit>::emit_branch(ast::block &else_block, const node_
 }
 
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::load_expression_into_new_var(const reg_idx dst) {
+
+void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto& expr = m_transformableExpressions[dst];
     auto id = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, get_next_var()});
     const std::string name = id->m_name.m_lexeme;
@@ -657,8 +654,8 @@ void decomp_function<is_64_bit>::load_expression_into_new_var(const reg_idx dst)
     m_transformableExpressions[dst]->set_type(type);
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
+
+void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::unique_ptr<ast::identifier>&& var) {
     if (!m_transformableExpressions[dst]) {
         throw std::runtime_error("error: expressions was empty at " + std::to_string(dst));
     }
@@ -676,9 +673,9 @@ void decomp_function<is_64_bit>::load_expression_into_existing_var(const reg_idx
     m_transformableExpressions[dst]->set_type(type_temp);
 }
 
-template<bool is_64_bit>
+
 template<ast::primitive_kind kind>
-[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function<is_64_bit>::make_abs(const reg_idx dst) {
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_abs(const reg_idx dst) {
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[dst]->clone());
     auto callee = std::make_unique<ast::literal>(sid64_literal{SID("abs"), "abs"});
@@ -687,8 +684,8 @@ template<ast::primitive_kind kind>
     return call;
 }
 
-template<bool is_64_bit>
-[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function<is_64_bit>::make_call(const Instruction& istr) {
+
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_call(const Instruction& istr) {
     expr_uptr callee = m_transformableExpressions[istr.destination]->clone();
     std::vector<expr_uptr> args;
     const auto& callee_type = callee->get_type_unchecked(m_env);
@@ -710,9 +707,9 @@ template<bool is_64_bit>
     return expr;
 }
 
-template<bool is_64_bit>
+
 template<typename to>
-[[nodiscard]] expr_uptr decomp_function<is_64_bit>::make_cast(const Instruction& istr, const ast::full_type& type) {
+[[nodiscard]] expr_uptr decomp_function::make_cast(const Instruction& istr, const ast::full_type& type) {
     const ast::literal* old_lit = m_transformableExpressions[istr.operand1]->as_literal();
     if (!old_lit) {
         const auto& op2 = m_transformableExpressions[istr.operand1];
@@ -731,8 +728,8 @@ template<typename to>
     }
 }
 
-template<bool is_64_bit>
-[[nodiscard]] expr_uptr decomp_function<is_64_bit>::get_expression_as_condition(const reg_idx src) const {
+
+[[nodiscard]] expr_uptr decomp_function::get_expression_as_condition(const reg_idx src) const {
     if (m_transformableExpressions[src] == nullptr) {
         throw std::runtime_error("error: empty expression at " + std::to_string(src));
     }
@@ -743,8 +740,8 @@ template<bool is_64_bit>
     return condition;
 }
 
-//template<bool is_64_bit>
-// [[nodiscard]] expr_uptr decomp_function<is_64_bit>::make_condition(const control_flow_node& condition_start) {
+//
+// [[nodiscard]] expr_uptr decomp_function::make_condition(const control_flow_node& condition_start) {
 //     struct stacked_condition {
 //         expr_uptr cond;
 //         node_id exit;
@@ -850,8 +847,8 @@ template<bool is_64_bit>
 // 	return std::move(condition_stack.back().cond);
 // }
 
-template<bool is_64_bit>
-[[nodiscard]] expr_uptr decomp_function<is_64_bit>::make_condition(
+
+[[nodiscard]] expr_uptr decomp_function::make_condition(
     const control_flow_node& condition_start,
     node_id& proper_head,
     node_id& proper_successor,
@@ -916,15 +913,15 @@ template<bool is_64_bit>
     return condition;
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::insert_return(const reg_idx dest) {
+
+void decomp_function::insert_return(const reg_idx dest) {
     *m_functionDefinition.m_type.m_return = m_transformableExpressions[dest]->get_type_unchecked(m_env);
     append_to_current_block(std::make_unique<ast::return_stmt>(std::move(m_transformableExpressions[dest])));
 }
 
-template<bool is_64_bit>
+
 template<ast::primitive_kind kind>
-[[nodiscard]] std::unique_ptr<ast::assign_expr> decomp_function<is_64_bit>::make_store(const Instruction& istr) {
+[[nodiscard]] std::unique_ptr<ast::assign_expr> decomp_function::make_store(const Instruction& istr) {
     auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ kind }));
     auto rhs = m_transformableExpressions[istr.operand2]->clone();
     auto res = std::make_unique<ast::assign_expr>(std::move(lhs), std::move(rhs));
@@ -932,8 +929,8 @@ template<ast::primitive_kind kind>
     return res;
 }
 
-template<bool is_64_bit>
-void decomp_function<is_64_bit>::optimize_ast() {
+
+void decomp_function::optimize_ast() {
     //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);

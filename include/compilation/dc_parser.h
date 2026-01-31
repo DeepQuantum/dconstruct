@@ -74,6 +74,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);
         [[nodiscard]] stmnt_uptr make_declaration();
         [[nodiscard]] stmnt_uptr make_statement();
+        [[nodiscard]] std::unique_ptr<ast::breakpoint> make_breakpoint();
         [[nodiscard]] std::unique_ptr<ast::block> make_block();
         [[nodiscard]] std::unique_ptr<ast::if_stmt> make_if();
         [[nodiscard]] std::unique_ptr<ast::while_stmt> make_while();
