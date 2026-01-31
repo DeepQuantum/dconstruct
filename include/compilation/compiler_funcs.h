@@ -56,12 +56,12 @@ namespace dconstruct::compilation {
     const std::vector<function>& target_functions,
     global_state& global) {
 
-    std::expected<BinaryFile<>, std::string> file_res = BinaryFile<>::from_path(target_filepath);
+    std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(target_filepath);
     if (!file_res) {
         return std::unexpected{file_res.error()};
     }
 
-    Disassembler<true> disassembler(&*file_res, &sidbase);
+    Disassembler disassembler(&*file_res, &sidbase);
     disassembler.disassemble();
 
     std::vector<function_disassembly> funcs = disassembler.get_functions();

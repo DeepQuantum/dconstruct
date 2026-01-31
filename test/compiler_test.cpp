@@ -1016,8 +1016,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         out.write(reinterpret_cast<const char*>(bytes.get()), size);
         out.flush();
 
-        auto check_file = *BinaryFile<>::from_path("compiled.bin");
-        TLOU2Disassembler da{ &check_file, &base };
+        auto check_file = *BinaryFile::from_path("compiled.bin");
+        Disassembler da{ &check_file, &base };
         da.disassemble();
         const auto& function = da.get_functions()[0];
         auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
@@ -1069,8 +1069,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         out.write(reinterpret_cast<const char*>(bytes.get()), size);
         out.flush();
 
-        auto check_file = *BinaryFile<>::from_path("compiled.bin");
-        TLOU2Disassembler da{ &check_file, &base };
+        auto check_file = *BinaryFile::from_path("compiled.bin");
+        Disassembler da{ &check_file, &base };
         da.disassemble();
         const auto& function = da.get_functions()[0];
         auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
@@ -1117,8 +1117,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         out.write(reinterpret_cast<const char*>(bytes.get()), size);
         out.flush();
 
-        auto check_file = *BinaryFile<>::from_path("compiled.bin");
-        TLOU2Disassembler da{ &check_file, &base };
+        auto check_file = *BinaryFile::from_path("compiled.bin");
+        Disassembler da{ &check_file, &base };
         da.disassemble();
         const auto& function = da.get_functions()[0];
         auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
@@ -1160,8 +1160,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         out.write(reinterpret_cast<const char*>(bytes.get()), size);
         out.flush();
 
-        auto check_file = *BinaryFile<>::from_path("compiled.bin");
-        TLOU2Disassembler da{ &check_file, &base };
+        auto check_file = *BinaryFile::from_path("compiled.bin");
+        Disassembler da{ &check_file, &base };
         da.disassemble();
         const auto& function = da.get_functions()[0];
         auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};

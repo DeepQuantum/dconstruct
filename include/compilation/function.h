@@ -66,10 +66,11 @@ namespace dconstruct::compilation {
         std::vector<u8> m_numberSavedArgumentsStack;
         std::vector<reg_set> m_savedArgumentsTemporaryRegs;
         std::vector<u16> m_returnBranchLocations;
-        std::vector<std::vector<Instruction>> m_deferred;
+        std::vector<std::pair<std::vector<Instruction>, u64>> m_deferred;
         environment<reg_idx> m_varsToRegs;
         reg_idx m_returnRegister;
         std::variant<std::string, sid64> m_name;
+        u16 m_deferredPoint;
         u8 m_usedArgumentRegisters = 0;
         reg_set m_usedRegisters = 0;
     };

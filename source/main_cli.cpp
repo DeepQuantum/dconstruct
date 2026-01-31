@@ -133,11 +133,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            if (uc4) {
-                dconstruct::disassembly::decomp_file<false>(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
-            } else {
-                dconstruct::disassembly::decomp_file<true>(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case);
-            }
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, !uc4);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";

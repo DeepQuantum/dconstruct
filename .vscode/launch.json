@@ -24,18 +24,18 @@
         //     "environment": [],
         //     "console": "internalConsole",
         // },
-        // {
-        //     "name": "cli test",
-        //     "type": "cppvsdbg",
-        //     "request": "launch",
-        //     "preLaunchTask": "build_cli_db",
-        //     "program": "${workspaceFolder}/build/Debug/dconstruct_cli.exe",
-        //     "args": ["C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/modules.bin", "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin"],
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}",
-        //     "environment": [],
-        //     "console": "internalConsole",
-        // },
+        {
+            "name": "cli test",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "preLaunchTask": "build_cli_db",
+            "program": "${workspaceFolder}/build/Debug/dconstruct_cli.exe",
+            "args": ["C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/modules.bin", "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "internalConsole",
+        },
         // {
         //     "name": "shader test",
         //     "type": "cppvsdbg",
@@ -48,20 +48,20 @@
         //     "environment": [],
         //     "console": "internalConsole",
         // }
-        {
-            "name": "dcc test",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "preLaunchTask": "build_dcc",
-            "program": "${workspaceFolder}/build/Debug/dcc.exe",
-            "args": [
-                "test/compiler/first_insert.dcpl"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "internalConsole",
-        },
+        // {
+        //     "name": "dcc test",
+        //     "type": "cppvsdbg",
+        //     "request": "launch",
+        //     "preLaunchTask": "build_dcc",
+        //     "program": "${workspaceFolder}/build/Debug/dcc.exe",
+        //     "args": [
+        //         "test/compiler/first_insert.dcpl"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "console": "internalConsole",
+        // },
     ],
     "version": "2.0.0"
 }

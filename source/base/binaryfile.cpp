@@ -10,11 +10,8 @@
 
 namespace dconstruct {
 
-    template class BinaryFile<true>;
-    template class BinaryFile<false>;
 
-    template<bool is_64_bit>
-    [[nodiscard]] std::expected<BinaryFile<is_64_bit>, std::string> BinaryFile<is_64_bit>::from_path(const std::filesystem::path &path) noexcept {
+    [[nodiscard]] std::expected<BinaryFile, std::string> BinaryFile::from_path(const std::filesystem::path &path) noexcept {
         std::ifstream scriptstream(path, std::ios::binary);
 
         if (!scriptstream.is_open()) {
@@ -41,19 +38,17 @@ namespace dconstruct {
             return std::unexpected{"not a DC-file. version number doesn't equal 0x00000001: " + std::to_string(*(uint32_t*)(bytes.get() + 8)) + '\n'};
         }
 
-        auto file = BinaryFile<is_64_bit>(path, size, std::move(bytes), dcheader);
+        auto file = BinaryFile(path, size, std::move(bytes), dcheader);
 
         file.read_reloc_table();
 
-        if constexpr (is_64_bit) {
-            file.replace_newlines_in_stringtable();
-        }
+        file.replace_newlines_in_stringtable();
 
         return file;
     }
 
-    template<bool is_64_bit>
-    void BinaryFile<is_64_bit>::replace_newlines_in_stringtable() noexcept {
+    
+    void BinaryFile::replace_newlines_in_stringtable() noexcept {
         constexpr u8 table_size_offset = 4;
         const u64 table_size = m_relocTable.num() - table_size_offset - m_strings.num();
         char* string_table = const_cast<char*>(m_strings.as<char>());
@@ -65,14 +60,14 @@ namespace dconstruct {
     }
 
 
-    template<bool is_64_bit>
-    [[nodiscard]] bool BinaryFile<is_64_bit>::gets_pointed_at(const location loc) const noexcept {
+    
+    [[nodiscard]] bool BinaryFile::gets_pointed_at(const location loc) const noexcept {
         const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get())) / 8;
         return (u8)m_pointedAtTable[offset / 8] & (1 << (offset % 8));
     }
 
-    template<bool is_64_bit>
-    [[nodiscard]] bool BinaryFile<is_64_bit>::is_file_ptr(const location loc) const noexcept {
+    
+    [[nodiscard]] bool BinaryFile::is_file_ptr(const location loc) const noexcept {
         p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
         if (offset >= m_size) {
             return false;
@@ -81,8 +76,8 @@ namespace dconstruct {
         return m_relocTable.get<u8>(offset / 8) & (1 << (offset % 8));
     }
 
-    template<bool is_64_bit>
-    [[nodiscard]] bool BinaryFile<is_64_bit>::is_string(const location loc) const noexcept {
+    
+    [[nodiscard]] bool BinaryFile::is_string(const location loc) const noexcept {
         return loc >= m_strings;
     }
 
@@ -96,8 +91,8 @@ namespace dconstruct {
     //     printf("\n");
     // }
 
-    template<bool is_64_bit>
-    void BinaryFile<is_64_bit>::read_reloc_table() noexcept {
+    
+    void BinaryFile::read_reloc_table() noexcept {
 
         std::byte *reloc_data = m_bytes.get() + m_dcheader->m_textSize;
 
@@ -138,8 +133,8 @@ namespace dconstruct {
         m_strings = location(m_bytes.get() + m_dcheader->m_stringsOffset);
     }
 
-    template<bool is_64_bit>
-    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile<is_64_bit>::get_unmapped() const { 
+    
+    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const { 
         std::byte *unmapped_bytes = new std::byte[m_size];
 
         std::memcpy(unmapped_bytes, m_bytes.get(), m_size);

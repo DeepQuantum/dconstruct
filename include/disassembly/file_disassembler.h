@@ -3,11 +3,10 @@
 
 
 namespace dconstruct {
-    template<bool is_64_bit>
-    class FileDisassembler : public Disassembler<is_64_bit> {
+    class FileDisassembler : public Disassembler {
 
     public:
-        FileDisassembler(BinaryFile<is_64_bit>* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options) noexcept : Disassembler<is_64_bit>(file, sidbase) {
+        FileDisassembler(BinaryFile* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options) noexcept : Disassembler(file, sidbase) {
             m_outbuf.reserve(0x2FFFFFULL);
             m_outfptr = fopen(out_file.c_str(), "wb");
             this->m_options = options;

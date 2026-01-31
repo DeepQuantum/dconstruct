@@ -144,9 +144,6 @@ void call_expr::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res call_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    // if (arg_pos && *arg_pos != 0) {
-    //     fn.save_used_argument_registers(std::min(static_cast<u64>(*arg_pos), m_arguments.size()));
-    // }
     fn.push_deferred();
 
     emission_res callee;

@@ -15,7 +15,7 @@ namespace dconstruct::testing {
 
     static function_disassembly get_function_disassembly(const std::string &path, const u32 offset) {
         SIDBase base = *SIDBase::from_binary(TEST_DIR + "test_sidbase.bin"); 
-        auto file_res = BinaryFile<>::from_path(TEST_DIR + path);
+        auto file_res = BinaryFile::from_path(TEST_DIR + path);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
@@ -32,22 +32,22 @@ namespace dconstruct::testing {
         const std::string& name = "Test",
         const SymbolTable& table = {}
     ) {
-        BinaryFile<> file = *BinaryFile<>::from_path(TEST_DIR + R"(\dummy.bin)");
-        TLOU2Disassembler da{ &file, &base };
+        BinaryFile file = *BinaryFile::from_path(TEST_DIR + R"(\dummy.bin)");
+        Disassembler da{ &file, &base };
         auto fd = da.create_function_disassembly(std::move(istrs), name, table.m_location);
-        auto dc_func = dconstruct::dcompiler::TLOU2decomp_function(fd, file, ControlFlowGraph::build(fd));
+        auto dc_func = dconstruct::dcompiler::decomp_function(fd, file, ControlFlowGraph::build(fd));
         auto& test = const_cast<ast::function_definition&>(dc_func.decompile(false));
         return std::move(test);
     }
 
     static std::string get_decompiled_function_from_file(const std::string& path, const std::string& function_id, const bool optimize = false) {
-        auto file_res = BinaryFile<>::from_path(path);
+        auto file_res = BinaryFile::from_path(path);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.get_id() == function_id) {
@@ -59,13 +59,13 @@ namespace dconstruct::testing {
     }
 
     static std::string get_decompiled_node_from_file(const std::string& path, const std::string& function_id, const node_id node) {
-        auto file_res = BinaryFile<>::from_path(path);
+        auto file_res = BinaryFile::from_path(path);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         for (const auto& func : da.get_functions()) {
             if (func.get_id() == function_id) {
@@ -77,13 +77,13 @@ namespace dconstruct::testing {
     }
 
     static void decomp_test(const std::string& filepath, const std::string& id, const std::string& expected, dconstruct::ast::print_fn_type stream_lang = dconstruct::ast::racket, const bool optimize = false, const bool use_pascal = false) {
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler<true> da{ &file, &base, DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", {} };
+        FileDisassembler da{ &file, &base, DCPL_PATH + dconstruct::sanitize_dc_string(id) + ".asm", {} };
         da.disassemble();
         da.dump();
         const auto& funcs = da.get_functions();
@@ -256,13 +256,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ImmediatePostdominator1) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -294,13 +294,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, RegistersToEmit1) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#8A8D5C923D5DDB3B";
         const auto& funcs = da.get_functions();
@@ -339,13 +339,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, If3) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "#BC06CBDEAE8344C7";
         const auto& funcs = da.get_functions();
@@ -397,7 +397,7 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, ShortCircuit2) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         const std::string id = "#608356039B1FD9FD";
         const std::string expected = "function DetermineArgumentType(i64 arg_0) {\n"
             "    return arg_0 == 5;\n"
@@ -446,13 +446,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, NodeRegisters0) {
         const std::string filepath = TEST_DIR + R"(\ss-wave-manager.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        TLOU2Disassembler da{ &file, &base };
+        Disassembler da{ &file, &base };
         da.disassemble();
         const std::string id = "select-spawn-regions@main@start@0";
         const auto& funcs = da.get_functions();
@@ -482,7 +482,7 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, AllFuncs) {
         const std::string filepath =  R"(C:\Program Files (x86)\Steam\steamapps\common\The Last of Us Part II\build\pc\main\bin_unpacked\dc1\ss\ss-ground-animal-flee.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
@@ -525,14 +525,14 @@ namespace dconstruct::testing {
             std::filesystem::path disassembly_path = base_path / entry.path().filename().replace_extension(".asm");
             std::set<std::string> emitted{};
 
-            auto file_res = BinaryFile<>::from_path(entry.path());
+            auto file_res = BinaryFile::from_path(entry.path());
             if (!file_res) {
                 std::cerr << file_res.error() << "\n";
                 std::terminate();
             }
             auto& file = *file_res;
             std::cout << file.m_path << "\n";
-            TLOU2Disassembler da{ &file, &base };
+            Disassembler da{ &file, &base };
             da.disassemble();
             const auto& funcs = da.get_named_functions();
             for (const auto* func : funcs) {
@@ -859,13 +859,13 @@ namespace dconstruct::testing {
 
     TEST(DECOMPILER, NewFileFormat1) {
         const std::string filepath = R"(C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/ss/ss-animal-flee-simple-loop.bin)";
-        auto file_res = BinaryFile<>::from_path(filepath);
+        auto file_res = BinaryFile::from_path(filepath);
         if (!file_res) {
             std::cerr << file_res.error() << "\n";
             std::terminate();
         }
         auto& file = *file_res;
-        FileDisassembler<true> da{ &file, &base, DCPL_PATH + "animal_behavior.asm", {} };
+        FileDisassembler da{ &file, &base, DCPL_PATH + "animal_behavior.asm", {} };
         da.disassemble();
         da.dump();
         const auto& funcs = da.get_functions();
@@ -873,7 +873,7 @@ namespace dconstruct::testing {
         for (const auto& func : funcs) {
             decompiled_funcs.push_back(dcompiler::decomp_function{func, file,  ControlFlowGraph::build(func), DCPL_PATH + "animal_behavior.svg"}.decompile());
         }
-        dcompiler::state_script_functions<> full_file_decomp(decompiled_funcs);
+        dcompiler::state_script_functions full_file_decomp(decompiled_funcs);
 
         std::ofstream file_out(DCPL_PATH + dconstruct::sanitize_dc_string("animal_behavior") + ".dcpl");
         full_file_decomp.to_string(file_out);

@@ -370,7 +370,7 @@ struct SymbolTable {
     location m_location;
     std::vector<ast::full_type> m_types;
 
-    template<typename T, bool is_64_bit = true>
+    template<typename T>
     [[nodiscard]] const T& get(const u64 offset) const noexcept {
         return m_location.get<T>(offset * 8);
     }

@@ -77,6 +77,9 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     if (!rvalue) {
         return rvalue;
     }
+    if (*rvalue != *lvalue) {
+        fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
+    }
     return *lvalue;
 }
 

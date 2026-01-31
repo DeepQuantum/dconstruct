@@ -10,7 +10,7 @@ namespace dconstruct::compilation {
 
     constexpr u64 all_50_bits_used = 0x3FFFFFFFFFFFFull;
 
-    if (reg_set_num >= all_50_bits_used) {
+    if ((reg_set_num & all_50_bits_used) == all_50_bits_used) {
         return std::unexpected{"no more free registers"};
     }
 
@@ -59,7 +59,7 @@ void function::restore_used_argument_registers() noexcept {
 
 void function::emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1, const u8 operand2) noexcept {
     if (!m_deferred.empty()) {
-        m_deferred.back().emplace_back(opcode, destination, operand1, operand2);
+        m_deferred.back().first.emplace_back(opcode, destination, operand1, operand2);
     } else {
         m_instructions.emplace_back(opcode, destination, operand1, operand2);
     }
@@ -95,14 +95,14 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
 }
 
 void function::push_deferred() noexcept {
-    m_deferred.push_back({});
+    m_deferred.emplace_back(std::vector<Instruction>(), m_deferred.empty() ? m_instructions.size() : m_deferred.back().first.size());
 }
 
 void function::pop_deferred() noexcept {
-    std::vector<Instruction> back = std::move(m_deferred.back());
+    const auto [instructions, save_point] = std::move(m_deferred.back());
     m_deferred.pop_back();
-    std::vector<Instruction>& next_back = m_deferred.empty() ? m_instructions : m_deferred.back();
-    next_back.insert(next_back.begin(), back.begin(), back.end());
+    std::vector<Instruction>& next_back = m_deferred.empty() ? m_instructions : m_deferred.back().first;
+    next_back.insert(next_back.begin() + save_point, instructions.begin(), instructions.end());
 }
 
 }

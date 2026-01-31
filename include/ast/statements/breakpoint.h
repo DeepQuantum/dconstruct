@@ -10,7 +10,7 @@ namespace dconstruct::ast {
 		void pseudo_racket(std::ostream&) const final;
         [[nodiscard]] bool equals(const statement& rhs) const noexcept final;
         [[nodiscard]] std::unique_ptr<statement> clone() const noexcept final;
-        VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
+        VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final { return VAR_OPTIMIZATION_ACTION::NONE; }
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope& scope) const noexcept final;
         [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
     };
