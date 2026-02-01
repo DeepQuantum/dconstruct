@@ -12,23 +12,23 @@
         //     "environment": [],
         //     "console": "internalConsole",
         // },
-        {
-            "name": "cli test",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "preLaunchTask": "build_cli",
-            "program": "${workspaceFolder}/build/Release/dconstruct.exe",
-            "args": [
-                "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/", 
-                "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin",
-                "-o",
-                "./disassembled"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "internalConsole",
-        },
+        // {
+        //     "name": "cli test",
+        //     "type": "cppvsdbg",
+        //     "request": "launch",
+        //     "preLaunchTask": "build_cli",
+        //     "program": "${workspaceFolder}/build/Release/dconstruct.exe",
+        //     "args": [
+        //         "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/", 
+        //         "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin",
+        //         "-o",
+        //         "./disassembled"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "console": "internalConsole",
+        // },
         // {
         //     "name": "cli test",
         //     "type": "cppvsdbg",

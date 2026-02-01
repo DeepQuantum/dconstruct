@@ -50,6 +50,7 @@
     "build/_deps/googletest-src/googletest/include",
     "${workspaceFolder}/source/llvm/llvm/include",
     "${workspaceFolder}/build/source/llvm/llvm/include",
+    "${workspaceFolder}/source/minhook/include",
     "${workspaceFolder}/build/"
     //"C:/Qt/6.9.0/mingw_64/include/**",
   ],

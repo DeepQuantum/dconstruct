@@ -318,6 +318,7 @@ using ShortInstruction = UP_Instruction<0>;
 
 static_assert(sizeof(Instruction) == 8);
 static_assert(sizeof(ShortInstruction) == 4);
+#undef max
 
 struct function_disassembly_line {
     Instruction m_instruction;
@@ -337,6 +338,8 @@ struct function_disassembly_line {
         m_isArgMove(false)
     {}
 };
+
+#undef max
 
 struct Register {
     ast::full_type m_type;
