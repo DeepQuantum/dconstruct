@@ -19,7 +19,7 @@
         {
             "label": "build_cli",
             "type": "shell",
-            "command": "cmake --build . --target dconstruct_cli --parallel --config Release",
+            "command": "cmake --build . --target dconstruct --parallel --config Release",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -34,7 +34,7 @@
         {
             "label": "build_cli_db",
             "type": "shell",
-            "command": "cmake --build . --target dconstruct_cli --parallel --config Debug",
+            "command": "cmake --build . --target dconstruct --parallel --config Debug",
             "args": [],
             "options": {
                 "cwd": "${workspaceFolder}/build"

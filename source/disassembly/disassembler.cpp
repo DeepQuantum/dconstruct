@@ -700,7 +700,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         if (!is_unknown(frame[dest].m_type) && frame[dest].m_containsArg) {
             if (std::holds_alternative<ast::function_type>(frame[dest].m_type)) {
                 frame.m_registerArgs[frame[dest].m_argNum] = *std::get<ast::function_type>(frame[dest].m_type).m_return;
-            } else if (frame[dest].m_argNum < frame.m_registerArgs.size()) {
+            } else {
                 frame.m_registerArgs[frame[dest].m_argNum] = frame[dest].m_type;
             }
         }
@@ -721,7 +721,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             std::snprintf(varying, disassembly_text_size,"r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "Return %s", dst_str);
             for (const auto& reg : fn.m_stackFrame.m_registers) {
-                if (reg.m_containsArg && !is_unknown(reg.m_type) && reg.m_argNum < fn.m_stackFrame.m_registerArgs.size()) {
+                if (reg.m_containsArg && !is_unknown(reg.m_type)) {
                     fn.m_stackFrame.m_registerArgs[reg.m_argNum] = reg.m_type;
                 }
             }
@@ -935,12 +935,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
                 }
                 else {
                     const auto arg_type = std::make_shared<ast::full_type>(frame[ARGUMENT_REGISTERS_IDX + i].m_type);
-                    const auto test = frame[dest].m_fromSymbolTable;
-                    auto& ftype = frame.m_symbolTable.get_type(test);
+                    auto& ftype = frame.m_symbolTable.get_type(frame[dest].m_fromSymbolTable);
                     if (!std::holds_alternative<ast::function_type>(ftype)) {
                         ftype = ast::function_type{};
                     }
-                    std::get<ast::function_type>(ftype).m_arguments.emplace_back("deduced", arg_type);
+                    std::get<ast::function_type>(ftype).m_arguments.emplace_back("", arg_type);
                 }
                 frame.to_string(dst_str, interpreted_buffer_size, ARGUMENT_REGISTERS_IDX + i, lookup(frame[i + ARGUMENT_REGISTERS_IDX].m_value));
                 offset += std::snprintf(comment_str + offset, sizeof(comment_str) - offset, "%s", dst_str);
