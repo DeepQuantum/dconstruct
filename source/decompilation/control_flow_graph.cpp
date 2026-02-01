@@ -687,10 +687,9 @@ namespace dconstruct {
         node_set checked(m_nodes.size(), false);
 
         const reg_set written = get_registers_written_to(m_nodes[last_head_node.m_followingNode], first_head_node.m_index);
-        const reg_set res_left = get_read_registers(m_nodes[last_head_node.m_targetNode], written, m_nodes.back().m_index);
-        const reg_set res_right = get_read_registers(m_nodes[first_head_node.m_index], written, last_head_node.m_index);
+        const reg_set res = get_read_registers(m_nodes[last_head_node.m_targetNode], written, m_nodes.back().m_index);
 
-        return res_left | res_right;
+        return res;
     }
 
     [[nodiscard]] const control_flow_node& ControlFlowGraph::get_final_loop_condition_node(const control_flow_loop& loop, const node_id exit_node) const noexcept {

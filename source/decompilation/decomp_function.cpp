@@ -201,7 +201,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
             }
 
             case Opcode::LoadStaticU64Imm: {
-                if (m_is64Bit) {
+                if (!m_is64Bit) {
                     break;
                 }
             }
@@ -679,6 +679,7 @@ template<ast::primitive_kind kind>
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[dst]->clone());
     auto callee = std::make_unique<ast::literal>(sid64_literal{SID("abs"), "abs"});
+    callee->set_type(ast::function_type{});
     auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     call->set_type(make_type_from_prim(kind));
     return call;
