@@ -222,3 +222,20 @@ target_link_options(dcc PRIVATE
 )
 
 add_dependencies(dconstruct generate_buildinfo)
+
+
+add_subdirectory(${SOURCE_DIR}/minhook)
+
+add_library(dconstruct_hooking SHARED "${SOURCE_DIR}/hooking/hooking.cpp")
+
+target_include_directories(dconstruct_hooking PRIVATE "${SOURCE_DIR}/minhook/include")
+
+target_link_libraries(dconstruct_hooking PRIVATE minhook)
+
+target_compile_options(dconstruct_hooking PRIVATE 
+    $<$<CONFIG:Release>:/GL>
+)
+
+target_link_options(dconstruct_hooking PRIVATE
+    $<$<CONFIG:Release>:/LTCG>
+)

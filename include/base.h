@@ -27,6 +27,8 @@ using f32 = float;
 using f64 = double;
 using p64 = uintptr_t;
 
+#undef max
+
 
 
 namespace dconstruct {

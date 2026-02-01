@@ -1,3 +1,6 @@
 [submodule "source/llvm"]
 	path = source/llvm
 	url = https://github.com/llvm/llvm-project
+[submodule "source/minhook"]
+	path = source/minhook
+	url = https://github.com/TsudaKageyu/minhook
