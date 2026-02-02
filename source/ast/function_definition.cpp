@@ -41,7 +41,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
 
 [[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compilation::scope& scope) const noexcept {
-    scope.m_returnType = m_type.m_return.get();
+    scope.m_expectedReturnType = m_type.m_return.get();
     for (const parameter& param : m_parameters) {
         scope.define(param.m_name, param.m_type);
     }
@@ -50,8 +50,12 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] emission_err function_definition::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
     if (std::holds_alternative<std::string>(m_name)) {
-        const auto id = global.m_sidAliases.at(std::get<std::string>(m_name));
-        fn.m_name = id.second;
+        if (global.m_sidAliases.contains(std::get<std::string>(m_name))) {
+            const auto id = global.m_sidAliases.at(std::get<std::string>(m_name));
+            fn.m_name = id.second;
+        } else {
+            fn.m_name = std::get<std::string>(m_name);
+        }
     }
 
     for (u32 i = 0; i < m_parameters.size(); ++i) {
@@ -65,25 +69,28 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
     }
 
-    if (!(std::holds_alternative<primitive_type>(*m_type.m_return) && std::get<primitive_type>(*m_type.m_return).m_type == primitive_kind::NOTHING)) {
-        const emission_res return_reg = fn.get_next_unused_register();
-        if (!return_reg) {
-            return return_reg.error();
-        }
-        fn.m_returnRegister = *return_reg;
-    }
+
 
     const emission_err body_err = m_body.emit_dc(fn, global);
     if (body_err) {
         return body_err;
     }
 
-    for (const reg_idx return_branch_location : fn.m_returnBranchLocations) {
-        fn.m_instructions[return_branch_location].set_lo_hi(fn.m_instructions.size());
+    if (fn.m_returnBranchLocations.empty()) {
+        fn.emit_instruction(Opcode::Return, 0r, 0r);
+    } else if (fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 2) {
+        assert(fn.m_instructions.back().opcode == Opcode::Branch);
+        fn.m_instructions.back() = Instruction(Opcode::Return, 0r, 0r);
+        fn.m_returnBranchLocations.pop_back();
     }
 
-    if (fn.m_instructions.back().opcode != Opcode::Return) {
-        fn.emit_instruction(Opcode::Return, 00);
+    const u16 return_location = fn.m_instructions.size() - 1;
+
+    for (const u64 branch_location : fn.m_returnBranchLocations) {
+        Instruction& branch = fn.m_instructions[branch_location + 1];
+        assert(branch.opcode == Opcode::Branch);
+        assert(branch.destination == compilation::function::BRANCH_PLACEHOLDER);
+        branch.set_lo_hi(return_location);
     }
     return std::nullopt;
 }

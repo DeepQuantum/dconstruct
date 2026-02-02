@@ -42,7 +42,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    std::expected<std::vector<function>, std::string> compile_res = program.compile_to_functions(base_scope, global);
+    std::expected<std::vector<function>, std::string> compile_res = program.compile_functions(base_scope, global);
     if (!compile_res) {
         std::cerr << "[compilation error] " << compile_res.error() << "\n";
         return std::nullopt;

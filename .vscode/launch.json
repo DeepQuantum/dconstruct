@@ -6,7 +6,7 @@
         //     "request": "launch",
         //     "preLaunchTask": "build_tests",
         //     "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-        //     "args": ["--gtest_filter=DECOMPILER."],
+        //     "args": ["--gtest_filter=COMPILER.MoreReturn1"],
         //     "stopAtEntry": false,
         //     "cwd": "${workspaceFolder}",
         //     "environment": [],
@@ -58,20 +58,20 @@
         //     "environment": [],
         //     "console": "internalConsole",
         // }
-        // {
-        //     "name": "dcc test",
-        //     "type": "cppvsdbg",
-        //     "request": "launch",
-        //     "preLaunchTask": "build_dcc",
-        //     "program": "${workspaceFolder}/build/Debug/dcc.exe",
-        //     "args": [
-        //         "test/compiler/first_insert.dcpl"
-        //     ],
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}",
-        //     "environment": [],
-        //     "console": "internalConsole",
-        // },
+        {
+            "name": "dcc test",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "preLaunchTask": "build_dcc",
+            "program": "${workspaceFolder}/build/Debug/dcc.exe",
+            "args": [
+                "test/compiler/first_insert.dcpl"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "internalConsole",
+        },
     ],
     "version": "2.0.0"
 }

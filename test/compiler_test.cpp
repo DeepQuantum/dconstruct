@@ -1168,4 +1168,38 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::string res = fd.decompile(true).to_c_string();
         ASSERT_EQ(res, decomp_code);
     }
+
+    TEST(COMPILER, MoreReturn1) {
+        const std::string code =
+            "u64 sum_upto(u64 x) {"
+            "    if (1) { return -56; } return 5;"
+            "}";
+        
+        const std::string decomp_code = "";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(program.m_declarations.size(), 1);
+
+        compilation::scope scope{types};
+        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
+        ASSERT_EQ(semantic_errors.size(), 0);
+
+        const auto binary = program.compile_to_file(scope);
+        ASSERT_TRUE(binary.has_value());
+        const auto& [bytes, size] = *binary;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+
+        auto check_file = *BinaryFile::from_path("compiled.bin");
+        Disassembler da{ &check_file, &base };
+        da.disassemble();
+        const auto& function = da.get_functions()[0];
+        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
+        const std::string res = fd.decompile(true).to_c_string();
+        ASSERT_EQ(res, decomp_code);
+    }
 }

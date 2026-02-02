@@ -40,14 +40,16 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
         if (!expr_type) {
             return {expr_type.error()};
         }
-        if (const std::optional<std::string> err = not_assignable_reason(*scope.m_returnType, *expr_type)) {
+        if (const std::optional<std::string> err = not_assignable_reason(*scope.m_expectedReturnType, *expr_type)) {
             return {semantic_check_error{*err}};
         }
+        scope.m_computedReturnType = true;
         return {};
     } else {
-        if (!std::holds_alternative<std::monostate>(*scope.m_returnType)) {
+        if (!std::holds_alternative<std::monostate>(*scope.m_expectedReturnType)) {
             return {semantic_check_error{"cannot return a value because function has type void", this}};
         }
+        scope.m_computedReturnType = true;
         return {};
     }
 }
@@ -57,7 +59,9 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
     if (!expr_res) {
         return expr_res.error();
     }
-    fn.emit_instruction(Opcode::Return, *expr_res, *expr_res);
+    fn.m_returnBranchLocations.push_back(fn.m_instructions.size());
+    fn.emit_instruction(Opcode::Move, 0r, *expr_res);
+    fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0r, compilation::function::BRANCH_PLACEHOLDER);
     return std::nullopt;
 }
 
