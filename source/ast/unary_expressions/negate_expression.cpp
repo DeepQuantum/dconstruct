@@ -59,6 +59,46 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_negate, this}};
 }
 
+
+[[nodiscard]] emission_res negate_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+    if (const literal* literal_rhs = m_rhs->as_literal(); is_arithmetic(literal_rhs->get_type())) {
+        const std::optional<primitive_number> value = get_number(literal_rhs->m_value);
+        assert(value);
+        const primitive_number new_value = std::visit([](auto&& arg) -> primitive_number {
+            using T = std::decay_t<decltype(arg)>;
+
+            if constexpr (std::is_same_v<T, u8> || std::is_same_v<T, u16> || std::is_same_v<T, u32>) {
+                return -static_cast<i32>(arg);
+            } else if constexpr (std::is_same_v<T, u64>) {
+                return -static_cast<i64>(arg);
+            } else {
+                return -arg;
+            }
+        }, *value);
+        //const table_idx = fn.add_to_symbol_table(std::bit_cast<u64>(new_value), )
+
+    } else {
+        const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+
+        if (!rhs_res) {
+            return rhs_res;
+        }
+
+        assert(std::holds_alternative<primitive_type>(*m_type));
+        const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::INeg : Opcode::FNeg;
+
+        const emission_res neg_destination = fn.get_destination(opt_destination);
+        if (!neg_destination) {
+            return neg_destination;
+        }
+
+        fn.emit_instruction(opcode, *neg_destination, *rhs_res);
+        fn.free_register(*rhs_res);
+        return *neg_destination;
+    }    
+}
+
+
 [[nodiscard]] llvm_res negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {
@@ -70,6 +110,8 @@ namespace dconstruct::ast {
     }
     return res;
 }
+
+
 
 
 }

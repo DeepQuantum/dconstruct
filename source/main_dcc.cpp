@@ -2,6 +2,9 @@
 
 
 int main(int argc, char* argv[]) {
+
+    // Qword(GetRegValue("RSP") + 0xC8 + 5*8)
+    // GetString(Qword(GetRegValue("RSP") + 0xC8 + 5*8), -1, STRTYPE_C)
     
     const std::optional<cxxopts::ParseResult> options = dconstruct::compilation::get_command_line_options(argc, argv);
     if (!options) {

@@ -26,6 +26,9 @@ void program::pseudo_racket(std::ostream& os) const {
         const std::vector<semantic_check_error> new_errors = decl->check_semantics(env);
         res.insert(res.end(), new_errors.begin(), new_errors.end());
     }
+    if (std::holds_alternative<primitive_type>(*env.m_expectedReturnType) && std::get<primitive_type>(*env.m_expectedReturnType).m_type == primitive_kind::NOTHING && !env.m_computedReturnType) {
+        return {semantic_check_error{"function expects a value to be returned"}};
+    }
     return res;
 }
 
@@ -175,7 +178,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 
 [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(const compilation::scope& scope) const noexcept {
     compilation::global_state global{};
-    const auto functions = compile_to_functions(scope, global);
+    const auto functions = compile_functions(scope, global);
     if (!functions) {
         return std::unexpected{functions.error()};
     }
@@ -183,14 +186,14 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 }
 
 [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::compile_to_file(const compilation::scope& scope, compilation::global_state& global) const noexcept {
-    const auto functions = compile_to_functions(scope, global);
+    const auto functions = compile_functions(scope, global);
     if (!functions) {
         return std::unexpected{functions.error()};
     }
     return make_binary(*functions, global);
 }
 
-[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_to_functions(const compilation::scope& scope, compilation::global_state& global) const noexcept {     
+[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_functions(const compilation::scope& scope, compilation::global_state& global) const noexcept {     
     for (const auto& [name, sid_literal] : scope.m_sidAliases) {
         const full_type* type = scope.lookup(name);
         global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
@@ -204,17 +207,21 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         }
         compilation::function fn;
         const emission_err err = m_declarations[i]->emit_dc(fn, global);
+
+
         if (err) {
             return std::unexpected{*err};
         }
         functions.push_back(std::move(fn));
     }
+
+
     return functions;
 }
 
-[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_to_functions(const compilation::scope& scope) const noexcept {
+[[nodiscard]] std::expected<std::vector<compilation::function>, std::string> program::compile_functions(const compilation::scope& scope) const noexcept {
     compilation::global_state global{};
-    return compile_to_functions(scope, global);
+    return compile_functions(scope, global);
 }
 
 } 

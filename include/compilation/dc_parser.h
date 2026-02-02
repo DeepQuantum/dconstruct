@@ -50,7 +50,7 @@ namespace dconstruct::compilation {
             {"bool", make_type_from_prim(ast::primitive_kind::BOOL)},
             {"string", make_type_from_prim(ast::primitive_kind::STRING)},
             {"sid", make_type_from_prim(ast::primitive_kind::SID)},
-            {"void", make_type_from_prim(ast::primitive_kind::NOTHING)}
+            {"u0", make_type_from_prim(ast::primitive_kind::NOTHING)}
         };
 
         u32 m_current = 0;

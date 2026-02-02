@@ -17,6 +17,8 @@ namespace dconstruct {
 namespace dconstruct::compilation {
     struct function {
 
+        static constexpr u8 BRANCH_PLACEHOLDER = 0xFF; 
+
         enum class SYMBOL_TABLE_POINTER_KIND {
             NONE,
             STRING,
@@ -68,7 +70,6 @@ namespace dconstruct::compilation {
         std::vector<u16> m_returnBranchLocations;
         std::vector<std::pair<std::vector<Instruction>, u64>> m_deferred;
         environment<reg_idx> m_varsToRegs;
-        reg_idx m_returnRegister;
         std::variant<std::string, sid64> m_name;
         u16 m_deferredPoint;
         u8 m_usedArgumentRegisters = 0;

@@ -203,4 +203,8 @@ namespace dconstruct {
 		ss << ']';
 		return ss.str();
 	}
+
+	constexpr reg_idx operator"" r(u64 v) {
+		return reg_idx(v);
+	}
 };

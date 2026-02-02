@@ -95,7 +95,8 @@ namespace dconstruct::compilation {
 
         std::unordered_map<std::string, ast::full_type> m_namesToTypes;
         std::unordered_map<std::string, sid64_literal> m_sidAliases;
-        const ast::full_type* m_returnType;
+        const ast::full_type* m_expectedReturnType;
+        bool m_computedReturnType;
     };
 
 }

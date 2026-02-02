@@ -15,8 +15,8 @@ namespace dconstruct::ast {
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept;
         [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> compile_to_file(const compilation::scope& scope) const noexcept;
         [[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> compile_to_file(const compilation::scope& scope, compilation::global_state& global) const noexcept;
-        [[nodiscard]] std::expected<std::vector<compilation::function>, std::string> compile_to_functions(const compilation::scope& scope) const noexcept;
-        [[nodiscard]] std::expected<std::vector<compilation::function>, std::string> compile_to_functions(const compilation::scope& scope, compilation::global_state& global) const noexcept;
+        [[nodiscard]] std::expected<std::vector<compilation::function>, std::string> compile_functions(const compilation::scope& scope) const noexcept;
+        [[nodiscard]] std::expected<std::vector<compilation::function>, std::string> compile_functions(const compilation::scope& scope, compilation::global_state& global) const noexcept;
         [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> make_binary(const std::vector<compilation::function>& functions, const compilation::global_state& global) noexcept;
 
         std::vector<ast::global_decl_uptr> m_declarations;

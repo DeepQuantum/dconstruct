@@ -15,6 +15,7 @@ namespace dconstruct::ast {
         
         [[nodiscard]] full_type compute_type_unchecked(const compilation::scope&) const noexcept override;
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope&) const noexcept override;
+        [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept override;
 
     };
 }
