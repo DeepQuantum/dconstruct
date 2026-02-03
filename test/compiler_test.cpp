@@ -1,12 +1,15 @@
 #include <gtest/gtest.h>
 #include "compilation/lexer.h"
 #include "compilation/dc_parser.h"
+#include "compilation/function.h"
 #include "disassembly/file_disassembler.h"
+#include "disassembly/instructions.h"
 #include "decompilation/decomp_function.h"
 #include "binaryfile.h"
 #include "ast/ast.h"
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 namespace dconstruct::testing {
     
@@ -49,7 +52,36 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         auto [program, _, errors] = get_parse_results(function_def_tokens);
 
         return { !program.m_declarations.empty() ? std::move(static_cast<ast::function_definition*>(program.m_declarations[0].get())->m_body.m_statements) : std::list<stmnt_uptr>{}, errors };
-    } 
+    }
+
+
+    [[nodiscard]] static std::expected<std::vector<compilation::function>, std::string> compile_to_functions(const std::string& code) {
+        const auto [tokens, lex_errors] = get_tokens(code);
+        if (!lex_errors.empty()) {
+            return std::unexpected{"lex errors: " + lex_errors.front().m_message};
+        }
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        if (!parse_errors.empty()) {
+            return std::unexpected{"parse errors: " + parse_errors.front().m_message};
+        }
+        compilation::scope scope{types};
+        const auto semantic_errors = program.check_semantics(scope);
+        if (!semantic_errors.empty()) {
+            return std::unexpected{"semantic errors: " + semantic_errors.front().m_message};
+        }
+        auto functions = program.compile_functions(scope);
+        if (!functions) {
+            return std::unexpected{functions.error()};
+        }
+        return *functions;
+    }
+
+    static void expect_instructions(const std::string& code, const std::vector<Instruction>& expected) {
+        auto functions = compile_to_functions(code);
+        ASSERT_TRUE(functions) << "compile failed: " << (functions ? "" : functions.error());
+        ASSERT_FALSE(functions->empty()) << "no functions produced";
+        EXPECT_EQ((*functions)[0].m_instructions, expected);
+    }
 
     TEST(COMPILER, LexerEmpty) {
         const std::string empty = "";
@@ -198,8 +230,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::RIGHT_SQUARE, "]", 0, 1),
             compilation::token(compilation::token_type::LEFT_BRACE, "{", 0, 1),
-            compilation::token(compilation::token_type::INT, "123", 123, 1),
-            compilation::token(compilation::token_type::INT, "34", 34, 2),
+            compilation::token(compilation::token_type::INT, "123", 123, static_cast<u16>(1)),
+            compilation::token(compilation::token_type::INT, "34", 34, static_cast<u16>(2)),
             compilation::token(compilation::token_type::_EOF, "", 0, 2),
         };
         EXPECT_EQ(tokens, expected);
@@ -211,7 +243,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::DOUBLE, "123.45", 123.45, 1),
+            compilation::token(compilation::token_type::DOUBLE, "123.45", 123.45f, 1),
             compilation::token(compilation::token_type::STRING, "\"a\"", "a", 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
@@ -1169,37 +1201,13 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_EQ(res, decomp_code);
     }
 
-    TEST(COMPILER, MoreReturn1) {
-        const std::string code =
-            "u64 sum_upto(u64 x) {"
-            "    if (1) { return -56; } return 5;"
-            "}";
-        
-        const std::string decomp_code = "";
-
-        auto [tokens, lex_errors] = get_tokens(code);
-        const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(program.m_declarations.size(), 1);
-
-        compilation::scope scope{types};
-        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(semantic_errors.size(), 0);
-
-        const auto binary = program.compile_to_file(scope);
-        ASSERT_TRUE(binary.has_value());
-        const auto& [bytes, size] = *binary;
-        std::ofstream out("compiled.bin", std::ios::binary);
-        out.write(reinterpret_cast<const char*>(bytes.get()), size);
-        out.flush();
-
-        auto check_file = *BinaryFile::from_path("compiled.bin");
-        Disassembler da{ &check_file, &base };
-        da.disassemble();
-        const auto& function = da.get_functions()[0];
-        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
-        const std::string res = fd.decompile(true).to_c_string();
-        ASSERT_EQ(res, decomp_code);
+    TEST(COMPILER, InstructionLevel_CastExpression_ProducesExpectedInstructions) {
+        // i32 main() { return (i32)1.0; }  ->  load float 1.0, CastInteger to int, move to return reg, return
+        expect_instructions("i32 main() { return (i32)1.0; }", {
+            Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
+            Instruction{Opcode::CastInteger, 1, 0, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
     }
 }

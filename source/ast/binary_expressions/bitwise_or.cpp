@@ -58,7 +58,7 @@ namespace dconstruct::ast {
 
     assert(std::holds_alternative<primitive_type>(*m_type));
     
-    const emission_res or_destination = destination ? *destination : fn.get_next_unused_register();
+    const emission_res or_destination = fn.get_destination(destination);
     if (!or_destination) {
         return or_destination;
     }

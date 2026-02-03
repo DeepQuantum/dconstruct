@@ -993,6 +993,21 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return nullptr;
 }
 
+[[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> Parser::make_cast() {
+    std::optional<ast::full_type> cast_type = make_type();
+    if (!cast_type) {
+        std::nullopt;
+    }
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after cast expression")) {
+        return nullptr;
+    }
+    expr_uptr expr = make_expression();
+    if (!expr) {
+        return nullptr;
+    }
+    return std::make_unique<ast::cast_expr>(std::move(*cast_type), std::move(expr));
+}
+
 [[nodiscard]] expr_uptr Parser::make_primary() {
     if (expr_uptr literal = make_literal()) {
         return literal;
@@ -1001,11 +1016,15 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (match({token_type::MATCH})) {
         return make_match();
     } else if (match({token_type::LEFT_PAREN})) {
-        std::unique_ptr expr = make_expression();
-        if(!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
-            return nullptr;
+        if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
+            return std::move(*cast);
+        } else {
+            expr_uptr expr = make_expression();
+            if(!consume(token_type::RIGHT_PAREN, "expected ')' after expression")) {
+                return nullptr;
+            }
+            return std::make_unique<ast::grouping>(std::move(expr));
         }
-        return std::make_unique<ast::grouping>(std::move(expr));
     }
 
     m_errors.emplace_back(previous(), "expected expression after '" + previous().m_lexeme + "'");
