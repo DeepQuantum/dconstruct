@@ -54,7 +54,7 @@ namespace dconstruct::ast {
 
     assert(std::holds_alternative<primitive_type>(*m_type));
     
-    const emission_res xor_destination = destination ? *destination : fn.get_next_unused_register();
+    const emission_res xor_destination = fn.get_destination(destination);
     if (!xor_destination) {
         return xor_destination;
     }

@@ -76,6 +76,46 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return std::make_unique<cast_expr>(type, m_rhs->clone());
 }
 
+[[nodiscard]] emission_res cast_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res expr_res = m_rhs->emit_dc(fn, global);
+    if (!expr_res) {
+        return expr_res;
+    }
+
+    const full_type& expr_type = *m_rhs->get_type();
+
+    if (std::holds_alternative<ptr_type>(m_castType)) {
+        return *expr_res;
+    }
+
+    assert(std::holds_alternative<primitive_type>(m_castType));
+    const primitive_type cast_type = std::get<primitive_type>(m_castType);
+
+    assert(std::holds_alternative<primitive_type>(expr_type));
+    const primitive_type expr_prim_type = std::get<primitive_type>(expr_type);
+
+    const bool cast_is_integral = is_integral(cast_type.m_type);
+    const bool expr_is_integral = is_integral(expr_prim_type.m_type);
+    
+    if (cast_is_integral && expr_is_integral) {
+        return *expr_res;
+    } else if (!cast_is_integral && !expr_is_integral) {
+        return *expr_res;
+    }
+
+    const emission_res cast_destination = fn.get_destination(destination);
+    if (!cast_destination) {
+        return cast_destination;
+    }
+
+    const Opcode cast_opcode = cast_is_integral ? Opcode::CastInteger : Opcode::CastFloat;
+
+    fn.emit_instruction(cast_opcode, *cast_destination, *expr_res);
+    fn.free_register(*expr_res);
+    
+    return *cast_destination;
+}
+
 VAR_OPTIMIZATION_ACTION cast_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     env.check_action(&m_rhs);
     return VAR_OPTIMIZATION_ACTION::NONE;
