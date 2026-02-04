@@ -136,6 +136,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::nullopt;
     }
 
+    advance();
+
     ast::full_type res = m_knownTypes.at(type_name);
 
     while (match({token_type::STAR}) && !is_at_end()) {
@@ -405,7 +407,6 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
-    advance();
     const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
     if (!name) {
         return nullptr;
