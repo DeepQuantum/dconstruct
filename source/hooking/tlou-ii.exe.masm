@@ -1,0 +1,572 @@
+.code
+
+parse PROC
+    VMOVSS XMM0,dword ptr [RDI + RSI*8h]
+    VXORPS XMM1,XMM0,XMM7
+    VMOVSS dword ptr [RDI + RBP*8h],XMM1
+    JMP 1414b2f50h
+    MOV RAX,R12R
+    CMP qword ptr [RDI + RSI*8],0
+    CMOVNZ RAX,R13
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP 1414b2f50h
+    CMP qword ptr [RDI + RSI*8],0
+    JZ 1414b316eh
+    CMP qword ptr [RDI + R15*8],0
+    MOV RAX,R12
+    JNZ 1414b3171h
+    MOV RAX,R13
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    CMP qword ptr [RDI + RSI*8],0
+    JNZ LAB_1414b318bh
+    CMP qword ptr [RDI + R15*8],0
+    MOV RAX,R13
+    JZ LAB_1414b318eh
+    MOV RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + R15*8]
+    AND RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    NOT RAX
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + R15*8]
+    OR RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + R15*8]
+    XOR RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + R15*8]
+    OR RAX,qword ptr [RDI + RSI*8]
+    NOT RAX
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVZ RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVNZ RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    VMOVSS XMM0,dword ptr [RDI + RSI*8]
+    VUCOMISS XMM0,dword ptr [RDI + R15*8]
+    JP LAB_1414b316eh
+    JNZ LAB_1414b316eh
+    MOV RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    VMOVSS XMM0,dword ptr [RDI + RSI*8]
+    VUCOMISS XMM0,dword ptr [RDI + R15*8]
+    JP LAB_1414b318bh
+    JNZ LAB_1414b318bh
+    MOV RAX,R13
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVG RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVGE RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVL RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,R13
+    MOV RAX,qword ptr [RDI + R15*8]
+    CMP qword ptr [RDI + RSI*8],RAX
+    CMOVLE RCX,R12
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RAX,R13
+    VMOVSS XMM0,dword ptr [RDI + RSI*8]
+    VCOMISS XMM0,dword ptr [RDI + R15*8]
+    CMOVA RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,R13
+    VMOVSS XMM0,dword ptr [RDI + RSI*8]
+    VCOMISS XMM0,dword ptr [RDI + R15*8]
+    CMOVNC RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,R13
+    VMOVSS XMM0,dword ptr [RDI + R15*8]
+    VCOMISS XMM0,dword ptr [RDI + RSI*8]
+    CMOVA RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,R13
+    VMOVSS XMM0,dword ptr [RDI + R15*8]
+    VCOMISS XMM0,dword ptr [RDI + RSI*8]
+    CMOVNC RAX,R12
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    SHL R15,8
+    OR R15,RSI
+    MOV qword ptr [RDI + RBP*8],R15
+    JMP LAB_1414b2f50h
+    MOVSXD RAX,dword ptr [R14 + 4]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV RCX,qword ptr [RBX + RAX*8]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV ECX,dword ptr [RBX + RAX*8]
+    MOV dword ptr [RDI + RBP*8],ECX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOVSX RAX,byte ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOVZX EAX,byte ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOVSX RAX,word ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOVZX EAX,word ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOVSXD RAX,dword ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV EAX,dword ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RBX + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV EAX,dword ptr [RBX + RSI*8]
+    MOV dword ptr [RDI + RBP*8],EAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV ECX,dword ptr [RAX]
+    MOV dword ptr [RDI + RBP*8],ECX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOV RAX,qword ptr [RDI + R15*8]
+    MOV qword ptr [RCX],RAX
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV RCX,qword ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    VMOVSS XMM0,dword ptr [RDI + R15*8]
+    VMOVSS dword ptr [RSP + 68h],XMM0
+    MOV EAX,dword ptr [RSP + 68h]
+    AND EAX,7f800000h
+    CMP EAX,7f800000h
+    JNZ LAB_1414b3495h
+    LEA RDX,[142af5450h]
+    LEA RCX,[142e2a4c0h]
+    CALL 1414ba4a0h
+    LEA RDX,[142af5450h]
+    LEA RCX,[142e2a4c0h]
+    CALL 141b87430h
+    VMOVAPS XMM0,XMM8
+    MOV R12,qword ptr [1484ae1d0h]
+    MOV R13,qword ptr [1484ae1e0h]
+    MOV RCX,qword ptr [RSP + 40h]
+    MOV R8,qword ptr [RSP + 48h]
+    LEA R9,[140000000h]
+    MOV RAX,qword ptr [RDI + RSI*8]
+    VMOVSS dword ptr [RAX],XMM0
+    VMOVSS dword ptr [RDI + RBP*8],XMM0
+    JMP 1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOV RAX,qword ptr [RDI + R15*8]
+    MOV qword ptr [RCX],RAX
+    MOV RAX,qword ptr [RDI + R15*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP 1414b2f50h
+    MOV RAX,qword ptr [RDI + R15*8]
+    MOV RCX,qword ptr [RDI + RSI*8]
+    VMOVUPS XMM0,xmmword ptr [RAX]
+    VMOVUPS xmmword ptr [RCX],XMM0
+    MOV RAX,qword ptr [RDI + R15*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOVZX EAX,byte ptr [RDI + R15*8]
+    MOV byte ptr [RCX],AL
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOVZX ECX,byte ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOVZX EAX,byte ptr [RDI + R15*8]
+    MOV byte ptr [RCX],AL
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOVSX RCX,byte ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOVZX EAX,word ptr [RDI + R15*8]
+    MOV word ptr [RCX],AX
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOVZX ECX,word ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOVZX EAX,word ptr [RDI + R15*8]
+    MOV word ptr [RCX],AX
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOVSX RCX,word ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOV EAX,dword ptr [RDI + R15*8]
+    MOV dword ptr [RCX],EAX
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV ECX,dword ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RDI + RSI*8]
+    MOV EAX,dword ptr [RDI + R15*8]
+    MOV dword ptr [RCX],EAX
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOVSXD RCX,dword ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RCX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    MOV RAX,qword ptr [R8 + RSI*8]
+    MOV qword ptr [R8 + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    MOV EAX,dword ptr [RDI + RSI*8]
+    MOV dword ptr [RDI + RBP*8],EAX
+    JMP LAB_1414b2f50h
+    VCVTTSS2SI RAX,dword ptr [RDI + RBP*8]
+    MOV qword ptr [RDI + RBP*8],RAX
+    JMP LAB_1414b2f50h
+    VXORPS XMM0,XMM0,XMM0
+    VCVTSI2SS XMM0,XMM0,qword ptr [RDI + RBP*8]
+    VMOVSS dword ptr [RDI + RBP*8],XMM0
+    JMP LAB_1414b2f50h
+    MOV RCX,qword ptr [RBX + RSI*8]
+    CALL 141353400h
+    MOV RCX,qword ptr [RBX + RSI*8]
+    MOV R8,qword ptr [RSP + 48h]
+    MOV qword ptr [R8 + RBP*8],RCX
+    TEST RAX,RAX
+    JZ LAB_1414b3623h
+    MOV RAX,qword ptr [RAX]
+    MOV qword ptr [RDI + RBP*8],RAX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f36h
+    MOV qword ptr [RDI + RBP*8],RAX
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f36h
+    MOV RBX,qword ptr [R8 + RSI*8]
+    MOV RAX,qword ptr [RDI + RSI*8]
+    MOV qword ptr [RSP + 68h],RAX
+    TEST RAX,RAX
+    JNZ LAB_1414b3672h
+    LEA RDX,[.142af5450h] ;= 23h
+    LEA RCX,[142dfe710h]
+    CALL FUN_1414ba4a0h ;undefined FUN_1414ba4a0h(void)
+    MOV qword ptr [RDI + RBP*8],0
+    MOV RBX,qword ptr [RSP + 50h]
+    MOV R8,qword ptr [RSP + 48h]
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f44h
+    LEA R9,[142e29710h]
+    MOV R8D,352h
+    LEA RDX,[142e292d0h]
+    LEA RCX,[1484adfa0h]
+    CALL FUN_14124b3c0h ;undefined FUN_14124b3c0h(ulonglong * ...
+    MOV RSI,qword ptr [1484adf88h]
+    TEST RSI,RSI
+    JZ LAB_1414b3955h
+    MOV RAX,qword ptr [RSI]
+    MOV qword ptr [1484adf88h],RAX
+    XOR EDX,EDX
+    MOV R8D,448h
+    MOV RCX,RSI
+    CALL FUN_14286ad10h ;undefined1[16h] * FUN_14286ad10h(undef...
+    MOV ECX,dword ptr [1484adf94h]
+    INC ECX
+    MOV dword ptr [1484adf94h],ECX
+    MOV EAX,dword ptr [1484adf98h]
+    CMP ECX,EAX
+    CMOVG EAX,ECX
+    MOV dword ptr [1484adf98h],EAX
+    LEA R9,[142e29710h]
+    MOV R8D,352h
+    LEA RDX,[142e292d0h]
+    LEA RCX,[1484adfa0h]
+    CALL FUN_14124b540h ;undefined FUN_14124b540h(undefined8 *...
+    NOP
+    MOV qword ptr [RSI + 10h],R14
+    TEST R15D,R15D
+    JZ LAB_1414b3732h
+    LEA RCX,[RSI + 1a0h]
+    SUB RDI,RSI
+    MOV RDX,R15
+    NOP dword ptr [RAX]
+    NOP dword ptr [RAX + RAX*1]
+    MOV RAX,qword ptr [RDI + RCX*1 + -18h]
+    MOV qword ptr [RCX],RAX
+    LEA RCX,[RCX + 8h]
+    SUB RDX,1
+    JNZ LAB_1414b3720h
+    MOV dword ptr [RSI + 444h],EBP
+    MOV RAX,qword ptr [RSP + 68h]
+    MOV qword ptr [RSI + 8],RAX
+    MOV dword ptr [RSI + 4],R15D
+    XOR ECX,ECX
+    MOV dword ptr [RSI],ECX
+    MOV qword ptr [RSI + 428h],RBX
+    MOV qword ptr [RSI + 430h],RCX
+    MOV R14,RSI
+    MOV RBX,qword ptr [RAX + 8]
+    MOV qword ptr [RSP + 50h],RBX
+    MOV RCX,qword ptr [RAX]
+    MOV qword ptr [RSP + 40h],RCX
+    LEA RDI,[RSI + 18h]
+    LEA RAX,[RSI + 220h]
+    MOV qword ptr [RSP +...,RAX
+    MOV R8,RSI
+    MOV RDX,-361bf4670129d615h
+    MOV ECX,6
+    CALL FUN_141234a50h ;undefined FUN_141234a50h(int param_1,...
+    MOV RCX,qword ptr [RSP + 40h]
+    MOV R8,qword ptr [RSP + 48h]
+    JMP LAB_1414b2f36h
+    MOV RSI,qword ptr [RDI + RSI*8]
+    TEST RSI,RSI
+    JZ LAB_1414b38abh
+    LEA RAX,[RSP + 80h]
+    VPXOR XMM0,XMM0,XMM0
+    MOV ECX,4
+    NOP
+    VMOVUPS ymmword ptr [RAX],YMM0
+    VMOVUPS ymmword ptr [RAX + 20h],YMM0
+    VMOVUPS ymmword ptr [RAX + 40h],YMM0
+    VMOVUPS xmmword ptr [RAX + 60h],XMM0
+    LEA RAX,[RAX + 80h]
+    VMOVUPS xmmword ptr [RAX + -10h],XMM0
+    SUB RCX,1
+    JNZ LAB_1414b37c0h
+    VMOVUPS xmmword ptr [RAX],XMM0
+    LEA RDX,[RDI + 188h]
+    LEA RCX,[RSP + 88h]
+    MOV R8D,10h
+    NOP
+    MOV RAX,qword ptr [RDX]
+    MOV qword ptr [RCX],RAX
+    MOV RAX,qword ptr [RDX + 8]
+    MOV qword ptr [RCX + 8],RAX
+    MOV RAX,qword ptr [RDX + 10h]
+    MOV qword ptr [RCX + 10h],RAX
+    LEA RCX,[RCX + 20h]
+    MOV RAX,qword ptr [RDX + 18h]
+    MOV qword ptr [RCX + -8],RAX
+    LEA RDX,[RDX + 20h]
+    SUB R8,1
+    JNZ 1414b3800h
+    MOV RAX,qword ptr [RDX]
+    MOV qword ptr [RCX],RAX
+    VZEROUPPER
+    CALL 141242290h
+    MOV RBX,RAX
+    MOV RCX,qword ptr [RSI]
+    MOV R10,qword ptr [RCX]
+    LEA R9,[RDI + RBP*8]
+    MOV qword ptr [RSP + 20h],RSI
+    MOV R8D,R15D
+    LEA RDX,[RSP + 88h]
+    MOV RCX,RSI
+    CALL R10
+    CALL 141242290h
+    SUB RAX,RBX
+    MOV RCX,RAX
+    CALL 14029c800h
+    MOV RAX,qword ptr [RSP + 60h]
+    TEST RAX,RAX
+    JZ 1414b3880h
+    CMP dword ptr [RAX],0
+    JNZ 1414b39f4h
+    MOV RAX,qword ptr [RSP + 80h]
+    CMP RAX,2
+    JZ 1414b39f4h
+    CMP RAX,1
+    JZ 1414b39e3h
+    MOV RBX,qword ptr [RSP + 50h]
+    MOV R8,qword ptr [RSP + 48h]
+    JMP 1414b393dh
+    LEA RDX,[142af5450h]
+    LEA RCX,[142dfe7a0h]
+    CALL 1414ba4a0h
+    MOV qword ptr [RDI + RBP*8],0
+    MOV RCX,qword ptr [RSP + 40h]
+    MOV R8,qword ptr [RSP + 48h]
+    JMP 1414b2f44h
+    LEA RCX,[142e2a4e8h]
+    CALL 1414ba4a0h
+    MOV RDX,qword ptr [RSP + 58h]
+    MOV RCX,R14
+    CALL 1414b8240h
+    TEST RAX,RAX
+    MOV R14,RAX
+    JZ LAB_1414b3ad3h
+    MOV RAX,qword ptr [RAX + 8]
+    MOV RBX,qword ptr [RAX + 8]
+    MOV qword ptr [RSP + 50h],RBX
+    MOV RCX,qword ptr [RAX]
+    MOV qword ptr [RSP + 40h],RCX
+    LEA RDI,[R14 + 18h]
+    LEA RAX,[R14 + 220h]
+    MOV qword ptr [RSP + 48h],RAX
+    MOV R8,R14
+    MOV RDX,-361bf4670129d615h
+    MOV ECX,6
+    CALL 141234a50h
+    LEA R8,[R14 + 220h]
+    MOV R13,qword ptr [1484ae1e0h]
+    MOV R12,qword ptr [1484ae1d0h]
+    MOV RCX,qword ptr [RSP + 40h]
+    JMP LAB_1414b2f44h
+    LEA R9,[142e29710h]
+    MOV R8D,352h
+    LEA RDX,[142e292d0h]
+    LEA RCX,[1484adfa0h]
+    CALL 14124b540h
+    NOP
+    XOR EDX,EDX
+    LEA ECX,[RDX + 13h]
+    CALL 14126cc80h
+    MOV RDI,RAX
+    MOV ECX,1
+    CALL 1412408a0h
+    MOV RBX,RAX
+    XOR EDX,EDX
+    LEA ECX,[RDX + 13h]
+    CALL 14126cc80h
+    MOV byte ptr [RSP + 30h],1
+    MOV byte ptr [RSP + 28h],1
+    MOV byte ptr [RSP + 20h],0
+    XOR R9D,R9D
+    MOV R8,RBX
+    MOV RDX,qword ptr [RAX + 1a0]
+    MOV RCX,RDI
+    CALL 141443cc0h
+    LEA RCX,[149341e80h]
+    CALL 141b854f0h
+    LEA RCX,[149448960h]
+    CALL 141d91f80h
+    MOV RCX,RAX
+    CALL 141d92c20h
+    JMP LAB_1414b3ac7h
+    MOV RAX,qword ptr [RSP + 58h]
+    MOV qword ptr [RAX],0
+    JMP LAB_1414b3ad6h
+    LEA RSI,[1484ade60h]
+    LEA RBP,[142e297e0h]
+    MOV RBX,R14
+    MOV R14,qword ptr [R14 + 10h]
+    MOV RDI,qword ptr [RBX + 438h]
+    TEST RDI,RDI
+    JZ LAB_1414b3a54h
+    MOV qword ptr [RSP + 60h],RSI
+    MOV qword ptr [RSP + 20h],RBP
+    MOV R9D,3e6
+    LEA R8,[142e292d0h]
+    MOV RDX,RSI
+    MOV RCX,RSI
+    CALL 141241f70h
+    NOP
+    MOV R8B,1
+    MOV RDX,RDI
+    LEA RCX,[1484ade00h]
+    CALL 141254110h
+    NOP
+    MOV RCX,RSI
+    CALL 141242040h
+    NOP
+    LEA R9,[142e29760h]
+    MOV R8D,380h
+    LEA RDX,[142e292d0h]
+    LEA RCX,[1484adfa0h]
+    CALL 14124b3c0h
+    DEC dword ptr [1484adf94h]
+    MOV dword ptr [RBX + 444h],f8eef8eeh
+    MOV qword ptr [RBX + 8],0
+    MOV RAX,qword ptr [1484adf88h]
+    MOV qword ptr [RBX],RAX
+    MOV qword ptr [1484adf88h],RBX
+    LEA R9,[142e29760h]
+    MOV R8D,380h
+    LEA RDX,[142e292d0h]
+    LEA RCX,[1484adfa0h]
+    CALL 14124b540h
+    NOP
+    TEST R14,R14
+    JNZ LAB_1414b3a02h
+    MOV RAX,qword ptr [RSP + 58h]
+    MOV qword ptr [RAX],0
+    XOR R14D,R14D
+    LEA RCX,[RSP + 70h]
+    CALL 14160f5d0h
+    MOV RAX,R14
+    MOV RCX,qword ptr [RSP + 290h]
+    XOR RCX,RSP
+    CALL 142865e80h
+    LEA R11,[RSP + 2d0h]
+    MOV RBX,qword ptr [R11 + 50h]
+    VMOVAPS XMM6,xmmword ptr [R11 + -10h]
+    VMOVAPS XMM7,xmmword ptr [R11 + -20h]
+    VMOVAPS XMM8,xmmword ptr [R11 + -30h]
+    MOV RSP,R11
+    POP R15
+    POP R14
+    POP R13
+    POP R12
+    POP RDI
+    POP RSI
+    POP RBP
+    RET R10                                        
+PARSE ENDP
+
+END

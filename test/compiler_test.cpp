@@ -230,8 +230,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::RIGHT_SQUARE, "]", 0, 1),
             compilation::token(compilation::token_type::LEFT_BRACE, "{", 0, 1),
-            compilation::token(compilation::token_type::INT, "123", 123, static_cast<u16>(1)),
-            compilation::token(compilation::token_type::INT, "34", 34, static_cast<u16>(2)),
+            compilation::token(compilation::token_type::INT, "123", static_cast<u16>(123), 1),
+            compilation::token(compilation::token_type::INT, "34", static_cast<u16>(34), 2),
             compilation::token(compilation::token_type::_EOF, "", 0, 2),
         };
         EXPECT_EQ(tokens, expected);
@@ -252,11 +252,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     }
 
     TEST(COMPILER, LexerSimpleHex) {
-        const std::string chars = "0x123F.abc";
+        const std::string chars = "0x123.abc";
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::HEX, "0x123F", 0x123F, 1),
+            compilation::token(compilation::token_type::HEX, "0x123", 0x123u, 1),
             compilation::token(compilation::token_type::DOT, ".", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "abc", 0, 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
@@ -271,7 +271,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::DOUBLE, "1.3", 1.3, 1),
+            compilation::token(compilation::token_type::DOUBLE, "1.3", 1.3f, 1),
             compilation::token(compilation::token_type::MINUS_EQUAL, "-=", 0, 1),
             compilation::token(compilation::token_type::SID, "#ellie", "ellie", 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
