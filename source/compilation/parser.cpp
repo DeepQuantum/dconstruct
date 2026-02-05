@@ -96,7 +96,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     if (!match({token_type::RIGHT_PAREN})) {
         do {
-            std::optional<ast::full_type> param_type = make_type();
+            std::optional<ast::full_type> param_type = peek_type();
             if (!param_type) {
                 m_current = temp_current;
                 return std::nullopt;
@@ -995,9 +995,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::optional<std::unique_ptr<ast::cast_expr>> Parser::make_cast() {
-    std::optional<ast::full_type> cast_type = make_type();
+    std::optional<ast::full_type> cast_type = peek_type();
     if (!cast_type) {
-        std::nullopt;
+        return std::nullopt;
     }
     if (!consume(token_type::RIGHT_PAREN, "expected ')' after cast expression")) {
         return nullptr;

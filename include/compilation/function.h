@@ -54,7 +54,7 @@ namespace dconstruct::compilation {
         std::optional<std::string> save_used_argument_registers(const u8 count) noexcept;
         void restore_used_argument_registers() noexcept;
         
-        [[nodiscard]] u8 add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind = SYMBOL_TABLE_POINTER_KIND::NONE) noexcept;
+        [[nodiscard]] u16 add_to_symbol_table(const u64 value, const SYMBOL_TABLE_POINTER_KIND pointer_kind = SYMBOL_TABLE_POINTER_KIND::NONE) noexcept;
 
         [[nodiscard]] u64 get_size_in_bytes() const noexcept;
         [[nodiscard]] u64 get_scriptlambda_sum() const noexcept;

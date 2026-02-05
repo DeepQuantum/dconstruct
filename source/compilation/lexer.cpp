@@ -89,6 +89,11 @@ char Lexer::advance() {
 }
 
 [[nodiscard]] token Lexer::make_sid() {
+    // allow # as the first char only
+    if (peek() == '#') {
+        advance();
+    }
+
     while (is_valid_sid_char(peek())) {
         advance();
     }

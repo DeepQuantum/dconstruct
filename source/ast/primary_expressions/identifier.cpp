@@ -56,14 +56,14 @@ void identifier::pseudo_racket(std::ostream& os) const {
     return *type;
 }
 
-[[nodiscard]] emission_res identifier::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
+[[nodiscard]] lvalue_emission_res identifier::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
     const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
     if (!var_location) {
         return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
     }
 
-    return *var_location;
+    return std::tuple{*var_location, Opcode::Move};
 }
 
 [[nodiscard]] emission_res identifier::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
@@ -71,26 +71,24 @@ void identifier::pseudo_racket(std::ostream& os) const {
     if (function_sid != global.m_sidAliases.end()) {
         const u8 index = fn.add_to_symbol_table(function_sid->second.second);
 
-        reg_idx true_destination;
-        if (!destination) {
-            const emission_res next_destination = fn.get_next_unused_register();
-            if (!next_destination) {
-                return next_destination;
-            }
-            true_destination = *next_destination;
-        } else {
-            true_destination = *destination;
+        emission_res true_destination = fn.get_destination(destination);
+        if (!true_destination) {
+            return true_destination;
         }
 
         if (std::holds_alternative<function_type>(function_sid->second.first)) {
-            fn.emit_instruction(Opcode::LookupPointer, true_destination, index);
+            fn.emit_instruction(Opcode::LookupPointer, *true_destination, index);
         } else { 
-            fn.emit_instruction(Opcode::LoadStaticU64Imm, true_destination, index);
+            fn.emit_instruction(Opcode::LoadStaticU64Imm, *true_destination, index);
         }
-        return true_destination;
+        return *true_destination;
     }
+    const reg_idx* var_location = fn.m_varsToRegs.lookup(m_name.m_lexeme);
 
-    return emit_dc_lvalue(fn, global);
+    if (!var_location) {
+        return std::unexpected{"variable " + m_name.m_lexeme + "doesn't have a register."};
+    }
+    return *var_location;
 }
 
 

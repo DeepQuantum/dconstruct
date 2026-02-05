@@ -20,6 +20,7 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] expr_uptr new_cast(const ast::full_type& type, const expression&) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] bool is_l_evaluable() const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 

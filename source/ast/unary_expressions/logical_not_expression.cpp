@@ -66,6 +66,23 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     return std::make_unique<logical_not_expr>(m_operator, std::move(rhs));
 }
 
+
+[[nodiscard]] emission_res logical_not_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+    if (!rhs_res) {
+        return rhs_res;
+    }
+    
+    const emission_res not_destination = fn.get_destination(destination);
+    if (!not_destination) {
+        return not_destination;
+    }
+
+    fn.emit_instruction(Opcode::OpLogNot, *not_destination, *rhs_res);
+    fn.free_register(*rhs_res);
+    return *not_destination;
+}
+
 [[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
     if (!rhs) {

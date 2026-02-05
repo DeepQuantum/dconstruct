@@ -76,5 +76,10 @@
                 "$msCompile"
             ],
         },
+        {
+            "label": "disassemble_dcc_file",
+            "type": "shell",
+            "command": "dconstruct \"C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/rogue\" - . --no_decompile"
+        }
     ]
 }

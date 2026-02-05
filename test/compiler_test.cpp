@@ -256,7 +256,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const auto [tokens, errors] = get_tokens(chars);
 
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::HEX, "0x123", 0x123u, 1),
+            compilation::token(compilation::token_type::INT, "0x123", (u16)0x123, 1),
             compilation::token(compilation::token_type::DOT, ".", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "abc", 0, 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
@@ -273,7 +273,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::DOUBLE, "1.3", 1.3f, 1),
             compilation::token(compilation::token_type::MINUS_EQUAL, "-=", 0, 1),
-            compilation::token(compilation::token_type::SID, "#ellie", "ellie", 1),
+            compilation::token(compilation::token_type::SID, "#ellie", sid64_literal(0,"ellie"), 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
@@ -344,9 +344,9 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::string chars = "#simple_sid #%alloc-array? #=f(test123)";
         const auto [tokens, errors] = get_tokens(chars);
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::SID, "#simple_sid", "simple_sid", 1),
-            compilation::token(compilation::token_type::SID, "#%alloc-array?", "%alloc-array?", 1),
-            compilation::token(compilation::token_type::SID, "#=f", "=f", 1),
+            compilation::token(compilation::token_type::SID, "#simple_sid", sid64_literal(0, "simple_sid"), 1),
+            compilation::token(compilation::token_type::SID, "#%alloc-array?", sid64_literal(0, "%alloc-array?"), 1),
+            compilation::token(compilation::token_type::SID, "#=f", sid64_literal(0, "=f"), 1),
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "test123", 0, 1),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 1),
@@ -380,19 +380,19 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             compilation::token(compilation::token_type::IDENTIFIER, "sid", 0, 2),
             compilation::token(compilation::token_type::IDENTIFIER, "name", 0, 2),
             compilation::token(compilation::token_type::EQUAL, "=", 0, 2),
-            compilation::token(compilation::token_type::SID, "#ellie", "ellie", 2),
+            compilation::token(compilation::token_type::SID, "#ellie", sid64_literal(0, "ellie"), 2),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
 
             compilation::token(compilation::token_type::IDENTIFIER, "double", 0, 3),
             compilation::token(compilation::token_type::IDENTIFIER, "damage", 0, 3),
             compilation::token(compilation::token_type::EQUAL, "=", 0, 3),
-            compilation::token(compilation::token_type::DOUBLE, "5.9", 5.9, 3),
+            compilation::token(compilation::token_type::DOUBLE, "5.9", 5.9f, 3),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 3),
 
             compilation::token(compilation::token_type::IDENTIFIER, "int", 0, 4),
             compilation::token(compilation::token_type::IDENTIFIER, "hexVal", 0, 4),
             compilation::token(compilation::token_type::EQUAL, "=", 0, 4),
-            compilation::token(compilation::token_type::HEX, "0x1A3F", 0x1A3F, 4),
+            compilation::token(compilation::token_type::INT, "0x1A3F", (u16)0x1A3F, 4),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 4),
 
             compilation::token(compilation::token_type::IDENTIFIER, "string", 0, 5),
@@ -405,7 +405,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 6),
             compilation::token(compilation::token_type::IDENTIFIER, "damage", 0, 6),
             compilation::token(compilation::token_type::GREATER, ">", 0, 6),
-            compilation::token(compilation::token_type::DOUBLE, "6.0", 6.0, 6),
+            compilation::token(compilation::token_type::DOUBLE, "6.0", 6.0f, 6),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 6),
             compilation::token(compilation::token_type::LEFT_BRACE, "{", 0, 6),
 
@@ -1207,6 +1207,50 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
             Instruction{Opcode::CastInteger, 1, 0, 0},
             Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, InstructionLevel_Dereference_Load_EmitsLoadI32) {
+        // i32 main(i32* p) { return *p; }  ->  Move param, LoadI32 from *p, Move to return reg, Return
+        expect_instructions("i32 main(i32* p) { return *p; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::LoadI32, 1, 0, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, InstructionLevel_Dereference_Store_EmitsStoreI32) {
+        // i32 main(i32* p) { *p = 42; return 0; }  ->  Move param, load 42, StoreI32, load 0, return
+        expect_instructions("i32 main(i32* p) { *p = 42; return 0; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::LoadStaticU64Imm, 1, 0, 0},
+            Instruction{Opcode::StoreI32, 0, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 0, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, InstructionLevel_Dereference_Load_EmitsLoadU64) {
+        // u64 main(u64* p) { return *p; }
+        expect_instructions("u64 main(u64* p) { return *p; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::LoadU64, 1, 0, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, InstructionLevel_Dereference_Store_EmitsStoreU64) {
+        // u64 main(u64* p) { *p = 42; return 0; }
+        expect_instructions("u64 main(u64* p) { *p = 42; return 0; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::LoadStaticU64Imm, 1, 0, 0},
+            Instruction{Opcode::StoreU64, 0, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 0, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }

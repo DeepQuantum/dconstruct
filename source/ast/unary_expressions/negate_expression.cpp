@@ -61,21 +61,43 @@ namespace dconstruct::ast {
 
 
 [[nodiscard]] emission_res negate_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+
+    const emission_res neg_destination = fn.get_destination(opt_destination);
+    if (!neg_destination) {
+        return neg_destination;
+    }
     if (const literal* literal_rhs = m_rhs->as_literal(); is_arithmetic(literal_rhs->get_type())) {
         const std::optional<primitive_number> value = get_number(literal_rhs->m_value);
         assert(value);
-        const primitive_number new_value = std::visit([](auto&& arg) -> primitive_number {
+        const auto opt_emit = std::visit([](auto&& arg) -> std::optional<std::pair<u64, Opcode>> {
             using T = std::decay_t<decltype(arg)>;
+            if constexpr (std::is_integral_v<T>) {
+                using signed_t = std::conditional_t<std::is_signed_v<T>, T, std::make_signed_t<T>>;
+                using unsigned_t = std::make_unsigned_t<signed_t>;
 
-            if constexpr (std::is_same_v<T, u8> || std::is_same_v<T, u16> || std::is_same_v<T, u32>) {
-                return -static_cast<i32>(arg);
-            } else if constexpr (std::is_same_v<T, u64>) {
-                return -static_cast<i64>(arg);
+                const signed_t neg = -static_cast<signed_t>(arg);
+                const unsigned_t bits = std::bit_cast<unsigned_t>(neg);
+                const u64 packed = static_cast<u64>(bits);
+                if constexpr (sizeof(T) <= 4) {
+                    return std::pair{packed, Opcode::LoadStaticI32Imm};
+                } else {
+                    return std::pair{packed, Opcode::LoadStaticI64Imm};
+                }
+            } else if constexpr (std::is_same_v<T, f32>) {
+                const f32 neg = -arg;
+                const u64 packed = static_cast<u64>(std::bit_cast<u32>(neg));
+                return std::pair{packed, Opcode::LoadStaticFloatImm};
             } else {
-                return -arg;
+                return std::nullopt;
             }
         }, *value);
-        //const table_idx = fn.add_to_symbol_table(std::bit_cast<u64>(new_value), )
+        if (!opt_emit) {
+            return std::unexpected{"attempted to negate non-numeric literal"};
+        }
+        const auto [new_value, opcode] = *opt_emit;
+        const u16 table_idx = fn.add_to_symbol_table(new_value);
+        fn.emit_instruction(opcode, *neg_destination, table_idx);
+        return *neg_destination;
 
     } else {
         const emission_res rhs_res = m_rhs->emit_dc(fn, global);
@@ -86,11 +108,6 @@ namespace dconstruct::ast {
 
         assert(std::holds_alternative<primitive_type>(*m_type));
         const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::INeg : Opcode::FNeg;
-
-        const emission_res neg_destination = fn.get_destination(opt_destination);
-        if (!neg_destination) {
-            return neg_destination;
-        }
 
         fn.emit_instruction(opcode, *neg_destination, *rhs_res);
         fn.free_register(*rhs_res);
