@@ -48,6 +48,14 @@ namespace dconstruct::ast {
     using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
 
+    enum class DC_LVALUE_TYPE : u8 {
+        REGISTER, 
+        POINTER,
+        NONE,
+    };
+
+    using lvalue_emission_res = std::expected<std::pair<reg_idx, Opcode>, std::string>;
+
     struct expression : public ast_element {
         virtual ~expression() = default;
         [[nodiscard]] virtual std::unique_ptr<expression> simplify() const = 0;
@@ -76,7 +84,10 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual emission_res emit_dc( compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
-        [[nodiscard]] virtual emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept { 
+
+        
+
+        [[nodiscard]] virtual lvalue_emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept { 
             return std::unexpected{"not an lvalue"}; 
         }
 

@@ -76,6 +76,10 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
     return std::make_unique<cast_expr>(type, m_rhs->clone());
 }
 
+[[nodiscard]] bool cast_expr::is_l_evaluable() const noexcept {
+    return m_rhs->is_l_evaluable();
+}
+
 [[nodiscard]] emission_res cast_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
     const emission_res expr_res = m_rhs->emit_dc(fn, global);
     if (!expr_res) {

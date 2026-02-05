@@ -69,18 +69,19 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res assign_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const emission_res lvalue = m_lhs->emit_dc_lvalue(fn, global);
+    const lvalue_emission_res lvalue = m_lhs->emit_dc_lvalue(fn, global);
     if (!lvalue) {
-        return lvalue;
+        return std::unexpected{std::move(lvalue.error())};
     }
-    const emission_res rvalue = m_rhs->emit_dc(fn, global, *lvalue);
+    const auto& [lvalue_reg, opcode] = *lvalue;
+    const emission_res rvalue = m_rhs->emit_dc(fn, global, lvalue_reg);
     if (!rvalue) {
         return rvalue;
     }
-    if (*rvalue != *lvalue) {
-        fn.emit_instruction(Opcode::Move, *lvalue, *rvalue);
+    if (*rvalue != lvalue_reg) {
+        fn.emit_instruction(opcode, lvalue_reg, *rvalue);
     }
-    return *lvalue;
+    return lvalue_reg;
 }
 
 VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env& env)  noexcept {

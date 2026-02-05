@@ -53,14 +53,14 @@ void increment_expression::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res increment_expression::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const emission_res expr_res = m_rhs->emit_dc_lvalue(fn, global);
+    const lvalue_emission_res expr_res = m_rhs->emit_dc_lvalue(fn, global);
     if (!expr_res) {
-        return expr_res;
+        return std::unexpected{std::move(expr_res.error())};
     }
 
-    fn.emit_instruction(Opcode::IAddImm, *expr_res, *expr_res, 1);
+    fn.emit_instruction(Opcode::IAddImm, expr_res->first, expr_res->first, 1);
 
-    return *expr_res;
+    return expr_res->first;
 }
 
 
