@@ -8,6 +8,7 @@
 #include <map>
 #include <array>
 #include <limits>
+#include <ostream>
 
 
 namespace dconstruct {
@@ -318,6 +319,15 @@ using ShortInstruction = UP_Instruction<0>;
 
 static_assert(sizeof(Instruction) == 8);
 static_assert(sizeof(ShortInstruction) == 4);
+
+template<u8 padding>
+inline std::ostream& operator<<(std::ostream& os, const UP_Instruction<padding>& ins) noexcept {
+    os << ins.opcode_to_string() << " " << static_cast<unsigned>(ins.destination)
+       << " " << static_cast<unsigned>(ins.operand1)
+       << " " << static_cast<unsigned>(ins.operand2);
+    return os;
+}
+
 #undef max
 
 struct function_disassembly_line {

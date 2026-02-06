@@ -60,8 +60,8 @@ void return_stmt::pseudo_racket(std::ostream& os) const {
         return expr_res.error();
     }
     fn.m_returnBranchLocations.push_back(fn.m_instructions.size());
-    fn.emit_instruction(Opcode::Move, 0r, *expr_res);
-    fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0r, compilation::function::BRANCH_PLACEHOLDER);
+    fn.emit_instruction(Opcode::Move, 0_r, *expr_res);
+    fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 0_r, compilation::function::BRANCH_PLACEHOLDER);
     return std::nullopt;
 }
 

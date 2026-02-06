@@ -204,7 +204,7 @@ namespace dconstruct {
 		return ss.str();
 	}
 
-	constexpr reg_idx operator"" r(u64 v) {
+	constexpr reg_idx operator"" _r(u64 v) {
 		return reg_idx(v);
 	}
 };

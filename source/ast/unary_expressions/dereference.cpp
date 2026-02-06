@@ -52,8 +52,8 @@ namespace dconstruct::ast {
             return rhs;
         }
         
-        assert(std::holds_alternative<ptr_type>(*m_type));
-        const ptr_type& ptr_t = std::get<ptr_type>(*m_type);
+        assert(std::holds_alternative<ptr_type>(*m_rhs->get_type()));
+        const ptr_type& ptr_t = std::get<ptr_type>(*m_rhs->get_type());
 
         assert(std::holds_alternative<primitive_type>(*ptr_t.m_pointedAt));
 
@@ -61,14 +61,14 @@ namespace dconstruct::ast {
 
         Opcode load_opcode;
         switch (kind) {
-            case primitive_kind::I8:  load_opcode = Opcode::LoadI8;
-            case primitive_kind::U8:  load_opcode = Opcode::LoadU8;
-            case primitive_kind::I16: load_opcode = Opcode::LoadI16;
-            case primitive_kind::U16: load_opcode = Opcode::LoadU16;
-            case primitive_kind::I32: load_opcode = Opcode::LoadI32;
-            case primitive_kind::U32: load_opcode = Opcode::LoadU32;
-            case primitive_kind::I64: load_opcode = Opcode::LoadI64;
-            case primitive_kind::U64: load_opcode = Opcode::LoadU64;
+            case primitive_kind::I8:  load_opcode = Opcode::LoadI8; break;
+            case primitive_kind::U8:  load_opcode = Opcode::LoadU8; break;
+            case primitive_kind::I16: load_opcode = Opcode::LoadI16; break;
+            case primitive_kind::U16: load_opcode = Opcode::LoadU16; break;
+            case primitive_kind::I32: load_opcode = Opcode::LoadI32; break;
+            case primitive_kind::U32: load_opcode = Opcode::LoadU32; break;
+            case primitive_kind::I64: load_opcode = Opcode::LoadI64; break;
+            case primitive_kind::U64: load_opcode = Opcode::LoadU64; break;
             default: assert(false && "need primitive");
         }
 
@@ -89,8 +89,8 @@ namespace dconstruct::ast {
             return rhs;
         }
 
-        assert(std::holds_alternative<ptr_type>(*m_type));
-        const ptr_type& ptr_t = std::get<ptr_type>(*m_type);
+        assert(std::holds_alternative<ptr_type>(*m_rhs->get_type()));
+        const ptr_type& ptr_t = std::get<ptr_type>(*m_rhs->get_type());
 
         assert(std::holds_alternative<primitive_type>(*ptr_t.m_pointedAt));
 
@@ -98,14 +98,14 @@ namespace dconstruct::ast {
         
         Opcode store_opcode;
         switch (kind) {
-            case primitive_kind::I8:  store_opcode = Opcode::StoreI8;
-            case primitive_kind::U8:  store_opcode = Opcode::StoreU8;
-            case primitive_kind::I16: store_opcode = Opcode::StoreI16;
-            case primitive_kind::U16: store_opcode = Opcode::StoreU16;
-            case primitive_kind::I32: store_opcode = Opcode::StoreI32;
-            case primitive_kind::U32: store_opcode = Opcode::StoreU32;
-            case primitive_kind::I64: store_opcode = Opcode::StoreI64;
-            case primitive_kind::U64: store_opcode = Opcode::StoreU64;
+            case primitive_kind::I8:  store_opcode = Opcode::StoreI8; break;
+            case primitive_kind::U8:  store_opcode = Opcode::StoreU8; break;
+            case primitive_kind::I16: store_opcode = Opcode::StoreI16; break;
+            case primitive_kind::U16: store_opcode = Opcode::StoreU16; break;
+            case primitive_kind::I32: store_opcode = Opcode::StoreI32; break;
+            case primitive_kind::U32: store_opcode = Opcode::StoreU32; break;
+            case primitive_kind::I64: store_opcode = Opcode::StoreI64; break;
+            case primitive_kind::U64: store_opcode = Opcode::StoreU64; break;
             default: assert(false && "need primitive");
         }
         

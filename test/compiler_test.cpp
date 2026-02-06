@@ -12,6 +12,8 @@
 #include <algorithm>
 
 namespace dconstruct::testing {
+
+
     
 const std::string TEST_DIR = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/";
 const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dcpl/";
@@ -659,7 +661,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         const auto [statements, parse_errors] = get_statements(tokens);
 
-        EXPECT_EQ(statements.size(), 3);
+        ASSERT_EQ(statements.size(), 3) << "expected 3 statements";
         EXPECT_EQ(lex_errors.size(), 0);
         EXPECT_EQ(parse_errors.size(), 0);
 
@@ -677,8 +679,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
                 )
             )
         ));
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "x", 0));
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", 1));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::I32), "x", (u16)0));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::I32), "y", (u16)1));
         expected.push_back(std::make_unique<ast::while_stmt>(
             std::make_unique<ast::compare_expr>(
                 compilation::token(compilation::token_type::LESS, "<", 0, 1),
@@ -711,17 +713,17 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
                 compilation::token(compilation::token_type::MINUS, "-", 0, 1),
                 std::make_unique<ast::add_expr>(
                     compilation::token(compilation::token_type::PLUS, "+", 0, 1),
-                    std::make_unique<ast::literal>(1),
+                    std::make_unique<ast::literal>((u16)1),
                     std::make_unique<ast::mul_expr>(
                         compilation::token(compilation::token_type::STAR, "*", 0, 1),
-                        std::make_unique<ast::literal>(2),
-                        std::make_unique<ast::literal>(3)
+                        std::make_unique<ast::literal>((u16)2),
+                        std::make_unique<ast::literal>((u16)3)
                     )
                 ),
                 std::make_unique<ast::div_expr>(
                     compilation::token(compilation::token_type::SLASH, "/", 0, 1),
-                    std::make_unique<ast::literal>(4),
-                    std::make_unique<ast::literal>(5)
+                    std::make_unique<ast::literal>((u16)4),
+                    std::make_unique<ast::literal>((u16)5)
                 )
             )
         ));
@@ -737,7 +739,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(parse_errors.size(), 0);
         EXPECT_EQ(statements.size(), 2);
         std::list<stmnt_uptr> expected;
-        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", 0));
+        expected.push_back(std::make_unique<ast::variable_declaration>(ast::make_type_from_prim(ast::primitive_kind::U32), "y", (u16)0));
         std::list<stmnt_uptr> block_stmnts;
         block_stmnts.push_back(std::make_unique<ast::expression_stmt>(
             std::make_unique<ast::assign_expr>(
@@ -771,11 +773,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         vars.push_back(std::make_unique<ast::identifier>("var_2"));
 
         std::vector<expr_uptr> case1_vals;
-        case1_vals.push_back(std::make_unique<ast::literal>(0));
-        case1_vals.push_back(std::make_unique<ast::literal>(1));
+        case1_vals.push_back(std::make_unique<ast::literal>((u16)0));
+        case1_vals.push_back(std::make_unique<ast::literal>((u16)1));
 
         std::vector<expr_uptr> case2_vals;
-        case2_vals.push_back(std::make_unique<ast::literal>(2));
+        case2_vals.push_back(std::make_unique<ast::literal>((u16)2));
 
         std::vector<ast::match_expr::matches_t> outer;
         outer.emplace_back(std::move(case1_vals), std::make_unique<ast::literal>("Cool"));
@@ -802,11 +804,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(statements.size(), 1);
 
         std::vector<expr_uptr> args;
-        args.push_back(std::make_unique<ast::literal>(1));
+        args.push_back(std::make_unique<ast::literal>((u16)1));
         args.push_back(std::make_unique<ast::add_expr>(
             compilation::token(compilation::token_type::PLUS, "+", 0, 1),
-            std::make_unique<ast::literal>(2),
-            std::make_unique<ast::literal>(3)
+            std::make_unique<ast::literal>((u16)2),
+            std::make_unique<ast::literal>((u16)3)
         ));
 
         std::list<stmnt_uptr> expected;
@@ -834,14 +836,14 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             std::make_unique<ast::expression_stmt>(
                 std::make_unique<ast::div_expr>(
                     compilation::token(compilation::token_type::SLASH, "/", 0, 1),
-                    std::make_unique<ast::literal>(2),
-                    std::make_unique<ast::literal>(1)
+                    std::make_unique<ast::literal>((u16)2),
+                    std::make_unique<ast::literal>((u16)1)
                 )
             )
         );
 
         ast::if_stmt expected_if(
-            std::make_unique<ast::literal>(1),
+            std::make_unique<ast::literal>((u16)1),
             std::make_unique<ast::block>(
                 std::move(block)
             )
@@ -952,25 +954,25 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     }
 
     TEST(COMPILER, Declaration1) {
-        const std::string code = "i32 main () { i32 x = 0; i32 y = 0; return x = y; }";
+        const std::string code = "u32 main () { u32 x = 0; u32 y = 0; return x = y; }";
         auto [tokens, lex_errors] = get_tokens(code);
         const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
+        EXPECT_EQ(lex_errors.size(), 0) << lex_errors[0].m_message;
+        EXPECT_EQ(parse_errors.size(), 0) << parse_errors[0].m_message;
         EXPECT_EQ(program.m_declarations.size(), 1);
         
         compilation::scope scope{types};
         const auto semantic_errors = program.m_declarations[0]->check_semantics(scope);
 
         std::vector<ast::semantic_check_error> empty{};
-        EXPECT_EQ(semantic_errors, empty);
+        EXPECT_EQ(semantic_errors, empty) << semantic_errors[0].m_message;
     }
 
     TEST(COMPILER, Using1) {
         const std::string code = 
-        "using far #display as (string, i32) -> void;"
-        "using far #5445173390656D6D as (string, i32, i32) -> string sprintf;"
-        "i32 main() {"
+        "using #display as far (string, u32) -> u0;"
+        "using #5445173390656D6D as near (string, u32, u32) -> string sprintf;"
+        "u32 main() {"
         "    string message = sprintf(\"Hello World from DC version %d.%d\", 0, 0);"
         "    display(message, 19);"
         "    return 0;"
@@ -1014,205 +1016,16 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         out.flush();
     }
 
-
-    TEST(COMPILER, FullCompile2) {
-        const std::string code = 
-            "using far #display as (string, string, u64) -> void;"
-            "using far #5445173390656D6D as (string, u64, u64) -> string sprintf;"
-            "u32 main() {"
-            "    display(\"test\", sprintf(\"Hello World from DC version %d.%d\", 0, 0), 19);"
-            "    return 0;"
-            "}";
-        
-        const std::string decomp_code = 
-            "u16 #CBF29CE484222325() {\n"
-            "    display(\"test\", #5445173390656D6D(\"Hello World from DC version %d.%d\", 0, 0), 19);\n"
-            "    return 0;\n"
-            "}";
-
-
-        auto [tokens, lex_errors] = get_tokens(code);
-        const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(program.m_declarations.size(), 3);
-
-        compilation::scope scope{types};
-        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(semantic_errors.size(), 0);
-
-        const auto binary = program.compile_to_file(scope);
-        ASSERT_TRUE(binary.has_value());
-        const auto& [bytes, size] = *binary;
-        std::ofstream out("compiled.bin", std::ios::binary);
-        out.write(reinterpret_cast<const char*>(bytes.get()), size);
-        out.flush();
-
-        auto check_file = *BinaryFile::from_path("compiled.bin");
-        Disassembler da{ &check_file, &base };
-        da.disassemble();
-        const auto& function = da.get_functions()[0];
-        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
-        const std::string res = fd.decompile(true).to_c_string();
-        ASSERT_EQ(res, decomp_code);
-    }
-
-    TEST(COMPILER, FullCompile3) {
-        const std::string code = 
-            "u32 main() {"
-            "    u64 i = 1;\n"
-            "    u64 res = 1;\n"
-            "    while (i < 10) {\n"
-            "        res = res * i;\n"
-            "        i = i + 1;\n"
-            "        while (i < 10) {"
-            "           i = i + 2 * 3;"
-            "        }"
-            "    }\n"
-            "    return res;\n"
-            "}";
-        
-        const std::string decomp_code = 
-            "u16 main() {"
-            "    u16 var_0 = 1;\n"
-            "    u64 var_1 = 1;\n"
-            "    while (i < 10) {\n"
-            "        res = res * i;\n"
-            "        i = i + 1;\n"
-            "    }\n"
-            "    return i;\n"
-            "}";
-
-
-        auto [tokens, lex_errors] = get_tokens(code);
-        const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(program.m_declarations.size(), 3);
-
-        compilation::scope scope{types};
-        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(semantic_errors.size(), 0);
-
-        const auto binary = program.compile_to_file(scope);
-        ASSERT_TRUE(binary.has_value());
-        const auto& [bytes, size] = *binary;
-        std::ofstream out("compiled.bin", std::ios::binary);
-        out.write(reinterpret_cast<const char*>(bytes.get()), size);
-        out.flush();
-
-        auto check_file = *BinaryFile::from_path("compiled.bin");
-        Disassembler da{ &check_file, &base };
-        da.disassemble();
-        const auto& function = da.get_functions()[0];
-        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
-        const std::string res = fd.decompile(true).to_c_string();
-        ASSERT_EQ(res, decomp_code);
-    }
-
-    TEST(COMPILER, FullCompile4) {
-        const std::string code = 
-            "u32 threexplusone(u64 x) {"
-            "        if (x > 2) {"
-            "            x = x / 2;"
-            "        } else {"
-            "            x = 3 * x + 1;"
-            "        }"
-            "}";
-        
-        const std::string decomp_code = 
-            "u32 threexplusone(u64 x) {"
-            "    while (x != 1) {\n"
-            "        if (x % 2 == 0) {"
-            "            x = x / 2;"
-            "        } else {"
-            "            x = 3 * i + 1;"
-            "        }"
-            "    }\n"
-            "    return res;\n"
-            "}";
-
-        auto [tokens, lex_errors] = get_tokens(code);
-        const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(program.m_declarations.size(), 1);
-
-        compilation::scope scope{types};
-        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(semantic_errors.size(), 0);
-
-        const auto binary = program.compile_to_file(scope);
-        ASSERT_TRUE(binary.has_value());
-        const auto& [bytes, size] = *binary;
-        std::ofstream out("compiled.bin", std::ios::binary);
-        out.write(reinterpret_cast<const char*>(bytes.get()), size);
-        out.flush();
-
-        auto check_file = *BinaryFile::from_path("compiled.bin");
-        Disassembler da{ &check_file, &base };
-        da.disassemble();
-        const auto& function = da.get_functions()[0];
-        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
-        const std::string res = fd.decompile(true).to_c_string();
-        ASSERT_EQ(res, decomp_code);
-    }
-
-    TEST(COMPILER, FullCompile5) {
-        const std::string code =
-            "u64 sum_upto(u64 x) {"
-            "    u64 acc = 0;"
-            "    for (u64 i = 0; i <= x; i++) {"
-            "        acc = acc + i;"
-            "    }"
-            "    if (acc > 0xFFFFFFFF) {"
-            "        acc = 0.0;"
-            "    } else {"
-            "        acc = 1.0;"
-            "    }"
-            "    return acc;"
-            "}";
-        
-        const std::string decomp_code = "";
-
-        auto [tokens, lex_errors] = get_tokens(code);
-        const auto [program, types, parse_errors] = get_parse_results(tokens);
-        EXPECT_EQ(lex_errors.size(), 0);
-        EXPECT_EQ(parse_errors.size(), 0);
-        EXPECT_EQ(program.m_declarations.size(), 1);
-
-        compilation::scope scope{types};
-        std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(scope);
-        ASSERT_EQ(semantic_errors.size(), 0);
-
-        const auto binary = program.compile_to_file(scope);
-        ASSERT_TRUE(binary.has_value());
-        const auto& [bytes, size] = *binary;
-        std::ofstream out("compiled.bin", std::ios::binary);
-        out.write(reinterpret_cast<const char*>(bytes.get()), size);
-        out.flush();
-
-        auto check_file = *BinaryFile::from_path("compiled.bin");
-        Disassembler da{ &check_file, &base };
-        da.disassemble();
-        const auto& function = da.get_functions()[0];
-        auto fd = dcompiler::decomp_function{function, check_file, ControlFlowGraph::build(function)};
-        const std::string res = fd.decompile(true).to_c_string();
-        ASSERT_EQ(res, decomp_code);
-    }
-
-    TEST(COMPILER, InstructionLevel_CastExpression_ProducesExpectedInstructions) {
-        // i32 main() { return (i32)1.0; }  ->  load float 1.0, CastInteger to int, move to return reg, return
+    TEST(COMPILER, CastInstructions1) {
         expect_instructions("i32 main() { return (i32)1.0; }", {
             Instruction{Opcode::LoadStaticFloatImm, 0, 0, 0},
             Instruction{Opcode::CastInteger, 1, 0, 0},
             Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Return, 0, 0, 0},
+            Instruction{Opcode::Return, 0, 0, 0_r},
         });
     }
 
-    TEST(COMPILER, InstructionLevel_Dereference_Load_EmitsLoadI32) {
-        // i32 main(i32* p) { return *p; }  ->  Move param, LoadI32 from *p, Move to return reg, Return
+    TEST(COMPILER, Load1) {
         expect_instructions("i32 main(i32* p) { return *p; }", {
             Instruction{Opcode::Move, 0, 49, 0},
             Instruction{Opcode::LoadI32, 1, 0, 0},
@@ -1221,11 +1034,10 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
-    TEST(COMPILER, InstructionLevel_Dereference_Store_EmitsStoreI32) {
-        // i32 main(i32* p) { *p = 42; return 0; }  ->  Move param, load 42, StoreI32, load 0, return
-        expect_instructions("i32 main(i32* p) { *p = 42; return 0; }", {
+    TEST(COMPILER, Store1) {
+        expect_instructions("u16 main(i32* p) { *p = (i32)42; return 0; }", {
             Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadStaticU64Imm, 1, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 0, 0},
             Instruction{Opcode::StoreI32, 0, 1, 0},
             Instruction{Opcode::LoadU16Imm, 2, 0, 0},
             Instruction{Opcode::Move, 0, 2, 0},
@@ -1233,8 +1045,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
-    TEST(COMPILER, InstructionLevel_Dereference_Load_EmitsLoadU64) {
-        // u64 main(u64* p) { return *p; }
+    TEST(COMPILER, Load2) {
         expect_instructions("u64 main(u64* p) { return *p; }", {
             Instruction{Opcode::Move, 0, 49, 0},
             Instruction{Opcode::LoadU64, 1, 0, 0},
@@ -1243,11 +1054,10 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
-    TEST(COMPILER, InstructionLevel_Dereference_Store_EmitsStoreU64) {
-        // u64 main(u64* p) { *p = 42; return 0; }
-        expect_instructions("u64 main(u64* p) { *p = 42; return 0; }", {
+    TEST(COMPILER, Store2) {
+        expect_instructions("u16 main(u64* p) { *p = 42; return 0; }", {
             Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadStaticU64Imm, 1, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 42, 0},
             Instruction{Opcode::StoreU64, 0, 1, 0},
             Instruction{Opcode::LoadU16Imm, 2, 0, 0},
             Instruction{Opcode::Move, 0, 2, 0},

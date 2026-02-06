@@ -74,7 +74,14 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{std::move(lvalue.error())};
     }
     const auto& [lvalue_reg, opcode] = *lvalue;
-    const emission_res rvalue = m_rhs->emit_dc(fn, global, lvalue_reg);
+    emission_res rvalue;
+
+    if (opcode == Opcode::Move) {
+        rvalue = m_rhs->emit_dc(fn, global, lvalue_reg);
+    } else {
+        rvalue = m_rhs->emit_dc(fn, global);
+    }
+
     if (!rvalue) {
         return rvalue;
     }
