@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build_tests",
             "program": "${workspaceFolder}/build/Debug/dconstruct_test.exe",
-            "args": ["--gtest_filter=COMPILER.*"],
+            "args": ["--gtest_filter=COMPILER.Store2"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -77,10 +77,10 @@ void function_definition::pseudo_racket(std::ostream& os) const {
     }
 
     if (fn.m_returnBranchLocations.empty()) {
-        fn.emit_instruction(Opcode::Return, 0r, 0r);
+        fn.emit_instruction(Opcode::Return, 0_r, 0_r);
     } else if (fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 2) {
         assert(fn.m_instructions.back().opcode == Opcode::Branch);
-        fn.m_instructions.back() = Instruction(Opcode::Return, 0r, 0r);
+        fn.m_instructions.back() = Instruction(Opcode::Return, 0_r, 0_r);
         fn.m_returnBranchLocations.pop_back();
     }
 
