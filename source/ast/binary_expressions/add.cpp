@@ -83,12 +83,19 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         return rhs;
     }
 
-    assert(std::holds_alternative<primitive_type>(*m_type));
-    const Opcode opcode = is_integral(std::get<primitive_type>(*m_type).m_type) ? Opcode::IAdd : Opcode::FAdd;
+    const full_type& lhs_type = *m_lhs->get_type();
+    const full_type& rhs_type = *m_rhs->get_type();
+
+    const Opcode opcode = is_floating_point(std::get<primitive_type>(*m_type).m_type) ? Opcode::FAdd : Opcode::IAdd;
 
     const emission_res add_destination = fn.get_destination(destination);
     if (!add_destination) {
         return add_destination;
+    }
+
+    if (std::holds_alternative<ptr_type>(lhs_type)) {
+        const u64 ptr_size = get_size(*std::get<ptr_type>(lhs_type).m_pointedAt);
+        fn.emit_instruction(Opcode::IMulImm, *add_destination, *add_destination, ptr_size);
     }
 
     fn.emit_instruction(opcode, *add_destination, *lhs, *rhs);

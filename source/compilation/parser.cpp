@@ -10,8 +10,6 @@ void Parser::synchronize_statements() {
             return;
         }
         switch (peek().m_type) {
-            case token_type::STRUCT:
-            case token_type::ENUM:
             case token_type::FOR:
             case token_type::FOREACH:
             case token_type::WHILE:
@@ -32,8 +30,6 @@ void Parser::synchronize_external_definitions() {
             case token_type::STRUCT:
             case token_type::ENUM:
             case token_type::USING:
-            case token_type::IDENTIFIER:
-            case token_type::LEFT_PAREN: return;
             default: advance();
         }
     }
@@ -185,7 +181,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
         res = std::move(func_def);
     } else {
-        //m_errors.emplace_back(peek(), "expected struct, enum, or function definition");
+        m_errors.emplace_back(peek(), "expected struct, enum, or function definition");
         synchronize_external_definitions();
         return std::nullopt;
     }
@@ -310,18 +306,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return func_def;
 }
 
-[[nodiscard]] std::unique_ptr<ast::using_declaration> Parser::make_using_declaration() {
-    
-
+[[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> Parser::make_using_declaration() {
     const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
     if (!old_sid) {
-        return nullptr;
+        return std::nullopt;
     }
     assert(std::holds_alternative<sid64_literal>(old_sid->m_literal));
     sid64_literal old_sid_val = std::get<sid64_literal>(old_sid->m_literal);
 
     if (!consume(token_type::AS, "expected 'as'")) {
-        return nullptr;
+        return std::nullopt;
     }
 
     const token* far_spec = nullptr;
@@ -331,20 +325,20 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     std::optional<ast::full_type> new_type = make_type();
     if (!new_type) {
-        return nullptr;
+        return std::nullopt;
     }
 
     if (std::holds_alternative<ast::function_type>(*new_type)) {
         if (!far_spec) {
             m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias.");
-            return nullptr;
+            return std::nullopt;
         } else {
             std::get<ast::function_type>(*new_type).m_isFarCall = far_spec->m_type == token_type::FAR;
         }
     } else { 
         if (far_spec) {
             m_errors.emplace_back(previous(), far_spec->m_lexeme + " specification was unexpected on non-function alias.");
-            return nullptr;
+            return std::nullopt;
         }
     }
 
@@ -354,7 +348,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
 
     if (!consume(token_type::SEMICOLON, "expected ';' at end of using declaration")) {
-        return nullptr;
+        return std::nullopt;
     }
 
     return std::make_unique<ast::using_declaration>(std::move(old_sid_val), std::move(*new_type), !new_name.empty() ? std::move(new_name) : old_sid_val.second);

@@ -163,27 +163,10 @@ void __fastcall parse_instruction(unsigned int *a1, u64 *a2, i64 *a3)
   v13 = instruction_idx_ptr + 136;
   v100 = instruction_idx_ptr + 136;
 
-  // f32* xmm7_ptr = reinterpret_cast<f32*>(0x142AF9720);
-  // f32* xmm6_ptr = reinterpret_cast<f32*>(0x142B039A0);
-  // f32* xmm8_ptr = reinterpret_cast<f32*>(0x142AF88E0);
-
-  // __m128 xmm7 = _mm_load_ss(xmm7_ptr);
-  // __m128 xmm6 = _mm_load_ss(xmm6_ptr);
-  // __m128 xmm8 = _mm_load_ss(xmm8_ptr);
-
   u8 _RBP;
   u8 _RSI;
   u8 _R15;
-  
-  // __asm
-  // {
-  //   vmovss  xmm7, dword ptr cs:xmmword_142AF9720
-  //   vmovss  xmm6, dword ptr cs:xmmword_142B039A0
-  //   vmovss  xmm8, cs:flt_142AF88E0
-  // }
 
-
-  //auto error1 = reinterpret_cast<void(__fastcall*)(const char*)>(0x1414BE090);
   auto error2 = reinterpret_cast<void(*)(const char*, ...)>(0x141B8E720);
 
   const char* script_set_float_error = reinterpret_cast<const char*>(0x142E30700);
@@ -304,7 +287,7 @@ LABEL_110:
         _RDI[_RBP] = _RDI[_RSI];
         continue;
       case Opcode::MoveFloat:
-        LODWORD(_RDI[_RBP]) = _RDI[_RSI];
+        *(f32*)(_RDI + _RBP) = _RDI[_RSI];
         continue;
       case Opcode::MovePointer:
       case Opcode::Move:
@@ -312,23 +295,17 @@ LABEL_110:
         *(u64*)&v13[2 * _RBP] = *(u64*)&v13[2 * _RSI];
         continue;
       case Opcode::CastInteger:
-        __asm { vcvttss2si rax, dword ptr [rdi+rbp*8]; jumptable 00000001414B6B41 case Opcode::25 }
-        _RDI[_RBP] = _RAX;
+        _RDI[_RBP] = (u64)*(f32*)(_RDI + _RSI);
         continue;
       case Opcode::CastFloat:
-        __asm
-        {
-          vxorps  xmm0, xmm0, xmm0; jumptable 00000001414B6B41 case Opcode::26
-          vcvtsi2ss xmm0, xmm0, qword ptr [rdi+rbp*8]
-          vmovss  dword ptr [rdi+rbp*8], xmm0
-        }
+        _RDI[_RBP] = (f32)_RDI[_RSI];
         continue;
       case Opcode::Call:
         v66 = *(u64*)&v13[2 * _RSI];
         v105 = _RDI[_RSI];
         if ( !v105 )
         {
-          error(
+          error2(
             "Unable to call defun '%s' (check TTY for load symbol failed) - is it defined in a .dc file that is (include)"
             "d?  Use (load-relative) instead.\n");
           _RDI[_RBP] = 0;

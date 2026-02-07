@@ -86,7 +86,17 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
         return rvalue;
     }
     if (*rvalue != lvalue_reg) {
-        fn.emit_instruction(opcode, lvalue_reg, *rvalue);
+        if (is_store_opcode(opcode)) {
+            const emission_res throwaway = fn.get_next_unused_register();
+            if (!throwaway) {
+                return throwaway;
+            }
+            fn.emit_instruction(opcode, *throwaway, lvalue_reg, *rvalue);
+            fn.free_register(*throwaway);
+        } else {
+            fn.emit_instruction(opcode, lvalue_reg, *rvalue);
+            fn.free_register(*rvalue);
+        }
     }
     return lvalue_reg;
 }

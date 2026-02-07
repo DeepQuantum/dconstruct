@@ -109,5 +109,30 @@ namespace dconstruct::ast {
     }, type);
 }
 
+[[nodiscard]] u64 get_size(const full_type& type) noexcept {
+    return std::visit([](auto&& arg) -> u64 {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, primitive_type>) {
+            return sizeof(arg.m_type);
+        } else if constexpr (std::is_same_v<T, struct_type>) {
+            return std::accumulate(arg.m_members.begin(), arg.m_members.end(), u64{0}, [](u64 acc, const auto& member) {
+                return acc + get_size(*member.second.get());
+            });
+        } else if constexpr (std::is_same_v<T, enum_type>) {
+            return sizeof(u64);
+        } else if constexpr (std::is_same_v<T, ptr_type>) {
+            return sizeof(void*);
+        } else if constexpr (std::is_same_v<T, function_type>) {
+            return sizeof(void*);
+        } else if constexpr (std::is_same_v<T, std::monostate>) {
+            return 0;
+        } else if constexpr (std::is_same_v<T, darray>) {
+            return get_size(*arg.m_arrType.get());
+        } else {
+            return 0;
+        }
+    }, type);
+}
+
 
 }

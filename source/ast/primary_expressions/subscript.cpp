@@ -51,8 +51,39 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] semantic_check_res subscript_expr::compute_type_checked(compilation::scope& scope) const noexcept {
-    const std::optional<full_type> lhs_type = m_lhs->compute_type_unchecked(scope);
-    return {};
+    const semantic_check_res lhs_type = m_lhs->compute_type_checked(scope);
+    if (!lhs_type) {
+        return lhs_type;
+    }
+    const semantic_check_res rhs_type = m_rhs->compute_type_checked(scope);
+    if (!rhs_type) {
+        return rhs_type;
+    }
+
+    if (!std::holds_alternative<ptr_type>(*lhs_type)) {
+        return std::unexpected{semantic_check_error{"expected pointer type for subscript operation"}};
+    }
+
+    if (!std::holds_alternative<primitive_type>(*rhs_type) || !is_integral(std::get<primitive_type>(*rhs_type).m_type)) {
+        return std::unexpected{semantic_check_error{"expected integral type in subscript index"}};
+    }
+
+    const ptr_type& ptr_t = std::get<ptr_type>(*lhs_type);
+
+    const primitive_kind kind = std::get<primitive_type>(*ptr_t.m_pointedAt).m_type;
+
+    Opcode load_opcode;
+    switch (kind) {
+        case primitive_kind::I8:  load_opcode = Opcode::LoadI8; break;
+        case primitive_kind::U8:  load_opcode = Opcode::LoadU8; break;
+        case primitive_kind::I16: load_opcode = Opcode::LoadI16; break;
+        case primitive_kind::U16: load_opcode = Opcode::LoadU16; break;
+        case primitive_kind::I32: load_opcode = Opcode::LoadI32; break;
+        case primitive_kind::U32: load_opcode = Opcode::LoadU32; break;
+        case primitive_kind::I64: load_opcode = Opcode::LoadI64; break;
+        case primitive_kind::U64: load_opcode = Opcode::LoadU64; break;
+        default: assert(false && "need primitive");
+    }
 }
 
 VAR_OPTIMIZATION_ACTION subscript_expr::var_optimization_pass(var_optimization_env& env) noexcept {
