@@ -890,6 +890,22 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(statements, expected_statements);
     }
 
+    TEST(COMPILER, ParseErrorUsingSync) {
+        const std::string code =
+            "using #display bar (string, u32) -> u0;"
+            "u32 main() { return 0; }";
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1) << "Parser should report exactly one error (in the using statement) and sync to next global";
+        EXPECT_EQ(parse_errors[0].m_message, "expected 'as'");
+        EXPECT_EQ(program.m_declarations.size(), 1) << "main() should parse successfully after sync";
+        const auto* main_fn = dynamic_cast<const ast::function_definition*>(program.m_declarations[0].get());
+        ASSERT_NE(main_fn, nullptr);
+        EXPECT_EQ(std::get<std::string>(main_fn->m_name), "main");
+    }
+
     TEST(COMPILER, ParseStructType) {
         const std::string code = 
         "struct Vector3 {\n"
@@ -1064,4 +1080,40 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }
+
+    TEST(COMPILER, ReturnLiteral) {
+        expect_instructions("i32 main() { return 1; }", {
+            Instruction{Opcode::LoadU16Imm, 1, 1, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, IfElseReturn) {
+        expect_instructions("i32 main() { if (1) { return 2; } return 3; }", {
+            Instruction{Opcode::LoadU16Imm, 0, 1, 0},
+            Instruction{Opcode::BranchIfNot, 6, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 2, 0},
+            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::Branch, 8, 0, 0},
+            Instruction{Opcode::Branch, 8, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 3, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, WhileLoop) {
+        expect_instructions("i32 main() { i32 x = 0; i32 y = 1; while (x < y) { x = x + y; } return x; }", {
+            Instruction{Opcode::LoadU16Imm, 0, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 1, 0},
+            Instruction{Opcode::ILessThan, 2, 0, 1},
+            Instruction{Opcode::BranchIfNot, 6, 2, 0},
+            Instruction{Opcode::IAdd, 0, 0, 1},
+            Instruction{Opcode::Branch, 2, 0, 0},
+            Instruction{Opcode::Move, 0, 0, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
 }

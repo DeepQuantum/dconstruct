@@ -99,7 +99,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::unique_ptr<ast::call_expr> finish_call(expr_uptr&& expr);
         [[nodiscard]] std::unique_ptr<ast::subscript_expr> finish_subscript(expr_uptr&& expr);
         [[nodiscard]] std::optional<ast::struct_type> make_struct_type();
-        [[nodiscard]] std::unique_ptr<ast::using_declaration> make_using_declaration(); 
+        [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> make_using_declaration(); 
         [[nodiscard]] std::optional<ast::enum_type> make_enum_type();
         [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition();
         [[nodiscard]] std::optional<global> make_global();

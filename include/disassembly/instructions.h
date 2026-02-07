@@ -268,6 +268,21 @@ const char* UP_Instruction<padding>::opcode_to_string() const noexcept {
     }
 }
 
+[[nodiscard]] static constexpr bool is_store_opcode(const Opcode op) {
+    return 
+        op == Opcode::StoreI8 ||
+        op == Opcode::StoreU8 ||
+        op == Opcode::StoreI16 ||
+        op == Opcode::StoreU16 ||
+        op == Opcode::StoreI32 ||
+        op == Opcode::StoreU32 ||
+        op == Opcode::StoreI64 ||
+        op == Opcode::StoreU64 ||
+        op == Opcode::StoreFloat ||
+        op == Opcode::StorePointer ||
+        op == Opcode::StoreArray;
+}
+
 template<u8 padding>
 [[nodiscard]] bool UP_Instruction<padding>::destination_is_immediate() const noexcept {
     return opcode == Opcode::Branch || opcode == Opcode::BranchIf

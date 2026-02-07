@@ -153,6 +153,8 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;
 
+    [[nodiscard]] static u64 get_size(const full_type& type) noexcept;
+
     [[nodiscard]] constexpr bool is_integral(primitive_kind k) noexcept {
         return
             k == primitive_kind::U8  ||
@@ -189,6 +191,7 @@ namespace dconstruct::ast {
                 k == primitive_kind::I32 ||
                 k == primitive_kind::I64;
     }
+
     
 
     [[nodiscard]] constexpr std::optional<primitive_kind> get_dominating_prim(const primitive_kind lhs, const primitive_kind rhs) {
@@ -220,10 +223,6 @@ namespace dconstruct::ast {
         const bool rhs_signed   = is_signed(rhs);
 
         if ((lhs_unsigned || lhs_signed) && (rhs_unsigned || rhs_signed)) {
-            if (lhs_unsigned != rhs_unsigned) {
-                return std::nullopt;
-            }
-
             const u32 l = int_rank(lhs);
             const u32 r = int_rank(rhs);
 
