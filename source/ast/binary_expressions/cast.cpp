@@ -114,7 +114,8 @@ void cast_expr::pseudo_racket(std::ostream& os) const {
 
     const Opcode cast_opcode = cast_is_integral ? Opcode::CastInteger : Opcode::CastFloat;
 
-    fn.emit_instruction(cast_opcode, *cast_destination, *expr_res);
+    fn.emit_instruction(Opcode::Move, *cast_destination, *expr_res);
+    fn.emit_instruction(cast_opcode, *cast_destination);
     fn.free_register(*expr_res);
     
     return *cast_destination;

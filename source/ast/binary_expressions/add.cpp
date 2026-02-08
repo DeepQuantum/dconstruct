@@ -95,7 +95,9 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 
     if (std::holds_alternative<ptr_type>(lhs_type)) {
         const u64 ptr_size = get_size(*std::get<ptr_type>(lhs_type).m_pointedAt);
-        fn.emit_instruction(Opcode::IMulImm, *add_destination, *add_destination, ptr_size);
+        if (ptr_size > 1) {
+            fn.emit_instruction(Opcode::IMulImm, *add_destination, *add_destination, ptr_size);
+        }
     }
 
     fn.emit_instruction(opcode, *add_destination, *lhs, *rhs);

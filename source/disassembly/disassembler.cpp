@@ -646,6 +646,7 @@ void load_nonstatic(
 void store_nonstatic(
     const u32 dest, 
     const u32 op1, 
+    const u32 op2, 
     StackFrame &frame, 
     char *varying, 
     const u32 disassembly_text_size, 
@@ -658,7 +659,7 @@ void store_nonstatic(
 ) {
     frame[dest].m_type = ast::ptr_type{kind};
     frame[dest].m_value = Register::UNKNOWN_VAL;
-    std::snprintf(varying, disassembly_text_size, "[r%d], r%d", dest, op1);
+    std::snprintf(varying, disassembly_text_size, "r%d, [r%d], r%d", dest, op1, op2);
     frame[op1].m_type = make_type_from_prim(kind);
     std::snprintf(interpreted, interpreted_buffer_size, type_format, dest, op1_str, op2_str);
 }
@@ -824,11 +825,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::StoreInt: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreFloat: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::F32, interpreted, interpreted_buffer_size, "r%d, *(f32*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::F32, interpreted, interpreted_buffer_size, "r%d, *(f32*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StorePointer: {
@@ -907,16 +908,16 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::CastInteger: {
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size,"r%d", dest, op1);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
             frame[dest].m_value = frame[op1].m_value;
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d) -> <%s> => <%s>", dest, op1, op1_str, dst_str);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d)", dest, dest);
             break;
         }
         case Opcode::CastFloat: {
-            std::snprintf(varying, disassembly_text_size,"r%d, r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size,"r%d", dest, op1);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
-            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d) -> <%s> => <%s>", dest, op1, op1_str, dst_str);
+            std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d)", dest, dest);
             break;
         }
         case Opcode::Call: 
@@ -1263,35 +1264,35 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::StoreI8: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I8, interpreted, interpreted_buffer_size, "r%d, *(i8*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I8, interpreted, interpreted_buffer_size, "r%d, *(i8*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreU8: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U8, interpreted, interpreted_buffer_size, "r%d, *(u8*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U8, interpreted, interpreted_buffer_size, "r%d, *(u8*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreI16: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I16, interpreted, interpreted_buffer_size, "r%d, *(i16*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I16, interpreted, interpreted_buffer_size, "r%d, *(i16*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreU16: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U16, interpreted, interpreted_buffer_size, "r%d, *(u16*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U16, interpreted, interpreted_buffer_size, "r%d, *(u16*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreI32: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I32, interpreted, interpreted_buffer_size, "r%d, *(i32*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreU32: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U32, interpreted, interpreted_buffer_size, "r%d, *(u32*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U32, interpreted, interpreted_buffer_size, "r%d, *(u32*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreI64: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::I64, interpreted, interpreted_buffer_size, "r%d, *(i64*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::I64, interpreted, interpreted_buffer_size, "r%d, *(i64*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::StoreU64: {
-            store_nonstatic(dest, op1, frame, varying, disassembly_text_size, ast::primitive_kind::U64, interpreted, interpreted_buffer_size, "r%d, *(u64*)%s = %s", op1_str, op2_str);
+            store_nonstatic(dest, op1, op2, frame, varying, disassembly_text_size, ast::primitive_kind::U64, interpreted, interpreted_buffer_size, "r%d, *(u64*)%s = %s", op1_str, op2_str);
             break;
         }
         case Opcode::AssertPointer: {

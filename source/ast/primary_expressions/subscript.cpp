@@ -51,11 +51,11 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] semantic_check_res subscript_expr::compute_type_checked(compilation::scope& scope) const noexcept {
-    const semantic_check_res lhs_type = m_lhs->compute_type_checked(scope);
+    const semantic_check_res lhs_type = m_lhs->get_type_checked(scope);
     if (!lhs_type) {
         return lhs_type;
     }
-    const semantic_check_res rhs_type = m_rhs->compute_type_checked(scope);
+    const semantic_check_res rhs_type = m_rhs->get_type_checked(scope);
     if (!rhs_type) {
         return rhs_type;
     }
@@ -64,26 +64,86 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
         return std::unexpected{semantic_check_error{"expected pointer type for subscript operation"}};
     }
 
+    const full_type& ptr_t = *std::get<ptr_type>(*lhs_type).m_pointedAt;
+    
+    if (is_unknown(ptr_t)) {
+        return std::unexpected{semantic_check_error{"cannot dereference void pointer"}};
+    }
+
     if (!std::holds_alternative<primitive_type>(*rhs_type) || !is_integral(std::get<primitive_type>(*rhs_type).m_type)) {
         return std::unexpected{semantic_check_error{"expected integral type in subscript index"}};
     }
 
-    const ptr_type& ptr_t = std::get<ptr_type>(*lhs_type);
+    return *std::get<ptr_type>(*lhs_type).m_pointedAt;
+}
 
-    const primitive_kind kind = std::get<primitive_type>(*ptr_t.m_pointedAt).m_type;
-
-    Opcode load_opcode;
-    switch (kind) {
-        case primitive_kind::I8:  load_opcode = Opcode::LoadI8; break;
-        case primitive_kind::U8:  load_opcode = Opcode::LoadU8; break;
-        case primitive_kind::I16: load_opcode = Opcode::LoadI16; break;
-        case primitive_kind::U16: load_opcode = Opcode::LoadU16; break;
-        case primitive_kind::I32: load_opcode = Opcode::LoadI32; break;
-        case primitive_kind::U32: load_opcode = Opcode::LoadU32; break;
-        case primitive_kind::I64: load_opcode = Opcode::LoadI64; break;
-        case primitive_kind::U64: load_opcode = Opcode::LoadU64; break;
-        default: assert(false && "need primitive");
+[[nodiscard]] emission_res subscript_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> opt_destination) const noexcept {
+    const emission_res lhs_res = m_lhs->emit_dc(fn, global);
+    if (!lhs_res) {
+        return lhs_res;
     }
+
+    const emission_res rhs_res = m_rhs->emit_dc(fn, global);
+    if (!rhs_res) {
+        return rhs_res;
+    }
+
+    const ptr_type& ptr_t = std::get<ptr_type>(*m_lhs->get_type());
+    
+    std::expected<Opcode, std::string> load_opcode = get_load_opcode(*ptr_t.m_pointedAt);
+    if (!load_opcode) {
+        return std::unexpected{std::move(load_opcode.error())};
+    }
+
+    const emission_res load_destination = fn.get_destination(opt_destination);
+    if (!load_destination) {
+        return load_destination;
+    }
+
+    const u64 ptr_size = get_size(*ptr_t.m_pointedAt);
+
+    fn.emit_instruction(Opcode::IMulImm, *load_destination, *rhs_res, ptr_size);
+    fn.emit_instruction(Opcode::IAdd, *load_destination, *lhs_res, *load_destination);
+    fn.emit_instruction(*load_opcode, *load_destination, *load_destination);
+
+    fn.free_register(*rhs_res);
+    fn.free_register(*lhs_res);
+
+    return *load_destination;
+}
+
+[[nodiscard]] lvalue_emission_res subscript_expr::emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept {
+    lvalue_emission_res lhs_res = m_lhs->emit_dc_lvalue(fn, global);
+    if (!lhs_res) {
+        return std::unexpected{std::move(lhs_res.error())};
+    }
+
+    emission_res rhs_res = m_rhs->emit_dc(fn, global);
+    if (!rhs_res) {
+        return std::unexpected{std::move(rhs_res.error())};
+    }
+
+    const ptr_type& ptr_t = std::get<ptr_type>(*m_lhs->get_type());
+
+    std::expected<Opcode, std::string> store_opcode = get_store_opcode(*ptr_t.m_pointedAt);
+    if (!store_opcode) {
+        return std::unexpected{std::move(store_opcode.error())};
+    }
+    
+
+    emission_res store_destination = fn.get_next_unused_register();
+    if (!store_destination) {
+        return std::unexpected{std::move(store_destination.error())};
+    }
+
+    const u64 ptr_size = get_size(*ptr_t.m_pointedAt);
+
+    fn.emit_instruction(Opcode::IMulImm, *store_destination, *rhs_res, ptr_size);
+    fn.emit_instruction(Opcode::IAdd, *store_destination, lhs_res->first, *store_destination);
+
+    fn.free_register(*rhs_res);
+
+    return std::pair{*store_destination, *store_opcode};
 }
 
 VAR_OPTIMIZATION_ACTION subscript_expr::var_optimization_pass(var_optimization_env& env) noexcept {
