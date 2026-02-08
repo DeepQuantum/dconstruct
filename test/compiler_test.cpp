@@ -1116,4 +1116,26 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
+    TEST(COMPILER, Subscript1) {
+        expect_instructions("i32 main(u16* bytes) { u16 my_byte = bytes[2]; }", {
+            Instruction{Opcode::Move, 0_r, 49_r},
+            Instruction{Opcode::LoadU16Imm, 2_r, 2_r, 0_r},
+            Instruction{Opcode::IMulImm, 1_r, 2_r, 2_imm},
+            Instruction{Opcode::IAdd, 1_r, 0_r, 1_r},
+            Instruction{Opcode::LoadU16, 1_r, 1_r},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, Subscript2) {
+        expect_instructions("i32 main(f32* floats) { floats[2] = 0.69; }", {
+            Instruction{Opcode::Move, 0_r, 49_r},
+            Instruction{Opcode::LoadStaticFloatImm, 1_r, 0_imm},
+            Instruction{Opcode::IMulImm, 1_r, 2_r, 2_imm},
+            Instruction{Opcode::IAdd, 1_r, 0_r, 1_r},
+            Instruction{Opcode::LoadU16, 1_r, 1_r},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
 }

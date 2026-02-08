@@ -6,6 +6,7 @@
 #include <variant>
 #include <vector>
 #include <expected>
+#include "disassembly/opcodes.h"
 
 namespace dconstruct::ast {
 
@@ -153,7 +154,7 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;
 
-    [[nodiscard]] static u64 get_size(const full_type& type) noexcept;
+    [[nodiscard]] u64 get_size(const full_type& type) noexcept;
 
     [[nodiscard]] constexpr bool is_integral(primitive_kind k) noexcept {
         return
@@ -205,7 +206,7 @@ namespace dconstruct::ast {
                 case primitive_kind::I32: return 32;
                 case primitive_kind::U64:
                 case primitive_kind::I64: return 64;
-                default: return -1;
+                default: return 0;
             }
         };
 
@@ -213,9 +214,13 @@ namespace dconstruct::ast {
             switch (k) {
                 case primitive_kind::F32: return 32;
                 case primitive_kind::F64: return 64;
-                default: return -1;
+                default: return 0;
             }
         };
+
+        if (lhs == rhs) {
+            return lhs;
+        }
 
         const bool lhs_unsigned = is_unsigned(lhs);
         const bool rhs_unsigned = is_unsigned(rhs);
@@ -236,7 +241,7 @@ namespace dconstruct::ast {
         const u32 lf = float_rank(lhs);
         const u32 rf = float_rank(rhs);
 
-        if (lf >= 0 && rf >= 0) {
+        if (lf > 0 && rf > 0) {
             return lf >= rf ? lhs : rhs;
         }
 
@@ -308,4 +313,7 @@ namespace dconstruct::ast {
             return &lhs;
         }
     }
+
+    [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type); 
+    [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type); 
 }

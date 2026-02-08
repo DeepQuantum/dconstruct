@@ -1,5 +1,6 @@
 #include "ast/type.h"
 #include <sstream>
+#include <numeric>
 
 namespace dconstruct::ast {
 
@@ -113,7 +114,13 @@ namespace dconstruct::ast {
     return std::visit([](auto&& arg) -> u64 {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, primitive_type>) {
-            return sizeof(arg.m_type);
+            switch (arg.m_type) {
+                case primitive_kind::U8: case primitive_kind::I8: case primitive_kind::CHAR: case primitive_kind::BOOL: return 1;
+                case primitive_kind::U16: case primitive_kind::I16: return 2;
+                case primitive_kind::U32: case primitive_kind::I32: case primitive_kind::F32: case primitive_kind::SID32: return 4;
+                case primitive_kind::U64: case primitive_kind::I64: case primitive_kind::F64: case primitive_kind::STRING: case primitive_kind::SID: return 8;
+                default: return 0;
+            }
         } else if constexpr (std::is_same_v<T, struct_type>) {
             return std::accumulate(arg.m_members.begin(), arg.m_members.end(), u64{0}, [](u64 acc, const auto& member) {
                 return acc + get_size(*member.second.get());
@@ -134,5 +141,55 @@ namespace dconstruct::ast {
     }, type);
 }
 
+
+[[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type) {
+    return std::visit([](auto&& arg) -> std::expected<Opcode, std::string> {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, primitive_type>) {
+            const primitive_kind kind = arg.m_type;
+            switch (kind) {
+                case primitive_kind::I8:  return Opcode::LoadI8;
+                case primitive_kind::U8:  return Opcode::LoadU8;
+                case primitive_kind::I16: return Opcode::LoadI16;
+                case primitive_kind::U16: return Opcode::LoadU16;
+                case primitive_kind::I32: return Opcode::LoadI32;
+                case primitive_kind::U32: return Opcode::LoadU32;
+                case primitive_kind::I64: return Opcode::LoadI64;
+                case primitive_kind::U64: return Opcode::LoadU64;
+                case primitive_kind::F32: return Opcode::LoadFloat;
+                default: return std::unexpected{"no load opcode for primitive type " + type_to_declaration_string(arg)};
+            }
+        } else if constexpr (std::is_same_v<T, ptr_type>) {
+            return Opcode::LoadPointer;
+        } else {
+            return std::unexpected{"no load opcode for type " + type_to_declaration_string(arg)};
+        }
+    }, type);
+}
+
+[[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type) {
+    return std::visit([](auto&& arg) -> std::expected<Opcode, std::string> {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, primitive_type>) {
+            const primitive_kind kind = arg.m_type;
+            switch (kind) {
+                case primitive_kind::I8:  return Opcode::StoreI8;
+                case primitive_kind::U8:  return Opcode::StoreU8;
+                case primitive_kind::I16: return Opcode::StoreI16;
+                case primitive_kind::U16: return Opcode::StoreU16;
+                case primitive_kind::I32: return Opcode::StoreI32;
+                case primitive_kind::U32: return Opcode::StoreU32;
+                case primitive_kind::I64: return Opcode::StoreI64;
+                case primitive_kind::U64: return Opcode::StoreU64;
+                case primitive_kind::F32: return Opcode::StoreFloat;
+                default: return std::unexpected{"no store opcode for primitive type " + type_to_declaration_string(arg)};
+            }
+        } else if constexpr (std::is_same_v<T, ptr_type>) {
+            return Opcode::StorePointer;
+        } else {
+            return std::unexpected{"no store opcode for type " + type_to_declaration_string(arg)};
+        }
+    }, type);
+}
 
 }

@@ -207,4 +207,8 @@ namespace dconstruct {
 	constexpr reg_idx operator"" _r(u64 v) {
 		return reg_idx(v);
 	}
+
+	constexpr u8 operator"" _imm(u64 v) {
+		return u8(v);
+	}
 };
