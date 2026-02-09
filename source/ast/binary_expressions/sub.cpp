@@ -24,28 +24,28 @@ namespace dconstruct::ast {
         using rhs_t = std::decay_t<decltype(rhs_type)>;
 
         if constexpr (!is_primitive<lhs_t>) {
-            return std::unexpected{"cannot subtract non-primitive type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected primitive type for subtraction but got " + type_to_declaration_string(lhs_type)};
         } else if constexpr (!is_primitive<rhs_t>) {
-            return std::unexpected{"cannot subtract non-primitive type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected primitive type for subtraction but got " + type_to_declaration_string(rhs_type)};
         } else if (is_integral(lhs_type.m_type)) {
             if (is_integral(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::U64);
             }
-            return std::unexpected{"cannot subtract non-integral type " + type_to_declaration_string(rhs_type) + " from integral type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected integral or pointer type for subtraction rhs but got " + type_to_declaration_string(rhs_type)};
         } else if (is_floating_point(lhs_type.m_type)) {
             if (is_floating_point(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::F32);
             }
-            return std::unexpected{"cannot subtract non-floating point type " + type_to_declaration_string(rhs_type) + " from floating point type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected floating point type for subtraction rhs but got " + type_to_declaration_string(rhs_type)};
         } else if constexpr (is_pointer<lhs_t>) {
             if constexpr (is_integral(rhs_type)) {
                 return lhs_type;
             } else if constexpr (is_pointer<rhs_t>) {
                 return make_type_from_prim(primitive_kind::U64);
             }
-            return std::unexpected{"cannot subtract non-integral or non-pointer type " + type_to_declaration_string(rhs_type) + " from integral type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected integral or pointer type for pointer subtraction rhs but got " + type_to_declaration_string(rhs_type)};
         } else {
-            return std::unexpected{"cannot subtract " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected subtractable type but got " + type_to_declaration_string(lhs_type)};
         }
     }, *lhs_type, *rhs_type);
 

@@ -41,28 +41,28 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         using rhs_t = std::decay_t<decltype(rhs_type)>;
         
         if constexpr (!is_primitive<lhs_t>) {
-            return std::unexpected{"cannot add non-primitive type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected primitive type for addition but got " + type_to_declaration_string(lhs_type)};
         } else if constexpr (!is_primitive<rhs_t>) {
-            return std::unexpected{"cannot add non-primitive type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected primitive type for addition but got " + type_to_declaration_string(rhs_type)};
         } else if (is_integral(lhs_type.m_type)) {
             if (is_integral(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::U64);
             } else if constexpr (is_pointer<rhs_t>) {
                 return rhs_type;
             }
-            return std::unexpected{"cannot add integral type " + type_to_declaration_string(lhs_type) + " to non-integral type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected integral or pointer type for addition rhs but got " + type_to_declaration_string(rhs_type)};
         } else if (is_floating_point(lhs_type.m_type)) {
             if (is_floating_point(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::F32);
             }
-            return std::unexpected{"cannot add floating point type " + type_to_declaration_string(lhs_type) + " to non-floating point type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected floating point type for addition rhs but got " + type_to_declaration_string(rhs_type)};
         } else if constexpr (is_pointer<lhs_t>) {
             if constexpr (is_integral(rhs_type)) {
                 return lhs_type;
             }
-            return std::unexpected{"cannot add pointer type " + type_to_declaration_string(lhs_type) + " to non-integral type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected integral type for pointer addition rhs but got " + type_to_declaration_string(rhs_type)};
         } else {
-            return std::unexpected{"cannot add " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected addable type but got " + type_to_declaration_string(lhs_type)};
         }
     }, *lhs_type, *rhs_type);
 
@@ -129,12 +129,12 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 
     if (lhs_type->isPointerTy()) {
         if (!rhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"rhs of ptr add must be integral type", *this}};
+            return std::unexpected{llvm_error{"expected integral type for ptr add rhs but got non-integral type", *this}};
         }
         res = builder.CreatePtrAdd(lhs_val, rhs_val);
     } else if (rhs_type->isPointerTy()) {
         if (!lhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"lhs of ptr add must be integral type", *this}};
+            return std::unexpected{llvm_error{"expected integral type for ptr add lhs but got non-integral type", *this}};
         }
         res = builder.CreatePtrAdd(rhs_val, lhs_val);
     } else if (lhs_type->isFloatingPointTy()) {
@@ -151,7 +151,7 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         res = builder.CreateAdd(lhs_val, rhs_val);
     } else if (lhs_type->isIntegerTy()) {
         if (!rhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"rhs of integral add must be integral", *this}};
+            return std::unexpected{llvm_error{"expected integral type for add rhs but got non-integral type", *this}};
         }
         auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
         auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
@@ -163,7 +163,7 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         res = builder.CreateAdd(lhs_val, rhs_val);
     } else if (rhs_type->isIntegerTy()) {
         if (!lhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"lhs of integral add must be integral", *this}};
+            return std::unexpected{llvm_error{"expected integral type for add lhs but got non-integral type", *this}};
         }
         auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
         auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
@@ -177,7 +177,7 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
         return std::unexpected{llvm_error{"unsupported addition between types", *this}};
     }
     if (!res) {
-        return std::unexpected{llvm_error{"res was nullptr", *this}};
+        return std::unexpected{llvm_error{"expected non-null result from addition but got nullptr", *this}};
     }
     return res;
 }

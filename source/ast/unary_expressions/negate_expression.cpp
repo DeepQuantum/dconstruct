@@ -45,7 +45,7 @@ namespace dconstruct::ast {
             if (is_arithmetic(rhs_type.m_type)) {
                 return std::nullopt;
             } else {
-                return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
+                return "expected integral or floating point type for negate but got " + type_to_declaration_string(rhs_type);
             }
         } else {
             return "cannot negate expression with non-integral type " + type_to_declaration_string(rhs_type);
@@ -92,7 +92,7 @@ namespace dconstruct::ast {
             }
         }, *value);
         if (!opt_emit) {
-            return std::unexpected{"attempted to negate non-numeric literal"};
+            return std::unexpected{"expected numeric literal for negate but got non-numeric literal"};
         }
         const auto [new_value, opcode] = *opt_emit;
         const u16 table_idx = fn.add_to_symbol_table(new_value);

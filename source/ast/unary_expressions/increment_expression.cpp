@@ -21,7 +21,7 @@ void increment_expression::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] semantic_check_res increment_expression::compute_type_checked(compilation::scope& env) const noexcept { 
     if (!m_rhs->is_l_evaluable()) {
-        return std::unexpected{semantic_check_error{"expected an lvalue expression in increment"}};
+        return std::unexpected{semantic_check_error{"expected lvalue for increment but got rvalue"}};
     }
 
     const semantic_check_res rhs_type = m_rhs->get_type_checked(env);
@@ -37,7 +37,7 @@ void increment_expression::pseudo_racket(std::ostream& os) const {
             if (is_integral(rhs_type.m_type)) {
                 return std::nullopt;
             } else {
-                return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);
+                return "expected integral type for increment but got " + type_to_declaration_string(rhs_type);
             }
         } else {
             return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);

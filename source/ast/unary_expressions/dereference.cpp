@@ -31,7 +31,7 @@ namespace dconstruct::ast {
                     return std::nullopt;
                 }
             } else {
-                return "cannot dereference non-pointer type " + type_to_declaration_string(rhs_type);
+                return "expected pointer type for dereference but got " + type_to_declaration_string(rhs_type);
             }
         }, *rhs_type);
 

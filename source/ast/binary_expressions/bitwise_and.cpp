@@ -51,16 +51,16 @@ namespace dconstruct::ast {
         using rhs_t = std::decay_t<decltype(rhs_type)>;
         
         if constexpr (!is_primitive<lhs_t>) {
-            return "cannot bitwise-and non-primitive type " + type_to_declaration_string(lhs_type);
+            return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
         } else if constexpr (!is_primitive<rhs_t>) {
-            return "cannot bitwise-and non-primitive type " + type_to_declaration_string(rhs_type);
+            return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
         } else if (is_integral(lhs_type.m_type)) {
             if (is_integral(rhs_type.m_type)) {
                 return std::nullopt;
             }
-            return "cannot bitwise-and right hand side non-integral type " + type_to_declaration_string(rhs_type);
+            return "expected integral type for bitwise-and rhs but got " + type_to_declaration_string(rhs_type);
         } else {
-            return "cannot bitwise-and left hand side non-integral type " + type_to_declaration_string(rhs_type);
+            return "expected integral type for bitwise-and lhs but got " + type_to_declaration_string(lhs_type);
         }
     }, *lhs_type, *rhs_type);
 
@@ -85,10 +85,10 @@ namespace dconstruct::ast {
     auto lhs_type = lhs_val->getType();
     auto rhs_type = rhs_val->getType();
     if (!lhs_type->isIntegerTy()) {
-        return std::unexpected{llvm_error{"expression must have integral type", *this}};
+        return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
     }
     if (!rhs_type->isIntegerTy()) {
-        return std::unexpected{llvm_error{"expression must have integral type", *this}};
+        return std::unexpected{llvm_error{"expected integral type for bitwise-and but got non-integral type", *this}};
     }
     auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
     auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
@@ -99,7 +99,7 @@ namespace dconstruct::ast {
     }
     llvm::Value* res = builder.CreateAnd(lhs_val, rhs_val);
     if (!res) {
-        return std::unexpected{llvm_error{"and was nullptr", *this}};
+        return std::unexpected{llvm_error{"expected non-null result from bitwise-and but got nullptr", *this}};
     }
     return res;
 }

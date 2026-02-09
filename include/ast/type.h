@@ -254,18 +254,18 @@ namespace dconstruct::ast {
             using rhs_t = std::decay_t<decltype(rhs)>;
             if constexpr (std::is_same_v<lhs_t, primitive_type>) {
                 if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
-                    return "cannot assign primitive of type " + type_to_declaration_string(rhs) + " to variable declared as " + type_to_declaration_string(lhs); 
+                    return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
                 } else {
                     const auto new_kind = get_dominating_prim(lhs.m_type, rhs.m_type);
                     if (!new_kind) {
-                        return "cannot assign primitive of type " + type_to_declaration_string(rhs) + " to primitive of type " + type_to_declaration_string(lhs); 
+                        return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
                     }
                     return std::nullopt;
                 }
             } else if constexpr (std::is_same_v<lhs_t, rhs_t>) {
                 return std::nullopt;
             } else {
-                return "cannot assign expression of type " + type_to_declaration_string(rhs) + " to variable declared as " + type_to_declaration_string(lhs);
+                return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
             }
         }, assignee, assign_value);
     }
@@ -276,13 +276,13 @@ namespace dconstruct::ast {
             using rhs_t = std::decay_t<decltype(rhs)>;
 
             if constexpr (!std::is_same_v<lhs_t, primitive_type>) {
-                return std::unexpected{"expected lhs of '" + op + "' to be primitive value"};
+                return std::unexpected{"expected primitive type for '" + op + "' lhs but got " + type_to_declaration_string(lhs)};
             } else if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
-                return std::unexpected{"expected rhs of '" + op + "' to be primitive value"};
+                return std::unexpected{"expected primitive type for '" + op + "' rhs but got " + type_to_declaration_string(rhs)};
             } else {
                 const std::optional<primitive_kind> new_prim = get_dominating_prim(lhs.m_type, rhs.m_type);
                 if (!new_prim) {
-                    return std::unexpected{"cannot perform operation '" + op + "' of type " + type_to_declaration_string(lhs) + " and " + type_to_declaration_string(rhs)};
+                    return std::unexpected{"expected compatible types for '" + op + "' but got " + type_to_declaration_string(lhs) + " and " + type_to_declaration_string(rhs)};
                 } else {
                     return make_type_from_prim(*new_prim);
                 }

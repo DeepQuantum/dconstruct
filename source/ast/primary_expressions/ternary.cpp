@@ -49,7 +49,7 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
             if (is_arithmetic(cond.m_type)) {
                 return std::nullopt;
             }
-            return "ternary condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+            return "expected arithmetic type for ternary condition but got " + type_to_declaration_string(cond);
         }
         return "ternary condition must be of arithmetic type, but got " + type_to_declaration_string(cond);
 
@@ -72,7 +72,7 @@ void ternary_expr::pseudo_racket(std::ostream& os) const {
     }
 
     if (*then_type != *else_type) {
-        return std::unexpected{semantic_check_error{"else type of ternary expression " + type_to_declaration_string(*else_type) + " must equal then type " + type_to_declaration_string(*then_type), m_else.get()}};
+        return std::unexpected{semantic_check_error{"expected else type " + type_to_declaration_string(*then_type) + " but got " + type_to_declaration_string(*else_type), m_else.get()}};
     }
 
     return *then_type;

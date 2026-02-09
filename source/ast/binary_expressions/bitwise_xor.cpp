@@ -21,16 +21,16 @@ namespace dconstruct::ast {
         using rhs_t = std::decay_t<decltype(rhs_type)>;
         
         if constexpr (!is_primitive<lhs_t>) {
-            return "cannot bitwise-xor non-primitive type " + type_to_declaration_string(lhs_type);
+            return "expected primitive type for bitwise-xor lhs but got " + type_to_declaration_string(lhs_type);
         } else if constexpr (!is_primitive<rhs_t>) {
-            return "cannot bitwise-xor non-primitive type " + type_to_declaration_string(rhs_type);
+            return "expected primitive type for bitwise-xor rhs but got " + type_to_declaration_string(rhs_type);
         } else if (is_integral(lhs_type.m_type)) {
             if (is_integral(rhs_type.m_type)) {
                 return std::nullopt;
             }
-            return "cannot bitwise-xor right hand side non-integral type " + type_to_declaration_string(rhs_type);
+            return "expected integral type for bitwise-xor rhs but got " + type_to_declaration_string(rhs_type);
         } else {
-            return "cannot bitwise-xor left hand side non-integral type " + type_to_declaration_string(rhs_type);
+            return "expected integral type for bitwise-xor lhs but got " + type_to_declaration_string(lhs_type);
         }
     }, *lhs_type, *rhs_type);
 

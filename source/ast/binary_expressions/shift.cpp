@@ -21,16 +21,16 @@ namespace dconstruct::ast {
         using rhs_t = std::decay_t<decltype(rhs_type)>;
         
         if constexpr (!is_primitive<lhs_t>) {
-            return std::unexpected{"cannot shift non-primitive left hand side type " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected primitive type for shift lhs but got " + type_to_declaration_string(lhs_type)};
         } else if constexpr (!is_primitive<rhs_t>) {
-            return std::unexpected{"cannot shift non-primitive right hand side type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected primitive type for shift rhs but got " + type_to_declaration_string(rhs_type)};
         } else if (is_integral(lhs_type.m_type)) {
             if (is_integral(rhs_type.m_type)) {
                 return make_type_from_prim(primitive_kind::U64);
             }
-            return std::unexpected{"cannot shift integral type " + type_to_declaration_string(lhs_type) + " with non-integral type " + type_to_declaration_string(rhs_type)};
+            return std::unexpected{"expected integral type for shift rhs but got " + type_to_declaration_string(rhs_type)};
         } else {
-            return std::unexpected{"cannot shift " + type_to_declaration_string(lhs_type)};
+            return std::unexpected{"expected integral type for shift lhs but got " + type_to_declaration_string(lhs_type)};
         }
     }, *lhs_type, *rhs_type);
 

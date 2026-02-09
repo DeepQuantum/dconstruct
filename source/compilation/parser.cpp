@@ -59,7 +59,13 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (check(type)) {
         return &advance();
     }
-    m_errors.emplace_back(peek(), message);
+    std::string full_message = message;
+    if (is_at_end()) {
+        full_message += " but got end of file";
+    } else {
+        full_message += " but got '" + peek().m_lexeme + "'";
+    }
+    m_errors.emplace_back(peek(), full_message);
     return nullptr;
 }
 
@@ -181,7 +187,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
         res = std::move(func_def);
     } else {
-        m_errors.emplace_back(peek(), "expected struct, enum, or function definition");
+        m_errors.emplace_back(peek(), "expected struct, enum, or function definition but got '" + peek().m_lexeme + "'");
         synchronize_external_definitions();
         return std::nullopt;
     }
@@ -330,14 +336,14 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     if (std::holds_alternative<ast::function_type>(*new_type)) {
         if (!far_spec) {
-            m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias.");
+            m_errors.emplace_back(previous(), "expected either 'near' or 'far' specification after 'using' when defining a function alias but got neither");
             return std::nullopt;
         } else {
             std::get<ast::function_type>(*new_type).m_isFarCall = far_spec->m_type == token_type::FAR;
         }
     } else { 
         if (far_spec) {
-            m_errors.emplace_back(previous(), far_spec->m_lexeme + " specification was unexpected on non-function alias.");
+            m_errors.emplace_back(previous(), "unexpecteded 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
             return std::nullopt;
         }
     }
@@ -529,7 +535,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     expr_uptr iterable = make_expression();
     if (!iterable) {
-        m_errors.emplace_back(peek(), "expected iterable expression in foreach-loop.");
+        m_errors.emplace_back(peek(), "expected iterable expression in foreach-loop but got '" + peek().m_lexeme + "'");
         return nullptr;
     }
 
@@ -539,7 +545,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
     stmnt_uptr body = make_statement();
     if (!body) {
-        m_errors.emplace_back(peek(), "expected body statement in foreach-loop.");
+        m_errors.emplace_back(peek(), "expected body statement in foreach-loop but got '" + peek().m_lexeme + "'");
         return nullptr;
     }
 
@@ -582,7 +588,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (!condition) {
         return nullptr;
     }
-    if (!consume(token_type::RIGHT_PAREN, "expect ')' after if-condition.")) {
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition.")) {
         return nullptr;
     }
     stmnt_uptr then_branch = make_statement();
@@ -703,7 +709,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 break;
             }
             default: {
-                m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
+                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
             }
         }
@@ -731,7 +737,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 break;
             }
             default: {
-                m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
+                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
             }
         }
@@ -760,7 +766,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 break;
             }
             default: {
-                m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
+                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
             }
         }
@@ -789,7 +795,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 break;
             }
             default: {
-                m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
+                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
             }
         }
@@ -830,7 +836,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 //return std::make_unique<ast::address_of_expr>(op, std::move(right));
             }
             default: {
-                m_errors.emplace_back(op, "unexpected token " + op.m_lexeme);
+                m_errors.emplace_back(op, "expected expression or operand but got '" + op.m_lexeme + "'");
                 return nullptr;
             }
         }
@@ -924,7 +930,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
             } else {
                 expr_uptr literal = make_literal();
                 if (!literal) {
-                    m_errors.emplace_back(peek(), "expected a literal");
+                    m_errors.emplace_back(peek(), "expected literal but got '" + peek().m_lexeme + "'");
                     return nullptr;
                 } else {
                     patterns.push_back(std::move(literal)); 
@@ -938,7 +944,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
         expr_uptr matched_expression = make_expression();
         if (!matched_expression) {
-            m_errors.emplace_back(peek(), "expected expression after '->'");
+            m_errors.emplace_back(peek(), "expected expression after '->' but got '" + peek().m_lexeme + "'");
         }
 
         if (!default_pattern_reached && !consume({token_type::COMMA}, "expected ',' at end of pattern-match expression")) {
@@ -1016,7 +1022,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         }
     }
 
-    m_errors.emplace_back(previous(), "expected expression after '" + previous().m_lexeme + "'");
+    m_errors.emplace_back(peek(), "expected expression after '" + previous().m_lexeme + "' but got '" + peek().m_lexeme + "'");
     return nullptr;
 }
 

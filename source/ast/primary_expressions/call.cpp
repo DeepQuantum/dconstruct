@@ -119,12 +119,12 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         return callee_type;
     }
     if (!std::holds_alternative<function_type>(*callee_type)) {
-        return std::unexpected{semantic_check_error{"callee is not of callable type: " + type_to_declaration_string(*callee_type)}};
+        return std::unexpected{semantic_check_error{"expected callable type but got " + type_to_declaration_string(*callee_type)}};
     }
     const function_type func_type = std::get<function_type>(*callee_type);
 
     if (func_type.m_arguments.size() != m_arguments.size()) {
-        return std::unexpected{semantic_check_error{"function expects " + std::to_string(func_type.m_arguments.size()) + " arguments but " + std::to_string(m_arguments.size()) + " were passed"}};
+        return std::unexpected{semantic_check_error{"expected " + std::to_string(func_type.m_arguments.size()) + " arguments but got " + std::to_string(m_arguments.size())}};
     }
 
     for (u32 i = 0; i < m_arguments.size(); ++i) {
@@ -229,7 +229,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
 [[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
     const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
     if (!callee_id) {
-        return std::unexpected{llvm_error{"callee wasn't an identifier, which is not implemented yet", *this}};
+        return std::unexpected{llvm_error{"expected identifier for callee but got non-identifier (not implemented)", *this}};
     }
     
     llvm::Function* callee_f = module.getFunction(callee_id->m_name.m_lexeme);
@@ -252,7 +252,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
 
     auto res = builder.CreateCall(callee_f, args_v);
     if (!res) {
-        return std::unexpected{llvm_error{"function call was nullptr", *this}};
+        return std::unexpected{llvm_error{"expected non-null result from function call but got nullptr", *this}};
     }
     return res;
 }
