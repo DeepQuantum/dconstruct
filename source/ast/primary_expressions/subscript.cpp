@@ -61,7 +61,7 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
     }
 
     if (!std::holds_alternative<ptr_type>(*lhs_type)) {
-        return std::unexpected{semantic_check_error{"expected pointer type for subscript operation"}};
+        return std::unexpected{semantic_check_error{"expected pointer type for subscript but got " + type_to_declaration_string(*lhs_type)}};
     }
 
     const full_type& ptr_t = *std::get<ptr_type>(*lhs_type).m_pointedAt;
@@ -71,7 +71,7 @@ void subscript_expr::pseudo_racket(std::ostream& os) const {
     }
 
     if (!std::holds_alternative<primitive_type>(*rhs_type) || !is_integral(std::get<primitive_type>(*rhs_type).m_type)) {
-        return std::unexpected{semantic_check_error{"expected integral type in subscript index"}};
+        return std::unexpected{semantic_check_error{"expected integral type for subscript index but got " + type_to_declaration_string(*rhs_type)}};
     }
 
     return *std::get<ptr_type>(*lhs_type).m_pointedAt;

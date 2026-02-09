@@ -19,9 +19,9 @@ namespace dconstruct::ast {
             if (is_integral(arg.m_type)) {
                 return std::nullopt;
             }
-            return "cannot negate expression with non-integral type " + type_to_declaration_string(arg);
+            return "expected integral type for bitwise not but got " + type_to_declaration_string(arg);
         } else {
-            return "cannot negate expression with non-integral type " + type_to_declaration_string(arg);
+            return "expected integral type for bitwise not but got " + type_to_declaration_string(arg);
         }
     }, *rhs_type);
 
@@ -55,7 +55,7 @@ namespace dconstruct::ast {
     }
     llvm::Value* res = builder.CreateNeg(*rhs);
     if (!res) {
-        return std::unexpected{llvm_error{"xor was nullptr", *this}};
+        return std::unexpected{llvm_error{"expected non-null result from bitwise not but got nullptr", *this}};
     }
     return res;
 }

@@ -69,7 +69,7 @@ char Lexer::advance() {
         advance();
     }
     if (reached_eof()) {
-        m_errors.emplace_back(m_line, "unterminated string literal");
+        m_errors.emplace_back(m_line, "expected '\"' to close string literal but got end of file");
         return token(token_type::EMPTY, "");
     }
     advance();

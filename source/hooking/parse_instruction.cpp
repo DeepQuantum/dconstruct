@@ -2,6 +2,52 @@
 #include <Windows.h>
 #include <immintrin.h>
 
+if ( *dword_1484B6438 > teb_offset_value)
+  {
+    Init_thread_header(dword_1484B6438);
+    if ( *dword_1484B6438 == -1 )
+    {
+      *qword_1484B6430 = 1;
+      Init_thread_footer(dword_1484B6438);
+    }
+  }
+  if ( *dword_1484B6448 > teb_offset_value )
+  {
+    Init_thread_header(dword_1484B6448);
+    if ( *dword_1484B6448 == -1 )
+    {
+      *qword_1484B6440 = 0;
+      Init_thread_footer(dword_1484B6448);
+    }
+  }
+  if ( *dword_1484B6458 > teb_offset_value )
+  {
+    Init_thread_header(dword_1484B6458);
+    if ( *dword_1484B6458 == -1 )
+    {
+      qword_1484B6450 = qword_1484B6430;
+      Init_thread_footer(dword_1484B6458);
+    }
+  }
+
+  constexpr u32* TlsIndex_loc = reinterpret_cast<u32*>(0x14964A9B8);
+
+  u32 TlsIndex = *TlsIndex_loc;
+
+  v6 = (unsigned int)TlsIndex;
+
+  const auto Init_thread_header = reinterpret_cast<void(*__fastcall)(i32*)>(0x14286C3C8);
+  const auto Init_thread_footer = reinterpret_cast<void(*__fastcall)(i32*)>(0x14286C368);
+
+  u64* qword_1484B6430 = reinterpret_cast<u64*>(0x1484B6430);
+  i32* dword_1484B6438 = reinterpret_cast<i32*>(0x1484B6438);
+  u64* qword_1484B6440 = reinterpret_cast<u64*>(0x1484B6440);
+  i32* dword_1484B6448 = reinterpret_cast<i32*>(0x1484B6448);
+  u64* qword_1484B6450 = reinterpret_cast<u64*>(0x1484B6450);
+  i32* dword_1484B6458 = reinterpret_cast<i32*>(0x1484B6458);
+  i64* qword_1484B6460 = reinterpret_cast<i64*>(0x1484B6460);
+  i32* dword_1484B6468 = reinterpret_cast<i32*>(0x1484B6468);
+
 namespace dconstruct {
 void __fastcall parse_instruction(unsigned int *a1, u64 *a2, i64 *a3)
 {
@@ -90,57 +136,14 @@ void __fastcall parse_instruction(unsigned int *a1, u64 *a2, i64 *a3)
 
   reinterpret_cast<u64*(__fastcall*)(u64*, i64)>(0x1416130E0)(v106, (i64)a1);
 
-  constexpr u32* TlsIndex_loc = reinterpret_cast<u32*>(0x14964A9B8);
-
-  u32 TlsIndex = *TlsIndex_loc;
-
-  v6 = (unsigned int)TlsIndex;
+  
 
   i32* dword_1484B6438 = reinterpret_cast<i32*>(0x1484B6438);
 
   const void* value = TlsGetValue(TlsIndex);
   u32 teb_offset_value = *reinterpret_cast<const u32*>(reinterpret_cast<const u8*>(value) + 0xF8);
 
-  const auto Init_thread_header = reinterpret_cast<void(*__fastcall)(i32*)>(0x14286C3C8);
-  const auto Init_thread_footer = reinterpret_cast<void(*__fastcall)(i32*)>(0x14286C368);
-
-  u64* qword_1484B6430 = reinterpret_cast<u64*>(0x1484B6430);
-  i32* dword_1484B6438 = reinterpret_cast<i32*>(0x1484B6438);
-  u64* qword_1484B6440 = reinterpret_cast<u64*>(0x1484B6440);
-  i32* dword_1484B6448 = reinterpret_cast<i32*>(0x1484B6448);
-  u64* qword_1484B6450 = reinterpret_cast<u64*>(0x1484B6450);
-  i32* dword_1484B6458 = reinterpret_cast<i32*>(0x1484B6458);
-
-  if ( *dword_1484B6438 > teb_offset_value)
-  {
-    Init_thread_header(dword_1484B6438);
-    if ( *dword_1484B6438 == -1 )
-    {
-      *qword_1484B6430 = 1;
-      Init_thread_footer(dword_1484B6438);
-    }
-  }
-  if ( *dword_1484B6448 > teb_offset_value )
-  {
-    Init_thread_header(dword_1484B6448);
-    if ( *dword_1484B6448 == -1 )
-    {
-      *qword_1484B6440 = 0;
-      Init_thread_footer(dword_1484B6448);
-    }
-  }
-  if ( *dword_1484B6458 > teb_offset_value )
-  {
-    Init_thread_header(dword_1484B6458);
-    if ( *dword_1484B6458 == -1 )
-    {
-      qword_1484B6450 = qword_1484B6430;
-      Init_thread_footer(dword_1484B6458);
-    }
-  }
-
-  i64* qword_1484B6460 = reinterpret_cast<i64*>(0x1484B6460);
-  i32* dword_1484B6468 = reinterpret_cast<i32*>(0x1484B6468);
+  
 
   v7 = teb_offset_value;
   garbage_flag = *dword_1484B6468 < v7;

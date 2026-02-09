@@ -28,7 +28,7 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
             if (is_integral(rhs_type.m_type)) {
                 return std::nullopt;
             } else {
-                return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);
+                return "expected integral type for logical not but got " + type_to_declaration_string(rhs_type);
             }
         } else {
             return "cannot increment expression with non-integral type " + type_to_declaration_string(rhs_type);

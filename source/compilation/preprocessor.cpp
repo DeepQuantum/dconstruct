@@ -84,13 +84,13 @@ namespace dconstruct::compilation {
         return std::unexpected{"provided both a command line argument and a precompiler directive for the option '" + std::move(param_name) + "\'. please only provide one or the other."};
     } else if (!lhs.empty()) {
         if (!std::filesystem::exists(lhs) && check_exists) {
-            return std::unexpected{"couldn't find file " + lhs.string()};
+            return std::unexpected{"expected file to exist but got missing path " + lhs.string()};
         } else {
             return lhs;
         }
     } else {
         if (!std::filesystem::exists(rhs) && check_exists) {
-            return std::unexpected{"couldn't find file " + rhs.string()};
+            return std::unexpected{"expected file to exist but got missing path " + rhs.string()};
         } else {
             return rhs;
         }
@@ -133,7 +133,7 @@ namespace dconstruct::compilation {
         if (!repackage_exp) {
             return std::unexpected{std::move(repackage_exp.error())};
         } else if (!std::filesystem::is_directory(*repackage_exp)) {
-            return std::unexpected{"repackage path must be a directory"};
+            return std::unexpected{"expected directory for repackage path but got non-directory"};
         }
         repackage_res = std::move(*repackage_exp);
     }

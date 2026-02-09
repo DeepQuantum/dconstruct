@@ -157,7 +157,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
                 if (is_arithmetic(cond.m_type)) {
                     return std::nullopt;
                 }
-                return "precondition must be of arithmetic type, but got " + type_to_declaration_string(cond);
+                return "expected arithmetic type for precondition but got " + type_to_declaration_string(cond);
             }
             return "precondition must be of arithmetic type, but got " + type_to_declaration_string(cond);
         }, *cond_type);
@@ -180,9 +180,9 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
             if (arg.m_type != primitive_kind::NULLPTR && arg.m_type != primitive_kind::NOTHING) {
                 return std::nullopt;
             }
-            return "match variable must be of complete primitive type, but got " + type_to_declaration_string(arg);
+            return "expected complete primitive type for match variable but got " + type_to_declaration_string(arg);
         }
-        return "match variable must be of primitive type, but got " + type_to_declaration_string(arg);
+        return "expected primitive type for match variable but got " + type_to_declaration_string(arg);
     }, *match_var_type);
 
     if (invalid_match_var_type) {
@@ -202,7 +202,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
 
             if (*pattern_type != *match_var_type) {
                 return std::unexpected{semantic_check_error{
-                    "pattern type must equal match expression type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
+                    "expected pattern type " + type_to_declaration_string(*match_var_type) + " but got " + type_to_declaration_string(*pattern_type), pattern.get()
                 }};
             }
         }
@@ -217,7 +217,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
             result_type = *expr_type;
             result_type_set = true;
         } else if (*expr_type != result_type) {
-            return std::unexpected{semantic_check_error{"result type must equal first result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*expr_type), expression.get()}};
+            return std::unexpected{semantic_check_error{"expected result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*expr_type), expression.get()}};
         }
     }
 
@@ -231,7 +231,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {}
 
     if (*default_type != result_type) {
         return std::unexpected{semantic_check_error{
-            "default expression type must equal first result type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*default_type), m_default.get()
+            "expected default expression type " + type_to_declaration_string(result_type) + " but got " + type_to_declaration_string(*default_type), m_default.get()
         }};
     }
 

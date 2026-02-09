@@ -57,7 +57,7 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     }
 
     if (!m_lhs->is_l_evaluable()) {
-        return std::unexpected{semantic_check_error{"cannot assign to rvalue", m_lhs.get()}};
+        return std::unexpected{semantic_check_error{"expected lvalue for assignment but got rvalue", m_lhs.get()}};
     }
 
     std::optional<std::string> assignable_err = not_assignable_reason(*lhs_type, *rhs_type);
@@ -101,7 +101,7 @@ void assign_expr::pseudo_racket(std::ostream& os) const {
     return lvalue_reg;
 }
 
-VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env& env)  noexcept {
+VAR_OPTIMIZATION_ACTION assign_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     env.check_action(&m_rhs);
     const auto* lhs = dynamic_cast<const identifier*>(m_lhs.get());
     if (!lhs || !lhs->m_name.m_lexeme.starts_with("var")) {

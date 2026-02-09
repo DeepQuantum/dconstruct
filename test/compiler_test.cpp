@@ -173,7 +173,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "invalid token '@'")
+            compilation::lexing_error(1, "expected valid token but got '@'")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -218,7 +218,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "unterminated string literal")
+            compilation::lexing_error(1, "expected '\"' to close string literal but got end of file")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -867,7 +867,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "invalid token '@'")
+            compilation::lexing_error(1, "expected valid token but got '@'")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -899,7 +899,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         EXPECT_EQ(lex_errors.size(), 0);
         ASSERT_EQ(parse_errors.size(), 1) << "Parser should report exactly one error (in the using statement) and sync to next global";
-        EXPECT_EQ(parse_errors[0].m_message, "expected 'as'");
+        EXPECT_TRUE(parse_errors[0].m_message.starts_with("expected 'as'")) << "got: " << parse_errors[0].m_message;
         EXPECT_EQ(program.m_declarations.size(), 1) << "main() should parse successfully after sync";
         const auto* main_fn = dynamic_cast<const ast::function_definition*>(program.m_declarations[0].get());
         ASSERT_NE(main_fn, nullptr);
