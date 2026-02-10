@@ -39,7 +39,8 @@
         //         "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/", 
         //         "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin",
         //         "-o",
-        //         "./disassembled"
+        //         "./disassembled",
+        //         "--no_decompile"
         //     ],
         //     "stopAtEntry": false,
         //     "cwd": "${workspaceFolder}",

@@ -1138,4 +1138,90 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
+    TEST(COMPILER, SizeofNormalType) {
+        const std::string code = "sizeof(u32);";
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0);
+        auto [statements, parse_errors] = get_statements(tokens);
+        ASSERT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 1);
+
+        const auto* expr_stmt = dynamic_cast<const ast::expression_stmt*>(statements.front().get());
+        ASSERT_NE(expr_stmt, nullptr);
+        const auto* sz = dynamic_cast<const ast::sizeof_expr*>(expr_stmt->m_expression.get());
+        ASSERT_NE(sz, nullptr);
+        ASSERT_TRUE(std::holds_alternative<ast::full_type>(sz->m_operand));
+        const auto& ty = std::get<ast::full_type>(sz->m_operand);
+        ASSERT_TRUE(std::holds_alternative<ast::primitive_type>(ty));
+        EXPECT_EQ(std::get<ast::primitive_type>(ty).m_type, ast::primitive_kind::U32);
+
+        auto functions = compile_to_functions("u64 main() { return sizeof(u32); }");
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+        ASSERT_EQ((*functions)[0].m_instructions.size(), 3);
+        EXPECT_EQ((*functions)[0].m_instructions[0].opcode, Opcode::LoadU16Imm);
+        EXPECT_EQ((*functions)[0].m_instructions[0].operand1, 4);
+        EXPECT_EQ((*functions)[0].m_instructions[0].operand2, 0);
+    }
+
+    TEST(COMPILER, SizeofStructType) {
+        const std::string code =
+            "struct Vector3 { f32 x; f32 y; f32 z; } "
+            "u64 main() { return sizeof(Vector3); }";
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0);
+        auto [program, types, parse_errors] = get_parse_results(tokens);
+        ASSERT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(program.m_declarations.size(), 1);
+        ASSERT_TRUE(types.contains("Vector3"));
+
+        compilation::scope scope{types};
+        auto semantic_errors = program.check_semantics(scope);
+        ASSERT_TRUE(semantic_errors.empty());
+
+        auto functions = program.compile_functions(scope);
+        ASSERT_TRUE(functions) << (functions ? "" : functions.error());
+        ASSERT_FALSE((*functions).empty());
+        const auto& instrs = (*functions)[0].m_instructions;
+        ASSERT_GE(instrs.size(), 2);
+        EXPECT_EQ(instrs[0].opcode, Opcode::LoadU16Imm);
+        EXPECT_EQ(instrs[0].operand1, 12);
+        EXPECT_EQ(instrs[0].operand2, 0);
+    }
+
+    TEST(COMPILER, SizeofSmallExpression) {
+        const std::string code = "u32 x = 0; sizeof(x);";
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0);
+        auto [statements, parse_errors] = get_statements(tokens);
+        ASSERT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 2);
+
+        const auto* expr_stmt = dynamic_cast<const ast::expression_stmt*>(statements.back().get());
+        ASSERT_NE(expr_stmt, nullptr);
+        const auto* sz = dynamic_cast<const ast::sizeof_expr*>(expr_stmt->m_expression.get());
+        ASSERT_NE(sz, nullptr);
+        ASSERT_TRUE(std::holds_alternative<expr_uptr>(sz->m_operand));
+        const auto* inner = dynamic_cast<const ast::identifier*>(std::get<expr_uptr>(sz->m_operand).get());
+        ASSERT_NE(inner, nullptr);
+        EXPECT_EQ(inner->m_name.m_lexeme, "x");
+    }
+
+    TEST(COMPILER, SizeofBiggerExpression) {
+        const std::string code = "u32 a = 0; u32 b = 0; sizeof(a + b);";
+        auto [tokens, lex_errors] = get_tokens(code);
+        ASSERT_EQ(lex_errors.size(), 0);
+        auto [statements, parse_errors] = get_statements(tokens);
+        ASSERT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(statements.size(), 3);
+
+        const auto* expr_stmt = dynamic_cast<const ast::expression_stmt*>(statements.back().get());
+        ASSERT_NE(expr_stmt, nullptr);
+        const auto* sz = dynamic_cast<const ast::sizeof_expr*>(expr_stmt->m_expression.get());
+        ASSERT_NE(sz, nullptr);
+        ASSERT_TRUE(std::holds_alternative<expr_uptr>(sz->m_operand));
+        const auto* inner = dynamic_cast<const ast::add_expr*>(std::get<expr_uptr>(sz->m_operand).get());
+        ASSERT_NE(inner, nullptr);
+    }
+
 }

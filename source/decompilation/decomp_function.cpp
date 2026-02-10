@@ -47,8 +47,7 @@ const ast::function_definition& decomp_function::decompile(const bool optimizati
 }
 
 
-[[nodiscard]] ast::function_definition decomp_function::decompile(const bool optimization_passes) &&
-{
+[[nodiscard]] ast::function_definition decomp_function::decompile(const bool optimization_passes) && {
     decompile(optimization_passes);
     return std::move(m_functionDefinition);
 }
@@ -663,14 +662,14 @@ void decomp_function::load_expression_into_existing_var(const reg_idx dst, std::
     if (expr->identifier_name_equals(var->m_name.m_lexeme)) {
         return;
     }
-    const auto type_temp = expr->get_type_unchecked(m_env);
+    auto type_temp = expr->get_type_unchecked(m_env);
     auto assign_expr = std::make_unique<ast::assign_expr>(var->clone(), std::move(expr));
 
     auto assign_statement = std::make_unique<ast::expression_stmt>(std::move(assign_expr));
 
     append_to_current_block(std::move(assign_statement));
     m_transformableExpressions[dst] = std::move(var);
-    m_transformableExpressions[dst]->set_type(type_temp);
+    m_transformableExpressions[dst]->set_type(std::move(type_temp));
 }
 
 
@@ -711,9 +710,9 @@ template<ast::primitive_kind kind>
 
 template<typename to>
 [[nodiscard]] expr_uptr decomp_function::make_cast(const Instruction& istr, const ast::full_type& type) {
-    const ast::literal* old_lit = m_transformableExpressions[istr.operand1]->as_literal();
+    const ast::literal* old_lit = m_transformableExpressions[istr.destination]->as_literal();
     if (!old_lit) {
-        const auto& op2 = m_transformableExpressions[istr.operand1];
+        const auto& op2 = m_transformableExpressions[istr.destination];
         return op2->new_cast(type, *op2->get_grouped());
     }
     else {
@@ -922,27 +921,23 @@ void decomp_function::insert_return(const reg_idx dest) {
 
 
 template<ast::primitive_kind kind>
-[[nodiscard]] std::unique_ptr<ast::assign_expr> decomp_function::make_store(const Instruction& istr) {
+[[nodiscard]] expr_uptr decomp_function::make_store(const Instruction& istr) {
     auto lhs = std::make_unique<ast::dereference_expr>(make_cast<u64>(istr, ast::ptr_type{ kind }));
     auto rhs = m_transformableExpressions[istr.operand2]->clone();
-    auto res = std::make_unique<ast::assign_expr>(std::move(lhs), std::move(rhs));
+    auto res = std::make_unique<ast::assign_expr>(std::move(lhs), rhs->clone());
     append_to_current_block(res->clone());
-    return res;
+    return rhs;
 }
 
 
 void decomp_function::optimize_ast() {
-    //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::var_optimization_env var_base{};
     m_functionDefinition.m_body.var_optimization_pass(var_base);
-    // std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::foreach_optimization_env foreach_base{};
     m_functionDefinition.m_body.foreach_optimization_pass(foreach_base);
-    // //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
     ast::match_optimization_env match_base{};
     m_functionDefinition.m_body.match_optimization_pass(match_base);
     ast::var_optimization_env var_base1{};
     m_functionDefinition.m_body.var_optimization_pass(var_base1);
-    //std::cout << m_functionDefinition.m_body.to_c_string() << std::endl;
 }
 }

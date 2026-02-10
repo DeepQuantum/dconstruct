@@ -834,7 +834,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::StorePointer: {
             frame[dest].set_first_type(ast::ptr_type{ast::ptr_type{}});
-            std::snprintf(varying, disassembly_text_size,"[r%d], r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size,"r%d, [r%d], r%d", dest, op1, op2);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d, *(p64*)%s = %s", dest, op1_str, op2_str);
             frame[op1].m_type = ast::ptr_type{};
             break;
@@ -902,20 +902,20 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::MovePointer: {
             frame[op1].set_first_type(ast::ptr_type{});
-            std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d, %d", dest, op1);
             frame[dest].m_type = ast::ptr_type{};
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = r%d <%s>", dest, op1, lookup(frame[op1].m_value));
             break;
         }
         case Opcode::CastInteger: {
-            std::snprintf(varying, disassembly_text_size,"r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d", dest);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I32);
             frame[dest].m_value = frame[op1].m_value;
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = int(r%d)", dest, dest);
             break;
         }
         case Opcode::CastFloat: {
-            std::snprintf(varying, disassembly_text_size,"r%d", dest, op1);
+            std::snprintf(varying, disassembly_text_size, "r%d", dest);
             frame[dest].m_type = make_type_from_prim(ast::primitive_kind::F32);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d = float(r%d)", dest, dest);
             break;
@@ -1311,8 +1311,8 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
     if (!is_unknown(table_entry) && op1 == frame.m_symbolTable.m_types.size()) {
         frame.m_symbolTable.m_types.push_back(std::move(table_entry));
     }
-    line.m_text = std::string(disassembly_text);
-    line.m_comment = std::string(interpreted);
+   line.m_text = std::string(disassembly_text);
+   line.m_comment = std::string(interpreted);
 }
 
 
@@ -1354,7 +1354,7 @@ void Disassembler::insert_function_disassembly_text(const function_disassembly &
     }
     
     for (const auto &line : functionDisassembly.m_lines) {
-        u32 line_offset = std::max(67ull - line.m_text.length(), 0ull);
+        u32 line_offset = std::max(67 - (i32)line.m_text.length(), 0);
         insert_label(labels, line, functionDisassembly.m_lines.size() - 1, indent);
         insert_span(line.m_text.c_str(), indent);
         const std::string comment = std::string(line_offset, ' ') + line.m_comment;

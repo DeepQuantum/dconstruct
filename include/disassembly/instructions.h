@@ -308,9 +308,9 @@ struct SymbolTable {
     }
 
     [[nodiscard]] ast::full_type& get_type(const u64 idx) noexcept {
-        if (idx > m_types.size()) {
-            m_types.resize(idx + 1);
-        }
+        // if (idx > m_types.size()) {
+        //     m_types.resize(idx + 1);
+        // }
         return m_types[idx];
     }
 };
