@@ -25,6 +25,8 @@ namespace dconstruct::compilation {
         CARET, CARET_CARET,
         AMPERSAND, AMPERSAND_AMPERSAND,
 
+        SIZEOF,
+
         AND, OR,
 
         IDENTIFIER, 

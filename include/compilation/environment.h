@@ -56,6 +56,17 @@ namespace dconstruct::compilation {
             return nullptr;
         }
 
+        [[nodiscard]] void undefine(const std::string& name) {
+            assert(lookup(name) != nullptr && "should never be able to remove a non existing variable");
+            if (auto it = m_values.find(name); it != m_values.end()) {
+                m_values.erase(name);
+                return;
+            }
+            if (m_enclosing != nullptr) {
+                m_enclosing->undefine(name);
+            }
+        }
+
         [[nodiscard]] bool value_used(const T& value) {
             for (const auto& [key, stored_value] : m_values) {
                 if (value == stored_value) {

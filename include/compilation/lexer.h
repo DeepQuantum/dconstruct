@@ -71,6 +71,7 @@ private:
         {"break", token_type::BREAK},
         {"continue", token_type::CONTINUE},
         {"breakpoint", token_type::BREAKPOINT},
+        {"sizeof", token_type::SIZEOF}
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

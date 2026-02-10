@@ -19,6 +19,7 @@ namespace dconstruct::ast {
         VAR_DECLARATION,
         VAR_READ,
         VAR_WRITE,
+        VAR_DEREFERENCE,
         NONE
     };
 

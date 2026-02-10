@@ -1003,6 +1003,31 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return std::make_unique<ast::cast_expr>(std::move(*cast_type), std::move(expr));
 }
 
+[[nodiscard]] std::unique_ptr<ast::sizeof_expr> Parser::make_sizeof() {
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'sizeof'")) {
+        return nullptr;
+    }
+
+    std::optional<ast::full_type> sizeof_type = peek_type();
+    if (sizeof_type) {
+        if (!consume(token_type::RIGHT_PAREN, "expected ')' after type inside 'sizeof'")) {
+            return nullptr;
+        }
+        return std::make_unique<ast::sizeof_expr>(std::move(*sizeof_type));
+    }
+
+    expr_uptr sizeof_expr = make_expression();
+    if (!sizeof_expr) {
+        return nullptr;
+    }
+
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after expression inside 'sizeof'")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::sizeof_expr>(std::move(sizeof_expr));
+}
+
 [[nodiscard]] expr_uptr Parser::make_primary() {
     if (expr_uptr literal = make_literal()) {
         return literal;
@@ -1010,6 +1035,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::identifier>(previous());
     } else if (match({token_type::MATCH})) {
         return make_match();
+    } else if (match({token_type::SIZEOF})) {
+        return make_sizeof();
     } else if (match({token_type::LEFT_PAREN})) {
         if (std::optional<std::unique_ptr<ast::cast_expr>> cast = make_cast()) {
             return std::move(*cast);

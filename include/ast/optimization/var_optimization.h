@@ -17,6 +17,7 @@ namespace dconstruct::ast {
 
     struct var_optimization_env {
         compilation::environment<variable_folding_context> m_env;
+        bool m_isLvalueDereference = false;
 
         explicit var_optimization_env(compilation::environment<variable_folding_context>* enclosing = nullptr) noexcept
             : m_env(enclosing) {}

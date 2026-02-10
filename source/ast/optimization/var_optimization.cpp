@@ -9,7 +9,12 @@ void var_optimization_env::check_action(expr_uptr* expr) {
     const auto pass_action = expr->get()->var_optimization_pass(*this);
     switch (pass_action) {
         case VAR_OPTIMIZATION_ACTION::VAR_READ: {
-            m_env.lookup(static_cast<identifier&>(**expr).m_name.m_lexeme)->m_reads.push_back(expr);
+            const std::string& var_name = static_cast<identifier&>(**expr).m_name.m_lexeme;
+            if (!m_isLvalueDereference) {
+                m_env.lookup(var_name)->m_reads.push_back(expr);
+            } else {
+                m_env.undefine(var_name);
+            }
             break;
         }
         case VAR_OPTIMIZATION_ACTION::VAR_WRITE: {
