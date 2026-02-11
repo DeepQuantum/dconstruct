@@ -10,6 +10,12 @@ namespace dconstruct::ast {
     return m_operand == rhs_ptr->m_operand;
 }
 
+[[nodiscard]] u16 sizeof_expr::calc_complexity() const noexcept {
+    if (std::holds_alternative<expr_uptr>(m_operand)) {
+        return 1 + std::get<expr_uptr>(m_operand)->get_complexity();
+    }
+    return 1;
+}
 
 [[nodiscard]] expr_uptr sizeof_expr::clone() const noexcept {
     if (std::holds_alternative<full_type>(m_operand)) {
@@ -19,7 +25,7 @@ namespace dconstruct::ast {
     }
 }
 
-[[nodiscard]] expr_uptr sizeof_expr::simplify() const noexcept {
+[[nodiscard]] expr_uptr sizeof_expr::simplify() const {
     return clone();
 }
 
@@ -79,7 +85,6 @@ void sizeof_expr::pseudo_racket(std::ostream& os) const {
         type_size = get_size(*op_type);
     }
 
-    //nah bro
     if (type_size > std::numeric_limits<u16>::max()) {
         return std::unexpected{"expected type with size less than " + std::to_string(std::numeric_limits<u16>::max()) + " but got size " + std::to_string(type_size)};
     }
@@ -92,12 +97,20 @@ void sizeof_expr::pseudo_racket(std::ostream& os) const {
     const u8 lo = static_cast<u16>(type_size) & 0xFF;
     const u8 hi = (static_cast<u16>(type_size) >> 8) & 0xFF;
     fn.emit_instruction(Opcode::LoadU16Imm, *sizeof_dest, lo, hi);
+
+    return *sizeof_dest;
 }
 
 [[nodiscard]] VAR_OPTIMIZATION_ACTION sizeof_expr::var_optimization_pass(var_optimization_env& env) noexcept {
     if (std::holds_alternative<expr_uptr>(m_operand)) {
         env.check_action(&std::get<expr_uptr>(m_operand));
     }
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
+
+[[nodiscard]] FOREACH_OPTIMIZATION_ACTION sizeof_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
+    return FOREACH_OPTIMIZATION_ACTION::NONE;
 }
 
 

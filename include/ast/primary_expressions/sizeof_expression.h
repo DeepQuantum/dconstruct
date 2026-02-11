@@ -2,6 +2,7 @@
 
 #include "ast/expression.h"
 #include "ast/optimization/var_optimization.h"
+#include "ast/optimization/foreach_optimization.h"
 
 
 namespace dconstruct::ast {
@@ -22,6 +23,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] expr_uptr clone() const noexcept final;
 
+        [[nodiscard]] u16 calc_complexity() const noexcept final;
+
         [[nodiscard]] inline full_type compute_type_unchecked(const compilation::scope& env) const noexcept final;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
 
@@ -29,6 +32,7 @@ namespace dconstruct::ast {
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept override;
     
         [[nodiscard]] VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
+        [[nodiscard]] FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
 
         std::variant<full_type, expr_uptr> m_operand;
     };
