@@ -349,7 +349,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
 
     std::string new_name = "";
-    if (match({token_type::IDENTIFIER})) {
+    if (match({token_type::IDENTIFIER, token_type::SID})) {
         new_name = previous().m_lexeme;
     }
 
