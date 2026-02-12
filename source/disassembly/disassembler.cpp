@@ -263,8 +263,11 @@ void Disassembler::disassemble() {
 
 
 void Disassembler::insert_entry(const Entry *entry) {
+    m_currentEmbeddedFunctionId = embedded_function_id{};
     const structs::unmapped *struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-    insert_span_fmt("%s = ", lookup(entry->m_nameID));
+    const char* entry_name = lookup(entry->m_nameID);
+    insert_span_fmt("%s = ", entry_name);
+    m_currentEmbeddedFunctionId.m_entry = entry_name;
     insert_struct(struct_ptr, 0, entry->m_nameID);
 }
 
@@ -274,7 +277,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 
     const u64 offset = get_offset(&struct_ptr->m_data);
 
-    insert_span_fmt("%s [0x%05X] {\n", lookup(struct_ptr->typeID), offset);
+    const char* struct_name = lookup(struct_ptr->typeID);
+    insert_span_fmt("%s [0x%05X] {\n", struct_name, offset);
+    m_currentEmbeddedFunctionId.m_outerStructs.emplace_back(struct_name, offset);
 
     switch (struct_ptr->typeID) {
         case SID("state-script"): {
@@ -283,17 +288,21 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             break;
         }
         case SID("script-lambda"): {
+            bool already_emitted_func = m_offsetsToFunctionNames.contains(offset);
             std::string name;
             if (name_id == 0) {
-                std::stringstream ss;
-                ss << "anonymous@";
-                ss << std::hex << offset;
-                name = ss.str();
+                m_currentEmbeddedFunctionId.m_outerStructs.pop_back();
+                name = m_currentEmbeddedFunctionId.to_string();
+                m_offsetsToFunctionNames[offset].push_back(name);
+                if (already_emitted_func) {
+                    break;
+                }
             } else {
                 name = lookup(name_id);
             }
             function_disassembly function = create_function_disassembly(reinterpret_cast<const ScriptLambda*>(&struct_ptr->m_data), std::move(name));
-            function.m_originalOffset = get_offset(&struct_ptr->m_data);
+            function.m_isEmbeddedFunction = name_id == 0;
+            function.m_originalOffset = offset;
             insert_function_disassembly_text(function, indent + m_options.m_indentPerLevel * 2);
             m_functions.push_back(std::move(function));
             break;
@@ -319,6 +328,9 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
             insert_unmapped_struct(struct_ptr, indent + m_options.m_indentPerLevel);
             break;
         }
+    }
+    if (!m_currentEmbeddedFunctionId.m_outerStructs.empty()) {
+        m_currentEmbeddedFunctionId.m_outerStructs.pop_back();
     }
     insert_span("}\n", indent);
     if (m_options.m_emitOnce) {

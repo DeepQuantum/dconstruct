@@ -45,8 +45,21 @@ namespace dconstruct {
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, function_name_variant name, const bool is_script_function = false);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, function_name_variant, const location& symbol_table, const bool is_script_function = false);
 
-        [[nodiscard]] const std::vector<function_disassembly>& get_functions() const noexcept {
-            return m_functions;
+        [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept {
+            std::vector<const function_disassembly*> funcs;
+            for (auto& func : m_functions) {
+                if (func.m_isEmbeddedFunction) {
+                    const auto& ids = m_offsetsToFunctionNames.at(func.m_originalOffset);
+                    std::ostringstream final_id;
+                    for (const auto& id : ids) {
+                        final_id << id << "\n";
+                    }
+                    final_id << "embedded@" << std::hex << func.m_originalOffset;
+                    func.m_id = final_id.str();
+                }
+                funcs.push_back(&func);
+            }
+            return funcs;
         }
 
         [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept {
@@ -60,6 +73,7 @@ namespace dconstruct {
         }
 
         void disassemble_functions_from_bin_file();
+        std::unordered_map<u64, std::vector<std::string>> m_offsetsToFunctionNames;
 
     protected:
         virtual void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) {};
@@ -69,6 +83,7 @@ namespace dconstruct {
         const SIDBase* m_sidbase = nullptr;
         DisassemblerOptions m_options;
         std::vector<function_disassembly> m_functions;
+        embedded_function_id m_currentEmbeddedFunctionId;
         bool m_is64Bit = true;
 
 

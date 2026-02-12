@@ -84,7 +84,8 @@ static void decomp_file(
     }
 
     disassembler.dump();
-    const auto funcs = disassembler.get_named_functions();
+
+    const auto funcs = disassembler.get_all_functions();
     if (!funcs.empty()) {
         std::ofstream out(out_decomp_filename);
         std::vector<dconstruct::ast::function_definition> functions;
@@ -93,6 +94,8 @@ static void decomp_file(
         if (use_pascal_case) {
             out << dconstruct::ast::func_pascal_case;
         }
+        std::set<u64> emitted_funcs;
+
         for (const auto& func : funcs) {
             std::optional<std::filesystem::path> graph_path = std::nullopt;
             if (write_graphs) {
@@ -168,7 +171,7 @@ static void decompile_multiple(
     std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
 
     std::for_each(
-        std::execution::par_unseq,
+        std::execution::seq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
