@@ -383,6 +383,26 @@ struct state_script_function_id {
     }
 };
 
+struct embedded_function_id {
+    const char* m_entry;
+    std::vector<std::pair<const char*, u64>> m_outerStructs;
+
+    [[nodiscard]] std::string to_string() const noexcept {
+        std::ostringstream os;
+        os << m_entry;
+        bool first = true;
+        for (const auto &strct : m_outerStructs) {
+            os << "__";
+            os << std::hex << strct.first << "@" << strct.second;
+            if (!first) {
+                os << "__";
+            }
+            first = false;
+        }
+        return os.str();
+    }
+};
+
 using function_name_variant = std::variant<std::string, state_script_function_id>;
 
 struct function_disassembly {
@@ -391,6 +411,7 @@ struct function_disassembly {
     function_name_variant m_id;
     u64 m_originalOffset;
     bool m_isScriptFunction;
+    bool m_isEmbeddedFunction = false;
 
     function_disassembly(std::vector<function_disassembly_line> lines, StackFrame stack_frame, function_name_variant id, bool is_script_function) noexcept :
     m_lines(std::move(lines)), m_stackFrame(std::move(stack_frame)), m_id(std::move(id)), m_isScriptFunction(is_script_function) {};
