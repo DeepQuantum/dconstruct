@@ -8,11 +8,11 @@ void breakpoint::pseudo_c(std::ostream& os) const {
 }
 
 void breakpoint::pseudo_py(std::ostream& os) const {
-    os << "breakpoint";
+    os << "breakpoint()";
 }
 
 void breakpoint::pseudo_racket(std::ostream& os) const {
-    os << "breakpoint";
+    os << "(breakpoint)";
 }
 
 [[nodiscard]] bool breakpoint::equals(const statement& rhs) const noexcept {

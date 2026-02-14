@@ -14,7 +14,7 @@ void subscript_expr::pseudo_py(std::ostream& os) const {
 }
 
 void subscript_expr::pseudo_racket(std::ostream& os) const {
-    os << *m_lhs << "[" << *m_rhs << "]";
+    os << "(vector-ref " << *m_lhs << " " << *m_rhs << ")";
 }
 
 [[nodiscard]] expr_uptr subscript_expr::simplify() const {

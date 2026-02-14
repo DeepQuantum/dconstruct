@@ -9,10 +9,11 @@ void ternary_expr::pseudo_c(std::ostream& os) const {
 }
 
 void ternary_expr::pseudo_py(std::ostream& os) const {
-    os << "if " << *m_condition << " then " << *m_then << " else " << *m_else;
+    os << *m_then << " if " << *m_condition << " else " << *m_else;
 }
+
 void ternary_expr::pseudo_racket(std::ostream& os) const {
-    os << "if " << *m_condition << " then " << *m_then << " else " << *m_else;
+    os << "(if " << *m_condition << " " << *m_then << " " << *m_else << ")";
 }
 
 [[nodiscard]] expr_uptr ternary_expr::simplify() const {

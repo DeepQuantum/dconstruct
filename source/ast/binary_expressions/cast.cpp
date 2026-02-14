@@ -12,7 +12,7 @@ void cast_expr::pseudo_py(std::ostream& os) const {
 }
 
 void cast_expr::pseudo_racket(std::ostream& os) const {
-	os << type_to_declaration_string(m_castType) << "-> " << *m_rhs;  
+    os << "(cast " << type_to_declaration_string(m_castType) << " " << *m_rhs << ")";
 }
 
 [[nodiscard]] expr_uptr cast_expr::simplify() const {

@@ -13,11 +13,12 @@ void foreach_stmt::pseudo_c(std::ostream& os) const {
 
 
 void foreach_stmt::pseudo_py(std::ostream& os) const {
-    return pseudo_c(os);
+    os << "for " << m_var << " in " << *m_iterable << ":";
+    os << *m_body;
 }
 
 void foreach_stmt::pseudo_racket(std::ostream& os) const {
-    return pseudo_c(os);
+    os << "(for ([" << m_var << " " << *m_iterable << "]) " << *m_body << ")";
 }
 
 [[nodiscard]] bool foreach_stmt::equals(const statement& rhs) const noexcept {

@@ -28,10 +28,11 @@ void block::clear_dead_statements() noexcept {
 
 
 void block::pseudo_py(std::ostream& os) const {
-    os << ':' << indent_more;
+    os << '\n' << indent_more;
     for (const auto& stmnt : m_statements) {
         os << indent << *stmnt << '\n';
-    } 
+    }
+    os << indent_less;
 }
 
 void block::pseudo_racket(std::ostream& os) const {
