@@ -316,4 +316,6 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::expected<Opcode, std::string> get_load_opcode(const full_type& type); 
     [[nodiscard]] std::expected<Opcode, std::string> get_store_opcode(const full_type& type); 
+
+    const static std::string UNKNOWN_TYPE_NAME = ast::type_to_declaration_string(std::monostate());
 }

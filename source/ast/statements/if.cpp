@@ -18,15 +18,17 @@ void if_stmt::pseudo_c(std::ostream& os) const {
 }
 
 void if_stmt::pseudo_py(std::ostream& os) const {
-    os << "if " << *m_condition << ' ' << *m_then;
-    if (m_else != nullptr) {
-        os << " else " << *m_else;
+    os << "if " << *m_condition << ":";
+    os << *m_then;
+    if (m_else && !m_else->is_dead_code()) {
+        os << "\nelse:";
+        os << *m_else;
     }
 }
 
 void if_stmt::pseudo_racket(std::ostream& os) const {
-    os << "(if "<< *m_condition << " " << *m_then << " ";
-    if (m_else != nullptr) {
+    os << "(if " << *m_condition << " " << *m_then << " ";
+    if (m_else && !m_else->is_dead_code()) {
         os << *m_else;
     } else {
         os << "(void)";

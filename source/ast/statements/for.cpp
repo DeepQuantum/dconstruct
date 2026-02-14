@@ -14,13 +14,14 @@ void for_stmt::pseudo_c(std::ostream& os) const {
 void for_stmt::pseudo_py(std::ostream& os) const {
     const auto& var = static_cast<const variable_declaration&>(*m_init).m_identifier;
     const auto& range = static_cast<const binary_expr&>(*m_condition).m_rhs;
-    os << "for " << var << " in range(" << *range << "):\n" << *m_body;
+    os << "for " << var << " in range(" << *range << "):";
+    os << *m_body;
 }
 
 void for_stmt::pseudo_racket(std::ostream& os) const {
-    const auto& var = static_cast<variable_declaration&>(*m_init).m_identifier;
-    const auto& range = static_cast<binary_expr&>(*m_condition).m_rhs;
-    os << "(for ([" << var << " (in-range " << *range << ")])\n" << *m_body << ')';
+    const auto& var = static_cast<const variable_declaration&>(*m_init).m_identifier;
+    const auto& range = static_cast<const binary_expr&>(*m_condition).m_rhs;
+    os << "(for ([ " << var << " (in-range " << *range << ")]) " << *m_body << ")";
 }
 
 [[nodiscard]] bool for_stmt::equals(const statement& rhs) const noexcept {

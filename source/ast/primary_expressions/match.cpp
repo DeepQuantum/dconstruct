@@ -1,6 +1,7 @@
 #include "ast/primary_expressions/match.h"
 
 #include <iomanip>
+#include <sstream>
 
 namespace dconstruct::ast {
 
@@ -71,8 +72,82 @@ void match_expr::pseudo_c(std::ostream& os) const {
 }
 
 
-void match_expr::pseudo_py(std::ostream& os) const {}
-void match_expr::pseudo_racket(std::ostream& os) const {}
+void match_expr::pseudo_py(std::ostream& os) const {
+    os << "match ";
+    bool first = true;
+    for (const auto& condition : m_conditions) {
+        if (!first) {
+            os << "; ";
+        }
+        first = false;
+        os << *condition;
+    }
+    os << ":\n";
+    os << indent_more;
+
+    const auto grouped = group_patterns();
+    std::vector<u64> pattern_lengths;
+    pattern_lengths.resize(grouped.size());
+
+    std::transform(grouped.cbegin(), grouped.cend(), pattern_lengths.begin(), [](const auto& pair) -> u64 {
+        std::stringstream ss;
+        for (const auto& pattern : pair.first) {
+            ss << **pattern;
+        }
+        return std::max(ss.str().length() + 2 * (pair.first.size() - 1), sizeof("else") - 1);
+    });
+
+    const auto max_size_iter = std::max_element(pattern_lengths.begin(), pattern_lengths.end());
+    const u64 max_size = *max_size_iter;
+
+    for (const auto& [patterns, expression] : grouped) {
+        const u64 n = m_conditions.size();
+        for (u64 r = 0; r + n <= patterns.size(); r += n) {
+            bool first_in_row = true;
+            os << indent;
+            for (u64 i = 0; i < n; ++i) {
+                if (!first_in_row) {
+                    os << ", ";
+                }
+                first_in_row = false;
+                os << std::left << std::setw(static_cast<std::streamsize>(max_size)) << **patterns[r + i];
+            }
+            os << " -> " << **expression << "\n";
+        }
+    }
+    os << indent << std::left << std::setw(static_cast<std::streamsize>(max_size)) << "else" << " -> " << *m_default << "\n";
+    os << indent_less;
+}
+
+void match_expr::pseudo_racket(std::ostream& os) const {
+    os << "(match (list";
+    for (const auto& c : m_conditions) {
+        os << " " << *c;
+    }
+    os << ")\n";
+    os << indent_more;
+
+    const auto grouped = group_patterns();
+    for (const auto& [patterns, expression] : grouped) {
+        const u64 n = m_conditions.size();
+        for (u64 r = 0; r + n <= patterns.size(); r += n) {
+            os << indent << "[";
+            if (n > 1) {
+                os << "(list";
+                for (u64 i = 0; i < n; ++i) {
+                    os << " " << **patterns[r + i];
+                }
+                os << ")";
+            } else {
+                os << **patterns[r];
+            }
+            os << " " << *expression << "]\n";
+        }
+    }
+    os << indent << "[_ " << *m_default << "]\n";
+    os << indent_less;
+    os << indent << ")";
+}
 
 [[nodiscard]] expr_uptr match_expr::simplify() const {
     return clone();

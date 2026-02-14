@@ -40,17 +40,15 @@ void sizeof_expr::pseudo_c(std::ostream& os) const {
 }
 
 void sizeof_expr::pseudo_py(std::ostream& os) const {
-    os << "sizeof(";
     if (std::holds_alternative<full_type>(m_operand)) {
-        os << type_to_declaration_string(std::get<full_type>(m_operand));
+        os << "sizeof(" << type_to_declaration_string(std::get<full_type>(m_operand)) << ")";
     } else {
-        os << *std::get<expr_uptr>(m_operand);
+        os << "sys.getsizeof(" << *std::get<expr_uptr>(m_operand) << ")";
     }
-    os << ")";
 }
 
 void sizeof_expr::pseudo_racket(std::ostream& os) const {
-    os << "sizeof(";
+    os << "(sizeof ";
     if (std::holds_alternative<full_type>(m_operand)) {
         os << type_to_declaration_string(std::get<full_type>(m_operand));
     } else {

@@ -9,8 +9,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
 
-        /*void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
-		void pseudo_racket(std::ostream& os) const final;*/
+        void pseudo_racket(std::ostream& os) const final;
     };
 }

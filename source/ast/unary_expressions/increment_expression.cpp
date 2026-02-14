@@ -8,11 +8,11 @@ void increment_expression::pseudo_c(std::ostream& os) const {
 }
 
 void increment_expression::pseudo_py(std::ostream& os) const {
-    os << *m_rhs << "++";
+    os << "(__post_inc(" << *m_rhs << "))";
 }
 
 void increment_expression::pseudo_racket(std::ostream& os) const {
-    os << "(++ " << *m_rhs << ')';
+    os << "(post-inc " << *m_rhs << ")";
 }
 
 [[nodiscard]] expr_uptr increment_expression::simplify() const {

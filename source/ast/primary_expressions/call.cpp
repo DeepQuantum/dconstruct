@@ -35,7 +35,14 @@ void call_expr::pseudo_c(std::ostream& os) const {
 }
 
 void call_expr::pseudo_py(std::ostream& os) const {
+    const bool func_name_as_pascal = os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::FUNCTION_NAMES_PASCAL);
+    if (func_name_as_pascal) {
+        os << id_pascal_case;
+    }
     os << *m_callee << '(';
+    if (func_name_as_pascal) {
+        os << remove_id_pascal_case;
+    }
     for (u16 i = 0; i < m_arguments.size(); ++i) {
         os << *m_arguments[i];
         if (i != m_arguments.size() - 1) {
@@ -46,22 +53,11 @@ void call_expr::pseudo_py(std::ostream& os) const {
 }
 
 void call_expr::pseudo_racket(std::ostream& os) const {
-    const bool is_builtin = static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "and" || static_cast<const ast::identifier&>(*m_callee).m_name.m_lexeme == "or";
-	if (!is_builtin) {
-        os << '(' << *m_callee;
-        for (const auto& arg : m_arguments) {
-            os << " " << * arg;
-        }
-        os << ')';
-    } else {
-        os << '(' << *m_callee << "\n";
-		os << indent_more;
-        for (const auto& arg : m_arguments) {
-            os << indent << *arg << "\n";
-        }
-        os << indent_less;
-        os << indent << ')';
+    os << '(' << *m_callee;
+    for (const auto& arg : m_arguments) {
+        os << " " << *arg;
     }
+    os << ')';
 }
 
 

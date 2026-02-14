@@ -15,11 +15,23 @@ void literal::pseudo_c(std::ostream& os) const {
 }
 
 void literal::pseudo_py(std::ostream& os) const {
-    os << primitive_to_string(m_value);
+    const std::string orig = primitive_to_string(m_value);
+    if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
+        const auto str_res = try_convert_pascal_case(orig);
+        os << str_res.value_or(orig);
+    } else {
+        os << orig;
+    }
 }
 
 void literal::pseudo_racket(std::ostream& os) const {
-    os << primitive_to_string(m_value);
+    const std::string orig = primitive_to_string(m_value);
+    if (os.iword(get_flag_index()) & static_cast<i32>(LANGUAGE_FLAGS::IDENTIFIER_PASCAL)) {
+        const auto str_res = try_convert_pascal_case(orig);
+        os << str_res.value_or(orig);
+    } else {
+        os << orig;
+    }
 }
 
 

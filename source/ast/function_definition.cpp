@@ -33,10 +33,36 @@ void function_definition::pseudo_c(std::ostream& os) const {
 }
 
 void function_definition::pseudo_py(std::ostream& os) const {
-
+    if (!std::holds_alternative<state_script_function_id>(m_name)) {
+        const std::string name = std::get<std::string>(m_name);
+        os << "def " << name << "(";
+        bool first = true;
+        for (const auto& param : m_parameters) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            param.pseudo_py(os);
+        }
+        os << "):";
+        os << m_body;
+    } else {
+        os << m_body;
+    }
 }
 
 void function_definition::pseudo_racket(std::ostream& os) const {
+    if (!std::holds_alternative<state_script_function_id>(m_name)) {
+        const std::string name = std::get<std::string>(m_name);
+        os << "(define (" << name;
+        for (const auto& param : m_parameters) {
+            os << " ";
+            param.pseudo_racket(os);
+        }
+        os << ") " << m_body << ")";
+    } else {
+        os << m_body;
+    }
 }
 
 

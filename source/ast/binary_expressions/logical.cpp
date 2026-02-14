@@ -42,17 +42,20 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_logical, this}};
 }
 
-//
-//void logical_expr::pseudo_c(std::ostream& os) const {
-//
-//}
-//
-//void logical_expr::pseudo_py(std::ostream& os) const {
-//
-//}
-//
-//void logical_expr::pseudo_racket(std::ostream& os) const {
-//
-//}
+void logical_expr::pseudo_py(std::ostream& os) const {
+    if (m_operator.m_lexeme == "&&") {
+        os << *m_lhs << " and " << *m_rhs;
+    } else {
+        os << *m_lhs << " or " << *m_rhs;
+    }
+}
+
+void logical_expr::pseudo_racket(std::ostream& os) const {
+    if (m_operator.m_lexeme == "&&") {
+        os << "(and " << *m_lhs << " " << *m_rhs << ")";
+    } else {
+        os << "(or " << *m_lhs << " " << *m_rhs << ")";
+    }
+}
 
 }
