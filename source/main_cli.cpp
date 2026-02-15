@@ -82,14 +82,14 @@ int main(int argc, char *argv[]) {
     const bool use_pascal_case = opts["pascal_case"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
     const bool uc4 = opts["uc4"].as<bool>();
-    // const std::string language_type = "C"; // opts["language"].as<std::string>();
+    const std::string language_type = opts["language"].as<std::string>();
 
-    // const auto opt_print_func = get_print_type(language_type);
-    // if (!opt_print_func) {
-    //     std::cerr << "error: unknown language type: '" << language_type << "'\n";
-    //     return -1;
-    // }
-    const auto& print_func = dconstruct::ast::c;;
+    const auto opt_print_func = dconstruct::disassembly::get_print_type(language_type);
+    if (!opt_print_func) {
+        std::cerr << "error: unknown language type: '" << language_type << "'\n";
+        return -1;
+    }
+    const auto print_func = *opt_print_func;
     
 
     if (opts.count("e") > 0) {

@@ -9,7 +9,7 @@ void expression_stmt::pseudo_c(std::ostream& os) const {
 }
 
 void expression_stmt::pseudo_py(std::ostream& os) const {
-    os << *m_expression << '\n';
+    os << *m_expression;
 }
 
 void expression_stmt::pseudo_racket(std::ostream& os) const {

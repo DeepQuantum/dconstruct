@@ -11,7 +11,7 @@ namespace dconstruct::ast {
     struct state_script : public ast_element {
 
         state_script(
-            std::vector<std::string> options,
+            std::vector<sid64_literal> options,
             std::vector<variable_declaration> declarations,
             std::vector<state_script_state> states) noexcept
             : m_options(std::move(options)),
@@ -24,7 +24,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 
-        std::vector<std::string> m_options;
+        std::vector<sid64_literal> m_options;
         std::vector<variable_declaration> m_declarations;
         std::vector<state_script_state> m_states;
     };

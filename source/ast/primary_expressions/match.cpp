@@ -101,19 +101,16 @@ void match_expr::pseudo_py(std::ostream& os) const {
     const u64 max_size = *max_size_iter;
 
     for (const auto& [patterns, expression] : grouped) {
-        const u64 n = m_conditions.size();
-        for (u64 r = 0; r + n <= patterns.size(); r += n) {
-            bool first_in_row = true;
-            os << indent;
-            for (u64 i = 0; i < n; ++i) {
-                if (!first_in_row) {
-                    os << ", ";
-                }
-                first_in_row = false;
-                os << std::left << std::setw(static_cast<std::streamsize>(max_size)) << **patterns[r + i];
+        bool first = true;
+        os << indent;
+        for (const auto& pattern : patterns) {
+            if (!first) {
+                os << ", ";
             }
-            os << " -> " << **expression << "\n";
+            first = false;
+            os << std::left << std::setw(max_size) << **pattern;
         }
+        os << " -> " << **expression << ",\n";
     }
     os << indent << std::left << std::setw(static_cast<std::streamsize>(max_size)) << "else" << " -> " << *m_default << "\n";
     os << indent_less;
