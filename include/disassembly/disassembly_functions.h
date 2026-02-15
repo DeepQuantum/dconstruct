@@ -171,7 +171,7 @@ static void decompile_multiple(
     std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
 
     std::for_each(
-        std::execution::seq,
+        std::execution::par_unseq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
@@ -298,7 +298,7 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
             cxxopts::value<bool>()->default_value("false"))
         ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
         ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
-        //("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
+        ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
         //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 

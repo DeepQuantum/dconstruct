@@ -30,6 +30,7 @@ void Parser::synchronize_external_definitions() {
             case token_type::STRUCT:
             case token_type::ENUM:
             case token_type::USING:
+            case token_type::STATESCRIPT: return;
             default: advance();
         }
     }
@@ -184,6 +185,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         res = make_enum_type();
     } else if (match({token_type::USING})) {
         res = make_using_declaration();
+    } else if (match({token_type::STATESCRIPT})) {
+        res = make_state_script();
     } else if (std::unique_ptr<ast::function_definition> func_def = make_function_definition()) {
         res = std::move(func_def);
     } else {
@@ -824,10 +827,10 @@ const token* Parser::consume(const token_type type, const std::string& message) 
                 return std::make_unique<ast::bitwise_not_expr>(op, std::move(right));
             }
             case token_type::PLUS_PLUS: {
-                return std::make_unique<ast::increment_expression>(op, std::move(right));
+                return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
             }
             case token_type::MINUS_MINUS: {
-                //return std::make_unique<ast::decrement_expression>(op, std::move(right));
+                return std::make_unique<ast::post_arithmetic_expression>(op, std::move(right));
             }
             case token_type::STAR: {
                 return std::make_unique<ast::dereference_expr>(op, std::move(right));
@@ -855,9 +858,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         if (match({token_type::LEFT_PAREN})) {
             expr = finish_call(std::move(expr));
         } else if (match({token_type::PLUS_PLUS})) {
-            expr = std::make_unique<ast::increment_expression>(std::move(expr));
-        } else if (match({token_type::PLUS_PLUS})) {
-            expr = std::make_unique<ast::increment_expression>(std::move(expr));
+            expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
+        } else if (match({token_type::MINUS_MINUS})) {
+            expr = std::make_unique<ast::post_arithmetic_expression>(previous(), std::move(expr));
         } else if (match({token_type::LEFT_SQUARE})) {
             expr = finish_subscript(std::move(expr));
         } else {
@@ -1053,5 +1056,30 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     return nullptr;
 }
 
+
+[[nodiscard]] std::unique_ptr<ast::state_script> Parser::make_state_script() {
+    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'statescript'")) {
+        return nullptr;
+    }
+    
+    if (!consume(token_type::OPTIONS, "expected 'options' section in statescript definition")) {
+        return nullptr;
+    }
+
+    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'options' in statescript definition")) {
+        return nullptr;
+    }
+
+    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+        const token* option_name = consume(token_type::SID, "expected sid option name in statescript options section");
+        if (!option_name) {
+            return nullptr;
+        }
+    }
+
+    if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
+        return nullptr;
+    }
+}
 
 }

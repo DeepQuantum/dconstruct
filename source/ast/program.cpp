@@ -11,7 +11,7 @@ void program::pseudo_c(std::ostream& os) const {
 }
 void program::pseudo_py(std::ostream& os) const {
     for (const auto& decl : m_declarations) {
-        os << *decl << "\n\n";
+        os << *decl << '\n';
     }
 }
 void program::pseudo_racket(std::ostream& os) const {

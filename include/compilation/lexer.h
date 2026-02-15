@@ -71,7 +71,14 @@ private:
         {"break", token_type::BREAK},
         {"continue", token_type::CONTINUE},
         {"breakpoint", token_type::BREAKPOINT},
-        {"sizeof", token_type::SIZEOF}
+        {"sizeof", token_type::SIZEOF},
+        {"statescript", token_type::STATESCRIPT},
+        {"declarations", token_type::DECLARATIONS},
+        {"options", token_type::OPTIONS},
+        {"state", token_type::STATE},
+        {"block", token_type::BLOCK},
+        {"track", token_type::TRACK},
+        {"lambda", token_type::LAMBDA},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

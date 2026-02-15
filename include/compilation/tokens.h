@@ -41,6 +41,8 @@ namespace dconstruct::compilation {
         
         BREAKPOINT,
 
+        STATESCRIPT, DECLARATIONS, OPTIONS, STATE, BLOCK, TRACK, LAMBDA,
+
         _EOF, EMPTY
     };
 

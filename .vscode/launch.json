@@ -23,7 +23,7 @@
                 "-s", "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/test_sidbase.bin",
                 "-o",
                 "./disassembled",
-                "--show_warnings"
+                "--show_warnings",
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

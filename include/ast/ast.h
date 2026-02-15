@@ -18,7 +18,7 @@
 #include "unary_expressions/bitwise_not_expression.h"
 #include "unary_expressions/negate_expression.h"
 #include "unary_expressions/dereference_expression.h"
-#include "unary_expressions/increment_expression.h"
+#include "unary_expressions/post_arithmetic.h"
 #include "primary_expressions/call.h"
 #include "primary_expressions/grouping.h"
 #include "primary_expressions/literal.h"
@@ -41,6 +41,11 @@
 #include "statements/breakpoint.h"
 #include "function_definition.h"
 #include "program.h"
+#include "state_script/state_script.h"
+#include "state_script/state_script_block.h"
+#include "state_script/state_script_lambda.h"
+#include "state_script/state.h"
+#include "state_script/track.h"
 
 namespace dconstruct::compilation {
 

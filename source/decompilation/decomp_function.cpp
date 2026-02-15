@@ -392,7 +392,7 @@ void decomp_function::emit_for_loop(const control_flow_loop& loop, const node_id
     auto id = std::make_unique<ast::identifier>(var_name);
 
     auto declaration = std::make_unique<ast::variable_declaration>(make_type_from_prim(ast::primitive_kind::U64), var_name, std::move(m_transformableExpressions[loop_var_reg]));
-    auto increment = std::make_unique<ast::increment_expression>(id->clone());
+    auto increment = std::make_unique<ast::post_arithmetic_expression>(id->clone());
 
     m_transformableExpressions[loop_var_reg] = id->clone();
     m_transformableExpressions[loop_var_reg]->set_type(make_type_from_prim(ast::primitive_kind::U64));

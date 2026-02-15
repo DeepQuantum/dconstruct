@@ -105,6 +105,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::unique_ptr<ast::function_definition> make_function_definition();
         [[nodiscard]] std::optional<global> make_global();
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
+        [[nodiscard]] std::unique_ptr<ast::state_script> make_state_script();
     };
 
     [[nodiscard]] inline bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {

@@ -10,7 +10,7 @@ void if_stmt::pseudo_c(std::ostream& os) const {
     os << "if (" << *m_condition << ") " << *m_then;
     if (m_else && !m_else->is_dead_code()) {
         if (const auto* statement = m_else->inlineable_else_statement()) {
-        os << " else " << *statement;
+            os << " else " << *statement;
         } else {
             os << " else " << *m_else;
         }
@@ -21,7 +21,7 @@ void if_stmt::pseudo_py(std::ostream& os) const {
     os << "if " << *m_condition << ":";
     os << *m_then;
     if (m_else && !m_else->is_dead_code()) {
-        os << "\nelse:";
+        os << indent << "else:";
         os << *m_else;
     }
 }

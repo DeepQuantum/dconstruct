@@ -12,9 +12,9 @@ void return_stmt::pseudo_c(std::ostream& os) const {
 
 void return_stmt::pseudo_py(std::ostream& os) const {
     if (m_expr) {
-        os << "return " << *m_expr << '\n';
+        os << "return " << *m_expr;
     } else {
-        os << "return;\n";
+        os << "return;";
     }
 }
 
