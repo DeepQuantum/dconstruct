@@ -8,14 +8,14 @@ void state_script::pseudo_c(std::ostream& os) const {
     os << indent << "options {\n";
     os << indent_more;
     for (const auto& opt : m_options) {
-        os << indent << opt << "\n";
+        os << indent << opt.second << "\n";
     }
     os << indent_less;
     os << indent << "}\n";
     os << indent << "declarations {\n";
     os << indent_more;
     for (const auto& decl : m_declarations) {
-        os << indent << decl << "\n";
+        os << indent << decl.m_identifier << "\n";
     }
     os << indent_less;
     os << indent << "}\n";
@@ -29,11 +29,11 @@ void state_script::pseudo_c(std::ostream& os) const {
 void state_script::pseudo_py(std::ostream& os) const {
     os << "statescript:\n  options: ";
     for (const auto& opt : m_options) {
-        os << opt << " ";
+        os << opt.second << " ";
     }
     os << "\n  declarations: ";
     for (const auto& decl : m_declarations) {
-        os << decl << " ";
+        os << decl.m_identifier << " ";
     }
     os << "\n  states: ";
     for (const auto& s : m_states) {
@@ -44,11 +44,11 @@ void state_script::pseudo_py(std::ostream& os) const {
 void state_script::pseudo_racket(std::ostream& os) const {
     os << "(statescript (options";
     for (const auto& opt : m_options) {
-        os << " " << opt;
+        os << " " << opt.second;
     }
     os << ") (declarations";
     for (const auto& decl : m_declarations) {
-        os << " " << decl;
+        os << " " << decl.m_identifier;
     }
     os << ") (states";
     for (const auto& s : m_states) {

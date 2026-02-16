@@ -1,7 +1,8 @@
 #pragma once
 
 #include "base.h"
-#include "ast/ast.h"
+#include "ast/ast_source.h"
+#include "ast/primary_expressions/literal.h"
 #include "ast/optimization/var_optimization.h"
 #include "ast/optimization/match_optimization.h"
 #include "ast/optimization/foreach_optimization.h"

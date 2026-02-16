@@ -44,8 +44,7 @@
 #include "state_script/state_script.h"
 #include "state_script/state_script_block.h"
 #include "state_script/state_script_lambda.h"
-#include "state_script/state.h"
-#include "state_script/track.h"
+#include "state_script/state_script_track.h"
 
 namespace dconstruct::compilation {
 

@@ -1,7 +1,5 @@
-#include "ast/statements/block.h"
-#include "ast/statements/variable_declaration.h"
-#include "ast/statements/foreach.h"
 #include "compilation/environment.h"
+#include "ast/ast.h"
 #include <iostream>
 
 namespace dconstruct::ast {
