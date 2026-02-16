@@ -71,6 +71,7 @@ namespace dconstruct::compilation {
 
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
+        [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_statescript_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);
         [[nodiscard]] stmnt_uptr make_declaration();
         [[nodiscard]] stmnt_uptr make_statement();
@@ -106,6 +107,10 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::optional<global> make_global();
         [[nodiscard]] ast::full_type make_type_from_string(const std::string&);
         [[nodiscard]] std::unique_ptr<ast::state_script> make_state_script();
+        [[nodiscard]] std::vector<ast::state_script_state> make_statescript_states();
+        [[nodiscard]] std::vector<ast::state_script_block> make_statescript_blocks();
+        [[nodiscard]] std::vector<ast::state_script_track> make_statescript_tracks();
+        [[nodiscard]] std::vector<ast::state_script_lambda> make_statescript_lambdas();
     };
 
     [[nodiscard]] inline bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {

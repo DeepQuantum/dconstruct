@@ -389,7 +389,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
     
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
+    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
     if (!name) {
         return nullptr;
     }
@@ -398,7 +398,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (match({token_type::EQUAL})) {
         init = make_expression();
     }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration.")) {
+    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
         return nullptr;
     }
 
@@ -406,27 +406,6 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
     } else {
         return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme); 
-    }
-}
-
-[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
-    if (!name) {
-        return nullptr;
-    }
-
-    expr_uptr init = nullptr;
-    if (match({token_type::EQUAL})) {
-        init = make_expression();
-    }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration.")) {
-        return nullptr;
-    }
-
-    if (init) {
-        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme, std::move(init));
-    } else {
-        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme); 
     }
 }
 
@@ -519,7 +498,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] stmnt_uptr Parser::make_foreach() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'foreach'.")) {
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'foreach'")) {
         return nullptr;
     }
 
@@ -527,12 +506,12 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (!type) {
         return nullptr;
     }
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
+    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
     if (!name) {
         return nullptr;
     }
 
-    if (!consume(token_type::COLON, "expected ':' after variable declaration.")) {
+    if (!consume(token_type::COLON, "expected ':' after variable declaration")) {
         return nullptr;
     }
 
@@ -1070,16 +1049,173 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
 
+    std::vector<sid64_literal> options;
+
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
         const token* option_name = consume(token_type::SID, "expected sid option name in statescript options section");
         if (!option_name) {
             return nullptr;
         }
+        assert(std::holds_alternative<sid64_literal>(option_name->m_literal));
+        options.push_back(std::get<sid64_literal>(option_name->m_literal));
     }
 
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
         return nullptr;
     }
+
+    if (!consume(token_type::DECLARATIONS, "expected 'declarations' section in statescript definition")) {
+        return nullptr;
+    }
+
+    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
+        return nullptr;
+    }
+
+    std::vector<ast::variable_declaration> declarations;
+
+    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+        std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
+        if (!decl) {
+            return nullptr;
+        }
+        declarations.push_back(std::move(*decl));
+    }
+
+    if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
+        return nullptr;
+    }
+
+    std::vector<ast::state_script_state> states = make_statescript_states();
+
+    if (states.empty()) {
+        m_errors.emplace_back(peek(), "expected at least one state in statescript definition");
+    }
+
+    if (!consume(token_type::RIGHT_BRACE, "expected '}' at end of statescript definition")) {
+        return nullptr;
+    }
+
+    return std::make_unique<ast::state_script>(std::move(options), std::move(declarations), std::move(states));
+}
+
+
+[[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
+    std::vector<ast::state_script_state> states;
+    while (match({token_type::STATE}) && !is_at_end()) {
+        const token* state_name = consume(token_type::IDENTIFIER, "expected state name after 'state' in statescript definition");
+        if (!state_name) {
+            return {};
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after state name in statescript definition")) {
+            return {};
+        }
+
+        std::vector<ast::state_script_block> blocks = make_statescript_blocks();
+        if (blocks.empty()) {
+            m_errors.emplace_back(peek(), "expected at least one block in state " + state_name->m_lexeme + " definition but got none");
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after state body in statescript definition")) {
+            return {};
+        }
+
+        states.emplace_back(state_name->m_lexeme, std::move(blocks));
+    }
+    return states;
+}
+
+[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_statescript_var_declaration() {
+    std::optional<ast::full_type> type = make_type();
+
+    if (!type) {
+        return nullptr;
+    }
+    
+    const token* name = consume(token_type::SID, "expected sid variable name in statescript declaration");
+    if (!name) {
+        return nullptr;
+    }
+
+    expr_uptr init = nullptr;
+    if (match({token_type::EQUAL})) {
+        init = make_expression();
+    }
+    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration in statescript declaration section")) {
+        return nullptr;
+    }
+
+    if (init) {
+        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
+    } else {
+        return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme); 
+    }
+}
+
+[[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
+    std::vector<ast::state_script_block> blocks;
+    while (match({token_type::BLOCK}) && !is_at_end()) {
+        const token* block_name = consume(token_type::IDENTIFIER, "expected block name after 'block' in statescript definition");
+        if (!block_name) {
+            return {};
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after block name in statescript definition")) {
+            return {};
+        }
+
+        std::vector<ast::state_script_track> tracks = make_statescript_tracks();
+        if (tracks.empty()) {
+            m_errors.emplace_back(peek(), "expected at least one track in block " + block_name->m_lexeme + " definition but got none");
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after block body in statescript definition")) {
+            return {};
+        }
+
+        blocks.emplace_back(block_name->m_lexeme, std::move(tracks));
+    }
+}
+
+[[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
+    std::vector<ast::state_script_track> tracks;
+    while (match({token_type::TRACK}) && !is_at_end()) {
+        const token* track_name = consume(token_type::IDENTIFIER, "expected track name after 'track' in statescript definition");
+        if (!track_name) {
+            return {};
+        }
+
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after track " + track_name->m_lexeme + " in statescript definition")) {
+            return {};
+        }
+
+        std::vector<ast::state_script_lambda> lambdas = make_statescript_lambdas();
+        if (lambdas.empty()) {
+            m_errors.emplace_back(peek(), "expected at least one lambda in track " + track_name->m_lexeme + " definition but got none");
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after track body in statescript definition")) {
+            return {};
+        }
+
+        tracks.emplace_back(track_name->m_lexeme, std::move(lambdas));
+    }
+}
+
+[[nodiscard]] std::vector<ast::state_script_lambda> Parser::make_statescript_lambdas() {
+    std::vector<ast::state_script_lambda> lambdas;
+    while (match({token_type::LAMBDA}) && !is_at_end()) {
+        stmnt_uptr body = make_statement();
+        if (!body) {
+            m_errors.emplace_back(peek(), "expected lambda body statement but got '" + peek().m_lexeme + "'");
+            return {};
+        }
+        assert(body);
+        assert(dynamic_cast<ast::block*>(body.get()));
+        lambdas.emplace_back(std::move(*static_cast<ast::block*>(body.release())));
+    }
+    return lambdas;
 }
 
 }

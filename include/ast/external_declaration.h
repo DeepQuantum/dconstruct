@@ -7,9 +7,6 @@
 
 namespace dconstruct::ast {
     struct global_declaration : public ast_element {
-        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept = 0;
-        [[nodiscard]] virtual emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept = 0;
-        [[nodiscard]] virtual bool emittable() const noexcept { return true; }
     };
 
     using global_decl_uptr = std::unique_ptr<global_declaration>;

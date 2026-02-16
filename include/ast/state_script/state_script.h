@@ -1,14 +1,15 @@
 #pragma once
 
-#include "ast/ast_source.h"
 #include "ast/statements/variable_declaration.h"
-#include "state.h"
+#include "ast/ast_source.h"
+#include "state_script_state.h"
+#include "ast/external_declaration.h"
 #include <string>
 #include <vector>
 
 namespace dconstruct::ast {
 
-    struct state_script : public ast_element {
+    struct state_script : public global_declaration {
 
         state_script(
             std::vector<sid64_literal> options,
@@ -21,6 +22,10 @@ namespace dconstruct::ast {
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;
+
+        [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
+        [[nodiscard]] virtual emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] virtual bool emittable() const noexcept { return true; }
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 

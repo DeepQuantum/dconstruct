@@ -906,6 +906,119 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(std::get<std::string>(main_fn->m_name), "main");
     }
 
+    TEST(COMPILER, ParseStateScriptBasic) {
+        const std::string code =
+            "statescript {"
+            "  options {"
+            "    #opt_idle"
+            "  }"
+            "  declarations {"
+            "    u32 #counter = 5;"
+            "  }"
+            "  state Idle {"
+            "    block Main {"
+            "      track Base {"
+            "        lambda { { return; } }"
+            "      }"
+            "    }"
+            "  }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+        ASSERT_EQ(program.m_declarations.size(), 1);
+
+        const auto* parsed = dynamic_cast<const ast::state_script*>(program.m_declarations[0].get());
+        ASSERT_NE(parsed, nullptr);
+
+        ASSERT_EQ(parsed->m_options.size(), 1);
+        EXPECT_EQ(parsed->m_options[0].second, "opt_idle");
+
+        ASSERT_EQ(parsed->m_declarations.size(), 1);
+        EXPECT_EQ(parsed->m_declarations[0].m_identifier, "#counter");
+
+        ASSERT_EQ(parsed->m_states.size(), 1);
+        EXPECT_EQ(parsed->m_states[0].m_name, "Idle");
+        ASSERT_EQ(parsed->m_states[0].m_blocks.size(), 1);
+        EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_name, "Main");
+        ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks.size(), 1);
+        EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_name, "Base");
+        ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas.size(), 1);
+        ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas[0].m_body.m_statements.size(), 1);
+    }
+
+    TEST(COMPILER, ParseStateScriptErrorNoStates) {
+        const std::string code =
+            "statescript {"
+            "  options { #opt_idle }"
+            "  declarations { u32 #counter; }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1);
+        EXPECT_EQ(parse_errors[0].m_message, "expected at least one state in statescript definition");
+    }
+
+    TEST(COMPILER, ParseStateScriptErrorNoBlocks) {
+        const std::string code =
+            "statescript {"
+            "  options { #opt_idle }"
+            "  declarations { u32 #counter; }"
+            "  state Idle { }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1);
+        EXPECT_EQ(parse_errors[0].m_message, "expected at least one block in state Idle definition but got none");
+    }
+
+    TEST(COMPILER, ParseStateScriptErrorNoTracks) {
+        const std::string code =
+            "statescript {"
+            "  options { #opt_idle }"
+            "  declarations { u32 #counter; }"
+            "  state Idle {"
+            "    block Main { }"
+            "  }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1);
+        EXPECT_EQ(parse_errors[0].m_message, "expected at least one track in block Main definition but got none");
+    }
+
+    TEST(COMPILER, ParseStateScriptErrorNoLambdas) {
+        const std::string code =
+            "statescript {"
+            "  options { #opt_idle }"
+            "  declarations { u32 #counter; }"
+            "  state Idle {"
+            "    block Main {"
+            "      track Base { }"
+            "    }"
+            "  }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        ASSERT_EQ(parse_errors.size(), 1);
+        EXPECT_EQ(parse_errors[0].m_message, "expected at least one lambda in track Base definition but got none");
+    }
+
     TEST(COMPILER, ParseStructType) {
         const std::string code = 
         "struct Vector3 {\n"

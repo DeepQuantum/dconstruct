@@ -64,16 +64,16 @@ namespace dconstruct::compilation {
     Disassembler disassembler(&*file_res, &sidbase);
     disassembler.disassemble();
 
-    std::vector<function_disassembly> funcs = disassembler.get_functions();
-    std::ranges::sort(funcs, [](const function_disassembly& a, const function_disassembly& b) {
-        return a.m_originalOffset < b.m_originalOffset;
+    std::vector<const function_disassembly*> funcs = disassembler.get_named_functions();
+    std::ranges::sort(funcs, [](const function_disassembly* a, const function_disassembly* b) {
+        return a->m_originalOffset < b->m_originalOffset;
     });
 
     std::vector<function> converted;
 
     for (const auto& f : funcs) {
         function cf;
-        const std::string id = f.get_id();
+        const std::string id = f->get_id();
         if (id.starts_with("#")) {
             cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
         } else {
@@ -83,10 +83,10 @@ namespace dconstruct::compilation {
         if (cf.m_name == target_functions[0].m_name) {
             cf = target_functions[0];
         } else {
-            for (const auto& line : f.m_lines) {
+            for (const auto& line : f->m_lines) {
                 cf.m_instructions.push_back(line.m_instruction);
             }
-            for (u32 i = 0; i < f.m_stackFrame.m_symbolTable.m_types.size(); ++i) {
+            for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
                 const function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
                     using T = std::decay_t<decltype(type)>;
                     if constexpr (std::is_same_v<T, ast::primitive_type>) {
@@ -96,12 +96,12 @@ namespace dconstruct::compilation {
                     } else {
                         return function::SYMBOL_TABLE_POINTER_KIND::NONE;
                     }
-                }, f.m_stackFrame.m_symbolTable.m_types[i]);
+                }, f->m_stackFrame.m_symbolTable.m_types[i]);
                 if (kind == function::SYMBOL_TABLE_POINTER_KIND::STRING) {
-                    const u32 size = global.add_string(f.m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
+                    const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {
-                    cf.m_symbolTable.push_back(f.m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
+                    cf.m_symbolTable.push_back(f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
                 }
                 cf.m_symbolTableEntryPointers.push_back(kind);
             }
