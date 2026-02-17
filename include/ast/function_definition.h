@@ -9,7 +9,7 @@ namespace dconstruct::ast {
         virtual void pseudo_racket(std::ostream&) const final;
 
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
 
         std::vector<ast::parameter> m_parameters;
         ast::block m_body;

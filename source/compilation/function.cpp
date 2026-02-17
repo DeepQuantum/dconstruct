@@ -2,9 +2,55 @@
 
 #include "compilation/function.h"
 #include "ast/expression.h"
+#include "DCHeader.h"
+#include "DCScript.h"
 
 
 namespace dconstruct::compilation {
+
+
+[[nodiscard]] program_binary_element function::to_binary_element() const noexcept {
+    constexpr sid64     global_sid           = SID("global");
+    constexpr sid64     function_sid         = SID("function");
+    constexpr u64       deadbeef             = 0xDEAD'BEEF'1337'F00D;
+    
+    constexpr u64 reloc_table_size_offset = 0x4;
+    constexpr u64 first_entry_offset      = 0x28;
+
+    program_binary_element element;
+
+    element.push_bytes(function_sid, 0b0);
+    const ScriptLambda lambda = {
+        reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda)),
+        reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction)),
+        function_sid,
+        get_scriptlambda_sum(),
+        0x0,
+        deadbeef,
+        0x0,
+        static_cast<u32>(m_instructions.size()),
+        -1,
+        global_sid,
+        0x0
+    };
+    element.push_bytes(lambda, 0b0000'0011, 0b00);
+    for (const Instruction& istr : m_instructions) {
+        element.push_bytes(istr, 1, 0b0);
+    }
+    for (u32 i = 0; i < m_symbolTable.size(); ++i) {
+        if (m_symbolTableEntryPointers[i] == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+            element.insert_string_offset(m_symbolTable[i]);
+            element.push_bytes(sizeof(u64), 1, 0b1);
+        } else {
+            element.push_bytes(m_symbolTable[i], 1, 0b0);
+        }
+    }
+    return element;
+}
+
+
+
+
 [[nodiscard]] std::expected<reg_idx, std::string> function::get_next_unused_register() noexcept {
     u64 reg_set_num = m_usedRegisters.to_ullong();
 
@@ -79,7 +125,7 @@ void function::emit_instruction(const Opcode opcode, const u8 destination, const
 }
 
 [[nodiscard]] u64 function::get_size_in_bytes() const noexcept {
-    return m_instructions.size() * sizeof(Instruction) + m_symbolTable.size() * sizeof(u64);
+    return sizeof(sid64) + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction) + m_symbolTable.size() * sizeof(u64);
 }
 
 [[nodiscard]] u64 function::get_scriptlambda_sum() const noexcept {
