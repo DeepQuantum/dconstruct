@@ -24,7 +24,7 @@ namespace dconstruct::ast {
         void pseudo_racket(std::ostream& os) const final;
 
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] virtual emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
         [[nodiscard]] virtual bool emittable() const noexcept { return true; }
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;

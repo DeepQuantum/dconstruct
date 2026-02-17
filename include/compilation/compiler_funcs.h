@@ -12,7 +12,7 @@
 
 namespace dconstruct::compilation {
 
-[[nodiscard]] static std::optional<std::vector<function>> run_compilation(const std::string& source_code, global_state& global) {
+[[nodiscard]] static std::optional<std::vector<compilation::program_binary_element>> run_compilation(const std::string& source_code, global_state& global) {
     const auto start_time = std::chrono::high_resolution_clock::now();
     Lexer lexer{source_code};
     const auto& [tokens, lex_errors] = lexer.get_results();
@@ -42,7 +42,7 @@ namespace dconstruct::compilation {
         return std::nullopt;
     }
 
-    std::expected<std::vector<function>, std::string> compile_res = program.compile_functions(base_scope, global);
+    std::expected<std::vector<compilation::program_binary_element>, std::string> compile_res = program.compile_binary_elements(base_scope, global);
     if (!compile_res) {
         std::cerr << "[compilation error] " << compile_res.error() << "\n";
         return std::nullopt;
@@ -53,7 +53,7 @@ namespace dconstruct::compilation {
 [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> disassemble_target(
     const std::filesystem::path& target_filepath, 
     const SIDBase& sidbase, 
-    const std::vector<function>& target_functions,
+    const std::vector<compilation::function>& target_functions,
     global_state& global) {
 
     std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(target_filepath);
@@ -69,7 +69,7 @@ namespace dconstruct::compilation {
         return a->m_originalOffset < b->m_originalOffset;
     });
 
-    std::vector<function> converted;
+    std::vector<compilation::program_binary_element> converted;
 
     for (const auto& f : funcs) {
         function cf;
@@ -106,10 +106,10 @@ namespace dconstruct::compilation {
                 cf.m_symbolTableEntryPointers.push_back(kind);
             }
         }
-        converted.push_back(std::move(cf));
+        converted.push_back(cf.to_binary_element());
     }
 
-    return ast::program::make_binary(converted, global);
+    return ast::program::make_binary(std::move(converted), global);
 }
 
 [[nodiscard]] static std::optional<cxxopts::ParseResult> get_command_line_options(int argc, char* argv[]) {

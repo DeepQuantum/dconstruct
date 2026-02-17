@@ -13,8 +13,7 @@ namespace dconstruct::ast {
         virtual void pseudo_racket(std::ostream&) const final;
         
         [[nodiscard]] std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] emission_err emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept final {return {};};
-        [[nodiscard]] virtual bool emittable() const noexcept { return false; }
+        [[nodiscard]] program_binary_result emit_dc(compilation::global_state& global) const noexcept final { return {}; };
 
         sid64_literal m_originalName;
         parameter m_newIdentifier;

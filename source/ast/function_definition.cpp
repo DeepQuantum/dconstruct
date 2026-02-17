@@ -74,7 +74,8 @@ void function_definition::pseudo_racket(std::ostream& os) const {
     return m_body.check_semantics(scope);
 }
 
-[[nodiscard]] emission_err function_definition::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
+[[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {
+    compilation::function fn{};
     if (std::holds_alternative<std::string>(m_name)) {
         if (global.m_sidAliases.contains(std::get<std::string>(m_name))) {
             const auto id = global.m_sidAliases.at(std::get<std::string>(m_name));
@@ -88,7 +89,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         const parameter& param = m_parameters[i];
         const emission_res new_var_reg = fn.get_next_unused_register();
         if (!new_var_reg) {
-            return new_var_reg.error();
+            return std::unexpected{new_var_reg.error()};
         }
         assert(!fn.m_varsToRegs.lookup(param.m_name));
         fn.m_varsToRegs.define(param.m_name, *new_var_reg);
@@ -99,7 +100,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
     const emission_err body_err = m_body.emit_dc(fn, global);
     if (body_err) {
-        return body_err;
+        return std::unexpected{*body_err};
     }
 
     if (fn.m_returnBranchLocations.empty()) {
@@ -118,7 +119,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         assert(branch.destination == compilation::function::BRANCH_PLACEHOLDER);
         branch.set_lo_hi(return_location);
     }
-    return std::nullopt;
+    return fn.to_binary_element();
 }
 
 }

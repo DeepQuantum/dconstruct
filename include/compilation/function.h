@@ -3,6 +3,7 @@
 #include "base.h"
 #include "disassembly/instructions.h"
 #include "environment.h"
+#include "program_binary_element.h"
 #include <unordered_map>
 
 namespace dconstruct::ast {
@@ -43,6 +44,8 @@ namespace dconstruct::compilation {
 
         function(function&& rhs) noexcept = default;
         function& operator=(function&& rhs) noexcept = default;
+
+        [[nodiscard]] program_binary_element to_binary_element() const noexcept;
 
 
         void emit_instruction(const Opcode opcode, const u8 destination, const u8 operand1 = 0, const u8 operand2 = 0) noexcept;
