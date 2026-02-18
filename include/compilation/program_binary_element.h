@@ -10,8 +10,11 @@ namespace dconstruct::compilation {
 
 
     struct program_binary_element {
-        [[nodiscard]] u64 get_size_in_bytes() const noexcept;
-        [[nodiscard]] u64 get_scriptlambda_sum() const noexcept;
+
+        program_binary_element(const u64 size) noexcept {
+            m_rawData.reserve(size);
+            m_relocTable.resize(size / 8 + 1);
+        }
 
         template<typename T, typename ... bits>
         void push_bytes(const T& data, bits... b) noexcept {
@@ -53,7 +56,7 @@ namespace dconstruct::compilation {
     
 
         u64 m_currentSize = 0;
-        u64 m_byteOffset;
-        u8 m_bitOffset;
+        u64 m_byteOffset = 0;
+        u8 m_bitOffset = 0;
     };
 }

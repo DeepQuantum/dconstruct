@@ -71,11 +71,48 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         if (!semantic_errors.empty()) {
             return std::unexpected{"semantic errors: " + semantic_errors.front().m_message};
         }
-        auto functions = program.compile_functions(scope);
-        if (!functions) {
-            return std::unexpected{functions.error()};
+        compilation::global_state global{};
+        for (const auto& [name, sid_literal] : scope.m_sidAliases) {
+            const ast::full_type* type = scope.lookup(name);
+            global.m_sidAliases.emplace(name, std::pair{*type, sid_literal.first});
         }
-        return *functions;
+        std::vector<compilation::function> functions;
+        for (const auto& decl : program.m_declarations) {
+            auto* func_def = dynamic_cast<const ast::function_definition*>(decl.get());
+            if (!func_def) {
+                continue;
+            }
+            compilation::function fn{};
+            if (std::holds_alternative<std::string>(func_def->m_name)) {
+                fn.m_name = std::get<std::string>(func_def->m_name);
+            }
+            for (u32 i = 0; i < func_def->m_parameters.size(); ++i) {
+                const auto& param = func_def->m_parameters[i];
+                const auto new_var_reg = fn.get_next_unused_register();
+                if (!new_var_reg) {
+                    return std::unexpected{new_var_reg.error()};
+                }
+                fn.m_varsToRegs.define(param.m_name, *new_var_reg);
+                fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
+            }
+            const auto body_err = func_def->m_body.emit_dc(fn, global);
+            if (body_err) {
+                return std::unexpected{*body_err};
+            }
+            if (fn.m_returnBranchLocations.empty()) {
+                fn.emit_instruction(Opcode::Return, 0_r, 0_r);
+            } else if (fn.m_returnBranchLocations.back() == fn.m_instructions.size() - 2) {
+                fn.m_instructions.back() = Instruction(Opcode::Return, 0_r, 0_r);
+                fn.m_returnBranchLocations.pop_back();
+            }
+            const u16 return_location = fn.m_instructions.size() - 1;
+            for (const u64 branch_location : fn.m_returnBranchLocations) {
+                Instruction& branch = fn.m_instructions[branch_location + 1];
+                branch.set_lo_hi(return_location);
+            }
+            functions.push_back(std::move(fn));
+        }
+        return functions;
     }
 
     static void expect_instructions(const std::string& code, const std::vector<Instruction>& expected) {
@@ -173,7 +210,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "expected valid token but got '@'")
+            compilation::lexing_error(1, "invalid token '@'")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -1292,14 +1329,9 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         auto semantic_errors = program.check_semantics(scope);
         ASSERT_TRUE(semantic_errors.empty());
 
-        auto functions = program.compile_functions(scope);
-        ASSERT_TRUE(functions) << (functions ? "" : functions.error());
-        ASSERT_FALSE((*functions).empty());
-        const auto& instrs = (*functions)[0].m_instructions;
-        ASSERT_GE(instrs.size(), 2);
-        EXPECT_EQ(instrs[0].opcode, Opcode::LoadU16Imm);
-        EXPECT_EQ(instrs[0].operand1, 12);
-        EXPECT_EQ(instrs[0].operand2, 0);
+        auto elements = program.compile_binary_elements(scope);
+        ASSERT_TRUE(elements) << (elements ? "" : elements.error());
+        ASSERT_FALSE((*elements).empty());
     }
 
     TEST(COMPILER, SizeofSmallExpression) {

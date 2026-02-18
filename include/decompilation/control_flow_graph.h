@@ -37,13 +37,9 @@ namespace dconstruct {
 
         explicit control_flow_node(const istr_line line) : m_startLine(line) {}
 
-        [[nodiscard]] bool has_target() const noexcept {
-            return m_targetNode != invalid_node;
-        }
+        [[nodiscard]] bool has_target() const noexcept;
 
-        [[nodiscard]] bool has_following() const noexcept {
-            return m_followingNode != invalid_node;
-        }
+        [[nodiscard]] bool has_following() const noexcept;
 
         [[nodiscard]] bool operator==(const control_flow_node& rhs) const noexcept;
         [[nodiscard]] bool operator!=(const control_flow_node& rhs) const noexcept;
@@ -79,9 +75,7 @@ namespace dconstruct {
         
         void insert_loop_subgraphs(Agraph_t *g) const;
 
-        [[nodiscard]] inline const control_flow_node& operator[](const node_id at) const {
-            return m_nodes[at];
-        }
+        [[nodiscard]] const control_flow_node& operator[](const node_id at) const;
 
         [[nodiscard]] const control_flow_loop* get_loop_with_head(const node_id node) const;
 

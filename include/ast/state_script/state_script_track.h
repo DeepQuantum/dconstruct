@@ -22,8 +22,6 @@ namespace dconstruct::ast {
         std::vector<state_script_lambda> m_lambdas;
     };
 
-    [[nodiscard]] inline bool operator==(const state_script_track& lhs, const state_script_track& rhs) noexcept {
-        return lhs.equals(rhs);
-    }
+    [[nodiscard]] bool operator==(const state_script_track& lhs, const state_script_track& rhs) noexcept;
 
 }

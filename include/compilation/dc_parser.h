@@ -19,17 +19,11 @@ namespace dconstruct::compilation {
         explicit Parser(const std::vector<token> &tokens) : m_tokens(tokens) {};
         [[nodiscard]] ast::program parse();
 
-        [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_results() {
-            return { parse(), get_known_types(), get_errors() };
-        }
+        [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> get_results();
         
-        inline const std::vector<parsing_error>& get_errors() const noexcept {
-            return m_errors;
-        }
+        const std::vector<parsing_error>& get_errors() const noexcept;
 
-        inline const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept {
-            return m_knownTypes;
-        }
+        const std::unordered_map<std::string, ast::full_type>& get_known_types() const noexcept;
     
     private:
         std::vector<token> m_tokens;
@@ -71,8 +65,8 @@ namespace dconstruct::compilation {
 
 
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration();
-        [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_statescript_var_declaration();
         [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_var_declaration(ast::full_type type);
+        [[nodiscard]] std::unique_ptr<ast::variable_declaration> make_statescript_var_declaration();
         [[nodiscard]] stmnt_uptr make_declaration();
         [[nodiscard]] stmnt_uptr make_statement();
         [[nodiscard]] std::unique_ptr<ast::breakpoint> make_breakpoint();
@@ -113,7 +107,5 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::vector<ast::state_script_lambda> make_statescript_lambdas();
     };
 
-    [[nodiscard]] inline bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {
-        return lhs.m_token == rhs.m_token && lhs.m_message == rhs.m_message;
-    }
+    [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept;
 }

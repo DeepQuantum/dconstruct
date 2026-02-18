@@ -24,8 +24,7 @@ namespace dconstruct::ast {
         void pseudo_racket(std::ostream& os) const final;
 
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
-        [[nodiscard]] virtual bool emittable() const noexcept { return true; }
+        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final { return std::unexpected("emitting state scripts isn't supported yet"); }
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 
@@ -34,8 +33,6 @@ namespace dconstruct::ast {
         std::vector<state_script_state> m_states;
     };
 
-    [[nodiscard]] inline bool operator==(const state_script& lhs, const state_script& rhs) noexcept {
-        return lhs.equals(rhs);
-    }
+    [[nodiscard]] bool operator==(const state_script& lhs, const state_script& rhs) noexcept;
 
 }

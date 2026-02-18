@@ -32,23 +32,23 @@ namespace dconstruct::testing {
         std::vector<compilation::function> converted;
         compilation::global_state global;
 
-        std::vector<function_disassembly> funcs = disassembler.get_functions();
-        std::ranges::sort(funcs, [](const function_disassembly& a, const function_disassembly& b) {
-            return a.m_originalOffset < b.m_originalOffset;
+        auto funcs = disassembler.get_all_functions();
+        std::ranges::sort(funcs, [](const function_disassembly* a, const function_disassembly* b) {
+            return a->m_originalOffset < b->m_originalOffset;
         });
 
-        for (const auto& f : funcs) {
+        for (const auto* f : funcs) {
             compilation::function cf;
-            const std::string id = f.get_id();
+            const std::string id = f->get_id();
             if (id.starts_with("#")) {
                 cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
             } else {
                 cf.m_name = id;
             }
-            for (const auto& line : f.m_lines) {
+            for (const auto& line : f->m_lines) {
                 cf.m_instructions.push_back(line.m_instruction);
             }
-            for (u32 i = 0; i < f.m_stackFrame.m_symbolTable.m_types.size(); ++i) {
+            for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
                 const compilation::function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
                     using T = std::decay_t<decltype(type)>;
                     if constexpr (std::is_same_v<T, ast::primitive_type>) {
@@ -58,19 +58,25 @@ namespace dconstruct::testing {
                     } else {
                         return compilation::function::SYMBOL_TABLE_POINTER_KIND::NONE;
                     }
-                }, f.m_stackFrame.m_symbolTable.m_types[i]);
+                }, f->m_stackFrame.m_symbolTable.m_types[i]);
                 if (kind == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
-                    const u32 size = global.add_string(f.m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
+                    const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
                     cf.m_symbolTable.push_back(size);
                 } else {
-                    cf.m_symbolTable.push_back(f.m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
+                    cf.m_symbolTable.push_back(f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
                 }
                 cf.m_symbolTableEntryPointers.push_back(kind);
             }
             converted.push_back(std::move(cf));
         }
-    
-        const auto compiled = ast::program::make_binary(converted, global);
+
+        std::vector<compilation::program_binary_element> binary_elements;
+        binary_elements.reserve(converted.size());
+        for (const auto& function : converted) {
+            binary_elements.push_back(function.to_binary_element());
+        }
+
+        const auto compiled = ast::program::make_binary(std::move(binary_elements), global);
         if (compiled) {
             std::ofstream out(result, std::ios::binary);
             out.write(reinterpret_cast<const char*>(compiled->first.get()), compiled->second);

@@ -2,6 +2,10 @@
 
 namespace dconstruct::ast {
 
+[[nodiscard]] bool operator==(const state_script_state& lhs, const state_script_state& rhs) noexcept {
+    return lhs.equals(rhs);
+}
+
 void state_script_state::pseudo_c(std::ostream& os) const {
     os << "state " << m_name << " {\n";
     os << indent_more;

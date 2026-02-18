@@ -25,6 +25,20 @@ namespace dconstruct {
     constexpr const char* branch_color = "blue";
     constexpr const char* loop_upwards_color = "purple";
 
+
+    [[nodiscard]] bool control_flow_node::has_target() const noexcept {
+        return m_targetNode != invalid_node;
+    }
+
+    [[nodiscard]] bool control_flow_node::has_following() const noexcept {
+        return m_followingNode != invalid_node;
+    }
+
+    [[nodiscard]] const control_flow_node& ControlFlowGraph::operator[](const node_id at) const {
+        return m_nodes[at];
+    }
+
+
     [[nodiscard]] const control_flow_loop* ControlFlowGraph::get_loop_with_head(const node_id node) const {
         for (const auto& loop : m_loops) {
             if (loop.m_headNode == node) {

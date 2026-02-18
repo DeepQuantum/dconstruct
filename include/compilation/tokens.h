@@ -55,10 +55,7 @@ namespace dconstruct::compilation {
             m_type(type),
             m_line(line) {}
 
-        [[nodiscard]] inline bool operator==(const token &rhs) const {
-            const bool result = m_type == rhs.m_type && m_lexeme == rhs.m_lexeme && m_literal == rhs.m_literal && m_line == rhs.m_line;
-            return result;
-        }
+        [[nodiscard]] bool operator==(const token &rhs) const;
 
         ast::primitive_value m_literal;
         std::string m_lexeme;

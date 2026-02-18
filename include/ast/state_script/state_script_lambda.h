@@ -22,8 +22,6 @@ namespace dconstruct::ast {
         block m_body;
     };
 
-    [[nodiscard]] inline bool operator==(const state_script_lambda& lhs, const state_script_lambda& rhs) noexcept {
-        return lhs.equals(rhs);
-    }
+    [[nodiscard]] bool operator==(const state_script_lambda& lhs, const state_script_lambda& rhs) noexcept;
 
 }

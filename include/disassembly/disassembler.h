@@ -45,32 +45,9 @@ namespace dconstruct {
         [[nodiscard]] function_disassembly create_function_disassembly(const ScriptLambda* lambda, function_name_variant name, const bool is_script_function = false);
         [[nodiscard]] function_disassembly create_function_disassembly(std::vector<Instruction>&&, function_name_variant, const location& symbol_table, const bool is_script_function = false);
 
-        [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept {
-            std::vector<const function_disassembly*> funcs;
-            for (auto& func : m_functions) {
-                if (func.m_isEmbeddedFunction) {
-                    const auto& ids = m_offsetsToFunctionNames.at(func.m_originalOffset);
-                    std::ostringstream final_id;
-                    for (const auto& id : ids) {
-                        final_id << id << "\n";
-                    }
-                    final_id << "embedded@" << std::hex << func.m_originalOffset;
-                    func.m_id = final_id.str();
-                }
-                funcs.push_back(&func);
-            }
-            return funcs;
-        }
+        [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept;
 
-        [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept {
-            std::vector<const function_disassembly*> funcs;
-            for (const auto& func : m_functions) {
-                if (!func.get_id().starts_with("anonymous")) {
-                    funcs.push_back(&func);
-                }
-            }
-            return funcs;
-        }
+        [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept;
 
         void disassemble_functions_from_bin_file();
         std::unordered_map<u64, std::vector<std::string>> m_offsetsToFunctionNames;

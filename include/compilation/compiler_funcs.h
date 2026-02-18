@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <unordered_map>
 
 namespace dconstruct::compilation {
 
@@ -53,7 +54,7 @@ namespace dconstruct::compilation {
 [[nodiscard]] static std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> disassemble_target(
     const std::filesystem::path& target_filepath, 
     const SIDBase& sidbase, 
-    const std::vector<compilation::function>& target_functions,
+    const std::vector<compilation::program_binary_element>& target_elements,
     global_state& global) {
 
     std::expected<BinaryFile, std::string> file_res = BinaryFile::from_path(target_filepath);
@@ -69,6 +70,12 @@ namespace dconstruct::compilation {
         return a->m_originalOffset < b->m_originalOffset;
     });
 
+    std::unordered_map<sid64, const compilation::program_binary_element*> target_elements_by_sid;
+    target_elements_by_sid.reserve(target_elements.size());
+    for (const compilation::program_binary_element& target_element : target_elements) {
+        target_elements_by_sid.emplace(target_element.m_entry.m_nameID, &target_element);
+    }
+
     std::vector<compilation::program_binary_element> converted;
 
     for (const auto& f : funcs) {
@@ -80,31 +87,37 @@ namespace dconstruct::compilation {
             cf.m_name = id;
         }
 
-        if (cf.m_name == target_functions[0].m_name) {
-            cf = target_functions[0];
-        } else {
-            for (const auto& line : f->m_lines) {
-                cf.m_instructions.push_back(line.m_instruction);
-            }
-            for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
-                const function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
-                    using T = std::decay_t<decltype(type)>;
-                    if constexpr (std::is_same_v<T, ast::primitive_type>) {
-                        return type.m_type == ast::primitive_kind::STRING ? function::SYMBOL_TABLE_POINTER_KIND::STRING : function::SYMBOL_TABLE_POINTER_KIND::NONE;
-                    } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
-                        return function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
-                    } else {
-                        return function::SYMBOL_TABLE_POINTER_KIND::NONE;
-                    }
-                }, f->m_stackFrame.m_symbolTable.m_types[i]);
-                if (kind == function::SYMBOL_TABLE_POINTER_KIND::STRING) {
-                    const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
-                    cf.m_symbolTable.push_back(size);
+        const sid64 disassembled_function_name_id = std::holds_alternative<sid64>(cf.m_name)
+            ? std::get<sid64>(cf.m_name)
+            : SID(std::get<std::string>(cf.m_name).c_str());
+
+        const auto replacement_it = target_elements_by_sid.find(disassembled_function_name_id);
+        if (replacement_it != target_elements_by_sid.end()) {
+            converted.push_back(*replacement_it->second);
+            continue;
+        }
+
+        for (const auto& line : f->m_lines) {
+            cf.m_instructions.push_back(line.m_instruction);
+        }
+        for (u32 i = 0; i < f->m_stackFrame.m_symbolTable.m_types.size(); ++i) {
+            const function::SYMBOL_TABLE_POINTER_KIND kind = std::visit([](auto&& type) {
+                using T = std::decay_t<decltype(type)>;
+                if constexpr (std::is_same_v<T, ast::primitive_type>) {
+                    return type.m_type == ast::primitive_kind::STRING ? function::SYMBOL_TABLE_POINTER_KIND::STRING : function::SYMBOL_TABLE_POINTER_KIND::NONE;
+                } else if constexpr (std::is_same_v<T, ast::ptr_type>) {
+                    return function::SYMBOL_TABLE_POINTER_KIND::GENERAL;
                 } else {
-                    cf.m_symbolTable.push_back(f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
+                    return function::SYMBOL_TABLE_POINTER_KIND::NONE;
                 }
-                cf.m_symbolTableEntryPointers.push_back(kind);
+            }, f->m_stackFrame.m_symbolTable.m_types[i]);
+            if (kind == function::SYMBOL_TABLE_POINTER_KIND::STRING) {
+                const u32 size = global.add_string(f->m_stackFrame.m_symbolTable.m_location.get<const char*>(i * 8));
+                cf.m_symbolTable.push_back(size);
+            } else {
+                cf.m_symbolTable.push_back(f->m_stackFrame.m_symbolTable.m_location.get<u64>(i * 8));
             }
+            cf.m_symbolTableEntryPointers.push_back(kind);
         }
         converted.push_back(cf.to_binary_element());
     }
@@ -176,7 +189,7 @@ namespace dconstruct::compilation {
 static i32 create_output(
     const std::expected<dconstruct::compilation::compiler_options, std::string> &filepaths, 
     const dconstruct::SIDBase &sidbase, 
-    const std::vector<dconstruct::compilation::function> &functions, 
+    const std::vector<dconstruct::compilation::program_binary_element> &functions, 
     dconstruct::compilation::global_state &global
 ) {
     const auto binary_res = dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
