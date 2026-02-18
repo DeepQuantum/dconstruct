@@ -12,6 +12,33 @@ static constexpr char ENTRY_SEP[] = "##############################";
 
 namespace dconstruct {
 
+[[nodiscard]] const std::vector<const function_disassembly*> Disassembler::get_all_functions() noexcept {
+    std::vector<const function_disassembly*> funcs;
+    for (auto& func : m_functions) {
+        if (func.m_isEmbeddedFunction) {
+            const auto& ids = m_offsetsToFunctionNames.at(func.m_originalOffset);
+            std::ostringstream final_id;
+            for (const auto& id : ids) {
+                final_id << id << "\n";
+            }
+            final_id << "embedded@" << std::hex << func.m_originalOffset;
+            func.m_id = final_id.str();
+        }
+        funcs.push_back(&func);
+    }
+    return funcs;
+}
+
+[[nodiscard]] std::vector<const function_disassembly*> Disassembler::get_named_functions() const noexcept {
+    std::vector<const function_disassembly*> funcs;
+    for (const auto& func : m_functions) {
+        if (!func.get_id().starts_with("anonymous")) {
+            funcs.push_back(&func);
+        }
+    }
+    return funcs;
+}
+
 
 [[nodiscard]] const char *Disassembler::lookup(const sid64 sid) {
     auto res = m_currentFile->m_sidCache.find(sid);

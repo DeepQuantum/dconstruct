@@ -4,6 +4,34 @@
 
 namespace dconstruct::ast {
 
+function_type::function_type() noexcept : m_return{ std::make_shared<ast::full_type>(std::monostate()) } {}
+
+function_type::function_type(ref_full_type return_type, t_arg_list args) noexcept
+    : m_return{ std::move(return_type) }, m_arguments{ std::move(args) } {}
+
+ptr_type::ptr_type() noexcept : m_pointedAt{ std::make_shared<ast::full_type>(std::monostate()) } {}
+
+ptr_type::ptr_type(ref_full_type&& type) noexcept : m_pointedAt{ std::move(type) } {}
+
+ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
+    : m_pointedAt{ std::make_shared<ast::full_type>(make_type_from_prim(kind)) } {}
+
+[[nodiscard]] full_type make_type_from_prim(const primitive_kind kind) {
+    return full_type{ primitive_type{ kind } };
+}
+
+[[nodiscard]] bool is_unknown(const full_type& type) noexcept {
+    return std::holds_alternative<std::monostate>(type);
+}
+
+[[nodiscard]] function_type make_function(const ast::full_type& return_arg, const std::initializer_list<std::pair<std::string, full_type>>& args) {
+    ast::function_type::t_arg_list arg_types;
+    for (const auto& [name, type] : args) {
+        arg_types.emplace_back(name, std::make_shared<full_type>(type));
+    }
+    return function_type{ std::make_shared<ast::full_type>(return_arg), std::move(arg_types) };
+}
+
 [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept {
     return static_cast<primitive_kind>(prim.index());
 }
@@ -191,5 +219,169 @@ namespace dconstruct::ast {
         }
     }, type);
 }
+
+[[nodiscard]] bool is_integral(primitive_kind k) noexcept {
+    return
+        k == primitive_kind::U8 ||
+        k == primitive_kind::U16 ||
+        k == primitive_kind::U32 ||
+        k == primitive_kind::U64 ||
+        k == primitive_kind::I8 ||
+        k == primitive_kind::I16 ||
+        k == primitive_kind::I32 ||
+        k == primitive_kind::I64 ||
+        k == primitive_kind::CHAR ||
+        k == primitive_kind::BOOL;
+}
+
+[[nodiscard]] bool is_floating_point(primitive_kind k) noexcept {
+    return k == primitive_kind::F32 || k == primitive_kind::F64;
+}
+
+[[nodiscard]] bool is_arithmetic(primitive_kind k) noexcept {
+    return is_integral(k) || is_floating_point(k);
+}
+
+[[nodiscard]] bool is_unsigned(const primitive_kind k) noexcept {
+    return k == primitive_kind::U8 ||
+           k == primitive_kind::U16 ||
+           k == primitive_kind::U32 ||
+           k == primitive_kind::U64;
+}
+
+[[nodiscard]] bool is_signed(const primitive_kind k) noexcept {
+    return k == primitive_kind::I8 ||
+           k == primitive_kind::I16 ||
+           k == primitive_kind::I32 ||
+           k == primitive_kind::I64;
+}
+
+[[nodiscard]] std::optional<primitive_kind> get_dominating_prim(const primitive_kind lhs, const primitive_kind rhs) {
+    auto int_rank = [](primitive_kind k) -> u32 {
+        switch (k) {
+            case primitive_kind::U8:
+            case primitive_kind::I8: return 8;
+            case primitive_kind::U16:
+            case primitive_kind::I16: return 16;
+            case primitive_kind::U32:
+            case primitive_kind::I32: return 32;
+            case primitive_kind::U64:
+            case primitive_kind::I64: return 64;
+            default: return 0;
+        }
+    };
+
+    auto float_rank = [](primitive_kind k) -> u32 {
+        switch (k) {
+            case primitive_kind::F32: return 32;
+            case primitive_kind::F64: return 64;
+            default: return 0;
+        }
+    };
+
+    if (lhs == rhs) {
+        return lhs;
+    }
+
+    const bool lhs_unsigned = is_unsigned(lhs);
+    const bool rhs_unsigned = is_unsigned(rhs);
+    const bool lhs_signed = is_signed(lhs);
+    const bool rhs_signed = is_signed(rhs);
+
+    if ((lhs_unsigned || lhs_signed) && (rhs_unsigned || rhs_signed)) {
+        const u32 l = int_rank(lhs);
+        const u32 r = int_rank(rhs);
+        return l >= r ? lhs : rhs;
+    }
+
+    const u32 lf = float_rank(lhs);
+    const u32 rf = float_rank(rhs);
+
+    if (lf > 0 && rf > 0) {
+        return lf >= rf ? lhs : rhs;
+    }
+
+    return std::nullopt;
+}
+
+[[nodiscard]] std::optional<std::string> not_assignable_reason(const full_type& assignee, const full_type& assign_value) {
+    return std::visit([](auto&& lhs, auto&& rhs) -> std::optional<std::string> {
+        using lhs_t = std::decay_t<decltype(lhs)>;
+        using rhs_t = std::decay_t<decltype(rhs)>;
+        if constexpr (std::is_same_v<lhs_t, primitive_type>) {
+            if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
+                return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
+            } else {
+                const auto new_kind = get_dominating_prim(lhs.m_type, rhs.m_type);
+                if (!new_kind) {
+                    return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
+                }
+                return std::nullopt;
+            }
+        } else if constexpr (std::is_same_v<lhs_t, rhs_t>) {
+            return std::nullopt;
+        } else {
+            return "expected type " + type_to_declaration_string(lhs) + " for assignment but got " + type_to_declaration_string(rhs);
+        }
+    }, assignee, assign_value);
+}
+
+[[nodiscard]] std::expected<full_type, std::string> is_valid_binary_op(const full_type& lhs, const full_type& rhs, const std::string& op) {
+    return std::visit([&op](auto&& lhs, auto rhs) -> std::expected<full_type, std::string> {
+        using lhs_t = std::decay_t<decltype(lhs)>;
+        using rhs_t = std::decay_t<decltype(rhs)>;
+        if constexpr (!std::is_same_v<lhs_t, primitive_type>) {
+            return std::unexpected{"expected primitive type for '" + op + "' lhs but got " + type_to_declaration_string(lhs)};
+        } else if constexpr (!std::is_same_v<rhs_t, primitive_type>) {
+            return std::unexpected{"expected primitive type for '" + op + "' rhs but got " + type_to_declaration_string(rhs)};
+        } else {
+            const std::optional<primitive_kind> new_prim = get_dominating_prim(lhs.m_type, rhs.m_type);
+            if (!new_prim) {
+                return std::unexpected{"expected compatible types for '" + op + "' but got " + type_to_declaration_string(lhs) + " and " + type_to_declaration_string(rhs)};
+            } else {
+                return make_type_from_prim(*new_prim);
+            }
+        }
+    }, lhs, rhs);
+}
+
+[[nodiscard]] bool operator==(const ref_full_type& lhs, const ref_full_type& rhs) noexcept {
+    if (lhs.get() == rhs.get()) {
+        return true;
+    }
+
+    if (!lhs || !rhs) {
+        return false;
+    }
+
+    return *lhs == *rhs;
+}
+
+[[nodiscard]] bool operator!=(const ref_full_type& lhs, const ref_full_type& rhs) noexcept {
+    return !(lhs == rhs);
+}
+
+[[nodiscard]] const full_type* get_dominating_type(const full_type& lhs, const full_type& rhs) {
+    const auto reason_l_to_r = not_assignable_reason(lhs, rhs);
+    const auto reason_r_to_l = not_assignable_reason(rhs, lhs);
+
+    if (!reason_l_to_r && !reason_r_to_l) {
+        if (lhs == rhs) {
+            return &lhs;
+        }
+        return nullptr;
+    }
+
+    if (!reason_l_to_r) {
+        return &lhs;
+    }
+
+    if (!reason_r_to_l) {
+        return &rhs;
+    }
+
+    return nullptr;
+}
+
 
 }

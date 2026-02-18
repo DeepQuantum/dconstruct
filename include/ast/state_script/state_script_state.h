@@ -22,8 +22,6 @@ namespace dconstruct::ast {
         std::vector<state_script_block> m_blocks;
     };
 
-    [[nodiscard]] inline bool operator==(const state_script_state& lhs, const state_script_state& rhs) noexcept {
-        return lhs.equals(rhs);
-    }
+    [[nodiscard]] bool operator==(const state_script_state& lhs, const state_script_state& rhs) noexcept;
 
 }

@@ -249,7 +249,46 @@ Comments and whitespace:
 
 ---
 
-## 8) AST Surface Beyond Main Parser (Placeholder)
+## 8) Precompiler Directives
+
+Precompiler directives are line-based instructions that begin with `@` and are consumed before parsing the main language grammar.
+
+```ebnf
+precompiler_directive ::= "@" directive_name " " quoted_path
+
+directive_name        ::= "target"
+                        | "output"
+                        | "modules"
+                        | "sidbase"
+                        | "repackage"
+
+quoted_path           ::= '"' path_char* '"'
+```
+
+Currently supported directives:
+
+- `@target "<path>"` — path to the original game binary being edited/recompiled (for adding new functions and hooking existing ones).
+- `@output "<path>"` — destination path for the newly compiled binary.
+- `@modules "<path>"` — path to `modules.bin`, which maps script files in the game; the compiler updates the recompiled script size there.
+- `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
+- `@repackage "<path>"` — path to a mod directory that is repacked into a `.psarc` archive; this automates the repackaging step as part of compile flow.
+
+Example:
+
+```dcpl
+@target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin"
+@output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked/bin/dc1/rogue/script-callbacks.bin"
+@modules "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked/bin/dc1/modules.bin"
+@sidbase "C:/Program Files/dconstruct-518-1-52-0-1768320617/bin/sidbase.bin"
+@repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/bin_unpacked"
+```
+
+> [!IMPORTANT]
+> Any unknown `@<name>` directive is rejected as a precompiler error.
+
+---
+
+## 9) AST Surface Beyond Main Parser (Placeholder)
 
 The AST also includes a **state script** domain (`state_script`, `state`, `block`, `track`, `lambda`) that appears to represent a separate syntax layer/workflow.
 
@@ -266,7 +305,7 @@ Suggested section outline for later:
 
 ---
 
-## 9) Future/Reserved Areas (Placeholder)
+## 10) Future/Reserved Areas (Placeholder)
 
 Several AST/token elements exist that are not fully wired in the primary parser grammar yet.
 
@@ -275,7 +314,7 @@ Several AST/token elements exist that are not fully wired in the primary parser 
 
 ---
 
-## 10) Example Snippets
+## 11) Example Snippets
 
 ### 10.1 Using alias
 

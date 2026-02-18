@@ -58,12 +58,12 @@ namespace dconstruct::testing {
         dis.dump();
         std::ofstream out("C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/uc4/ss-isl-cave-get-piton.dcpl");
 
-        for (const auto& func : dis.get_functions()) {
-            auto decomp = dconstruct::dcompiler::decomp_function{func, file, ControlFlowGraph::build(func)}.decompile(true);
+        for (const auto* func : dis.get_all_functions()) {
+            auto decomp = dconstruct::dcompiler::decomp_function{*func, file, ControlFlowGraph::build(*func)}.decompile(true);
             out << decomp << "\n\n";
         }
 
-        ASSERT_GT(dis.get_functions().size(), 0);
+        ASSERT_GT(dis.get_all_functions().size(), 0);
     }
 }
 

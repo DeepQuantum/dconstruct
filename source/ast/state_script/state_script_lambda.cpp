@@ -2,6 +2,10 @@
 
 namespace dconstruct::ast {
 
+[[nodiscard]] bool operator==(const state_script_lambda& lhs, const state_script_lambda& rhs) noexcept {
+    return lhs.equals(rhs);
+}
+
 void state_script_lambda::pseudo_c(std::ostream& os) const {
     os << "lambda" << m_body;
 }

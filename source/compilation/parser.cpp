@@ -3,6 +3,23 @@
 
 namespace dconstruct::compilation {
 
+
+[[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> Parser::get_results() {
+    return { parse(), get_known_types(), get_errors() };
+}
+
+const std::vector<parsing_error>& Parser::get_errors() const noexcept {
+    return m_errors;
+}
+
+const std::unordered_map<std::string, ast::full_type>& Parser::get_known_types() const noexcept {
+    return m_knownTypes;
+}
+
+[[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept {
+    return lhs.m_token == rhs.m_token && lhs.m_message == rhs.m_message;
+}
+
 void Parser::synchronize_statements() {
     advance();
     while (!is_at_end()) {
@@ -406,6 +423,27 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme, std::move(init));
     } else {
         return std::make_unique<ast::variable_declaration>(std::move(*type), name->m_lexeme); 
+    }
+}
+
+[[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
+    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
+    if (!name) {
+        return nullptr;
+    }
+
+    expr_uptr init = nullptr;
+    if (match({token_type::EQUAL})) {
+        init = make_expression();
+    }
+    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration.")) {
+        return nullptr;
+    }
+
+    if (init) {
+        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme, std::move(init));
+    } else {
+        return std::make_unique<ast::variable_declaration>(std::move(type), name->m_lexeme);
     }
 }
 
@@ -1176,6 +1214,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
         blocks.emplace_back(block_name->m_lexeme, std::move(tracks));
     }
+
+    return blocks;
 }
 
 [[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
@@ -1201,6 +1241,8 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 
         tracks.emplace_back(track_name->m_lexeme, std::move(lambdas));
     }
+
+    return tracks;
 }
 
 [[nodiscard]] std::vector<ast::state_script_lambda> Parser::make_statescript_lambdas() {

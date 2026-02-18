@@ -14,38 +14,22 @@ struct lexing_error {
     u32 m_line;
     std::string m_message;
 
-    [[nodiscard]] bool operator==(const lexing_error &rhs) const noexcept {
-        return m_line == rhs.m_line && m_message == rhs.m_message;
-    }
+    [[nodiscard]] bool operator==(const lexing_error &rhs) const noexcept;
 };
 
 
-inline std::ostream& operator<<(std::ostream& os, const lexing_error &l) {
-    return os << "line: " << l.m_line << " message: " << l.m_message;
-}
+std::ostream& operator<<(std::ostream& os, const lexing_error &l);
 
-inline std::ostream& operator<<(std::ostream& os, const token &t) {
-    std::string literal_type = ast::kind_to_string(ast::kind_from_primitive_value(t.m_literal));
-    std::string literal_value = ast::primitive_to_string(t.m_literal);
-    return os
-        << " lexeme: " << t.m_lexeme
-        << " literal: " << literal_type << ' ' << literal_value
-        << " line: " << t.m_line;
-}
+std::ostream& operator<<(std::ostream& os, const token &t);
 
 
 class Lexer {
 public:
     Lexer(std::string source) : m_source(std::move(source)) {};
     [[nodiscard]] const std::vector<token>& scan_tokens();
-    [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results() {
-        const auto& tokens = scan_tokens();
-        return { tokens, m_errors };
-    }
+    [[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> get_results();
 
-    [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept {
-        return m_errors;
-    }
+    [[nodiscard]] const std::vector<lexing_error>& get_errors() const noexcept;
 
 private:
     const std::unordered_map<std::string, token_type> m_keywords {

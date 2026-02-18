@@ -23,6 +23,10 @@ void breakpoint::pseudo_racket(std::ostream& os) const {
     return std::make_unique<breakpoint>();
 }
 
+VAR_OPTIMIZATION_ACTION breakpoint::var_optimization_pass(var_optimization_env& env) noexcept {
+    return VAR_OPTIMIZATION_ACTION::NONE;
+}
+
 [[nodiscard]] std::vector<semantic_check_error> breakpoint::check_semantics(compilation::scope& scope) const noexcept {
     return {};
 }

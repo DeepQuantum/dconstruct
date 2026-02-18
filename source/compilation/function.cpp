@@ -17,7 +17,9 @@ namespace dconstruct::compilation {
     constexpr u64 reloc_table_size_offset = 0x4;
     constexpr u64 first_entry_offset      = 0x28;
 
-    program_binary_element element;
+    program_binary_element element{get_size_in_bytes()};
+    element.m_rawData.reserve(get_size_in_bytes());
+    element.m_relocTable.resize(get_size_in_bytes() / 8 + 1);
 
     element.push_bytes(function_sid, 0b0);
     const ScriptLambda lambda = {

@@ -22,8 +22,6 @@ namespace dconstruct::ast {
         std::vector<state_script_track> m_tracks;
     };
 
-    [[nodiscard]] inline bool operator==(const state_script_block& lhs, const state_script_block& rhs) noexcept {
-        return lhs.equals(rhs);
-    }
+    [[nodiscard]] bool operator==(const state_script_block& lhs, const state_script_block& rhs) noexcept;
 
 }

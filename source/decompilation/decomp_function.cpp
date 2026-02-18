@@ -1,6 +1,7 @@
 #include "decompilation/decomp_function.h"
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 namespace dconstruct::dcompiler {
 
@@ -8,6 +9,38 @@ static constexpr u8 MIN_GRAPH_SIZE = 0;
 
 static const auto and_token = compilation::token{ compilation::token_type::AMPERSAND_AMPERSAND, "&&" };
 static const auto or_token = compilation::token{ compilation::token_type::PIPE_PIPE, "||" };
+
+
+std::string decomp_function::get_next_var() {
+    return "var_" + std::to_string(m_varCount++);
+}
+
+void decomp_function::append_to_current_block(stmnt_uptr&& statement) {
+    m_blockStack.top().get().m_statements.push_back(std::move(statement));
+}
+
+void decomp_function::append_to_current_block(expr_uptr&& expr) {
+    append_to_current_block(std::make_unique<ast::expression_stmt>(std::move(expr)));
+}
+
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_shift(const Instruction& istr) {
+    std::vector<expr_uptr> args;
+    args.push_back(m_transformableExpressions[istr.operand1]->clone());
+    args.push_back(m_transformableExpressions[istr.operand2]->clone());
+    auto callee = std::make_unique<ast::literal>(sid64_literal{SID("int_ash"), "int_ash"});
+    callee->set_type(ast::function_type{});
+    auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(args));
+    call->set_type(make_type_from_prim(ast::primitive_kind::U64));
+    return call;
+}
+
+[[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_load_symbol_table(const Instruction& istr) {
+    std::vector<expr_uptr> arg;
+    arg.push_back(m_transformableExpressions[istr.destination]->clone());
+    auto callee = std::make_unique<ast::literal>(sid64_literal{SID("symbol_table_load"), "symbol_table_load"});
+    auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
+    return call;
+}
 
 
 //#define _TRACE
@@ -50,6 +83,227 @@ const ast::function_definition& decomp_function::decompile(const bool optimizati
 [[nodiscard]] ast::function_definition decomp_function::decompile(const bool optimization_passes) && {
     decompile(optimization_passes);
     return std::move(m_functionDefinition);
+}
+
+state_script_functions::state_script_functions(const std::vector<ast::function_definition>& funcs, const BinaryFile* binary_file) noexcept : m_binFile(binary_file) {
+    for (const auto& func : funcs) {
+        if (std::holds_alternative<std::string>(func.m_name)) {
+            m_nonStateScriptFuncs.push_back(&func);
+        }
+        else {
+            const state_script_function_id& id = std::get<state_script_function_id>(func.m_name);
+            auto& states = m_states;
+            const u32 state_idx = id.m_state.m_idx;
+            const u32 event_idx = id.m_event.m_idx;
+            const u32 track_idx = id.m_track.m_idx;
+
+            if (states.size() <= state_idx) {
+                states.resize(state_idx + 1);
+                states[state_idx].first = id.m_state.m_name;
+            }
+
+            auto& state_entry = states[state_idx].second;
+
+            if (state_entry.size() <= event_idx) {
+                state_entry.resize(event_idx + 1);
+                state_entry[event_idx].first = id.m_event.m_name;
+            }
+
+            auto& event_entry = state_entry[event_idx].second;
+
+            if (event_entry.size() <= track_idx) {
+                event_entry.resize(track_idx + 1);
+                event_entry[track_idx].first = id.m_track.m_name;
+            }
+
+            event_entry[track_idx].second.push_back(&func);
+        }
+    }
+}
+
+[[nodiscard]] void state_script_functions::to_string(std::ostream& os) const noexcept {
+    for (const auto& func : m_nonStateScriptFuncs) {
+        os << *func << "\n\n";
+    }
+
+    if (m_states.empty()) {
+        return;
+    }
+
+    assert(m_binFile->m_dcscript != nullptr);
+
+    os << "statescript {\n" << ast::indent_more;
+
+    emit_script_metadata(os);
+
+    for (const auto& [state_name, blocks] : m_states) {
+        os << ast::indent <<  "state " << state_name << " {\n";
+        os << ast::indent_more;
+        for (const auto& [block_name, tracks] : blocks) {
+            os << ast::indent << "block " << block_name << " {\n";
+            os << ast::indent_more;
+            for (const auto& [track_name, functions] : tracks) {
+                os << ast::indent << "track " << track_name << " {\n";
+                os << ast::indent_more;
+                for (const auto* function : functions) {
+                    os << ast::indent << "lambda " << *function;
+                    os << "\n";
+                }
+                os << ast::indent_less;
+                os << ast::indent << "}\n";
+            }
+            os << ast::indent_less;
+            os << ast::indent << "}\n";
+        }
+        os << ast::indent_less;
+        os << ast::indent << "}\n";
+    }
+
+    os << "}\n" << ast::indent_less;
+}
+
+void state_script_functions::emit_script_metadata(std::ostream& os) const {
+    if (m_binFile->m_dcscript->m_pSsOptions && m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray) {
+        const SymbolArray* array = m_binFile->m_dcscript->m_pSsOptions->m_pSymbolArray;
+        os << ast::indent << "options {\n" << ast::indent_more;
+        for (i32 i = 0; i < array->m_numEntries; ++i){
+            os << ast::indent << m_binFile->m_sidCache.at(array->m_pSymbols[i]) << "\n";
+        }
+        os << ast::indent_less << ast::indent << "}\n";
+    }
+
+    os << std::fixed << std::setprecision(2);
+
+    if (m_binFile->m_dcscript->m_pSsDeclList) {
+        os << ast::indent << "declarations {\n" << ast::indent_more;
+        for (i32 i = 0; i < m_binFile->m_dcscript->m_pSsDeclList->m_numDeclarations; ++i) {
+            const SsDeclaration* decl = m_binFile->m_dcscript->m_pSsDeclList->m_pDeclarations + i;
+            const bool is_nullptr = decl->m_pDeclValue == nullptr;
+            if (decl->m_isVar) {
+                os << ast::indent;
+                std::string decl_name = m_binFile->m_sidCache.at(decl->m_declId);
+                switch (decl->m_declTypeId) {
+                    case SID("boolean"): {
+                        os << "bool " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << std::boolalpha << *reinterpret_cast<const bool*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("vector"): {
+                        const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        os << "vector " << decl_name << " = ";
+                        if (!is_nullptr)
+                        os << "("
+                            << val[0] << ", "
+                            << val[1] << ", "
+                            << val[2] << ", "
+                            << val[3] << ")";
+                        else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("quat"): {
+                        const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        os << "quaternion " << decl_name << " = ";
+                        if (!is_nullptr) {
+                        os
+                            << "(" << val[0] << ", "
+                            << val[1] << ", "
+                            << val[2] << ", "
+                            << val[3] << ")";
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("float"): {
+                        os << "f32 " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("string"): {
+                        os << "string " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const char**>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("symbol"): {
+                        os << "symbol " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << m_binFile->m_sidCache.at(*reinterpret_cast<const sid64*>(decl->m_pDeclValue));
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("int32"): {
+                        os << "i32 " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const i32*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("uint64"): {
+                        os << "u64 " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const u64*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("timer"): {
+                        os << "timer " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("point"): {
+                        const f32* val = reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        os << "point " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << "(" << val[0] << ", "
+                               << "(" << val[1] << ", "
+                               << "(" << val[2] << ")";
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    case SID("bound-frame"): {
+                        os << "bound-frame " << decl_name << " = ";
+                        if (!is_nullptr) {
+                            os << *reinterpret_cast<const f32*>(decl->m_pDeclValue);
+                        } else {
+                            os << "nullptr";
+                        }
+                        break;
+                    }
+                    default: {
+                        os << "u64? " << decl_name << " = ???";
+                    }
+                }
+                os << "\n";
+            }
+        }
+        os << ast::indent_less << ast::indent << "}\n";
+    }
 }
 
 

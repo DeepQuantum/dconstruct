@@ -80,7 +80,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     const u32 entries_size = sizeof(Entry) * num_entries;
 
     const u64 entries_data_size = std::accumulate(program_element.begin(), program_element.end(), u64{0}, [](u64 acc, const compilation::program_binary_element& program_element) {
-        return acc + program_element.get_size_in_bytes();
+        return acc + program_element.m_rawData.size();
     });
 
     const u64 stringtable_size = std::accumulate(global.m_strings.begin(), global.m_strings.end(), u64{0}, [](u64 acc, const std::string& s) {
@@ -140,7 +140,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 
     for (const auto& element : program_element) {
         push_bytes(element.m_entry, 0b100);
-        prev_entry_size += element.get_size_in_bytes();
+        prev_entry_size += element.m_rawData.size();
     }
 
     

@@ -3,6 +3,33 @@
 
 namespace dconstruct::compilation {
 
+[[nodiscard]] bool lexing_error::operator==(const lexing_error &rhs) const noexcept {
+    return m_line == rhs.m_line && m_message == rhs.m_message;
+}
+
+std::ostream& operator<<(std::ostream& os, const lexing_error &l) {
+    return os << "line: " << l.m_line << " message: " << l.m_message;
+}
+
+std::ostream& operator<<(std::ostream& os, const token &t) {
+    std::string literal_type = ast::kind_to_string(ast::kind_from_primitive_value(t.m_literal));
+    std::string literal_value = ast::primitive_to_string(t.m_literal);
+    return os
+        << " lexeme: " << t.m_lexeme
+        << " literal: " << literal_type << ' ' << literal_value
+        << " line: " << t.m_line;
+}
+
+
+[[nodiscard]] std::pair<std::vector<token>, std::vector<lexing_error>> Lexer::get_results() {
+    const auto& tokens = scan_tokens();
+    return { tokens, m_errors };
+}
+
+[[nodiscard]] const std::vector<lexing_error>& Lexer::get_errors() const noexcept {
+    return m_errors;
+}
+
 [[nodiscard]] const std::vector<token>& Lexer::scan_tokens() {
     while (!reached_eof()) {
         m_start = m_current;
