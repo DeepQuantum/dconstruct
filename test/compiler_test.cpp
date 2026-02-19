@@ -904,7 +904,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         };
 
         const std::vector<compilation::lexing_error> expected_errors = {
-            compilation::lexing_error(1, "expected valid token but got '@'")
+            compilation::lexing_error(1, "invalid token '@'")
         };
 
         EXPECT_EQ(tokens, expected);
@@ -1203,8 +1203,8 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     TEST(COMPILER, Store1) {
         expect_instructions("u16 main(i32* p) { *p = (i32)42; return 0; }", {
             Instruction{Opcode::Move, 0, 49, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 0, 0},
-            Instruction{Opcode::StoreI32, 0, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 42, 0},
+            Instruction{Opcode::StoreI32, 2, 0, 1},
             Instruction{Opcode::LoadU16Imm, 2, 0, 0},
             Instruction{Opcode::Move, 0, 2, 0},
             Instruction{Opcode::Return, 0, 0, 0},
@@ -1224,7 +1224,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         expect_instructions("u16 main(u64* p) { *p = 42; return 0; }", {
             Instruction{Opcode::Move, 0, 49, 0},
             Instruction{Opcode::LoadU16Imm, 1, 42, 0},
-            Instruction{Opcode::StoreU64, 0, 1, 0},
+            Instruction{Opcode::StoreU64, 2, 0, 1},
             Instruction{Opcode::LoadU16Imm, 2, 0, 0},
             Instruction{Opcode::Move, 0, 2, 0},
             Instruction{Opcode::Return, 0, 0, 0},
@@ -1233,8 +1233,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, ReturnLiteral) {
         expect_instructions("i32 main() { return 1; }", {
-            Instruction{Opcode::LoadU16Imm, 1, 1, 0},
-            Instruction{Opcode::Move, 0, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 0, 1, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }
@@ -1280,10 +1279,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     TEST(COMPILER, Subscript2) {
         expect_instructions("i32 main(f32* floats) { floats[2] = 0.69; }", {
             Instruction{Opcode::Move, 0_r, 49_r},
-            Instruction{Opcode::LoadStaticFloatImm, 1_r, 0_imm},
-            Instruction{Opcode::IMulImm, 1_r, 2_r, 2_imm},
-            Instruction{Opcode::IAdd, 1_r, 0_r, 1_r},
-            Instruction{Opcode::LoadU16, 1_r, 1_r},
+            Instruction{Opcode::LoadU16Imm, 1_r, 2_r, 0_r},
+            Instruction{Opcode::IMulImm, 2_r, 1_r, 4_imm},
+            Instruction{Opcode::IAdd, 2_r, 0_r, 2_r},
+            Instruction{Opcode::LoadStaticFloatImm, 1_r, 0, 0},
+            Instruction{Opcode::StoreFloat, 3_r, 2_r, 1_r},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }
