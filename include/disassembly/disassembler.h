@@ -31,6 +31,7 @@ namespace dconstruct {
     struct DisassemblerOptions {
         u8 m_indentPerLevel = 2;
         bool m_emitOnce = false;
+        bool m_verbose = false;
     };
 
     
@@ -88,6 +89,17 @@ namespace dconstruct {
         void insert_anonymous_array(const location, const u32);
         void insert_array(const location, const u32, const u32);
         void insert_state_script(const StateScript*, const u32);
+        void insert_state_script_verbose_fields(const StateScript*, const u32);
+        void insert_ss_declaration_list_verbose_fields(const SsDeclarationList*, const u32);
+        void insert_ss_declaration_verbose_fields(const SsDeclaration*, const u32);
+        void insert_ss_options_verbose_fields(const SsOptions*, const u32);
+        void insert_symbol_array_verbose_fields(const SymbolArray*, const u32);
+        void insert_ss_state_verbose_fields(const SsState*, const u32);
+        void insert_ss_track_group_verbose_fields(const SsTrackGroup*, const u32);
+        void insert_ss_on_block_verbose_fields(const SsOnBlock*, const u32);
+        void insert_ss_track_verbose_fields(const SsTrack*, const u32);
+        void insert_ss_lambda_verbose_fields(const SsLambda*, const u32);
+        void insert_script_lambda_verbose_fields(const ScriptLambda*, const u32);
         void insert_unmapped_struct(const structs::unmapped*, const u32);
         u8 insert_next_struct_member(const location, const u32);
         void insert_variable(const SsDeclaration* var, const u32);

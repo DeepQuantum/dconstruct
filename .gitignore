@@ -2,6 +2,8 @@
 # ----------------------------------------------------------------------------
 loc.py
 .cursorignore
+.github/
+.vscode/
 disassembled
 CHANGELOG.md
 sidbase.bin
