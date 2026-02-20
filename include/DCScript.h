@@ -46,20 +46,23 @@ namespace dconstruct {
     struct SsDeclaration //0x30
     {
         sid64				m_declId;				///< <c>0x00</c>: StringId of the declaration name
-        uint64_t				m_padding;				///< <c>0x08</c>: padding probably
+        const char*				m_declIdString;				///< <c>0x08</c>: padding probably
         sid64				m_declTypeId;			///< <c>0x10</c>: StringId of the declaration type eg: boolean, int32, float etc..
-        int16_t					m_unk;					///< <c>0x18</c>: unk number
+        int16_t					m_varSizeSum;					///< <c>0x18</c>: size of the variable in bytes
         int16_t					m_isVar;				///< <c>0x1A</c>: is variable ?
-        uint32_t				unk3;					///< <c>0x1C</c>: always 0 ?
+        uint32_t				m_always0;					///< <c>0x1C</c>: always 0 ?
         void* m_pDeclValue;			///< <c>0x20</c>: ptr to the declaration value
-        uint64_t				m_unkNumber;			///< <c>0x28</c>: always 0x80 ?
+        uint64_t				m_always0x80;			///< <c>0x28</c>: always 0x80 ?
     };
 
     struct SsOptions //0x50
     {
-        uint8_t					m_imLazy[0x18];			///< <c>0x00</c>: self explanatory
+        const char* m_optionString;
+        uint8_t					m_imLazy[0x10];			///< <c>0x10</c>: self explanatory
         SymbolArray* m_pSymbolArray;			///< <c>0x18</c>: ptr to the symbol array
-        uint8_t					m_imLazyPt2[0x18];		///< <c>0x20</c>: self explanatory always 0 ?
+        SymbolArray* m_symbolArray2;				///< <c>0x20</c>: unk string that is only used in one statescript as far as i know, can be null 
+        SymbolArray* m_symbolArray3;		///< <c>0x20</c>: self explanatory always 0 ?
+        SymbolArray* m_symbolArray4;				///< <c>0x30</c>: unk string that is only used in one statescript as far as i know, can be null
         int64_t					m_unkNumber;			///< <c>0x38</c>: unk number
         uint8_t					m_imLazyPt3[0x10];		///< <c>0x20</c>: self explanatory always 0 ?
     };
@@ -86,9 +89,9 @@ namespace dconstruct {
         uint32_t				m_padding;				///< <c>0x1C</c>: padding probably
         SsTrack* m_aTracks;				///< <c>0x10</c>: ptr to an array of Tracks
         const char* m_name;					///< <c>0x18</c>: eg: ss-fp-test initial (on (start))
-        uint64_t				field_20;               ///< <c>0x20</c>:
-        uint64_t				field_28;               ///< <c>0x28</c>:
-        uint64_t				field_30;               ///< <c>0x30</c>:
+        uint64_t				m_always0_1;               ///< <c>0x20</c>:
+        uint64_t				m_always0_2;               ///< <c>0x28</c>:
+        const ScriptLambda*	    m_rareScriptLambda;               ///< <c>0x30</c>:
     };
 
     struct SsOnBlock //

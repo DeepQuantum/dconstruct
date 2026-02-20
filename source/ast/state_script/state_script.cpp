@@ -133,4 +133,45 @@ void state_script::pseudo_racket(std::ostream& os) const {
     return true;
 }
 
+
+[[nodiscard]] program_binary_result state_script::emit_dc(compilation::global_state& global) const noexcept {
+    constexpr sid64 script_name = SID("ss-compiled-test");
+    constexpr sid64 state_script = SID("state-script");
+    constexpr sid64 ss_options = SID("ss-options");
+    constexpr sid64 ss_declarations = SID("ss-declarations");
+
+
+    const u64 num_states = m_states.size();
+
+
+    std::vector<SsDeclaration> declarations;
+    for (const auto& decl : m_declarations) {
+        SsDeclaration ss_decl{};
+        ss_decl.m_declId = SID(decl.m_identifier.c_str());
+        const auto& prim_type = std::get<primitive_type>(decl.m_type);
+        switch (prim_type.m_type) {
+            case primitive_kind::I32:
+                ss_decl.m_declTypeId = SID("int32");
+                ss_decl.m_varSizeSum = sizeof(i32);
+                break;
+            case primitive_kind::U32:
+                ss_decl.m_declTypeId = SID("u32");
+                ss_decl.m_varSizeSum = sizeof(u32);
+                break;
+            case primitive_kind::F32:
+                ss_decl.m_declTypeId = SID("float");
+                ss_decl.m_varSizeSum = sizeof(f32);
+                break;
+            case primitive_kind::BOOL:
+                ss_decl.m_declTypeId = SID("boolean");
+                ss_decl.m_varSizeSum = sizeof(bool);
+                break;
+        }
+        declarations.push_back(ss_decl);
+    }
+
+    return std::unexpected("state script code emission not yet implemented");
+
+}
+
 }

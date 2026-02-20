@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
 
     constexpr u8 indent_per_level = 2;// opts["indent"].as<u8>();
     const bool emit_once = opts["emit_once"].as<bool>();
+    const bool verbose = opts["verbose"].as<bool>();
     const bool decompile = !opts["no_decompile"].as<bool>();
     const bool optimize = !opts["no_optimize"].as<bool>();
     const bool generate_graphs = opts["graphs"].as<bool>();
@@ -99,6 +100,7 @@ int main(int argc, char *argv[]) {
     const dconstruct::DisassemblerOptions disassember_options {
         indent_per_level,
         emit_once,
+        verbose,
     };
 
     auto base_exp = dconstruct::SIDBase::from_binary(sidbase_path);

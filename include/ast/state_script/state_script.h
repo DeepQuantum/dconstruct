@@ -24,13 +24,16 @@ namespace dconstruct::ast {
         void pseudo_racket(std::ostream& os) const final;
 
         [[nodiscard]] virtual std::vector<semantic_check_error> check_semantics(compilation::scope&) const noexcept final;
-        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final { return std::unexpected("emitting state scripts isn't supported yet"); }
+        [[nodiscard]] virtual program_binary_result emit_dc(compilation::global_state& global) const noexcept final;
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 
         std::vector<sid64_literal> m_options;
         std::vector<variable_declaration> m_declarations;
         std::vector<state_script_state> m_states;
+
+        u64 m_initialStateIdx;
+        
     };
 
     [[nodiscard]] bool operator==(const state_script& lhs, const state_script& rhs) noexcept;

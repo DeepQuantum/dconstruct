@@ -296,6 +296,7 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
         ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
         ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", 
             cxxopts::value<bool>()->default_value("false"))
+        ("verbose", "emit verbose details for script-lambda and state-script structs, including all known fields from DCScript.h.", cxxopts::value<bool>()->default_value("false"))
         ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
         ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
         ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
