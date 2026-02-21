@@ -2,15 +2,29 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-REGEX_PATTERN = r"m_imLazyPt2\s*= \[0x[0-9A-Fa-f]+\] u64\[1\] { (.*?) }"
+REGEX_PATTERN = r"m_unkNumberDeclarationList\s*=\s*(.*)"
 
-REGEX_FLAGS = re.MULTILINE | re.DOTALL
+REGEX_FLAGS = re.MULTILINE
 
 SEARCH_DIR = Path("./disassembled")
 
 CASE_INSENSITIVE = False
+
+
+def process_file(file_path: Path, pattern: re.Pattern[str]) -> Counter[str]:
+    try:
+        content = file_path.read_text(encoding="utf-8", errors="ignore")
+    except OSError as exc:
+        print(f"Skipping {file_path}: {exc}")
+        return Counter()
+
+    file_counts: Counter[str] = Counter()
+    for match in pattern.finditer(content):
+        file_counts[match.group(1)] += 1
+    return file_counts
 
 
 def main() -> None:
@@ -25,22 +39,23 @@ def main() -> None:
         print(f"Invalid regex pattern: {exc}")
         return
 
+    file_paths = sorted(
+        [file_path for file_path in SEARCH_DIR.rglob("*") if file_path.is_file() and file_path.suffix == ".asm"],
+        key=lambda path: str(path),
+    )
+
     counts: Counter[str] = Counter()
-    scanned_files = 0
+    file_occurrences: Counter[str] = Counter()
+    first_file_for_value: dict[str, Path] = {}
+    with ThreadPoolExecutor() as executor:
+        for file_path, file_counts in zip(file_paths, executor.map(lambda path: process_file(path, pattern), file_paths)):
+            counts.update(file_counts)
+            for value in file_counts:
+                file_occurrences[value] += 1
+                if value not in first_file_for_value:
+                    first_file_for_value[value] = file_path
 
-    for file_path in SEARCH_DIR.rglob("*"):
-        if not file_path.is_file():
-            continue
-
-        scanned_files += 1
-        try:
-            content = file_path.read_text(encoding="utf-8", errors="ignore")
-        except OSError as exc:
-            print(f"Skipping {file_path}: {exc}")
-            continue
-
-        for match in pattern.finditer(content):
-            counts[match.group(1)] += 1
+    scanned_files = len(file_paths)
 
     print(f"Scanned files: {scanned_files}")
     print(f"Distinct matches: {len(counts)}")
@@ -52,7 +67,10 @@ def main() -> None:
 
     print("Matches (grouped):")
     for value, count in sorted(counts.items(), key=lambda item: (-item[1], item[0])):
-        print(f"{count:>8}  {value}")
+        if file_occurrences[value] == 1:
+            print(f"{count:>8}  {value}  {first_file_for_value[value]}")
+        else:
+            print(f"{count:>8}  {value}")
 
 
 if __name__ == "__main__":

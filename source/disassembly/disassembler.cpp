@@ -547,7 +547,7 @@ void Disassembler::insert_state_script_verbose_fields(const StateScript *stateSc
     } else {
         insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pSsOptions", get_offset(stateScript->m_pSsOptions));
     }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_1", static_cast<u64>(stateScript->field_20));
+    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_1", stateScript->m_always0_1);
     if (stateScript->m_pSsStateTable == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pSsStateTable");
     } else {
@@ -555,7 +555,7 @@ void Disassembler::insert_state_script_verbose_fields(const StateScript *stateSc
     }
     insert_span_indent("%*s%-18s = %d\n", indent, "m_stateCount", stateScript->m_stateCount);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_line", stateScript->m_line);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "field_34", stateScript->field_34);
+    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_always0_2", stateScript->m_always0_2);
     if (stateScript->m_pDebugFileName == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pDebugFileName");
     } else {
@@ -585,7 +585,7 @@ void Disassembler::insert_script_lambda_verbose_fields(const ScriptLambda *lambd
     }
     insert_span_indent("%*s%-18s = %s\n", indent, "m_typeId", lambda->m_typeId == 0 ? "0" : lookup(lambda->m_typeId));
     insert_span_indent("%*s%-18s = %llu\n", indent, "m_sum", static_cast<u64>(lambda->m_sum));
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0_1", static_cast<u64>(lambda->m_always0_1));
+    insert_span_indent("%*s%-18s = %s\n", indent, "m_funcName", lambda->m_funcName == 0 ? "0" : lookup(lambda->m_funcName));
     insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_instructionFlag", static_cast<u64>(lambda->m_instructionFlag));
     insert_span_indent("%*s%-18s = %u\n", indent, "m_always0_2", lambda->m_always0_2);
     insert_span_indent("%*s%-18s = %u\n", indent, "m_numInstructions", lambda->m_numInstructions);
@@ -603,7 +603,7 @@ void Disassembler::insert_ss_declaration_list_verbose_fields(const SsDeclaration
     }
 
     insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = %d\n", indent, "m_unkNumber", decl_list->m_unkNumber);
+    insert_span_indent("%*s%-18s = %d\n", indent, "m_totalDeclarationSize", decl_list->m_totalDeclarationSize);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_numDeclarations", decl_list->m_numDeclarations);
     if (decl_list->m_pDeclarations == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pDeclarations");
@@ -626,7 +626,7 @@ void Disassembler::insert_ss_declaration_verbose_fields(const SsDeclaration *dec
     insert_span_indent("%*s%-18s = %s\n", indent, "m_declTypeId", decl->m_declTypeId == 0 ? "0" : lookup(decl->m_declTypeId));
     insert_span_indent("%*s%-18s = %d\n", indent, "m_varSizeInBytes", decl->m_varSizeSum);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_isVar", decl->m_isVar);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "unk3", decl->m_always0);
+    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_always0", decl->m_always0);
     if (decl->m_pDeclValue == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pDeclValue");
     } else {
@@ -643,41 +643,12 @@ void Disassembler::insert_ss_options_verbose_fields(const SsOptions *options, co
         return;
     }
 
-    const auto insert_imlazy = [this, indent](const char* field_name, const u8* data, const u32 size) {
-        const u32 u64_count = size / static_cast<u32>(sizeof(u64));
-        const u32 remainder = size % static_cast<u32>(sizeof(u64));
-        insert_span_indent("%*s%-18s = ", indent, field_name);
-
-        if (u64_count > 0) {
-            insert_span_fmt("[0x%06X] ", get_offset(data));
-            insert_span_fmt("u64[%u] {", u64_count);
-            for (u32 i = 0; i < u64_count; ++i) {
-                u64 value = 0;
-                std::memcpy(&value, data + (i * sizeof(u64)), sizeof(u64));
-                insert_span_fmt("%s0x%016llX", i == 0 ? " " : ", ", static_cast<unsigned long long>(value));
-            }
-            insert_span(" }");
-        }
-
-        if (u64_count == 0 || remainder > 0) {
-            const u32 byte_start = u64_count * static_cast<u32>(sizeof(u64));
-            const u32 byte_count = u64_count == 0 ? size : remainder;
-            if (u64_count > 0) {
-                insert_span(", ");
-            }
-            insert_span_fmt("bytes[%u] {", byte_count);
-            for (u32 i = 0; i < byte_count; ++i) {
-                insert_span_fmt("%s0x%02X", i == 0 ? " " : ", ", data[byte_start + i]);
-            }
-            insert_span(" }");
-        }
-
-        insert_span("\n");
-    };
-
     insert_span("FIELDS: \n", indent);
     insert_span_indent("%*s%-18s = \"%s\"\n", indent, "m_optionString", options->m_optionString);
-    insert_imlazy("m_imLazy", options->m_imLazy, static_cast<u32>(sizeof(options->m_imLazy)));
+    
+    insert_span_indent("%*s%-18s = %llu\n", indent, "m_unknownFlags", options->m_unknownFlags);
+    insert_span_indent("%*s%-18s = %u\n", indent, "m_always0_1", options->m_always0_1);
+
     if (options->m_pSymbolArray == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pSymbolArray");
     } else {
@@ -705,8 +676,10 @@ void Disassembler::insert_ss_options_verbose_fields(const SsOptions *options, co
     } else {
         insert_span_indent("%*s%-18s = null\n", indent, "m_symbolArray4");
     }
-    insert_span_indent("%*s%-18s = %lld\n", indent, "m_unkNumber", static_cast<i64>(options->m_unkNumber));
-    insert_imlazy("m_imLazyPt3", options->m_imLazyPt3, static_cast<u32>(sizeof(options->m_imLazyPt3)));
+    insert_span_indent("%*s%-18s = %u\n", indent, "m_always5", options->m_always5);
+    insert_span_indent("%*s%-18s = %u\n", indent, "m_mostly0", options->m_mostly0);
+    insert_span_indent("%*s%-18s = %llu\n", indent, "m_mostly0Rarely1", options->m_mostly0Rarely1);
+    insert_span_indent("%*s%-18s = %llu\n", indent, "m_always0_2", options->m_always0_2);
     insert_span("\n", indent);
 }
 
@@ -754,7 +727,7 @@ void Disassembler::insert_ss_track_group_verbose_fields(const SsTrackGroup *trac
     }
 
     insert_span("FIELDS: \n", indent);
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "field_0", static_cast<u64>(track_group->field_0));
+    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_always0", static_cast<u64>(track_group->m_always0));
     insert_span_indent("%*s%-18s = %u\n", indent, "m_totalLambdaCount", track_group->m_totalLambdaCount);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_numTracks", track_group->m_numTracks);
     insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_padding", track_group->m_padding);
@@ -791,7 +764,7 @@ void Disassembler::insert_ss_on_block_verbose_fields(const SsOnBlock *block, con
 
     insert_span("FIELDS: \n", indent);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_blockType", block->m_blockType);
-    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_unkNumber", block->m_unkNumber);
+    insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_unkNumberBlock", block->m_always0);
     insert_span_indent("%*s%-18s = %s\n", indent, "m_blockEventId", block->m_blockEventId == 0 ? "0" : lookup(block->m_blockEventId));
     if (block->m_pScriptLambda == nullptr) {
         insert_span_indent("%*s%-18s = null\n", indent, "m_pScriptLambda");
@@ -810,7 +783,7 @@ void Disassembler::insert_ss_track_verbose_fields(const SsTrack *track, const u3
 
     insert_span("FIELDS: \n", indent);
     insert_span_indent("%*s%-18s = %s\n", indent, "m_trackId", track->m_trackId == 0 ? "0" : lookup(track->m_trackId));
-    insert_span_indent("%*s%-18s = %u\n", indent, "field_8", track->field_8);
+    insert_span_indent("%*s%-18s = %u\n", indent, "m_trackIdx", track->m_trackIdx);
     insert_span_indent("%*s%-18s = %d\n", indent, "m_totalLambdaCount", track->m_totalLambdaCount);
     insert_span_indent("%*s%-18s = 0x%X\n", indent, "m_padding", track->m_padding);
     if (track->m_pSsLambda == nullptr) {
@@ -834,7 +807,7 @@ void Disassembler::insert_ss_lambda_verbose_fields(const SsLambda *ss_lambda, co
     } else {
         insert_span_indent("%*s%-18s = [0x%06X]\n", indent, "m_pScriptLambda", get_offset(ss_lambda->m_pScriptLambda));
     }
-    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_unkNumber", static_cast<u64>(ss_lambda->m_unkNumber));
+    insert_span_indent("%*s%-18s = 0x%llX\n", indent, "m_unkNumberSsLambda", static_cast<u64>(ss_lambda->m_someSortOfCounter));
     insert_span("\n", indent);
 }
 
