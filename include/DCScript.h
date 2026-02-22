@@ -37,8 +37,8 @@ namespace dconstruct {
 
     struct SsDeclarationList //0x10
     {
-        i32         m_totalDeclarationSize;   ///< <c>0x00</c>: total size of all declarations
-        i32         m_numDeclarations;            ///< <c>0x04</c>: number of declared vars in the table
+        u32         m_totalDeclarationSize;   ///< <c>0x00</c>: total size of all declarations
+        u32         m_numDeclarations;            ///< <c>0x04</c>: number of declared vars in the table
         SsDeclaration*  m_pDeclarations;              ///< <c>0x08</c>: ptr to the list of declarations
     };
 
@@ -47,8 +47,8 @@ namespace dconstruct {
         sid64       m_declId;          ///< <c>0x00</c>: StringId of the declaration name
         const char* m_declIdString;    ///< <c>0x08</c>: padding probably
         sid64       m_declTypeId;      ///< <c>0x10</c>: StringId of the declaration type eg: boolean, int32, float etc..
-        i16        m_varSizeSum;      ///< <c>0x18</c>: size of the variable in bytes
-        i16        m_isVar;           ///< <c>0x1A</c>: is variable ?
+        u16        m_varSizeSum;      ///< <c>0x18</c>: size of the variable in bytes
+        u16        m_isVar;           ///< <c>0x1A</c>: is variable ?
         u32        m_always0;         ///< <c>0x1C</c>: always 0 ?
         void*       m_pDeclValue;      ///< <c>0x20</c>: ptr to the declaration value
         u64        m_always0x80;      ///< <c>0x28</c>: always 0x80 ?

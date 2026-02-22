@@ -28,6 +28,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const state_script& rhs) const noexcept;
 
+        std::string m_name;
+        std::string m_optionsString;
         std::vector<sid64_literal> m_options;
         std::vector<variable_declaration> m_declarations;
         std::vector<state_script_state> m_states;

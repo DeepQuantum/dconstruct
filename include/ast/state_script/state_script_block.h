@@ -18,6 +18,8 @@ namespace dconstruct::ast {
 
         [[nodiscard]] bool equals(const state_script_block& rhs) const noexcept;
 
+        [[nodiscard]] std::pair<u64, sid64> get_block_struct_info() const noexcept;
+
         std::string m_name;
         std::vector<state_script_track> m_tracks;
     };

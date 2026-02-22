@@ -13,9 +13,6 @@ namespace dconstruct::compilation {
     constexpr sid64     global_sid           = SID("global");
     constexpr sid64     function_sid         = SID("function");
     constexpr u64       deadbeef             = 0xDEAD'BEEF'1337'F00D;
-    
-    constexpr u64 reloc_table_size_offset = 0x4;
-    constexpr u64 first_entry_offset      = 0x28;
 
     program_binary_element element{get_size_in_bytes()};
     element.m_rawData.reserve(get_size_in_bytes());
@@ -42,7 +39,7 @@ namespace dconstruct::compilation {
     for (u32 i = 0; i < m_symbolTable.size(); ++i) {
         if (m_symbolTableEntryPointers[i] == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
             element.insert_string_offset(m_symbolTable[i]);
-            element.push_bytes(sizeof(u64), 1, 0b1);
+            element.push_bytes(sizeof(const char*), 1, 0b1);
         } else {
             element.push_bytes(m_symbolTable[i], 1, 0b0);
         }

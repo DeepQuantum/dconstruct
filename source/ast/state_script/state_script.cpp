@@ -1,4 +1,6 @@
 #include "ast/state_script/state_script.h"
+#include "ast/primary_expressions/literal.h"
+#include "compilation/function.h"
 #include <unordered_set>
 
 namespace dconstruct::ast {
@@ -141,282 +143,308 @@ void state_script::pseudo_racket(std::ostream& os) const {
     constexpr sid64 ss_options_sid = SID("ss-options");
     constexpr sid64 ss_declarations_sid = SID("ss-declarations");
 
+    u64 current_offset = 0;
+    current_offset += sizeof(StateScript);
+    const u64 declaration_list_offset = current_offset;
+    current_offset += sizeof(SsDeclarationList);
+    current_offset += sizeof(array_sid);
+    const u64 state_offset = current_offset;
+    current_offset += sizeof(SsState) * m_states.size();    
+    current_offset += sizeof(ss_options_sid);
+    const u64 options_offset = current_offset;
+    current_offset += sizeof(SsOptions);
+    current_offset += sizeof(u64) * 4; // unknown padding
 
-    const u64 num_states = m_states.size();
-    if (num_states == 0) {
-        return std::unexpected("state script code emission requires at least one state");
+    current_offset += sizeof(array_sid);
+    const u64 declaration_data_offset = current_offset;
+    current_offset += sizeof(SsDeclaration) * m_declarations.size();
+    current_offset += sizeof(array_sid);
+    const u64 block_data_offset = current_offset;
+
+    std::vector<u64> block_offsets;
+    for (const auto& state : m_states) {
+        block_offsets.push_back(current_offset);
+        current_offset += sizeof(SsOnBlock);
     }
 
-
-    std::vector<SsDeclaration> declarations;
-    declarations.reserve(m_declarations.size());
-    i32 total_declaration_size = 0;
+    std::vector<u64> declaration_value_offset;
     for (const auto& decl : m_declarations) {
-        SsDeclaration ss_decl{};
-        ss_decl.m_declId = SID(decl.m_identifier.c_str());
-        ss_decl.m_declIdString = nullptr;
-        const auto& prim_type = std::get<primitive_type>(decl.m_type);
-        switch (prim_type.m_type) {
-            case primitive_kind::I32:
-                ss_decl.m_declTypeId = SID("int32");
-                ss_decl.m_varSizeSum = sizeof(i32);
-                break;
-            case primitive_kind::U32:
-                ss_decl.m_declTypeId = SID("u32");
-                ss_decl.m_varSizeSum = sizeof(u32);
-                break;
-            case primitive_kind::F32:
-                ss_decl.m_declTypeId = SID("float");
-                ss_decl.m_varSizeSum = sizeof(f32);
-                break;
-            case primitive_kind::BOOL:
-                ss_decl.m_declTypeId = SID("boolean");
-                ss_decl.m_varSizeSum = sizeof(bool);
-                break;
-        }
-        ss_decl.m_isVar = 1;
-        ss_decl.m_always0 = 0;
-        ss_decl.m_pDeclValue = nullptr;
-        ss_decl.m_always0x80 = 0x80;
-        total_declaration_size += ss_decl.m_varSizeSum;
-        declarations.push_back(ss_decl);
+        declaration_value_offset.push_back(current_offset);
+        current_offset += sizeof(sid64) + sizeof(void*);
     }
 
-    const u64 total_blocks = std::accumulate(m_states.begin(), m_states.end(), u64{0}, [](const u64 acc, const state_script_state& s) {
-        return acc + s.m_blocks.size();
-    });
-    u64 total_tracks = 0;
-    u64 total_lambdas = 0;
+    std::vector<u64> track_offsets;
     for (const auto& state : m_states) {
         for (const auto& block : state.m_blocks) {
-            total_tracks += block.m_tracks.size();
+            current_offset += sizeof(array_sid);
             for (const auto& track : block.m_tracks) {
-                total_lambdas += track.m_lambdas.size();
+                track_offsets.push_back(current_offset);
+                current_offset += sizeof(SsTrack);           
             }
         }
     }
 
-    std::vector<sid64> option_symbols;
-    option_symbols.reserve(m_options.size());
-    for (const auto& opt : m_options) {
-        option_symbols.push_back(opt.first);
+    std::vector<u64> ss_lambda_offsets;
+    for (const auto& state : m_states) {
+        for (const auto& block : state.m_blocks) {
+            for (const auto& track : block.m_tracks) {
+                current_offset += sizeof(array_sid);
+                for (const auto& lambda : track.m_lambdas) {
+                    ss_lambda_offsets.push_back(current_offset);
+                    current_offset += sizeof(SsLambda);
+                }
+            }
+        }
     }
 
-    u64 current_offset = 0;
-    current_offset += sizeof(sid64);
-    const u64 state_script_struct_offset = current_offset;
-    current_offset += sizeof(StateScript);
-    current_offset += sizeof(sid64);
-    const u64 options_struct_offset = current_offset;
-    current_offset += sizeof(SsOptions);
-    const u64 symbol_array1_offset = current_offset;
-    current_offset += sizeof(SymbolArray);
-    const u64 symbol_array2_offset = current_offset;
-    current_offset += sizeof(SymbolArray);
-    const u64 symbol_array3_offset = current_offset;
-    current_offset += sizeof(SymbolArray);
-    const u64 symbol_array4_offset = current_offset;
-    current_offset += sizeof(SymbolArray);
-    const u64 option_symbols_offset = current_offset;
-    current_offset += option_symbols.size() * sizeof(sid64);
-    current_offset += sizeof(sid64);
-    const u64 declaration_list_offset = current_offset;
-    current_offset += sizeof(SsDeclarationList);
-    const u64 declarations_offset = current_offset;
-    current_offset += declarations.size() * sizeof(SsDeclaration);
-    current_offset += sizeof(sid64);
-    const u64 states_offset = current_offset;
-    current_offset += m_states.size() * sizeof(SsState);
-    const u64 blocks_offset = current_offset;
-    current_offset += total_blocks * sizeof(SsOnBlock);
-    const u64 tracks_offset = current_offset;
-    current_offset += total_tracks * sizeof(SsTrack);
-    const u64 lambdas_offset = current_offset;
-    current_offset += total_lambdas * sizeof(SsLambda);
+    std::vector<u64> script_lambda_offsets;
+    for (const auto& state : m_states) {
+        for (const auto& block : state.m_blocks) {
+            for (const auto& track : block.m_tracks) {
+                current_offset += sizeof(array_sid);
+                for (const auto& lambda : track.m_lambdas) {
+                    script_lambda_offsets.push_back(current_offset);
+                    current_offset += sizeof(ScriptLambda);
+                }
+            }
+        }
+    }
+
+    const u64 total_declarations_size = std::accumulate(m_declarations.begin(), m_declarations.end(), 0ull, [](u64 sum, const variable_declaration& decl) {
+        return sum + get_size(decl.m_type);
+    });
 
     compilation::program_binary_element element{current_offset};
 
-    const u64 option_string_idx = global.add_string(m_options.empty() ? std::string{"ss-option-placeholder"} : m_options.front().second);
-    const u64 debug_name_idx = global.add_string("ss-debug-placeholder");
-    const u64 error_name_idx = global.add_string("ss-error-placeholder");
+    element.push_bytes(state_script_sid, 0b0);
 
-    StateScript script{};
-    script.m_stateScriptId = script_name;
-    script.m_pSsDeclList = reinterpret_cast<SsDeclarationList*>(declaration_list_offset);
-    const u64 initial_state_idx = m_initialStateIdx < m_states.size() ? m_initialStateIdx : 0;
-    script.m_initialStateId = SID(m_states[initial_state_idx].m_name.c_str());
-    script.m_pSsOptions = reinterpret_cast<SsOptions*>(options_struct_offset);
-    script.m_always0_1 = 0;
-    script.m_pSsStateTable = reinterpret_cast<SsState*>(states_offset);
-    script.m_stateCount = static_cast<i16>(m_states.size());
-    script.m_line = 0x10;
-    script.m_always0_2 = 0;
-    script.m_pDebugFileName = nullptr;
-    script.m_pErrorName = nullptr;
-    script.m_padding = 0;
 
-    SsOptions options{};
-    options.m_optionString = nullptr;
-    options.m_unknownFlags = 0;
-    options.m_always0_1 = 0;
-    options.m_pSymbolArray = reinterpret_cast<SymbolArray*>(symbol_array1_offset);
-    options.m_symbolArray2 = reinterpret_cast<SymbolArray*>(symbol_array2_offset);
-    options.m_symbolArray3 = reinterpret_cast<SymbolArray*>(symbol_array3_offset);
-    options.m_symbolArray4 = reinterpret_cast<SymbolArray*>(symbol_array4_offset);
-    options.m_always5 = 5;
-    options.m_mostly0 = 0;
-    options.m_mostly0Rarely1 = 0;
-    options.m_always0_2 = 0;
+    const u64 debug_str_idx = global.add_string("debug_file_name_placeholder");
+    element.insert_string_offset(current_offset + offsetof(StateScript, m_pDebugFileName));
+    const StateScript ss = {
+        script_name,
+        reinterpret_cast<SsDeclarationList*>(declaration_list_offset),
+        m_initialStateIdx,
+        reinterpret_cast<SsOptions*>(options_offset),
+        0x0,
+        reinterpret_cast<SsState*>(state_offset),
+        static_cast<i16>(m_states.size()),
+        0x0,
+        0x0,
+        reinterpret_cast<const char*>(debug_str_idx),
+        nullptr,
+        0x0,
+    };
+    element.push_bytes(ss, 0b1010'1010, 0b01);
 
-    SymbolArray symbol_array1{};
-    symbol_array1.m_numEntries = static_cast<i32>(option_symbols.size());
-    symbol_array1.m_unk = 0;
-    symbol_array1.m_pSymbols = reinterpret_cast<sid64*>(option_symbols_offset);
+    element.push_bytes(ss_declarations_sid, 0b0);
+    
+    const SsDeclarationList decl_list = {
+        static_cast<u32>(total_declarations_size),
+        static_cast<u32>(m_declarations.size()),
+        reinterpret_cast<SsDeclaration*>(declaration_data_offset)
+    };
 
-    SymbolArray symbol_array2{};
-    SymbolArray symbol_array3{};
-    SymbolArray symbol_array4{};
+    element.push_bytes(decl_list, 0b01);
 
-    SsDeclarationList declaration_list{};
-    declaration_list.m_totalDeclarationSize = total_declaration_size;
-    declaration_list.m_numDeclarations = static_cast<i32>(declarations.size());
-    declaration_list.m_pDeclarations = reinterpret_cast<SsDeclaration*>(declarations_offset);
 
-    std::vector<SsState> states;
-    states.resize(m_states.size());
-    std::vector<SsOnBlock> blocks;
-    blocks.resize(total_blocks);
-    std::vector<SsTrack> tracks;
-    tracks.resize(total_tracks);
-    std::vector<SsLambda> lambdas;
-    lambdas.resize(total_lambdas);
+    element.push_bytes(array_sid, 0b0);
 
-    u64 block_index = 0;
-    u64 track_index = 0;
-    u64 lambda_index = 0;
+    for (u32 i = 0; i < m_states.size(); ++i) {
+        const state_script_state& state = m_states[i];
+        const SsState ss_state = {
+            SID(state.m_name.c_str()),
+            static_cast<i64>(state.m_blocks.size()),
+            reinterpret_cast<SsOnBlock*>(block_offsets[i])
+        };
+        element.push_bytes(ss_state, 0b0);
+    }
 
-    std::vector<std::pair<u64, u64>> block_name_string_offsets;
-    block_name_string_offsets.reserve(total_blocks);
-    std::vector<std::pair<u64, u64>> declaration_name_string_offsets;
-    declaration_name_string_offsets.reserve(declarations.size());
+    element.push_bytes(ss_options_sid, 0b0);
 
-    for (u64 state_idx = 0; state_idx < m_states.size(); ++state_idx) {
-        const auto& source_state = m_states[state_idx];
-        SsState& out_state = states[state_idx];
+    const u64 options_string_idx = global.add_string(m_optionsString);
+    const SsOptions ss_options = {
+        reinterpret_cast<const char*>(options_string_idx),
+        0x0,
+        0x0,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        5,
+        0,
+        0x0,
+        0x0,
+    };
+    element.push_bytes(ss_options, 0b0000'0001, 0b00);
 
-        out_state.m_stateId = SID(source_state.m_name.c_str());
-        out_state.m_numSsOnBlocks = source_state.m_blocks.size();
-        out_state.m_pSsOnBlocks = source_state.m_blocks.empty() ? nullptr : reinterpret_cast<SsOnBlock*>(blocks_offset + block_index * sizeof(SsOnBlock));
+    for (u32 i = 0; i < 4; ++i) {
+        element.push_bytes(u64{0}, 0b0);
+    }
 
-        for (const auto& source_block : source_state.m_blocks) {
-            const u64 block_start_track_index = track_index;
-            u64 block_lambda_count = 0;
+    element.push_bytes(array_sid, 0b0);
 
-            for (const auto& source_track : source_block.m_tracks) {
-                SsTrack& out_track = tracks[track_index];
-                out_track.m_trackId = SID(source_track.m_name.c_str());
-                out_track.m_trackIdx = static_cast<u16>(track_index - block_start_track_index);
-                out_track.m_totalLambdaCount = static_cast<i16>(source_track.m_lambdas.size());
-                out_track.m_padding = 0;
-                out_track.m_pSsLambda = source_track.m_lambdas.empty() ? nullptr : reinterpret_cast<SsLambda*>(lambdas_offset + lambda_index * sizeof(SsLambda));
+    u16 var_size_sum = 0;
+    for (u32 i = 0; i < m_declarations.size(); ++i) {
+        const auto& decl = m_declarations[i];
+        const auto& ptype = std::get<primitive_type>(decl.m_type);
+        sid64 decl_type_sid = 0;
+        switch (ptype.m_type) {
+            case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
+            case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
+            case primitive_kind::F32:    decl_type_sid = SID("float");   break;
+            case primitive_kind::STRING: decl_type_sid = SID("string");  break;
+            case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
+            default: assert(false && "unsupported declaration type"); break;
+        }
 
-                for (u64 local_lambda_idx = 0; local_lambda_idx < source_track.m_lambdas.size(); ++local_lambda_idx) {
-                    SsLambda& out_lambda = lambdas[lambda_index++];
-                    out_lambda.m_pScriptLambda = nullptr;
-                    out_lambda.m_someSortOfCounter = lambda_index;
-                }
+        const SsDeclaration ss_decl = {
+            SID(decl.m_identifier.c_str()),
+            nullptr,
+            decl_type_sid,
+            var_size_sum,
+            1,
+            0,
+            reinterpret_cast<void*>(declaration_value_offset[i]),
+            0x80,
+        };
+        element.push_bytes(ss_decl, 0b01'0010);
+        var_size_sum += static_cast<u16>(get_size(decl.m_type));
+    }
 
-                block_lambda_count += source_track.m_lambdas.size();
-                ++track_index;
+    element.push_bytes(array_sid, 0b0);
+
+    u32 track_flat_idx = 0;
+    for (u32 i = 0; i < m_states.size(); ++i) {
+        const auto& state = m_states[i];
+        const auto& block = state.m_blocks[0];
+        const auto [block_id, block_event_id]  = block.get_block_struct_info();
+
+        i32 block_type = static_cast<i32>(block_id);
+
+        u16 block_lambda_count = 0;
+        for (const auto& t : block.m_tracks) {
+            block_lambda_count += static_cast<u16>(t.m_lambdas.size());
+        }
+
+        const u64 tg_name_idx = global.add_string(m_name + " " + state.m_name + " (on (" + block.m_name + "))");
+
+        const SsOnBlock on_block = {
+            block_type,
+            0,
+            block_event_id,
+            nullptr,
+            {
+                0x0,
+                block_lambda_count,
+                static_cast<i16>(block.m_tracks.size()),
+                0,
+                reinterpret_cast<SsTrack*>(track_offsets.empty() ? 0 : track_offsets[track_flat_idx]),
+                reinterpret_cast<const char*>(tg_name_idx),
+                0x0,
+                0x0,
+                nullptr,
             }
+        };
+        element.push_bytes(on_block, 0b0110'0100, 0b10);
+        track_flat_idx += static_cast<u32>(block.m_tracks.size());
+    }
 
-            SsOnBlock& out_block = blocks[block_index];
-            out_block.m_blockType = 0;
-            out_block.m_always0 = 0;
-            out_block.m_blockEventId = source_block.m_name.empty() ? sid64{0} : SID(source_block.m_name.c_str());
-            out_block.m_pScriptLambda = nullptr;
-            out_block.m_trackGroup.m_always0 = 0;
-            out_block.m_trackGroup.m_totalLambdaCount = static_cast<u16>(block_lambda_count);
-            out_block.m_trackGroup.m_numTracks = static_cast<i16>(source_block.m_tracks.size());
-            out_block.m_trackGroup.m_padding = 0;
-            out_block.m_trackGroup.m_aTracks = source_block.m_tracks.empty() ? nullptr : reinterpret_cast<SsTrack*>(tracks_offset + block_start_track_index * sizeof(SsTrack));
-            out_block.m_trackGroup.m_name = nullptr;
-            out_block.m_trackGroup.m_always0_1 = 0;
-            out_block.m_trackGroup.m_always0_2 = 0;
-            out_block.m_trackGroup.m_rareScriptLambda = nullptr;
+    for (u32 i = 0; i < m_declarations.size(); ++i) {
+        const auto& decl = m_declarations[i];
+        const auto& ptype = std::get<primitive_type>(decl.m_type);
+        sid64 decl_type_sid = 0;
+        switch (ptype.m_type) {
+            case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
+            case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
+            case primitive_kind::F32:    decl_type_sid = SID("float");   break;
+            case primitive_kind::STRING: decl_type_sid = SID("string");  break;
+            case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
+            default:                     decl_type_sid = SID("int32");   break;
+        }
+        element.push_bytes(decl_type_sid, 0b0);
 
-            const u64 block_name_string_idx = global.add_string(source_block.m_name.empty() ? std::string{"ss-block-placeholder"} : source_block.m_name);
-            const u64 block_name_offset = blocks_offset + block_index * sizeof(SsOnBlock) + offsetof(SsOnBlock, m_trackGroup) + offsetof(SsTrackGroup, m_name);
-            block_name_string_offsets.emplace_back(block_name_offset, block_name_string_idx);
+        u64 init_value = 0;
+        if (decl.m_init) {
+            const literal* lit = decl.m_init->as_literal();
+            if (lit) {
+                std::visit([&](auto&& val) {
+                    using T = std::decay_t<decltype(val)>;
+                    if constexpr (std::is_arithmetic_v<T>) {
+                        std::memcpy(&init_value, &val, sizeof(val));
+                    }
+                }, lit->m_value);
+            }
+        }
+        element.push_bytes(init_value, 0b0);
+    }
 
-            ++block_index;
+    u32 ss_lambda_flat_idx = 0;
+    for (const auto& state : m_states) {
+        for (const auto& block : state.m_blocks) {
+            element.push_bytes(array_sid, 0b0);
+            for (u32 ti = 0; ti < block.m_tracks.size(); ++ti) {
+                const auto& track = block.m_tracks[ti];
+                const SsTrack ss_track = {
+                    SID(track.m_name.c_str()),
+                    static_cast<u16>(ti),
+                    static_cast<i16>(track.m_lambdas.size()),
+                    0,
+                    reinterpret_cast<SsLambda*>(ss_lambda_offsets.empty() ? 0 : ss_lambda_offsets[ss_lambda_flat_idx]),
+                };
+                element.push_bytes(ss_track, 0b100);
+                ss_lambda_flat_idx += static_cast<u32>(track.m_lambdas.size());
+            }
         }
     }
 
-    for (u64 decl_idx = 0; decl_idx < declarations.size(); ++decl_idx) {
-        const u64 decl_name_idx = global.add_string(m_declarations[decl_idx].m_identifier);
-        const u64 decl_name_offset = declarations_offset + decl_idx * sizeof(SsDeclaration) + offsetof(SsDeclaration, m_declIdString);
-        declaration_name_string_offsets.emplace_back(decl_name_offset, decl_name_idx);
+    u32 script_lambda_flat_idx = 0;
+    u64 lambda_counter = 0;
+    for (const auto& state : m_states) {
+        for (const auto& block : state.m_blocks) {
+            for (const auto& track : block.m_tracks) {
+                element.push_bytes(array_sid, 0b0);
+                for (u32 li = 0; li < track.m_lambdas.size(); ++li) {
+                    const SsLambda ss_lam = {
+                        reinterpret_cast<ScriptLambda*>(script_lambda_offsets[script_lambda_flat_idx]),
+                        lambda_counter++,
+                    };
+                    element.push_bytes(ss_lam, 0b01);
+                    script_lambda_flat_idx++;
+                }
+            }
+        }
     }
 
-    auto push = [&element](const auto& value, auto... reloc_bits) {
-        element.push_bytes(value, reloc_bits...);
-        element.m_currentSize = element.m_rawData.size();
-    };
+    constexpr sid64 function_sid = SID("function");
+    constexpr u64 deadbeef = 0xDEAD'BEEF'1337'F00D;
 
-    push(state_script_sid, 0b0);
-    push(script, 0b1010'1010, 0b01);
-    push(ss_options_sid, 0b0);
-    push(options, 0b0111'1001, 0b00);
-    push(symbol_array1, 0b10);
-    push(symbol_array2, 0b00);
-    push(symbol_array3, 0b00);
-    push(symbol_array4, 0b00);
-    for (const sid64 option_sid : option_symbols) {
-        push(option_sid, 0b0);
-    }
-    push(ss_declarations_sid, 0b0);
-    push(declaration_list, 0b10);
-    for (const SsDeclaration& declaration : declarations) {
-        push(declaration, 0b000010, 0b00);
-    }
-    push(array_sid, 0b0);
-    for (const SsState& state : states) {
-        const u8 reloc_bits = state.m_pSsOnBlocks ? 0b100 : 0b000;
-        push(state, reloc_bits);
-    }
-    for (const SsOnBlock& block : blocks) {
-        const u8 first_bits = static_cast<u8>((block.m_pScriptLambda ? 0b0000'0100 : 0) |
-                                              (block.m_trackGroup.m_aTracks ? 0b0001'0000 : 0) |
-                                              0b0010'0000 |
-                                              (block.m_trackGroup.m_rareScriptLambda ? 0b1000'0000 : 0));
-        const u8 second_bits = 0b00;
-        push(block, first_bits, second_bits);
-    }
-    for (const SsTrack& track : tracks) {
-        const u8 reloc_bits = track.m_pSsLambda ? 0b100 : 0b000;
-        push(track, reloc_bits);
-    }
-    for (const SsLambda& lambda : lambdas) {
-        const u8 reloc_bits = lambda.m_pScriptLambda ? 0b01 : 0b00;
-        push(lambda, reloc_bits);
-    }
+    for (const auto& state : m_states) {
+        for (const auto& block : state.m_blocks) {
+            for (const auto& track : block.m_tracks) {
+                element.push_bytes(array_sid, 0b0);
+                for (const auto& lambda : track.m_lambdas) {
+                    compilation::function fn;
+                    (void)lambda.m_body.emit_dc(fn, global);
 
-    element.m_stringOffsets.emplace_back(options_struct_offset + offsetof(SsOptions, m_optionString), option_string_idx);
-    element.m_stringOffsets.emplace_back(state_script_struct_offset + offsetof(StateScript, m_pDebugFileName), debug_name_idx);
-    element.m_stringOffsets.emplace_back(state_script_struct_offset + offsetof(StateScript, m_pErrorName), error_name_idx);
-    for (const auto& [offset, str_idx] : declaration_name_string_offsets) {
-        element.m_stringOffsets.emplace_back(offset, str_idx);
+                    const ScriptLambda script_lam = {
+                        nullptr,
+                        nullptr,
+                        function_sid,
+                        fn.get_scriptlambda_sum(),
+                        0x0,
+                        deadbeef,
+                        0x0,
+                        static_cast<u32>(fn.m_instructions.size()),
+                        -1,
+                        script_name,
+                        0x0,
+                    };
+                    element.push_bytes(script_lam, 0b0000'0011, 0b00);
+                }
+            }
+        }
     }
-    for (const auto& [offset, str_idx] : block_name_string_offsets) {
-        element.m_stringOffsets.emplace_back(offset, str_idx);
-    }
-
-    element.m_entry = Entry{
-        script_name,
-        state_script_sid,
-        reinterpret_cast<const void*>(state_script_struct_offset)
-    };
 
     return element;
 

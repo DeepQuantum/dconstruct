@@ -5,7 +5,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-REGEX_PATTERN = r"m_unkNumberDeclarationList\s*=\s*(.*)"
+REGEX_PATTERN = r"m_optionString\s*=\s*(.*)"
 
 REGEX_FLAGS = re.MULTILINE
 

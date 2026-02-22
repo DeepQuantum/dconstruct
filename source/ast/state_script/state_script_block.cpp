@@ -43,4 +43,16 @@ void state_script_block::pseudo_racket(std::ostream& os) const {
     return true;
 }
 
+[[nodiscard]] std::pair<u64, sid64> state_script_block::get_block_struct_info() const noexcept {
+    if (m_name == "start") {
+        return {0, SID("start")};
+    } else if (m_name == "end") {
+        return {1, SID("end")};
+    } else if (m_name.starts_with("event ")) {
+        return {2, SID(m_name.substr(6).c_str())};
+    } else if (m_name == "update") {
+        return {3, SID("update")};
+    } else {
+        return {4, SID("virtual")};
+    }
 }
