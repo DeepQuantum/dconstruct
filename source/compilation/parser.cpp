@@ -1,7 +1,24 @@
 #include "compilation/dc_parser.h"
 #include <vector>
+#include <charconv>
 
 namespace dconstruct::compilation {
+
+[[nodiscard]] static std::optional<sid64_literal> sid_from_identifier_lexeme(const std::string& lexeme) noexcept {
+    if (lexeme.empty() || lexeme[0] != '#') {
+        return std::nullopt;
+    }
+    sid64_literal result = {0, ""};
+    const std::string value = lexeme.substr(1);
+    sid64 sid_hex_value = 0;
+    auto [ptr, ec] = std::from_chars(value.data(), value.data() + value.size(), sid_hex_value, 16);
+    if (ec == std::errc{} && ptr == value.data() + value.size()) {
+        result.first = sid_hex_value;
+    } else {
+        result.second = value;
+    }
+    return result;
+}
 
 
 [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> Parser::get_results() {
@@ -333,12 +350,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
 }
 
 [[nodiscard]] std::optional<std::unique_ptr<ast::using_declaration>> Parser::make_using_declaration() {
-    const token* old_sid = consume(token_type::SID, "expected an sid to redefine");
+    const token* old_sid = consume(token_type::IDENTIFIER, "expected an sid to redefine");
     if (!old_sid) {
         return std::nullopt;
     }
-    assert(std::holds_alternative<sid64_literal>(old_sid->m_literal));
-    sid64_literal old_sid_val = std::get<sid64_literal>(old_sid->m_literal);
+    auto old_sid_val_opt = sid_from_identifier_lexeme(old_sid->m_lexeme);
+    if (!old_sid_val_opt) {
+        m_errors.emplace_back(*old_sid, "expected an sid to redefine but got '" + old_sid->m_lexeme + "'");
+        return std::nullopt;
+    }
+    sid64_literal old_sid_val = *old_sid_val_opt;
 
     if (!consume(token_type::AS, "expected 'as'")) {
         return std::nullopt;
@@ -369,7 +390,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     }
 
     std::string new_name = "";
-    if (match({token_type::IDENTIFIER, token_type::SID})) {
+    if (match({token_type::IDENTIFIER})) {
         new_name = previous().m_lexeme;
     }
 
@@ -1000,10 +1021,6 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     } else if (match({token_type::STRING})) {
         const std::string str = std::get<std::string>(previous().m_literal);
         return std::make_unique<ast::literal>(str);
-    } else if (match({token_type::SID})) {
-        const sid64 val = std::get<sid64>(previous().m_literal);
-        const sid64_literal sid = { val, previous().m_lexeme };
-        return std::make_unique<ast::literal>(sid);
     }
     return nullptr;
 }
@@ -1052,6 +1069,9 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     if (expr_uptr literal = make_literal()) {
         return literal;
     } else if (match({token_type::IDENTIFIER})) {
+        if (previous().m_lexeme.starts_with('#')) {
+            return std::make_unique<ast::sid_identifier>(previous());
+        }
         return std::make_unique<ast::identifier>(previous());
     } else if (match({token_type::MATCH})) {
         return make_match();
@@ -1090,12 +1110,16 @@ const token* Parser::consume(const token_type type, const std::string& message) 
     std::vector<sid64_literal> options;
 
     while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        const token* option_name = consume(token_type::SID, "expected sid option name in statescript options section");
+        const token* option_name = consume(token_type::IDENTIFIER, "expected sid option name in statescript options section");
         if (!option_name) {
             return nullptr;
         }
-        assert(std::holds_alternative<sid64_literal>(option_name->m_literal));
-        options.push_back(std::get<sid64_literal>(option_name->m_literal));
+        auto option_sid = sid_from_identifier_lexeme(option_name->m_lexeme);
+        if (!option_sid) {
+            m_errors.emplace_back(*option_name, "expected sid option name in statescript options section but got '" + option_name->m_lexeme + "'");
+            return nullptr;
+        }
+        options.push_back(*option_sid);
     }
 
     if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript options section")) {
@@ -1171,7 +1195,7 @@ const token* Parser::consume(const token_type type, const std::string& message) 
         return nullptr;
     }
     
-    const token* name = consume(token_type::SID, "expected sid variable name in statescript declaration");
+    const token* name = consume(token_type::IDENTIFIER, "expected sid variable name in statescript declaration");
     if (!name) {
         return nullptr;
     }

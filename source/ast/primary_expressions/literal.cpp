@@ -107,17 +107,6 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             const u8 table_idx = fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
             fn.emit_instruction(Opcode::LoadStaticPointerImm, *literal_dest, table_idx);
             return *literal_dest;
-        } else if constexpr (std::is_same_v<T, sid64_literal>) {
-            const auto& [numeric, name] = lit;
-            sid64 table_entry = 0;
-            if (numeric != 0) {
-                table_entry = numeric;
-            } else {
-                assert(!name.empty());
-                table_entry = SID(name.c_str());
-            }
-            const u8 table_idx = fn.add_to_symbol_table(numeric, compilation::function::SYMBOL_TABLE_POINTER_KIND::GENERAL);
-            fn.emit_instruction(Opcode::LookupPointer, *literal_dest, table_idx);
         } else if constexpr (std::is_integral_v<T>) {
             if constexpr (sizeof(T) <= 2) {
                 const u8 lo = static_cast<u16>(lit) & 0xFF;
@@ -153,8 +142,6 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
             return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T) * 8, lit, std::is_signed_v<T>));
         } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
             return llvm::ConstantPointerNull::get(llvm::PointerType::get(ctx, 0));
-        } else if constexpr (std::is_same_v<T, sid32_literal> || std::is_same_v<T, sid64_literal>) {
-            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T::first) * 8, lit.first, std::is_signed_v<T>));
         } else if constexpr (std::is_same_v<T, std::string>) {
             auto* gv = new llvm::GlobalVariable(
                 module,

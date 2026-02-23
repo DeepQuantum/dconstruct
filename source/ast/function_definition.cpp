@@ -68,10 +68,15 @@ void function_definition::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] std::vector<semantic_check_error> function_definition::check_semantics(compilation::scope& scope) const noexcept {
     scope.m_expectedReturnType = m_type.m_return.get();
+    scope.m_computedReturnType = false;
     for (const parameter& param : m_parameters) {
         scope.define(param.m_name, param.m_type);
     }
-    return m_body.check_semantics(scope);
+    std::vector<semantic_check_error> res = m_body.check_semantics(scope);
+    if (std::holds_alternative<primitive_type>(*scope.m_expectedReturnType) && std::get<primitive_type>(*scope.m_expectedReturnType).m_type == primitive_kind::NOTHING && !scope.m_computedReturnType) {
+        return {semantic_check_error{"function expects a value to be returned"}};
+    }
+    return res;
 }
 
 [[nodiscard]] program_binary_result function_definition::emit_dc(compilation::global_state& global) const noexcept {

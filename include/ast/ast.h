@@ -23,6 +23,7 @@
 #include "primary_expressions/grouping.h"
 #include "primary_expressions/literal.h"
 #include "primary_expressions/identifier.h"
+#include "primary_expressions/sid_identifier.h"
 #include "primary_expressions/match.h"
 #include "primary_expressions/subscript.h"
 #include "primary_expressions/sizeof_expression.h"

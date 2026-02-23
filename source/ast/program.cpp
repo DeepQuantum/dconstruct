@@ -26,9 +26,6 @@ void program::pseudo_racket(std::ostream& os) const {
         const std::vector<semantic_check_error> new_errors = decl->check_semantics(env);
         res.insert(res.end(), new_errors.begin(), new_errors.end());
     }
-    if (std::holds_alternative<primitive_type>(*env.m_expectedReturnType) && std::get<primitive_type>(*env.m_expectedReturnType).m_type == primitive_kind::NOTHING && !env.m_computedReturnType) {
-        return {semantic_check_error{"function expects a value to be returned"}};
-    }
     return res;
 }
 

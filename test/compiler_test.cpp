@@ -999,7 +999,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "  state Idle {"
             "    block Main {"
             "      track Base {"
-            "        lambda { co }"
+            "        lambda { #counter = #counter - 1; }"
             "      }"
             "    }"
             "  }"

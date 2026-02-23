@@ -15,7 +15,7 @@ namespace dconstruct::ast {
 
     const std::string UNKNOWN_TYPE_NAME = "u64?";
 
-    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, bool, std::string, sid64_literal, sid32_literal, std::nullptr_t, std::monostate>;
+    using primitive_value = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char, bool, std::string, std::nullptr_t, std::monostate>;
     using primitive_number = std::variant<u8, u16, u32, u64, i8, i16, i32, i64, f32, f64, char>;
 
 
@@ -38,8 +38,6 @@ namespace dconstruct::ast {
         NULLPTR,
         NOTHING
     };
-
-    static_assert(std::variant_size_v<primitive_value> == static_cast<u64>(primitive_kind::NOTHING) + 1);
 
     [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept;
 

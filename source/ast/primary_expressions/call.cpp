@@ -189,11 +189,9 @@ VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& e
 }
 
 FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    if (const auto* literal = m_callee->as_literal()) {
-        if (!std::holds_alternative<sid64_literal>(literal->m_value)) {
-            return FOREACH_OPTIMIZATION_ACTION::NONE;
-        }
-        const auto id = std::get<sid64_literal>(literal->m_value).first;
+    assert(dynamic_cast<identifier*>(m_callee.get()));
+    if (const auto* ident = static_cast<const identifier*>(m_callee.get())) {
+        const sid64 id = SID(ident->m_name.m_lexeme.c_str());
         switch (id) {
             case SID("begin-foreach"): {
                 return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
@@ -223,7 +221,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
 }
 
 [[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
-    const ast::identifier* callee_id = dynamic_cast<ast::identifier*>(m_callee.get());
+    const identifier* callee_id = dynamic_cast<identifier*>(m_callee.get());
     if (!callee_id) {
         return std::unexpected{llvm_error{"expected identifier for callee but got non-identifier (not implemented)", *this}};
     }

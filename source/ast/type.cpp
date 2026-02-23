@@ -33,7 +33,24 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
 }
 
 [[nodiscard]] primitive_kind kind_from_primitive_value(const primitive_value& prim) noexcept {
-    return static_cast<primitive_kind>(prim.index());
+    return std::visit([](auto&& arg) -> primitive_kind {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, u8>) return primitive_kind::U8;
+        else if constexpr (std::is_same_v<T, u16>) return primitive_kind::U16;
+        else if constexpr (std::is_same_v<T, u32>) return primitive_kind::U32;
+        else if constexpr (std::is_same_v<T, u64>) return primitive_kind::U64;
+        else if constexpr (std::is_same_v<T, i8>) return primitive_kind::I8;
+        else if constexpr (std::is_same_v<T, i16>) return primitive_kind::I16;
+        else if constexpr (std::is_same_v<T, i32>) return primitive_kind::I32;
+        else if constexpr (std::is_same_v<T, i64>) return primitive_kind::I64;
+        else if constexpr (std::is_same_v<T, f32>) return primitive_kind::F32;
+        else if constexpr (std::is_same_v<T, f64>) return primitive_kind::F64;
+        else if constexpr (std::is_same_v<T, char>) return primitive_kind::CHAR;
+        else if constexpr (std::is_same_v<T, bool>) return primitive_kind::BOOL;
+        else if constexpr (std::is_same_v<T, std::string>) return primitive_kind::STRING;
+        else if constexpr (std::is_same_v<T, std::nullptr_t>) return primitive_kind::NULLPTR;
+        else return primitive_kind::NOTHING;
+    }, prim);
 }
 
 [[nodiscard]] std::optional<primitive_number> get_number(const primitive_value& prim) noexcept {
@@ -72,9 +89,6 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
         }
         else if constexpr (std::is_same_v<T, std::monostate>) {
             return "null";
-        }
-        else if constexpr (std::is_same_v<T, sid32_literal> || std::is_same_v<T, sid64_literal>) {
-            return std::get<1>(arg);
         }
         else if constexpr (std::is_same_v<T, f32>) {
             const std::string first = std::to_string(arg);
