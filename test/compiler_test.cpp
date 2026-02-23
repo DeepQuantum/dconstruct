@@ -947,7 +947,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::string code =
             "statescript {"
             "  options {"
-            "    #opt_idle"
+            "    #player"
             "  }"
             "  declarations {"
             "    u32 #counter = 5;"
@@ -955,7 +955,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "  state Idle {"
             "    block Main {"
             "      track Base {"
-            "        lambda { { return; } }"
+            "        lambda { counter = counter - 1; }"
             "      }"
             "    }"
             "  }"
@@ -985,6 +985,39 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_name, "Base");
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas.size(), 1);
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas[0].m_body.m_statements.size(), 1);
+    }
+
+    TEST(COMPILER, CompileStateScriptBasicNoErrors) {
+        const std::string code =
+            "statescript {"
+            "  options {"
+            "    #opt_idle"
+            "  }"
+            "  declarations {"
+            "    u32 #counter = 5;"
+            "  }"
+            "  state Idle {"
+            "    block Main {"
+            "      track Base {"
+            "        lambda { co }"
+            "      }"
+            "    }"
+            "  }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+
+        compilation::scope scope{types};
+        const auto semantic_errors = program.check_semantics(scope);
+        EXPECT_EQ(semantic_errors.size(), 0);
+
+        compilation::global_state global{};
+        const auto binary_elements = program.compile_binary_elements(scope, global);
+        ASSERT_TRUE(binary_elements) << "compile failed: " << (binary_elements ? "" : binary_elements.error());
     }
 
     TEST(COMPILER, ParseStateScriptErrorNoStates) {

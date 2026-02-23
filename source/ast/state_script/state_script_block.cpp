@@ -56,3 +56,5 @@ void state_script_block::pseudo_racket(std::ostream& os) const {
         return {4, SID("virtual")};
     }
 }
+
+}
