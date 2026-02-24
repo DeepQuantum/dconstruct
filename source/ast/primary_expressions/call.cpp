@@ -244,6 +244,7 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
         args_v.push_back(*exp_value);
     }
 
+    
     auto res = builder.CreateCall(callee_f, args_v);
     if (!res) {
         return std::unexpected{llvm_error{"expected non-null result from function call but got nullptr", *this}};
