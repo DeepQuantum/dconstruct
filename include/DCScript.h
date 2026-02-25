@@ -71,7 +71,7 @@ namespace dconstruct {
 
     struct SymbolArray //0x10
     {
-        i32      m_numEntries;    ///< <c>0x00</c>: number of entries
+        u32      m_numEntries;    ///< <c>0x00</c>: number of entries
         u32      m_unk;           ///< <c>0x04</c>: always 0 ?
         sid64*    m_pSymbols;      ///< <c>0x08</c>: ptr to the symbols
     };

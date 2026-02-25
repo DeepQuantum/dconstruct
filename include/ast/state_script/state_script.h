@@ -3,6 +3,7 @@
 #include "ast/statements/variable_declaration.h"
 #include "ast/ast_source.h"
 #include "state_script_state.h"
+#include "ast/primary_expressions/sid_identifier.h"
 #include "ast/external_declaration.h"
 #include <string>
 #include <vector>
@@ -12,7 +13,7 @@ namespace dconstruct::ast {
     struct state_script : public global_declaration {
 
         state_script(
-            std::vector<sid64_literal> options,
+            std::vector<sid_identifier> options,
             std::vector<variable_declaration> declarations,
             std::vector<state_script_state> states) noexcept
             : m_options(std::move(options)),
@@ -30,7 +31,7 @@ namespace dconstruct::ast {
 
         std::string m_name;
         std::string m_optionsString;
-        std::vector<sid64_literal> m_options;
+        std::vector<sid_identifier> m_options;
         std::vector<variable_declaration> m_declarations;
         std::vector<state_script_state> m_states;
 

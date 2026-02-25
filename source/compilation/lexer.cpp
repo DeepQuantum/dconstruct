@@ -124,7 +124,7 @@ char Lexer::advance() {
     while (is_valid_sid_char(peek())) {
         advance();
     }
-    return make_current_token(token_type::IDENTIFIER);
+    return make_current_token(token_type::SID);
 }
 
 [[nodiscard]] token Lexer::make_number() {

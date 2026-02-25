@@ -54,6 +54,7 @@ namespace dconstruct::compilation {
 
         const token& advance();
         const token* consume(const token_type, const std::string&);
+        const token* consume(const std::initializer_list<token_type> types, const std::string& message);
         [[nodiscard]] const token& peek() const;
         [[nodiscard]] const token& previous() const;
         [[nodiscard]] bool is_at_end() const;

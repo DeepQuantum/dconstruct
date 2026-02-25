@@ -15,7 +15,7 @@ void state_script::pseudo_c(std::ostream& os) const {
     os << indent << "options {\n";
     os << indent_more;
     for (const auto& opt : m_options) {
-        os << indent << opt.second << "\n";
+        os << indent << opt << "\n";
     }
     os << indent_less;
     os << indent << "}\n";
@@ -36,7 +36,7 @@ void state_script::pseudo_c(std::ostream& os) const {
 void state_script::pseudo_py(std::ostream& os) const {
     os << "statescript:\n  options: ";
     for (const auto& opt : m_options) {
-        os << opt.second << " ";
+        os << opt << " ";
     }
     os << "\n  declarations: ";
     for (const auto& decl : m_declarations) {
@@ -51,7 +51,7 @@ void state_script::pseudo_py(std::ostream& os) const {
 void state_script::pseudo_racket(std::ostream& os) const {
     os << "(statescript (options";
     for (const auto& opt : m_options) {
-        os << " " << opt.second;
+        os << " " << opt;
     }
     os << ") (declarations";
     for (const auto& decl : m_declarations) {
@@ -327,7 +327,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
     element.push_bytes(symbol_array_sid, 0b0);
 
     const SymbolArray symbol_array = {
-        m_options.size(),
+        static_cast<u32>(m_options.size()),
         0,
         reinterpret_cast<sid64*>(symbol_offsets.empty() ? 0 : symbol_offsets[0]),
     };

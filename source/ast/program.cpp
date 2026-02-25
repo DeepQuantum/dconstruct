@@ -135,7 +135,8 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     const u64 first_function_start = header_size + num_entries * sizeof(Entry);
     u64 prev_entry_size = sizeof(function_sid);
 
-    for (const auto& element : program_element) {
+    for (auto& element : program_element) {
+        element.m_entry.m_entryPtr = reinterpret_cast<void*>(first_function_start + prev_entry_size);
         push_bytes(element.m_entry, 0b100);
         prev_entry_size += element.m_rawData.size();
     }
@@ -145,8 +146,9 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     for (auto& fn : program_element) {
         for (const auto& [offset, str_index] : fn.m_stringOffsets) {
             const u64 relative_offset = get_string_offset(str_index);
-            *reinterpret_cast<u64*>(&fn.m_rawData[offset]) = relative_offset;
+            *reinterpret_cast<u64*>(&fn.m_rawData[offset]) = relative_offset - current_size;
         }
+        fn.adjust_offsets(current_size);
         insert_into_bytestream(out, current_size, fn.m_rawData);
         for (const auto& bits : fn.m_relocTable) {
             insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits, sizeof(bits));

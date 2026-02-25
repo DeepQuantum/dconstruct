@@ -11,10 +11,7 @@ namespace dconstruct::compilation {
 
     struct program_binary_element {
 
-        program_binary_element(const u64 size) noexcept {
-            m_rawData.reserve(size);
-            m_relocTable.resize(size / 8 + 1);
-        }
+        program_binary_element(const u64 size) noexcept;
 
         template<typename T, typename ... bits>
         void push_bytes(const T& data, bits... b) noexcept {
@@ -27,26 +24,11 @@ namespace dconstruct::compilation {
             insert_into_reloctable(bits_list.back(), (sizeof(T) / 8) % 8);
         }
 
-        void insert_into_reloctable(const u8 bits, const u64 num_bits) noexcept {
-            const u8 bit_space_remaining = (8 - m_bitOffset % 8);
-            if (bit_space_remaining >= num_bits) {
-                m_relocTable[m_byteOffset] |= bits << m_bitOffset;
-                m_bitOffset += num_bits;
-                assert(m_bitOffset <= 8);
-                if (m_bitOffset == 8) {
-                    m_bitOffset = 0;
-                    m_byteOffset++;
-                }
-            } else {
-                m_relocTable[m_byteOffset++] |= bits << m_bitOffset;
-                m_relocTable[m_byteOffset] |= bits >> bit_space_remaining;
-                m_bitOffset = num_bits - bit_space_remaining;
-            }
-        }
+        void insert_into_reloctable(const u8 bits, const u64 num_bits) noexcept;
 
-        void insert_string_offset(const u64 index) noexcept {
-            m_stringOffsets.emplace_back(m_currentSize, index);
-        }
+        void insert_string_offset(const u64 index) noexcept;
+
+        void adjust_offsets(const u64 offset) noexcept;
 
 
         Entry m_entry;

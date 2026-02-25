@@ -312,7 +312,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::vector<compilation::token> expected = {
             compilation::token(compilation::token_type::DOUBLE, "1.3", 1.3f, 1),
             compilation::token(compilation::token_type::MINUS_EQUAL, "-=", 0, 1),
-            compilation::token(compilation::token_type::SID, "#ellie", sid64_literal(0,"ellie"), 1),
+            compilation::token(compilation::token_type::SID, "#ellie", 0, 1),
             compilation::token(compilation::token_type::_EOF, "", 0, 1),
         };
         EXPECT_EQ(tokens, expected);
@@ -383,9 +383,9 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         const std::string chars = "#simple_sid #%alloc-array? #=f(test123)";
         const auto [tokens, errors] = get_tokens(chars);
         const std::vector<compilation::token> expected = {
-            compilation::token(compilation::token_type::SID, "#simple_sid", sid64_literal(0, "simple_sid"), 1),
-            compilation::token(compilation::token_type::SID, "#%alloc-array?", sid64_literal(0, "%alloc-array?"), 1),
-            compilation::token(compilation::token_type::SID, "#=f", sid64_literal(0, "=f"), 1),
+            compilation::token(compilation::token_type::SID, "#simple_sid", 0, 1),
+            compilation::token(compilation::token_type::SID, "#%alloc-array?", 0, 1),
+            compilation::token(compilation::token_type::SID, "#=f", 0, 1),
             compilation::token(compilation::token_type::LEFT_PAREN, "(", 0, 1),
             compilation::token(compilation::token_type::IDENTIFIER, "test123", 0, 1),
             compilation::token(compilation::token_type::RIGHT_PAREN, ")", 0, 1),
@@ -419,7 +419,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             compilation::token(compilation::token_type::IDENTIFIER, "sid", 0, 2),
             compilation::token(compilation::token_type::IDENTIFIER, "name", 0, 2),
             compilation::token(compilation::token_type::EQUAL, "=", 0, 2),
-            compilation::token(compilation::token_type::SID, "#ellie", sid64_literal(0, "ellie"), 2),
+            compilation::token(compilation::token_type::SID, "#ellie", 0, 2),
             compilation::token(compilation::token_type::SEMICOLON, ";", 0, 2),
 
             compilation::token(compilation::token_type::IDENTIFIER, "double", 0, 3),
@@ -972,7 +972,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_NE(parsed, nullptr);
 
         ASSERT_EQ(parsed->m_options.size(), 1);
-        EXPECT_EQ(parsed->m_options[0].second, "opt_idle");
+        EXPECT_EQ(parsed->m_options[0], ast::sid_identifier("opt_idle"));
 
         ASSERT_EQ(parsed->m_declarations.size(), 1);
         EXPECT_EQ(parsed->m_declarations[0].m_identifier, "#counter");
@@ -994,12 +994,12 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "    #opt_idle"
             "  }"
             "  declarations {"
-            "    u32 #counter = 5;"
+            "    i32 #counter = 5;"
             "  }"
             "  state Idle {"
             "    block Main {"
             "      track Base {"
-            "        lambda { #counter = #counter - 1; }"
+            "        lambda { i32 var = #counter - 1; }"
             "      }"
             "    }"
             "  }"
@@ -1016,7 +1016,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_EQ(semantic_errors.size(), 0);
 
         compilation::global_state global{};
-        const auto binary_elements = program.compile_binary_elements(scope, global);
+        const auto binary_elements = program.compile_to_file(scope, global);
         ASSERT_TRUE(binary_elements) << "compile failed: " << (binary_elements ? "" : binary_elements.error());
     }
 

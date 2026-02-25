@@ -10,7 +10,7 @@ namespace dconstruct::ast {
     struct sid_identifier : public expression {
         explicit sid_identifier(compilation::token name) : m_name(std::move(name)){};
 
-        explicit sid_identifier(std::string name) : m_name(compilation::token{compilation::token_type::IDENTIFIER, std::move(name), 0, 1}){};
+        explicit sid_identifier(std::string name) : m_name(compilation::token{compilation::token_type::SID, std::move(name), 0, 1}){};
 
         void pseudo_c(std::ostream& os) const final;
         void pseudo_py(std::ostream& os) const final;
@@ -24,8 +24,7 @@ namespace dconstruct::ast {
         [[nodiscard]] std::unique_ptr<sid_identifier> copy() const noexcept;
         [[nodiscard]] bool identifier_name_equals(const std::string& name) const noexcept final;
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
-        [[nodiscard]] bool is_l_evaluable() const noexcept final { return true; }
-        [[nodiscard]] lvalue_emission_res emit_dc_lvalue(compilation::function& fn, compilation::global_state& global) const noexcept final;
+        [[nodiscard]] emission_res emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
 
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept;

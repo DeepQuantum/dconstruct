@@ -27,7 +27,7 @@ void decomp_function::append_to_current_block(expr_uptr&& expr) {
     std::vector<expr_uptr> args;
     args.push_back(m_transformableExpressions[istr.operand1]->clone());
     args.push_back(m_transformableExpressions[istr.operand2]->clone());
-    auto callee = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, "int_ash", 0, 1 });
+    auto callee = std::make_unique<ast::identifier>("shift");
     callee->set_type(ast::function_type{});
     auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(args));
     call->set_type(make_type_from_prim(ast::primitive_kind::U64));
@@ -37,7 +37,7 @@ void decomp_function::append_to_current_block(expr_uptr&& expr) {
 [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_load_symbol_table(const Instruction& istr) {
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[istr.destination]->clone());
-    auto callee = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, "symbol_table_load", 0, 1 });
+    auto callee = std::make_unique<ast::identifier>("symbol_table_load");
     auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     return call;
 }
@@ -406,7 +406,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 } else {
                     const sid32 sid = symbol_table.get<sid32>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
-                    expr_uptr lit = std::make_unique<ast::literal>(sid32_literal{ sid, name });
+                    expr_uptr lit = std::make_unique<ast::sid_identifier>(name);
                     const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                     if (!std::holds_alternative<ast::function_type>(type)) {
                         generated_expression = std::move(lit);
@@ -464,12 +464,12 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 if (m_is64Bit) {
                     const sid64 sid = symbol_table.get<sid64>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
-                    lit = std::make_unique<ast::sid_identifier>(compilation::token{ compilation::token_type::IDENTIFIER, name, 0, 1 });
+                    lit = std::make_unique<ast::sid_identifier>(name);
                     
                 } else {
                     const sid32 sid = symbol_table.get<sid32>(istr.operand1);
                     const std::string& name = m_file.m_sidCache.at(sid);
-                    lit = std::make_unique<ast::sid_identifier>(compilation::token{ compilation::token_type::IDENTIFIER, name, 0, 1 });
+                    lit = std::make_unique<ast::sid_identifier>(name);
                 }
                 const auto& type = m_disassembly.m_stackFrame.m_symbolTable.m_types[istr.operand1];
                 if (!std::holds_alternative<ast::function_type>(type)) {
@@ -896,7 +896,7 @@ void decomp_function::emit_branch(ast::block &else_block, const node_id target, 
 
 void decomp_function::load_expression_into_new_var(const reg_idx dst) {
     auto& expr = m_transformableExpressions[dst];
-    auto id = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, get_next_var()});
+    auto id = std::make_unique<ast::identifier>(get_next_var());
     const std::string name = id->m_name.m_lexeme;
     const ast::full_type type = expr->get_type_unchecked(m_env);
 
@@ -931,7 +931,7 @@ template<ast::primitive_kind kind>
 [[nodiscard]] std::unique_ptr<ast::call_expr> decomp_function::make_abs(const reg_idx dst) {
     std::vector<expr_uptr> arg;
     arg.push_back(m_transformableExpressions[dst]->clone());
-    auto callee = std::make_unique<ast::identifier>(compilation::token{ compilation::token_type::IDENTIFIER, "abs", 0, 1 });
+    auto callee = std::make_unique<ast::identifier>("abs");
     callee->set_type(ast::function_type{});
     auto call = std::make_unique<ast::call_expr>(compilation::token{ compilation::token_type::_EOF, "" }, std::move(callee), std::move(arg));
     call->set_type(make_type_from_prim(kind));

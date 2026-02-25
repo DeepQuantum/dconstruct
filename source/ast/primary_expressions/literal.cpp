@@ -103,6 +103,14 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
         }
 
         if constexpr (std::is_same_v<T, std::string>) {
+            if (m_type && std::holds_alternative<primitive_type>(*m_type)) {
+                const primitive_kind kind = std::get<primitive_type>(*m_type).m_type;
+                if (kind == primitive_kind::SID || kind == primitive_kind::SID32) {
+                    const u8 table_idx = fn.add_to_symbol_table(SID(lit.c_str()));
+                    fn.emit_instruction(Opcode::LoadStaticU64Imm, *literal_dest, table_idx);
+                    return *literal_dest;
+                }
+            }
             const u64 size = global.add_string(std::move(lit));
             const u8 table_idx = fn.add_to_symbol_table(size, compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING);
             fn.emit_instruction(Opcode::LoadStaticPointerImm, *literal_dest, table_idx);

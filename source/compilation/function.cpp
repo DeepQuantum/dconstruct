@@ -12,13 +12,20 @@ namespace dconstruct::compilation {
 [[nodiscard]] program_binary_element function::to_binary_element() const noexcept {
     constexpr sid64     global_sid           = SID("global");
     constexpr sid64     function_sid         = SID("function");
+    constexpr sid64     script_lambda_sid    = SID("script-lambda");
     constexpr u64       deadbeef             = 0xDEAD'BEEF'1337'F00D;
 
     program_binary_element element{get_size_in_bytes()};
     element.m_rawData.reserve(get_size_in_bytes());
     element.m_relocTable.resize(get_size_in_bytes() / 8 + 1);
 
-    element.push_bytes(function_sid, 0b0);
+    element.m_entry = {
+        .m_nameID = SID(std::get<std::string>(m_name).c_str()),
+        .m_typeId = script_lambda_sid,
+        .m_entryPtr = nullptr
+    };
+
+    element.push_bytes(script_lambda_sid, 0b0);
     const ScriptLambda lambda = {
         reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda)),
         reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction)),

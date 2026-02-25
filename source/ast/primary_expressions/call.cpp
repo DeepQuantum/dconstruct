@@ -148,9 +148,9 @@ void call_expr::pseudo_racket(std::ostream& os) const {
         if (!callee_destination) {
             return callee_destination;
         }
-        callee = m_callee->emit_dc(fn, global, *callee_destination);
+        callee = m_callee->emit_dc_callee(fn, global, *callee_destination);
     } else { 
-        callee = m_callee->emit_dc(fn, global);
+        callee = m_callee->emit_dc_callee(fn, global);
     }
 
     if (!callee) {

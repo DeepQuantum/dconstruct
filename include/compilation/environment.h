@@ -102,8 +102,6 @@ namespace dconstruct::compilation {
         scope& operator=(scope&& rhs) = default;
         scope(scope&& rhs) = default;
 
-        
-
         std::unordered_map<std::string, ast::full_type> m_namesToTypes;
         std::unordered_map<std::string, sid64_literal> m_sidAliases;
         const ast::full_type* m_expectedReturnType;
