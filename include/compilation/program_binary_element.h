@@ -27,6 +27,7 @@ namespace dconstruct::compilation {
         void insert_into_reloctable(const u8 bits, const u64 num_bits) noexcept;
 
         void insert_string_offset(const u64 index) noexcept;
+        void insert_string_offset(const u64 index, const u64 offset) noexcept;
 
         void adjust_offsets(const u64 offset) noexcept;
 
@@ -37,7 +38,6 @@ namespace dconstruct::compilation {
         std::vector<u8> m_relocTable;
     
 
-        u64 m_currentSize = 0;
         u64 m_byteOffset = 0;
         u8 m_bitOffset = 0;
     };

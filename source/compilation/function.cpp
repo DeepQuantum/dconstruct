@@ -27,8 +27,8 @@ namespace dconstruct::compilation {
 
     element.push_bytes(script_lambda_sid, 0b0);
     const ScriptLambda lambda = {
-        reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda)),
-        reinterpret_cast<u64*>(element.m_currentSize + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction)),
+        reinterpret_cast<u64*>(element.m_rawData.size() + sizeof(ScriptLambda)),
+        reinterpret_cast<u64*>(element.m_rawData.size() + sizeof(ScriptLambda) + m_instructions.size() * sizeof(Instruction)),
         function_sid,
         get_scriptlambda_sum(),
         0x0,

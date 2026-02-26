@@ -58,7 +58,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     }
 }
 
-[[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::make_binary(std::vector<compilation::program_binary_element> program_element, const compilation::global_state& global) noexcept {
+[[nodiscard]] std::expected<std::pair<std::unique_ptr<std::byte[]>, u64>, std::string> program::make_binary(std::vector<compilation::program_binary_element> program_elements, const compilation::global_state& global) noexcept {
     constexpr sid64     script_lambda_sid    = SID("script-lambda");
     constexpr sid64     array_sid            = SID("array");
     constexpr sid64     global_sid           = SID("global");
@@ -73,10 +73,10 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 
 
     constexpr u32 header_size = sizeof(DC_Header) + sizeof(array_sid);
-    const u64 num_entries = program_element.size();
+    const u64 num_entries = program_elements.size();
     const u32 entries_size = sizeof(Entry) * num_entries;
 
-    const u64 entries_data_size = std::accumulate(program_element.begin(), program_element.end(), u64{0}, [](u64 acc, const compilation::program_binary_element& program_element) {
+    const u64 entries_data_size = std::accumulate(program_elements.begin(), program_elements.end(), u64{0}, [](u64 acc, const compilation::program_binary_element& program_element) {
         return acc + program_element.m_rawData.size();
     });
 
@@ -135,7 +135,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     const u64 first_function_start = header_size + num_entries * sizeof(Entry);
     u64 prev_entry_size = sizeof(function_sid);
 
-    for (auto& element : program_element) {
+    for (auto& element : program_elements) {
         element.m_entry.m_entryPtr = reinterpret_cast<void*>(first_function_start + prev_entry_size);
         push_bytes(element.m_entry, 0b100);
         prev_entry_size += element.m_rawData.size();
@@ -143,7 +143,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
 
     
     u64 string_index = 0;
-    for (auto& fn : program_element) {
+    for (auto& fn : program_elements) {
         for (const auto& [offset, str_index] : fn.m_stringOffsets) {
             const u64 relative_offset = get_string_offset(str_index);
             *reinterpret_cast<u64*>(&fn.m_rawData[offset]) = relative_offset - current_size;

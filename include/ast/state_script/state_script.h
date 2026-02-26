@@ -35,7 +35,7 @@ namespace dconstruct::ast {
         std::vector<variable_declaration> m_declarations;
         std::vector<state_script_state> m_states;
 
-        u64 m_initialStateIdx;
+        u64 m_initialStateIdx = 0;
         
     };
 

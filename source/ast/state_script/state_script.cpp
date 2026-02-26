@@ -1,6 +1,7 @@
 #include "ast/state_script/state_script.h"
 #include "ast/primary_expressions/literal.h"
 #include "compilation/function.h"
+#include <array>
 #include <unordered_set>
 
 namespace dconstruct::ast {
@@ -222,11 +223,16 @@ void state_script::pseudo_racket(std::ostream& os) const {
 
     compilation::program_binary_element element{current_offset};
 
+    element.m_entry = Entry {
+        script_name,
+        state_script_sid,
+        nullptr
+    };
+
     element.push_bytes(state_script_sid, 0b0);
 
-
     const u64 debug_str_idx = global.add_string("debug_file_name_placeholder");
-    element.insert_string_offset(current_offset + offsetof(StateScript, m_pDebugFileName));
+    element.insert_string_offset(0, offsetof(StateScript, m_pDebugFileName));
     const StateScript ss = {
         script_name,
         reinterpret_cast<SsDeclarationList*>(declaration_list_offset),
@@ -245,7 +251,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
 
     element.push_bytes(ss_options_sid, 0b0);
     const u64 options_string_idx = global.add_string(m_optionsString);
-    element.insert_string_offset(current_offset + offsetof(SsOptions, m_optionString));
+    element.insert_string_offset(1);
 
     const SsOptions ss_options = {
         reinterpret_cast<const char*>(options_string_idx),
@@ -300,7 +306,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
         }
 
         const u64 tg_name_idx = global.add_string(m_name + " " + state.m_name + " (on (" + block.m_name + "))");
-        element.insert_string_offset(current_offset + offsetof(SsOnBlock, m_trackGroup.m_name));
+        element.insert_string_offset(2);
 
         const SsOnBlock on_block = {
             block_type,
@@ -444,10 +450,29 @@ void state_script::pseudo_racket(std::ostream& os) const {
                     }
 
                     compilation::program_binary_element fn_element = fn.to_binary_element();
-                    ScriptLambda script_lam{};
-                    std::memcpy(&script_lam, fn_element.m_rawData.data() + sizeof(sid64), sizeof(ScriptLambda));
-                    script_lam.m_sidGlobal = script_name;
-                    element.push_bytes(script_lam, 0b0000'0011, 0b00);
+                    assert(fn_element.m_rawData.size() % 8 == 0);
+
+                    struct byte_span_64 {
+                        std::array<std::byte, 64> bytes;
+                    };
+
+                    const u64 full_chunks = fn_element.m_rawData.size() / sizeof(byte_span_64);
+                    for (u64 i = 0; i < full_chunks; ++i) {
+                        byte_span_64 chunk{};
+                        std::memcpy(chunk.bytes.data(), fn_element.m_rawData.data() + i * sizeof(byte_span_64), sizeof(byte_span_64));
+                        const std::byte* p = reinterpret_cast<const std::byte*>(std::addressof(chunk));
+                        element.m_rawData.insert(element.m_rawData.end(), p, p + sizeof(byte_span_64));
+                        element.insert_into_reloctable(fn_element.m_relocTable[i], 8);
+                    }
+
+                    const u64 tail_start = full_chunks * sizeof(byte_span_64);
+                    for (u64 i = tail_start; i < fn_element.m_rawData.size(); i += 8) {
+                        std::array<std::byte, 8> chunk{};
+                        std::memcpy(chunk.data(), fn_element.m_rawData.data() + i, chunk.size());
+                        const u64 bit_index = i / 8;
+                        const u8 bit = (fn_element.m_relocTable[bit_index / 8] >> (bit_index % 8)) & 0x1;
+                        element.push_bytes(chunk, bit);
+                    }
                 }
             }
         }

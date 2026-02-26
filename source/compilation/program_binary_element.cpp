@@ -25,7 +25,11 @@ void program_binary_element::insert_into_reloctable(const u8 bits, const u64 num
 }
 
 void program_binary_element::insert_string_offset(const u64 index) noexcept {
-    m_stringOffsets.emplace_back(m_currentSize, index);
+    m_stringOffsets.emplace_back(m_rawData.size(), index);
+}
+
+void program_binary_element::insert_string_offset(const u64 index, const u64 offset) noexcept {
+    m_stringOffsets.emplace_back(m_rawData.size() + offset, index);
 }
 
 void program_binary_element::adjust_offsets(const u64 offset) noexcept {

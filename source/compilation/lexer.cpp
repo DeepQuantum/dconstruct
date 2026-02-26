@@ -234,7 +234,7 @@ char Lexer::advance() {
         case '"': return make_string();
         default: {
             if (std::isdigit(c)) {
-                if (match('X') || match('x')) {
+                if (c == '0' && (match('X') || match('x'))) {
                     return make_hex();
                 }
                 return make_number();

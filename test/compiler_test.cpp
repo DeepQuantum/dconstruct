@@ -1018,6 +1018,10 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         compilation::global_state global{};
         const auto binary_elements = program.compile_to_file(scope, global);
         ASSERT_TRUE(binary_elements) << "compile failed: " << (binary_elements ? "" : binary_elements.error());
+        const auto& [bytes, size] = *binary_elements;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
     }
 
     TEST(COMPILER, ParseStateScriptErrorNoStates) {
