@@ -13,10 +13,12 @@ namespace dconstruct::ast {
     struct state_script : public global_declaration {
 
         state_script(
+            std::string name,
             std::vector<sid_identifier> options,
             std::vector<variable_declaration> declarations,
             std::vector<state_script_state> states) noexcept
-            : m_options(std::move(options)),
+            : m_name(std::move(name)),
+              m_options(std::move(options)),
               m_declarations(std::move(declarations)),
               m_states(std::move(states)) {}
 

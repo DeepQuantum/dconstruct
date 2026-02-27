@@ -200,7 +200,9 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         if (!res) {
             return std::unexpected{res.error()};
         }
-        functions.push_back(std::move(*res));
+        if (res->m_rawData.size() != 0) {
+            functions.push_back(std::move(*res));
+        }
     }
 
     return functions;

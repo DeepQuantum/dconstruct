@@ -36,7 +36,10 @@ void program_binary_element::adjust_offsets(const u64 offset) noexcept {
     const u64 chunks = m_rawData.size() / sizeof(u64);
     for (u64 i = 0; i < chunks; ++i) {
         if (m_relocTable[i / 8] & (1 << (i % 8))) {
-            *reinterpret_cast<u64*>(m_rawData.data() + i * sizeof(u64)) += offset;
+            u64* ptr = reinterpret_cast<u64*>(m_rawData.data() + i * sizeof(u64));
+            if (*ptr != 0) {
+                *ptr += offset;
+            }
         }
     }
 }

@@ -55,6 +55,9 @@ struct SsTrackGroup {
     u64 m_rareScriptLambda;
 
     SsTrack tracks[m_numTracks] @ m_aTracks;
+    if (m_name) {
+        char track_name[] @ m_name;
+    }
 };
 
 struct SsOnBlock {
@@ -132,6 +135,9 @@ struct SsOptions {
     u8 _padding2[8];
 
     SymbolArray symbolArray @ m_pSymbolArray;
+    if (m_optionString) {
+        char options_string[] @ m_optionString;    
+    }
 };
 
 struct StateScript {
@@ -160,4 +166,4 @@ struct StateScript {
     }
 };
 
-StateScript script @ 0x60;
+StateScript script @ 0x48;

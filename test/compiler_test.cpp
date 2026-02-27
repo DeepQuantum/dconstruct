@@ -987,6 +987,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas[0].m_body.m_statements.size(), 1);
     }
 
+    
     TEST(COMPILER, CompileStateScriptBasicNoErrors) {
         const std::string code =
             "statescript {"
@@ -1000,6 +1001,44 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "    block Main {"
             "      track Base {"
             "        lambda { i32 var = #counter - 1; }"
+            "      }"
+            "    }"
+            "  }"
+            "}";
+
+        auto [tokens, lex_errors] = get_tokens(code);
+        const auto [program, types, parse_errors] = get_parse_results(tokens);
+
+        EXPECT_EQ(lex_errors.size(), 0);
+        EXPECT_EQ(parse_errors.size(), 0);
+
+        compilation::scope scope{types};
+        const auto semantic_errors = program.check_semantics(scope);
+        EXPECT_EQ(semantic_errors.size(), 0);
+
+        compilation::global_state global{};
+        const auto binary_elements = program.compile_to_file(scope, global);
+        ASSERT_TRUE(binary_elements) << "compile failed: " << (binary_elements ? "" : binary_elements.error());
+        const auto& [bytes, size] = *binary_elements;
+        std::ofstream out("compiled.bin", std::ios::binary);
+        out.write(reinterpret_cast<const char*>(bytes.get()), size);
+        out.flush();
+    }
+
+    TEST(COMPILER, CompileStateScriptLevShoesMudHashOptionNoErrors) {
+        const std::string code =
+            "using #set-table-shader-material-values-param as near (string, f32) -> u0;"
+            "using #C64E7DADB562F643 as string;"
+            "statescript #ss-lev-shoes-mud-hack {"
+            "  options {"
+            "    #lev"
+            "  }"
+            "  state #lev-shoes-mud {"
+            "    block start {"
+            "      track main {"
+            "        lambda {"
+            "          #set-table-shader-material-values-param(#C64E7DADB562F643, 0.80);"
+            "        }"
             "      }"
             "    }"
             "  }"

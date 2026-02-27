@@ -3,6 +3,13 @@
 
 namespace dconstruct::compilation {
 
+[[nodiscard]] static std::string statescript_name_from_token(const token& t) {
+    if (!t.m_lexeme.empty() && t.m_lexeme[0] == '#') {
+        return t.m_lexeme.substr(1);
+    }
+    return t.m_lexeme;
+}
+
 
 [[nodiscard]] std::tuple<ast::program, std::unordered_map<std::string, ast::full_type>, std::vector<compilation::parsing_error>> Parser::get_results() {
     return { parse(), get_known_types(), get_errors() };
@@ -1086,6 +1093,12 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 
 
 [[nodiscard]] std::unique_ptr<ast::state_script> Parser::make_state_script() {
+    if (!consume({token_type::SID, token_type::IDENTIFIER}, "expected statescript name after 'statescript'")) {
+        return nullptr;
+    }
+
+    const std::string script_name = statescript_name_from_token(previous());
+
     if (!consume(token_type::LEFT_BRACE, "expected '{' after 'statescript'")) {
         return nullptr;
     }
@@ -1112,26 +1125,23 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         return nullptr;
     }
 
-    if (!consume(token_type::DECLARATIONS, "expected 'declarations' section in statescript definition")) {
-        return nullptr;
-    }
-
-    if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
-        return nullptr;
-    }
-
     std::vector<ast::variable_declaration> declarations;
-
-    while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
-        std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
-        if (!decl) {
+    if (match({token_type::DECLARATIONS})) {
+        if (!consume(token_type::LEFT_BRACE, "expected '{' after 'declarations' in statescript definition")) {
             return nullptr;
         }
-        declarations.push_back(std::move(*decl));
-    }
 
-    if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
-        return nullptr;
+        while (!check(token_type::RIGHT_BRACE) && !is_at_end()) {
+            std::unique_ptr<ast::variable_declaration> decl = make_statescript_var_declaration();
+            if (!decl) {
+                return nullptr;
+            }
+            declarations.push_back(std::move(*decl));
+        }
+
+        if (!consume(token_type::RIGHT_BRACE, "expected '}' after statescript declarations section")) {
+            return nullptr;
+        }
     }
 
     std::vector<ast::state_script_state> states = make_statescript_states();
@@ -1144,14 +1154,14 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         return nullptr;
     }
 
-    return std::make_unique<ast::state_script>(std::move(options), std::move(declarations), std::move(states));
+    return std::make_unique<ast::state_script>(std::move(script_name), std::move(options), std::move(declarations), std::move(states));
 }
 
 
 [[nodiscard]] std::vector<ast::state_script_state> Parser::make_statescript_states() {
     std::vector<ast::state_script_state> states;
     while (match({token_type::STATE}) && !is_at_end()) {
-        const token* state_name = consume(token_type::IDENTIFIER, "expected state name after 'state' in statescript definition");
+        const token* state_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected state name after 'state' in statescript definition");
         if (!state_name) {
             return {};
         }
@@ -1169,7 +1179,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             return {};
         }
 
-        states.emplace_back(state_name->m_lexeme, std::move(blocks));
+        states.emplace_back(statescript_name_from_token(*state_name), std::move(blocks));
     }
     return states;
 }
@@ -1204,7 +1214,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 [[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
     std::vector<ast::state_script_block> blocks;
     while (match({token_type::BLOCK}) && !is_at_end()) {
-        const token* block_name = consume(token_type::IDENTIFIER, "expected block name after 'block' in statescript definition");
+        const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected block name after 'block' in statescript definition");
         if (!block_name) {
             return {};
         }
@@ -1222,7 +1232,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             return {};
         }
 
-        blocks.emplace_back(block_name->m_lexeme, std::move(tracks));
+        blocks.emplace_back(statescript_name_from_token(*block_name), std::move(tracks));
     }
 
     return blocks;
@@ -1231,7 +1241,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 [[nodiscard]] std::vector<ast::state_script_track> Parser::make_statescript_tracks() {
     std::vector<ast::state_script_track> tracks;
     while (match({token_type::TRACK}) && !is_at_end()) {
-        const token* track_name = consume(token_type::IDENTIFIER, "expected track name after 'track' in statescript definition");
+        const token* track_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected track name after 'track' in statescript definition");
         if (!track_name) {
             return {};
         }
@@ -1249,7 +1259,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             return {};
         }
 
-        tracks.emplace_back(track_name->m_lexeme, std::move(lambdas));
+        tracks.emplace_back(statescript_name_from_token(*track_name), std::move(lambdas));
     }
 
     return tracks;

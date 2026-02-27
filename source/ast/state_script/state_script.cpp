@@ -138,28 +138,46 @@ void state_script::pseudo_racket(std::ostream& os) const {
 
 
 [[nodiscard]] program_binary_result state_script::emit_dc(compilation::global_state& global) const noexcept {
-    constexpr sid64 script_name = SID("ss-compiled-test");
     constexpr sid64 state_script_sid = SID("state-script");
     constexpr sid64 array_sid = SID("array");
     constexpr sid64 ss_options_sid = SID("ss-options");
     constexpr sid64 ss_declarations_sid = SID("ss-declarations");
     constexpr sid64 symbol_array_sid = SID("symbol-array");
 
+    const sid64 script_name = SID(m_name.c_str());
+    
     u64 current_offset = 0;
     current_offset += sizeof(StateScript);
-    const u64 declaration_list_offset = current_offset;
-    current_offset += sizeof(SsDeclarationList);
+
+    u64 options_offset = 0;
+    u64 symbol_array_offset = 0;
+    u64 symbol_data_offset = 0;
+    if (!m_options.empty()) {
+        current_offset += sizeof(ss_options_sid);
+        options_offset = current_offset;
+        current_offset += sizeof(SsOptions);
+        current_offset += sizeof(symbol_array_sid);
+        symbol_array_offset = current_offset;
+        current_offset += sizeof(SymbolArray);
+        symbol_data_offset = current_offset;
+        current_offset += sizeof(sid64) * m_options.size();
+    }
+
+    u64 declaration_list_offset = 0;
+    u64 declaration_data_offset = 0;
+    if (!m_declarations.empty()) {
+        current_offset += sizeof(ss_declarations_sid);
+        declaration_list_offset = current_offset;
+        current_offset += sizeof(SsDeclarationList);
+        current_offset += sizeof(array_sid);
+        declaration_data_offset = current_offset;
+        current_offset += sizeof(SsDeclaration) * m_declarations.size();
+    }
+
     current_offset += sizeof(array_sid);
     const u64 state_offset = current_offset;
-    current_offset += sizeof(SsState) * m_states.size();    
-    current_offset += sizeof(ss_options_sid);
-    const u64 options_offset = current_offset;
-    current_offset += sizeof(SsOptions);
+    current_offset += sizeof(SsState) * m_states.size();
 
-
-    current_offset += sizeof(array_sid);
-    const u64 declaration_data_offset = current_offset;
-    current_offset += sizeof(SsDeclaration) * m_declarations.size();
     current_offset += sizeof(array_sid);
     const u64 block_data_offset = current_offset;
 
@@ -169,17 +187,15 @@ void state_script::pseudo_racket(std::ostream& os) const {
         current_offset += sizeof(SsOnBlock);
     }
 
-    current_offset += sizeof(symbol_array_sid);
-    const u64 symbol_array_offset = current_offset;
-    current_offset += sizeof(SymbolArray);
-
-    current_offset += sizeof(array_sid);
     std::vector<u64> symbol_offsets;
-    for (const auto& decl : m_declarations) {
-        symbol_offsets.push_back(current_offset);
-        current_offset += sizeof(sid64) + sizeof(void*);
+    if (!m_declarations.empty()) {
+        current_offset += sizeof(array_sid);
+        for (const auto& decl : m_declarations) {
+            symbol_offsets.push_back(current_offset);
+            current_offset += sizeof(sid64) + sizeof(void*);
+        }
     }
-
+    
     std::vector<u64> track_offsets;
     for (const auto& state : m_states) {
         for (const auto& block : state.m_blocks) {
@@ -235,7 +251,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
     element.insert_string_offset(0, offsetof(StateScript, m_pDebugFileName));
     const StateScript ss = {
         script_name,
-        reinterpret_cast<SsDeclarationList*>(declaration_list_offset),
+        !m_declarations.empty() ? reinterpret_cast<SsDeclarationList*>(declaration_list_offset) : nullptr,
         m_initialStateIdx,
         reinterpret_cast<SsOptions*>(options_offset),
         0x0,
@@ -249,24 +265,82 @@ void state_script::pseudo_racket(std::ostream& os) const {
     };
     element.push_bytes(ss, 0b1010'1010, 0b01);
 
-    element.push_bytes(ss_options_sid, 0b0);
-    const u64 options_string_idx = global.add_string(m_optionsString);
-    element.insert_string_offset(1);
+    if (!m_options.empty()) {
+        element.push_bytes(ss_options_sid, 0b0);
+        const u64 options_string_idx = global.add_string(m_optionsString);
+        element.insert_string_offset(1);
 
-    const SsOptions ss_options = {
-        reinterpret_cast<const char*>(options_string_idx),
-        0x0,
-        0x0,
-        reinterpret_cast<SymbolArray*>(symbol_array_offset),
-        nullptr,
-        nullptr,
-        nullptr,
-        5,
+        const SsOptions ss_options = {
+            reinterpret_cast<const char*>(options_string_idx),
+            0x0,
+            0x0,
+            reinterpret_cast<SymbolArray*>(symbol_array_offset),
+            nullptr,
+            nullptr,
+            nullptr,
+            5,
+            0,
+            0x0,
+            0x0,
+        };
+        element.push_bytes(ss_options, 0b0111'1001, 0b00);
+    }
+
+    element.push_bytes(symbol_array_sid, 0b0);
+
+    const SymbolArray symbol_array = {
+        static_cast<u32>(m_options.size()),
         0,
-        0x0,
-        0x0,
+        reinterpret_cast<sid64*>(symbol_data_offset),
     };
-    element.push_bytes(ss_options, 0b0111'1001, 0b00);
+
+    element.push_bytes(symbol_array, 0b10);
+
+
+    
+
+
+    if (!m_declarations.empty()) {
+        element.push_bytes(ss_declarations_sid, 0b0);
+
+        const SsDeclarationList decl_list = {
+            static_cast<u32>(total_declarations_size),
+            static_cast<u32>(m_declarations.size()),
+            reinterpret_cast<SsDeclaration*>(declaration_data_offset)
+        };
+
+        element.push_bytes(decl_list, 0b01);
+
+        element.push_bytes(array_sid, 0b0);
+
+        u16 var_size_sum = 0;
+        for (u32 i = 0; i < m_declarations.size(); ++i) {
+            const auto& decl = m_declarations[i];
+            const auto& ptype = std::get<primitive_type>(decl.m_type);
+            sid64 decl_type_sid = 0;
+            switch (ptype.m_type) {
+                case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
+                case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
+                case primitive_kind::F32:    decl_type_sid = SID("float");   break;
+                case primitive_kind::STRING: decl_type_sid = SID("string");  break;
+                case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
+                default: assert(false && "unsupported declaration type"); break;
+            }
+
+            var_size_sum += static_cast<u16>(get_size(decl.m_type));
+            const SsDeclaration ss_decl = {
+                SID(decl.m_identifier.c_str()),
+                nullptr,
+                decl_type_sid,
+                var_size_sum,
+                1,
+                0,
+                reinterpret_cast<void*>(symbol_offsets[i]),
+                0x80,
+            };
+            element.push_bytes(ss_decl, 0b01'0010);
+        }
+    }
 
     element.push_bytes(array_sid, 0b0);
 
@@ -279,16 +353,6 @@ void state_script::pseudo_racket(std::ostream& os) const {
         };
         element.push_bytes(ss_state, 0b0);
     }
-
-    element.push_bytes(ss_declarations_sid, 0b0);
-    
-    const SsDeclarationList decl_list = {
-        static_cast<u32>(total_declarations_size),
-        static_cast<u32>(m_declarations.size()),
-        reinterpret_cast<SsDeclaration*>(declaration_data_offset)
-    };
-
-    element.push_bytes(decl_list, 0b01);
 
     element.push_bytes(array_sid, 0b0);
 
@@ -329,75 +393,37 @@ void state_script::pseudo_racket(std::ostream& os) const {
         track_flat_idx += static_cast<u32>(block.m_tracks.size());
     } 
 
+    if (!m_declarations.empty()) {
+        element.push_bytes(array_sid, 0b0);
 
-    element.push_bytes(symbol_array_sid, 0b0);
-
-    const SymbolArray symbol_array = {
-        static_cast<u32>(m_options.size()),
-        0,
-        reinterpret_cast<sid64*>(symbol_offsets.empty() ? 0 : symbol_offsets[0]),
-    };
-
-    element.push_bytes(symbol_array, 0b10);
-
-    element.push_bytes(array_sid, 0b0);
-
-    u16 var_size_sum = 0;
-    for (u32 i = 0; i < m_declarations.size(); ++i) {
-        const auto& decl = m_declarations[i];
-        const auto& ptype = std::get<primitive_type>(decl.m_type);
-        sid64 decl_type_sid = 0;
-        switch (ptype.m_type) {
-            case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
-            case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
-            case primitive_kind::F32:    decl_type_sid = SID("float");   break;
-            case primitive_kind::STRING: decl_type_sid = SID("string");  break;
-            case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
-            default: assert(false && "unsupported declaration type"); break;
-        }
-
-        var_size_sum += static_cast<u16>(get_size(decl.m_type));
-        const SsDeclaration ss_decl = {
-            SID(decl.m_identifier.c_str()),
-            nullptr,
-            decl_type_sid,
-            var_size_sum,
-            1,
-            0,
-            reinterpret_cast<void*>(symbol_offsets[i]),
-            0x80,
-        };
-        element.push_bytes(ss_decl, 0b01'0010);
-    }
-
-
-    for (u32 i = 0; i < m_declarations.size(); ++i) {
-        const auto& decl = m_declarations[i];
-        const auto& ptype = std::get<primitive_type>(decl.m_type);
-        sid64 decl_type_sid = 0;
-        switch (ptype.m_type) {
-            case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
-            case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
-            case primitive_kind::F32:    decl_type_sid = SID("float");   break;
-            case primitive_kind::STRING: decl_type_sid = SID("string");  break;
-            case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
-            default:                     decl_type_sid = SID("int32");   break;
-        }
-        element.push_bytes(decl_type_sid, 0b0);
-
-        u64 init_value = 0;
-        if (decl.m_init) {
-            const literal* lit = decl.m_init->as_literal();
-            if (lit) {
-                std::visit([&](auto&& val) {
-                    using T = std::decay_t<decltype(val)>;
-                    if constexpr (std::is_arithmetic_v<T>) {
-                        std::memcpy(&init_value, &val, sizeof(val));
-                    }
-                }, lit->m_value);
+        for (u32 i = 0; i < m_declarations.size(); ++i) {
+            const auto& decl = m_declarations[i];
+            const auto& ptype = std::get<primitive_type>(decl.m_type);
+            sid64 decl_type_sid = 0;
+            switch (ptype.m_type) {
+                case primitive_kind::BOOL:   decl_type_sid = SID("boolean"); break;
+                case primitive_kind::I32:    decl_type_sid = SID("int32");   break;
+                case primitive_kind::F32:    decl_type_sid = SID("float");   break;
+                case primitive_kind::STRING: decl_type_sid = SID("string");  break;
+                case primitive_kind::SID:    decl_type_sid = SID("symbol");  break;
+                default:                     decl_type_sid = SID("int32");   break;
             }
+            element.push_bytes(decl_type_sid, 0b0);
+
+            u64 init_value = 0;
+            if (decl.m_init) {
+                const literal* lit = decl.m_init->as_literal();
+                if (lit) {
+                    std::visit([&](auto&& val) {
+                        using T = std::decay_t<decltype(val)>;
+                        if constexpr (std::is_arithmetic_v<T>) {
+                            std::memcpy(&init_value, &val, sizeof(val));
+                        }
+                    }, lit->m_value);
+                }
+            }
+            element.push_bytes(init_value, 0b0);
         }
-        element.push_bytes(init_value, 0b0);
     }
 
     u32 ss_lambda_flat_idx = 0;

@@ -80,6 +80,9 @@ void sid_identifier::pseudo_racket(std::ostream& os) const {
     return *true_destination;
 }
 
+[[nodiscard]] std::string sid_identifier::get_raw_string() const noexcept {
+    return m_name.m_lexeme.substr(1, m_name.m_lexeme.size() - 1);
+}
 
 VAR_OPTIMIZATION_ACTION sid_identifier::var_optimization_pass(var_optimization_env& env) noexcept {
     return VAR_OPTIMIZATION_ACTION::NONE;
