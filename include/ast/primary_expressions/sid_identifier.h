@@ -35,5 +35,6 @@ namespace dconstruct::ast {
 
 
         compilation::token m_name;
+        bool m_isNumeric = false;
     };
 }

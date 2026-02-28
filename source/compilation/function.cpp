@@ -16,8 +16,6 @@ namespace dconstruct::compilation {
     constexpr u64       deadbeef             = 0xDEAD'BEEF'1337'F00D;
 
     program_binary_element element{get_size_in_bytes()};
-    element.m_rawData.reserve(get_size_in_bytes());
-    element.m_relocTable.resize(get_size_in_bytes() / 8 + 1);
 
     element.m_entry = {
         .m_nameID = SID(std::get<std::string>(m_name).c_str()),
@@ -41,14 +39,14 @@ namespace dconstruct::compilation {
     };
     element.push_bytes(lambda, 0b0000'0011, 0b00);
     for (const Instruction& istr : m_instructions) {
-        element.push_bytes(istr, 1, 0b0);
+        element.push_bytes(istr, 0b0);
     }
     for (u32 i = 0; i < m_symbolTable.size(); ++i) {
         if (m_symbolTableEntryPointers[i] == compilation::function::SYMBOL_TABLE_POINTER_KIND::STRING) {
-            element.insert_string_offset(m_symbolTable[i]);
-            element.push_bytes(sizeof(const char*), 1, 0b1);
+            element.insert_string_offset();
+            element.push_bytes(m_symbolTable[i], 0b1);
         } else {
-            element.push_bytes(m_symbolTable[i], 1, 0b0);
+            element.push_bytes(m_symbolTable[i], 0b0);
         }
     }
     return element;

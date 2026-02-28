@@ -26,16 +26,16 @@ namespace dconstruct::compilation {
 
         void insert_into_reloctable(const u8 bits, const u64 num_bits) noexcept;
 
-        void insert_string_offset(const u64 index) noexcept;
-        void insert_string_offset(const u64 index, const u64 offset) noexcept;
+        void insert_string_offset() noexcept;
+        void insert_string_offset(const u64 offset) noexcept;
 
         void adjust_offsets(const u64 offset) noexcept;
 
 
         Entry m_entry;
         std::vector<std::byte> m_rawData;
-        std::vector<std::pair<u64, u64>> m_stringOffsets;
-        std::vector<u8> m_relocTable;
+        std::vector<u64> m_stringOffsets;
+        std::vector<bool> m_relocTable;
     
 
         u64 m_byteOffset = 0;

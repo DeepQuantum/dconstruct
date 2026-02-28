@@ -111,7 +111,7 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         for (u32 i = 0; i < bits_list.size() - 1; ++i) {
             insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits_list[i], 8);
         }
-        insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits_list.back(), sizeof(arg) % 8);
+        insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits_list.back(), sizeof(arg) / 8); 
     };
 
     auto get_string_offset = [data_size, &global](const u32 index) -> u64 {
@@ -142,16 +142,16 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     }
 
     
-    u64 string_index = 0;
     for (auto& fn : program_elements) {
-        for (const auto& [offset, str_index] : fn.m_stringOffsets) {
+        for (const auto offset : fn.m_stringOffsets) {
+            const u64 str_index = *reinterpret_cast<u64*>(&fn.m_rawData[offset]);
             const u64 relative_offset = get_string_offset(str_index);
             *reinterpret_cast<u64*>(&fn.m_rawData[offset]) = relative_offset - current_size;
         }
         fn.adjust_offsets(current_size);
         insert_into_bytestream(out, current_size, fn.m_rawData);
-        for (const auto& bits : fn.m_relocTable) {
-            insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits, sizeof(bits));
+        for (const auto& bit : fn.m_relocTable) {
+            insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bit, sizeof(bool));
         }
     }
 
