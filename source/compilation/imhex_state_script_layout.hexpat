@@ -1,0 +1,226 @@
+#pragma endian little
+
+using sid64 = u64;
+
+struct vector {
+    float x, y, z, w;
+};
+
+struct ScriptLambda {
+    u64 m_pInstruction;
+    u64 m_pSymbols;
+    sid64 m_typeId;
+    u64 m_sum;
+    sid64 m_funcName;
+    u64 m_instructionFlag;
+    u8 _padding0[4];
+    u32 m_numInstructions;
+    s64 m_neg1;
+    u64 m_sidGlobal;
+    u8 _padding1[8];
+
+    u64 instructions[m_numInstructions] @ m_pInstruction;
+    u64 symbols[(m_sum - 4 * m_numInstructions - 12) / 4] @ m_pSymbols;
+};
+
+struct SsLambda {
+    u64 m_pScriptLambda;
+    u64 m_someSortOfCounter;
+
+    if (m_pScriptLambda != 0) {
+        ScriptLambda scriptLambda @ m_pScriptLambda;
+    }
+};
+
+struct SsTrack {
+    sid64 m_trackId;
+    u16 m_trackIdx;
+    s16 m_totalLambdaCount;
+    u8 _padding0[4];
+    u64 m_pSsLambda;
+
+    if (m_pSsLambda != 0) {
+        SsLambda lambdas[m_totalLambdaCount] @ m_pSsLambda;
+    }
+};
+
+struct SsTrackGroup {
+    u8 _padding0[8];
+    u16 m_totalLambdaCount;
+    s16 m_numTracks;
+    u8 _padding1[4];
+    u64 m_aTracks;
+    u64 m_name;
+    u8 _padding2[16];
+    u64 m_rareScriptLambda;
+
+    SsTrack tracks[m_numTracks] @ m_aTracks;
+    if (m_name != 0) {
+        char track_name[] @ m_name;
+    }
+};
+
+struct SsOnBlock {
+    s32 m_blockType;
+    u8 _padding0[4];
+    sid64 m_blockEventId;
+    u64 m_pScriptLambda;
+    
+    SsTrackGroup m_trackGroup;
+    
+    if (m_pScriptLambda != 0) {
+        ScriptLambda scriptLambda @ m_pScriptLambda;
+    }
+};
+
+struct SsState {
+    sid64 m_stateId;
+    s64 m_numSsOnBlocks;
+    u64 m_pSsOnBlocks;
+
+    SsOnBlock onBlocks[m_numSsOnBlocks] @ m_pSsOnBlocks;
+};
+
+struct SsDeclaration {
+    sid64 m_declId;
+    u64 m_declIdString;
+    sid64 m_declTypeId;
+    u16 m_varSizeSum;
+    u16 m_isVar;
+    u8 _padding0[4];
+    u64 m_pDeclValue;
+    u8 _padding1[8];
+    
+    if (m_declIdString != 0) {
+        char decl_string[] @ m_declIdString;
+    }
+    
+    if (m_pDeclValue) {
+        u64 type_id @ m_pDeclValue - 8;
+        if (type_id == 11532138274943533413) {
+            float value @ m_pDeclValue;
+        } else if (type_id == 18005884506733652191) {
+            u64 value @ m_pDeclValue;
+        } else if (type_id == 16817156562142133634) {
+            vector value @ m_pDeclValue;
+        }
+    }
+};
+
+struct SsDeclarationList {
+    u32 m_totalDeclarationSize;
+    u32 m_numDeclarations;
+    u64 m_pDeclarations;
+
+    SsDeclaration declarations[m_numDeclarations] @ m_pDeclarations;
+};
+
+struct SymbolArray {
+    s32 m_numEntries;
+    u8 _padding0[4];
+    u64 m_pSymbols;
+
+    sid64 symbols[m_numEntries] @ m_pSymbols;
+};
+
+struct SsOptions {
+    u64 m_optionString;
+    u64 m_unknownFlags;
+    u8 _padding0[8];
+    u64 m_pSymbolArray;
+    u8 _padding1[24];
+    u32 m_always5;
+    u32 m_mostly0;
+    u64 m_mostly0Rarely1;
+    u8 _padding2[8];
+
+    SymbolArray symbolArray @ m_pSymbolArray;
+    if (m_optionString) {
+        char options_string[] @ m_optionString;    
+    }
+};
+
+struct StateScript {
+    sid64 m_stateScriptId;
+    u64 m_pSsDeclList;
+    sid64 m_initialStateId;
+    u64 m_pSsOptions;
+    u8 _padding0[8];
+    u64 m_pSsStateTable;
+    s16 m_stateCount;
+    s16 m_line;
+    u8 _padding1[4];
+    u64 m_pDebugFileName;
+    u64 m_pErrorName;
+    u8 _padding2[8];
+    
+    if (m_pSsDeclList) {
+       SsDeclarationList declList @ m_pSsDeclList;
+    }
+   
+    SsState states[m_stateCount] @ m_pSsStateTable;
+    
+    if (m_pSsOptions) SsOptions options @ m_pSsOptions;
+    
+    if (m_pDebugFileName) {
+        char debug_name[] @ m_pDebugFileName;
+    }
+};
+
+
+struct Entry {
+    sid64 m_nameID;
+    sid64 m_typeId;
+    u64   m_entryPtr;
+    
+    if (m_entryPtr != 0) {
+        if (m_typeId == 14848776067067198830) {
+            StateScript script @ m_entryPtr;
+        }
+    }
+};
+
+bitfield SymbolTableBits {
+    chunk0 : 1;
+    chunk1 : 1;
+    chunk2 : 1;
+    chunk3 : 1;
+    chunk4 : 1;
+    chunk5 : 1;
+    chunk6 : 1;
+    chunk7 : 1;
+};
+
+struct SymbolTableByte {
+    u8 m_raw;
+    SymbolTableBits m_bits @ $ - 1;
+};
+
+struct SymbolTable {
+    u32 m_size;
+    SymbolTableByte bytes[m_size];
+};
+
+struct SymbolLinkedChunk {
+    u64 chunk [[hidden]];
+    u8 symbolByte @ header.m_textSize + 4 + (($ - 8) / 64);
+    if (((symbolByte >> ((($ - 8) / 8) % 8)) & 1) != 0) {
+        u64 pointer_chunk @ $ - 8;
+    }
+};
+
+struct DC_Header {
+    u32   m_magic;
+    u32   m_versionNumber;
+    u32   m_textSize;
+    u32   m_stringsOffset;
+    u32   field_10;
+    u32   m_numEntries;
+    u64   m_pStartOfData;
+    
+    //Entry entries[m_numEntries] @ m_pStartOfData; 
+    SymbolTable symbolTable @ m_textSize;
+};
+
+DC_Header header @ 0x0;
+SymbolLinkedChunk linkedChunks[(header.m_textSize + 7) / 8] @ 0x0;
