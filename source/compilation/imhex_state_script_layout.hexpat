@@ -2,6 +2,120 @@
 
 using sid64 = u64;
 
+enum TypeId : u64 {
+    StateScript = 14848776067067198830,
+    Float = 11532138274943533413,
+    UInt64 = 18005884506733652191,
+    Vector = 16817156562142133634,
+};
+
+enum Opcode : u8 {
+    Return,
+    IAdd,
+    ISub,
+    IMul,
+    IDiv,
+    FAdd,
+    FSub,
+    FMul,
+    FDiv,
+    LoadStaticInt,
+    LoadStaticFloat,
+    LoadStaticPointer,
+    LoadU16Imm,
+    LoadU32,
+    LoadFloat,
+    LoadPointer,
+    StoreInt,
+    StoreFloat,
+    StorePointer,
+    LookupInt,
+    LookupFloat,
+    LookupPointer,
+    MoveInt,
+    MoveFloat,
+    MovePointer,
+    CastInteger,
+    CastFloat,
+    Call,
+    CallFf,
+    IEqual,
+    IGreaterThan,
+    IGreaterThanEqual,
+    ILessThan,
+    ILessThanEqual,
+    FEqual,
+    FGreaterThan,
+    FGreaterThanEqual,
+    FLessThan,
+    FLessThanEqual,
+    IMod,
+    FMod,
+    IAbs,
+    FAbs,
+    GoTo,
+    Label,
+    Branch,
+    BranchIf,
+    BranchIfNot,
+    OpLogNot,
+    OpBitAnd,
+    OpBitNot,
+    OpBitOr,
+    OpBitXor,
+    OpBitNor,
+    OpLogAnd,
+    OpLogOr,
+    INeg,
+    FNeg,
+    LoadParamCnt,
+    IAddImm,
+    ISubImm,
+    IMulImm,
+    IDivImm,
+    LoadStaticI32Imm,
+    LoadStaticFloatImm,
+    LoadStaticPointerImm,
+    IntAsh,
+    Move,
+    LoadStaticU32Imm,
+    LoadStaticI8Imm,
+    LoadStaticU8Imm,
+    LoadStaticI16Imm,
+    LoadStaticU16Imm,
+    LoadStaticI64Imm,
+    LoadStaticU64Imm,
+    LoadI8,
+    LoadU8,
+    LoadI16,
+    LoadU16,
+    LoadI32,
+    LoadI64,
+    LoadU64,
+    StoreI8,
+    StoreU8,
+    StoreI16,
+    StoreU16,
+    StoreI32,
+    StoreU32,
+    StoreI64,
+    StoreU64,
+    INotEqual,
+    FNotEqual,
+    StoreArray,
+    AssertPointer,
+    BreakFlag,
+    Breakpoint,
+};
+
+struct Instruction {
+    Opcode m_opcode;
+    u8 m_arg0;
+    u8 m_arg1;
+    u8 m_arg2;
+    padding[4];
+};
+
 struct vector {
     float x, y, z, w;
 };
@@ -19,7 +133,7 @@ struct ScriptLambda {
     u64 m_sidGlobal;
     u8 _padding1[8];
 
-    u64 instructions[m_numInstructions] @ m_pInstruction;
+    Instruction instructions[m_numInstructions] @ m_pInstruction;
     u64 symbols[(m_sum - 4 * m_numInstructions - 12) / 4] @ m_pSymbols;
 };
 
@@ -81,6 +195,16 @@ struct SsState {
     SsOnBlock onBlocks[m_numSsOnBlocks] @ m_pSsOnBlocks;
 };
 
+struct TypedValue {
+    u64 m_typeId;
+    match (m_typeId) {
+        (TypeId::StateScript): StateScript script;
+        (TypeId::Float): float value;
+        (TypeId::UInt64): u64 value;
+        (TypeId::Vector): vector value;
+    }
+};
+
 struct SsDeclaration {
     sid64 m_declId;
     u64 m_declIdString;
@@ -96,14 +220,7 @@ struct SsDeclaration {
     }
     
     if (m_pDeclValue) {
-        u64 type_id @ m_pDeclValue - 8;
-        if (type_id == 11532138274943533413) {
-            float value @ m_pDeclValue;
-        } else if (type_id == 18005884506733652191) {
-            u64 value @ m_pDeclValue;
-        } else if (type_id == 16817156562142133634) {
-            vector value @ m_pDeclValue;
-        }
+        TypedValue value @ m_pDeclValue - 8;
     }
 };
 
@@ -173,10 +290,8 @@ struct Entry {
     sid64 m_typeId;
     u64   m_entryPtr;
     
-    if (m_entryPtr != 0) {
-        if (m_typeId == 14848776067067198830) {
-            StateScript script @ m_entryPtr;
-        }
+    if (m_entryPtr) {
+        TypedValue value @ m_entryPtr - 8;
     }
 };
 
@@ -218,7 +333,7 @@ struct DC_Header {
     u32   m_numEntries;
     u64   m_pStartOfData;
     
-    //Entry entries[m_numEntries] @ m_pStartOfData; 
+    Entry entries[m_numEntries] @ m_pStartOfData; 
     SymbolTable symbolTable @ m_textSize;
 };
 

@@ -141,7 +141,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
     constexpr sid64 state_script_sid = SID("state-script");
     constexpr sid64 array_sid = SID("array");
     constexpr sid64 ss_options_sid = SID("ss-options");
-    constexpr sid64 ss_declarations_sid = SID("ss-declarations");
+    constexpr sid64 ss_decl_list_sid = SID("ss-decl-list");
     constexpr sid64 symbol_array_sid = SID("symbol-array");
     constexpr sid64 script_lambda_sid = SID("script-lambda");
 
@@ -166,19 +166,22 @@ void state_script::pseudo_racket(std::ostream& os) const {
 
     u64 declaration_list_offset = 0;
     u64 declaration_data_offset = 0;
-    std::vector<u64> symbol_offsets;
+    std::vector<u64> declaration_data_offsets;
 
     if (!m_declarations.empty()) {
-        current_offset += sizeof(ss_declarations_sid);
+        current_offset += sizeof(ss_decl_list_sid);
         declaration_list_offset = current_offset;
         current_offset += sizeof(SsDeclarationList);
         current_offset += sizeof(array_sid);
         declaration_data_offset = current_offset;
         current_offset += sizeof(SsDeclaration) * m_declarations.size();
-        current_offset += sizeof(array_sid);
         for (const auto& decl : m_declarations) {
-            symbol_offsets.push_back(current_offset);
-            current_offset += sizeof(sid64) + sizeof(void*);
+            if (decl.m_init == nullptr) {
+                continue;
+            }
+            current_offset += sizeof(sid64);
+            declaration_data_offsets.push_back(current_offset);
+            current_offset += sizeof(void*);
         }
     }
 
@@ -224,7 +227,6 @@ void state_script::pseudo_racket(std::ostream& os) const {
     for (const auto& state : m_states) {
         for (const auto& block : state.m_blocks) {
             for (const auto& track : block.m_tracks) {
-                current_offset += sizeof(array_sid);
                 for (const auto& lambda : track.m_lambdas) {
                     current_offset += sizeof(script_lambda_sid);
                     script_lambda_offsets.push_back(current_offset);
@@ -248,7 +250,9 @@ void state_script::pseudo_racket(std::ostream& os) const {
                     }
                     compilation::program_binary_element fn_element = fn.to_binary_element();
                     fn_element.adjust_offsets(current_offset - sizeof(ScriptLambda) - 2 * sizeof(sid64));
+
                     assert(fn_element.m_rawData.size() % 8 == 0);
+
                     current_offset += fn_element.m_rawData.size();
                     lambda_elements.push_back(std::move(fn_element));
                 }
@@ -329,15 +333,15 @@ void state_script::pseudo_racket(std::ostream& os) const {
 
 
     if (!m_declarations.empty()) {
-        element.push_bytes(ss_declarations_sid, 0b0);
+        element.push_bytes(ss_decl_list_sid, 0b0);
 
         const SsDeclarationList decl_list = {
             static_cast<u32>(total_declarations_size),
             static_cast<u32>(m_declarations.size()),
-            reinterpret_cast<SsDeclaration*>(declaration_data_offset)
+            reinterpret_cast<SsDeclaration*>(declaration_data_offset),
         };
 
-        element.push_bytes(decl_list, 0b01);
+        element.push_bytes(decl_list, 0b10);
 
         element.push_bytes(array_sid, 0b0);
 
@@ -363,13 +367,11 @@ void state_script::pseudo_racket(std::ostream& os) const {
                 var_size_sum,
                 1,
                 0,
-                reinterpret_cast<void*>(symbol_offsets[i]),
+                reinterpret_cast<void*>(declaration_data_offsets[i]),
                 0x80,
             };
             element.push_bytes(ss_decl, 0b01'0010);
         }
-
-        element.push_bytes(array_sid, 0b0);
 
         for (u32 i = 0; i < m_declarations.size(); ++i) {
             const auto& decl = m_declarations[i];
@@ -388,14 +390,13 @@ void state_script::pseudo_racket(std::ostream& os) const {
             u64 init_value = 0;
             if (decl.m_init) {
                 const literal* lit = decl.m_init->as_literal();
-                if (lit) {
-                    std::visit([&](auto&& val) {
-                        using T = std::decay_t<decltype(val)>;
-                        if constexpr (std::is_arithmetic_v<T>) {
-                            std::memcpy(&init_value, &val, sizeof(val));
-                        }
-                    }, lit->m_value);
-                }
+                assert(lit && "declaration initializer must be a literal");
+                std::visit([&](auto&& val) {
+                    using T = std::decay_t<decltype(val)>;
+                    if constexpr (std::is_arithmetic_v<T>) {
+                        std::memcpy(&init_value, &val, sizeof(val));
+                    }
+                }, lit->m_value);
             }
             element.push_bytes(init_value, 0b0);
         }
@@ -495,32 +496,8 @@ void state_script::pseudo_racket(std::ostream& os) const {
     for (const auto& state : m_states) {
         for (const auto& block : state.m_blocks) {
             for (const auto& track : block.m_tracks) {
-                element.push_bytes(array_sid, 0b0);
                 for (u32 lambda_idx = 0; lambda_idx < track.m_lambdas.size(); ++lambda_idx) {
                     const compilation::program_binary_element& fn_element = lambda_elements[lambda_element_flat_idx++];
-                    assert(fn_element.m_rawData.size() % 8 == 0);
-
-                    // struct byte_span_64 {
-                    //     std::array<std::byte, 64> bytes;
-                    // };
-
-                    // const u64 full_chunks = fn_element.m_rawData.size() / sizeof(byte_span_64);
-                    // for (u64 i = 0; i < full_chunks; ++i) {
-                    //     byte_span_64 chunk{};
-                    //     std::memcpy(chunk.bytes.data(), fn_element.m_rawData.data() + i * sizeof(byte_span_64), sizeof(byte_span_64));
-                    //     const std::byte* p = reinterpret_cast<const std::byte*>(std::addressof(chunk));
-                    //     element.m_rawData.insert(element.m_rawData.end(), p, p + sizeof(byte_span_64));
-                    //     element.insert_into_reloctable(fn_element.m_relocTable[i], 8);
-                    // }
-
-                    // const u64 tail_start = full_chunks * sizeof(byte_span_64);
-                    // for (u64 i = tail_start; i < fn_element.m_rawData.size(); i += 8) {
-                    //     std::array<std::byte, 8> chunk{};
-                    //     std::memcpy(chunk.data(), fn_element.m_rawData.data() + i, chunk.size());
-                    //     const u64 bit_index = i / 8;
-                    //     const u8 bit = (fn_element.m_relocTable[bit_index / 8] >> (bit_index % 8)) & 0x1;
-                    //     element.push_bytes(chunk, bit);
-                    // }
 
                     element.m_rawData.insert(element.m_rawData.end(), fn_element.m_rawData.begin(), fn_element.m_rawData.end());
                     element.m_relocTable.insert(element.m_relocTable.end(), fn_element.m_relocTable.begin(), fn_element.m_relocTable.end());
