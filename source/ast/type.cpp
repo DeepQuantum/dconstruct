@@ -152,6 +152,39 @@ ptr_type::ptr_type(const ast::primitive_kind& kind) noexcept
     }, type);
 }
 
+[[nodiscard]] std::string type_to_definition_string(const full_type& type) {
+    return std::visit([&type](auto&& arg) -> std::string {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, struct_type>) {
+            std::ostringstream os;
+            os << "struct " << arg.m_name << " // size: " << get_size(type) << "\n";
+            os << "{\n";
+            for (const auto& [name, member_type] : arg.m_members) {
+                os << "    " << type_to_declaration_string(*member_type.get()) << " " << name << ";\n";
+            }
+            os << "};";
+            return os.str();
+        } else if constexpr (std::is_same_v<T, enum_type>) {
+            std::ostringstream os;
+            os << "enum " << arg.m_name << " // size: " << get_size(type) << "\n";
+            os << "{\n";
+            for (u32 i = 0; i < arg.m_enumerators.size(); ++i) {
+                os << "    " << arg.m_enumerators[i];
+                if (i < arg.m_enumerators.size() - 1) {
+                    os << ',';
+                }
+                os << "\n";
+            }
+            os << "};";
+            return os.str();
+        } else {
+            std::ostringstream os;
+            os << type_to_declaration_string(type) << " // size: " << get_size(type);
+            return os.str();
+        }
+    }, type);
+}
+
 [[nodiscard]] u64 get_size(const full_type& type) noexcept {
     return std::visit([](auto&& arg) -> u64 {
         using T = std::decay_t<decltype(arg)>;

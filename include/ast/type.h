@@ -140,6 +140,8 @@ namespace dconstruct::ast {
 
     [[nodiscard]] std::string type_to_declaration_string(const full_type& type);
 
+    [[nodiscard]] std::string type_to_definition_string(const full_type& type);
+
     [[nodiscard]] std::string primitive_to_string(const primitive_value& prim);
 
     [[nodiscard]] std::string kind_to_string(const primitive_kind kind) noexcept;

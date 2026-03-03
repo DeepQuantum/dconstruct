@@ -1,5 +1,7 @@
 #include "disassembly/file_disassembler.h"
 #include "disassembly/edit_disassembler.h"
+#include "disassembly/mapping_disassembler.h"
+#include "disassembly/mapping_registry.h"
 #include "decompilation/decomp_function.h"
 #include "shaders/ndshader.h"
 #include "cxxopts.hpp"
@@ -224,6 +226,46 @@ static void disassemble_multiple(
 
 
     std::cout << "took " << time_taken.count() << "ms\n";
+}
+
+static void map_types_multiple(
+    const std::filesystem::path &in,
+    const dconstruct::SIDBase &sidbase,
+    dconstruct::MappingRegistry &registry
+) {
+    std::vector<std::filesystem::path> filepaths;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
+        if (entry.path().extension() != ".bin") {
+            continue;
+        }
+        filepaths.emplace_back(entry.path());
+    }
+
+    std::for_each(
+        std::execution::par_unseq,
+        filepaths.begin(),
+        filepaths.end(),
+        [&](const std::filesystem::path &entry) {
+            auto file_res = dconstruct::BinaryFile::from_path(entry.string());
+            if (!file_res) {
+                return;
+            }
+            auto& file = *file_res;
+            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry);
+            disassembler.ingest();
+        }
+    );
+}
+
+static void map_types_multiple_to_file(
+    const std::filesystem::path &in,
+    const dconstruct::SIDBase &sidbase,
+    const std::filesystem::path &out_types_file
+) {
+    dconstruct::MappingRegistry registry;
+    map_types_multiple(in, sidbase, registry);
+    registry.dump_types_file(out_types_file, sidbase);
 }
 
 static std::vector<std::string> edits_from_file(const std::filesystem::path &path) {

@@ -42,6 +42,81 @@ namespace dconstruct::ast {
     return std::unexpected{semantic_check_error{*invalid_logical, this}};
 }
 
+[[nodiscard]] emission_res logical_expr::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
+    const emission_res logical_destination = fn.get_destination(destination);
+    if (!logical_destination) {
+        return logical_destination;
+    }
+
+    if (m_operator.m_lexeme == "&&") {
+        fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 1, 0);
+
+        const emission_res lhs = m_lhs->emit_dc(fn, global);
+        if (!lhs) {
+            return lhs;
+        }
+
+        const u16 lhs_false_branch = static_cast<u16>(fn.m_instructions.size());
+        fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *lhs, compilation::function::BRANCH_PLACEHOLDER);
+        fn.free_register(*lhs);
+
+        const emission_res rhs = m_rhs->emit_dc(fn, global);
+        if (!rhs) {
+            return rhs;
+        }
+
+        const u16 rhs_false_branch = static_cast<u16>(fn.m_instructions.size());
+        fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *rhs, compilation::function::BRANCH_PLACEHOLDER);
+        fn.free_register(*rhs);
+
+        const u16 done_branch = static_cast<u16>(fn.m_instructions.size());
+        fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 00, compilation::function::BRANCH_PLACEHOLDER);
+
+        const u16 set_false_location = static_cast<u16>(fn.m_instructions.size());
+        fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 0, 0);
+
+        const u16 end_location = static_cast<u16>(fn.m_instructions.size());
+        fn.m_instructions[lhs_false_branch].set_lo_hi(set_false_location);
+        fn.m_instructions[rhs_false_branch].set_lo_hi(set_false_location);
+        fn.m_instructions[done_branch].set_lo_hi(end_location);
+
+        return *logical_destination;
+    }
+
+    fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 0, 0);
+
+    const emission_res lhs = m_lhs->emit_dc(fn, global);
+    if (!lhs) {
+        return lhs;
+    }
+
+    const u16 lhs_true_branch = static_cast<u16>(fn.m_instructions.size());
+    fn.emit_instruction(Opcode::BranchIf, compilation::function::BRANCH_PLACEHOLDER, *lhs, compilation::function::BRANCH_PLACEHOLDER);
+    fn.free_register(*lhs);
+
+    const emission_res rhs = m_rhs->emit_dc(fn, global);
+    if (!rhs) {
+        return rhs;
+    }
+
+    const u16 rhs_true_branch = static_cast<u16>(fn.m_instructions.size());
+    fn.emit_instruction(Opcode::BranchIf, compilation::function::BRANCH_PLACEHOLDER, *rhs, compilation::function::BRANCH_PLACEHOLDER);
+    fn.free_register(*rhs);
+
+    const u16 done_branch = static_cast<u16>(fn.m_instructions.size());
+    fn.emit_instruction(Opcode::Branch, compilation::function::BRANCH_PLACEHOLDER, 00, compilation::function::BRANCH_PLACEHOLDER);
+
+    const u16 set_true_location = static_cast<u16>(fn.m_instructions.size());
+    fn.emit_instruction(Opcode::LoadU16Imm, *logical_destination, 1, 0);
+
+    const u16 end_location = static_cast<u16>(fn.m_instructions.size());
+    fn.m_instructions[lhs_true_branch].set_lo_hi(set_true_location);
+    fn.m_instructions[rhs_true_branch].set_lo_hi(set_true_location);
+    fn.m_instructions[done_branch].set_lo_hi(end_location);
+
+    return *logical_destination;
+}
+
 void logical_expr::pseudo_py(std::ostream& os) const {
     if (m_operator.m_lexeme == "&&") {
         os << *m_lhs << " and " << *m_rhs;

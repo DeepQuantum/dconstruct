@@ -5,6 +5,8 @@
 #include <variant>
 
 namespace dconstruct::compilation {
+    [[nodiscard]] sid64 get_identifier_sid(const std::string& identifier);
+
     enum class token_type {
         LEFT_PAREN, RIGHT_PAREN, 
         LEFT_BRACE, RIGHT_BRACE, 

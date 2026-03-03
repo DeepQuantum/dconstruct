@@ -80,6 +80,12 @@ namespace dconstruct::ast {
         opcode = integral ? Opcode::IGreaterThanEqual : Opcode::FGreaterThanEqual;
     } else if (m_operator.m_lexeme == "<=") {
         opcode = integral ? Opcode::ILessThanEqual : Opcode::FLessThanEqual;
+    } else if (m_operator.m_lexeme == "==") {
+        opcode = integral ? Opcode::IEqual : Opcode::FEqual;
+    } else if (m_operator.m_lexeme == "!=") {
+        opcode = integral ? Opcode::INotEqual : Opcode::FNotEqual;
+    } else {
+        assert(false && "invalid compare operator");
     }
 
     fn.emit_instruction(opcode, *comp_destination, *lhs, *rhs);

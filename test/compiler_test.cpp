@@ -1345,6 +1345,33 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         });
     }
 
+    TEST(COMPILER, LogicalAndShortCircuit) {
+        auto functions = compile_to_functions("i32 main() { if (0 && 42) { return 1; } return 0; }");
+        ASSERT_TRUE(functions) << functions.error();
+        ASSERT_FALSE(functions->empty());
+
+        const auto& instructions = (*functions)[0].m_instructions;
+        ASSERT_FALSE(instructions.empty());
+
+        const auto lhs_branch_it = std::find_if(instructions.begin(), instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::BranchIfNot;
+        });
+        ASSERT_NE(lhs_branch_it, instructions.end());
+
+        const auto rhs_load_it = std::find_if(instructions.begin(), instructions.end(), [](const Instruction& instruction) {
+            return instruction.opcode == Opcode::LoadU16Imm && instruction.operand1 == 42;
+        });
+        ASSERT_NE(rhs_load_it, instructions.end());
+
+        const u16 lhs_branch_target = lhs_branch_it->destination | (lhs_branch_it->operand2 << 8);
+        const u16 rhs_load_index = static_cast<u16>(std::distance(instructions.begin(), rhs_load_it));
+        const u16 lhs_branch_index = static_cast<u16>(std::distance(instructions.begin(), lhs_branch_it));
+
+        EXPECT_LT(lhs_branch_index, rhs_load_index);
+        EXPECT_GT(lhs_branch_target, rhs_load_index);
+        EXPECT_EQ(instructions.back().opcode, Opcode::Return);
+    }
+
     TEST(COMPILER, Subscript1) {
         expect_instructions("i32 main(u16* bytes) { u16 my_byte = bytes[2]; }", {
             Instruction{Opcode::Move, 0_r, 49_r},
