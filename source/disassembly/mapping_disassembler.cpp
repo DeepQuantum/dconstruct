@@ -43,27 +43,6 @@ namespace dconstruct {
         if (array_size == 0) {
             return;
         }
-
-        u32 member_offset = 8;
-        u32 member_count = 0;
-        const location member = location().from(array);
-
-        while (!m_currentFile->is_string(member + member_offset) && !m_currentFile->gets_pointed_at(member + member_offset)) {
-            member_offset += 8;
-        }
-
-        const u8 type_id_padding = m_currentFile->is_string(member + member_offset) ? 0 : 8;
-        u32 struct_size = (member_offset - type_id_padding) / array_size;
-
-        for (u32 array_entry_count = 0; array_entry_count < array_size; ++array_entry_count) {
-            member_offset = member_count = 0;
-            while (member_offset < struct_size) {
-                const location current_member_location = member + (array_entry_count * struct_size + member_offset);
-                const u32 last_member_size = discover_struct_or_arraylike(current_member_location.aligned());
-                member_offset += last_member_size ? last_member_size : 8;
-                ++member_count;
-            }
-        }
     }
 
     [[nodiscard]] u8 MappingDisassembler::discover_struct_or_arraylike(const location struct_location) {
@@ -77,16 +56,12 @@ namespace dconstruct {
                 discover_anonymous_array(struct_location);
             } else if (next_struct_header.get<sid64>() == SID("array")) {
                 discover_array(struct_location, get_size_array(struct_location));
-            } else {
-                observe_unmapped_struct(next_struct_header.as<structs::unmapped>());
             }
             bytes_inserted = 8;
-        }
-        else {
+        } else {
             if (struct_location >= m_currentFile->m_strings) {
                 bytes_inserted = 8;
-            }
-            else {
+            } else {
                 bytes_inserted = discover_next_struct_member(struct_location);
             }
         }
@@ -98,8 +73,7 @@ namespace dconstruct {
             if (member_loc >= m_currentFile->m_strings) {
                 return 8;
             }
-            discover_struct_or_arraylike(member_loc);
-            return 8;
+            return discover_struct_or_arraylike(member_loc);
         }
 
         if (m_sidbase->search(member_loc.get<sid64>()) != nullptr) {
@@ -141,40 +115,41 @@ namespace dconstruct {
     void MappingDisassembler::map_temporary_members(const sid64 struct_type_id, const location member_start, const u32 inferred_size) {
         m_registry.observe_struct(struct_type_id, inferred_size);
 
-        if (inferred_size == 16) {
-            u32 offset = 0;
-            while (offset < 16) {
-                const location current = member_start + offset;
-                if (offset % 8 == 0 && m_currentFile->is_file_ptr(current)) {
-                    const location pointed_to = location(current.get<const void*>());
-                    m_registry.observe_pointer_member(struct_type_id, offset, 8, try_get_pointed_struct_type(pointed_to));
-                    offset += 8;
-                } else {
-                    m_registry.observe_primitive_member(struct_type_id, offset, 1, ast::primitive_kind::U8, current.get<u8>());
-                    offset += 1;
-                }
-            }
+        if (inferred_size == 0 || inferred_size > 5'000) {
             return;
         }
 
-        for (u32 offset = 0; offset + 8 <= inferred_size; offset += 8) {
+        u32 offset = 0;
+        while (offset < inferred_size) {
             const location current = member_start + offset;
-            if (!m_currentFile->is_file_ptr(current)) {
-                continue;
+            if (offset % 8 == 0 && m_currentFile->is_file_ptr(current)) {
+                const location pointed_to = location(current.get<const void*>());
+                const std::optional<sid64> pointed_type_id = try_get_pointed_struct_type(pointed_to);
+                m_registry.observe_pointer_member(struct_type_id, offset, 8, pointed_type_id);
+                if (pointed_type_id.has_value()) {
+                    const auto* pointed_struct = (pointed_to - 8).as<structs::unmapped>();
+                    observe_unmapped_struct(pointed_struct, *pointed_type_id);
+                }
+                offset += 8;
+            } else {
+                m_registry.observe_primitive_member(struct_type_id, offset, 2, ast::primitive_kind::U16, current.get<u16>());
+                offset += 2;
             }
-            const location pointed_to = location(current.get<const void*>());
-            m_registry.observe_pointer_member(struct_type_id, offset, 8, try_get_pointed_struct_type(pointed_to));
         }
     }
 
-    void MappingDisassembler::observe_unmapped_struct(const structs::unmapped* struct_ptr) {
+    void MappingDisassembler::observe_unmapped_struct(const structs::unmapped* struct_ptr, const sid64 type_id) {
+        if (type_id == 0) {
+            return;
+        }
+
         const p64 struct_ptr_num = reinterpret_cast<p64>(struct_ptr);
-        if (m_visitedStructs.contains(struct_ptr_num)) {
+        if (m_registry.get_struct(type_id).has_value() || m_visitedStructs.contains(struct_ptr_num)) {
             return;
         }
         m_visitedStructs.emplace(struct_ptr_num);
 
-        const sid64 struct_type_id = struct_ptr->typeID;
+        const sid64 struct_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
         u64 member_offset = 0;
         u64 last_member_size = 0;
         bool offset_gets_pointed_at = false;
@@ -197,7 +172,10 @@ namespace dconstruct {
         for (i32 i = 0; i < m_currentFile->m_dcheader->m_numEntries; ++i) {
             const Entry* entry = m_currentFile->m_dcheader->m_pStartOfData + i;
             const auto* struct_ptr = reinterpret_cast<const structs::unmapped*>(reinterpret_cast<const u64*>(entry->m_entryPtr) - 1);
-            observe_unmapped_struct(struct_ptr);
+            if (m_registry.get_struct(entry->m_typeId).has_value() || m_registry.get_struct(struct_ptr->typeID).has_value()) {
+                continue;
+            }
+            observe_unmapped_struct(struct_ptr, entry->m_typeId);
         }
     }
 }

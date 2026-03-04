@@ -241,12 +241,12 @@ static void map_types_multiple(
         }
         filepaths.emplace_back(entry.path());
     }
-
     std::for_each(
         std::execution::par_unseq,
         filepaths.begin(),
         filepaths.end(),
         [&](const std::filesystem::path &entry) {
+            std::cout << "mapping types in " << entry << "...\n";
             auto file_res = dconstruct::BinaryFile::from_path(entry.string());
             if (!file_res) {
                 return;
@@ -346,7 +346,8 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"))
-        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"));
+        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"))
+        ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")
         ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")

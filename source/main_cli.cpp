@@ -1,7 +1,6 @@
 #include "disassembly/disassembly_functions.h"
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[]) {  
     const std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> opts_res = dconstruct::disassembly::get_command_line_options(argc, argv);
     if (!opts_res) {
         return -1;
@@ -56,10 +55,6 @@ int main(int argc, char *argv[]) {
         }
     } else {
         output = opts["o"].as<std::string>();
-        if (!std::filesystem::exists(output)) {
-            std::cout << "error: output filepath " << output << " doesn't exist\n";
-            return -1;
-        }
         if (std::filesystem::is_directory(output) && !std::filesystem::is_directory(filepath)) {
             output /= filepath.filename().string() + ".asm";
         }
@@ -73,6 +68,26 @@ int main(int argc, char *argv[]) {
         std::cout << "error: sidbase path " << sidbase_path << " doesn't exist\n";
         return -1;
     }
+    
+    const bool map_types = opts["map_types"].as<bool>();
+
+    if (map_types) {
+        if (std::filesystem::is_directory(output)) {
+            std::cout << "error: output path must be a file when using --map_types\n";
+            return -1;
+        } 
+        if (!std::filesystem::is_directory(filepath)) {
+            std::cout << "error: input path must be a folder when using --map_types\n";
+            return -1;
+        }
+        const std::expected<dconstruct::SIDBase, std::string> sidbase_opt = dconstruct::SIDBase::from_binary(sidbase_path);
+        if (!sidbase_opt) {
+            std::cout << "error: couldn't load sidbase: " << sidbase_opt.error() << "\n";
+            return -1;
+        }
+        dconstruct::disassembly::map_types_multiple_to_file(filepath, *sidbase_opt, output);
+        return 0;
+    }
 
     constexpr u8 indent_per_level = 2;// opts["indent"].as<u8>();
     const bool emit_once = opts["emit_once"].as<bool>();
@@ -83,6 +98,9 @@ int main(int argc, char *argv[]) {
     const bool use_pascal_case = opts["pascal_case"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
     const bool uc4 = opts["uc4"].as<bool>();
+
+
+
     const std::string language_type = opts["language"].as<std::string>();
 
     const auto opt_print_func = dconstruct::disassembly::get_print_type(language_type);

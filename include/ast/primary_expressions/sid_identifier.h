@@ -23,6 +23,7 @@ namespace dconstruct::ast {
         [[nodiscard]] u16 calc_complexity() const noexcept final;
         [[nodiscard]] std::unique_ptr<sid_identifier> copy() const noexcept;
         [[nodiscard]] bool identifier_name_equals(const std::string& name) const noexcept final;
+        [[nodiscard]] const std::string* get_name() const noexcept final { return &m_name.m_lexeme; }
         [[nodiscard]] bool is_dead_code() const noexcept final { return true; }
         [[nodiscard]] emission_res emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;

@@ -105,20 +105,20 @@ namespace dconstruct {
         }
 
         member.m_kind = mapping_member_kind::Primitive;
-        ++member.m_primitiveVotes[kind];
+        //++member.m_primitiveVotes[kind];
 
-        if (!member.m_primitive.has_value()) {
-            member.m_primitive = kind;
-        } else if (member.m_primitive.value() != kind) {
-            const u64 current_votes = member.m_primitiveVotes[member.m_primitive.value()];
-            const u64 candidate_votes = member.m_primitiveVotes[kind];
-            if (candidate_votes > current_votes) {
-                member.m_primitive = kind;
-            }
-            ++member.m_conflicts;
-        }
+        // if (!member.m_primitive.has_value()) {
+        //     member.m_primitive = kind;
+        // } else if (member.m_primitive.value() != kind) {
+        //     const u64 current_votes = member.m_primitiveVotes[member.m_primitive.value()];
+        //     const u64 candidate_votes = member.m_primitiveVotes[kind];
+        //     if (candidate_votes > current_votes) {
+        //         member.m_primitive = kind;
+        //     }
+        //     ++member.m_conflicts;
+        // }
 
-        member.m_valueProfile.observe(raw_value);
+        // member.m_valueProfile.observe(raw_value);
     }
 
     void MappingRegistry::observe_unknown_member(const sid64 type_id, const u32 offset, const u32 size) {
@@ -155,10 +155,33 @@ namespace dconstruct {
             return lhs.m_typeId < rhs.m_typeId;
         });
 
-        std::ofstream out(out_path);
+        const std::filesystem::path header_path = out_path.parent_path() / out_path.filename().replace_extension(".h");
+
+        std::ofstream header_out(header_path);
+        header_out << "#pragma once\n\n";
+        header_out << "typedef unsigned char u8;\n";
+        header_out << "typedef unsigned short u16;\n";
+        header_out << "typedef unsigned int u32;\n";
+        header_out << "typedef unsigned long long u64;\n";
+        header_out << "typedef signed char i8;\n";
+        header_out << "typedef signed short i16;\n";
+        header_out << "typedef signed int i32;\n";
+        header_out << "typedef signed long long i64;\n";
+        header_out << "typedef float f32;\n";
+        header_out << "typedef double f64;\n";
+        header_out << "typedef u64 sid64;\n";
+        header_out << "typedef u32 sid32;\n\n";
+
         for (const auto& type : types) {
             const ast::struct_type mapped_struct = mapping_struct_to_ast_struct(type, sidbase);
-            out << ast::type_to_definition_string(ast::full_type{mapped_struct}) << "\n\n";
+            header_out << "typedef struct " << mapped_struct.m_name << " " << mapped_struct.m_name << ";\n";
+        }
+
+        std::ofstream out(out_path);
+        out << "#include \"" << header_path.filename().string() << "\"\n\n";
+        for (const auto& type : types) {
+            const ast::struct_type mapped_struct = mapping_struct_to_ast_struct(type, sidbase);
+            out << ast::type_to_definition_string(mapped_struct) << "\n\n";
         }
     }
 }

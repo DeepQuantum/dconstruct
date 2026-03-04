@@ -73,7 +73,7 @@ namespace dconstruct {
         FILE* m_perfFile = nullptr;
 
         void insert_entry(const Entry* entry);
-        void insert_struct(const structs::unmapped* entry, const u32 indent = 0, const sid64 name_id = 0);
+        void insert_struct(const structs::unmapped* entry, const u32 indent = 0, const sid64 name_id = 0, const sid64 type_id = 0);
         template<TextFormat text_format = TextFormat{}, typename... Args> 
         void insert_span_fmt(const char* format, Args ...args);
         template<TextFormat text_format = TextFormat{}, typename... Args> 

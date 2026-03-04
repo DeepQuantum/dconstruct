@@ -295,20 +295,23 @@ void Disassembler::insert_entry(const Entry *entry) {
     const char* entry_name = lookup(entry->m_nameID);
     insert_span_fmt("%s = ", entry_name);
     m_currentEmbeddedFunctionId.m_entry = entry_name;
-    insert_struct(struct_ptr, 0, entry->m_nameID);
+    insert_struct(struct_ptr, 0, entry->m_nameID, entry->m_typeId);
 }
 
 
 
-void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id) {
+void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 indent, const sid64 name_id, const sid64 type_id) {
 
     const u64 offset = get_offset(&struct_ptr->m_data);
+    
+    const sid64 effective_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
+    const char* struct_name = lookup(effective_type_id);
 
-    const char* struct_name = lookup(struct_ptr->typeID);
     insert_span_fmt("%s [0x%05X] {\n", struct_name, offset);
     m_currentEmbeddedFunctionId.m_outerStructs.emplace_back(struct_name, offset);
 
-    switch (struct_ptr->typeID) {
+
+    switch (effective_type_id) {
         case SID("state-script"): {
             m_currentFile->m_dcscript = reinterpret_cast<const StateScript*>(&struct_ptr->m_data);
             if (m_options.m_verbose) {

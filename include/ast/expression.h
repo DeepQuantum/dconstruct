@@ -73,6 +73,7 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& optimization_env) noexcept { return MATCH_OPTIMIZATION_ACTION::NONE; }
 
         [[nodiscard]] virtual bool identifier_name_equals(const std::string& name) const noexcept { return false; }
+        [[nodiscard]] virtual const std::string* get_name() const noexcept { return nullptr; }
         
         [[nodiscard]] virtual std::unique_ptr<expression> new_cast(const ast::full_type& type, const expression& expr) const noexcept;
 

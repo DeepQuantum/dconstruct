@@ -29,7 +29,7 @@ namespace dconstruct {
         void discover_array(const location array, const u32 array_size);
         [[nodiscard]] std::optional<sid64> try_get_pointed_struct_type(const location ptr_value) const noexcept;
         void map_temporary_members(const sid64 struct_type_id, const location member_start, const u32 inferred_size);
-        void observe_unmapped_struct(const structs::unmapped* struct_ptr);
+        void observe_unmapped_struct(const structs::unmapped* struct_ptr, const sid64 type_id = 0);
         void insert_span(const char* text, const u32 indent = 0, const TextFormat& text_format = TextFormat{}) override {}
 
         MappingRegistry& m_registry;

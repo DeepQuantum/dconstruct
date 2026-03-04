@@ -1,5 +1,6 @@
 #include "ast/primary_expressions/call.h"
 #include "ast/primary_expressions/identifier.h"
+#include "ast/primary_expressions/sid_identifier.h"
 #include "ast//primary_expressions/literal.h"
 
 namespace dconstruct::ast {
@@ -189,9 +190,8 @@ VAR_OPTIMIZATION_ACTION call_expr::var_optimization_pass(var_optimization_env& e
 }
 
 FOREACH_OPTIMIZATION_ACTION call_expr::foreach_optimization_pass(foreach_optimization_env& env) noexcept {
-    assert(dynamic_cast<identifier*>(m_callee.get()));
-    if (const auto* ident = static_cast<const identifier*>(m_callee.get())) {
-        const sid64 id = SID(ident->m_name.m_lexeme.c_str());
+    if (const std::string* name = m_callee->get_name()) {
+        const sid64 id = SID(name->c_str());
         switch (id) {
             case SID("begin-foreach"): {
                 return FOREACH_OPTIMIZATION_ACTION::BEGIN_FOREACH;
