@@ -9,7 +9,7 @@ It outputs `.asm` files containing the disassembled structures and bytecode, asw
 
 You can also make edits to files via the command line, including replacing entire structures with little effort. This makes creating mods that simply change a couple values inside the .bin files extremely easy.
 
-# Main feautures
+# Main features
 
 - Optimized for speed. Disassembling & decompiling files is blazingly fast.
 - Accurate reconstruction of the original source code, especially control flow
