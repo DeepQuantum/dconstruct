@@ -1,6 +1,7 @@
 #include "ast/primary_expressions/match.h"
 
 #include <iomanip>
+#include <numeric>
 #include <sstream>
 
 namespace dconstruct::ast {
@@ -55,7 +56,6 @@ void match_expr::pseudo_c(std::ostream& os) const {
     std::vector<std::pair<std::vector<const expr_uptr*>, const expr_uptr*>> res;
 
     for (const auto& [patterns, match] : m_matchPairs) {
-        //assert(pattern.size() == 1 && "used in decomp only so by default there should only ever be one expression per pattern");
         
         auto match_exists = [&match](const auto& pair) -> bool { return *pair.second == match; };
         
@@ -165,7 +165,7 @@ void match_expr::pseudo_racket(std::ostream& os) const {
             m_conditions.end(),
             u16{0},
             [](u16 acc, const auto& cond) {
-                return acc + cond->get_complexity();
+                return static_cast<u16>(acc + cond->get_complexity());
             }
         );
 
@@ -175,11 +175,11 @@ void match_expr::pseudo_racket(std::ostream& os) const {
             m_matchPairs.end(),
             u16{0},
             [](u16 acc, const auto& pair) {
-                return acc + pair.first.size() + pair.second->get_complexity();
+                return static_cast<u16>(acc + static_cast<u16>(pair.first.size()) + pair.second->get_complexity());
             }
         );
 
-    return static_cast<u16>(1 + conditions_complexity + match_pairs_complexity);
+    return 1 + conditions_complexity + match_pairs_complexity;
 }
 
 [[nodiscard]] expr_uptr match_expr::clone() const {

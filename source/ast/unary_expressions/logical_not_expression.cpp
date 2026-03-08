@@ -83,16 +83,16 @@ void logical_not_expr::pseudo_racket(std::ostream &os) const {
     return *not_destination;
 }
 
-[[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
-    llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
-    if (!rhs) {
-        return rhs;
-    }
-    llvm::Value* res = builder.CreateNot(*rhs);
-    if (!res) {
-        return std::unexpected{llvm_error{"create not was nullptr", *this}};
-    }
-    return res;
-}
+// [[nodiscard]] llvm_res logical_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
+//     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env);
+//     if (!rhs) {
+//         return rhs;
+//     }
+//     llvm::Value* res = builder.CreateNot(*rhs);
+//     if (!res) {
+//         return std::unexpected{llvm_error{"create not was nullptr", *this}};
+//     }
+//     return res;
+// }
 
 }

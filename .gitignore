@@ -3,6 +3,7 @@
 animation/
 media/
 loc.py
+game_dumps/
 .cursorignore
 .github/
 .vscode/

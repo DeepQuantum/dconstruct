@@ -2,6 +2,7 @@
 #include "ast/primary_expressions/literal.h"
 #include "compilation/function.h"
 #include <array>
+#include <numeric>
 #include <unordered_set>
 
 namespace dconstruct::ast {

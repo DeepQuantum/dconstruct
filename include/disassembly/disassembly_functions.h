@@ -1,52 +1,20 @@
-#include "disassembly/file_disassembler.h"
-#include "disassembly/edit_disassembler.h"
-#include "disassembly/mapping_disassembler.h"
+#pragma once
+
+#include "ast/ast_source.h"
+#include "disassembly/disassembler.h"
 #include "disassembly/mapping_registry.h"
-#include "decompilation/decomp_function.h"
-#include "shaders/ndshader.h"
-#include "cxxopts.hpp"
 #include "about.h"
-#include "windows.h"
-#include <locale>
-#include <codecvt>
+#include "cxxopts.hpp"
 #include <chrono>
-#include <iostream>
 #include <filesystem>
-#include <execution>
+#include <iostream>
+#include <optional>
+#include <string>
+#include <vector>
 
 namespace dconstruct::disassembly {
 
-static constexpr char DEFAULT_OUT[] = "<input_path.asm>";
-
-[[nodiscard]] static std::filesystem::path get_sanitized_graph_path(const std::filesystem::path& graph_dir, const std::string &func_id) {
-    std::string sanitized_func_id;
-    sanitized_func_id.reserve(func_id.size());
-    for (char c : func_id) {
-        switch (c) {
-            case '?':
-            case '>':
-            case '<':
-            case '*':
-            case '\\':
-            case '/':
-            case '|':
-            case '\"':
-            case ':':
-            case '@':
-            case '-': {
-                sanitized_func_id += '_';
-                break;
-            }
-            default: {
-                sanitized_func_id += c;
-            }
-        }
-    }
-    return (graph_dir / sanitized_func_id).replace_extension(".svg");
-} 
-
-
-static void decomp_file(
+void decomp_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_disasm_filename, 
     const std::filesystem::path &out_decomp_filename,
@@ -58,96 +26,17 @@ static void decomp_file(
     const bool optimize,
     const std::vector<std::string> &edits = {}, 
     const bool use_pascal_case = false,
-    const dconstruct::game_type game = dconstruct::game_type::T2R) {
-    
-    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
+    const dconstruct::game_type game = dconstruct::game_type::T2R);
 
-    if (!file_res) {
-        std::cerr << file_res.error() << "\n";
-        std::terminate();
-    }
-
-
-    auto& file = *file_res;
-
-    if (game != dconstruct::game_type::UC4) {
-        if (!edits.empty()) {
-            dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
-            ed.apply_file_edits();
-        }
-    }
-
-    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options, game);
-    
-    if (game == dconstruct::game_type::UC4) {
-        disassembler.disassemble_functions_from_bin_file();
-    } else {
-        disassembler.disassemble();
-    }
-
-    disassembler.dump();
-
-    const auto funcs = disassembler.get_all_functions();
-    if (!funcs.empty()) {
-        std::ofstream out(out_decomp_filename);
-        std::vector<dconstruct::ast::function_definition> functions;
-        functions.reserve(funcs.size());
-        out << language_type;
-        if (use_pascal_case) {
-            out << dconstruct::ast::func_pascal_case;
-        }
-        std::set<u64> emitted_funcs;
-
-        for (const auto& func : funcs) {
-            std::optional<std::filesystem::path> graph_path = std::nullopt;
-            if (write_graphs) {
-                auto graph_dir = (std::filesystem::path(out_decomp_filename).replace_extension("").concat("_graphs"));
-                std::filesystem::create_directories(graph_dir);
-                graph_path = get_sanitized_graph_path(graph_dir, func->get_id());
-            }
-            try {
-                functions.emplace_back(dconstruct::dcompiler::decomp_function{ *func, file, dconstruct::ControlFlowGraph::build(*func), std::move(graph_path) }.decompile(optimize));
-            }
-            catch (const std::exception& e) {
-                if (show_warnings) {
-                    std::cout << "warning: couldn't decompile <" << func->get_id() << ">: " << e.what() << "\n";
-                }
-            }
-        }
-        dconstruct::dcompiler::state_script_functions output_functions{functions, &file};
-        output_functions.to_string(out);
-    }
-}
-
-static void disasm_file(
+void disasm_file(
     const std::filesystem::path &inpath, 
     const std::filesystem::path &out_filename, 
     const dconstruct::SIDBase &base,
     const dconstruct::DisassemblerOptions &options,
     const std::vector<std::string> &edits = {},
-    const dconstruct::game_type game = dconstruct::game_type::T2R) {
-    
-    auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
+    const dconstruct::game_type game = dconstruct::game_type::T2R);
 
-    if (!file_res) {
-        std::cerr << file_res.error() << "\n";
-        std::terminate();
-    }
-
-    auto& file = *file_res;
-
-    if (!edits.empty() && game != dconstruct::game_type::UC4) {
-        dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
-        ed.apply_file_edits();
-    }
-
-
-    dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options, game);
-    disassembler.disassemble();
-    disassembler.dump();
-}
-
-static void decompile_multiple(
+void decompile_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
@@ -158,228 +47,44 @@ static void decompile_multiple(
     const dconstruct::ast::print_fn_type language_print,
     const bool pascal_case,
     const dconstruct::game_type game = dconstruct::game_type::T2R
-) {
+);
 
-    std::vector<std::filesystem::path> filepaths;
-    
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-        if (entry.path().extension() != ".bin") {
-            continue;
-        }
-        filepaths.emplace_back(entry.path());
-    }
-
-    const auto start = std::chrono::high_resolution_clock::now();
-
-    std::cout << "disassembling & decompiling " << filepaths.size() << " files into " << out << "...\n";
-
-    std::for_each(
-        std::execution::par_unseq,
-        filepaths.begin(),
-        filepaths.end(),
-        [&](const std::filesystem::path &entry) {
-            const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
-            const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
-            std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case, game);
-        }
-    );
-
-    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-
-
-    std::cout << "took " << time_taken.count() << "ms\n";
-}
-
-static void disassemble_multiple(
+void disassemble_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
     const dconstruct::DisassemblerOptions &options,
     const dconstruct::game_type game = dconstruct::game_type::T2R
-) {
+);
 
-    std::vector<std::filesystem::path> filepaths;
-        
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-        if (entry.path().extension() != ".bin") {
-            continue;
-        }
-        std::filesystem::path output_file_path = out;
-        filepaths.emplace_back(entry.path());
-    }
-
-    const auto start = std::chrono::high_resolution_clock::now();
-
-    std::cout << "disassembling " << filepaths.size() << " files into " << out << "...\n";
-
-    std::for_each(
-        std::execution::par_unseq,
-        filepaths.begin(),
-        filepaths.end(),
-        [&](const std::filesystem::path &entry) {
-            const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
-            std::filesystem::create_directories(outpath.parent_path());
-            disasm_file(entry.string(), outpath, sidbase, options, {}, game);
-        }
-    );
-
-    const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
-
-
-    std::cout << "took " << time_taken.count() << "ms\n";
-}
-
-static void map_types_multiple(
-    const std::filesystem::path &in,
-    const dconstruct::SIDBase &sidbase,
-    dconstruct::MappingRegistry &registry,
-    const dconstruct::game_type game = dconstruct::game_type::T2R
-) {
-    std::vector<std::filesystem::path> filepaths;
-
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(in)) {
-        if (entry.path().extension() != ".bin") {
-            continue;
-        }
-        filepaths.emplace_back(entry.path());
-    }
-    std::for_each(
-        std::execution::par_unseq,
-        filepaths.begin(),
-        filepaths.end(),
-        [&](const std::filesystem::path &entry) {
-            std::cout << "mapping types in " << entry << "...\n";
-            auto file_res = dconstruct::BinaryFile::from_path(entry.string());
-            if (!file_res) {
-                return;
-            }
-            auto& file = *file_res;
-            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, DisassemblerOptions{}, game);
-            disassembler.ingest();
-        }
-    );
-}
-
-static void map_types_multiple_to_file(
+void map_types_multiple_to_file(
     const std::filesystem::path &in,
     const dconstruct::SIDBase &sidbase,
     const std::filesystem::path &out_types_file,
     const dconstruct::game_type game = dconstruct::game_type::T2R
-) {
-    dconstruct::MappingRegistry registry;
-    map_types_multiple(in, sidbase, registry, game);
-    registry.dump_types_file(out_types_file, sidbase);
-}
+);
 
-static std::vector<std::string> edits_from_file(const std::filesystem::path &path) {
-    std::ifstream edit_in(path);
-    std::vector<std::string> result;
+std::vector<std::string> edits_from_file(const std::filesystem::path &path);
 
-    if (!edit_in.is_open()) {
-        std::cout << "warning: couldn't open " << path << '\n'; 
-    }
-    std::string edit_str;           
-    while (edit_in >> edit_str) {
-        result.emplace_back(std::move(edit_str));
-    }
+// static i32 disassemble_shader(const std::filesystem::path& path) {
+//     const auto ir_exp = dconstruct::shaders::ndshader_file::parse_from_file(path);
+//     if (!ir_exp) {
+//         std::cerr << "couldn't process shader file: " << ir_exp.error() << "\n";
+//         return -1;
+//     }
+//     const auto [msg, success] = ir_exp->to_string();
+//     if (!success) {
+//         std::cerr << msg << "\n";
+//         return -1;
+//     }
+//     std::cout << msg << "\n";
+//     return 0;
+// }
 
-    return result;
-}
+[[nodiscard]] std::optional<dconstruct::ast::print_fn_type> get_print_type(const std::string& input_string);
 
-static i32 disassemble_shader(const std::filesystem::path& path) {
-    const auto ir_exp = dconstruct::shaders::ndshader_file::parse_from_file(path);
-    if (!ir_exp) {
-        std::cerr << "couldn't process shader file: " << ir_exp.error() << "\n";
-        return -1;
-    }
-    const auto [msg, success] = ir_exp->to_string();
-    if (!success) {
-        std::cerr << msg << "\n";
-        return -1;
-    }
-    std::cout << msg << "\n";
-    return 0;
-}
+[[nodiscard]] std::optional<dconstruct::game_type> get_game_type(const std::string& input_string);
 
-[[nodiscard]] static std::wstring get_executable_path() {
-    wchar_t buffer[MAX_PATH];
-    DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-    if (len == 0 || len == MAX_PATH)
-        throw std::runtime_error("GetModuleFileNameW failed");
-    return std::wstring(buffer, len);
-}
-
-[[nodiscard]] static std::optional<dconstruct::ast::print_fn_type> get_print_type(const std::string& input_string) {
-    if (input_string == "C" || input_string == "c") {
-        return dconstruct::ast::c;
-    } else if (input_string == "Python" || input_string == "python") {
-        return dconstruct::ast::py;
-    } else if (input_string == "Racket" || input_string == "racket") {
-        return dconstruct::ast::racket;
-    } else {
-        return std::nullopt;
-    }
-}
-
-[[nodiscard]] static std::optional<dconstruct::game_type> get_game_type(const std::string& input_string) {
-    if (input_string == "t2r" || input_string == "T2R") {
-        return dconstruct::game_type::T2R;
-    } else if (input_string == "t1x" || input_string == "T1X") {
-        return dconstruct::game_type::T1X;
-    } else if (input_string == "uc4" || input_string == "UC4") {
-        return dconstruct::game_type::UC4;
-    } else {
-        return std::nullopt;
-    }
-}
-
-[[nodiscard]] static std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
-    cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
-
-    using convert_type = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convert_type, wchar_t> converter;
-
-    std::filesystem::path current_program_path = converter.to_bytes(dconstruct::disassembly::get_executable_path());
-
-    options.add_options("information")
-        ("h, help", "display this message")
-        ("help_edit", "help with editing a file")
-        ("a,about", "print about");
-    options.add_options("input/output")
-        ("i,input",  "input DC file or folder", cxxopts::value<std::string>(), "<path>")
-        ("o,output", "output file or folder", cxxopts::value<std::string>()->default_value(""), dconstruct::disassembly::DEFAULT_OUT)
-        ("s,sidbase", "sidbase file", cxxopts::value<std::string>()->default_value((current_program_path.parent_path() / "sidbase.bin").string()), "<path>");
-    options.add_options("configuration")
-        ("no_decompile", "don't emit a file containing the decompiled functions (excluding those nested inside structs).", cxxopts::value<bool>()->default_value("false"))
-        ("no_optimize", "don't optimize/cleanup the decompiled code output, e.g. replacing some 'for' loops with 'foreach' loops, some if-else chains with match expressions, and removing unused variables.", 
-            cxxopts::value<bool>()->default_value("false"))
-        ("verbose", "emit verbose details for script-lambda and state-script structs, including all known fields from DCScript.h.", cxxopts::value<bool>()->default_value("false"))
-        ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
-        ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
-        ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
-        ("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
-        //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
-        ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
-        ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
-            cxxopts::value<bool>()->default_value("false"))
-        ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
-
-    options.add_options("edit")
-        ("e,edit", "make an edit at a specific address. may only be specified during single file disassembly.", cxxopts::value<std::vector<std::string>>(), "<addr>[<offset>]=<new_value>")
-        ("edit_file", "specify a path to an edit file. a line in an edit file is equivalent to the value for one -e flag.", cxxopts::value<std::string>())
-    ;
-
-    options.parse_positional({"i"});
-    cxxopts::ParseResult opts;
-    try {
-        opts = options.parse(argc, argv);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << "\n";
-        return std::nullopt;
-    }
-
-    return std::pair{options, opts};
-}
+[[nodiscard]] std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]);
 
 }

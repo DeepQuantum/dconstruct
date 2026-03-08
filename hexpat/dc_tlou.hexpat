@@ -1,17 +1,30 @@
 #pragma endian little
 
+#include "std/string"
+
 using sid64 = u64;
 
-const bool is_t1x = false;
+const bool is_t1x = true;
+
+
+fn to_sid64(ref str name) {
+    u64 base = 0xCBF29CE484222325;
+    for (u64 i = 0, i < std::string::length(name), i = i + 1) {
+        base = 0x100000001B3 * (base ^ name[i]);
+    }
+    return base;
+};
+
+//out_sid = to_sid64(in_str);
 
 enum TypeId : u64 {
-    StateScript = 14848776067067198830,
-    Float = 11532138274943533413,
-    UInt64 = 18005884506733652191,
-    Vector = 16817156562142133634,
-    Symbol = 16724962288577279249,
-    Boolean = 16822532743728177535,
-    Function = 9155132395257954602,
+    StateScript = to_sid64("state-script"),
+    Float = to_sid64("float"),
+    UInt64 = to_sid64("uint64"),
+    Vector = to_sid64("vector"),
+    Symbol = to_sid64("symbol"),
+    Boolean = to_sid64("boolean"),
+    ScriptLambda = to_sid64("script-lambda"),
 };
 
 enum Opcode : u8 {
@@ -118,9 +131,7 @@ struct Instruction {
     u8 m_arg0;
     u8 m_arg1;
     u8 m_arg2;
-    if (!is_t1x) {
-        padding[4];
-    }
+    padding[4];
 };
 
 struct vector {
@@ -140,8 +151,7 @@ struct ScriptLambda {
     u64 m_sidGlobal;
     u8 _padding1[8];
     
-    const u64 num_instructions = is_t1x ? m_numInstructions * 2 - 1 : m_numInstructions;
-    Instruction instructions[num_instructions] @ m_pInstruction;
+    Instruction instructions[m_numInstructions] @ m_pInstruction;
     u64 symbols[(m_sum - 4 * m_numInstructions - 12) / 4] @ m_pSymbols;
 };
 
@@ -214,7 +224,7 @@ struct TypedValue {
         (TypeId::Vector): vector value;
         (TypeId::Symbol): sid64 value;
         (TypeId::Boolean): bool value;
-        (TypeId::Function): ScriptLambda value;
+        (TypeId::ScriptLambda): ScriptLambda value;
     }
 };
 
@@ -249,8 +259,10 @@ struct SymbolArray {
     s32 m_numEntries;
     u8 _padding0[4];
     u64 m_pSymbols;
-
-    sid64 symbols[m_numEntries] @ m_pSymbols;
+    
+    if (m_pSymbols) {
+       sid64 symbols[m_numEntries] @ m_pSymbols;    
+    }
 };
 
 struct SsOptions {
@@ -263,8 +275,11 @@ struct SsOptions {
     u32 m_mostly0;
     u64 m_mostly0Rarely1;
     u8 _padding2[8];
-
-    SymbolArray symbolArray @ m_pSymbolArray;
+    
+    if (m_pSymbolArray) {
+        SymbolArray symbolArray @ m_pSymbolArray;
+    }
+  
     if (m_optionString) {
         char options_string[] @ m_optionString;    
     }

@@ -22,7 +22,7 @@ namespace dconstruct::ast {
 
         static constexpr u16 MAX_NON_SPLIT_COMPLEXITY = 10;
 
-        [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const noexcept final;
+        // [[nodiscard]] llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const noexcept final;
         VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& env) noexcept final;
         FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& env) noexcept final;
         MATCH_OPTIMIZATION_ACTION match_optimization_pass(match_optimization_env& env) noexcept final;

@@ -116,17 +116,17 @@ namespace dconstruct::ast {
 }
 
 
-[[nodiscard]] llvm_res negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
-    auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
-    if (!rhs) {
-        return rhs;
-    }
-    llvm::Value* res = builder.CreateNeg(*rhs); 
-    if (!res) {
-        return std::unexpected{llvm_error{"negate was nullptr", *this}};
-    }
-    return res;
-}
+// [[nodiscard]] llvm_res negate_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
+//     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
+//     if (!rhs) {
+//         return rhs;
+//     }
+//     llvm::Value* res = builder.CreateNeg(*rhs); 
+//     if (!res) {
+//         return std::unexpected{llvm_error{"negate was nullptr", *this}};
+//     }
+//     return res;
+// }
 
 
 

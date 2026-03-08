@@ -1,6 +1,6 @@
 #include "ast/primary_expressions/literal.h"
 
-#include "llvm/IR/Constant.h"
+// #include "llvm/IR/Constant.h"
 
 namespace dconstruct::ast {
 
@@ -141,36 +141,36 @@ MATCH_OPTIMIZATION_ACTION literal::match_optimization_pass(match_optimization_en
     }, m_value);
 }
 
-[[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compilation::scope& env) const noexcept {
-   return std::visit([&](auto&& lit) -> llvm_res {
-        using T = std::decay_t<decltype(lit)>;
-        if constexpr (std::is_floating_point_v<T>) {
-            return llvm::ConstantFP::get(ctx, llvm::APFloat(lit));
-        } else if constexpr (std::is_integral_v<T>) {
-            return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T) * 8, lit, std::is_signed_v<T>));
-        } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
-            return llvm::ConstantPointerNull::get(llvm::PointerType::get(ctx, 0));
-        } else if constexpr (std::is_same_v<T, std::string>) {
-            auto* gv = new llvm::GlobalVariable(
-                module,
-                llvm::ArrayType::get(llvm::Type::getInt8Ty(ctx), lit.length() + 1),
-                true,
-                llvm::GlobalValue::PrivateLinkage,
-                llvm::ConstantDataArray::getString(ctx, lit, true),
-                ".str_" + std::to_string(m_emittedStringCount++)
-            );
-            if (!gv) {
-                return std::unexpected{llvm_error{"couldn't create global variable", *this}};
-            }
-            return llvm::ConstantExpr::getGetElementPtr(gv->getValueType(), gv, llvm::ArrayRef<llvm::Constant*>{
-                {llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0),
-                llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0)}}
-            );
-        } else if constexpr (std::is_same_v<T, std::monostate>) {
-            return std::unexpected{llvm_error{"tried to emit literal with unknown type", *this}};
-        }
-   }, m_value);
-}
+// [[nodiscard]] llvm_res literal::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>&, llvm::Module& module, const compilation::scope& env) const noexcept {
+//    return std::visit([&](auto&& lit) -> llvm_res {
+//         using T = std::decay_t<decltype(lit)>;
+//         if constexpr (std::is_floating_point_v<T>) {
+//             return llvm::ConstantFP::get(ctx, llvm::APFloat(lit));
+//         } else if constexpr (std::is_integral_v<T>) {
+//             return llvm::ConstantInt::get(ctx, llvm::APInt(sizeof(T) * 8, lit, std::is_signed_v<T>));
+//         } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+//             return llvm::ConstantPointerNull::get(llvm::PointerType::get(ctx, 0));
+//         } else if constexpr (std::is_same_v<T, std::string>) {
+//             auto* gv = new llvm::GlobalVariable(
+//                 module,
+//                 llvm::ArrayType::get(llvm::Type::getInt8Ty(ctx), lit.length() + 1),
+//                 true,
+//                 llvm::GlobalValue::PrivateLinkage,
+//                 llvm::ConstantDataArray::getString(ctx, lit, true),
+//                 ".str_" + std::to_string(m_emittedStringCount++)
+//             );
+//             if (!gv) {
+//                 return std::unexpected{llvm_error{"couldn't create global variable", *this}};
+//             }
+//             return llvm::ConstantExpr::getGetElementPtr(gv->getValueType(), gv, llvm::ArrayRef<llvm::Constant*>{
+//                 {llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0),
+//                 llvm::ConstantInt::get(llvm::Type::getInt32Ty(ctx), 0)}}
+//             );
+//         } else if constexpr (std::is_same_v<T, std::monostate>) {
+//             return std::unexpected{llvm_error{"tried to emit literal with unknown type", *this}};
+//         }
+//    }, m_value);
+// }
 
 
 }

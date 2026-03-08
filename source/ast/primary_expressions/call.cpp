@@ -220,37 +220,37 @@ MATCH_OPTIMIZATION_ACTION call_expr::match_optimization_pass(match_optimization_
     return MATCH_OPTIMIZATION_ACTION::NONE;
 }
 
-[[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
-    const identifier* callee_id = dynamic_cast<identifier*>(m_callee.get());
-    if (!callee_id) {
-        return std::unexpected{llvm_error{"expected identifier for callee but got non-identifier (not implemented)", *this}};
-    }
-    
-    llvm::Function* callee_f = module.getFunction(callee_id->m_name.m_lexeme);
-
-    if (callee_f->arg_size() != m_arguments.size()) {
-        std::string error = "llvm function expects " + std::to_string(callee_f->arg_size()) + " arguments but ast call contains " + std::to_string(m_arguments.size()) + " arguments";
-        return std::unexpected{llvm_error{std::move(error), *this}};
-    }
-
-    std::vector<llvm::Value*> args_v;
-    args_v.reserve(m_arguments.size());
-
-    for (const auto& arg : m_arguments) {
-        auto exp_value = arg->emit_llvm(ctx, builder, module, env);
-        if (!exp_value) {
-            return exp_value;
-        }
-        args_v.push_back(*exp_value);
-    }
-
-    
-    auto res = builder.CreateCall(callee_f, args_v);
-    if (!res) {
-        return std::unexpected{llvm_error{"expected non-null result from function call but got nullptr", *this}};
-    }
-    return res;
-}
+// [[nodiscard]] llvm_res call_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
+//     const identifier* callee_id = dynamic_cast<identifier*>(m_callee.get());
+//     if (!callee_id) {
+//         return std::unexpected{llvm_error{"expected identifier for callee but got non-identifier (not implemented)", *this}};
+//     }
+//     
+//     llvm::Function* callee_f = module.getFunction(callee_id->m_name.m_lexeme);
+// 
+//     if (callee_f->arg_size() != m_arguments.size()) {
+//         std::string error = "llvm function expects " + std::to_string(callee_f->arg_size()) + " arguments but ast call contains " + std::to_string(m_arguments.size()) + " arguments";
+//         return std::unexpected{llvm_error{std::move(error), *this}};
+//     }
+// 
+//     std::vector<llvm::Value*> args_v;
+//     args_v.reserve(m_arguments.size());
+// 
+//     for (const auto& arg : m_arguments) {
+//         auto exp_value = arg->emit_llvm(ctx, builder, module, env);
+//         if (!exp_value) {
+//             return exp_value;
+//         }
+//         args_v.push_back(*exp_value);
+//     }
+// 
+//     
+//     auto res = builder.CreateCall(callee_f, args_v);
+//     if (!res) {
+//         return std::unexpected{llvm_error{"expected non-null result from function call but got nullptr", *this}};
+//     }
+//     return res;
+// }
 
 
 }

@@ -16,6 +16,10 @@ namespace dconstruct {
             fwrite(m_outbuf.c_str(), sizeof(char), m_outbuf.length(), m_outfptr);
         }
 
+        void prepend_output(const std::string& text) {
+            m_outbuf.insert(0, text);
+        }
+
         ~FileDisassembler() noexcept override {
             fclose(m_outfptr);
         }

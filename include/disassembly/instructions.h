@@ -236,6 +236,15 @@ template<u8 padding>
 using Instruction = UP_Instruction<4>;
 using ShortInstruction = UP_Instruction<0>;
 
+[[nodiscard]] static constexpr Instruction from_short(const ShortInstruction& short_ins) noexcept {
+    Instruction ins;
+    ins.opcode = short_ins.opcode;
+    ins.destination = short_ins.destination;
+    ins.operand1 = short_ins.operand1;
+    ins.operand2 = short_ins.operand2;
+    return ins;
+}
+
 static_assert(sizeof(Instruction) == 8);
 static_assert(sizeof(ShortInstruction) == 4);
 
@@ -260,8 +269,8 @@ struct function_disassembly_line {
 
     function_disassembly_line() noexcept = default;
 
-    function_disassembly_line(u64 idx, const Instruction* ptr) noexcept :
-        m_instruction(ptr[idx]),
+    function_disassembly_line(u64 idx, const Instruction* ptr, const bool is_64_bit_instruction = true) noexcept :
+        m_instruction(is_64_bit_instruction ? ptr[idx] : from_short(reinterpret_cast<const ShortInstruction*>(ptr)[idx])),
         m_location(idx),
         m_globalPointer(ptr),
         m_isArgMove(false)

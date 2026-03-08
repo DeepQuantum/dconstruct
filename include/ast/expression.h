@@ -9,9 +9,9 @@
 #include "compilation/global_state.h"
 #include <ostream>
 #include <vector>
-#include "llvm/IR/Value.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Module.h"
+// #include "llvm/IR/Value.h"
+// #include "llvm/IR/IRBuilder.h"
+// #include "llvm/IR/Module.h"
 
 
 
@@ -26,10 +26,10 @@ namespace dconstruct::ast {
     struct foreach_optimization_env;
     struct match_optimization_env;
 
-    struct llvm_error {
-        std::string m_message;
-        const expression& m_expr;
-    };
+    // struct llvm_error {
+    //     std::string m_message;
+    //     const expression& m_expr;
+    // };
 
     struct semantic_check_error {
         std::string m_message;
@@ -45,7 +45,7 @@ namespace dconstruct::ast {
         POSTFIX,
     };
 
-    using llvm_res = std::expected<llvm::Value*, llvm_error>;
+    // using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
 
     enum class DC_LVALUE_TYPE : u8 {
@@ -64,9 +64,9 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual std::unique_ptr<expression> get_grouped() const {
             return clone();
         }
-        [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const {
-            return std::unexpected{llvm_error{"not implemented", *this}};
-        };
+        // [[nodiscard]] virtual llvm_res emit_llvm(llvm::LLVMContext&, llvm::IRBuilder<>&, llvm::Module&, const compilation::scope&) const {
+        //     return std::unexpected{llvm_error{"not implemented", *this}};
+        // };
         
         [[nodiscard]] virtual VAR_OPTIMIZATION_ACTION var_optimization_pass(var_optimization_env& optimization_env) noexcept = 0;
         [[nodiscard]] virtual FOREACH_OPTIMIZATION_ACTION foreach_optimization_pass(foreach_optimization_env& optimization_env) noexcept = 0;

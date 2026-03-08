@@ -2,6 +2,8 @@
 #include "DCHeader.h"
 #include "DCScript.h"
 
+#include <numeric>
+
 namespace dconstruct::ast {
 
 void program::pseudo_c(std::ostream& os) const {

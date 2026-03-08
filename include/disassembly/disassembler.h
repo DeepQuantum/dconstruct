@@ -55,6 +55,9 @@ namespace dconstruct {
         [[nodiscard]] const std::vector<const function_disassembly*> get_all_functions() noexcept;
 
         [[nodiscard]] std::vector<const function_disassembly*> get_named_functions() const noexcept;
+        [[nodiscard]] bool has_state_script() const noexcept {
+            return m_hasStateScript;
+        }
 
         void disassemble_functions_from_bin_file();
         std::unordered_map<u64, std::vector<std::string>> m_offsetsToFunctionNames;
@@ -69,6 +72,7 @@ namespace dconstruct {
         std::vector<function_disassembly> m_functions;
         embedded_function_id m_currentEmbeddedFunctionId;
         game_type m_game = game_type::T2R;
+        bool m_hasStateScript = false;
 
 
         constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };
@@ -87,7 +91,6 @@ namespace dconstruct {
         [[nodiscard]] const char* lookup(const sid64 hash);
         [[nodiscard]] const char* lookup(const sid32 hash);
         [[nodiscard]] bool is_unmapped_sid(const location) const noexcept;
-        void insert_header_line();
         [[nodiscard]] bool is_possible_float(const f32* ptr) const noexcept;
         [[nodiscard]] bool is_possible_i32(const i32* ptr) const noexcept;
         u8 insert_struct_or_arraylike(const location, const u32);

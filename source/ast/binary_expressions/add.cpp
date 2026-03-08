@@ -108,79 +108,79 @@ using larger_t = std::conditional_t<(sizeof(T) >= sizeof(U)), T, U>;
 }
 
 
-[[nodiscard]] llvm_res add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const {
-    llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
-    if (!lhs) {
-        return lhs;
-    }
-    llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env); 
-    if (!rhs) {
-        return rhs;
-    }
-    llvm::Value* lhs_val = *lhs;
-    llvm::Value* rhs_val = *rhs;
-    llvm::Type* lhs_type = lhs_val->getType();
-    llvm::Type* rhs_type = rhs_val->getType();
-    
-    assert(lhs_type != nullptr);
-    assert(rhs_type != nullptr);
-    
-    llvm::Value* res = nullptr;
-
-    if (lhs_type->isPointerTy()) {
-        if (!rhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"expected integral type for ptr add rhs but got non-integral type", *this}};
-        }
-        res = builder.CreatePtrAdd(lhs_val, rhs_val);
-    } else if (rhs_type->isPointerTy()) {
-        if (!lhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"expected integral type for ptr add lhs but got non-integral type", *this}};
-        }
-        res = builder.CreatePtrAdd(rhs_val, lhs_val);
-    } else if (lhs_type->isFloatingPointTy()) {
-        if (!rhs_type->isFloatingPointTy()) {
-            const auto cast_op = is_signed(m_rhs->get_type_unchecked(env)) ? llvm::Instruction::CastOps::SIToFP : llvm::Instruction::CastOps::UIToFP;
-            rhs_val = builder.CreateCast(cast_op, rhs_val, lhs_type);
-        }
-        res = builder.CreateAdd(lhs_val, rhs_val);
-    } else if (rhs_type->isFloatingPointTy()) {
-        if (!lhs_type->isFloatingPointTy()) {
-            const auto cast_op = is_signed(m_lhs->get_type_unchecked(env)) ? llvm::Instruction::CastOps::SIToFP : llvm::Instruction::CastOps::UIToFP;
-            lhs_val = builder.CreateCast(cast_op, lhs_val, rhs_type);
-        }
-        res = builder.CreateAdd(lhs_val, rhs_val);
-    } else if (lhs_type->isIntegerTy()) {
-        if (!rhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"expected integral type for add rhs but got non-integral type", *this}};
-        }
-        auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
-        auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
-        if (lhs_i_type_size > rhs_i_type_size) {
-            lhs_val = builder.CreateZExt(lhs_val, rhs_type);
-        } else if (rhs_i_type_size > lhs_i_type_size) {
-            rhs_val = builder.CreateZExt(rhs_val, lhs_type);
-        }
-        res = builder.CreateAdd(lhs_val, rhs_val);
-    } else if (rhs_type->isIntegerTy()) {
-        if (!lhs_type->isIntegerTy()) {
-            return std::unexpected{llvm_error{"expected integral type for add lhs but got non-integral type", *this}};
-        }
-        auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
-        auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
-        if (lhs_i_type_size > rhs_i_type_size) {
-            lhs_val = builder.CreateZExt(lhs_val, rhs_type);
-        } else if (rhs_i_type_size > lhs_i_type_size) {
-            rhs_val = builder.CreateZExt(rhs_val, lhs_type);
-        }
-        res = builder.CreateAdd(lhs_val, rhs_val);
-    } else {
-        return std::unexpected{llvm_error{"unsupported addition between types", *this}};
-    }
-    if (!res) {
-        return std::unexpected{llvm_error{"expected non-null result from addition but got nullptr", *this}};
-    }
-    return res;
-}
+// [[nodiscard]] llvm_res add_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const {
+//     llvm_res lhs = m_lhs->emit_llvm(ctx, builder, module, env);
+//     if (!lhs) {
+//         return lhs;
+//     }
+//     llvm_res rhs = m_rhs->emit_llvm(ctx, builder, module, env); 
+//     if (!rhs) {
+//         return rhs;
+//     }
+//     llvm::Value* lhs_val = *lhs;
+//     llvm::Value* rhs_val = *rhs;
+//     llvm::Type* lhs_type = lhs_val->getType();
+//     llvm::Type* rhs_type = rhs_val->getType();
+//     
+//     assert(lhs_type != nullptr);
+//     assert(rhs_type != nullptr);
+//     
+//     llvm::Value* res = nullptr;
+// 
+//     if (lhs_type->isPointerTy()) {
+//         if (!rhs_type->isIntegerTy()) {
+//             return std::unexpected{llvm_error{"expected integral type for ptr add rhs but got non-integral type", *this}};
+//         }
+//         res = builder.CreatePtrAdd(lhs_val, rhs_val);
+//     } else if (rhs_type->isPointerTy()) {
+//         if (!lhs_type->isIntegerTy()) {
+//             return std::unexpected{llvm_error{"expected integral type for ptr add lhs but got non-integral type", *this}};
+//         }
+//         res = builder.CreatePtrAdd(rhs_val, lhs_val);
+//     } else if (lhs_type->isFloatingPointTy()) {
+//         if (!rhs_type->isFloatingPointTy()) {
+//             const auto cast_op = is_signed(m_rhs->get_type_unchecked(env)) ? llvm::Instruction::CastOps::SIToFP : llvm::Instruction::CastOps::UIToFP;
+//             rhs_val = builder.CreateCast(cast_op, rhs_val, lhs_type);
+//         }
+//         res = builder.CreateAdd(lhs_val, rhs_val);
+//     } else if (rhs_type->isFloatingPointTy()) {
+//         if (!lhs_type->isFloatingPointTy()) {
+//             const auto cast_op = is_signed(m_lhs->get_type_unchecked(env)) ? llvm::Instruction::CastOps::SIToFP : llvm::Instruction::CastOps::UIToFP;
+//             lhs_val = builder.CreateCast(cast_op, lhs_val, rhs_type);
+//         }
+//         res = builder.CreateAdd(lhs_val, rhs_val);
+//     } else if (lhs_type->isIntegerTy()) {
+//         if (!rhs_type->isIntegerTy()) {
+//             return std::unexpected{llvm_error{"expected integral type for add rhs but got non-integral type", *this}};
+//         }
+//         auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
+//         auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
+//         if (lhs_i_type_size > rhs_i_type_size) {
+//             lhs_val = builder.CreateZExt(lhs_val, rhs_type);
+//         } else if (rhs_i_type_size > lhs_i_type_size) {
+//             rhs_val = builder.CreateZExt(rhs_val, lhs_type);
+//         }
+//         res = builder.CreateAdd(lhs_val, rhs_val);
+//     } else if (rhs_type->isIntegerTy()) {
+//         if (!lhs_type->isIntegerTy()) {
+//             return std::unexpected{llvm_error{"expected integral type for add lhs but got non-integral type", *this}};
+//         }
+//         auto lhs_i_type_size = llvm::cast<llvm::IntegerType>(lhs_type)->getBitWidth();
+//         auto rhs_i_type_size = llvm::cast<llvm::IntegerType>(rhs_type)->getBitWidth();
+//         if (lhs_i_type_size > rhs_i_type_size) {
+//             lhs_val = builder.CreateZExt(lhs_val, rhs_type);
+//         } else if (rhs_i_type_size > lhs_i_type_size) {
+//             rhs_val = builder.CreateZExt(rhs_val, lhs_type);
+//         }
+//         res = builder.CreateAdd(lhs_val, rhs_val);
+//     } else {
+//         return std::unexpected{llvm_error{"unsupported addition between types", *this}};
+//     }
+//     if (!res) {
+//         return std::unexpected{llvm_error{"expected non-null result from addition but got nullptr", *this}};
+//     }
+//     return res;
+// }
 
 
 }

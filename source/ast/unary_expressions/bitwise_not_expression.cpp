@@ -52,17 +52,17 @@ void bitwise_not_expr::pseudo_racket(std::ostream& os) const {
 }
 
 
-[[nodiscard]] llvm_res bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
-    auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
-    if (!rhs) {
-        return rhs;
-    }
-    llvm::Value* res = builder.CreateNeg(*rhs);
-    if (!res) {
-        return std::unexpected{llvm_error{"expected non-null result from bitwise not but got nullptr", *this}};
-    }
-    return res;
-}
+// [[nodiscard]] llvm_res bitwise_not_expr::emit_llvm(llvm::LLVMContext& ctx, llvm::IRBuilder<>& builder, llvm::Module& module, const compilation::scope& env) const noexcept {
+//     auto rhs = m_rhs->emit_llvm(ctx, builder, module, env);
+//     if (!rhs) {
+//         return rhs;
+//     }
+//     llvm::Value* res = builder.CreateNeg(*rhs);
+//     if (!res) {
+//         return std::unexpected{llvm_error{"expected non-null result from bitwise not but got nullptr", *this}};
+//     }
+//     return res;
+// }
 
 
 }
