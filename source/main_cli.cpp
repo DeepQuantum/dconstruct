@@ -63,6 +63,15 @@ int main(int argc, char *argv[]) {
     const bool output_is_folder = std::filesystem::is_directory(output);
 
     const std::filesystem::path sidbase_path = opts["s"].as<std::string>();
+    const std::string game_type_string = opts["game_type"].as<std::string>();
+    const auto game_type_opt = dconstruct::disassembly::get_game_type(game_type_string);
+
+    if (!game_type_opt) {
+        std::cerr << "error: unknown game type: '" << game_type_string << "'\n";
+        return -1;
+    }
+
+    const dconstruct::game_type game = *game_type_opt;
 
     if (!std::filesystem::exists(sidbase_path)) {
         std::cout << "error: sidbase path " << sidbase_path << " doesn't exist\n";
@@ -85,11 +94,11 @@ int main(int argc, char *argv[]) {
             std::cout << "error: couldn't load sidbase: " << sidbase_opt.error() << "\n";
             return -1;
         }
-        dconstruct::disassembly::map_types_multiple_to_file(filepath, *sidbase_opt, output);
+        dconstruct::disassembly::map_types_multiple_to_file(filepath, *sidbase_opt, output, game);
         return 0;
     }
 
-    constexpr u8 indent_per_level = 2;// opts["indent"].as<u8>();
+    constexpr u8 indent_per_level = 2;
     const bool emit_once = opts["emit_once"].as<bool>();
     const bool verbose = opts["verbose"].as<bool>();
     const bool decompile = !opts["no_decompile"].as<bool>();
@@ -97,7 +106,6 @@ int main(int argc, char *argv[]) {
     const bool generate_graphs = opts["graphs"].as<bool>();
     const bool use_pascal_case = opts["pascal_case"].as<bool>();
     const bool show_warnings = opts["show_warnings"].as<bool>();
-    const bool uc4 = opts["uc4"].as<bool>();
 
 
 
@@ -140,24 +148,20 @@ int main(int argc, char *argv[]) {
             if (generate_graphs) {
                 std::filesystem::create_directory(output / "graphs");
             }
-            if (uc4) {
-                dconstruct::disassembly::decompile_multiple<false>(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
-            } else {
-                dconstruct::disassembly::decompile_multiple<true>(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case);
-            }
+            dconstruct::disassembly::decompile_multiple(filepath, output, base, disassember_options, generate_graphs, show_warnings, optimize, print_func, use_pascal_case, game);
         }
         else {
-            dconstruct::disassembly::disassemble_multiple(filepath, output, base, disassember_options);
+            dconstruct::disassembly::disassemble_multiple(filepath, output, base, disassember_options, game);
         }
     } else {
         const auto start = std::chrono::high_resolution_clock::now();
         if (decompile) {
             std::cout << "disassembling & decompiling " << filepath.filename() << "...\n";
-            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, !uc4);
+            dconstruct::disassembly::decomp_file(filepath, output, std::filesystem::path(output).replace_extension(".dcpl"), base, disassember_options, generate_graphs, print_func, show_warnings, optimize, edits, use_pascal_case, game);
         }
         else {
             std::cout << "disassembling " << filepath.filename() << "...\n";
-            dconstruct::disassembly::disasm_file(filepath, output, base, disassember_options, edits);
+            dconstruct::disassembly::disasm_file(filepath, output, base, disassember_options, edits, game);
         }
         const auto time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
         std::cout << "took " << time_taken.count() << "ms\n";

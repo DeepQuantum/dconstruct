@@ -34,12 +34,18 @@ namespace dconstruct {
         bool m_verbose = false;
     };
 
+
+    enum class game_type : u8 {
+        T2R,
+        T1X,
+        UC4,
+    };
     
 
     class Disassembler {
     public:
 
-        Disassembler(BinaryFile* file, const SIDBase* sidbase) noexcept : m_currentFile(file), m_sidbase(sidbase) {}
+        Disassembler(BinaryFile* file, const SIDBase* sidbase, const game_type game = game_type::T2R) noexcept : m_currentFile(file), m_sidbase(sidbase), m_game(game) {}
 
         void disassemble();
         virtual ~Disassembler() {};
@@ -62,7 +68,7 @@ namespace dconstruct {
         DisassemblerOptions m_options;
         std::vector<function_disassembly> m_functions;
         embedded_function_id m_currentEmbeddedFunctionId;
-        bool m_is64Bit = true;
+        game_type m_game = game_type::T2R;
 
 
         constexpr static TextFormat ENTRY_HEADER_FMT = { VAR_COLOR, 20 };

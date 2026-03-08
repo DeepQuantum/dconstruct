@@ -26,7 +26,7 @@ namespace dconstruct {
     class EditDisassembler : public Disassembler {
 
     public:
-        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits) noexcept : Disassembler(file, sidbase) {
+        EditDisassembler(BinaryFile* file, const SIDBase* sidbase, const DisassemblerOptions& options, const std::vector<std::string> &edits, const game_type game = game_type::T2R) noexcept : Disassembler(file, sidbase, game) {
             m_options = options;
             m_edits = edits;
         }

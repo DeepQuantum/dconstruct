@@ -313,6 +313,19 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 
     switch (effective_type_id) {
         case SID("state-script"): {
+            const StateScript *script;
+            switch (m_game) {
+                case game_type::T2R:
+                    script = reinterpret_cast<const StateScript*>(&struct_ptr->m_data);
+                    break;
+                case game_type::T1X:
+                    script = reinterpret_cast<const StateScript*>(&struct_ptr->m_data + 8);
+                    break;
+                default:
+                    script = nullptr;
+            }
+
+
             m_currentFile->m_dcscript = reinterpret_cast<const StateScript*>(&struct_ptr->m_data);
             if (m_options.m_verbose) {
                 insert_state_script_verbose_fields(reinterpret_cast<const StateScript*>(&struct_ptr->m_data), indent + m_options.m_indentPerLevel);
@@ -1198,7 +1211,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         }
         case Opcode::LookupInt: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
-            if (m_is64Bit) {
+            if (m_game != game_type::UC4) {
                 const i64 value = frame.m_symbolTable.get<i64>(op1);
                 frame[dest].m_type = make_type_from_prim(ast::primitive_kind::I64);
                 table_entry = make_type_from_prim(ast::primitive_kind::I64);
@@ -1222,7 +1235,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
         case Opcode::LookupPointer: {
             std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
             p64 value = 0;
-            if (m_is64Bit) {
+            if (m_game != game_type::UC4) {
                 value = frame.m_symbolTable.get<p64>(op1);
                 
             } else {
@@ -1573,7 +1586,7 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             break;
         }
         case Opcode::LoadStaticU32Imm: {
-            if (!m_is64Bit) {
+            if (m_game == game_type::UC4) {
                 std::snprintf(varying, disassembly_text_size,"r%d, %d", dest, op1);
                 const sid32 value = frame.m_symbolTable.get<sid32>(op1);
                 const char *hash_str = lookup(value);

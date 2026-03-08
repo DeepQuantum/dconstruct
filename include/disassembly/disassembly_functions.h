@@ -58,7 +58,7 @@ static void decomp_file(
     const bool optimize,
     const std::vector<std::string> &edits = {}, 
     const bool use_pascal_case = false,
-    const bool is_64_bit = true) {
+    const dconstruct::game_type game = dconstruct::game_type::T2R) {
     
     auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
@@ -70,19 +70,19 @@ static void decomp_file(
 
     auto& file = *file_res;
 
-    if (is_64_bit) {
+    if (game != dconstruct::game_type::UC4) {
         if (!edits.empty()) {
-            dconstruct::EditDisassembler ed(&file, &base, options, edits);
+            dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
             ed.apply_file_edits();
         }
     }
 
-    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options);
+    dconstruct::FileDisassembler disassembler(&file, &base, out_disasm_filename.string(), options, game);
     
-    if (is_64_bit) {
-        disassembler.disassemble();
-    } else {
+    if (game == dconstruct::game_type::UC4) {
         disassembler.disassemble_functions_from_bin_file();
+    } else {
+        disassembler.disassemble();
     }
 
     disassembler.dump();
@@ -124,7 +124,8 @@ static void disasm_file(
     const std::filesystem::path &out_filename, 
     const dconstruct::SIDBase &base,
     const dconstruct::DisassemblerOptions &options,
-    const std::vector<std::string> &edits = {}) {
+    const std::vector<std::string> &edits = {},
+    const dconstruct::game_type game = dconstruct::game_type::T2R) {
     
     auto file_res = dconstruct::BinaryFile::from_path(inpath.string());
 
@@ -135,18 +136,17 @@ static void disasm_file(
 
     auto& file = *file_res;
 
-    if (!edits.empty()) {
-        dconstruct::EditDisassembler ed(&file, &base, options, edits);
+    if (!edits.empty() && game != dconstruct::game_type::UC4) {
+        dconstruct::EditDisassembler ed(&file, &base, options, edits, game);
         ed.apply_file_edits();
     }
 
 
-    dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options);
+    dconstruct::FileDisassembler disassembler(&file, &base, out_filename.string(), options, game);
     disassembler.disassemble();
     disassembler.dump();
 }
 
-template <bool is_64_bit = true>
 static void decompile_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
@@ -156,7 +156,8 @@ static void decompile_multiple(
     const bool show_warnings,
     const bool optimize,
     const dconstruct::ast::print_fn_type language_print,
-    const bool pascal_case
+    const bool pascal_case,
+    const dconstruct::game_type game = dconstruct::game_type::T2R
 ) {
 
     std::vector<std::filesystem::path> filepaths;
@@ -180,7 +181,7 @@ static void decompile_multiple(
             const std::filesystem::path disasm_outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             const std::filesystem::path decomp_outpath = (out / std::filesystem::relative(entry, in)).concat(".dcpl");
             std::filesystem::create_directories(disasm_outpath.parent_path());
-            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case);
+            decomp_file(entry.string(), disasm_outpath, decomp_outpath, sidbase, options, generate_graphs, language_print, show_warnings, optimize, {}, pascal_case, game);
         }
     );
 
@@ -194,7 +195,8 @@ static void disassemble_multiple(
     const std::filesystem::path &in, 
     const std::filesystem::path &out, 
     const dconstruct::SIDBase &sidbase, 
-    const dconstruct::DisassemblerOptions &options
+    const dconstruct::DisassemblerOptions &options,
+    const dconstruct::game_type game = dconstruct::game_type::T2R
 ) {
 
     std::vector<std::filesystem::path> filepaths;
@@ -218,7 +220,7 @@ static void disassemble_multiple(
         [&](const std::filesystem::path &entry) {
             const std::filesystem::path outpath = (out / std::filesystem::relative(entry, in)).concat(".asm");
             std::filesystem::create_directories(outpath.parent_path());
-            disasm_file(entry.string(), outpath, sidbase, options);
+            disasm_file(entry.string(), outpath, sidbase, options, {}, game);
         }
     );
 
@@ -231,7 +233,8 @@ static void disassemble_multiple(
 static void map_types_multiple(
     const std::filesystem::path &in,
     const dconstruct::SIDBase &sidbase,
-    dconstruct::MappingRegistry &registry
+    dconstruct::MappingRegistry &registry,
+    const dconstruct::game_type game = dconstruct::game_type::T2R
 ) {
     std::vector<std::filesystem::path> filepaths;
 
@@ -252,7 +255,7 @@ static void map_types_multiple(
                 return;
             }
             auto& file = *file_res;
-            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry);
+            dconstruct::MappingDisassembler disassembler(&file, &sidbase, registry, DisassemblerOptions{}, game);
             disassembler.ingest();
         }
     );
@@ -261,10 +264,11 @@ static void map_types_multiple(
 static void map_types_multiple_to_file(
     const std::filesystem::path &in,
     const dconstruct::SIDBase &sidbase,
-    const std::filesystem::path &out_types_file
+    const std::filesystem::path &out_types_file,
+    const dconstruct::game_type game = dconstruct::game_type::T2R
 ) {
     dconstruct::MappingRegistry registry;
-    map_types_multiple(in, sidbase, registry);
+    map_types_multiple(in, sidbase, registry, game);
     registry.dump_types_file(out_types_file, sidbase);
 }
 
@@ -318,6 +322,18 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
     }
 }
 
+[[nodiscard]] static std::optional<dconstruct::game_type> get_game_type(const std::string& input_string) {
+    if (input_string == "t2r" || input_string == "T2R") {
+        return dconstruct::game_type::T2R;
+    } else if (input_string == "t1x" || input_string == "T1X") {
+        return dconstruct::game_type::T1X;
+    } else if (input_string == "uc4" || input_string == "UC4") {
+        return dconstruct::game_type::UC4;
+    } else {
+        return std::nullopt;
+    }
+}
+
 [[nodiscard]] static std::optional<std::pair<cxxopts::Options, cxxopts::ParseResult>> get_command_line_options(int argc, char* argv[]) {
     cxxopts::Options options("dconstruct", "\na program for disassembling, editing and decompiling tlouii dc files. use --about for a more detailed description.\n");
 
@@ -342,11 +358,11 @@ static i32 disassemble_shader(const std::filesystem::path& path) {
         ("pascal_case", "convert the games function names into pascal case in the DCPL output.", cxxopts::value<bool>()->default_value("false"))
         ("show_warnings", "don't show warnings for functions that couldn't be decompiled.", cxxopts::value<bool>()->default_value("false"))
         ("language", "specify the DCPL pseudo language type. current options are 'C', 'Racket' (closest to original DC), or 'Python'. default is 'C'.", cxxopts::value<std::string>()->default_value("C"))
+        ("g,game_type", "game type. current options are 't2r', 't1x', or 'uc4'. default is 't2r'.", cxxopts::value<std::string>()->default_value("t2r"))
         //("shader", "treat the input as a shader file instead.", cxxopts::value<bool>()->default_value("false"))
         ("graphs", "emit control flow graph SVGs of the named functions when decompiling. only emits graphs of size >1. SIGNIFICANTLY slows down decompilation.", cxxopts::value<bool>()->default_value("false"))
         ("emit_once", "only emit the first occurence of a struct. repeating instances will still show the address but not the contents of the struct.", 
             cxxopts::value<bool>()->default_value("false"))
-        ("uc4", "experimental: try to disassemble/decompile an uncharted 4 .bin file instead. not tested, so might be very broken.", cxxopts::value<bool>()->default_value("false"))
         ("map_types", "don't emit disassembly or decompilation output, just map as many struct types as possible and emit them to a file specified by --output", cxxopts::value<bool>()->default_value("false"));
 
     options.add_options("edit")

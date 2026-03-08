@@ -2,11 +2,16 @@
 
 using sid64 = u64;
 
+const bool is_t1x = false;
+
 enum TypeId : u64 {
     StateScript = 14848776067067198830,
     Float = 11532138274943533413,
     UInt64 = 18005884506733652191,
     Vector = 16817156562142133634,
+    Symbol = 16724962288577279249,
+    Boolean = 16822532743728177535,
+    Function = 9155132395257954602,
 };
 
 enum Opcode : u8 {
@@ -113,7 +118,9 @@ struct Instruction {
     u8 m_arg0;
     u8 m_arg1;
     u8 m_arg2;
-    padding[4];
+    if (!is_t1x) {
+        padding[4];
+    }
 };
 
 struct vector {
@@ -132,8 +139,9 @@ struct ScriptLambda {
     s64 m_neg1;
     u64 m_sidGlobal;
     u8 _padding1[8];
-
-    Instruction instructions[m_numInstructions] @ m_pInstruction;
+    
+    const u64 num_instructions = is_t1x ? m_numInstructions * 2 - 1 : m_numInstructions;
+    Instruction instructions[num_instructions] @ m_pInstruction;
     u64 symbols[(m_sum - 4 * m_numInstructions - 12) / 4] @ m_pSymbols;
 };
 
@@ -195,6 +203,8 @@ struct SsState {
     SsOnBlock onBlocks[m_numSsOnBlocks] @ m_pSsOnBlocks;
 };
 
+using StateScript;
+
 struct TypedValue {
     u64 m_typeId;
     match (m_typeId) {
@@ -202,6 +212,9 @@ struct TypedValue {
         (TypeId::Float): float value;
         (TypeId::UInt64): u64 value;
         (TypeId::Vector): vector value;
+        (TypeId::Symbol): sid64 value;
+        (TypeId::Boolean): bool value;
+        (TypeId::Function): ScriptLambda value;
     }
 };
 
@@ -258,6 +271,9 @@ struct SsOptions {
 };
 
 struct StateScript {
+    if (is_t1x) {
+        u64 m_pStateScriptName;
+    }
     sid64 m_stateScriptId;
     u64 m_pSsDeclList;
     sid64 m_initialStateId;
@@ -271,16 +287,20 @@ struct StateScript {
     u64 m_pErrorName;
     u8 _padding2[8];
     
-    if (m_pSsDeclList) {
-       SsDeclarationList declList @ m_pSsDeclList;
+    if (is_t1x) {
+        char name [] @ m_pStateScriptName;
     }
+    
+   if (m_pSsDeclList) {
+       SsDeclarationList declList @ m_pSsDeclList;
+   }
    
     SsState states[m_stateCount] @ m_pSsStateTable;
     
     if (m_pSsOptions) SsOptions options @ m_pSsOptions;
     
     if (m_pDebugFileName) {
-        char debug_name[] @ m_pDebugFileName;
+       char debug_name[] @ m_pDebugFileName;
     }
 };
 

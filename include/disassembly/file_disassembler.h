@@ -6,7 +6,7 @@ namespace dconstruct {
     class FileDisassembler : public Disassembler {
 
     public:
-        FileDisassembler(BinaryFile* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options) noexcept : Disassembler(file, sidbase) {
+        FileDisassembler(BinaryFile* file, const SIDBase* sidbase, const std::string& out_file, const DisassemblerOptions& options, const game_type game = game_type::T2R) noexcept : Disassembler(file, sidbase, game) {
             m_outbuf.reserve(0x2FFFFFULL);
             m_outfptr = fopen(out_file.c_str(), "wb");
             this->m_options = options;
