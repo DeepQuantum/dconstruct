@@ -161,17 +161,28 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
 
 [[nodiscard]] u32 Disassembler::get_size_array(const location array, const u32 indent) {
     u32 size_array_front = array.get<u32>(8);
+
     u32 size_array_back = array.get<u32>(-8);
     u32 size_array;
-    constexpr u32 max_allowed_size_array = 100'000;
-    if (size_array_front > max_allowed_size_array) {
-        if (size_array_back > max_allowed_size_array) {
-            insert_span_fmt("array [0x%x] {size: (%u, %u) (*invalid*)} {", 
-                get_offset(array), 
-                size_array_front,
-                size_array_back
-            );
-            return 0;
+    constexpr u32 max_allowed_size_array_u32 = 100'000;
+    constexpr u16 max_allowed_size_array_u16 = 1'000;
+    constexpr u16 bit_mask_u16 = 0xFFFF;
+    if (size_array_front > max_allowed_size_array_u32) {
+        if ((size_array_front & bit_mask_u16) < max_allowed_size_array_u16) {
+            size_array = size_array_front & bit_mask_u16;
+        }
+        else if (size_array_back > max_allowed_size_array_u32) {
+            if ((size_array_back & bit_mask_u16) < max_allowed_size_array_u16) {
+                size_array = size_array_back & bit_mask_u16;
+            }
+            else {
+                insert_span_fmt("array [0x%x] {size: (%u, %u) (*invalid*)} {", 
+                    get_offset(array), 
+                    size_array_front,
+                    size_array_back
+                );
+                return 0;
+            }
         } else {
             size_array = size_array_back;
         }
@@ -303,13 +314,12 @@ void Disassembler::insert_struct(const structs::unmapped *struct_ptr, const u32 
 
     const u64 offset = get_offset(&struct_ptr->m_data);
     
-    const sid64 effective_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
+    sid64 effective_type_id = type_id != 0 ? type_id : struct_ptr->typeID;
     const char* struct_name = lookup(effective_type_id);
 
     insert_span_fmt("%s [0x%05X] {\n", struct_name, offset);
     m_currentEmbeddedFunctionId.m_outerStructs.emplace_back(struct_name, offset);
-
-
+    
     switch (effective_type_id) {
         case SID("state-script"): {
             m_hasStateScript = true;

@@ -20,8 +20,22 @@ namespace dconstruct {
 
     [[nodiscard]] u32 MappingDisassembler::get_size_array(const location array) const {
         u32 size_array_front = array.get<u32>(8);
+        const u16 size_array_front_u16_raw = array.get<u16>(8);
+        const u16 size_array_front_u16_swapped = static_cast<u16>((size_array_front_u16_raw << 8) | (size_array_front_u16_raw >> 8));
         u32 size_array_back = array.get<u32>(-8);
         constexpr u32 max_allowed_size_array = 100'000;
+        const bool front_u16_raw_plausible = size_array_front_u16_raw > 0 && size_array_front_u16_raw <= max_allowed_size_array;
+        const bool front_u16_swapped_plausible = size_array_front_u16_swapped > 0 && size_array_front_u16_swapped <= max_allowed_size_array;
+        u32 size_array_front_u16 = size_array_front_u16_raw;
+        if (!front_u16_raw_plausible && front_u16_swapped_plausible) {
+            size_array_front_u16 = size_array_front_u16_swapped;
+        }
+        const bool front_u16_plausible = size_array_front_u16 > 0 && size_array_front_u16 <= max_allowed_size_array;
+        const bool front_u32_invalid = size_array_front == 0 || size_array_front > max_allowed_size_array;
+        const bool front_u32_significantly_larger = front_u16_plausible && size_array_front >= size_array_front_u16 * 8 && (size_array_front - size_array_front_u16) >= 256;
+        if (front_u16_plausible && (front_u32_invalid || front_u32_significantly_larger)) {
+            size_array_front = size_array_front_u16;
+        }
         if (size_array_front > max_allowed_size_array) {
             if (size_array_back > max_allowed_size_array) {
                 return 0;

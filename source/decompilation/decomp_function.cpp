@@ -459,6 +459,7 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 }
             }
 
+            case Opcode::LookupInt:
             case Opcode::LookupPointer: {
                 expr_uptr lit = nullptr;
                 if (m_is64Bit) {
