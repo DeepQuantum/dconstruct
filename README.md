@@ -3,6 +3,10 @@
 
 # dconstruct
 
+![Full disassembly and decompilation animation](images/disassembly_readme.webp)
+
+[Open the source MP4](images/Disassembly.mp4)
+
 `dconstruct` is a reverse engineering tool for the DC-Script files used in The Last of Us Part II. It features a disassembler and a decompiler.
 
 It outputs `.asm` files containing the disassembled structures and bytecode, aswell as `.dcpl` (DC Pseudo Language) files containing C-like pseudo code.

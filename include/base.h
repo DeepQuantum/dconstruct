@@ -211,4 +211,24 @@ namespace dconstruct {
 	constexpr u8 operator"" _imm(u64 v) {
 		return u8(v);
 	}
+
+	// once C++26 is added to MSVC....
+	/*
+	
+	template<typename T>
+	[[nodiscard]] static consteval std::pair<u64, u64> get_bitmap() {
+		u64 res = 0;
+		u64 count = 0;
+		u64 size = 0;
+		template for (constexpr auto mem : define_static_array(nonstatic_data_members_of(^^T, std::meta::access_context::current()))) {
+			using member_t = [:std::meta::type_of(mem):];
+			size += sizeof(member_t);
+			if (size % sizeof(u64) == 0) {
+				res |= static_cast<u64>(is_pointer_type(type_of(mem))) << count++;
+			}
+		}
+		return {size, res};
+	} 
+	
+	*/
 };
