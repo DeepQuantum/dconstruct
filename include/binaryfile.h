@@ -40,9 +40,17 @@ namespace dconstruct {
 
     class BinaryFile
     {
+        struct aligned_deleter {
+            void operator()(std::byte* p) const noexcept {
+                ::operator delete[](p, std::align_val_t(64));
+            }
+        };
+
+        using byte_uptr = std::unique_ptr<std::byte[], aligned_deleter>;
+
     public:
 
-        BinaryFile(std::filesystem::path path, const u64 size, std::unique_ptr<std::byte[]>&& bytes, DC_Header* dcheader) noexcept : 
+        BinaryFile(std::filesystem::path path, const u64 size, byte_uptr&& bytes, DC_Header* dcheader) noexcept : 
         m_path(std::move(path)), m_size(size), m_bytes(std::move(bytes)), m_dcheader(dcheader) {};
 
         [[nodiscard]] static std::expected<BinaryFile, std::string> from_path(const std::filesystem::path& path) noexcept;
@@ -51,8 +59,8 @@ namespace dconstruct {
         const DC_Header* m_dcheader = nullptr;
         const StateScript* m_dcscript = nullptr;
         std::size_t m_size = 0;
-        std::unique_ptr<std::byte[]> m_bytes;
-        std::unique_ptr<std::byte[]> m_pointedAtTable;
+        byte_uptr m_bytes;
+        byte_uptr m_pointedAtTable;
         location m_strings;
         location m_relocTable;
         std::map<sid64, const std::string> m_sidCache;
@@ -60,7 +68,7 @@ namespace dconstruct {
         [[nodiscard]] bool is_file_ptr(const location) const noexcept;
         [[nodiscard]] bool gets_pointed_at(const location) const noexcept;
         [[nodiscard]] bool is_string(const location) const noexcept;
-        [[nodiscard]] std::unique_ptr<std::byte[]> get_unmapped() const;
+        [[nodiscard]] byte_uptr get_unmapped() const;
 
         
 

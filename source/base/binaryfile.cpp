@@ -19,10 +19,10 @@ namespace dconstruct {
         }
 
         const u64 size = std::filesystem::file_size(path);
-        std::byte* temp_buffer = new std::byte[size];
+        std::byte* temp_buffer = static_cast<std::byte*>(::operator new[](size, std::align_val_t(512)));
 
         scriptstream.read((char*)temp_buffer, size);
-        auto bytes = std::unique_ptr<std::byte[]>(temp_buffer);
+        auto bytes = byte_uptr(temp_buffer);
 
         if (size == 0) {
             return std::unexpected{path.string() + " is empty.\n"};
@@ -62,8 +62,8 @@ namespace dconstruct {
 
     
     [[nodiscard]] bool BinaryFile::gets_pointed_at(const location loc) const noexcept {
-        const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get())) / 8;
-        return (u8)m_pointedAtTable[offset / 8] & (1 << (offset % 8));
+        const p64 offset = (loc.num() - reinterpret_cast<p64>(m_bytes.get()));
+        return (bool)m_pointedAtTable[offset];
     }
 
     
@@ -93,49 +93,37 @@ namespace dconstruct {
 
     
     void BinaryFile::read_reloc_table() noexcept {
-
         std::byte *reloc_data = m_bytes.get() + m_dcheader->m_textSize;
 
         const u32 table_size = *reinterpret_cast<u32*>(reloc_data);
-        m_pointedAtTable = std::make_unique<std::byte[]>(table_size);
+        m_pointedAtTable = byte_uptr(static_cast<std::byte*>(::operator new[](table_size * 64, std::align_val_t(64))));
+        std::memset(m_pointedAtTable.get(), 0, table_size * 64);
 
         m_relocTable = location(reloc_data + 4);
-
-#ifdef false
-        const __m512i _indices = _mm512_set_epi64(7, 6, 5, 4, 3, 2, 1, 0);
         const __m512i _1 = _mm512_set1_epi64(0x1);
-        const __m512i _7 = _mm512_set1_epi64(0x7);
-        const __m512i _3 = _mm512_set1_epi64(0x3);
         const __m512i _base = _mm512_set1_epi64(reinterpret_cast<p64>(m_bytes.get()));
 
-        for (u64 i = 0; i < table_size; ++i) {
-            const u8* data_segment_ptr   = m_bytes.get() + i * 64;
-            __m512i _data_segment        = _mm512_loadu_epi64((void*)data_segment_ptr);
-            __m512i _reloc_bits          = _mm512_set1_epi64(bitmap[i]);
-            _reloc_bits                  = _mm512_srlv_epi64(_reloc_bits, _indices);
-            __m512i _bit_mask            = _mm512_and_epi64(_reloc_bits, _1);
-            __m512i _data_segment_masked = _mm512_mullo_epi64(_bit_mask, _base);
-            _data_segment_masked         = _mm512_add_epi64(_data_segment_masked, _data_segment);
+        std::byte* data_segment_ptr = m_bytes.get();
+        __m512i _data_segment, _reloc_bits, _bit_mask, _data_segment_masked;
+        __mmask8 reloc_byte;
 
-            _mm512_storeu_epi64((void*)data_segment_ptr, _data_segment_masked);
-            _mm512_mask_i64scatter_epi64((void*)m_pointedAtTable.get(), (__mmask8)bitmap[i], _data_segment, _bit_mask, 0x1);
+        for (u64 i = 0; i < table_size; ++i) {
+            reloc_byte = m_relocTable.get<__mmask8>(i);    
+
+            _data_segment        = _mm512_load_epi64((void*)data_segment_ptr); // load the next 8 8-byte lanes
+            _data_segment_masked = _mm512_maskz_mov_epi64(reloc_byte, _base); // load only the reloc offsets
+            _data_segment_masked = _mm512_add_epi64(_data_segment_masked, _data_segment); // add the base pointer to the lanes that actually are pointers and need to be reloc'd
+            _mm512_store_epi64((void*)data_segment_ptr, _data_segment_masked); // store the result back at the start of the current 8x8 byte chunk
+            _mm512_mask_i64scatter_epi64((void*)m_pointedAtTable.get(), reloc_byte, _data_segment, _1, sizeof(std::byte)); // store which offsets get pointed at
+
+            data_segment_ptr += 64;
         }
-#else
-        for (u64 i = 0; i < table_size * 8; ++i) {
-            if (m_relocTable.get<u8>(i / 8) & (1 << (i % 8))) {
-                u64* entry = reinterpret_cast<u64*>(m_bytes.get() + i * 8);
-                u64 offset = *entry;
-                *entry = reinterpret_cast<u64>(m_bytes.get() + offset);
-                reinterpret_cast<u8*>(m_pointedAtTable.get())[offset / 64] |= (1 << ((offset / 8) % 8));
-            }
-        }
-#endif
         m_strings = location(m_bytes.get() + m_dcheader->m_stringsOffset);
     }
 
     
-    [[nodiscard]] std::unique_ptr<std::byte[]> BinaryFile::get_unmapped() const { 
-        std::byte *unmapped_bytes = new std::byte[m_size];
+    [[nodiscard]] BinaryFile::byte_uptr BinaryFile::get_unmapped() const { 
+        std::byte *unmapped_bytes = static_cast<std::byte*>(::operator new[](m_size, std::align_val_t(512)));
 
         std::memcpy(unmapped_bytes, m_bytes.get(), m_size);
 
@@ -151,6 +139,6 @@ namespace dconstruct {
             }
         }
 
-        return std::unique_ptr<std::byte[]>(unmapped_bytes);
+        return byte_uptr(unmapped_bytes);
     }
 }
