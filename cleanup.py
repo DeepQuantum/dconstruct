@@ -4,7 +4,7 @@ import re
 from typing import Callable
 import pathlib
 
-DECOMP_PATH = pathlib.Path(r"./disassembled")
+DECOMP_PATH = pathlib.Path(r"./disassembled_t2r")
 
 
 def replace_boxed_value(txt: str) -> str:

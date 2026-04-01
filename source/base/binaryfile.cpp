@@ -47,7 +47,6 @@ namespace dconstruct {
         return file;
     }
 
-    
     void BinaryFile::replace_newlines_in_stringtable() noexcept {
         constexpr u8 table_size_offset = 4;
         const u64 table_size = m_relocTable.num() - table_size_offset - m_strings.num();
@@ -104,11 +103,11 @@ namespace dconstruct {
         const __m512i _base = _mm512_set1_epi64(reinterpret_cast<p64>(m_bytes.get()));
 
         std::byte* data_segment_ptr = m_bytes.get();
-        __m512i _data_segment, _reloc_bits, _bit_mask, _data_segment_masked;
+        __m512i _data_segment, _data_segment_masked;
         __mmask8 reloc_byte;
 
         for (u64 i = 0; i < table_size; ++i) {
-            reloc_byte = m_relocTable.get<__mmask8>(i);    
+            reloc_byte = m_relocTable.get<__mmask8>(i);
 
             _data_segment        = _mm512_load_epi64((void*)data_segment_ptr); // load the next 8 8-byte lanes
             _data_segment_masked = _mm512_maskz_mov_epi64(reloc_byte, _base); // load only the reloc offsets
