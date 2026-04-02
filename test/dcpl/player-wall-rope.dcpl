@@ -1,0 +1,26 @@
+u64? anim-player-wall-rope-states__actor-state-list@48(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u8 anim-player-wall-rope-states(u64? arg_0, u8 arg_1) {
+    return *(u8*)(*arg_1 + 209);
+}
+
+u64 anim-player-wall-rope-states__anim-node-blend@28b8__anim-node-blend@5d68____anim-node-animation@b780__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 240) + 32);
+}
+
+u64 anim-player-wall-rope-states__anim-node-blend@28b8__anim-node-animation@b748__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 240) + 48);
+}
+
+u64 anim-player-wall-rope-states__anim-node-animation@8050(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 240) + 40);
+}
+
+u64 anim-player-wall-rope-states__anim-node-animation@2448(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 8) + 1296);
+}
+

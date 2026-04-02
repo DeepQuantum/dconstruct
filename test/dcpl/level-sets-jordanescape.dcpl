@@ -1,0 +1,60 @@
+bool tsk-joe-school-evidence__level-set@210__level-scripted-set@950__() {
+    u64? var_0 = stat-value?(joe-exit-load-wat-wide);
+    return var_0 > 0;
+}
+
+bool tsk-joe-school-evidence__level-scripted-set@788() {
+    u64? var_0 = stat-value?(joe-exit-load-wat-wide);
+    return var_0 == 0;
+}
+
+bool joe-school-library-cubemaps__level-set@258__level-scripted-set@8c0__() {
+    u64? var_0 = stat-value?(joe-school-corridor-library-cubemaps);
+    return var_0 > 0;
+}
+
+bool joe-school-library-cubemaps__level-scripted-set@5f0() {
+    u64? var_0 = stat-value?(joe-school-corridor-library-cubemaps);
+    return var_0 == 0;
+}
+
+bool joe-school-cubemaps__level-set@2d8__level-scripted-set@560__() {
+    u64? var_0 = stat-value?(joe-school-cubemaps);
+    return var_0 > 0;
+}
+
+bool joe-school-cubemaps__level-scripted-set@4a0() {
+    u64? var_0 = stat-value?(joe-school-cubemaps);
+    return var_0 == 0;
+}
+
+bool joe-utility-corridor-shadow-blocker__level-set@390__level-scripted-set@9e0__() {
+    u64? var_0 = stat-value?(joe-load-corridor-shadow-blocker);
+    return var_0 > 0;
+}
+
+bool joe-utility-corridor-shadow-blocker__level-scripted-set@530() {
+    u64? var_0 = stat-value?(joe-load-corridor-shadow-blocker);
+    return var_0 == 0;
+}
+
+bool tsk-joe-school-corridor__level-set@3d8__level-scripted-set@6f8__() {
+    u64? var_0 = stat-value?(joe-vent-igc-succeeded);
+    return var_0 > 0;
+}
+
+bool tsk-joe-school-corridor__level-scripted-set@7a0() {
+    u64? var_0 = stat-value?(joe-vent-igc-succeeded);
+    return var_0 == 0;
+}
+
+bool joe-school-switch-apartment-fight__level-set@420__level-scripted-set@8a8__() {
+    u64? var_0 = stat-value?(joe-player-in-utility-corridor);
+    return var_0 > 0;
+}
+
+bool joe-school-switch-apartment-fight__level-scripted-set@548() {
+    u64? var_0 = stat-value?(joe-player-in-utility-corridor);
+    return var_0 == 0;
+}
+

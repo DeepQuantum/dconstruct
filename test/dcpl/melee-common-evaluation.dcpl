@@ -1,0 +1,55 @@
+u16 *melee-common-evaluation-func*(sid arg_0, sid arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5) {
+    if (!(arg_0 == 0) && !(arg_1 == 0)) {
+        f32 var_0 = *(f32*)(arg_5 + 268);
+        u64? var_1 = fast-melee-dir-from-attacker-to-defender(var_0);
+        *(u8*)(arg_5 + 332) = var_1;
+        f32 var_2 = *(f32*)(arg_5 + 272);
+        u64? var_3 = fast-melee-dir-from-attacker-to-defender(var_2);
+        *(u8*)(arg_5 + 333) = var_3;
+        f32 var_4 = *(f32*)(arg_5 + 268);
+        u64? var_5 = fast-melee-dir-from-attacker-to-defender-180(var_4);
+        *(u8*)(arg_5 + 334) = var_5;
+        f32 var_6 = *(f32*)(arg_5 + 272);
+        u64? var_7 = fast-melee-dir-from-attacker-to-defender-180(var_6);
+        *(u8*)(arg_5 + 335) = var_7;
+    }
+    if (!(arg_0 == 0)) {
+        u64? var_8 = character-in-melee-attack?(arg_0);
+        if (!var_8) {
+            u64? var_9 = *(arg_5 + 120);
+            fast-reset-melee-sequence-count(var_9);
+        }
+    }
+    if (*(u8*)(arg_5 + 346)) {
+        *(f32*)(arg_5 + 228) = *(f32*)(arg_5 + 228);
+    } else {
+        u64? var_10 = *(arg_5 + 144);
+        u64? var_11 = *(arg_5 + 160);
+        u64? var_12 = distance-between-points(var_10, var_11);
+        f32 var_13;
+        if (var_12 > *(f32*)(arg_5 + 228)) {
+            u64? var_14 = *(arg_5 + 144);
+            u64? var_15 = *(arg_5 + 160);
+            u64? var_16 = distance-between-points(var_14, var_15);
+            var_13 = var_16;
+        } else {
+            var_13 = *(f32*)(arg_5 + 228);
+        }
+        *(f32*)(arg_5 + 228) = var_13;
+    }
+    if (arg_0 == player) {
+        u64? var_17 = melee-get-collab-kill-best-buddy(arg_1, player);
+        *(u64*)(arg_5 + 320) = var_17;
+    }
+    u16 var_18;
+    if (!(*(u64*)(arg_5 + 320) == 0)) {
+        u64? var_19 = *(arg_5 + 136);
+        u64 var_20 = *(u64*)(arg_5 + 320);
+        u64? var_21 = fast-melee-fact-set-symbol(var_19, melee-best-bud, var_20);
+        var_18 = var_21;
+    } else {
+        var_18 = 0;
+    }
+    return var_18;
+}
+

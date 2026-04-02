@@ -1,0 +1,12 @@
+f32 character-prone-phase-loop(f32 arg_0) {
+    f32 var_0;
+    if (arg_0 >= 1.00) {
+        var_0 = arg_0 - 1.00;
+    } else if (arg_0 < 0.00) {
+        var_0 = arg_0 + 1.00;
+    } else {
+        var_0 = arg_0;
+    }
+    return var_0;
+}
+

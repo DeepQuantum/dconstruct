@@ -1,0 +1,11 @@
+u64? efp-cin-jackson-reveal__level-set@150__level-scripted-set@4f0__() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? efp-cin-jackson-reveal__level-scripted-set@9b8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+

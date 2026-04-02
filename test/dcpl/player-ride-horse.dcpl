@@ -1,0 +1,44 @@
+u64? anim-player-ride-horse-states__actor-state-list@108(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u16 anim-player-ride-horse-states(u64? arg_0, u64? arg_1) {
+    return 1;
+}
+
+u64? anim-player-ride-horse-states__anim-node-blend@3068(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)((*(arg_0 + 16) + 2584) + 48);
+    u64? var_1 = minmax(var_0, 0.00, 1.00);
+    return var_1;
+}
+
+f32 anim-player-ride-horse-states__anim-node-blend@23b0__anim-node-blend@4070__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2584) + 40);
+}
+
+u64 anim-player-ride-horse-states__anim-node-blend@2538__anim-node-animation@4428__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 2584);
+}
+
+u8 anim-player-ride-horse-states__anim-node-blend@2538(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)((*(arg_1 + 16) + 2584) + 8);
+}
+
+f32 anim-player-ride-horse-states__anim-node-blend@2b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00;
+}
+
+u64 anim-player-ride-horse-states__anim-node-animation@2fd0(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 16) + 2584) + 56);
+}
+
+u64 anim-player-ride-horse-states__anim-node-blend@2ea8__anim-node-blend@43e8____anim-node-animation@4c88__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(*(arg_1 + 16) + 2584);
+}
+
+u8 anim-player-ride-horse-states__anim-node-blend@2ea8__anim-node-blend@43e8__(u64? arg_0, u8 arg_1, u64? arg_2) {
+    return *(u8*)((*(arg_1 + 16) + 2584) + 8);
+}
+

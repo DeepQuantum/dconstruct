@@ -1,0 +1,10 @@
+u64? npc-machete-back-hit__melee-attack@48__start-func-array@400__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-behind?-symbol(arg_2, arg_1, 2, 180.00);
+    return var_0;
+}
+
+u64? npc-machete-back-hit__melee-attack@48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = is-poise-broken?(arg_2);
+    return var_0;
+}
+

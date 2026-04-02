@@ -1,0 +1,69 @@
+u64? tsk-far-restless__level-set@2b0__level-scripted-set@f20__() {
+    u64? var_0 = is-chronological-mode?();
+    bool var_1 = get-boolean(#B13A697A01AEF60F, ss-far-restless-igc-guitar-1);
+    bool var_2 = !var_0 && !var_1;
+    return var_2;
+}
+
+u64? tsk-far-restless__level-scripted-set@bc0() {
+    u64? var_0 = is-chronological-mode?();
+    bool var_1 = get-boolean(#B13A697A01AEF60F, ss-far-restless-igc-guitar-1);
+    bool var_2 = !var_0 && var_1;
+    return var_2;
+}
+
+u64? tsk-far-restless__level-scripted-set@10d0() {
+    u64? var_0 = is-chronological-mode?();
+    return var_0;
+}
+
+bool tsk-far-abandoned-house__level-set@370__level-scripted-set@1040__() {
+    bool var_0 = get-boolean(#C23F75FD89E0203E, ss-far-abandoned-controller-player-1);
+    return var_0;
+}
+
+u64? tsk-far-abandoned-house__level-scripted-set@e00() {
+    bool var_0 = get-boolean(#C23F75FD89E0203E, ss-far-abandoned-controller-player-1);
+    return !var_0;
+}
+
+bool tsk-far-tommy__level-set@3f0__level-scripted-set@bf0__() {
+    bool var_0 = get-boolean(#26B15F628BECA1BB, ss-cin-far-tommy-1);
+    return var_0;
+}
+
+u16 tsk-far-tommy__level-scripted-set@fb0() {
+    return 1;
+}
+
+u64? tsk-far-first-kiss__level-set@438__level-scripted-set@a40__() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-efj-first-kiss);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 < 7870.00 && var_2;
+    return var_3;
+}
+
+u64? tsk-far-first-kiss__level-scripted-set@f08() {
+    u64? var_0 = cinematic-get-current-maya-frame(cin-efj-first-kiss);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 >= 7870.00 && var_2;
+    return var_3;
+}
+
+u64? tsk-far-first-kiss__level-scripted-set@10e8() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+
+bool tsk-far-herding__level-set@488__level-scripted-set@bd8__() {
+    bool var_0 = get-boolean(#E940B09DB3BA7C38, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
+    return var_0;
+}
+
+u64? tsk-far-herding__level-scripted-set@d70() {
+    bool var_0 = get-boolean(#E940B09DB3BA7C38, ss-far-herding-igc-baby-sheep-ptsd-trigger-1);
+    return !var_0;
+}
+

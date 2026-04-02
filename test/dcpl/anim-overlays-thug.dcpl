@@ -1,0 +1,212 @@
+u64? anim-overlay-thug-move-set-bow-aggr-wade-run__anim-overlay-set@3758(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return var_0;
+}
+
+u64? anim-overlay-thug-level-pat-kid__anim-overlay-set@3858(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 1.00);
+    return var_0;
+}
+
+f32 anim-overlay-thug-level-pat-kid(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 1.00);
+    return 1.00 - var_0;
+}
+
+u64? anim-overlay-thug-weapon-base-fist__anim-overlay-set@3bc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-base-fist(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 1.00, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-thug-move-set-pistol-aggr-walk__anim-overlay-set@3d08(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 312);
+    u64? var_1 = lerp-scale(0.80, 0.20, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-overlay-thug-move-set-pistol-aggr-walk(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 312);
+    u64? var_1 = lerp-scale(0.20, 0.80, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-overlay-thug-weapon-bow-aggr__anim-overlay-set@3ea8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.25, 0.15, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-bow-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.75, 0.55, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-thug-base-default(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.20, 0.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-base-mg__anim-overlay-set@4128(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.67, 0.73, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-thug-weapon-base-mg(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.70, 0.90, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 3);
+    return var_1;
+}
+
+f32 anim-overlay-thug-move-set-pistol-aggr-wade-sprint__anim-overlay-set@4308(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    return 1.00 - var_0;
+}
+
+f32 anim-overlay-thug-move-set-pistol-aggr-wade-sprint(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    u64? var_1 = pow-float(var_0, 0.50);
+    return 1.50 * var_1;
+}
+
+string bow-aim-ik-config__ik-node-config@4928__array*@32ff80____anim-overlay-thug-weapon-id-pistol-revolver-scar@4e73b0__(u64? arg_0) {
+    return "";
+}
+
+u16 bow-aim-ik-config__array*@21c4f0__anim-overlay-thug-cover-step-out-enabled@4e6eb8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = gesture-get-target-ws-from-snapshot(aim, arg_2, arg_3, 1);
+    u16 var_1;
+    if (var_0) {
+        u64? var_2 = alloc-ik-goal-look-at();
+        *(i32*)(var_2 + 32) = 2;
+        *(f32*)(var_2 + 16) = *(f32*)var_0;
+        *(f32*)((var_2 + 16) + 4) = *(f32*)(var_0 + 4);
+        *(f32*)((var_2 + 16) + 8) = *(f32*)(var_0 + 8);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+f32 bow-aim-ik-config(f32 arg_0, u64? arg_1) {
+    return *(f32*)(*arg_0 + 332);
+}
+
+f32 anim-overlay-thug-weapon-bow-crouch__anim-overlay-set@4e68(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 1.00 - *(f32*)(*arg_0 + 332);
+}
+
+f32 anim-overlay-thug-weapon-bow-crouch(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*arg_0 + 332);
+}
+
+u64? anim-overlay-thug-weapon-mg-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.10, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-pistol-aggr(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.70, 0.50, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-base-bow(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.20, 0.60, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-character-dina__anim-overlay-set@5aa8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 0.50, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+f32 anim-overlay-thug-weapon-base-long-melee(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.90;
+}
+
+u64? anim-overlay-thug-character-mel__anim-overlay-set@71f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.60, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-character-mel(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.55, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+string lg-aim-ik-config__ik-node-config@7a10__array*@648c0__(u64? arg_0) {
+    return "";
+}
+
+u64? anim-overlay-thug-move-set-pistol-aggr-sprint(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = read-float-channel(OverlayHelper.AimState, arg_3, arg_0, arg_1, arg_2, 0.00);
+    u64? var_1 = pow-float(var_0, 0.50);
+    return var_1;
+}
+
+u64? anim-overlay-thug-injured-healing(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.40, 0.70, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-thug-move-set-mg-aggr-walk__anim-overlay-set@8550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(1.00, 1.00, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-base-1hblade(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.30, 0.90, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 2);
+    return var_1;
+}
+
+u64? anim-overlay-thug-on-horse-on-horse-passenger(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.90, 0.00, 1.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+f32 anim-overlay-thug-move-set-long-melee-search-walk-grass__anim-overlay-set@8b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return 0.70;
+}
+
+u64? anim-overlay-thug-weapon-base-pistol(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.45, 0.60, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-bow-ambi__anim-overlay-set@8ff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.10, 0.30, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-thug-weapon-bow-ambi(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.80, 0.50, 1.00, 0.00, arg_1);
+    u64? var_1 = make-curve(var_0, 4);
+    return var_1;
+}
+
+u64? anim-overlay-thug-weapon-1hblade-aggr__anim-overlay-set@9810(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.75, 0.65, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-up-down-up__anim-overlay-set@a3f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.60, 0.80, 1.00, 0.00, arg_1);
+    return var_0;
+}
+
+u64? anim-overlay-thug-weapon-up-down-up(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = lerp-scale(0.50, 0.30, 1.00, 0.00, arg_1);
+    return var_0;
+}
+

@@ -1,0 +1,27 @@
+u16 #608356039B1FD9FD() {
+    u64? var_0 = get-symbol(current-task, self);
+    u64? var_1 = get-symbol(current-task, ss-wave-manager-level-set-loader-1);
+    bool var_2 = get-boolean(#B0E4DDF4A79D13AC, ss-wave-manager-level-set-loader-1);
+    u16 var_3;
+    if (var_0 == var_1 && var_2) {
+        u64? var_4 = get-svar(#47CB08FCD5FE82DB);
+        u64? var_5 = #8693D9A4BDE7277F(var_4);
+        u64? var_6 = task-get-current-node-id();
+        u64? var_7 = task-get-current-subnode-id();
+        u64? var_8 = #1E176D04CC65D2D7(var_6, var_7);
+        u64? var_9 = #9B439BF7680342CC(var_8);
+        u64? var_10 = string-compare(var_5, "");
+        string var_11;
+        if (var_10 == 0) {
+            var_11 = "Default";
+        } else {
+            var_11 = var_5;
+        }
+        u64? var_12 = #5445173390656D6D("%s %s", var_11, var_9);
+        u64? var_13 = log-event("encounter-enemy-awareness", 1, var_12, 0, 0);
+        var_3 = var_13;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}

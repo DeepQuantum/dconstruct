@@ -1,0 +1,35 @@
+u64? buddy-knife-interrupt__melee-attack@48__start-func-array@3b0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-character-bit-check(arg_2, 1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(melee-character-bit-check defender valid-targets)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2071);
+    }
+    u64? var_1 = character-facing-object?(arg_1, arg_2, 1);
+    melee-debug-text-file-line-fail("(or from-grab? (if back-facing? (character-facing-away-from-object? attacker defender #t) (character-facing-object? attacker defender #t)))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2072);
+    bool var_2 = var_0 || 0 && var_1 && var_1 && var_1;
+    return var_2;
+}
+
+u64? buddy-knife-interrupt(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = melee-fact-get-symbol(arg_1, buddy-interrupt-defender);
+    u64? var_1 = melee-fact-set-bool(var_0, disable-parry, 0);
+    return var_1;
+}
+
+u16 buddy-knife-interrupt__melee-event-list@260(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-fact-remove(arg_1, buddy-low-health-state);
+    melee-fact-remove(arg_1, already-shouted-for-help-1);
+    melee-fact-remove(arg_1, already-shouted-for-help-2);
+    melee-fact-remove(arg_1, already-shouted-for-help-3);
+    u16 var_0;
+    if (!0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        u64? var_2 = new-boxed-value(7, arg_2);
+        broadcast-event(buddy-exited-struggle-rescue, var_1, var_2);
+        u64? var_3 = request-dialog(player-saves-buddy, player, arg_1, 0, 0, 0, 0);
+        var_0 = var_3;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+

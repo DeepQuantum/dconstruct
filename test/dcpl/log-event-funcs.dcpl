@@ -1,0 +1,34 @@
+u64? #58E2FB9236FC6D79(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = ddict-contains-key?(arg_0, arg_1);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = ddict-set(arg_0, arg_1, arg_2);
+        var_1 = var_2;
+    } else {
+        u64? var_3 = string-debug(arg_0);
+        u64? var_4 = string-debug(arg_1);
+        u64? var_5 = #5445173390656D6D("Context-log %s does not have pre-declared key %s. Add it in log-context-tables.", var_3, var_4);
+        display(var_5, 8);
+        u64? var_6 = display-error(var_5);
+        var_1 = var_6;
+    }
+    return var_1;
+}
+
+u64? #88BAC9F8F1700C8D(string arg_0, u64? arg_1) {
+    u64? var_0 = ddict-contains-key?(arg_0, arg_1);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = ddict-get(arg_0, arg_1);
+        var_1 = var_2;
+    } else {
+        u64? var_3 = string-debug(arg_0);
+        u64? var_4 = string-debug(arg_1);
+        u64? var_5 = #5445173390656D6D("Context-log %s does not have pre-declared key %s. Add it in log-context-tables.", var_3, var_4);
+        display(var_5, 8);
+        u64? var_6 = display-error(var_5);
+        var_1 = var_6;
+    }
+    return var_1;
+}
+

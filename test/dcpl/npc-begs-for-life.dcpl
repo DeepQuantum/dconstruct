@@ -1,0 +1,881 @@
+u16 npc-BfL-militia-plead-getup__melee-attack@348(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (arg_0 == arg_2 && var_0) {
+        spawn-script("ss-melee-timed-disable", 0, arg_2, 0);
+        u64? var_2 = npc-set-script-mode(arg_2, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? npc-BfL-militia-plead-getup__melee-event-list@4768(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-get-up, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-militia-plead-getup(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    fact-remove(arg_2, B4L-drop-weapon?);
+    fact-remove(arg_2, death-begs-for-life);
+    fact-remove(arg_2, in-mortal-mode);
+    fact-remove(arg_2, in-mortal-mode-untargetable);
+    fact-remove(arg_2, melee-npc-brute-stun);
+    u64? var_0 = fact-remove(arg_2, stunned);
+    return var_0;
+}
+
+u64? npc-BfL-militia-mortal__melee-attack@538__character-melee-info@5c98__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = fact-exists?(arg_2, BfL-blend-in-time);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-get-float(arg_2, BfL-blend-in-time);
+        melee-fact-remove(arg_2, BfL-blend-in-time);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u64? npc-BfL-militia-mortal__start-func-array@56d8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_2, B4L-drop-weapon?);
+    bool var_1 = arg_2 != npc-ski-scar-sledgehammer-1 && var_0;
+    return var_1;
+}
+
+u64? npc-BfL-militia-mortal(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    melee-fact-set-bool(arg_2, dazed, 0);
+    if (arg_0 == arg_2) {
+        fact-remove(arg_1, begs-for-life-time-close);
+        fact-remove(arg_1, begs-for-life-holstered);
+    }
+    u64? var_0 = set-overlay-set(arg_2, anim-overlay-thug-melee-tweak-default);
+    return var_0;
+}
+
+u64? npc-BfL-militia-mortal__melee-event-list@4750(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-defiant, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-scar-mortal-back-scoot__start-func-array@5410(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-position(arg_2);
+    u64? var_1 = get-object-position(arg_1);
+    u64? var_2 = point-sub(var_0, var_1);
+    u64? var_3 = vector-normalize(var_2, 0);
+    u64? var_4 = vector-scale(1.00, var_3);
+    u64? var_5 = has-line-of-motion?(arg_2, var_4, 0.00, 0, 0);
+    u64? var_6 = is-in-front?-symbol(arg_2, arg_1, 2, 75.00);
+    bool var_7 = var_5 && !var_6;
+    return var_7;
+}
+
+u64? npc-BfL-scar-mortal-back-scoot(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    fact-remove(arg_2, in-knee-stun?);
+    fact-remove(arg_2, stunned);
+    u64? var_0 = set-overlay-set(arg_2, anim-overlay-thug-melee-tweak-default);
+    return var_0;
+}
+
+u64? npc-BfL-scar-mortal-back-scoot__melee-event-list@4c20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-cower, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u16 npc-BfL-scar-mortal-back-scoot__melee-event-advanced@14200(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return 1;
+}
+
+u64? npc-BFL-brute-right-melee-transfer__melee-attack@918(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = get-hit-direction(arg_2);
+    u64? var_1 = get-hit-pos(arg_2);
+    u64? var_2 = rate-animation-for-melee-impact(arg_2, brute-begs-for-life-hit-right-to-knee, var_0, var_1, *npc-begs-for-life-intro-melee*);
+    return var_2;
+}
+
+u64? npc-BFL-brute-right-melee-transfer__start-func-array@5db0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 15, 90.00);
+    return var_2;
+}
+
+u64? npc-BFL-brute-right-melee-transfer(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    fact-remove(arg_2, in-knee-stun?);
+    u64? var_0 = fact-remove(arg_2, stunned);
+    return var_0;
+}
+
+u64? npc-BFL-brute-right-melee-transfer__melee-event-list@4780(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-stun, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u16 npc-BfL-abby-getup__melee-attack@cf8(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = is-npc?(arg_2);
+    u16 var_1;
+    if (arg_0 == arg_2 && var_0) {
+        u64? var_2 = npc-set-script-mode(arg_2, 0, 0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? npc-BfL-abby-getup__melee-event-list@5bd8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = broadcast-event(abby-plead-getup);
+    return var_0;
+}
+
+u64? npc-BfL-abby-getup(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-bool(arg_2, infinite-beg-for-life?, 1);
+    return var_0;
+}
+
+u64? npc-BfL-brute-death__melee-event-list@5b90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-prayer-interrupt, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-brute-death(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 28, var_0, 0.50);
+    return var_1;
+}
+
+sid npc-BfL-brute-death__melee-event-transitions@11ce0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    return npc-begs-for-life-death-prep;
+}
+
+u64? npc-BfL-scar-defiant-back-scoot__melee-event-list@48e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-backscoot, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-scar-defiant-back-scoot(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-speaking?(arg_2);
+    u64? var_1 = melee-fact-get-bool(arg_2, infinite-beg-for-life?);
+    u64? var_2 = melee-fact-get-time-since(arg_2, time-since-begs-for-life);
+    u64? var_3 = melee-fact-get-float(arg_2, time-before-getup);
+    bool var_4 = !var_0 || !*cwohlwend-test* && !*(u8*)(*cwohlwend-test* + 21) && !var_1 && var_2 > var_3;
+    return var_4;
+}
+
+u64? npc-BfL-militia-plead__melee-attack@12c8__character-melee-info@4c38__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = fact-exists?(arg_2, BfL-blend-in-time);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-get-float(arg_2, BfL-blend-in-time);
+        melee-fact-remove(arg_2, BfL-blend-in-time);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u64? npc-BfL-militia-plead__start-func-array@44d8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = melee-fact-get-bool(arg_2, B4L-drop-weapon?);
+    bool var_1 = arg_2 != npc-ski-scar-sledgehammer-1 && !var_0;
+    return var_1;
+}
+
+u64? npc-BfL-militia-plead__melee-event-list@44c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-plead, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u16 npc-BfL-militia-plead(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-BfL-militia-plead);
+    log-event("melee-npc-begs-for-life", 1, var_0, 0, 0);
+    melee-fact-set-bool(arg_2, melee-npc-brute-stun, 1);
+    u64? var_1 = fact-exists?(arg_2, time-since-begs-for-life);
+    if (!var_1) {
+        melee-fact-set-time(arg_2, time-since-begs-for-life);
+        melee-fact-set-time(arg_1, last-begs-for-life);
+    }
+    u64? var_2 = npc-enemy-abby?(arg_2);
+    u16 var_3;
+    if (var_2) {
+        u64? var_4 = melee-fact-set-time(arg_2, time-since-begs-for-life);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? npc-BFL-brute-left-melee-transfer__melee-attack@14b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = get-hit-direction(arg_2);
+    u64? var_1 = get-hit-pos(arg_2);
+    u64? var_2 = rate-animation-for-melee-impact(arg_2, brute-begs-for-life-hit-left-to-knee, var_0, var_1, *npc-begs-for-life-intro-melee*);
+    return var_2;
+}
+
+u16 npc-BFL-stun-melee-transfer__melee-attack@16a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    return 1;
+}
+
+u64? npc-BFL-front-gun-shot-transfer__start-func-array@59e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 1, 90.00);
+    return var_2;
+}
+
+u16 npc-BFL-front-gun-shot-transfer(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-get-faction(arg_2, 1);
+    u64? var_1 = npc-get-faction(arg_2, 1);
+    u64? var_2 = melee-fact-get-bool(arg_2, B4L-drop-weapon?);
+    u16 var_3;
+    if (var_0 == Militia && var_1 == Slaver && var_2) {
+        melee-fact-set-float(arg_2, BfL-blend-in-time, 0.70);
+        var_3 = 1;
+    }
+    return var_3;
+}
+
+u64? npc-BfL-scar-mortal__melee-event-list@5b60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-prayer, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u16 npc-BfL-scar-mortal(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-BfL-scar-mortal);
+    log-event("melee-npc-begs-for-life", 1, var_0, 0, 0);
+    melee-fact-set-bool(arg_2, melee-npc-brute-stun, 1);
+    u64? var_1 = fact-exists?(arg_2, time-since-begs-for-life);
+    if (!var_1) {
+        melee-fact-set-time(arg_2, time-since-begs-for-life);
+        melee-fact-set-time(arg_1, last-begs-for-life);
+    }
+    u64? var_2 = npc-enemy-abby?(arg_2);
+    u16 var_3;
+    if (var_2) {
+        u64? var_4 = melee-fact-set-time(arg_2, time-since-begs-for-life);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? npc-BfL-scar-mortal-death-prep__melee-attack@1c78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 8, var_0, 0.10);
+    return var_1;
+}
+
+u64? npc-BFL-right-gun-shot-transfer__start-func-array@56a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 8, 90.00);
+    return var_2;
+}
+
+u16 npc-BFL-right-gun-shot-transfer(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-get-faction(arg_2, 1);
+    u64? var_1 = npc-get-faction(arg_2, 1);
+    u64? var_2 = melee-fact-get-bool(arg_2, B4L-drop-weapon?);
+    u16 var_3;
+    if (var_0 == Militia && var_1 == Slaver && var_2) {
+        melee-fact-set-float(arg_2, BfL-blend-in-time, 1.00);
+        var_3 = 1;
+    }
+    return var_3;
+}
+
+u64? npc-BfL-militia-mortal-death-prep__melee-attack@2058__melee-event-list@5b48__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-defiant-interrupt, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BFL-left-gun-shot-transfer__start-func-array@4ac0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 4, 90.00);
+    return var_2;
+}
+
+u16 npc-BFL-left-gun-shot-transfer(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-get-faction(arg_2, 1);
+    u64? var_1 = npc-get-faction(arg_2, 1);
+    u64? var_2 = melee-fact-get-bool(arg_2, B4L-drop-weapon?);
+    u16 var_3;
+    if (var_0 == Militia && var_1 == Slaver && var_2) {
+        melee-fact-set-float(arg_2, BfL-blend-in-time, 0.80);
+        var_3 = 1;
+    }
+    return var_3;
+}
+
+u16 npc-BfL-abby-plead__melee-event-list@45b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-BfL-abby-plead);
+    log-event("melee-npc-begs-for-life", 1, var_0, 0, 0);
+    melee-fact-set-bool(arg_2, melee-npc-brute-stun, 1);
+    u64? var_1 = fact-exists?(arg_2, time-since-begs-for-life);
+    if (!var_1) {
+        melee-fact-set-time(arg_2, time-since-begs-for-life);
+        melee-fact-set-time(arg_1, last-begs-for-life);
+    }
+    u64? var_2 = npc-enemy-abby?(arg_2);
+    u16 var_3;
+    if (var_2) {
+        u64? var_4 = melee-fact-set-time(arg_2, time-since-begs-for-life);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? npc-BfL-abby-plead(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_2, 12, var_0, 0.10);
+    return var_1;
+}
+
+u64? npc-BfL-militia-plead-death-prep__melee-attack@2628__melee-event-list@5578__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-plead-interrupt, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BFL-right-melee-transfer__melee-attack@2bf8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = get-hit-direction(arg_2);
+    u64? var_1 = get-hit-pos(arg_2);
+    u64? var_2 = rate-animation-for-melee-impact(arg_2, npc-begs-for-life-hr-right, var_0, var_1, *npc-begs-for-life-intro-melee*);
+    return var_2;
+}
+
+u64? npc-BfL-militia-plead-back-scoot__melee-attack@2de8__character-melee-info@4d88__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = fact-exists?(arg_2, BfL-blend-in-time);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-get-float(arg_2, BfL-blend-in-time);
+        melee-fact-remove(arg_2, BfL-blend-in-time);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u16 npc-BfL-militia-plead-back-scoot(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-object-distance(arg_1, arg_2);
+    bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 999.00 && var_0 > 2.50;
+    u64? var_2 = new-boxed-value(6, var_0);
+    u64? var_3 = new-boxed-value(6, 2.50);
+    u64? var_4 = new-boxed-value(6, 999.00);
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = new-boxed-value(7, true);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = new-boxed-value(7, false);
+        var_5 = var_7;
+    }
+    do-melee-log("characters-in-range? [[f]] [[f]] [[f]] [[s]]", var_2, var_3, var_4, var_5);
+    u64? var_8 = is-in-front?-symbol(arg_2, arg_1, 2, 15.00);
+    u16 var_9;
+    if (var_1 || var_8) {
+        u64? var_10 = get-object-position(arg_2);
+        u64? var_11 = get-object-position(arg_1);
+        u64? var_12 = point-sub(var_10, var_11);
+        u64? var_13 = vector-normalize(var_12, 0);
+        u64? var_14 = vector-scale(1.00, var_13);
+        u64? var_15 = has-line-of-motion?(arg_2, var_14, 0.00, 0, 0);
+        u64? var_16 = is-in-front?-symbol(arg_2, arg_1, 2, 15.00);
+        melee-fact-set-float(arg_2, BfL-blend-in-time, 0.60);
+        bool var_17 = !var_15 && var_16 && 1;
+        var_9 = var_17;
+    } else {
+        melee-fact-set-float(arg_2, BfL-blend-in-time, 0.60);
+        var_9 = 1;
+    }
+    return var_9;
+}
+
+u64? npc-BFL-brute-right-gun-shot-transfer__start-func-array@5aa8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 11, 90.00);
+    return var_2;
+}
+
+u64? npc-BfL-scar-defiant__melee-event-list@5590(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-scar-defiant, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u16 npc-BfL-scar-defiant(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-BfL-scar-defiant);
+    log-event("melee-npc-begs-for-life", 1, var_0, 0, 0);
+    melee-fact-set-bool(arg_2, melee-npc-brute-stun, 1);
+    u64? var_1 = fact-exists?(arg_2, time-since-begs-for-life);
+    if (!var_1) {
+        melee-fact-set-time(arg_2, time-since-begs-for-life);
+        melee-fact-set-time(arg_1, last-begs-for-life);
+    }
+    u64? var_2 = npc-enemy-abby?(arg_2);
+    u16 var_3;
+    if (var_2) {
+        u64? var_4 = melee-fact-set-time(arg_2, time-since-begs-for-life);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? npc-BFL-brute-left-gun-shot-transfer__start-func-array@5ba8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 7, 90.00);
+    return var_2;
+}
+
+u64? npc-BFL-back-gun-shot-transfer__start-func-array@4598(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-object-locator(arg_1);
+    u64? var_1 = get-object-locator(arg_2);
+    u64? var_2 = melee-direction-check-locator-90s(var_0, var_1, 2, 90.00);
+    return var_2;
+}
+
+u64? npc-BfL-abby-plead-back-scoot__melee-event-list@5b30(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(abby-beg-for-life-backscoot-plead, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-brute-mortal__melee-attack@3b78__character-melee-info@54d0__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = fact-exists?(arg_2, BfL-blend-in-time);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = melee-fact-get-float(arg_2, BfL-blend-in-time);
+        melee-fact-remove(arg_2, BfL-blend-in-time);
+        var_1 = var_2;
+    }
+    return var_1;
+}
+
+u64? npc-BfL-brute-mortal__start-func-array@4ad8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-brute?(arg_2);
+    bool var_1 = !(arg_2 == 0) && var_0;
+    return var_1;
+}
+
+u16 npc-BfL-brute-mortal(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = string-debug(npc-BfL-brute-mortal);
+    log-event("melee-npc-begs-for-life", 1, var_0, 0, 0);
+    melee-fact-set-bool(arg_2, melee-npc-brute-stun, 1);
+    u64? var_1 = fact-exists?(arg_2, time-since-begs-for-life);
+    if (!var_1) {
+        melee-fact-set-time(arg_2, time-since-begs-for-life);
+        melee-fact-set-time(arg_1, last-begs-for-life);
+    }
+    u64? var_2 = npc-enemy-abby?(arg_2);
+    u16 var_3;
+    if (var_2) {
+        u64? var_4 = melee-fact-set-time(arg_2, time-since-begs-for-life);
+        var_3 = var_4;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? npc-BfL-scar-mortal-death__melee-event-list@60f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u16 var_0;
+    if (attacker == defender) {
+        var_0 = arg_1;
+    } else if (defender == defender) {
+        var_0 = arg_2;
+    } else {
+        u64? var_1 = dc-assert-enabled?();
+        if (var_1 && !1) {
+            u64? var_2 = string-debug(defender);
+            u64? var_3 = #5445173390656D6D("melee-vox-request-frames: invalid speaker character '%s'", var_2);
+            display-error(var_3);
+        }
+        var_0 = 0;
+    }
+    u16 var_4;
+    if (attacker == attacker) {
+        var_4 = arg_1;
+    } else if (defender == attacker) {
+        var_4 = arg_2;
+    } else {
+        u64? var_5 = dc-assert-enabled?();
+        if (var_5 && !1) {
+            u64? var_6 = string-debug(attacker);
+            u64? var_7 = #5445173390656D6D("melee-vox-request-frames: invalid listener character '%s'", var_6);
+            display-error(var_7);
+        }
+        var_4 = 0;
+    }
+    u64? var_8 = request-dialog(ai-enemy-combat-beg-for-life-death, var_0, var_4, 0, 0, 0, 0);
+    return var_8;
+}
+
+u64? npc-BfL-scar-mortal-death(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = new-boxed-value(6, 100.00);
+    u64? var_3 = broadcast-event(melee-damage, var_0, var_1, var_2);
+    return var_3;
+}
+
+u64? npc-BFL-left-melee-transfer__melee-attack@3f58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
+    u64? var_0 = get-hit-direction(arg_2);
+    u64? var_1 = get-hit-pos(arg_2);
+    u64? var_2 = rate-animation-for-melee-impact(arg_2, npc-begs-for-life-hr-left, var_0, var_1, *npc-begs-for-life-intro-melee*);
+    return var_2;
+}
+

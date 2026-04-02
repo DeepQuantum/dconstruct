@@ -1,0 +1,926 @@
+u64? wait-npc-move-to-entry-dynamic-speed(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-spawner-locator(arg_2, 1);
+    u64? var_1 = wait-npc-move-to-entry-frame-dynamic-speed(
+        arg_0,
+        arg_1,
+        var_0,
+        arg_3,
+        arg_4,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        arg_9,
+        arg_10,
+        arg_11
+    );
+    return var_1;
+}
+
+u64? npc-move-to-entry-goal-reached-type(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = get-animation-entry(arg_0, arg_1, arg_2, 0, 0.00, apReference);
+    u64? var_1 = npc-move-to(arg_0, var_0, arg_3, arg_4, 0, 0, 0, 0);
+    return var_1;
+}
+
+u64? npc-move-to-entry-frame-dynamic-speed(u64? arg_0, u64? arg_1, u64? arg_2, f32 arg_3, f32 arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10) {
+    u64? var_0 = get-object-locator(arg_0);
+    u64? var_1 = get-animation-entry(arg_0, arg_1, arg_2, 0, 0.00, apReference);
+    u64? var_2 = get-locator-distance(var_0, var_1);
+    u16 var_3;
+    if (arg_4 >= 0.00 && var_2 > arg_4) {
+        var_3 = 2;
+    } else if (arg_3 >= 0.00 && var_2 > arg_3) {
+        var_3 = 1;
+    } else {
+        var_3 = 0;
+    }
+    u64? var_4 = npc-move-to-entry-frame(
+        arg_0,
+        arg_1,
+        arg_2,
+        var_3,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        arg_9,
+        arg_10
+    );
+    return var_4;
+}
+
+u64? is-npc-and-buddy?(u64? arg_0) {
+    u64? var_0 = is-npc?(arg_0);
+    u64? var_1 = npc-is-buddy?(arg_0);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+f32 ai-post-get-score(f32 arg_0) {
+    return *(f32*)(arg_0 + 16);
+}
+
+u64? ai-post-get-position(u64?* arg_0) {
+    return *arg_0;
+}
+
+u16 print-attack-info(u64? arg_0) {
+    u64? var_0 = #48EBF93F51D4757B(arg_0);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = is-final-build?();
+        if (!var_2) {
+            u64 var_3 = *(u64*)(var_0 + 8);
+            u64? var_4 = string-debug(var_3);
+            u64 var_5 = *(u64*)(var_0 + 16);
+            u64? var_6 = string-debug(var_5);
+            u64 var_7 = *(u64*)(var_0 + 72);
+            u64? var_8 = string-debug(var_7);
+            u64 var_9 = *(u64*)(var_0 + 80);
+            u64? var_10 = string-debug(var_9);
+            u8 var_11 = *(u8*)(var_0 + 96);
+            u64? var_12 = new-boxed-value(1, var_11);
+            u16 var_13;
+            if (var_12) {
+                u8 var_14 = *(u8*)(var_0 + 96);
+                u64? var_15 = new-boxed-value(1, var_14);
+                var_13 = *(u16*)(var_15 + 12);
+            } else {
+                var_13 = 0;
+            }
+            string var_16;
+            if (var_13 == 1) {
+                u8 var_17 = *(u8*)(var_0 + 96);
+                u64? var_18 = new-boxed-value(1, var_17);
+                u16 var_19;
+                if (var_18 && *(u16*)(var_18 + 12) == 1) {
+                    var_19 = *(u8*)var_18;
+                } else if (var_18 && *(u16*)(var_18 + 12) == 2) {
+                    var_19 = *(i32*)var_18 != 0;
+                } else if (var_18 && *(u16*)(var_18 + 12) == 3) {
+                    var_19 = *(u32*)var_18 != 0;
+                } else if (var_18 && *(u16*)(var_18 + 12) == 4) {
+                    var_19 = *(i64*)var_18 != 0;
+                } else if (var_18 && *(u16*)(var_18 + 12) == 5) {
+                    var_19 = *(u64*)var_18 != 0;
+                } else if (var_18 && *(u16*)(var_18 + 12) == 6) {
+                    var_19 = *(f32*)var_18 != 0.00;
+                } else {
+                    var_19 = !!0;
+                }
+                string var_20;
+                if (var_19) {
+                    var_20 = "#t";
+                } else {
+                    var_20 = "#f";
+                }
+                u64? var_21 = #5445173390656D6D("%s", var_20);
+                var_16 = var_21;
+            } else if (var_13 == 2) {
+                u8 var_22 = *(u8*)(var_0 + 96);
+                u64? var_23 = new-boxed-value(1, var_22);
+                u16 var_24;
+                if (var_23 && *(u16*)(var_23 + 12) == 1) {
+                    var_24 = *(u8*)var_23;
+                } else if (var_23 && *(u16*)(var_23 + 12) == 2) {
+                    var_24 = *(i32*)var_23;
+                } else if (var_23 && *(u16*)(var_23 + 12) == 3) {
+                    var_24 = *(u32*)var_23;
+                } else if (var_23 && *(u16*)(var_23 + 12) == 4) {
+                    var_24 = *(i64*)var_23;
+                } else if (var_23 && *(u16*)(var_23 + 12) == 5) {
+                    var_24 = *(u64*)var_23;
+                } else if (var_23 && *(u16*)(var_23 + 12) == 6) {
+                    var_24 = (i32)*(f32*)var_23;
+                } else {
+                    var_24 = 0;
+                }
+                u64? var_25 = #5445173390656D6D("%d", var_24);
+                var_16 = var_25;
+            } else if (var_13 == 3) {
+                u8 var_26 = *(u8*)(var_0 + 96);
+                u64? var_27 = new-boxed-value(1, var_26);
+                u16 var_28;
+                if (var_27 && *(u16*)(var_27 + 12) == 1) {
+                    var_28 = *(u8*)var_27;
+                } else if (var_27 && *(u16*)(var_27 + 12) == 2) {
+                    var_28 = *(i32*)var_27;
+                } else if (var_27 && *(u16*)(var_27 + 12) == 3) {
+                    var_28 = *(u32*)var_27;
+                } else if (var_27 && *(u16*)(var_27 + 12) == 4) {
+                    var_28 = *(i64*)var_27;
+                } else if (var_27 && *(u16*)(var_27 + 12) == 5) {
+                    var_28 = *(u64*)var_27;
+                } else if (var_27 && *(u16*)(var_27 + 12) == 6) {
+                    var_28 = (i32)*(f32*)var_27;
+                } else {
+                    var_28 = 0;
+                }
+                u64? var_29 = #5445173390656D6D("%uU", var_28);
+                var_16 = var_29;
+            } else if (var_13 == 4) {
+                u8 var_30 = *(u8*)(var_0 + 96);
+                u64? var_31 = new-boxed-value(1, var_30);
+                u16 var_32;
+                if (var_31 && *(u16*)(var_31 + 12) == 1) {
+                    var_32 = *(u8*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 2) {
+                    var_32 = *(i32*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 3) {
+                    var_32 = *(u32*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 4) {
+                    var_32 = *(i64*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 5) {
+                    var_32 = *(u64*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 6) {
+                    var_32 = (i32)*(f32*)var_31;
+                } else {
+                    var_32 = 0;
+                }
+                u64? var_33 = #5445173390656D6D("%lldLL", var_32);
+                var_16 = var_33;
+            } else if (var_13 == 5) {
+                u8 var_34 = *(u8*)(var_0 + 96);
+                u64? var_35 = new-boxed-value(1, var_34);
+                u16 var_36;
+                if (var_35 && *(u16*)(var_35 + 12) == 1) {
+                    var_36 = *(u8*)var_35;
+                } else if (var_35 && *(u16*)(var_35 + 12) == 2) {
+                    var_36 = *(i32*)var_35;
+                } else if (var_35 && *(u16*)(var_35 + 12) == 3) {
+                    var_36 = *(u32*)var_35;
+                } else if (var_35 && *(u16*)(var_35 + 12) == 4) {
+                    var_36 = *(i64*)var_35;
+                } else if (var_35 && *(u16*)(var_35 + 12) == 5) {
+                    var_36 = *(u64*)var_35;
+                } else if (var_35 && *(u16*)(var_35 + 12) == 6) {
+                    var_36 = (i32)*(f32*)var_35;
+                } else {
+                    var_36 = 0;
+                }
+                u64? var_37 = #5445173390656D6D("%lluULL", var_36);
+                var_16 = var_37;
+            } else if (var_13 == 6) {
+                u8 var_38 = *(u8*)(var_0 + 96);
+                u64? var_39 = new-boxed-value(1, var_38);
+                f32 var_40;
+                if (var_39 && *(u16*)(var_39 + 12) == 1) {
+                    var_40 = *(u8*)var_39;
+                } else if (var_39 && *(u16*)(var_39 + 12) == 2) {
+                    var_40 = (f32)*(i32*)var_39;
+                } else if (var_39 && *(u16*)(var_39 + 12) == 3) {
+                    var_40 = (f32)*(u32*)var_39;
+                } else if (var_39 && *(u16*)(var_39 + 12) == 4) {
+                    var_40 = (f32)*(i64*)var_39;
+                } else if (var_39 && *(u16*)(var_39 + 12) == 5) {
+                    var_40 = (f32)*(u64*)var_39;
+                } else if (var_39 && *(u16*)(var_39 + 12) == 6) {
+                    var_40 = *(f32*)var_39;
+                } else {
+                    var_40 = 0.00;
+                }
+                u64? var_41 = #5445173390656D6D("%f", var_40);
+                var_16 = var_41;
+            } else if (var_13 == 7) {
+                u8 var_42 = *(u8*)(var_0 + 96);
+                u64? var_43 = new-boxed-value(1, var_42);
+                u16 var_44;
+                if (var_43 && *(u16*)(var_43 + 12) == 7) {
+                    var_44 = *(u64*)var_43;
+                } else if (var_43 && *(u16*)(var_43 + 12) == 5) {
+                    var_44 = *(u64*)var_43;
+                } else if (var_43 && *(u16*)(var_43 + 12) == 4) {
+                    var_44 = *(u64*)var_43;
+                } else {
+                    var_44 = 0;
+                }
+                u64? var_45 = string-debug(var_44);
+                u64? var_46 = #5445173390656D6D("'%s", var_45);
+                var_16 = var_46;
+            } else if (var_13 == 11) {
+                var_16 = "<process-handle-mutable>";
+            } else if (var_13 == 12) {
+                var_16 = "<process-handle>";
+            } else if (var_13 == 13) {
+                u8 var_47 = *(u8*)(var_0 + 96);
+                u64? var_48 = new-boxed-value(1, var_47);
+                u64? var_49 = #5445173390656D6D("<pointer #x%p>", *(i64*)var_48);
+                var_16 = var_49;
+            } else if (var_13 == 14) {
+                u8 var_50 = *(u8*)(var_0 + 96);
+                u64? var_51 = new-boxed-value(1, var_50);
+                string var_52;
+                if (var_51 && *(u16*)(var_51 + 12) == 14) {
+                    var_52 = *var_51;
+                } else {
+                    var_52 = "";
+                }
+                f32 var_53 = *(f32*)(var_52 + 4);
+                f32 var_54 = *(f32*)(var_52 + 8);
+                u64? var_55 = #5445173390656D6D("P(%f,%f,%f)", *(f32*)var_52, var_53, var_54);
+                var_16 = var_55;
+            } else if (var_13 == 15) {
+                u8 var_56 = *(u8*)(var_0 + 96);
+                u64? var_57 = new-boxed-value(1, var_56);
+                string var_58;
+                if (var_57 && *(u16*)(var_57 + 12) == 15) {
+                    var_58 = *var_57;
+                } else {
+                    var_58 = "";
+                }
+                f32 var_59 = *(f32*)(var_58 + 4);
+                f32 var_60 = *(f32*)(var_58 + 8);
+                u64? var_61 = #5445173390656D6D("V(%f,%f,%f)", *(f32*)var_58, var_59, var_60);
+                var_16 = var_61;
+            } else if (var_13 == 16) {
+                var_16 = "<quaternion>";
+            } else if (var_13 == 17) {
+                var_16 = "<locator>";
+            } else if (var_13 == 18) {
+                var_16 = "<bound-frame>";
+            } else if (var_13 == 19) {
+                u8 var_62 = *(u8*)(var_0 + 96);
+                u64? var_63 = new-boxed-value(1, var_62);
+                string var_64;
+                if (var_63 && *(u16*)(var_63 + 12) == 19) {
+                    var_64 = *(i64*)var_63;
+                } else {
+                    var_64 = "";
+                }
+                u64? var_65 = #5445173390656D6D(""%s"", var_64);
+                var_16 = var_65;
+            } else if (var_13 == 20) {
+                var_16 = "<boxable>";
+            } else if (var_13 == 21) {
+                var_16 = "<array>";
+            } else if (var_13 == 8) {
+                var_16 = "<time-frame>";
+            } else {
+                var_16 = "<unknown>";
+            }
+            i32 var_66 = *(i32*)(var_0 + 24);
+            i32 var_67 = *(i32*)(var_0 + 48);
+            i32 var_68 = *(i32*)(var_0 + 52);
+            i32 var_69 = *(i32*)(var_0 + 56);
+            i32 var_70 = *(i32*)(var_0 + 88);
+            i32 var_71 = *(i32*)(var_0 + 92);
+            u64? var_72 = #5445173390656D6D(
+                " ---------- Attack Info ---------- Attack Type: %i Source: %s Process ID: %s Damage: %i Projectile Type: %i Explosion Type: %i Exploision Reaction: %i Weapon ID: %s Ammo ID: %s Num Impact Points: %i Attacker Net ID: %s Is Grazing?: %s ---------------------------------",
+                *(i32*)var_0,
+                var_4,
+                var_6,
+                var_66,
+                var_67,
+                var_68,
+                var_69,
+                var_8,
+                var_10,
+                var_70,
+                var_71,
+                var_16
+            );
+            u64? var_73 = display(var_72, 19);
+            var_1 = var_73;
+        } else {
+            var_1 = 0;
+        }
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? npc-look-aim-at-spawner(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-spawner-locator(arg_1, 1);
+    u64? var_1 = npc-look-aim-at-locator(arg_0, var_0, arg_2, arg_3);
+    return var_1;
+}
+
+u64? is-npc-and-is-not-buddy?(u64? arg_0) {
+    u64? var_0 = is-npc?(arg_0);
+    u64? var_1 = npc-is-buddy?(arg_0);
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 && var_2;
+    return var_3;
+}
+
+u64? npc-teleport-into-closest-cover(u64? arg_0, u64? arg_1) {
+    u64? var_0 = npc-teleport-into-closest-post(arg_0, arg_1, 1);
+    return var_0;
+}
+
+u64? npc-look-at-spawner(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-spawner-position(arg_1, 1);
+    u64? var_1 = npc-look-at-point(arg_0, var_0, arg_2);
+    return var_1;
+}
+
+u64? wait-npc-unholster-weapon(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = wait-npc-holster-weapon(arg_0, arg_1, 0, arg_2, arg_3);
+    return var_0;
+}
+
+u64? npc-request-follow-conversation(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = npc-request-follow(arg_0, arg_1, arg_3, *conversation-ai-follow-settings*, arg_2, arg_4);
+    return var_0;
+}
+
+u64? simple-npc-on-screen-and-visible?(u64? arg_0) {
+    u64? var_0 = npc-on-screen-and-visible?(arg_0, -1, 0);
+    return var_0;
+}
+
+u64? simple-npc-set-weapon-visible(u64? arg_0, u64? arg_1) {
+    u64? var_0 = npc-set-weapon-visible(arg_0, arg_1);
+    return var_0;
+}
+
+u16 npc-get-flashlight(u64? arg_0) {
+    u64? var_0 = send-event-box-result(get-flashlight, arg_0);
+    u16 var_1;
+    if (var_0 && *(u16*)(var_0 + 12) == 7) {
+        var_1 = *(u64*)var_0;
+    } else if (var_0 && *(u16*)(var_0 + 12) == 5) {
+        var_1 = *(u64*)var_0;
+    } else if (var_0 && *(u16*)(var_0 + 12) == 4) {
+        var_1 = *(u64*)var_0;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? ai-post-get-locator(u64? arg_0) {
+    u64? var_0 = ai-post-get-position(arg_0);
+    u64? var_1 = alloc-bound-frame(var_0, 0, 0, 0, 0);
+    return var_1;
+}
+
+u64? npc-face-spawner(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-spawner-position(arg_1, 1);
+    u64? var_1 = npc-face-point(arg_0, var_0);
+    return var_1;
+}
+
+u64? npc-set-zone-center(u64? arg_0, u64? arg_1) {
+    u64? var_0 = npc-set-zone-center-and-radius(arg_0, arg_1, 1.00);
+    return var_0;
+}
+
+u64? wait-npc-teleport-into-closest-cover(u64? arg_0, u64? arg_1) {
+    u64? var_0 = wait-npc-teleport-into-closest-post(arg_0, arg_1, 1);
+    return var_0;
+}
+
+u64? npc-request-explore-behind-close(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-request-explore(arg_0, arg_1, 0, *buddy-post-selector-set*, 12.00, arg_2, *close-behind-ai-follow-settings*, arg_3);
+    return var_0;
+}
+
+u64? npc-request-follow-loose(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = npc-request-follow(arg_0, arg_1, arg_3, *loose-ai-follow-settings*, arg_2, arg_4);
+    return var_0;
+}
+
+u64? wait-npc-use-closest-cover(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10) {
+    u64? var_0 = wait-npc-use-closest-post(
+        arg_0,
+        arg_1,
+        1,
+        arg_2,
+        arg_3,
+        arg_4,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        arg_9,
+        arg_10
+    );
+    return var_0;
+}
+
+u64? npc-request-explore-behind(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-request-explore(arg_0, arg_1, 0, *buddy-post-selector-set*, 12.00, arg_2, *behind-ai-follow-settings*, arg_3);
+    return var_0;
+}
+
+u64? npc-clear-force-drop-table(u64? arg_0) {
+    u64? var_0 = npc-set-force-drop-table(arg_0, 0);
+    return var_0;
+}
+
+u64? ai-post-selection-ready?(u64? arg_0) {
+    return arg_0;
+}
+
+u64? npc-target-location-known?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = npc-is-aware-of?(arg_0, arg_1);
+    u64? var_1 = npc-target-missing?(arg_0, arg_1);
+    u64? var_2 = npc-target-lost?(arg_0, arg_1);
+    bool var_3 = var_0 && !var_1 && !var_2;
+    return var_3;
+}
+
+u64? buddy-get-off-horse(u64? arg_0, u64? arg_1) {
+    u64? var_0 = npc-force-off-horse(arg_0, arg_1);
+    return var_0;
+}
+
+u64? npc-search-move-to-spawner(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = npc-move-to-spawner(
+        arg_0,
+        arg_1,
+        arg_2,
+        arg_3,
+        arg_4,
+        0,
+        1,
+        0,
+        arg_5
+    );
+    return var_0;
+}
+
+u64? wait-npc-move-to-entry-frame-dynamic-speed(u64? arg_0, u64? arg_1, u64? arg_2, f32 arg_3, f32 arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0;
+    if (arg_5) {
+        u64? var_1 = get-locator-position(arg_2);
+        u64? var_2 = get-locator-rotation(arg_2);
+        u64? var_3 = alloc-bound-frame(var_1, var_2, 0, 0, 1);
+        u64? var_4 = get-animation-entry(arg_0, arg_1, var_3, 0, 0.00, apReference);
+        u64? var_5 = get-locator-position(var_4);
+        u64? var_6 = get-locator-rotation(var_4);
+        u64? var_7 = alloc-bound-frame(var_5, var_6, 0, 0, 1);
+        u64? var_8 = get-object-locator(arg_0);
+        u64? var_9 = get-locator-distance(var_8, var_7);
+        u64? var_10;
+        if (arg_4 >= 0.00 && var_9 > arg_4) {
+            npc-move-to-entry-frame(
+                arg_0,
+                arg_1,
+                var_3,
+                2,
+                arg_6,
+                arg_7,
+                arg_8,
+                arg_9,
+                arg_10,
+                arg_11
+            );
+            u64 i = var_9;
+            while (!(i < arg_4)) {
+                wait(0.10);
+                u64? var_11 = get-object-locator(arg_0);
+                u64? var_12 = get-locator-distance(var_11, var_7);
+                i = var_12;
+            }
+            var_10 = var_12;
+        }
+        if (arg_3 >= 0.00 && var_10 > arg_3) {
+            npc-move-to-entry-frame(
+                arg_0,
+                arg_1,
+                var_3,
+                1,
+                arg_6,
+                arg_7,
+                arg_8,
+                arg_9,
+                arg_10,
+                arg_11
+            );
+            u64 i = var_10;
+            while (!(i < arg_3)) {
+                wait(0.10);
+                u64? var_13 = get-object-locator(arg_0);
+                u64? var_14 = get-locator-distance(var_13, var_7);
+                i = var_14;
+            }
+        }
+        u64? var_15 = wait-npc-move-to-entry-frame(
+            arg_0,
+            arg_1,
+            var_3,
+            0,
+            arg_6,
+            arg_7,
+            arg_8,
+            arg_9,
+            arg_10,
+            arg_11
+        );
+        var_0 = var_15;
+    } else {
+        u64? var_16 = get-object-locator(arg_0);
+        u64? var_17 = get-animation-entry(arg_0, arg_1, arg_2, 0, 0.00, apReference);
+        u64? var_18 = get-locator-distance(var_16, var_17);
+        u16 var_19;
+        if (arg_4 >= 0.00 && var_18 > arg_4) {
+            var_19 = 2;
+        } else if (arg_3 >= 0.00 && var_18 > arg_3) {
+            var_19 = 1;
+        } else {
+            var_19 = 0;
+        }
+        u64? var_20 = wait-npc-move-to-entry-frame(
+            arg_0,
+            arg_1,
+            arg_2,
+            var_19,
+            arg_6,
+            arg_7,
+            arg_8,
+            arg_9,
+            arg_10,
+            arg_11
+        );
+        var_0 = var_20;
+    }
+    return var_0;
+}
+
+u64? ai-post-id-is-cover?(u64? arg_0) {
+    u64? var_0 = ai-get-post(arg_0);
+    u64? var_1 = ai-post-is-valid?(var_0);
+    bool var_2 = var_1 && *(i32*)(var_0 + 8) == 0;
+    return var_2;
+}
+
+u64? wait-npc-move-to-entry-goal-reached-type(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = get-animation-entry(arg_0, arg_1, arg_2, 0, 0.00, apReference);
+    u64? var_1 = wait-npc-move-to(arg_0, var_0, arg_3, arg_4, 0, 0, 0, 0);
+    return var_1;
+}
+
+u64? npc-unholster-weapon(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-holster-weapon(arg_0, arg_1, 0, arg_2, arg_3);
+    return var_0;
+}
+
+u64? npc-request-explore-close(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-request-explore(arg_0, arg_1, 0, *buddy-post-selector-set*, 12.00, arg_2, *close-ai-follow-settings*, arg_3);
+    return var_0;
+}
+
+u64? npc-hide-health-bar(u64? arg_0) {
+    u64? var_0 = npc-set-health-bar-visible(arg_0, 0);
+    return var_0;
+}
+
+u64? npc-aim-at-locator(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-locator-position(arg_1);
+    u64? var_1 = npc-aim-at-point(arg_0, var_0, arg_2, arg_3);
+    return var_1;
+}
+
+u64? npc-aim-at-spawner(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-spawner-position(arg_1, 1);
+    u64? var_1 = npc-aim-at-point(arg_0, var_0, arg_2, arg_3);
+    return var_1;
+}
+
+u64? npc-request-explore-loose(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-request-explore(arg_0, arg_1, 0, *buddy-post-selector-set*, 12.00, arg_2, *loose-ai-follow-settings*, arg_3);
+    return var_0;
+}
+
+i32 ai-post-get-type(i32 arg_0) {
+    return *(i32*)(arg_0 + 8);
+}
+
+u64? npc-move-to-entry-frame-hack-stop(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = npc-move-to-entry-frame(
+        arg_0,
+        arg_1,
+        arg_2,
+        arg_3,
+        0,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        0
+    );
+    return var_0;
+}
+
+u64? npc-move-to-entry-dynamic-speed(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10) {
+    u64? var_0 = get-spawner-locator(arg_2, 1);
+    u64? var_1 = npc-move-to-entry-frame-dynamic-speed(
+        arg_0,
+        arg_1,
+        var_0,
+        arg_3,
+        arg_4,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        arg_9,
+        arg_10
+    );
+    return var_1;
+}
+
+u64? npc-on-screen?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = is-object-on-screen?(arg_0, arg_1);
+    return var_0;
+}
+
+u64? npc-request-stay(u64? arg_0, u64? arg_1) {
+    u64? var_0 = #5445173390656D6D("npc-request-stay has been deprecated. Please use npc-request-hold");
+    display(var_0, 8);
+    u64? var_1 = display-error(var_0);
+    u64? var_2 = npc-request-hold(arg_0, 10.00);
+    return var_2;
+}
+
+u64? npc-use-closest-cover(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10) {
+    u64? var_0 = npc-use-closest-post(
+        arg_0,
+        arg_1,
+        1,
+        arg_2,
+        arg_3,
+        arg_4,
+        arg_5,
+        arg_6,
+        arg_7,
+        arg_8,
+        arg_9,
+        arg_10
+    );
+    return var_0;
+}
+
+u64? wait-npc-play-feather-blend-with-turn-to(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, f32 arg_4, f32 arg_5, u64? arg_6, u64? arg_7) {
+    npc-request-hold(arg_0, 10.00);
+    u64? var_0 = %alloc-array(single-frame, 16, 10, 1);
+    *(i32*)*(*var_0 + (0 * 8)) = 28;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (0 * 8)) + 8) = arg_6;
+    *(i32*)*(*var_0 + (1 * 8)) = 30;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = arg_7;
+    *(i32*)*(*var_0 + (2 * 8)) = 27;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
+    *(i32*)*(*var_0 + (3 * 8)) = 29;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
+    *(i32*)*(*var_0 + (4 * 8)) = 57;
+    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+    u64? var_1 = get-animation-frame(arg_0, 0, arg_1);
+    *(f32*)(*(*var_0 + (4 * 8)) + 8) = var_1;
+    *(i32*)*(*var_0 + (5 * 8)) = 22;
+    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
+    f32 var_2;
+    if (arg_5 > 0.00) {
+        u64? var_3 = get-animation-duration(arg_0, arg_1);
+        if (1.00 < (arg_5 / (var_3 * 30.00))) {
+            var_2 = 1.00;
+        } else {
+            u64? var_4 = get-animation-duration(arg_0, arg_1);
+            var_2 = arg_5 / (var_4 * 30.00);
+        }
+    } else {
+        var_2 = 1.00;
+    }
+    *(f32*)(*(*var_0 + (5 * 8)) + 8) = var_2;
+    *(i32*)*(*var_0 + (6 * 8)) = 40;
+    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (6 * 8)) + 8) = 1;
+    *(i32*)*(*var_0 + (7 * 8)) = 75;
+    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (7 * 8)) + 8) = arg_3;
+    *(i32*)*(*var_0 + (8 * 8)) = 52;
+    *(u64*)(*(*var_0 + (8 * 8)) + 8) = 0;
+    *(u8*)(*(*var_0 + (8 * 8)) + 8) = 0;
+    *(i32*)*(*var_0 + (9 * 8)) = 32;
+    *(u64*)(*(*var_0 + (9 * 8)) + 8) = 0;
+    *(u8*)(*(*var_0 + (9 * 8)) + 8) = 1;
+    animate_(arg_0, arg_1, var_0);
+    stop-animating(arg_0, 0, arg_6, arg_1, 0);
+    wait-one-frame();
+    u64? var_5 = get-animation-playing?(arg_0, arg_1, 1);
+    u64? var_6;
+    while (var_5) {
+        u64? var_7 = get-object-locator(arg_0);
+        u64? var_8 = get-object-or-spawner-locator(arg_2);
+        u64? var_9 = rotate-locator-lookat(var_7, var_8, 1.00, 0);
+        u64? var_10 = get-object-locator(arg_0);
+        u64? var_11 = get-locator-rotation(var_10);
+        u64? var_12 = get-locator-rotation(var_9);
+        u64? var_13 = get-angle-between-quats(var_11, var_12);
+        u16 var_14;
+        if (!(var_13 < 30.00)) {
+            u64? var_15 = npc-move-to(arg_0, var_9, 0, 1, 0, 0, 0, 0);
+            var_14 = var_15;
+        } else {
+            var_14 = 0;
+        }
+        if (arg_4 > (1.00 / 30.00)) {
+            wait(arg_4);
+        } else {
+            wait-one-frame();
+        }
+    }
+    return var_6;
+}
+
+u64? wait-npc-use-positional-action-pack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = action-pack-enabled?(arg_1);
+    u64? var_1;
+    if (arg_8 && var_0) {
+        u64? var_2;
+        if (arg_7) {
+            var_2 = arg_7;
+        } else {
+            u64? var_3 = tag-specified?(point-of-interest, arg_1);
+            if (var_3) {
+                u64? var_4 = get-spawner-locator(arg_1, 1);
+                u64? var_5 = tag-symbol(point-of-interest, arg_1);
+                u64? var_6 = get-object-locator(var_5);
+                u64? var_7 = rotate-locator-lookat(var_4, var_6, 1.00, 0);
+                var_2 = var_7;
+            } else {
+                u64? var_8 = get-spawner-locator(arg_1, 1);
+                var_2 = var_8;
+            }
+        }
+        wait-npc-move-to(arg_0, var_2, arg_2, arg_3, arg_9, 0, 0, 0);
+        npc-request-buddy-look(arg_0, 0);
+        u64? var_9 = tag-symbol(animation-name, arg_1);
+        u64? var_10 = %alloc-array(single-frame, 16, 4, 1);
+        *(i32*)*(*var_10 + (0 * 8)) = 28;
+        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
+        *(f32*)(*(*var_10 + (0 * 8)) + 8) = arg_5;
+        *(i32*)*(*var_10 + (1 * 8)) = 30;
+        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
+        *(f32*)(*(*var_10 + (1 * 8)) + 8) = arg_6;
+        *(i32*)*(*var_10 + (2 * 8)) = 58;
+        *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
+        u64? var_11 = tag-symbol(animation-name, arg_1);
+        u64? var_12 = get-object-locator(arg_0);
+        u64? var_13 = get-best-entry-phase(arg_0, var_11, var_12, 7.00, apReference, 0);
+        *(f32*)(*(*var_10 + (2 * 8)) + 8) = var_13;
+        *(i32*)*(*var_10 + (3 * 8)) = 31;
+        *(u64*)(*(*var_10 + (3 * 8)) + 8) = 0;
+        *(u8*)(*(*var_10 + (3 * 8)) + 8) = arg_4;
+        wait-animate_(arg_0, var_9, var_10);
+        u64? var_14 = npc-set-look-aim-mode(arg_0, 0);
+        var_1 = var_14;
+    } else {
+        u64? var_15 = string-debug(arg_1);
+        u64? var_16 = #5445173390656D6D("PAP %s is disabled. Call (enable-action-pack ) or add param 'use-even-if-disabled? #t' to force use", var_15);
+        u64? var_17 = display-error(var_16);
+        var_1 = var_17;
+    }
+    return var_1;
+}
+
+u64? npc-on-screen-and-visible?(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = object-on-screen-and-visible?(arg_0, arg_1, arg_2);
+    return var_0;
+}
+
+u64? npc-request-follow-close(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = npc-request-follow(arg_0, arg_1, arg_3, *close-ai-follow-settings*, arg_2, arg_4);
+    return var_0;
+}
+
+bool no-npcs-in-group-alive?(u64? arg_0) {
+    u64? var_0 = npc-group-alive-count(arg_0);
+    return var_0 == 0;
+}
+
+u64? wait-npc-search-move-to-spawner(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = wait-npc-move-to-spawner(
+        arg_0,
+        arg_1,
+        arg_2,
+        arg_3,
+        arg_4,
+        0,
+        1,
+        0,
+        arg_5
+    );
+    return var_0;
+}
+
+u64? npc-offscreen?(u64? arg_0) {
+    u64? var_0 = npc-on-screen?(arg_0, 0.00);
+    return !var_0;
+}
+
+u64? wait-npc-move-to-and-play-anim(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    set-bound-frame(arg_0, arg_3, self);
+    u64? var_0 = get-animation-entry(arg_1, arg_2, arg_3, 0, 0.00, apReference);
+    wait-npc-move-to(arg_1, var_0, arg_4, arg_5, 0, 0, 0, 0);
+    u64? var_1 = %alloc-array(single-frame, 16, 3, 1);
+    *(i32*)*(*var_1 + (0 * 8)) = 10;
+    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+    u64? var_2 = get-bound-frame(arg_0, self);
+    *(u64*)(*(*var_1 + (0 * 8)) + 8) = var_2;
+    *(i32*)*(*var_1 + (1 * 8)) = 28;
+    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
+    *(i32*)*(*var_1 + (2 * 8)) = 30;
+    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
+    u64? var_3 = wait-animate_(arg_1, arg_2, var_1);
+    return var_3;
+}
+
+u64? wait-npc-corner-check-spawner(u64? arg_0, u64? arg_1, bool arg_2) {
+    u64? var_0;
+    if (!(arg_2 == 0)) {
+        u64? var_1 = get-spawner-locator(arg_1, 1);
+        u64? var_2 = get-spawner-locator(arg_2, 1);
+        u64? var_3 = wait-npc-corner-check-c(arg_0, var_1, var_2, 0, 6);
+        var_0 = var_3;
+    } else {
+        u64? var_4 = get-spawner-locator(arg_1, 1);
+        u64? var_5 = wait-npc-corner-check-c(arg_0, var_4, 0, 0, 6);
+        var_0 = var_5;
+    }
+    return var_0;
+}
+
+u64? turret-force-aim-at(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = new-boxed-value(6, arg_2);
+    u64? var_2 = send-event(force-aim-at, arg_0, var_0, var_1);
+    return var_2;
+}
+
+u64? ai-post-is-valid?(i32 arg_0) {
+    bool var_0 = arg_0 && *(i32*)(arg_0 + 12) != -1;
+    return var_0;
+}
+
+u64? npc-request-explore-behind-loose(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-request-explore(arg_0, arg_1, 0, *buddy-post-selector-set*, 12.00, arg_2, *loose-behind-ai-follow-settings*, arg_3);
+    return var_0;
+}
+
+u64? eff-npc-has-long-weapon?(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = npc-has-long-weapon?(arg_2);
+    return var_0;
+}
+
+u64? get-entry-frame-all-parameters(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9) {
+    u64? var_0 = get-animation-duration(arg_0, arg_1);
+    f32 var_1 = arg_7 / (30.00 * var_0);
+    u64? var_2 = get-animation-entry(arg_0, arg_1, arg_2, arg_5, var_1, arg_8);
+    return var_2;
+}
+
+u64? npc-show-health-bar(u64? arg_0) {
+    u64? var_0 = npc-set-health-bar-visible(arg_0, 1);
+    return var_0;
+}
+

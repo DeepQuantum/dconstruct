@@ -1,0 +1,11 @@
+u64? ellie-player-inventory-all__level-set@2200__level-scripted-set@3330__() {
+    u64? var_0 = player-get-skin-id(ellie);
+    u64? var_1 = player-get-skin-id(ellie);
+    bool var_2 = var_0 == ellie-astro && var_1 == ellie-astro-no-helmet;
+    return var_2;
+}
+
+u16 ellie-player-inventory-all__level-scripted-set@4680() {
+    return 1;
+}
+

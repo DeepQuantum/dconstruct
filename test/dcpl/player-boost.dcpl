@@ -1,0 +1,18 @@
+u64? anim-player-boost-states__actor-state-list@48__anim-node-blend@888____anim-node-blend@ba0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 808);
+    u64? var_1 = lerp-scale(0.00, 90.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-boost-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    f32 var_0 = *(f32*)(*arg_0 + 808);
+    u64? var_1 = lerp-scale(-90.00, 0.00, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? anim-player-boost-states(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+

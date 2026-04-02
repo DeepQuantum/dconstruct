@@ -1,0 +1,705 @@
+f32 #069466FDCADABF7B__melee-attack@3f0__character-melee-info@65d8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (-1 > -1) {
+        var_0 = -1.00;
+    } else {
+        u64? var_1 = is-npc?(arg_2);
+        u64? var_2 = is-npc?(arg_3);
+        if (var_1 && var_2) {
+            var_0 = 0.50;
+        } else {
+            var_0 = 0.00;
+        }
+    }
+    return var_0;
+}
+
+f32 #069466FDCADABF7B__melee-attack@3f0(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_2);
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+f32 #069466FDCADABF7B(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = is-npc?(arg_1);
+    f32 var_1;
+    if (var_0) {
+        var_1 = 0.60;
+    } else {
+        var_1 = 0.20;
+    }
+    return var_1;
+}
+
+u64? #069466FDCADABF7B__start-func-array@5cc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = #329DF6617C39EA76();
+    return var_0;
+}
+
+u16 #069466FDCADABF7B__melee-event-list@6be8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    u16 var_1;
+    if (var_0) {
+        gui2-disable-categories/f(256);
+        set-all-character-weapons-invisible/f(player, -2, -2, -2, -2);
+        joypad-disable-all-commands();
+        u64? var_2 = interrupt-forced-camera-dof-focus();
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? infected-shared-prone-left-finisher__start-func-array@5118(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-is-prone?(arg_2);
+    u64? var_1 = is-player?(arg_2);
+    u64? var_2 = player-is-supine?();
+    bool var_3 = var_0 && var_1 && var_2;
+    return var_3;
+}
+
+u64? infected-shared-prone-left-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+f32 #15D963C82D992646__melee-attack@7d0__character-melee-info@6a98__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (0.00 > -1.00) {
+        var_0 = 0.00;
+    } else {
+        u64? var_1 = is-npc?(arg_2);
+        u64? var_2 = is-npc?(arg_3);
+        if (var_1 && var_2) {
+            var_0 = 0.00;
+        } else {
+            var_0 = 0.00;
+        }
+    }
+    return var_0;
+}
+
+u64? #15D963C82D992646__start-func-array@55e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1785);
+    }
+    u64? var_1 = ratking-get-fallback-finisher-ap(arg_1, arg_2);
+    set-cache-bound-frame(arg_13, var_1, 0);
+    melee-debug-text-file-line-fail("(begin (set-cache-bound-frame attack-data (ratking-get-fallback-finisher-ap attacker defender) 0) #t)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1786);
+    bool var_2 = var_0 && 1 && 1;
+    return var_2;
+}
+
+u64? #15D963C82D992646(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #20ECC6AE42303415(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-vs-npc-finisher-start-func(u64? arg_0, u64? arg_1) {
+    u64? var_0 = melee-character-bit-check(arg_1, 8192);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type npc-all))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 726);
+    }
+    u64? var_1 = npc-in-tap?(arg_1);
+    melee-debug-text-file-line-fail("(not (npc-in-tap? defender))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 727);
+    bool var_2 = var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u64? infected-ratking-back-kill-1-fallback__start-func-array@7cb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1650);
+    }
+    u64? var_1 = task-active?(medicine, med-hospital-basement-ratking-split);
+    u64? var_2 = !(var_1);
+    melee-debug-text-file-line-fail("(! (task-active? (quote medicine) (quote med-hospital-basement-ratking-split)))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1651);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? infected-ratking-back-kill-1-fallback(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-back-kill-1-fallback);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-runner-lynching-kill__start-func-array@7460(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = #BCC56A0BCEA8CC56();
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(not-rogue-mode-finisher)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 226);
+    }
+    u64? var_1 = is-player?(arg_2);
+    melee-debug-text-file-line-fail("(is-player? defender)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 227);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? infected-runner-lynching-kill(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-ratking-back-kill-2-fallback__start-func-array@5508(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1739);
+    }
+    u64? var_1 = task-active?(medicine, med-hospital-basement-ratking-split);
+    melee-debug-text-file-line-fail("(task-active? (quote medicine) (quote med-hospital-basement-ratking-split))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1740);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? infected-ratking-back-kill-2-fallback(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-back-kill-2-fallback);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-bloater-kill-drag-punch__start-func-array@7230(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = #BCC56A0BCEA8CC56();
+    return var_0;
+}
+
+u64? infected-bloater-kill-drag-punch(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-runner-right-back-knockdown(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-bloater-charge-front-drop__start-func-array@73a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = #BCC56A0BCEA8CC56();
+    bool var_3 = var_1 && var_2;
+    return var_3;
+}
+
+u64? infected-bloater-charge-front-drop(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-bloater-charge-front-drop);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-runner-lynching-kill-adds__melee-attack@1958__start-func-array@5c90__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = get-player-ap-ref();
+    u64? var_1 = set-cache-bound-frame(arg_13, var_0, 0);
+    return var_1;
+}
+
+u64? infected-runner-lynching-kill-adds__melee-event-list@5370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = get-player-ap-ref();
+    u64? var_1 = set-cache-bound-frame(arg_9, var_0, 0);
+    return var_1;
+}
+
+u64? infected-shared-left-neck-bite-fallback-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #44CEE8A8435096A0__start-func-array@5100(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1479);
+    }
+    u64? var_1 = melee-character-bit-check(arg_2, 4);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type ellie))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1480);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? #44CEE8A8435096A0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#44CEE8A8435096A0);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-runner-stalker-right-strikes(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #4B5F02CAF7ABFDAA__start-func-array@8578(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1606);
+    }
+    u64? var_1 = ratking-get-fallback-finisher-ap(arg_1, arg_2);
+    set-cache-bound-frame(arg_13, var_1, 0);
+    melee-debug-text-file-line-fail("(begin (set-cache-bound-frame attack-data (ratking-get-fallback-finisher-ap attacker defender) 0) #t)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1607);
+    bool var_2 = var_0 && 1 && 1;
+    return var_2;
+}
+
+u64? #4B5F02CAF7ABFDAA(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-ratking-back-kill-2__start-func-array@55c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1445);
+    }
+    u64? var_1 = task-active?(medicine, med-hospital-basement-ratking-split);
+    melee-debug-text-file-line-fail("(task-active? (quote medicine) (quote med-hospital-basement-ratking-split))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1446);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? infected-ratking-back-kill-2(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-back-kill-2);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-ratking-back-kill-1__start-func-array@5d98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1338);
+    }
+    u64? var_1 = task-active?(medicine, med-hospital-basement-ratking-split);
+    u64? var_2 = !(var_1);
+    melee-debug-text-file-line-fail("(! (task-active? (quote medicine) (quote med-hospital-basement-ratking-split)))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1339);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? infected-ratking-back-kill-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-back-kill-1);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? #62D29F9312499651__start-func-array@5f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1300);
+    }
+    u64? var_1 = melee-character-bit-check(arg_2, 4);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type ellie))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1301);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? #62D29F9312499651(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#62D29F9312499651);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? #6605DE060A14CCD4(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #6B3BC73C1A39E885__start-func-array@7da8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1830);
+    }
+    u64? var_1 = ratking-get-fallback-finisher-ap(arg_1, arg_2);
+    set-cache-bound-frame(arg_13, var_1, 0);
+    melee-debug-text-file-line-fail("(begin (set-cache-bound-frame attack-data (ratking-get-fallback-finisher-ap attacker defender) 0) #t)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1831);
+    bool var_2 = var_0 && 1 && 1;
+    return var_2;
+}
+
+u64? #6B3BC73C1A39E885(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#6B3BC73C1A39E885);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-shared-prone-right-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #7B62AC88B052550D__start-func-array@60a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1415);
+    }
+    u64? var_1 = melee-character-bit-check(arg_2, 2);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type abby))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1416);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? #7B62AC88B052550D(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#7B62AC88B052550D);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-shared-back-left-neck-bite-finisher__start-func-array@8318(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = #BCC56A0BCEA8CC56();
+    u64? var_1 = npc-super-stalker?(arg_1);
+    u64? var_2 = npc-runner?(arg_1);
+    u64? var_3 = player-can-prone?();
+    u64? var_4 = npc-in-wade-water?(arg_1);
+    bool var_5 = var_0 && !var_1 && var_2 || !var_3 && var_4 && var_4;
+    return var_5;
+}
+
+u64? infected-shared-back-left-neck-bite-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-bloater-kill-gorilla-pound(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-bloater-kill-gorilla-pound);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-ratking-front-kill__start-func-array@7248(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1225);
+    }
+    u64? var_1 = melee-fact-get-bool(arg_1, ratking-force-fallback-finishers?);
+    u64? var_2 = !(var_1);
+    melee-debug-text-file-line-fail("(! (melee-fact-get-bool attacker (quote ratking-force-fallback-finishers?)))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1226);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? infected-ratking-front-kill(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-front-kill);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? #8A6A8825C7EEF8E6__start-func-array@7370(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1262);
+    }
+    u64? var_1 = melee-character-bit-check(arg_2, 2);
+    melee-debug-text-file-line-fail("(melee-character-bit-check defender (target-character-type abby))", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1263);
+    bool var_2 = var_0 && var_1 && var_1;
+    return var_2;
+}
+
+u64? #8A6A8825C7EEF8E6(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#8A6A8825C7EEF8E6);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+f32 infected-vs-npc-bite-front-left__melee-attack@3858__character-melee-info@7aa8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    f32 var_0;
+    if (-1 > -1) {
+        var_0 = -1.00;
+    } else {
+        u64? var_1 = is-npc?(arg_2);
+        u64? var_2 = is-npc?(arg_3);
+        if (var_1 && var_2) {
+            var_0 = 0.30;
+        } else {
+            var_0 = 0.00;
+        }
+    }
+    return var_0;
+}
+
+u64? infected-vs-npc-bite-front-left__start-func-array@7dc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = infected-vs-npc-finisher-start-func(arg_1, arg_2);
+    return var_0;
+}
+
+u64? infected-vs-npc-bite-front-left(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-set-force-player-push(arg_1, 1, 0.50, 0.10);
+    return var_0;
+}
+
+u64? infected-bloater-charge-back-knock-down(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? infected-ratking-front-kill-fallback__start-func-array@8030(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1518);
+    }
+    u64? var_1 = ratking-get-fallback-finisher-ap(arg_1, arg_2);
+    set-cache-bound-frame(arg_13, var_1, 0);
+    melee-debug-text-file-line-fail("(begin (set-cache-bound-frame attack-data (ratking-get-fallback-finisher-ap attacker defender) 0) #t)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1519);
+    bool var_2 = var_0 && 1 && 1;
+    return var_2;
+}
+
+u64? infected-ratking-front-kill-fallback(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-ratking-front-kill-fallback);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-shared-left-neck-bite-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-melee-event-active?(arg_2, 211, 0);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (character-melee-event-active? defender (melee-event-type hide-all-uninvolved-characters)))", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3496);
+    }
+    melee-debug-text-file-line-fail("(if player-is-prone (and (player-in-state? (quote Prone)) (prone-pull-out-clear? attacker-probes)) #t)", "t2r/src/game/scriptx/melee/npc-standing/imports/npc-standing-macros.dcx", 3498);
+    bool var_1 = !var_0 && 1 && 1;
+    return var_1;
+}
+
+u64? #B8014CBCD5CE81DF__start-func-array@5f28(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = npc-ratking?(arg_1);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(npc-ratking? attacker)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1562);
+    }
+    u64? var_1 = ratking-get-fallback-finisher-ap(arg_1, arg_2);
+    set-cache-bound-frame(arg_13, var_1, 0);
+    melee-debug-text-file-line-fail("(begin (set-cache-bound-frame attack-data (ratking-get-fallback-finisher-ap attacker defender) 0) #t)", "t2r/src/game/scriptx/melee/npc-standing/npc-infected-finishers.dcx", 1563);
+    bool var_2 = var_0 && 1 && 1;
+    return var_2;
+}
+
+u64? #B8014CBCD5CE81DF(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(#B8014CBCD5CE81DF);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-runner-stalker-left-double-fist(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-runner-stalker-left-double-fist);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-shambler-swing-right-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-shambler-swing-right-finisher);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-bloater-jaw-rip(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-bloater-jaw-rip);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-bloater-back-neck-break(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-bloater-back-neck-break);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-runner-left-back-knockdown(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-runner-left-back-knockdown);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-shambler-swing-left-finisher(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-shambler-swing-left-finisher);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+
+u64? infected-vs-npc-bite-front-right__start-func-array@8300(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = infected-vs-npc-finisher-start-func(arg_1, arg_2);
+    u64? var_1 = #BCC56A0BCEA8CC56();
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u64? infected-vs-npc-bite-front-right(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = is-player?(arg_2);
+    if (var_0) {
+        u64? var_1 = new-boxed-value(7, arg_1);
+        send-event(synced-finisher-v-player, ss-promote-death-hints, var_1);
+    }
+    u64? var_2 = string-debug(infected-vs-npc-bite-front-right);
+    u64? var_3 = log-event("melee-npc-finisher", 1, var_2, 0, 0);
+    return var_3;
+}
+

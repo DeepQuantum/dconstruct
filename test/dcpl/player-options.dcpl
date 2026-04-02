@@ -1,0 +1,5 @@
+u64? test-player-global() {
+    u64? var_0 = set-player-global-boolean(0, disable-flat-jump, 1);
+    return var_0;
+}
+

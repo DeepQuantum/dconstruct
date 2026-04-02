@@ -1,0 +1,51 @@
+bool tsk-ski-enter-building__level-set@448__level-scripted-set@af0__() {
+    bool var_0 = get-boolean(igc-started, ss-ski-find-backpack-enter-building-1);
+    return var_0;
+}
+
+u16 tsk-ski-enter-building__level-scripted-set@19a8() {
+    return 1;
+}
+
+u64? tsk-ski-coastal-explore-ferry__level-set@570__level-scripted-set@10a8__() {
+    u64? var_0 = player-in-region?(#F1A53F955D6D37ED, 2);
+    return var_0;
+}
+
+u64? tsk-ski-coastal-explore-ferry__level-scripted-set@1708() {
+    u64? var_0 = player-in-region?(#F1A53F955D6D37ED, 2);
+    return !var_0;
+}
+
+bool tsk-ski-forest-escape-exit__level-set@7e8__level-scripted-set@19c0__() {
+    bool var_0 = get-boolean(#D5EBED1A948887BC, ss-ski-escape-infected-1);
+    return var_0;
+}
+
+u64? tsk-ski-forest-escape-exit__level-scripted-set@10c0() {
+    bool var_0 = get-boolean(#D5EBED1A948887BC, ss-ski-escape-infected-1);
+    return !var_0;
+}
+
+u64? tsk-ski-safe-house-outro__level-set@a28__level-scripted-set@1720__() {
+    bool var_0 = get-boolean(#69995E36C852D061, ss-cin-ski-safe-house-outro-1);
+    u64? var_1 = is-chronological-mode-enabled?();
+    u64? var_2 = !(var_1);
+    bool var_3 = var_0 && var_2;
+    return var_3;
+}
+
+u64? tsk-ski-safe-house-outro__level-scripted-set@1600() {
+    bool var_0 = get-boolean(#69995E36C852D061, ss-cin-ski-safe-house-outro-1);
+    u64? var_1 = !(var_0);
+    u64? var_2 = is-chronological-mode-enabled?();
+    u64? var_3 = !(var_2);
+    bool var_4 = var_1 && var_3;
+    return var_4;
+}
+
+u64? tsk-ski-safe-house-outro__level-scripted-set@1738() {
+    u64? var_0 = is-chronological-mode-enabled?();
+    return var_0;
+}
+

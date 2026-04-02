@@ -1,0 +1,219 @@
+bool wat-halloween-int-scriptset__level-set@4f0__level-scripted-set@1df8__() {
+    u64? var_0 = stat-value?(wat-explore-load-halloween);
+    return var_0 > 0;
+}
+
+u16 wat-halloween-int-scriptset__level-scripted-set@2170() {
+    return 1;
+}
+
+u64? wat-crossover-scriptset__level-set@538__level-scripted-set@1438__() {
+    u64? var_0 = stat-value?(wat-explore-load-checkpoint);
+    u64? var_1 = stat-value?(wat-explore-load-checkpoint-wide);
+    bool var_2 = var_0 == 0 && var_1 == 0;
+    return var_2;
+}
+
+u64? wat-crossover-scriptset__level-scripted-set@17e0() {
+    u64? var_0 = stat-value?(wat-explore-load-bank);
+    u64? var_1 = stat-value?(wat-explore-load-checkpoint);
+    u64? var_2 = stat-value?(wat-explore-load-crossover);
+    bool var_3 = var_0 > 0 || var_1 == 0 && var_2 == 0;
+    return var_3;
+}
+
+u64? wat-crossover-scriptset__level-scripted-set@1378() {
+    u64? var_0 = stat-value?(wat-explore-load-checkpoint);
+    u64? var_1 = stat-value?(wat-explore-load-crossover);
+    bool var_2 = var_0 == 0 && var_1 == 0;
+    return var_2;
+}
+
+bool wat-crossover-wide-scriptset__level-set@590__level-scripted-set@22a8__() {
+    u64? var_0 = stat-value?(wat-explore-load-crossover);
+    return var_0 > 0;
+}
+
+bool tsk-wat-watchtower-escape-tunnel__level-set@5d8__level-scripted-set@1210__() {
+    u64? var_0 = stat-value?(wat-escape-tunnel-drop-down);
+    return var_0 == 0;
+}
+
+bool wat-juicery-int-scriptset__level-set@618__level-scripted-set@12b8__() {
+    u64? var_0 = stat-value?(#98B8463941F40618);
+    return var_0 > 0;
+}
+
+bool tsk-wat-perimeter-traps-approach__level-set@708__level-scripted-set@1a68__() {
+    u64? var_0 = stat-value?(wat-traps-load-station);
+    return var_0 > 0;
+}
+
+bool tsk-wat-perimeter-traps-approach__level-scripted-set@1528() {
+    u64? var_0 = stat-value?(wat-traps-load-station);
+    return var_0 == 0;
+}
+
+bool wat-motel-bg-scriptset__level-set@788__level-scripted-set@1900__() {
+    u64? var_0 = stat-value?(wat-explore-load-motel);
+    return var_0 > 0;
+}
+
+u64? wat-dina-anims-no-inf__level-set@840__level-scripted-set@22f0__() {
+    u64? var_0 = task-complete?(watchtower, wat-watchtower-approach-balcony);
+    return var_0;
+}
+
+u64? wat-dina-anims-no-inf__level-scripted-set@1db0() {
+    u64? var_0 = task-complete?(watchtower, wat-watchtower-approach-balcony);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+u64? lvlset-wat-explore-apartments__level-set@888__level-scripted-set@1ab0__() {
+    u64? var_0 = stat-value?(wat-explore-load-apartment);
+    u64? var_1 = stat-value?(wat-explore-load-motel);
+    bool var_2 = var_0 == 0 && var_1 == 0;
+    return var_2;
+}
+
+bool tsk-wat-perimeter-traps-street__level-set@900__level-scripted-set@1c00__() {
+    u64? var_0 = stat-value?(wat-traps-show-station);
+    return var_0 > 0;
+}
+
+bool wat-checkpoint-wide-scriptset__level-set@988__level-scripted-set@1090__() {
+    u64? var_0 = stat-value?(wat-explore-load-checkpoint-wide);
+    return var_0 > 0;
+}
+
+bool wat-bank-int-scriptset__level-set@a08__level-scripted-set@22c0__() {
+    u64? var_0 = stat-value?(wat-explore-load-bank);
+    return var_0 > 0;
+}
+
+u64? wat-apartment-int-scriptset__level-set@a50__level-scripted-set@15b8__() {
+    u64? var_0 = stat-value?(wat-explore-load-apartment);
+    u64? var_1 = stat-value?(wat-explore-load-apartment-a);
+    bool var_2 = var_0 > 0 && var_1 == 0;
+    return var_2;
+}
+
+bool wat-apartment-int-scriptset__level-scripted-set@12d0() {
+    u64? var_0 = stat-value?(wat-explore-load-apartment);
+    return var_0 > 0;
+}
+
+bool wat-bar-int-scriptset__level-set@aa0__level-scripted-set@1f60__() {
+    u64? var_0 = stat-value?(wat-explore-load-bar);
+    return var_0 > 0;
+}
+
+bool tsk-wat-infected-tunnels-explore__level-set@b58__level-scripted-set@1ac8__() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-bg-only-intro-station);
+    return var_0 == 0;
+}
+
+bool tsk-wat-infected-tunnels-explore__level-scripted-set@1a20() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-bg-only-intro-station);
+    return var_0 == 1;
+}
+
+u64? lvlset-wat-highway-checkpoint-olive__level-set@ba0__level-scripted-set@14c8__() {
+    bool var_0 = get-boolean(#B9C9C5CC01E1A8AE, ss-wat-freeway-checkpoint-boost-1);
+    u64? var_1 = !(var_0);
+    return var_1;
+}
+
+bool lvlset-wat-highway-checkpoint-olive__level-scripted-set@1de0() {
+    bool var_0 = get-boolean(#B9C9C5CC01E1A8AE, ss-wat-freeway-checkpoint-boost-1);
+    return var_0;
+}
+
+bool tsk-wat-infected-tunnels-shambler-facility__level-set@c70__level-scripted-set@22d8__() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-facility-door-shadow-blocker);
+    return var_0 == 1;
+}
+
+bool tsk-wat-infected-tunnels-shambler-facility__level-scripted-set@1a08() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-facility-door-shadow-blocker);
+    return var_0 == 2;
+}
+
+bool tsk-wat-infected-tunnels-shambler-facility__level-scripted-set@1228() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-exit-station-load-nav);
+    return var_0 == 0;
+}
+
+bool tsk-wat-infected-tunnels-shambler-facility__level-scripted-set@1660() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-exit-station-load-nav);
+    return var_0 == 1;
+}
+
+bool wat-checkpoint-scriptset__level-set@cc8__level-scripted-set@14e0__() {
+    u64? var_0 = stat-value?(wat-explore-load-checkpoint);
+    return var_0 > 1;
+}
+
+bool wat-checkpoint-scriptset__level-scripted-set@1ae0() {
+    u64? var_0 = stat-value?(wat-explore-load-checkpoint);
+    return var_0 == 1;
+}
+
+bool wat-apartment-b-int-scriptset__level-set@d50__level-scripted-set@1a50__() {
+    u64? var_0 = stat-value?(wat-explore-load-apartment-b);
+    return var_0 > 0;
+}
+
+bool wat-motel-int-scriptset__level-scripted-set@1e88() {
+    u64? var_0 = stat-value?(wat-explore-load-motel);
+    return var_0 == 0;
+}
+
+bool wat-bookstore-int-scriptset__level-set@e18__level-scripted-set@1dc8__() {
+    u64? var_0 = stat-value?(wat-explore-load-bookstore);
+    return var_0 > 0;
+}
+
+bool wat-flower-shop-int-scriptset__level-set@e60__level-scripted-set@20b0__() {
+    u64? var_0 = stat-value?(#B23ACCA9C918520F);
+    return var_0 > 0;
+}
+
+bool wat-apartment-a-int-scriptset__level-set@ea8__level-scripted-set@1510__() {
+    u64? var_0 = stat-value?(wat-explore-load-apartment-a);
+    return var_0 > 0;
+}
+
+bool wat-grocery-int-scriptset__level-set@ef0__level-scripted-set@1408__() {
+    u64? var_0 = stat-value?(wat-explore-load-grocery);
+    return var_0 > 0;
+}
+
+bool wat-sandwich-int-scriptset__level-set@f38__level-scripted-set@1a38__() {
+    u64? var_0 = stat-value?(wat-explore-load-sandwich);
+    return var_0 > 0;
+}
+
+bool tsk-wat-infected-tunnels-exit-station__level-set@f80__level-scripted-set@1d98__() {
+    u64? var_0 = stat-value?(wat-infected-tunnels-unload-faciliy);
+    return var_0 == 0;
+}
+
+bool wat-cleaners-int-scriptset__level-set@ff8__level-scripted-set@20e0__() {
+    u64? var_0 = stat-value?(wat-explore-load-cleaners);
+    return var_0 > 0;
+}
+
+u64? wat-gas-station-int-scriptset__level-set@1040__level-scripted-set@1f48__() {
+    u64? var_0 = stat-value?(wat-explore-load-gas-station);
+    u64? var_1 = stat-value?(wat-explore-load-motel);
+    bool var_2 = var_0 > 0 && var_1 == 0;
+    return var_2;
+}
+
+bool wat-gas-station-int-scriptset__level-scripted-set@1f90() {
+    u64? var_0 = stat-value?(wat-explore-load-gas-station);
+    return var_0 > 0;
+}
+

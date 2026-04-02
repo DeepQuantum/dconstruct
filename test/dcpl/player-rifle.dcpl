@@ -1,0 +1,73 @@
+u64? rifle-glass-crouch-attack-1__melee-attack@78__start-func-array@7b8__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2420);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2421);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u16 rifle-glass-crouch-attack-1__melee-event-list@748(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-swing-wall", 1);
+    u16 var_0;
+    if (!1) {
+        u64? var_1 = player-equip-best-melee-weapon(1, 1);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? rifle-glass-crouch-attack-1(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    f32 var_0;
+    if (!(0.00 == 0.00)) {
+        var_0 = 0.00;
+    } else {
+        var_0 = 0.00;
+    }
+    u64? var_1 = play-melee-facial-gesture(arg_1, 25, var_0, 0.10);
+    return var_1;
+}
+
+u64? rifle-glass-attack-1__melee-attack@268__start-func-array@688__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2420);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2421);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u64? rifle-glass-crouch-low-attack-1__melee-attack@458__start-func-array@958__(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = player-is-crouched?();
+    return var_0;
+}
+
+u64? rifle-glass-crouch-low-attack-1__melee-attack@458(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, f32 arg_11, u8 arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = task-active?(saving-kids, ski-find-backpack);
+    if (!!var_0) {
+        melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2567);
+    }
+    u64? var_1 = task-active?(saving-kids, ski-find-backpack-enter-building);
+    melee-debug-text-file-line-fail("(not (task-active? (quote saving-kids) (quote ski-find-backpack-enter-building)))", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 2568);
+    bool var_2 = !var_0 && !var_1 && !var_1;
+    return var_2;
+}
+
+u16 rifle-glass-crouch-low-attack-1__melee-event-list@648(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-log-player-event("melee-player-swing-low-glass", 1);
+    u16 var_0;
+    if (!1) {
+        u64? var_1 = player-equip-best-melee-weapon(1, 1);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+

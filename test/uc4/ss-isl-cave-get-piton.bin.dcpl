@@ -1,0 +1,444 @@
+bool 0x2064(u64? arg_0) {
+    return event-arg-symbol(0) == int-piton-1;
+}
+
+u64? 0x4208() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 2, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return wait-animate_(isl-skeleton-climber-b-1, isl-cave-get-piton--skel, #%alloc-mem(single-frame, 16));
+}
+
+u64? 0x4248() {
+    return animate-done(isl-skeleton-climber-b-1, isl-cave-get-piton--skel, ap-isl-cave-get-piton-1, 0, 0);
+}
+
+u16 0x4288() {
+    u16 var_2;
+    if (joypad-stick-pressed-towards-screen-space?(2, move, get-spawner-locator(pos-stick-deflect-1, 1), 0)) {
+        var_2 = go(cancel, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x4328() {
+    return hud-hide-world-widget(world-widget-isl-piton-stab-tutorial, 0, 0);
+}
+
+u64? 0x4368() {
+    return simple-wait-animate(player, isl-cave-get-piton--hero-pull-2, ap-isl-cave-get-piton-1, 0.30, 0.30);
+}
+
+u16 0x4408() {
+    u16 var_1;
+    if (task-complete?(island, isl-cliff-cave-sinkhole-exit)) {
+        var_1 = go(done, 0);
+    } else if (task-complete?(island, isl-cliff-cave-sinkhole-piton)) {
+        var_1 = go(animate-done, 0);
+    } else if (task-complete?(island, isl-cliff-cave-wade)) {
+        var_1 = go(setup, 0);
+    } else if (task-active?(island, isl-cliff-cave-wade)) {
+        var_1 = go(setup, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x4448() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 54;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(i32*)*(*var_0 + (2 * 8)) = 53;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (3 * 8)) = 51;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (4 * 8)) = 28;
+    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.00;
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 5, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return animate_(piton-grab-1, isl-cave-get-piton--piton, #%alloc-mem(single-frame, 16));
+}
+
+u16 0x4488() {
+    event-arg-int32(2);
+    u16 var_2;
+    if (event-arg-int32(0) == 1 && event-arg-symbol(1) == piton-grab-1) {
+        interactable-enable(int-piton-1);
+        var_2 = go(waiting-for-press, 0);
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x4528() {
+    return set-shimmer-intensity(piton-grab-1, 0.00, 0.00);
+}
+
+u64? 0x4568() {
+    return send-event(turn-on, rgn-sinkhole-climb-2);
+}
+
+u16 0x4608() {
+    u16 var_1;
+    if (task-active?(island, isl-cliff-cave-wade)) {
+        var_1 = go(setup, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x4648() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (2 * 8)) = 28;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+    *(i32*)*(*var_0 + (3 * 8)) = 22;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 3;
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 4, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return wait-animate_(player, isl-cave-get-piton--hero-success, #%alloc-mem(single-frame, 16));
+}
+
+u64? 0x4688() {
+    return wait(1.00);
+}
+
+u64? 0x4728() {
+    return kill-entity(obj-piton-attachable-1);
+}
+
+u64? 0x4768() {
+    return wait(0.75);
+}
+
+u64? 0x4808() {
+    return kill-entity-if-spawned(int-piton-1);
+}
+
+u64? 0x4848() {
+    return hud-hide-world-widget(world-widget-isl-piton-tutorial, 0, 0);
+}
+
+u64? 0x4888() {
+    return hud-show-world-widget(world-widget-isl-piton-stab-tutorial, get-spawner-locator(pos-widget-1, 1), 0, 20.00);
+}
+
+u64? 0x4928() {
+    return wait(4.50);
+}
+
+u64? 0x4968() {
+    return signal(piton-done, 0);
+}
+
+u64? 0x5008() {
+    return player-check-for-interactables-during-igc();
+}
+
+u64? 0x5048() {
+    return signal(tutorial-done, 0);
+}
+
+u64? 0x5088() {
+    return #650B7911(*med-pistol-haptic-settings*, 0, 2);
+}
+
+u64? 0x5128() {
+    return hud-show-world-widget-on-object(world-widget-isl-piton-tutorial, ic-isl-piton-tutorial-start-point-1, 0, alloc-vector(0.00, 0.00, 0.00, 1.00, 0), 0, 0, 20.00);
+}
+
+u64? 0x5168() {
+    return camera-fade-out(self(), 2.00, 0);
+}
+
+u64? 0x5208() {
+    return wait-for(piton-done);
+}
+
+u64? 0x5248() {
+    return go(cleanup-tutorial, 0);
+}
+
+u64? 0x5288() {
+    return go(done, 0);
+}
+
+u16 0x5328() {
+    u16 var_2;
+    if (task-active?(island, isl-cliff-cave-sinkhole-piton) && player-in-region?(rgn-disable-dyno-jump-1, 2)) {
+        var_2 = player-disable-dyno-jumps();
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? 0x5368() {
+    return attach(obj-piton-attachable-1, player, rightHand);
+}
+
+u64? 0x5408() {
+    return wait-frames(100);
+}
+
+u64? 0x5448() {
+    return go(enter, 0);
+}
+
+u64? 0x5488() {
+    return interactable-disable(int-piton-1);
+}
+
+u64? 0x5528() {
+    return set-boolean(piton-tutorial-started, 1, self);
+}
+
+u64? 0x5568() {
+    return wait-for(skel-done);
+}
+
+u64? 0x5608() {
+    return go(waiting, 0);
+}
+
+u64? 0x5648() {
+    return wait-for(tutorial-done);
+}
+
+u16 0x5688() {
+    u16 var_1;
+    if (player-in-region?(rgn-disable-dyno-jump-1, 2)) {
+        var_1 = player-disable-dyno-jumps();
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x5728() {
+    return signal(skel-done, 0);
+}
+
+u64? 0x5768() {
+    return go(success, 0);
+}
+
+u64? 0x5808() {
+    return wait(2.75);
+}
+
+u64? 0x5848() {
+    u64? var_2;
+    while (!((current-time(1) - current-time(1)) > 1.00)) {
+        send-event(turn-off, rgn-sinkhole-climb-4);
+        send-event(turn-on, rgn-sinkhole-climb-2);
+        wait-one-frame();
+    }
+    return var_2;
+}
+
+u64? 0x5888() {
+    return kill-entity(piton-grab-1);
+}
+
+u64? 0x5928() {
+    return simple-wait-animate(player, isl-cave-get-piton--hero-pull-1, ap-isl-cave-get-piton-1, 0.30, 0.30);
+}
+
+u64? 0x5968() {
+    return wait-frames(3);
+}
+
+u64? 0x6008() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+    *(i32*)*(*var_0 + (2 * 8)) = 28;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
+    *(i32*)*(*var_0 + (3 * 8)) = 22;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 3;
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 4, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return wait-animate_(player, isl-cave-get-piton--hero-idle^ledge, #%alloc-mem(single-frame, 16));
+}
+
+u64? 0x6048() {
+    return player-disable-all-commands-except(
+        camera,
+        interact,
+        object-interact,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    );
+}
+
+u64? 0x6088() {
+    return send-event(turn-off, rgn-sinkhole-climb-4);
+}
+
+u64? 0x6128() {
+    return draw-interactable-hud(interact-triangle-mash, get-object-locator(int-piton-1), 0, 0);
+}
+
+u64? 0x6168() {
+    return send-event(increment-pitons, player);
+}
+
+u64? 0x6208() {
+    return simple-wait-animate(player, isl-cave-get-piton--hero-enter, ap-isl-cave-get-piton-1, 0.50, 0.30);
+}
+
+u16 0x6248() {
+    u16 var_1;
+    if (player-command-active?(interact-repeat, 1)) {
+        var_1 = go(pull, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x6288() {
+    return go(piton-tutorial, 0);
+}
+
+u64? 0x6328() {
+    return signal(pull, 0);
+}
+
+u64? 0x6368() {
+    return simple-wait-animate(player, isl-cave-get-piton--hero-pull-3, ap-isl-cave-get-piton-1, 0.30, 0.00);
+}
+
+u64? 0x6408() {
+    return say(player, vox-igc-drk-gam-isl-cliff-cave-sinkhole-pitonget-001, 2);
+}
+
+u64? 0x6448() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(i32*)*(*var_0 + (1 * 8)) = 26;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+    *(i32*)*(*var_0 + (2 * 8)) = 28;
+    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
+    *(i32*)*(*var_0 + (3 * 8)) = 22;
+    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 3;
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 4, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return animate_(player, isl-cave-get-piton--hero-hold-idle, #%alloc-mem(single-frame, 16));
+}
+
+u64? 0x6488() {
+    return kill-entity-if-spawned(piton-grab-1);
+}
+
+u16 0x6528() {
+    u16 var_1;
+    if (!player-command-active?(interact-repeat, 1)) {
+        var_1 = go(idle, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? 0x6568() {
+    return camera-enable(
+        self(),
+        animated,
+        2.00,
+        12,
+        1.00,
+        10.00,
+        0,
+        1,
+        0
+    );
+}
+
+u64? 0x6608() {
+    *(i32*)*(*var_0 + (0 * 8)) = 26;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
+    *(i32*)*(*var_0 + (1 * 8)) = 28;
+    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+    *(u64*)var_1 = #%alloc-array(single-frame, 16, 2, 1);
+    *(i32*)(var_1 + 12) = 16;
+    return wait-animate_(obj-piton-attachable-1, isl-cave-get-piton--piton, #%alloc-mem(single-frame, 16));
+}
+
+u64? 0x6648() {
+    u64? var_0;
+    while (1) {
+        if (#C8277F75(2)) {
+            wait-for(pull);
+            wait-frames(9);
+            #650B7911(#91B3398B, 0, 2);
+        }
+        wait-one-frame();
+    }
+    return var_0;
+}
+
+u64? 0x6688() {
+    return go(idle, 0);
+}
+
+u64? 0x6728() {
+    *(i32*)*(*var_0 + (0 * 8)) = 8;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-isl-cave-get-piton-1, 1);
+    *(u64*)var_2 = #%alloc-array(single-frame, 16, 1, 1);
+    *(i32*)(var_2 + 12) = 16;
+    return animate_(isl-skeleton-climber-b-1, isl-cave-get-piton-idle--skel, #%alloc-mem(single-frame, 16));
+}
+
+u16 0x6768() {
+    u16 var_1;
+    if (player-command-active?(minigame-cancel, 1)) {
+        var_1 = go(cancel, 0);
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+

@@ -11,7 +11,7 @@ disassembled
 CHANGELOG.md
 sidbase.bin
 test/dc_test_files
-*.dcpl
+disassembled_t1x
 *.svg
 *~
 *.autosave

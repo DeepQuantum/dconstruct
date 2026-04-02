@@ -1,0 +1,1701 @@
+u16 print-point(f32 arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-point";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        f32 var_8 = *(f32*)(arg_0 + 4);
+        f32 var_9 = *(f32*)(arg_0 + 8);
+        f32 var_10 = *(f32*)(arg_0 + 12);
+        u64? var_11 = #5445173390656D6D("%s: (%f, %f, %f, %f) ", var_4, *(f32*)arg_0, var_8, var_9, var_10);
+        u64? var_12 = display(var_11, 19);
+        var_1 = var_12;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64 set-bit(i64 arg_0, i8 arg_1, u64? arg_2) {
+    u64 var_0;
+    if (arg_2) {
+        var_0 = arg_0 | int_ash(1, arg_1);
+    } else {
+        var_0 = arg_0 & ~int_ash(1, arg_1);
+    }
+    return var_0;
+}
+
+u64? wait-task-complete(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-complete?(arg_0, arg_1);
+    u64? var_1;
+    while (!var_0) {
+        wait-one-frame();
+    }
+    return var_1;
+}
+
+i32 task-get-timeline(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    i32 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-timeline(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = -1;
+    }
+    return var_1;
+}
+
+u16 print-string(u64? arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-string";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        u64? var_8 = #5445173390656D6D("%s: %s ", var_4, arg_0);
+        u64? var_9 = display(var_8, 19);
+        var_1 = var_9;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? set-shader-instance-shimmer-intensity(u64? arg_0, u64? arg_1) {
+    u64? var_0 = set-single-shader-instance-param(arg_0, shimmerIntensity, arg_1);
+    return var_0;
+}
+
+u64? stop-timer(u64? arg_0, u64? arg_1) {
+    u64? var_0 = set-float(arg_0, 0.00, arg_1);
+    return var_0;
+}
+
+u64? camera-enable-animated-no-fail-over(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = camera-enable-animated(arg_0, arg_1, arg_2, arg_3, arg_4, arg_5, 1);
+    return var_0;
+}
+
+u64? wait-simple-npc-move-to-goal(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = simple-npc-move-to-goal(arg_0, arg_1, arg_2, arg_3, arg_4, 1, arg_5);
+    return var_0;
+}
+
+u64? cin-lerp-maya(u64? arg_0, u64? arg_1) {
+    u64? var_0 = cinematic-get-current-maya-frame(0);
+    u64? var_1 = lerp-scale(arg_0, arg_1, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u64? event-message() {
+    u64? var_0 = get-event();
+    u64? var_1 = #29339E8693DD625B(var_0);
+    return var_1;
+}
+
+u64? camera-enable-very-tight-squeeze-through/f() {
+    camera-override-near-clip/f(0.05);
+    prevent-camera-pull-in-lock-during-squeeze-through/f();
+    u64? var_0 = player-squeeze-through-camera-blend-time-in-override/f(0.50);
+    return var_0;
+}
+
+u64? pause-hint-timer(u64? arg_0) {
+    u64? var_0 = send-event(pause-timer, arg_0);
+    return var_0;
+}
+
+u64? from-upf-no-dt(u64? arg_0) {
+    u64? var_0 = get-delta-time();
+    return arg_0 / var_0;
+}
+
+u64? wait-for-object-spawned-with-look(u64? arg_0, u64? arg_1, i64 arg_2) {
+    u64? var_0 = get-object-look(arg_0, 1);
+    u64? var_1 = remap-look(arg_1);
+    u64? var_2 = get-object-skeleton(arg_0);
+    u64? var_3;
+    while (var_0 == var_1 || arg_2 == 0 && !(var_2 == arg_2)) {
+        wait-one-frame();
+    }
+    return var_3;
+}
+
+f32 current-task-total-elapsed-time() {
+    u64? var_0 = task-get-current-node-id();
+    u64? var_1 = task-get-current-subnode-id();
+    f32 var_2;
+    if (!(var_0 == 0) && !(var_1 == 0)) {
+        u64? var_3 = total-task-elapsed-time(var_0, var_1);
+        var_2 = var_3;
+    } else {
+        var_2 = 0.00;
+    }
+    return var_2;
+}
+
+u64? sprint-bits(i64 arg_0, u16 arg_1) {
+    u64? var_0 = entity-exists?(arg_1);
+    u64? var_1 = get-object-id(arg_1);
+    u64? var_2;
+    if (var_0 && !(var_1 == 0)) {
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4 = string-debug(var_3);
+        var_2 = var_4;
+    } else if (arg_1 == self && arg_1 == 0) {
+        var_2 = "print-bits";
+    } else {
+        u64? var_5 = string-debug(arg_1);
+        var_2 = var_5;
+    }
+    u64 i = 0;
+    u64? var_6;
+    while (i < 31) {
+        u64? var_7 = pow(2, i);
+        u16 var_8;
+        if ((arg_0 & var_7) == 0) {
+            var_8 = 0;
+        } else {
+            var_8 = 1;
+        }
+        u64? var_9 = #5445173390656D6D("%s%d", "", var_8);
+        var_6 = var_9;
+        i = i + 1;
+    }
+    u64? var_10 = #5445173390656D6D("%s: %s ", var_2, var_6);
+    return var_10;
+}
+
+u64? flashback-task?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u64? var_1 = flashback-task-node?(var_0);
+    return var_1;
+}
+
+u64? wait-simple-npc-move-to-spawner(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = simple-npc-move-to-spawner(arg_0, arg_1, arg_2, arg_3, arg_4, 1, arg_5);
+    return var_0;
+}
+
+bool get-bit(i64 arg_0, i8 arg_1) {
+    return (arg_0 & int_ash(1, arg_1)) != 0;
+}
+
+u64? box-event-arg-string(u64? arg_0) {
+    u64? var_0 = event-arg-string(arg_0);
+    u64? var_1 = new-boxed-value(19, var_0);
+    return var_1;
+}
+
+u16 print-vector2(f32 arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-vector2";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        f32 var_8 = *(f32*)(arg_0 + 4);
+        u64? var_9 = #5445173390656D6D("%s: (%f, %f) ", var_4, *(f32*)arg_0, var_8);
+        u64? var_10 = display(var_9, 19);
+        var_1 = var_10;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? set-shader-instance-incandescence-strength(u64? arg_0, u64? arg_1) {
+    u64? var_0 = set-single-shader-instance-param(arg_0, incandescenceStrength, arg_1);
+    return var_0;
+}
+
+u64? get-bounding-sphere-center(f32 arg_0, u64? arg_1) {
+    f32 var_0;
+    if (arg_1) {
+        var_0 = 0.00;
+    } else {
+        var_0 = *(f32*)(arg_0 + 4);
+    }
+    f32 var_1 = *(f32*)(arg_0 + 8);
+    u64? var_2 = alloc-point(*(f32*)arg_0, var_0, var_1, 0);
+    return var_2;
+}
+
+u64? darray-extend(u64? arg_0, u64? arg_1) {
+    u64? var_0 = darray-count(arg_1);
+    begin-foreach();
+    for (u64 i = 0; i < var_0; i++) {
+        u64? var_1 = darray-at(arg_1, i);
+        darray-append(arg_0, var_1, 0);
+    }
+    u64? var_2 = end-foreach();
+    return var_2;
+}
+
+u64? #43CB2FCA96CCDB2B(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = subtitle-show-text(arg_0, arg_1, arg_2, 1);
+    return var_0;
+}
+
+u64? wait-simple-npc-move-to-entry-frame(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-animation-entry(arg_0, arg_1, arg_2, 0, 0.00, apReference);
+    u64? var_1 = get-locator-position(var_0);
+    u64? var_2 = wait-simple-npc-move-to-goal(arg_0, var_1, arg_3, arg_4, arg_5, arg_6);
+    return var_2;
+}
+
+u64? set-shader-instance-uv-offset(u64? arg_0, u64? arg_1, u64? arg_2) {
+    set-single-shader-instance-param(arg_0, uvOffset.u, arg_1);
+    u64? var_0 = set-single-shader-instance-param(arg_0, uvOffset.v, arg_2);
+    return var_0;
+}
+
+bool task-subnode-complete?(u32 arg_0) {
+    return *(u32*)((arg_0 + 48) + 48) == 4;
+}
+
+u64? get-object-speed(u64? arg_0) {
+    u64? var_0 = get-object-linear-velocity(arg_0);
+    u64? var_1 = vector-magnitude(var_0);
+    return var_1;
+}
+
+u64? current-task-is-test?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-get-current-node-id();
+    u64? var_1 = task-get-current-subnode-id();
+    u64? var_2 = task-is-test?(var_0, var_1);
+    return var_2;
+}
+
+u64? wait-simple-npc-move-to-action-pack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = simple-npc-move-to-action-pack(arg_0, arg_1, arg_2, 1, arg_3);
+    return var_0;
+}
+
+u64? simple-npc-transfer-to-spline(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = transfer-to-spline(arg_0, arg_1, arg_2);
+    return var_0;
+}
+
+f32 get-bounding-sphere-radius(f32 arg_0) {
+    return *(f32*)(arg_0 + 12);
+}
+
+u64? flashback-task-node?(i32 arg_0) {
+    bool var_0 = !(arg_0 == 0) && *(i32*)(arg_0 + 480) == 1;
+    return var_0;
+}
+
+u64 set-bit-uint64(i64 arg_0, i8 arg_1, u64? arg_2) {
+    u64 var_0;
+    if (arg_2) {
+        var_0 = arg_0 | int_ash(1, arg_1);
+    } else {
+        var_0 = arg_0 & ~int_ash(1, arg_1);
+    }
+    return var_0;
+}
+
+u64 find-index-in-symbol-array-broken(u64 arg_0, i32 arg_1) {
+    u64 var_0;
+    for (u64 i = 0; i < *(i32*)arg_1; i++) {
+        u64 var_1;
+        u16 var_2;
+        if (*(u64*)(*(arg_1 + 8) + (i * 8)) == arg_0) {
+            var_1 = i;
+            var_2 = i;
+        } else {
+            var_2 = 0;
+        }
+        var_0 = var_1;
+    }
+    return var_0;
+}
+
+u64? wait-for-want-load-levels-fully-spawned() {
+    u64? var_0 = task-want-load-levels-fully-spawned?(0);
+    u64? var_1;
+    while (!var_0) {
+        display("waiting for want-load levels to be fully spawned...", 19);
+        wait-one-frame();
+    }
+    return var_1;
+}
+
+u64? regular-timeline-task?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u64? var_1 = regular-timeline-task-node?(var_0);
+    return var_1;
+}
+
+u64? ddict-print(u64? arg_0) {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = string-debug(arg_0);
+        u64? var_2 = ddict-key-count(arg_0);
+        u64? var_3 = #5445173390656D6D("ddict '%s (%i keys):", var_1, var_2);
+        display(var_3, 19);
+    }
+    u64? var_4 = ddict-key-count(arg_0);
+    begin-foreach();
+    for (u64 i = 0; i < var_4; i++) {
+        u64? var_5 = ddict-key-at(arg_0, i);
+        u64? var_6 = is-final-build?();
+        if (!var_6) {
+            u64? var_7 = string-debug(var_5);
+            u64? var_8 = ddict-get(arg_0, var_5);
+            u16 var_9;
+            if (var_8) {
+                u64? var_10 = ddict-get(arg_0, var_5);
+                var_9 = *(u16*)(var_10 + 12);
+            } else {
+                var_9 = 0;
+            }
+            string var_11;
+            if (var_9 == 1) {
+                u64? var_12 = ddict-get(arg_0, var_5);
+                u16 var_13;
+                if (var_12 && *(u16*)(var_12 + 12) == 1) {
+                    var_13 = *(u8*)var_12;
+                } else if (var_12 && *(u16*)(var_12 + 12) == 2) {
+                    var_13 = *(i32*)var_12 != 0;
+                } else if (var_12 && *(u16*)(var_12 + 12) == 3) {
+                    var_13 = *(u32*)var_12 != 0;
+                } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
+                    var_13 = *(i64*)var_12 != 0;
+                } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
+                    var_13 = *(u64*)var_12 != 0;
+                } else if (var_12 && *(u16*)(var_12 + 12) == 6) {
+                    var_13 = *(f32*)var_12 != 0.00;
+                } else {
+                    var_13 = !!0;
+                }
+                string var_14;
+                if (var_13) {
+                    var_14 = "#t";
+                } else {
+                    var_14 = "#f";
+                }
+                u64? var_15 = #5445173390656D6D("%s", var_14);
+                var_11 = var_15;
+            } else if (var_9 == 2) {
+                u64? var_16 = ddict-get(arg_0, var_5);
+                u16 var_17;
+                if (var_16 && *(u16*)(var_16 + 12) == 1) {
+                    var_17 = *(u8*)var_16;
+                } else if (var_16 && *(u16*)(var_16 + 12) == 2) {
+                    var_17 = *(i32*)var_16;
+                } else if (var_16 && *(u16*)(var_16 + 12) == 3) {
+                    var_17 = *(u32*)var_16;
+                } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
+                    var_17 = *(i64*)var_16;
+                } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
+                    var_17 = *(u64*)var_16;
+                } else if (var_16 && *(u16*)(var_16 + 12) == 6) {
+                    var_17 = (i32)*(f32*)var_16;
+                } else {
+                    var_17 = 0;
+                }
+                u64? var_18 = #5445173390656D6D("%d", var_17);
+                var_11 = var_18;
+            } else if (var_9 == 3) {
+                u64? var_19 = ddict-get(arg_0, var_5);
+                u16 var_20;
+                if (var_19 && *(u16*)(var_19 + 12) == 1) {
+                    var_20 = *(u8*)var_19;
+                } else if (var_19 && *(u16*)(var_19 + 12) == 2) {
+                    var_20 = *(i32*)var_19;
+                } else if (var_19 && *(u16*)(var_19 + 12) == 3) {
+                    var_20 = *(u32*)var_19;
+                } else if (var_19 && *(u16*)(var_19 + 12) == 4) {
+                    var_20 = *(i64*)var_19;
+                } else if (var_19 && *(u16*)(var_19 + 12) == 5) {
+                    var_20 = *(u64*)var_19;
+                } else if (var_19 && *(u16*)(var_19 + 12) == 6) {
+                    var_20 = (i32)*(f32*)var_19;
+                } else {
+                    var_20 = 0;
+                }
+                u64? var_21 = #5445173390656D6D("%uU", var_20);
+                var_11 = var_21;
+            } else if (var_9 == 4) {
+                u64? var_22 = ddict-get(arg_0, var_5);
+                u16 var_23;
+                if (var_22 && *(u16*)(var_22 + 12) == 1) {
+                    var_23 = *(u8*)var_22;
+                } else if (var_22 && *(u16*)(var_22 + 12) == 2) {
+                    var_23 = *(i32*)var_22;
+                } else if (var_22 && *(u16*)(var_22 + 12) == 3) {
+                    var_23 = *(u32*)var_22;
+                } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
+                    var_23 = *(i64*)var_22;
+                } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
+                    var_23 = *(u64*)var_22;
+                } else if (var_22 && *(u16*)(var_22 + 12) == 6) {
+                    var_23 = (i32)*(f32*)var_22;
+                } else {
+                    var_23 = 0;
+                }
+                u64? var_24 = #5445173390656D6D("%lldLL", var_23);
+                var_11 = var_24;
+            } else if (var_9 == 5) {
+                u64? var_25 = ddict-get(arg_0, var_5);
+                u16 var_26;
+                if (var_25 && *(u16*)(var_25 + 12) == 1) {
+                    var_26 = *(u8*)var_25;
+                } else if (var_25 && *(u16*)(var_25 + 12) == 2) {
+                    var_26 = *(i32*)var_25;
+                } else if (var_25 && *(u16*)(var_25 + 12) == 3) {
+                    var_26 = *(u32*)var_25;
+                } else if (var_25 && *(u16*)(var_25 + 12) == 4) {
+                    var_26 = *(i64*)var_25;
+                } else if (var_25 && *(u16*)(var_25 + 12) == 5) {
+                    var_26 = *(u64*)var_25;
+                } else if (var_25 && *(u16*)(var_25 + 12) == 6) {
+                    var_26 = (i32)*(f32*)var_25;
+                } else {
+                    var_26 = 0;
+                }
+                u64? var_27 = #5445173390656D6D("%lluULL", var_26);
+                var_11 = var_27;
+            } else if (var_9 == 6) {
+                u64? var_28 = ddict-get(arg_0, var_5);
+                f32 var_29;
+                if (var_28 && *(u16*)(var_28 + 12) == 1) {
+                    var_29 = *(u8*)var_28;
+                } else if (var_28 && *(u16*)(var_28 + 12) == 2) {
+                    var_29 = (f32)*(i32*)var_28;
+                } else if (var_28 && *(u16*)(var_28 + 12) == 3) {
+                    var_29 = (f32)*(u32*)var_28;
+                } else if (var_28 && *(u16*)(var_28 + 12) == 4) {
+                    var_29 = (f32)*(i64*)var_28;
+                } else if (var_28 && *(u16*)(var_28 + 12) == 5) {
+                    var_29 = (f32)*(u64*)var_28;
+                } else if (var_28 && *(u16*)(var_28 + 12) == 6) {
+                    var_29 = *(f32*)var_28;
+                } else {
+                    var_29 = 0.00;
+                }
+                u64? var_30 = #5445173390656D6D("%f", var_29);
+                var_11 = var_30;
+            } else if (var_9 == 7) {
+                u64? var_31 = ddict-get(arg_0, var_5);
+                u16 var_32;
+                if (var_31 && *(u16*)(var_31 + 12) == 7) {
+                    var_32 = *(u64*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 5) {
+                    var_32 = *(u64*)var_31;
+                } else if (var_31 && *(u16*)(var_31 + 12) == 4) {
+                    var_32 = *(u64*)var_31;
+                } else {
+                    var_32 = 0;
+                }
+                u64? var_33 = string-debug(var_32);
+                u64? var_34 = #5445173390656D6D("'%s", var_33);
+                var_11 = var_34;
+            } else if (var_9 == 11) {
+                var_11 = "<process-handle-mutable>";
+            } else if (var_9 == 12) {
+                var_11 = "<process-handle>";
+            } else if (var_9 == 13) {
+                u64? var_35 = ddict-get(arg_0, var_5);
+                u64? var_36 = #5445173390656D6D("<pointer #x%p>", *(i64*)var_35);
+                var_11 = var_36;
+            } else if (var_9 == 14) {
+                u64? var_37 = ddict-get(arg_0, var_5);
+                string var_38;
+                if (var_37 && *(u16*)(var_37 + 12) == 14) {
+                    var_38 = *var_37;
+                } else {
+                    var_38 = "";
+                }
+                f32 var_39 = *(f32*)(var_38 + 4);
+                f32 var_40 = *(f32*)(var_38 + 8);
+                u64? var_41 = #5445173390656D6D("P(%f,%f,%f)", *(f32*)var_38, var_39, var_40);
+                var_11 = var_41;
+            } else if (var_9 == 15) {
+                u64? var_42 = ddict-get(arg_0, var_5);
+                string var_43;
+                if (var_42 && *(u16*)(var_42 + 12) == 15) {
+                    var_43 = *var_42;
+                } else {
+                    var_43 = "";
+                }
+                f32 var_44 = *(f32*)(var_43 + 4);
+                f32 var_45 = *(f32*)(var_43 + 8);
+                u64? var_46 = #5445173390656D6D("V(%f,%f,%f)", *(f32*)var_43, var_44, var_45);
+                var_11 = var_46;
+            } else if (var_9 == 16) {
+                var_11 = "<quaternion>";
+            } else if (var_9 == 17) {
+                var_11 = "<locator>";
+            } else if (var_9 == 18) {
+                var_11 = "<bound-frame>";
+            } else if (var_9 == 19) {
+                u64? var_47 = ddict-get(arg_0, var_5);
+                string var_48;
+                if (var_47 && *(u16*)(var_47 + 12) == 19) {
+                    var_48 = *(i64*)var_47;
+                } else {
+                    var_48 = "";
+                }
+                u64? var_49 = #5445173390656D6D(""%s"", var_48);
+                var_11 = var_49;
+            } else if (var_9 == 20) {
+                var_11 = "<boxable>";
+            } else if (var_9 == 21) {
+                var_11 = "<array>";
+            } else if (var_9 == 8) {
+                var_11 = "<time-frame>";
+            } else {
+                var_11 = "<unknown>";
+            }
+            u64? var_50 = #5445173390656D6D("  '%20s: %s", var_7, var_11);
+            display(var_50, 19);
+        }
+    }
+    u64? var_51 = end-foreach();
+    return var_51;
+}
+
+u64? empty-string?(u64? arg_0) {
+    u64? var_0 = string-eq?(arg_0, "");
+    return var_0;
+}
+
+u16 print-bits(u64? arg_0, u64? arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = sprint-bits(arg_0, arg_1);
+        u64? var_3 = #5445173390656D6D(var_2);
+        u64? var_4 = display(var_3, 19);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 task-play-fadeout!(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-play(var_0, arg_2, arg_3, arg_5, arg_4);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? box-event-arg-int32(u64? arg_0) {
+    u64? var_0 = event-arg-int32(arg_0);
+    u64? var_1 = new-boxed-value(2, var_0);
+    return var_1;
+}
+
+u64? task-or-continue-active?(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = tag-string(arg_0, self, 1, 1);
+    u64? var_1 = tag-string-at(arg_1, arg_2, self, 1, 1);
+    u64? var_2;
+    if (var_0) {
+        u64? var_3 = string-to-symbol(var_0);
+        var_2 = var_3;
+    } else {
+        u64? var_4 = tag-symbol(arg_0, self);
+        var_2 = var_4;
+    }
+    u64? var_5;
+    if (var_1) {
+        u64? var_6 = task-extract-subnode-id(var_1);
+        var_5 = var_6;
+    } else {
+        u64? var_7 = tag-symbol-at(arg_1, arg_2, self);
+        var_5 = var_7;
+    }
+    u16 var_8;
+    if (var_1) {
+        u64? var_9 = task-extract-continue-id(var_1);
+        var_8 = var_9;
+    } else {
+        var_8 = 0;
+    }
+    u64? var_10;
+    if (var_8 != 0) {
+        u64? var_11 = task-continue-active?(var_2, var_5, var_8);
+        var_10 = var_11;
+    } else {
+        u64? var_12 = task-active?(var_2, var_5);
+        var_10 = var_12;
+    }
+    return var_10;
+}
+
+u64? random-float-range(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = random-float(arg_2);
+    u64? var_1 = lerp-scale(0.00, 1.00, arg_0, arg_1, var_0);
+    return var_1;
+}
+
+u16 print-symbol(u64? arg_0, u64? arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-symbol";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        u64? var_8 = string-debug(arg_0);
+        u64? var_9 = #5445173390656D6D("%s: %s ", var_4, var_8);
+        u64? var_10 = display(var_9, 19);
+        var_1 = var_10;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? #732436DB57345E0C(u64? arg_0, u64? arg_1, u64? arg_2) {
+    stop-animating-by-layer-name(arg_0, arg_1, arg_2);
+    wait-one-frame();
+    u64? var_0 = wait-one-frame();
+    return var_0;
+}
+
+u64? get-object-relative-speed(u64? arg_0) {
+    u64? var_0 = get-object-relative-linear-velocity(arg_0);
+    u64? var_1 = vector-magnitude(var_0);
+    return var_1;
+}
+
+i32 pow(f32 arg_0, f32 arg_1) {
+    u64? var_0 = pow-float((f32)arg_0, (f32)arg_1);
+    return (i32)var_0;
+}
+
+u64? rand-range(u64? arg_0, u64? arg_1) {
+    u64? var_0 = random-float(0);
+    return arg_0 + (var_0 * (arg_1 - arg_0));
+}
+
+u64? cin-lerp-frames(u64? arg_0, u64? arg_1) {
+    u64? var_0 = cinematic-get-current-frame(0);
+    u64? var_1 = lerp-scale(arg_0, arg_1, 0.00, 1.00, var_0);
+    return var_1;
+}
+
+u16 task-complete?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = is-chronological-mode?();
+        if (var_2) {
+            u64? var_3 = chronological-task-complete?(arg_0, arg_1);
+            var_1 = var_3;
+        } else {
+            u64? var_4 = task-subnode-complete?(var_0);
+            var_1 = var_4;
+        }
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 task-complete!(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-complete(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? box-event-arg-boolean(u64? arg_0) {
+    u64? var_0 = event-arg-boolean(arg_0);
+    u64? var_1 = new-boxed-value(1, var_0);
+    return var_1;
+}
+
+u64? simple-npc-move-to-entry(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = get-object-or-spawner-locator(arg_2);
+    u64? var_1 = get-animation-entry(arg_0, arg_1, var_0, 0, 0.00, apReference);
+    u64? var_2 = get-locator-position(var_1);
+    u64? var_3 = simple-npc-move-to-goal(arg_0, var_2, arg_3, arg_4, arg_5, 0, arg_6);
+    return var_3;
+}
+
+u64? box-event-arg-uint64(u64? arg_0) {
+    u64? var_0 = event-arg-uint64(arg_0);
+    u64? var_1 = new-boxed-value(5, var_0);
+    return var_1;
+}
+
+u64? joypad-stick-pulled-away?(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = joypad-stick-pressed-towards?(arg_0, arg_1, arg_2, arg_3, 180.00);
+    return var_0;
+}
+
+u64? cloth-disable-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = new-boxed-value(1, 0);
+    u64? var_2 = new-boxed-value(7, arg_2);
+    u64? var_3 = send-event(enable-cloth-collider, arg_0, var_0, var_1, var_2);
+    return var_3;
+}
+
+u64? camera-disable-animated() {
+    u64? var_0 = camera-disable(self);
+    return var_0;
+}
+
+bool valid-symbol-var?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-symbol(arg_0, arg_1);
+    return !(var_0 == 0);
+}
+
+u16 task-get-active-continue() {
+    u64? var_0 = task-get-current();
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-get-active-continue(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 print-bits-uint64(u64? arg_0, u64? arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = sprint-bits-uint64(arg_0, arg_1);
+        u64? var_3 = #5445173390656D6D(var_2);
+        u64? var_4 = display(var_3, 19);
+        var_1 = var_4;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? box-event-arg-float(u64? arg_0) {
+    u64? var_0 = event-arg-float(arg_0);
+    u64? var_1 = new-boxed-value(6, var_0);
+    return var_1;
+}
+
+u64? camera-abandon-animated() {
+    u64? var_0 = camera-abandon(self);
+    return var_0;
+}
+
+u64? get-int64(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-uint64(arg_0, arg_1);
+    return var_0;
+}
+
+u16 conversation-interactable-enable(u64? arg_0, u64? arg_1) {
+    interactable-enable(arg_0);
+    u16 var_0;
+    if (arg_1) {
+        u64? var_1 = interactable-allow-hint-sound-once(arg_0);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? vector-set-magnitude(u64? arg_0, u64? arg_1) {
+    u64? var_0 = vector-normalize(arg_1, 0);
+    u64? var_1 = vector-scale(arg_0, var_0);
+    return var_1;
+}
+
+f32 dot-product(f32 arg_0, f32 arg_1) {
+    return ((*(f32*)arg_0 * *(f32*)arg_1) + (*(f32*)(arg_0 + 4) * *(f32*)(arg_1 + 4))) + (*(f32*)(arg_0 + 8) * *(f32*)(arg_1 + 8));
+}
+
+u16 change-render-setting-value-vector(u64? arg_0, u64? arg_1, f32 arg_2, bool arg_3) {
+    u64? var_0 = symbol-concat-string(arg_1, "-x");
+    change-render-setting-value-float(arg_0, var_0, *(f32*)arg_2);
+    u64? var_1 = symbol-concat-string(arg_1, "-z");
+    f32 var_2 = *(f32*)(arg_2 + 8);
+    change-render-setting-value-float(arg_0, var_1, var_2);
+    u16 var_3;
+    if (!arg_3) {
+        u64? var_4 = symbol-concat-string(arg_1, "-y");
+        f32 var_5 = *(f32*)(arg_2 + 4);
+        u64? var_6 = change-render-setting-value-float(arg_0, var_4, var_5);
+        var_3 = var_6;
+    } else {
+        var_3 = 0;
+    }
+    return var_3;
+}
+
+u64? task-not-complete?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-complete?(arg_0, arg_1);
+    return !var_0;
+}
+
+u64? transform-world-to-localspace(u64? arg_0, u64? arg_1) {
+    u64? var_0 = transform-vector-world-to-local(arg_0, arg_1);
+    return var_0;
+}
+
+u64? timer-to-blend-value(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = get-float(arg_0, self);
+    u64? var_1 = lerp-scale(arg_1, 0.00, arg_2, arg_3, var_0);
+    return var_1;
+}
+
+f32 cinematic-get-current-time(u64? arg_0) {
+    u64? var_0 = cinematic-get-current-frame(arg_0);
+    return var_0 / 30.00;
+}
+
+u16 darray-find-remove(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = darray-find(arg_0, arg_1, arg_2);
+    u16 var_1;
+    if (var_0 >= 0) {
+        u64? var_2 = darray-remove(arg_0, var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? vector-scale(u64? arg_0, f32 arg_1) {
+    f32 var_0 = arg_0 * *(f32*)arg_1;
+    f32 var_1 = arg_0 * *(f32*)(arg_1 + 4);
+    f32 var_2 = arg_0 * *(f32*)(arg_1 + 8);
+    u64? var_3 = alloc-vector(var_0, var_1, var_2, 1.00, 0);
+    return var_3;
+}
+
+u16 task-is-test?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-is-test?(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? regular-timeline-task-node?(i32 arg_0) {
+    bool var_0 = !(arg_0 == 0) && *(i32*)(arg_0 + 480) == 0;
+    return var_0;
+}
+
+u64? set-object-teleport(u64? arg_0) {
+    u64? var_0 = send-event(object-teleport, arg_0);
+    return var_0;
+}
+
+u64? set-shader-instance-wind-intensity(u64? arg_0, u64? arg_1) {
+    u64? var_0 = set-single-shader-instance-param(arg_0, windIntensity, arg_1);
+    return var_0;
+}
+
+bool invalid-symbol-var?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-symbol(arg_0, arg_1);
+    return var_0 == 0;
+}
+
+u64? box-event-arg-point(u64? arg_0) {
+    u64? var_0 = event-arg-point(arg_0);
+    u64? var_1 = new-boxed-value(14, var_0);
+    return var_1;
+}
+
+u64?* #97D1668000B8958B(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u64?* var_1;
+    if (var_0) {
+        var_1 = *(u64*)(var_0 + 40);
+    } else {
+        var_1 = *invalid-symbol*;
+    }
+    return var_1;
+}
+
+u64? wait-simple-npc-move-to-entry(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7) {
+    u64? var_0 = get-object-or-spawner-locator(arg_2);
+    u64? var_1 = get-animation-entry(arg_0, arg_1, var_0, 0, arg_7, apReference);
+    u64? var_2 = get-locator-position(var_1);
+    u64? var_3 = wait-simple-npc-move-to-goal(arg_0, var_2, arg_3, arg_4, arg_5, arg_6);
+    return var_3;
+}
+
+u16 task-skip-to!(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-play(var_0, 0.00, !arg_2, arg_3, arg_4);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? camera-fade-out-animated(u64? arg_0, u64? arg_1) {
+    u64? var_0 = camera-fade-out(self, arg_0, arg_1);
+    return var_0;
+}
+
+u64? sprint-bits-uint64(i64 arg_0, u16 arg_1) {
+    u64? var_0 = entity-exists?(arg_1);
+    u64? var_1 = get-object-id(arg_1);
+    u64? var_2;
+    if (var_0 && !(var_1 == 0)) {
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4 = string-debug(var_3);
+        var_2 = var_4;
+    } else if (arg_1 == self && arg_1 == 0) {
+        var_2 = "print-bits";
+    } else {
+        u64? var_5 = string-debug(arg_1);
+        var_2 = var_5;
+    }
+    u64 i = 0;
+    u64? var_6;
+    while (i < 63) {
+        u64? var_7 = pow(2, i);
+        u16 var_8;
+        if ((arg_0 & var_7) == 0) {
+            var_8 = 0;
+        } else {
+            var_8 = 1;
+        }
+        u64? var_9 = #5445173390656D6D("%s%d", "", var_8);
+        var_6 = var_9;
+        i = i + 1;
+    }
+    u64? var_10 = #5445173390656D6D("%s: %s ", var_2, var_6);
+    return var_10;
+}
+
+u64? darray-print(u64? arg_0) {
+    u64? var_0 = is-final-build?();
+    if (!var_0) {
+        u64? var_1 = string-debug(arg_0);
+        u64? var_2 = darray-count(arg_0);
+        u64? var_3 = #5445173390656D6D("darray '%s (%i members):", var_1, var_2);
+        display(var_3, 19);
+    }
+    u64? var_4 = darray-count(arg_0);
+    begin-foreach();
+    for (u64 i = 0; i < var_4; i++) {
+        u64? var_5 = darray-at(arg_0, i);
+        u64? var_6 = is-final-build?();
+        if (!var_6) {
+            u16 var_7;
+            if (var_5) {
+                var_7 = *(u16*)(var_5 + 12);
+            } else {
+                var_7 = 0;
+            }
+            string var_8;
+            if (var_7 == 1) {
+                u16 var_9;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_9 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_9 = *(i32*)var_5 != 0;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_9 = *(u32*)var_5 != 0;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_9 = *(i64*)var_5 != 0;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_9 = *(u64*)var_5 != 0;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_9 = *(f32*)var_5 != 0.00;
+                } else {
+                    var_9 = !!0;
+                }
+                string var_10;
+                if (var_9) {
+                    var_10 = "#t";
+                } else {
+                    var_10 = "#f";
+                }
+                u64? var_11 = #5445173390656D6D("%s", var_10);
+                var_8 = var_11;
+            } else if (var_7 == 2) {
+                u16 var_12;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_12 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_12 = *(i32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_12 = *(u32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_12 = *(i64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_12 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_12 = (i32)*(f32*)var_5;
+                } else {
+                    var_12 = 0;
+                }
+                u64? var_13 = #5445173390656D6D("%d", var_12);
+                var_8 = var_13;
+            } else if (var_7 == 3) {
+                u16 var_14;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_14 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_14 = *(i32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_14 = *(u32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_14 = *(i64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_14 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_14 = (i32)*(f32*)var_5;
+                } else {
+                    var_14 = 0;
+                }
+                u64? var_15 = #5445173390656D6D("%uU", var_14);
+                var_8 = var_15;
+            } else if (var_7 == 4) {
+                u16 var_16;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_16 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_16 = *(i32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_16 = *(u32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_16 = *(i64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_16 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_16 = (i32)*(f32*)var_5;
+                } else {
+                    var_16 = 0;
+                }
+                u64? var_17 = #5445173390656D6D("%lldLL", var_16);
+                var_8 = var_17;
+            } else if (var_7 == 5) {
+                u16 var_18;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_18 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_18 = *(i32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_18 = *(u32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_18 = *(i64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_18 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_18 = (i32)*(f32*)var_5;
+                } else {
+                    var_18 = 0;
+                }
+                u64? var_19 = #5445173390656D6D("%lluULL", var_18);
+                var_8 = var_19;
+            } else if (var_7 == 6) {
+                f32 var_20;
+                if (var_5 && *(u16*)(var_5 + 12) == 1) {
+                    var_20 = *(u8*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 2) {
+                    var_20 = (f32)*(i32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 3) {
+                    var_20 = (f32)*(u32*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_20 = (f32)*(i64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_20 = (f32)*(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 6) {
+                    var_20 = *(f32*)var_5;
+                } else {
+                    var_20 = 0.00;
+                }
+                u64? var_21 = #5445173390656D6D("%f", var_20);
+                var_8 = var_21;
+            } else if (var_7 == 7) {
+                u16 var_22;
+                if (var_5 && *(u16*)(var_5 + 12) == 7) {
+                    var_22 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
+                    var_22 = *(u64*)var_5;
+                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
+                    var_22 = *(u64*)var_5;
+                } else {
+                    var_22 = 0;
+                }
+                u64? var_23 = string-debug(var_22);
+                u64? var_24 = #5445173390656D6D("'%s", var_23);
+                var_8 = var_24;
+            } else if (var_7 == 11) {
+                var_8 = "<process-handle-mutable>";
+            } else if (var_7 == 12) {
+                var_8 = "<process-handle>";
+            } else if (var_7 == 13) {
+                u64? var_25 = #5445173390656D6D("<pointer #x%p>", *(i64*)var_5);
+                var_8 = var_25;
+            } else if (var_7 == 14) {
+                string var_26;
+                if (var_5 && *(u16*)(var_5 + 12) == 14) {
+                    var_26 = *var_5;
+                } else {
+                    var_26 = "";
+                }
+                f32 var_27 = *(f32*)(var_26 + 4);
+                f32 var_28 = *(f32*)(var_26 + 8);
+                u64? var_29 = #5445173390656D6D("P(%f,%f,%f)", *(f32*)var_26, var_27, var_28);
+                var_8 = var_29;
+            } else if (var_7 == 15) {
+                string var_30;
+                if (var_5 && *(u16*)(var_5 + 12) == 15) {
+                    var_30 = *var_5;
+                } else {
+                    var_30 = "";
+                }
+                f32 var_31 = *(f32*)(var_30 + 4);
+                f32 var_32 = *(f32*)(var_30 + 8);
+                u64? var_33 = #5445173390656D6D("V(%f,%f,%f)", *(f32*)var_30, var_31, var_32);
+                var_8 = var_33;
+            } else if (var_7 == 16) {
+                var_8 = "<quaternion>";
+            } else if (var_7 == 17) {
+                var_8 = "<locator>";
+            } else if (var_7 == 18) {
+                var_8 = "<bound-frame>";
+            } else if (var_7 == 19) {
+                string var_34;
+                if (var_5 && *(u16*)(var_5 + 12) == 19) {
+                    var_34 = *(i64*)var_5;
+                } else {
+                    var_34 = "";
+                }
+                u64? var_35 = #5445173390656D6D(""%s"", var_34);
+                var_8 = var_35;
+            } else if (var_7 == 20) {
+                var_8 = "<boxable>";
+            } else if (var_7 == 21) {
+                var_8 = "<array>";
+            } else if (var_7 == 8) {
+                var_8 = "<time-frame>";
+            } else {
+                var_8 = "<unknown>";
+            }
+            u64? var_36 = #5445173390656D6D("  %s", var_8);
+            display(var_36, 19);
+        }
+    }
+    u64? var_37 = end-foreach();
+    return var_37;
+}
+
+u64? flashback-task-active?() {
+    u64? var_0 = task-get-current();
+    u64? var_1 = flashback-task-node?(var_0);
+    return var_1;
+}
+
+u64? wait-stop-animating(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    stop-animating(arg_0, arg_1, arg_2, arg_3, 0);
+    wait-one-frame();
+    u64? var_0 = wait-one-frame();
+    return var_0;
+}
+
+u64? !(bool arg_0) {
+    return !arg_0;
+}
+
+f32 seek-float(u64? arg_0, f32 arg_1, f32 arg_2) {
+    f32 var_0;
+    if (arg_2 < 0.00) {
+        var_0 = 0.00;
+    } else {
+        var_0 = arg_2;
+    }
+    f32 var_1;
+    if ((arg_1 - arg_0) >= 0.00) {
+        if ((arg_1 - arg_0) < var_0) {
+            var_1 = arg_1 - arg_0;
+        } else {
+            var_1 = var_0;
+        }
+    } else if ((arg_1 - arg_0) > (-1.00 * var_0)) {
+        var_1 = arg_1 - arg_0;
+    } else {
+        var_1 = -1.00 * var_0;
+    }
+    return arg_0 + var_1;
+}
+
+u64? get-object-or-spawner-locator(u64? arg_0) {
+    u64? var_0 = object-spawned?(arg_0);
+    u64? var_1;
+    if (var_0) {
+        u64? var_2 = get-object-locator(arg_0);
+        var_1 = var_2;
+    } else {
+        u64? var_3 = get-spawner-locator(arg_0, 1);
+        var_1 = var_3;
+    }
+    return var_1;
+}
+
+u64? regular-timeline-task-active?() {
+    u64? var_0 = task-get-current();
+    u64? var_1 = regular-timeline-task-node?(var_0);
+    return var_1;
+}
+
+u64? transform-local-to-worldspace(u64? arg_0, u64? arg_1) {
+    u64? var_0 = transform-vector-local-to-world(arg_0, arg_1);
+    return var_0;
+}
+
+u64? cloth-remove-external-collider(u64? arg_0) {
+    u64? var_0 = send-event(cloth-remove-external-collider, arg_0);
+    return var_0;
+}
+
+bool object-in-namespace?(u64? arg_0, i64 arg_1) {
+    u64? var_0 = get-object-namespace-id(arg_0);
+    return var_0 == arg_1;
+}
+
+u64? cloth-connect-external-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = new-boxed-value(7, arg_2);
+    u64? var_2 = send-event(cloth-connect-external-collider, arg_0, var_0, var_1);
+    return var_2;
+}
+
+u16 print-int32(u64? arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-int32";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        u64? var_8 = #5445173390656D6D("%s: %d ", var_4, arg_0);
+        u64? var_9 = display(var_8, 19);
+        var_1 = var_9;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 print-float(u64? arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-float";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        u64? var_8 = #5445173390656D6D("%s: %f ", var_4, arg_0);
+        u64? var_9 = display(var_8, 19);
+        var_1 = var_9;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? get-object-or-spawner-rotation(u64? arg_0) {
+    u64? var_0 = get-object-or-spawner-locator(arg_0);
+    u64? var_1 = get-locator-rotation(var_0);
+    return var_1;
+}
+
+u16 task-complete-if-active!(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u64? var_1 = task-subnode-active?(var_0);
+    u16 var_2;
+    if (!(var_0 == 0) && var_1) {
+        u64? var_3 = task-subnode-complete(var_0);
+        var_2 = var_3;
+    } else {
+        var_2 = 0;
+    }
+    return var_2;
+}
+
+u64? box-event-arg-symbol(u64? arg_0) {
+    u64? var_0 = event-arg-symbol(arg_0);
+    u64? var_1 = new-boxed-value(7, var_0);
+    return var_1;
+}
+
+u64? simple-npc-set-config(u64? arg_0, u64? arg_1) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = send-event(set-config, arg_0, var_0);
+    return var_1;
+}
+
+u64? set-int64(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = set-uint64(arg_0, arg_1, arg_2);
+    return var_0;
+}
+
+u64? box-event-arg-bound-frame(u64? arg_0) {
+    u64? var_0 = event-arg-bound-frame(arg_0);
+    u64? var_1 = new-boxed-value(18, var_0);
+    return var_1;
+}
+
+u64? vector-random(u64? arg_0, u64? arg_1) {
+    u64? var_0 = random-float-range(arg_0, arg_1, 0);
+    u64? var_1 = random-float-range(arg_0, arg_1, 0);
+    u64? var_2 = random-float-range(arg_0, arg_1, 0);
+    u64? var_3 = alloc-vector(var_0, var_1, var_2, 1.00, 0);
+    return var_3;
+}
+
+f32 current-task-elapsed-time() {
+    u64? var_0 = task-get-current-node-id();
+    u64? var_1 = task-get-current-subnode-id();
+    f32 var_2;
+    if (!(var_0 == 0) && !(var_1 == 0)) {
+        u64? var_3 = task-elapsed-time(var_0, var_1);
+        var_2 = var_3;
+    } else {
+        var_2 = 0.00;
+    }
+    return var_2;
+}
+
+u64? unparent-bound-frame(u64? arg_0) {
+    u64? var_0 = get-locator-position(arg_0);
+    u64? var_1 = get-locator-rotation(arg_0);
+    u64? var_2 = alloc-bound-frame(var_0, var_1, 0, 0, 0);
+    return var_2;
+}
+
+u64? get-shader-instance-blend-offset(u64? arg_0, u16 arg_1) {
+    u64? var_0;
+    if (arg_1 == 0) {
+        u64? var_1 = get-single-shader-instance-param(arg_0, blendOffset0);
+        var_0 = var_1;
+    } else if (arg_1 == 1) {
+        u64? var_2 = get-single-shader-instance-param(arg_0, blendOffset1);
+        var_0 = var_2;
+    } else if (arg_1 == 2) {
+        u64? var_3 = get-single-shader-instance-param(arg_0, blendOffset2);
+        var_0 = var_3;
+    } else {
+        u64? var_4 = get-single-shader-instance-param(arg_0, blendOffset3);
+        var_0 = var_4;
+    }
+    return var_0;
+}
+
+u64? box-event-arg-vector(u64? arg_0) {
+    u64? var_0 = event-arg-vector(arg_0);
+    u64? var_1 = new-boxed-value(15, var_0);
+    return var_1;
+}
+
+u16 task-complete-current!() {
+    u64? var_0 = task-get-current();
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-complete(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? get-object-or-spawner-position(u64? arg_0) {
+    u64? var_0 = get-object-or-spawner-locator(arg_0);
+    u64? var_1 = get-locator-position(var_0);
+    return var_1;
+}
+
+u64? camera-fade-out-animated-and-set-next-camera-dir(u64? arg_0, u64? arg_1) {
+    u64? var_0 = get-object-id(self);
+    u64? var_1 = camera-fade-out-and-set-next-camera-dir(var_0, arg_0, arg_1);
+    return var_1;
+}
+
+bool log-test?(bool arg_0, u64? arg_1) {
+    return !((arg_0 & arg_1) == 0);
+}
+
+u64? spring-reset(u64? arg_0) {
+    u64? var_0 = set-float(arg_0, 0.00, self);
+    return var_0;
+}
+
+u64? start-timer(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
+    u64? var_0 = set-float(arg_0, arg_1, arg_2);
+    return var_0;
+}
+
+u16 print-vector(f32 arg_0, u16 arg_1) {
+    u64? var_0 = is-final-build?();
+    u16 var_1;
+    if (!var_0) {
+        u64? var_2 = entity-exists?(arg_1);
+        u64? var_3 = get-object-id(arg_1);
+        u64? var_4;
+        if (var_2 && !(var_3 == 0)) {
+            u64? var_5 = get-object-id(arg_1);
+            u64? var_6 = string-debug(var_5);
+            var_4 = var_6;
+        } else if (arg_1 == self && arg_1 == 0) {
+            var_4 = "print-vector";
+        } else {
+            u64? var_7 = string-debug(arg_1);
+            var_4 = var_7;
+        }
+        f32 var_8 = *(f32*)(arg_0 + 4);
+        f32 var_9 = *(f32*)(arg_0 + 8);
+        f32 var_10 = *(f32*)(arg_0 + 12);
+        u64? var_11 = #5445173390656D6D("%s: (%f, %f, %f, %f) ", var_4, *(f32*)arg_0, var_8, var_9, var_10);
+        u64? var_12 = display(var_11, 19);
+        var_1 = var_12;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 task-set-active-continue!(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u64? var_0 = task-get-current();
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-set-active-continue(var_0, arg_0, arg_1, arg_2, arg_3, arg_4, arg_5, arg_6);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 #E1D7E4BF85B412B6(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-play(var_0, arg_4, arg_2, arg_3, 1);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 print-float-melee(u64? arg_0, u64? arg_1) {
+    print-float(arg_0, arg_1);
+    return 1;
+}
+
+u64? set-shader-instance-tint(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u16 arg_4) {
+    u64? var_0;
+    if (arg_4 == 0) {
+        set-single-shader-instance-param(arg_0, diffuseTint0.r, arg_1);
+        set-single-shader-instance-param(arg_0, diffuseTint0.g, arg_2);
+        u64? var_1 = set-single-shader-instance-param(arg_0, diffuseTint0.b, arg_3);
+        var_0 = var_1;
+    } else if (arg_4 == 1) {
+        set-single-shader-instance-param(arg_0, diffuseTint1.r, arg_1);
+        set-single-shader-instance-param(arg_0, diffuseTint1.g, arg_2);
+        u64? var_2 = set-single-shader-instance-param(arg_0, diffuseTint1.b, arg_3);
+        var_0 = var_2;
+    } else if (arg_4 == 2) {
+        set-single-shader-instance-param(arg_0, diffuseTint2.r, arg_1);
+        set-single-shader-instance-param(arg_0, diffuseTint2.g, arg_2);
+        u64? var_3 = set-single-shader-instance-param(arg_0, diffuseTint2.b, arg_3);
+        var_0 = var_3;
+    } else {
+        set-single-shader-instance-param(arg_0, diffuseTint3.r, arg_1);
+        set-single-shader-instance-param(arg_0, diffuseTint3.g, arg_2);
+        u64? var_4 = set-single-shader-instance-param(arg_0, diffuseTint3.b, arg_3);
+        var_0 = var_4;
+    }
+    return var_0;
+}
+
+u64? camera-fade-out-auto-gen-animated(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = get-object-id(self);
+    u64? var_1 = camera-fade-out-auto-gen(var_0, arg_0, arg_1, arg_2);
+    return var_1;
+}
+
+u16 task-continue-active?(u64? arg_0, u64? arg_1, i64 arg_2) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-get-active-continue(var_0);
+        var_1 = var_2 == arg_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? wait-random(u64? arg_0, u64? arg_1) {
+    u64? var_0 = random-float(0);
+    u64? var_1 = arg_0 + (var_0 * (arg_1 - arg_0));
+    u64? var_2 = wait(var_1);
+    return var_2;
+}
+
+u16 task-disable!(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-disable(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u64? cloth-enable-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = new-boxed-value(7, arg_1);
+    u64? var_1 = new-boxed-value(1, 1);
+    u64? var_2 = new-boxed-value(7, arg_2);
+    u64? var_3 = send-event(enable-cloth-collider, arg_0, var_0, var_1, var_2);
+    return var_3;
+}
+
+u16 task-active?(u64? arg_0, u64? arg_1) {
+    u64? var_0 = task-find(arg_0, arg_1);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = task-subnode-active?(var_0);
+        var_1 = var_2;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+bool get-bit-uint64(i64 arg_0, i8 arg_1) {
+    return (arg_0 & int_ash(1, arg_1)) != 0;
+}
+
+u64? conversation-interactable-disable(u64? arg_0) {
+    u64? var_0 = interactable-disable(arg_0);
+    return var_0;
+}
+
+u64? simple-npc-is-female?(u64? arg_0) {
+    u64? var_0 = object-is-female?(arg_0);
+    return var_0;
+}
+
+u64? spawn-camera(u64? arg_0, u64? arg_1, u64? arg_2) {
+    u64? var_0 = spawn-object(
+        dummy-camera-object,
+        NdDrawableObject,
+        arg_0,
+        arg_1,
+        arg_2,
+        0,
+        0,
+        0,
+        0
+    );
+    u64? var_1 = new-boxed-value(1, 0);
+    send-event(suppress-camera-updates, var_0, var_1);
+    return var_0;
+}
+
+u64? set-shader-instance-blend-offset(u64? arg_0, u64? arg_1, u16 arg_2) {
+    u64? var_0;
+    if (arg_2 == 0) {
+        u64? var_1 = set-single-shader-instance-param(arg_0, blendOffset0, arg_1);
+        var_0 = var_1;
+    } else if (arg_2 == 1) {
+        u64? var_2 = set-single-shader-instance-param(arg_0, blendOffset1, arg_1);
+        var_0 = var_2;
+    } else if (arg_2 == 2) {
+        u64? var_3 = set-single-shader-instance-param(arg_0, blendOffset2, arg_1);
+        var_0 = var_3;
+    } else {
+        u64? var_4 = set-single-shader-instance-param(arg_0, blendOffset3, arg_1);
+        var_0 = var_4;
+    }
+    return var_0;
+}
+

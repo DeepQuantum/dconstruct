@@ -1,0 +1,95 @@
+u16 buddy-f-knife-grab-shared-sync__melee-attack@1b0(i64 arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
+    u16 var_0;
+    if (arg_0 == arg_2) {
+        u64? var_1 = fact-remove(arg_2, stunned);
+        var_0 = var_1;
+    } else {
+        var_0 = 0;
+    }
+    return var_0;
+}
+
+u64? buddy-f-knife-grab-shared-sync__melee-event-list@2828(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = melee-fact-set-bool(arg_1, proper-transition, 1);
+    return var_0;
+}
+
+u64? buddy-f-knife-grab-shared-sync(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    log-event("player-attack-from-buddy-hold", 1, "", 0, 0);
+    vignette-notify-complete(arg_1, 2);
+    u64? var_0 = melee-fact-set-symbol(arg_1, grabbed-npc, arg_2);
+    return var_0;
+}
+
+bool buddy-m-fists-grab-back-enter(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    return arg_2 == 0;
+}
+
+u64? buddy-f-knife-grab-atk-interrupt__melee-event-list@2fc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = log-event("player-attack-from-buddy-hold", 1, "", 0, 0);
+    return var_0;
+}
+
+u64? buddy-f-knife-grab-front-intro__melee-attack@d50__start-func-array@2420__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-type-matches(193183744, arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(character-type-matches valid-targets defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2172);
+    }
+    u64? var_1 = get-animation-duration(arg_1, dina-grabs-npc-front-intro--dina);
+    u64? var_2 = melee-direction-check(arg_1, arg_2, 1, var_1);
+    melee-debug-text-file-line-fail("(melee-direction-check attacker defender facing-direction (get-animation-duration attacker atk-anim-intro))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2173);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? buddy-f-knife-grab-front-intro__melee-event-list@2c00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    u64? var_0 = npc-alive?(arg_2);
+    u64? var_1 = npc-in-tap?(arg_2);
+    u64? var_2 = npc-get-limb-state(arg_2);
+    bool var_3 = !var_0 || var_1 && !(var_2 == 0);
+    return var_3;
+}
+
+u64? buddy-f-knife-grab-back-intro__melee-attack@1130__start-func-array@2a50__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-type-matches(193183744, arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(character-type-matches valid-targets defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2172);
+    }
+    u64? var_1 = get-animation-duration(arg_1, dina-grabs-npc-back-intro--dina);
+    u64? var_2 = melee-direction-check(arg_1, arg_2, 2, var_1);
+    melee-debug-text-file-line-fail("(melee-direction-check attacker defender facing-direction (get-animation-duration attacker atk-anim-intro))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2173);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? buddy-m-fists-grab-front-intro__melee-attack@1510__start-func-array@2fa8__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-type-matches(193183744, arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(character-type-matches valid-targets defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2172);
+    }
+    u64? var_1 = get-animation-duration(arg_1, buddy-m-grabs-npc-front-intro--buddy-m);
+    u64? var_2 = melee-direction-check(arg_1, arg_2, 1, var_1);
+    melee-debug-text-file-line-fail("(melee-direction-check attacker defender facing-direction (get-animation-duration attacker atk-anim-intro))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2173);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+
+u64? buddy-f-knife-grab-fail(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
+    melee-fact-set-bool(arg_2, stunned, 1);
+    set-object-health(arg_1, 1.00);
+    u64? var_0 = npc-buddy-notify-failed-enemy-grab(arg_1, arg_2);
+    return var_0;
+}
+
+u64? buddy-m-fists-grab-back-intro__melee-attack@1cd0__start-func-array@2810__(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
+    u64? var_0 = character-type-matches(193183744, arg_2);
+    if (!var_0) {
+        melee-debug-text-file-line-fail("(character-type-matches valid-targets defender)", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2172);
+    }
+    u64? var_1 = get-animation-duration(arg_1, buddy-m-grabs-npc-front-intro--buddy-m);
+    u64? var_2 = melee-direction-check(arg_1, arg_2, 2, var_1);
+    melee-debug-text-file-line-fail("(melee-direction-check attacker defender facing-direction (get-animation-duration attacker atk-anim-intro))", "t2r/src/game/scriptx/melee/buddy-standing/imports/buddy-standing-macros.dcx", 2173);
+    bool var_3 = var_0 && var_2 && var_2;
+    return var_3;
+}
+

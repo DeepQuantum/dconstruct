@@ -1,0 +1,70 @@
+u64? anim-player-swim-underwater-states__actor-state-list@48(u64? arg_0, u64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64 arg_5, u64? arg_6) {
+    u64 var_0 = *(u64*)(*(arg_1 + 8) + 384);
+    u64? var_1 = player-anim-speed-mult(var_0, *(u64*)arg_5);
+    return arg_2 + ((arg_3 * var_1) * arg_4);
+}
+
+u8 anim-player-swim-underwater-states(u64? arg_0, u8 arg_1) {
+    return *(u8*)(((*(arg_1 + 16) + 2064) + 128) + 32);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-blend@1f90__anim-node-animation@65c8__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)(((*(arg_1 + 16) + 2064) + 128) + 40);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-gesture@8058(u64? arg_0, u64 arg_1) {
+    return *(u64*)(((*(arg_1 + 16) + 2064) + 128) + 48);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@2730__anim-node-blend@6cf0____anim-node-blend@aef0____anim-node-blend@bfb0____anim-node-blend@d5c8____anim-node-blend@d8c0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 128);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@2730__anim-node-blend@6cf0____anim-node-blend@aef0____anim-node-blend@bfb0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 128) + 4);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@2730__anim-node-blend@6cf0__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 128) + 8);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@28f0__anim-node-blend@82d8____anim-node-blend@ad38____anim-node-blend@c728____anim-node-blend@d698__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 2064) + 128);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@28f0__anim-node-blend@82d8____anim-node-blend@ad38__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 128) + 4);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@28f0(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 128) + 8);
+}
+
+f32 anim-player-swim-underwater-states__anim-node-blend@20c0__anim-node-blend@6c78__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(((*(arg_0 + 16) + 2064) + 128) + 60);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-blend@29c8__anim-node-blend@7488____anim-node-animation@ae80__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 32);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-blend@29c8__anim-node-animation@ab98__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 48);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-animation@5700(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 40);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-blend@23c8__anim-node-blend@5928____anim-node-animation@aa08__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 72);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-blend@23c8__anim-node-animation@b630__(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 80);
+}
+
+u64 anim-player-swim-underwater-states__anim-node-animation@7b48(u64? arg_0, u64 arg_1, u64? arg_2) {
+    return *(u64*)((*(arg_1 + 8) + 2224) + 88);
+}
+

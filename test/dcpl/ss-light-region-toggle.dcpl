@@ -1,0 +1,314 @@
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-1);
+    } else {
+        safe-toggle-light-off(light-1);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-2);
+    } else {
+        safe-toggle-light-off(light-2);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-3);
+    } else {
+        safe-toggle-light-off(light-3);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-4);
+    } else {
+        safe-toggle-light-off(light-4);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-5);
+    } else {
+        safe-toggle-light-off(light-5);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-6);
+    } else {
+        safe-toggle-light-off(light-6);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-7);
+    } else {
+        safe-toggle-light-off(light-7);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-8);
+    } else {
+        safe-toggle-light-off(light-8);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-9);
+    } else {
+        safe-toggle-light-off(light-9);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-10);
+    } else {
+        safe-toggle-light-off(light-10);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-11);
+    } else {
+        safe-toggle-light-off(light-11);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-12);
+    } else {
+        safe-toggle-light-off(light-12);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-13);
+    } else {
+        safe-toggle-light-off(light-13);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-14);
+    } else {
+        safe-toggle-light-off(light-14);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-15);
+    } else {
+        safe-toggle-light-off(light-15);
+    }
+}
+
+{
+    u64? var_0 = get-self-id();
+    u64? var_1 = player-in-region?(var_0, 2);
+    if (var_1) {
+        safe-toggle-light-on(light-16);
+    } else {
+        safe-toggle-light-off(light-16);
+    }
+}
+
+{
+    safe-toggle-light-on(light-1);
+}
+
+{
+    safe-toggle-light-on(light-2);
+}
+
+{
+    safe-toggle-light-on(light-3);
+}
+
+{
+    safe-toggle-light-on(light-4);
+}
+
+{
+    safe-toggle-light-on(light-5);
+}
+
+{
+    safe-toggle-light-on(light-6);
+}
+
+{
+    safe-toggle-light-on(light-7);
+}
+
+{
+    safe-toggle-light-on(light-8);
+}
+
+{
+    safe-toggle-light-on(light-9);
+}
+
+{
+    safe-toggle-light-on(light-10);
+}
+
+{
+    safe-toggle-light-on(light-11);
+}
+
+{
+    safe-toggle-light-on(light-12);
+}
+
+{
+    safe-toggle-light-on(light-13);
+}
+
+{
+    safe-toggle-light-on(light-14);
+}
+
+{
+    safe-toggle-light-on(light-15);
+}
+
+{
+    safe-toggle-light-on(light-16);
+}
+
+{
+    safe-toggle-light-off(light-1);
+}
+
+{
+    safe-toggle-light-off(light-2);
+}
+
+{
+    safe-toggle-light-off(light-3);
+}
+
+{
+    safe-toggle-light-off(light-4);
+}
+
+{
+    safe-toggle-light-off(light-5);
+}
+
+{
+    safe-toggle-light-off(light-6);
+}
+
+{
+    safe-toggle-light-off(light-7);
+}
+
+{
+    safe-toggle-light-off(light-8);
+}
+
+{
+    safe-toggle-light-off(light-9);
+}
+
+{
+    safe-toggle-light-off(light-10);
+}
+
+{
+    safe-toggle-light-off(light-11);
+}
+
+{
+    safe-toggle-light-off(light-12);
+}
+
+{
+    safe-toggle-light-off(light-13);
+}
+
+{
+    safe-toggle-light-off(light-14);
+}
+
+{
+    safe-toggle-light-off(light-15);
+}
+
+{
+    safe-toggle-light-off(light-16);
+}
+
+u16 safe-toggle-light-off(u64? arg_0) {
+    u64? var_0 = tag-symbol(arg_0, self);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = tag-symbol(arg_0, self);
+        u64? var_3 = turn-off-light(var_2, 0);
+        var_1 = var_3;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+
+u16 safe-toggle-light-on(u64? arg_0) {
+    u64? var_0 = tag-symbol(arg_0, self);
+    u16 var_1;
+    if (!(var_0 == 0)) {
+        u64? var_2 = tag-symbol(arg_0, self);
+        u64? var_3 = turn-on-light(var_2, 0);
+        var_1 = var_3;
+    } else {
+        var_1 = 0;
+    }
+    return var_1;
+}
+

@@ -1,0 +1,21 @@
+u64? rs-sub-world-neighborhood-2__level-set@148__level-scripted-set@5a0__() {
+    u64? var_0 = task-not-complete?(seattle-ellie-towers, sub-grocery-climb);
+    return var_0;
+}
+
+u64? rs-sub-world-neighborhood-2__level-scripted-set@468() {
+    u64? var_0 = task-complete?(seattle-ellie-towers, sub-grocery-climb);
+    u64? var_1 = task-not-complete?(seattle-ellie-towers, sub-elementary-enter);
+    bool var_2 = var_0 && var_1;
+    return var_2;
+}
+
+u16 rs-sub-world-neighborhood-2__level-scripted-set@480() {
+    return 1;
+}
+
+u64? rs-sub-world-neighborhood-1__level-set@198__level-scripted-set@5b8__() {
+    u64? var_0 = task-not-complete?(seattle-ellie-towers, sub-grocery-view-point);
+    return var_0;
+}
+

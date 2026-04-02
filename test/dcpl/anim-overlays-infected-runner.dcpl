@@ -1,0 +1,4 @@
+f32 anim-overlay-infected-runner-weapon-base-fist__anim-overlay-set@1220(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*arg_0 + 192);
+}
+

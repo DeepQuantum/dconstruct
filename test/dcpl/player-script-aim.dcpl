@@ -1,0 +1,16 @@
+f32 anim-player-script-aim-states__actor-state-list@48__anim-node-blend@110____anim-node-blend@330____anim-node-blend@550____anim-node-blend@9b8__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)(*(arg_0 + 16) + 640);
+}
+
+f32 anim-player-script-aim-states__actor-state-list@48__anim-node-blend@110____anim-node-blend@330__(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 4);
+}
+
+f32 anim-player-script-aim-states__actor-state-list@48(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 8);
+}
+
+f32 anim-player-script-aim-states(f32 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
+    return *(f32*)((*(arg_0 + 16) + 640) + 12);
+}
+
