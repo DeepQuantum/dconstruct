@@ -51,6 +51,8 @@ Thumbs.db
 CMakeLists.txt.user*
 *.asm
 *.txt
+!CMakeLists.txt
+!requirements.txt
 # xemacs temporary files
 *.flc
 vs_proj
