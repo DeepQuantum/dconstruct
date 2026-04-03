@@ -164,12 +164,6 @@ endif()
 
 target_link_libraries(dconstruct PRIVATE dconstruct_lib)
 
-add_executable(
-    binaryfile_benchmark
-    ${SOURCE_DIR}/benchmark_binaryfile.cpp
-)
-
-target_link_libraries(binaryfile_benchmark PRIVATE dconstruct_lib)
 
 set(BUILDINFO_H "${CMAKE_CURRENT_BINARY_DIR}/buildinfo.h")
 add_custom_command(
