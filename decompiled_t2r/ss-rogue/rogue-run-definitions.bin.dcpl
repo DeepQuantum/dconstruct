@@ -35,34 +35,34 @@ embedded@428(sid arg_0) {
     u64? var_0 = darray-create(single-frame, -1, 0);
     if (!(arg_0 == 0)) {
         if (arg_0 == enc-photo-0) {
-            darray-append(var_0, boxed_symbol(enc-photo-1), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-2), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-1), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-2), 0);
         } else if (arg_0 == enc-photo-1) {
-            darray-append(var_0, boxed_symbol(enc-photo-3), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-3), 0);
         } else if (arg_0 == enc-photo-2) {
-            darray-append(var_0, boxed_symbol(enc-photo-4), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-4), 0);
         } else if (arg_0 == enc-photo-3) {
-            darray-append(var_0, boxed_symbol(enc-photo-5), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-6), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-5), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-6), 0);
         } else if (arg_0 == enc-photo-4) {
-            darray-append(var_0, boxed_symbol(enc-photo-7), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-8), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-7), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-8), 0);
         } else if (arg_0 == enc-photo-5) {
-            darray-append(var_0, boxed_symbol(enc-photo-9), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-9), 0);
         } else if (arg_0 == enc-photo-6) {
-            darray-append(var_0, boxed_symbol(enc-photo-10), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-10), 0);
         } else if (arg_0 == enc-photo-7) {
-            darray-append(var_0, boxed_symbol(enc-photo-11), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-11), 0);
         } else if (arg_0 == enc-photo-8) {
-            darray-append(var_0, boxed_symbol(enc-photo-12), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-12), 0);
         } else if (arg_0 == enc-photo-9) {
-            darray-append(var_0, boxed_symbol(enc-photo-13), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-13), 0);
         } else if (arg_0 == enc-photo-10) {
-            darray-append(var_0, boxed_symbol(enc-photo-13), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-13), 0);
         } else if (arg_0 == enc-photo-11) {
-            darray-append(var_0, boxed_symbol(enc-photo-13), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-13), 0);
         } else if (arg_0 == enc-photo-12) {
-            darray-append(var_0, boxed_symbol(enc-photo-13), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-13), 0);
         }
     }
     return var_0;
@@ -73,34 +73,34 @@ embedded@4f8(sid arg_0) {
     u64? var_0 = darray-create(single-frame, -1, 0);
     if (!(arg_0 == 0)) {
         if (arg_0 == enc-photo-1) {
-            darray-append(var_0, boxed_symbol(enc-photo-0), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-0), 0);
         } else if (arg_0 == enc-photo-2) {
-            darray-append(var_0, boxed_symbol(enc-photo-0), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-0), 0);
         } else if (arg_0 == enc-photo-3) {
-            darray-append(var_0, boxed_symbol(enc-photo-1), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-1), 0);
         } else if (arg_0 == enc-photo-4) {
-            darray-append(var_0, boxed_symbol(enc-photo-2), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-2), 0);
         } else if (arg_0 == enc-photo-5) {
-            darray-append(var_0, boxed_symbol(enc-photo-3), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-3), 0);
         } else if (arg_0 == enc-photo-6) {
-            darray-append(var_0, boxed_symbol(enc-photo-3), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-3), 0);
         } else if (arg_0 == enc-photo-7) {
-            darray-append(var_0, boxed_symbol(enc-photo-4), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-4), 0);
         } else if (arg_0 == enc-photo-8) {
-            darray-append(var_0, boxed_symbol(enc-photo-4), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-4), 0);
         } else if (arg_0 == enc-photo-9) {
-            darray-append(var_0, boxed_symbol(enc-photo-5), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-5), 0);
         } else if (arg_0 == enc-photo-10) {
-            darray-append(var_0, boxed_symbol(enc-photo-6), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-6), 0);
         } else if (arg_0 == enc-photo-11) {
-            darray-append(var_0, boxed_symbol(enc-photo-7), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-7), 0);
         } else if (arg_0 == enc-photo-12) {
-            darray-append(var_0, boxed_symbol(enc-photo-8), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-8), 0);
         } else if (arg_0 == enc-photo-13) {
-            darray-append(var_0, boxed_symbol(enc-photo-9), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-10), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-11), 0);
-            darray-append(var_0, boxed_symbol(enc-photo-12), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-9), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-10), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-11), 0);
+            darray-append(var_0, new-boxed-value(7, enc-photo-12), 0);
         }
     }
     return var_0;
