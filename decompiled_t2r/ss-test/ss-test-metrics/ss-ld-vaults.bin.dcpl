@@ -114,48 +114,48 @@ u64? ss-ld-update-vault() {
 
 u64? ss-ld-update-vault-groups() {
     darray-clear(ss-ld-vault-heights);
-    darray-append(ss-ld-vault-heights, new-boxed-value(6, 0.90), 0);
+    darray-append(ss-ld-vault-heights, boxed_f32(0.90), 0);
     if (get-boolean(test-jump-heights?, self)) {
         darray-clear(ss-ld-vault-heights);
-        darray-append(ss-ld-vault-heights, new-boxed-value(6, 0.50), 0);
-        darray-append(ss-ld-vault-heights, new-boxed-value(6, 0.90), 0);
-        darray-append(ss-ld-vault-heights, new-boxed-value(6, 1.50), 0);
-        darray-append(ss-ld-vault-heights, new-boxed-value(6, 2.00), 0);
+        darray-append(ss-ld-vault-heights, boxed_f32(0.50), 0);
+        darray-append(ss-ld-vault-heights, boxed_f32(0.90), 0);
+        darray-append(ss-ld-vault-heights, boxed_f32(1.50), 0);
+        darray-append(ss-ld-vault-heights, boxed_f32(2.00), 0);
     }
     darray-clear(ss-ld-vault-move-mode);
-    darray-append(ss-ld-vault-move-mode, new-boxed-value(7, run), 0);
+    darray-append(ss-ld-vault-move-mode, boxed_symbol(run), 0);
     if (get-boolean(test-move-modes?, self)) {
-        darray-append(ss-ld-vault-move-mode, new-boxed-value(7, sprint), 0);
-        darray-append(ss-ld-vault-move-mode, new-boxed-value(7, crouch), 0);
+        darray-append(ss-ld-vault-move-mode, boxed_symbol(sprint), 0);
+        darray-append(ss-ld-vault-move-mode, boxed_symbol(crouch), 0);
     }
     darray-clear(ss-ld-vault-distance);
-    darray-append(ss-ld-vault-distance, new-boxed-value(6, 2.50), 0);
+    darray-append(ss-ld-vault-distance, boxed_f32(2.50), 0);
     if (get-boolean(test-vault-distances?, self)) {
-        darray-append(ss-ld-vault-distance, new-boxed-value(6, 0.60), 0);
+        darray-append(ss-ld-vault-distance, boxed_f32(0.60), 0);
     }
     darray-clear(ss-ld-vault-edge-angles);
-    darray-append(ss-ld-vault-edge-angles, new-boxed-value(6, 0.00), 0);
+    darray-append(ss-ld-vault-edge-angles, boxed_f32(0.00), 0);
     if (get-boolean(test-tilted-edge?, self)) {
-        darray-append(ss-ld-vault-edge-angles, new-boxed-value(6, -10.00), 0);
-        darray-append(ss-ld-vault-edge-angles, new-boxed-value(6, 10.00), 0);
+        darray-append(ss-ld-vault-edge-angles, boxed_f32(-10.00), 0);
+        darray-append(ss-ld-vault-edge-angles, boxed_f32(10.00), 0);
     }
     darray-clear(ss-ld-vault-wall-angles);
-    darray-append(ss-ld-vault-wall-angles, new-boxed-value(6, 0.00), 0);
+    darray-append(ss-ld-vault-wall-angles, boxed_f32(0.00), 0);
     if (get-boolean(test-tilted-wall?, self)) {
-        darray-append(ss-ld-vault-wall-angles, new-boxed-value(6, -10.00), 0);
-        darray-append(ss-ld-vault-wall-angles, new-boxed-value(6, 10.00), 0);
+        darray-append(ss-ld-vault-wall-angles, boxed_f32(-10.00), 0);
+        darray-append(ss-ld-vault-wall-angles, boxed_f32(10.00), 0);
     }
     darray-clear(ss-ld-vault-wall-player-starts);
-    darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-2), 0);
+    darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-2), 0);
     if (get-boolean(test-approach-angle?, self)) {
-        darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-6), 0);
-        darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-5), 0);
+        darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-6), 0);
+        darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-5), 0);
     }
     if (get-boolean(test-thick-vaults?, self)) {
-        darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-1), 0);
+        darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-1), 0);
         if (get-boolean(test-approach-angle?, self)) {
-            darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-3), 0);
-            darray-append(ss-ld-vault-wall-player-starts, new-boxed-value(7, pos-auto-vault-start-4), 0);
+            darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-3), 0);
+            darray-append(ss-ld-vault-wall-player-starts, boxed_symbol(pos-auto-vault-start-4), 0);
         }
     }
     return set-int32(total-iterations, ((((darray-count(ss-ld-vault-heights) * darray-count(ss-ld-vault-move-mode)) * darray-count(ss-ld-vault-distance)) * darray-count(ss-ld-vault-edge-angles)) * darray-count(ss-ld-vault-wall-angles)) * darray-count(ss-ld-vault-wall-player-starts), self);
@@ -191,17 +191,7 @@ statescript {
                     set-object-locator(obj-vaults-1, get-spawner-locator(obj-vaults-1, 1));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         stop-animating(var_2, 2, 0.00, 0, 0);
                     }
                 }
@@ -209,31 +199,31 @@ statescript {
                     darray-clear(ld-manual-vault-heights);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 0.25), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(0.25), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 0.50), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(0.50), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 0.75), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(0.75), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 0.90), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(0.90), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 1.25), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(1.25), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 1.50), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(1.50), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 1.75), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(1.75), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 2.00), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(2.00), 0);
                 }
                 lambda {
-                    darray-append(ld-manual-vault-heights, new-boxed-value(6, 2.25), 0);
+                    darray-append(ld-manual-vault-heights, boxed_f32(2.25), 0);
                 }
                 lambda {
                     set-int32(vault-height-index, 3, self);
@@ -451,17 +441,7 @@ statescript {
                     ss-ld-update-vault-groups();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         animate-start(var_2, bindpose-anim, pos-auto-vault-dina-1, 0);
                     }
                 }
@@ -475,17 +455,7 @@ statescript {
                     set-object-locator(obj-vault-ground-1, get-spawner-locator(obj-vault-ground-1, 1));
                 }
                 lambda {
-                    foreach (u64? var_1 : ss-ld-vault-wall-player-starts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ss-ld-vault-wall-player-starts) {
                         foreach (u64? var_4 : ss-ld-vault-edge-angles) {
                             f32 var_5;
                             if (var_4 && *(u16*)(var_4 + 12) == 1) {
@@ -537,17 +507,7 @@ statescript {
                                     } else {
                                         var_11 = 0.00;
                                     }
-                                    foreach (u64? var_13 : ss-ld-vault-move-mode) {
-                                        u16 var_14;
-                                        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                            var_14 = *(u64*)var_13;
-                                        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                            var_14 = *(u64*)var_13;
-                                        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                            var_14 = *(u64*)var_13;
-                                        } else {
-                                            var_14 = 0;
-                                        }
+                                    foreach (u64? var_14 : ss-ld-vault-move-mode) {
                                         foreach (u64? var_16 : ss-ld-vault-heights) {
                                             f32 var_17;
                                             if (var_16 && *(u16*)(var_16 + 12) == 1) {

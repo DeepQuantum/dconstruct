@@ -272,15 +272,15 @@ statescript {
                             npc-m-ambi-entry-table
                         );
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-dina-jump-to-balcony-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-dina-jump-to-balcony-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         wait-animate_(dina, joe-exit-jump-to-balcony--dina, var_2);
                     }
                 }
@@ -299,15 +299,15 @@ statescript {
                             npc-m-ambi-entry-table
                         );
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-dina-jump-to-balcony-2, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-dina-jump-to-balcony-2, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         wait-animate_(dina, joe-exit-jump-to-balcony--dina, var_2);
                     }
                 }

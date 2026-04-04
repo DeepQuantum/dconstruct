@@ -53,7 +53,7 @@ statescript {
                                 } else {
                                     var_10 = get-player-max-health() - get-player-health();
                                 }
-                                send-event(character-healed, ss-meta-abby-heal-1, new-boxed-value(2, var_10));
+                                send-event(character-healed, ss-meta-abby-heal-1, boxed_i32(var_10));
                             }
                             i32 var_18;
                             if (get-player-max-health() < (get-player-health() + get-int32(amount-to-restore, self))) {
@@ -86,7 +86,7 @@ statescript {
                                 } else {
                                     var_27 = get-player-max-health() - get-player-health();
                                 }
-                                send-event(character-healed, ss-meta-abby-heal-1, new-boxed-value(2, var_27));
+                                send-event(character-healed, ss-meta-abby-heal-1, boxed_i32(var_27));
                             }
                             i32 var_35;
                             if (get-player-max-health() < (get-player-health() + get-int32(amount-to-restore-kill, self))) {

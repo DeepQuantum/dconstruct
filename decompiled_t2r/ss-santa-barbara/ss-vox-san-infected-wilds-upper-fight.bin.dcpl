@@ -83,14 +83,14 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(vox-san-wilds-upper-outside-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(vox-san-wilds-upper-outside-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         if (!get-boolean(vox-street-combat-done, self)) {
                             if (no-npcs-in-group-alive?(vox-san-wilds-upper-outside-npcs) && npc-group-alive-count(all-enemy-npcs) == 0) {
                                 set-boolean(vox-street-combat-done, 1, self);
                                 go(street-combat-done, 1);
                             }
                         }
-                    } else if (darray-contains?(vox-san-wilds-mansion-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    } else if (darray-contains?(vox-san-wilds-mansion-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         if (!get-boolean(vox-mansion-combat-done, self)) {
                             if (no-npcs-in-group-alive?(vox-san-wilds-mansion-npcs)) {
                                 set-boolean(vox-mansion-combat-done, 1, self);

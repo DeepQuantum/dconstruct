@@ -26,28 +26,18 @@ u64? is-collectibles-tab-open?() {
 }
 
 u64? speak-tts-for-each-skull-in-group(u64? arg_0, u64? arg_1) {
-    speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(active-skulls-cipher, self)), 1, 0, 1);
-    foreach (u64? var_3 : arg_0) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    speak-text-to-speech-formatted(boxed_symbol(get-symbol(active-skulls-cipher, self)), 1, 0, 1);
+    foreach (u64? var_4 : arg_0) {
         if (**t2r-skulls-array* + (var_4 * 152)) {
             speak-text-to-speech-formatted(
-                new-boxed-value(7, *(u64*)((**t2r-skulls-array* + (var_4 * 152)) + 16)),
+                boxed_symbol(*(u64*)((**t2r-skulls-array* + (var_4 * 152)) + 16)),
                 1,
                 0,
                 1
             );
             if (arg_1) {
                 speak-text-to-speech-formatted(
-                    new-boxed-value(7, *(u64*)((**t2r-skulls-array* + (var_4 * 152)) + 24)),
+                    boxed_symbol(*(u64*)((**t2r-skulls-array* + (var_4 * 152)) + 24)),
                     1,
                     0,
                     1
@@ -226,7 +216,7 @@ statescript {
                     }
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(active-skulls-cipher, self)), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(get-symbol(active-skulls-cipher, self)), 1, 0, 1);
                 }
             }
         }

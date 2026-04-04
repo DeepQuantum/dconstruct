@@ -98,12 +98,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.60;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(npc-efj-children-clicker-1, clkr-mm-ambi-idle, var_0);
                 }
                 lambda {
@@ -173,34 +173,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = apReference-player;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 14;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = apReference-player;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-object-locator(player);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(npc-efj-children-clicker-1, efj-ellie-plays-clicker--kid, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-player;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(player);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-player;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(player, efj-ellie-plays-clicker--ellie, var_0);
                 }
                 lambda {
@@ -243,18 +243,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = apReference-player;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 14;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = apReference-player;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-object-locator(player);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(npc-efj-children-clicker-2, efj-ellie-plays-clicker--kid, var_0);
                 }
                 lambda {
@@ -292,17 +292,7 @@ statescript {
                     wait-for(move-to-done);
                 }
                 lambda {
-                    foreach (u64? var_1 : clicker-game-children) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : clicker-game-children) {
                         if (npc-alive?(var_2)) {
                             npc-face-point(var_2, get-object-position(player));
                         }
@@ -344,17 +334,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : clicker-game-children) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : clicker-game-children) {
                         if (npc-alive?(var_2)) {
                             listen-mode-visible(var_2, 1, 1, -1.00);
                             listen-mode-add-reveal(
@@ -487,7 +467,7 @@ statescript {
                     set-symbol(tackling-child-1, get-furthest-in-group(clicker-game-children, player), self);
                 }
                 lambda {
-                    darray-find-remove(clicker-game-children, new-boxed-value(7, get-symbol(tackling-child-1, self)), 0);
+                    darray-find-remove(clicker-game-children, boxed_symbol(get-symbol(tackling-child-1, self)), 0);
                 }
                 lambda {
                     set-symbol(tackling-child-2, get-furthest-in-group(clicker-game-children, player), self);
@@ -508,41 +488,41 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(ellie-ending-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(ellie-ending-ap, self);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
                     animate_(get-symbol(tackling-child-1, self), efj-ellie-plays-clicker-end--kid-female, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(ellie-ending-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(ellie-ending-ap, self);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
                     animate_(get-symbol(tackling-child-2, self), efj-ellie-plays-clicker-end--kid-female-a, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ellie-ending-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ellie-ending-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, efj-ellie-plays-clicker-end--ellie, var_0);
                 }
                 lambda {

@@ -32,19 +32,9 @@ u64? wait-spawn-stalker-hidden() {
         var_2 = descent-stalkers-1f;
     }
     if (!(var_2 == 0)) {
-        foreach (u64? var_7 : var_2) {
-            u16 var_8;
-            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                var_8 = *(u64*)var_7;
-            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                var_8 = *(u64*)var_7;
-            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                var_8 = *(u64*)var_7;
-            } else {
-                var_8 = 0;
-            }
+        foreach (u64? var_8 : var_2) {
             if (!is-spawner-on-screen?(var_8) && distance-between-locators(get-spawner-locator(var_8, 1), get-object-locator(player)) > 10.00) {
-                darray-append(var_0, new-boxed-value(7, var_8), 1);
+                darray-append(var_0, boxed_symbol(var_8), 1);
             }
         }
     }
@@ -52,7 +42,7 @@ u64? wait-spawn-stalker-hidden() {
         set-symbol(active-stalker, wait-spawn-npc(group-random(var_0), 0, 0), self);
         log-event("descent-stalker-spawned", 1, string-debug(get-spawner-name(get-symbol(active-stalker, self))), 0, 0);
         npc-make-aware-of(get-symbol(active-stalker, self), player, 2, 0);
-        darray-find-remove(var_2, new-boxed-value(7, get-symbol(active-stalker, self)), 0);
+        darray-find-remove(var_2, boxed_symbol(get-symbol(active-stalker, self)), 0);
         send-event(enable-overwhelm, get-symbol(active-stalker, self));
         set-boolean(spawning-allowed, 0, self);
         start-timer(cooldown, 75.00, self, 1);

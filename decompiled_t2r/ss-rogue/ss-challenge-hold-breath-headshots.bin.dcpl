@@ -68,7 +68,7 @@ statescript {
                     u64? var_1 = event::get-attack-info(get-event());
                     u64? var_2 = event-arg-symbol(1);
                     get-object-health(var_2);
-                    if (player == *(u64*)(var_1 + 8) && darray-contains?(rogue-headshot-joint-group, new-boxed-value(7, event-get-attack-joint())) && *(i32*)(var_1 + 48) != 0 && *(i32*)(var_1 + 48) != 4 && *(i32*)(var_1 + 48) != 6) {
+                    if (player == *(u64*)(var_1 + 8) && darray-contains?(rogue-headshot-joint-group, boxed_symbol(event-get-attack-joint())) && *(i32*)(var_1 + 48) != 0 && *(i32*)(var_1 + 48) != 4 && *(i32*)(var_1 + 48) != 6) {
                         ++(current-kill-count, self);
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: Player just killed %s with headshot while breath held", string-debug(var_2)), 19);

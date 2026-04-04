@@ -36,7 +36,7 @@ u16 weapons-initialize() {
             } else {
                 var_5 = 0;
             }
-            ddict-set(weapons-ddict, element, new-boxed-value(2, var_5));
+            ddict-set(weapons-ddict, element, boxed_i32(var_5));
         }
         u64? var_8 = ddict-get(weapons-ellie-ddict, pistol-beretta);
         u16 var_9;
@@ -55,7 +55,7 @@ u16 weapons-initialize() {
         } else {
             var_9 = 0;
         }
-        ddict-set(handguns-ddict, pistol-beretta, new-boxed-value(2, var_9));
+        ddict-set(handguns-ddict, pistol-beretta, boxed_i32(var_9));
         u64? var_11 = ddict-get(weapons-ellie-ddict, pistol-revolver-taurus);
         u16 var_12;
         if (var_11 && *(u16*)(var_11 + 12) == 1) {
@@ -73,7 +73,7 @@ u16 weapons-initialize() {
         } else {
             var_12 = 0;
         }
-        var_1 = ddict-set(handguns-ddict, pistol-revolver-taurus, new-boxed-value(2, var_12));
+        var_1 = ddict-set(handguns-ddict, pistol-revolver-taurus, boxed_i32(var_12));
     } else if (is-player-abby?(player)) {
         foreach (u64? element : weapons-abby-ddict) {
             ddict-key-at(weapons-abby-ddict, i);
@@ -95,7 +95,7 @@ u16 weapons-initialize() {
             } else {
                 var_19 = 0;
             }
-            ddict-set(weapons-ddict, element, new-boxed-value(2, var_19));
+            ddict-set(weapons-ddict, element, boxed_i32(var_19));
         }
         u64? var_22 = ddict-get(weapons-abby-ddict, pistol-glock);
         u16 var_23;
@@ -114,7 +114,7 @@ u16 weapons-initialize() {
         } else {
             var_23 = 0;
         }
-        ddict-set(handguns-ddict, pistol-glock, new-boxed-value(2, var_23));
+        ddict-set(handguns-ddict, pistol-glock, boxed_i32(var_23));
         u64? var_25 = ddict-get(weapons-abby-ddict, pistol-xcaliber);
         u16 var_26;
         if (var_25 && *(u16*)(var_25 + 12) == 1) {
@@ -132,7 +132,7 @@ u16 weapons-initialize() {
         } else {
             var_26 = 0;
         }
-        var_1 = ddict-set(handguns-ddict, pistol-xcaliber, new-boxed-value(2, var_26));
+        var_1 = ddict-set(handguns-ddict, pistol-xcaliber, boxed_i32(var_26));
     } else {
         var_1 = 0;
     }
@@ -201,7 +201,7 @@ u64? give-player-profile-loadout(u64? arg_0, u64? arg_1) {
         } else {
             var_20 = 0;
         }
-        ddict-set(loadout-all, var_17, new-boxed-value(2, var_20));
+        ddict-set(loadout-all, var_17, boxed_i32(var_20));
         u16 var_22;
         if (var_18 && *(u16*)(var_18 + 12) == 1) {
             var_22 = *(u8*)var_18;
@@ -258,7 +258,7 @@ u64? give-player-profile-loadout(u64? arg_0, u64? arg_1) {
         } else {
             var_29 = 0;
         }
-        ddict-set(loadout-all, var_26, new-boxed-value(2, var_29));
+        ddict-set(loadout-all, var_26, boxed_i32(var_29));
     }
     foreach (u64? element : var_3) {
         ddict-value-at(var_3, i);
@@ -1441,7 +1441,7 @@ statescript {
                             } else {
                                 var_12 = 0;
                             }
-                            ddict-set(loadout-all, ddict-key-at(var_12, get-int32(item-index, self)), new-boxed-value(2, get-int32(quantity, self)));
+                            ddict-set(loadout-all, ddict-key-at(var_12, get-int32(item-index, self)), boxed_i32(get-int32(quantity, self)));
                         } else {
                             u64? var_18 = darray-at(category-all, get-int32(category-index, self));
                             u16 var_19;
@@ -1478,7 +1478,7 @@ statescript {
                                 } else {
                                     var_27 = 0;
                                 }
-                                ddict-set(upgrade-all, ddict-key-at(var_27, get-int32(item-index, self)), new-boxed-value(2, get-int32(quantity, self)));
+                                ddict-set(upgrade-all, ddict-key-at(var_27, get-int32(item-index, self)), boxed_i32(get-int32(quantity, self)));
                             } else {
                                 u64? var_33 = darray-at(category-all, get-int32(category-index, self));
                                 u16 var_34;
@@ -1548,7 +1548,7 @@ statescript {
                                     } else {
                                         var_57 = 0;
                                     }
-                                    ddict-set(upgrade-all, var_57, new-boxed-value(2, 1));
+                                    ddict-set(upgrade-all, var_57, boxed_i32(1));
                                 } else {
                                     u64? var_60 = darray-at(ddict-all, get-int32(category-index, self));
                                     u16 var_61;
@@ -1573,7 +1573,7 @@ statescript {
                                     } else {
                                         var_67 = 0;
                                     }
-                                    ddict-set(loadout-all, ddict-key-at(var_67, get-int32(item-index, self)), new-boxed-value(2, get-int32(quantity, self)));
+                                    ddict-set(loadout-all, ddict-key-at(var_67, get-int32(item-index, self)), boxed_i32(get-int32(quantity, self)));
                                 }
                             }
                         }
@@ -1781,7 +1781,7 @@ statescript {
                     }
                     u64? var_9 = random-integer(var_6, var_8 / 2, 0);
                     give-player-weapon(ddict-key-at(handguns-ddict, var_4), var_9, 0);
-                    ddict-set(loadout-all, ddict-key-at(handguns-ddict, var_4), new-boxed-value(2, var_9));
+                    ddict-set(loadout-all, ddict-key-at(handguns-ddict, var_4), boxed_i32(var_9));
                     u64? var_13 = ddict-value-at(weapons-ddict, var_2);
                     u16 var_14;
                     if (var_13 && *(u16*)(var_13 + 12) == 1) {
@@ -1818,7 +1818,7 @@ statescript {
                     }
                     u64? var_17 = random-integer(var_14, var_16 / 2, 0);
                     give-player-weapon(ddict-key-at(weapons-ddict, var_2), var_17, 0);
-                    ddict-set(loadout-all, ddict-key-at(weapons-ddict, var_2), new-boxed-value(2, var_17));
+                    ddict-set(loadout-all, ddict-key-at(weapons-ddict, var_2), boxed_i32(var_17));
                     u64? var_22 = random-integer(ddict-key-count(weapons-ddict), 0, 0);
                     u16 var_23;
                     for (u64 i = 0 + 1; i < random-integer(3, 1, 0); i++) {
@@ -1858,23 +1858,23 @@ statescript {
                         }
                         u64? var_28 = random-integer(var_25, var_27 / 2, 0);
                         give-player-weapon(ddict-key-at(weapons-ddict, var_22), var_28, 0);
-                        ddict-set(loadout-all, ddict-key-at(weapons-ddict, var_22), new-boxed-value(2, var_28));
+                        ddict-set(loadout-all, ddict-key-at(weapons-ddict, var_22), boxed_i32(var_28));
                         random-integer(ddict-key-count(weapons-ddict), 0, 0);
                         var_23 = (100 + 25) + 25;
                     }
                     if (random-float-range(0.00, 1.00, 0) < 0.50) {
                         u64? var_37 = random-integer(ddict-key-count(melee-ddict), 0, 0);
                         player-inventory-add-item-quantity(ddict-key-at(melee-ddict, var_37), 1);
-                        ddict-set(loadout-all, ddict-key-at(melee-ddict, var_37), new-boxed-value(2, 1));
+                        ddict-set(loadout-all, ddict-key-at(melee-ddict, var_37), boxed_i32(1));
                         var_23 + 25;
                     }
                     u64? var_43 = random-integer(ddict-key-count(item-ddict), 0, 0);
                     player-inventory-add-item-quantity(ddict-key-at(item-ddict, var_43), 1);
-                    ddict-set(loadout-all, ddict-key-at(item-ddict, var_43), new-boxed-value(2, 1));
+                    ddict-set(loadout-all, ddict-key-at(item-ddict, var_43), boxed_i32(1));
                     u64? var_48 = random-integer(ddict-key-count(item-ddict), 0, 0);
                     for (u64 i = 0 + 1; i < random-integer(2, 0, 0); i++) {
                         player-inventory-add-item-quantity(ddict-key-at(item-ddict, var_48), 1);
-                        ddict-set(loadout-all, ddict-key-at(item-ddict, var_48), new-boxed-value(2, 1));
+                        ddict-set(loadout-all, ddict-key-at(item-ddict, var_48), boxed_i32(1));
                         random-integer(ddict-key-count(item-ddict), 0, 0);
                     }
                 }

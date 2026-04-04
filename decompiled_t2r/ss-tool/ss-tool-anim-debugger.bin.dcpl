@@ -105,7 +105,7 @@ statescript {
         block event add-expected-anim {
             track main {
                 lambda {
-                    ddict-set(get-symbol(expected-anim-ddict, self), event-arg-symbol(0), new-boxed-value(1, 1));
+                    ddict-set(get-symbol(expected-anim-ddict, self), event-arg-symbol(0), boxed_bool(1));
                 }
             }
         }
@@ -113,7 +113,7 @@ statescript {
             track main {
                 lambda {
                     if (ddict-contains-key?(get-symbol(expected-anim-ddict, self), event-arg-symbol(0))) {
-                        ddict-set(get-symbol(expected-anim-ddict, self), event-arg-symbol(0), new-boxed-value(0, 0));
+                        ddict-set(get-symbol(expected-anim-ddict, self), event-arg-symbol(0), boxed_invalid(0));
                     }
                 }
             }
@@ -128,7 +128,7 @@ statescript {
         block event add-break-anim {
             track main {
                 lambda {
-                    ddict-set(get-symbol(break-anim-ddict, self), event-arg-symbol(0), new-boxed-value(1, 1));
+                    ddict-set(get-symbol(break-anim-ddict, self), event-arg-symbol(0), boxed_bool(1));
                 }
             }
         }
@@ -136,7 +136,7 @@ statescript {
             track main {
                 lambda {
                     if (ddict-contains-key?(get-symbol(break-anim-ddict, self), event-arg-symbol(0))) {
-                        ddict-set(get-symbol(break-anim-ddict, self), event-arg-symbol(0), new-boxed-value(0, 0));
+                        ddict-set(get-symbol(break-anim-ddict, self), event-arg-symbol(0), boxed_invalid(0));
                     }
                 }
             }

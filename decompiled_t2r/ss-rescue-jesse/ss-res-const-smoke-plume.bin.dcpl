@@ -123,17 +123,7 @@ statescript {
                     wait-spawn-npc-group-async(backyard-infected, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : backyard-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : backyard-infected) {
                         if (npc-alive?(var_2)) {
                             enable-fg-vis(var_2, 0);
                         }
@@ -150,30 +140,30 @@ statescript {
                             holster-player-weapon(3, 1.00);
                         }
                         u64? var_12 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_12 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_12[0] = 28;
+                        *(u64*)(*var_12[0] + 8) = 0;
                         f32 var_14;
                         if (player-is-crouched?()) {
                             var_14 = 0.45;
                         } else {
                             var_14 = 0.20;
                         }
-                        *(f32*)(*(*var_12 + (0 * 8)) + 8) = var_14;
-                        *(i32*)*(*var_12 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_12 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_12 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_12 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_12 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_12 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_12 + (3 * 8)) + 8) = 43;
-                        *(i32*)*(*var_12 + (4 * 8)) = 60;
-                        *(u64*)(*(*var_12 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_12 + (4 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_12 + (5 * 8)) = 70;
-                        *(u64*)(*(*var_12 + (5 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_12 + (5 * 8)) + 8) = 10;
+                        *(f32*)(*var_12[0] + 8) = var_14;
+                        *(i32*)*var_12[1] = 30;
+                        *(u64*)(*var_12[1] + 8) = 0;
+                        *(f32*)(*var_12[1] + 8) = 0.50;
+                        *(i32*)*var_12[2] = 13;
+                        *(u64*)(*var_12[2] + 8) = 0;
+                        *(i32*)(*var_12[2] + 8) = 2;
+                        *(i32*)*var_12[3] = 61;
+                        *(u64*)(*var_12[3] + 8) = 0;
+                        *(i32*)(*var_12[3] + 8) = 43;
+                        *(i32*)*var_12[4] = 60;
+                        *(u64*)(*var_12[4] + 8) = 0;
+                        *(f32*)(*var_12[4] + 8) = 0.50;
+                        *(i32*)*var_12[5] = 70;
+                        *(u64*)(*var_12[5] + 8) = 0;
+                        *(i32*)(*var_12[5] + 8) = 10;
                         wait-animate_(player, res-get-vantage--ellie, var_12);
                     }
                 }
@@ -201,17 +191,7 @@ statescript {
                     while (1) {
                         wait-boolean(top-o-stairs, 1, self);
                         set-boolean(regress, 0, self);
-                        foreach (u64? var_1 : backyard-infected) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : backyard-infected) {
                             if (npc-alive?(var_2)) {
                                 npc-set-script-low-priority(var_2);
                             }
@@ -302,17 +282,7 @@ statescript {
                     wait-boolean(infected-leave, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : backyard-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : backyard-infected) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                             npc-make-aware-of(var_2, player, 0, 0);
@@ -336,17 +306,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(rescue-jesse, res-neighborhood-house-intro)) {
-                        foreach (u64? var_2 : backyard-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : backyard-infected) {
                             melee-fact-set-bool(var_3, disable-unreachable-behavior, 1);
                         }
                         if (npc-group-alive-count(backyard-infected) > 0) {

@@ -14,17 +14,7 @@
 u16 ski-coast-unzone-wave-1() {
     u16 var_2;
     if (!(get-boolean(released-outer-group-1, self))) {
-        foreach (u64? var_4 : grp-coastal-wave-1-stalkers) {
-            u16 var_5;
-            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                var_5 = *(u64*)var_4;
-            } else {
-                var_5 = 0;
-            }
+        foreach (u64? var_5 : grp-coastal-wave-1-stalkers) {
             if (npc-alive?(var_5)) {
                 npc-clear-zone(var_5);
                 npc-set-melee-settings(var_5, *ai-melee-settings-stalker*);
@@ -43,17 +33,7 @@ u16 ski-coast-unzone-wave-1() {
 u16 ski-coast-unzone-wave-2() {
     u16 var_3;
     if (!(get-boolean(released-outer-group-2, self)) && get-boolean(outer-spawned?, ss-ski-coastal-explore-combat-1)) {
-        foreach (u64? var_5 : grp-coastal-infected-outer-zone) {
-            u16 var_6;
-            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                var_6 = *(u64*)var_5;
-            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                var_6 = *(u64*)var_5;
-            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                var_6 = *(u64*)var_5;
-            } else {
-                var_6 = 0;
-            }
+        foreach (u64? var_6 : grp-coastal-infected-outer-zone) {
             npc-clear-zone-if-alive(var_6);
         }
         var_3 = set-boolean(released-outer-group-2, 1, self);
@@ -107,34 +87,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-coastal-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-coastal-infected) {
                         if (npc-alive?(var_2) && npc-has-zone?(var_2) && npc-stalker?(var_2) && distance-between-objects-less-than?(var_2, player, 8.00)) {
                             ski-coast-unzone-wave-1();
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-coastal-infected-outer-zone) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-coastal-infected-outer-zone) {
                         if (npc-alive?(var_2) && npc-has-zone?(var_2) && npc-stalker?(var_2) && distance-between-objects-less-than?(var_2, player, 8.00)) {
                             ski-coast-unzone-wave-2();
                         }
@@ -150,7 +110,7 @@ statescript {
                     distance-between-objects(var_0, player);
                     if (npc-alive?(var_0) && npc-has-zone?(var_0)) {
                         if (distance-between-objects-less-than?(var_0, player, 8.00)) {
-                            if (darray-contains?(grp-coastal-infected, new-boxed-value(7, var_0))) {
+                            if (darray-contains?(grp-coastal-infected, boxed_symbol(var_0))) {
                                 var_3 = ski-coast-unzone-wave-1();
                             } else {
                                 var_3 = ski-coast-unzone-wave-2();

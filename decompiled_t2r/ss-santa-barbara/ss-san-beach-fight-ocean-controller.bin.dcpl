@@ -42,17 +42,7 @@ u64? adjust-water-height() {
 }
 
 u64? kill-beach-waves() {
-    foreach (u64? var_1 : beach-fight-wave-emitters) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : beach-fight-wave-emitters) {
         kill-entity(var_2);
     }
 }
@@ -83,17 +73,7 @@ u16 adjust-ocean-params() {
 }
 
 u64? start-beach-waves() {
-    foreach (u64? var_1 : beach-fight-wave-emitters) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : beach-fight-wave-emitters) {
         spawn-entity(var_2, 0, 0);
     }
 }

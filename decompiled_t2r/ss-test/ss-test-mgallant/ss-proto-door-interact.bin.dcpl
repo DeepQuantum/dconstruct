@@ -78,17 +78,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (distance-between-objects-less-than?(self, var_2, 1.50) && npc-using-traversal-action-pack?(var_2)) {
                             set-symbol(npc-opening, var_2, self);
                             go(opening-npc, 1);
@@ -170,15 +160,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(tag-symbol(open-bw-pos, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(tag-symbol(open-bw-pos, self), 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(player, ellie-mm-crouch-idle, var_0);
                 }
             }

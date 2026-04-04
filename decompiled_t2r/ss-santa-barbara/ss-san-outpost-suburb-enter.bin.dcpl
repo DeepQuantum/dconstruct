@@ -56,28 +56,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-san-outpost-enter-suburbs-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-san-outpost-enter-suburbs-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(lev, lev=cin-san-outpost-enter-suburbs, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-san-outpost-enter-suburbs-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1858;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-san-outpost-enter-suburbs-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1858;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.70;
                     wait-animate_(player, abby=cin-san-outpost-enter-suburbs, var_0);
                 }
                 lambda {
@@ -108,9 +108,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
                     animate_(vulture-san-outpost-1, fly-glide, var_0);
                 }
                 lambda {
@@ -118,9 +118,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.10;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.10;
                     animate_(vulture-san-outpost-1, fly-straight-mild, var_0);
                 }
                 lambda {

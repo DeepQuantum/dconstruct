@@ -131,17 +131,7 @@ statescript {
         block event cleanup-combat {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-die-if-alive(var_2);
                         }
@@ -204,17 +194,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-infected-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-infected-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             if (object-in-region?(var_3, rgn-nor-spore-basement-hole-clickers-1)) {
@@ -227,17 +207,7 @@ statescript {
                         disable-action-pack(tap-vault-8498);
                         disable-action-pack(tap-vault-8928);
                         disable-action-pack(tap-vault-8929);
-                        foreach (u64? var_10 : nor-basement-militia-wave-2) {
-                            u16 var_11;
-                            if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                                var_11 = *(u64*)var_10;
-                            } else {
-                                var_11 = 0;
-                            }
+                        foreach (u64? var_11 : nor-basement-militia-wave-2) {
                             if (npc-alive?(var_11)) {
                                 npc-make-aware-of(var_11, get-closest-living-npc-in-group(all-infected-npcs, var_11, 0), 2, 0);
                                 npc-fire-at-object(var_11, get-closest-living-npc-in-group(all-infected-npcs, var_11, 0), 0, 0, 0, 0);
@@ -250,17 +220,7 @@ statescript {
                     if (!tension-mode-is?(3) && !get-boolean(combat-started?, self)) {
                         npc-set-patrol-route-if-alive(npc-nor-basement-reinforcements-1, spl-nor-basement-militia-1, -1);
                         npc-set-patrol-route-if-alive(npc-nor-basement-reinforcements-2, spl-nor-basement-militia-2, -1);
-                        foreach (u64? var_3 : nor-basement-militia-wave-2) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : nor-basement-militia-wave-2) {
                             if (npc-alive?(var_4)) {
                                 npc-make-aware-of(var_4, player, 0, 0);
                             }
@@ -269,17 +229,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(combat-started?, self)) {
-                        foreach (u64? var_2 : nor-basement-militia-wave-2) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : nor-basement-militia-wave-2) {
                             if (npc-alive?(var_3)) {
                                 npc-make-aware-of-at(var_3, player, get-spawner-position(pos-nor-basement-npc-3, 1), 4, 0, 0);
                             }
@@ -294,17 +244,7 @@ statescript {
             track main {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-infected-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-infected-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             if (object-in-region?(var_3, rgn-nor-spore-basement-hole-clickers-1)) {

@@ -64,17 +64,7 @@ statescript {
                         if (darray-count(all-enemy-npcs) == 0) {}
 
                         u16 var_16;
-                        foreach (u64? var_17 : all-enemy-npcs) {
-                            u16 var_18;
-                            if (var_17 && *(u16*)(var_17 + 12) == 7) {
-                                var_18 = *(u64*)var_17;
-                            } else if (var_17 && *(u16*)(var_17 + 12) == 5) {
-                                var_18 = *(u64*)var_17;
-                            } else if (var_17 && *(u16*)(var_17 + 12) == 4) {
-                                var_18 = *(u64*)var_17;
-                            } else {
-                                var_18 = 0;
-                            }
+                        foreach (u64? var_18 : all-enemy-npcs) {
                             u16 var_20;
                             if (!npc-sprint-loud-tutorial-valid?(var_18)) {
                                 var_20 = 0;

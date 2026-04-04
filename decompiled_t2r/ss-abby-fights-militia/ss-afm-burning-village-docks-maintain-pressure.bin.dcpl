@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? clear-enemy-targeting-player() {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-alive?(var_2)) {
             npc-set-targeting-params(var_2, never-target-player-or-buddy);
         }
@@ -128,17 +118,7 @@ statescript {
         block event distract-enemies {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-targeting-params(var_2, never-target-player-or-buddy);
                         }
@@ -184,9 +164,9 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(player-progression-level, self) == 0) {
-                        send-event(attack-player, ss-afm-burning-village-bg-headshot-intro-1, new-boxed-value(2, get-int32(player-progression-level, self)));
+                        send-event(attack-player, ss-afm-burning-village-bg-headshot-intro-1, boxed_i32(get-int32(player-progression-level, self)));
                     } else if (get-int32(player-progression-level, self) == 1) {
-                        send-event(attack-player, ss-afm-burning-village-bg-headshot-intro-1, new-boxed-value(2, get-int32(player-progression-level, self)));
+                        send-event(attack-player, ss-afm-burning-village-bg-headshot-intro-1, boxed_i32(get-int32(player-progression-level, self)));
                     } else if (get-int32(player-progression-level, self) == 2) {
                         set-boolean(attack-player?, 1, ss-afm-burning-village-bg-melee-struggle-1);
                     } else if (get-int32(player-progression-level, self) == 3) {
@@ -201,7 +181,7 @@ statescript {
         block event unleash-enemies-lethal-timer {
             track main {
                 lambda {
-                    send-event(unleash-enemies-timer, get-self-id(), new-boxed-value(1, 1));
+                    send-event(unleash-enemies-timer, get-self-id(), boxed_bool(1));
                 }
             }
         }
@@ -227,17 +207,7 @@ statescript {
                     set-boolean(kill-fast?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-accuracy-multiplier(var_2, 0.00);
                         }

@@ -49,7 +49,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    set-svar-bit(the-lobby-pickups, darray-find(the-pickups, new-boxed-value(7, event-arg-symbol(0)), 0), 1);
+                    set-svar-bit(the-lobby-pickups, darray-find(the-pickups, boxed_symbol(event-arg-symbol(0)), 0), 1);
                 }
             }
         }
@@ -61,18 +61,8 @@ statescript {
                     kill-entity(coll-the-soldier-setlist-3);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-the-pickups) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!get-svar-bit(the-lobby-pickups, darray-find(res-the-pickups, new-boxed-value(7, var_2), 0))) {
+                    foreach (u64? var_2 : res-the-pickups) {
+                        if (!get-svar-bit(the-lobby-pickups, darray-find(res-the-pickups, boxed_symbol(var_2), 0))) {
                             spawn-entity(var_2, 0, 0);
                         }
                     }

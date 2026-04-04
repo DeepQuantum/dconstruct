@@ -264,31 +264,31 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 45;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.00;
                     wait-animate_(jesse, pat-jackson-enter-bar-enter--jesse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(jesse, pat-jackson-enter-bar-idle--jesse, var_0);
                 }
             }
@@ -379,15 +379,15 @@ statescript {
                     if (object-anim-playing?(jesse, pat-jackson-enter-bar-enter--jesse, 0)) {
                         wait-until-anim-phase(jesse, pat-jackson-enter-bar-enter--jesse, 0.85, 2);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.75;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(jesse, pat-jackson-enter-bar-idle--jesse, var_1);
                     }
                 }
@@ -472,34 +472,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-pat-jackson-enter-bar-door-1, pat-jackson-enter-bar--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.85;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 270;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.65;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.85;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 270;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.65;
                     wait-animate_(player, pat-jackson-enter-bar--ellie, var_0);
                 }
                 lambda {
@@ -512,15 +512,15 @@ statescript {
             track jesse {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(jesse, pat-jackson-enter-bar--jesse, var_0);
                 }
                 lambda {
@@ -546,31 +546,31 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-frame(player, 2, pat-jackson-enter-bar--ellie) + 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-open-bar-door-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-frame(player, 2, pat-jackson-enter-bar--ellie) + 1.00;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(snpc-bar-32, pat-jackson-enter-bar-idle--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-bar-32, fob-finding-isaac-crowds-chilling-standing-3--male, var_0);
                 }
             }
@@ -611,182 +611,182 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar--bowl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar--cup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar--spoon, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar--glass, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar--male-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(snpc-pat-jackson-crowd-igc-bar-gossip-5, pat-crowd-gossiping-in-bar--female-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar-idle--bowl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar-idle--cup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar-idle--spoon, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar-idle--glass, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar-idle--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar-idle--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar-idle--male-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar-idle--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-5, pat-crowd-gossiping-in-bar-idle--female-a, var_0);
                 }
             }
@@ -839,129 +839,129 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-bar-32, fob-finding-isaac-crowds-chilling-standing-3--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar-idle--bowl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar-idle--cup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar-idle--spoon, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar-idle--glass, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-1, pat-crowd-gossiping-in-bar-idle--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-2, pat-crowd-gossiping-in-bar-idle--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-3, pat-crowd-gossiping-in-bar-idle--male-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-4, pat-crowd-gossiping-in-bar-idle--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-bar-gossip-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(snpc-pat-jackson-crowd-igc-bar-gossip-5, pat-crowd-gossiping-in-bar-idle--female-a, var_0);
                 }
                 lambda {

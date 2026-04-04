@@ -49,10 +49,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-wi-trail?, new-boxed-value(1, 1));
+                    fact-set(global, disable-wi-trail?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 1));
+                    fact-set(global, disable-scent-trail, boxed_bool(1));
                 }
             }
         }
@@ -76,8 +76,8 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(forward-base, fob-car-ride-crash)) {
-                        fact-set(global, disable-wi-trail?, new-boxed-value(1, 0));
-                        fact-set(global, disable-scent-trail, new-boxed-value(1, 0));
+                        fact-set(global, disable-wi-trail?, boxed_bool(0));
+                        fact-set(global, disable-scent-trail, boxed_bool(0));
                         go(complete, 1);
                     }
                 }

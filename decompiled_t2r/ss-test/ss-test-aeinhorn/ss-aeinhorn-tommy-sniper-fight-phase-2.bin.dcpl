@@ -55,7 +55,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(npc-tommy-fight-1, tommy-fight-health, new-boxed-value(6, get-object-health(npc-tommy-fight-1)));
+                    fact-set(npc-tommy-fight-1, tommy-fight-health, boxed_f32(get-object-health(npc-tommy-fight-1)));
                 }
                 lambda {
                     while (!get-boolean(player-in-convention-center, self)) {

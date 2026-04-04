@@ -22,7 +22,7 @@ u64? flo-send-update-lead-spline-event(bool arg_0, string arg_1, bool arg_2) {
         if (!(!(arg_2 == 0))) {
             var_6 = get-symbol(default-settings, self);
         }
-        var_1 = send-event(set-new-lead-spline, arg_0, new-boxed-value(7, arg_1), new-boxed-value(7, var_6));
+        var_1 = send-event(set-new-lead-spline, arg_0, boxed_symbol(arg_1), boxed_symbol(var_6));
     }
     return var_1;
 }
@@ -35,7 +35,7 @@ u16 flo-set-new-lead-spline(u64? arg_0, bool arg_1, bool arg_2) {
     npc-request-lead-spline(jesse, arg_0, player, var_0, 0, 0);
     u16 var_2;
     if (!(arg_2 == 0)) {
-        var_2 = send-event(set-new-lead-spline, arg_2, new-boxed-value(7, arg_0), new-boxed-value(7, var_0));
+        var_2 = send-event(set-new-lead-spline, arg_2, boxed_symbol(arg_0), boxed_symbol(var_0));
     } else {
         var_2 = 0;
     }

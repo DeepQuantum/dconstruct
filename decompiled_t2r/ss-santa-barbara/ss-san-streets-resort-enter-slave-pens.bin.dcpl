@@ -13,17 +13,7 @@
 
 u16 is-member-of-group-in-region?(u64? arg_0, u64? arg_1) {
     u16 var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         u16 var_5;
         if (object-in-region?(var_3, arg_1)) {
             var_5 = 1;
@@ -132,50 +122,50 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-door-lobby-exit-1, san-streets-ellie-barricades-door--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-san-streets-ellie-barricades-door-pole-1, san-streets-ellie-barricades-door--pole, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 286;
-                    *(i32*)*(*var_0 + (5 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 61;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 286;
+                    *(i32*)*var_0[5] = 60;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 0.50;
                     wait-animate_(player, san-streets-ellie-barricades-door--ellie, var_0);
                 }
                 lambda {
@@ -268,47 +258,47 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-door-lobby-exit-1, san-streets-ellie-barricades-door-tense--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-san-streets-ellie-barricades-door-pole-1, san-streets-ellie-barricades-door--tense--pole, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 168;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-barricades-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 168;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
                     wait-animate_(player, san-streets-ellie-barricades-door-tense--ellie, var_0);
                 }
                 lambda {

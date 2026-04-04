@@ -111,35 +111,35 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-crossroad-squeeze-through-debris-1, med-street-crossroad-squeeze-through-enter--debris, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 0;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(lev, med-street-crossroad-squeeze-through-enter--lev, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(player, med-street-crossroad-squeeze-through-enter--abby, var_0);
                 }
                 lambda {
@@ -166,41 +166,41 @@ statescript {
             track anims {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-crossroad-squeeze-through-debris-1, med-street-crossroad-squeeze-through-idle--debris, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 0;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(lev, med-street-crossroad-squeeze-through-idle--lev, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(player, med-street-crossroad-squeeze-through-idle--abby, var_0);
                 }
             }
@@ -231,22 +231,22 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-crossroad-squeeze-through-debris-1, med-street-crossroad-squeeze-through-push--debris, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(player, med-street-crossroad-squeeze-through-push--abby, var_0);
                 }
                 lambda {
@@ -314,44 +314,44 @@ statescript {
             track anims {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-med-crossroad-squeeze-through-debris-1, med-street-crossroad-squeeze-through-exit--debris, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 0;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(lev, med-street-crossroad-squeeze-through-exit--lev, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-crossroad-squeeze-through-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, med-street-crossroad-squeeze-through-exit--abby, var_0);
                 }
                 lambda {

@@ -65,10 +65,10 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(player, carrying-rope-coil-obj, new-boxed-value(7, 0));
+                    fact-set(player, carrying-rope-coil-obj, boxed_symbol(0));
                 }
                 lambda {
-                    fact-set(player, carrying-rope-coil, new-boxed-value(1, 0));
+                    fact-set(player, carrying-rope-coil, boxed_bool(0));
                 }
                 lambda {
                     if (!(tag-symbol(start-attach-obj, self) == 0)) {
@@ -95,8 +95,8 @@ statescript {
             track main {
                 lambda {
                     if (get-player-carry-object-id() == tag-symbol(coil-obj, self)) {
-                        fact-set(player, carrying-rope-coil-obj, new-boxed-value(7, get-self-id()));
-                        fact-set(player, carrying-rope-coil, new-boxed-value(1, 1));
+                        fact-set(player, carrying-rope-coil-obj, boxed_symbol(get-self-id()));
+                        fact-set(player, carrying-rope-coil, boxed_bool(1));
                         go(carrying, 1);
                     }
                 }
@@ -327,8 +327,8 @@ statescript {
                 lambda {
                     if (get-state-time(self) > 1.00) {
                         if (get-player-carry-object-id() == tag-symbol(coil-obj, self)) {
-                            fact-set(player, carrying-rope-coil-obj, new-boxed-value(7, get-self-id()));
-                            fact-set(player, carrying-rope-coil, new-boxed-value(1, 1));
+                            fact-set(player, carrying-rope-coil-obj, boxed_symbol(get-self-id()));
+                            fact-set(player, carrying-rope-coil, boxed_bool(1));
                             if (!(tag-boolean(detach-start?, self)) && !(tag-symbol(start-attach-obj, self) == 0)) {
                                 send-event(disable, get-symbol(attached-obj, self));
                                 interactable-disable(get-symbol(attached-obj, self));
@@ -358,8 +358,8 @@ statescript {
                             give-player-carry-object(tag-symbol(coil-obj, self));
                             broadcast-event(pulled-hang-rope);
                             set-boolean(rope-draped, 0, self);
-                            fact-set(player, carrying-rope-coil-obj, new-boxed-value(7, get-self-id()));
-                            fact-set(player, carrying-rope-coil, new-boxed-value(1, 1));
+                            fact-set(player, carrying-rope-coil-obj, boxed_symbol(get-self-id()));
+                            fact-set(player, carrying-rope-coil, boxed_bool(1));
                             go(carrying, 1);
                         }
                     }

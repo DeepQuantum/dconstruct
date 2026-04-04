@@ -233,61 +233,61 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
                     animate_(door-fob-stadium-boxes-1, door=cin-fob-mel-arrival-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(manny, manny=cin-fob-mel-arrival-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-fob-stadium-concessions-wait-in-line-food-2, burrito=cin-fob-mel-arrival-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-fob-stadium-concessions-wait-in-line-food-3, burrito02=cin-fob-mel-arrival-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.20;
                     wait-animate_(player, abby=cin-fob-mel-arrival-a, var_0);
                 }
                 lambda {
@@ -537,37 +537,37 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(player-get-anim-backpack(), backpack-abby=cin-fob-mel-arrival-b, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(obj-fob-stadium-boxes-get-gear-socks-1, sock-roll=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(obj-fob-stadium-boxes-get-gear-bed-1, bed=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(obj-fob-stadium-boxes-get-gear-canteen-1, canteen=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(obj-fob-stadium-boxes-get-gear-jacket-1, jacket=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
@@ -601,44 +601,44 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 500.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 500.00;
                     animate_(door-fob-stadium-boxes-1, door=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
                     animate_(obj-fob-stadium-box-exit-1, door-a=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(fade-in?, self)) {
                         var_3 = 0.70;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 1450;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.70;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 1450;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.70;
                     wait-animate_(player, abby=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
@@ -663,18 +663,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1392.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 20;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1392.00;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(manny, manny=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {
@@ -690,15 +690,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 22;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.82;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-fob-mel-arrival-b-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 22;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.82;
                     wait-animate_(mel, mel=cin-fob-mel-arrival-b, var_0);
                 }
                 lambda {

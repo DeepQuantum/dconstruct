@@ -13,19 +13,9 @@
 
 u16 nor-get-closest-living-stalker(u64? arg_0, u16 arg_1, u16 arg_2) {
     u16 var_2;
-    foreach (u64? var_3 : arg_0) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : arg_0) {
         u16 var_9;
-        if (arg_2 == 0 && !(darray-contains?(arg_2, new-boxed-value(7, var_4))) && arg_1 != var_4 && npc-alive?(var_4)) {
+        if (arg_2 == 0 && !(darray-contains?(arg_2, boxed_symbol(var_4))) && arg_1 != var_4 && npc-alive?(var_4)) {
             u64? var_12 = get-locator-distance(get-object-locator(var_4), get-object-locator(arg_1));
             u16 var_13;
             u64? var_14;
@@ -44,17 +34,7 @@ u16 nor-get-closest-living-stalker(u64? arg_0, u16 arg_1, u16 arg_2) {
 
 u16 nor-some-stalker-chasing?() {
     u16 var_1;
-    foreach (u64? var_2 : intro-stalkers) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : intro-stalkers) {
         u16 var_7;
         if (npc-alive?(var_3) || npc-using-skill?(var_3, 5) || get-player-melee-target() == var_3) {
             if (get-player-time-since-last-attack() < 6.00) {
@@ -120,17 +100,7 @@ statescript {
                 }
                 lambda {
                     if (get-float(disengage-start-time, self) > 0.00 && time-elapsed(get-float(disengage-start-time, self)) > 10.00) {
-                        foreach (u64? var_4 : intro-stalkers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : intro-stalkers) {
                             if (npc-alive?(var_5)) {
                                 send-event(force-disengage, var_5);
                             }
@@ -141,17 +111,7 @@ statescript {
                         set-float(disengage-start-time, -1.00, self);
                         set-float(chase-start-time, -1.00, self);
                     } else if (get-float(disengage-start-time, self) > 0.00) {
-                        foreach (u64? var_14 : intro-stalkers) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : intro-stalkers) {
                             if (npc-alive?(var_15)) {
                                 send-event(force-disengage, var_15);
                             }

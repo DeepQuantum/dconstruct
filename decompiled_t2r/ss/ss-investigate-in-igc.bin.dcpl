@@ -155,7 +155,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(ignore-exit?, self) && event-arg-symbol(0) == get-self-id()) {
-                        broadcast-event(exiting-investigate, new-boxed-value(7, get-self-id()));
+                        broadcast-event(exiting-investigate, boxed_symbol(get-self-id()));
                         go(initial, 1);
                     }
                 }

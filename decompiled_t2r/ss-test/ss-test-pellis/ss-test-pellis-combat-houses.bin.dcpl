@@ -142,17 +142,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-houses-reinforcements, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-houses-reinforcements) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-houses-reinforcements) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -173,17 +163,7 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(testellis-npcs-houses-starting) == 1) {
-                        foreach (u64? var_2 : testellis-npcs-houses-starting) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : testellis-npcs-houses-starting) {
                             npc-clear-zone(var_3);
                         }
                     }
@@ -201,17 +181,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-houses-reinforcements-not-alerted, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-houses-reinforcements-not-alerted) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-houses-reinforcements-not-alerted) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }

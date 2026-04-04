@@ -56,17 +56,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-zone-region(var_2, rgn-restrict-enemies-1);
                     }
                 }
@@ -74,17 +64,7 @@ statescript {
                     set-boolean(front-hard-points-active?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-front) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-front) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -94,17 +74,7 @@ statescript {
             track main {
                 lambda {
                     if (tension-mode-is?(3)) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             npc-clear-zone(var_3);
                         }
                         go(start-fight, 1);
@@ -123,32 +93,12 @@ statescript {
                     set-boolean(mid-hard-points-active?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-front) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-front) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-mid) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-mid) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -171,17 +121,7 @@ statescript {
                     set-boolean(front-hard-points-active?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-front) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-front) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -204,17 +144,7 @@ statescript {
                     set-boolean(mid-hard-points-active?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-mid) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-mid) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -222,17 +152,7 @@ statescript {
                     set-boolean(back-hard-points-active?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-back) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-back) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -255,32 +175,12 @@ statescript {
                     set-boolean(back-hard-points-active?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-hard-points-back) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-hard-points-back) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-make-aware-of(var_2, player, 2, 0);
                     }
                 }

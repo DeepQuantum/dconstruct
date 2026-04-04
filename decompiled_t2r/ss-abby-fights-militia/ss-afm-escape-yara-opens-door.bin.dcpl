@@ -92,15 +92,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(lev, afm-escape-yara-opens-door-idle--lev, var_0);
                 }
                 lambda {
@@ -132,28 +132,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     wait-animate_(yara, afm-escape-yara-opens-door-enter--yara, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(yara, afm-escape-yara-opens-door-idle--yara, var_0);
                 }
                 lambda {
@@ -183,28 +183,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(door-afm-escape-yara-opens-door-1, afm-escape-yara-opens-door--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(yara, afm-escape-yara-opens-door--yara, var_0);
                 }
                 lambda {
@@ -212,52 +212,52 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 18;
                     animate_(yara, afm-escape-yara-under-truck-idle--yara, var_0);
                 }
             }
             track lev {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(lev, afm-escape-yara-opens-door--lev, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-escape-yara-opens-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 18;
                     animate_(lev, afm-escape-yara-under-truck-idle--lev, var_0);
                 }
             }
@@ -306,18 +306,18 @@ statescript {
                             stop-animating(yara, 2, 0.40, 0, 0);
                         } else {
                             u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 57;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (0 * 8)) + 8) = get-animation-frame(yara, 2, 0);
-                            *(i32*)*(*var_2 + (1 * 8)) = 20;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-animation-frame(yara, 2, 0) + 15.00;
-                            *(i32*)*(*var_2 + (2 * 8)) = 24;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_2 + (2 * 8)) + 8) = 2;
-                            *(i32*)*(*var_2 + (3 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.30;
+                            *(i32*)*var_2[0] = 57;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(f32*)(*var_2[0] + 8) = get-animation-frame(yara, 2, 0);
+                            *(i32*)*var_2[1] = 20;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = get-animation-frame(yara, 2, 0) + 15.00;
+                            *(i32*)*var_2[2] = 24;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(i32*)(*var_2[2] + 8) = 2;
+                            *(i32*)*var_2[3] = 30;
+                            *(u64*)(*var_2[3] + 8) = 0;
+                            *(f32*)(*var_2[3] + 8) = 0.30;
                             animate_(yara, afm-escape-yara-opens-door--yara, var_2);
                         }
                     } else {
@@ -358,18 +358,18 @@ statescript {
                             stop-animating(lev, 2, 0.40, 0, 0);
                         } else {
                             u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 57;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (0 * 8)) + 8) = get-animation-frame(lev, 2, 0);
-                            *(i32*)*(*var_2 + (1 * 8)) = 20;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-animation-frame(lev, 2, 0) + 30.00;
-                            *(i32*)*(*var_2 + (2 * 8)) = 24;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_2 + (2 * 8)) + 8) = 2;
-                            *(i32*)*(*var_2 + (3 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.30;
+                            *(i32*)*var_2[0] = 57;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(f32*)(*var_2[0] + 8) = get-animation-frame(lev, 2, 0);
+                            *(i32*)*var_2[1] = 20;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = get-animation-frame(lev, 2, 0) + 30.00;
+                            *(i32*)*var_2[2] = 24;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(i32*)(*var_2[2] + 8) = 2;
+                            *(i32*)*var_2[3] = 30;
+                            *(u64*)(*var_2[3] + 8) = 0;
+                            *(f32*)(*var_2[3] + 8) = 0.30;
                             wait-animate_(lev, afm-escape-yara-opens-door--lev, var_2);
                         }
                     } else {

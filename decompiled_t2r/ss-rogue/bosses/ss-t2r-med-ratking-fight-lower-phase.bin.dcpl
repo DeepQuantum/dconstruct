@@ -123,7 +123,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    broadcast-event(sending-boss-card-data, new-boxed-value(7, ROGUE_TITLE_INTRO_BOSS), new-boxed-value(7, MENU_MODEL_VIEWER_RATKING));
+                    broadcast-event(sending-boss-card-data, boxed_symbol(ROGUE_TITLE_INTRO_BOSS), boxed_symbol(MENU_MODEL_VIEWER_RATKING));
                 }
                 lambda {
                     while (!get-boolean(boss-card-intro-done, self)) {

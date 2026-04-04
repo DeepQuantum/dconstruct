@@ -190,7 +190,7 @@ statescript {
                     gui2-set-widget-visible(get-symbol(w-timer-group, self), var_0 > 0.00);
                     gui2-set-widget-visible(get-symbol(w-timer-descr-text, self), 0);
                     gui2-set-widget-visible(get-symbol(w-timer-pause-icon, self), event-arg-boolean(1));
-                    gui2-set-widget-text-formatted(get-symbol(w-timer-text, self), new-boxed-value(19, get-time-string(var_0)));
+                    gui2-set-widget-text-formatted(get-symbol(w-timer-text, self), boxed_stringcopy(get-time-string(var_0)));
                     sid var_10;
                     if (event-arg-boolean(2) == 1) {
                         var_10 = t2-yellow;

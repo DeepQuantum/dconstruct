@@ -124,17 +124,7 @@ statescript {
                     ), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (!(npc-is-infected?(var_2))) {
                                 npc-surprise(var_2, get-object-locator(self), 3.00, 0);
@@ -167,17 +157,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             u64? var_7 = distance-between-objects(var_3, self);
@@ -195,22 +175,12 @@ statescript {
                     }
                     if (!(var_1 == 0)) {
                         set-symbol(investigating-npc, var_1, self);
-                        var_16 = fact-set(var_1, saved-patrol-route, new-boxed-value(7, npc-get-patrol-route(var_1)));
+                        var_16 = fact-set(var_1, saved-patrol-route, boxed_symbol(npc-get-patrol-route(var_1)));
                     }
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             u64? var_8 = distance-between-objects(var_3, get-symbol(investigating-npc, self));
@@ -228,7 +198,7 @@ statescript {
                     }
                     if (!(var_1 == 0)) {
                         set-symbol(buddy, var_1, self);
-                        var_18 = fact-set(var_1, saved-patrol-route, new-boxed-value(7, npc-get-patrol-route(var_1)));
+                        var_18 = fact-set(var_1, saved-patrol-route, boxed_symbol(npc-get-patrol-route(var_1)));
                     }
                 }
                 lambda {
@@ -459,12 +429,12 @@ statescript {
                 lambda {
                     if (!(get-symbol(investigating-npc, self) == 0) && npc-alive?(get-symbol(investigating-npc, self))) {
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_4[0] = 28;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(f32*)(*var_4[0] + 8) = 0.50;
+                        *(i32*)*var_4[1] = 30;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.50;
                         wait-animate_(get-symbol(investigating-npc, self), thug-p-idle-lost-target-reaction-01, var_4);
                     }
                 }

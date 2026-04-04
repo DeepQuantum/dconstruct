@@ -73,25 +73,25 @@ statescript {
             track animate {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 45;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(player, ellie-bolt-cutters-check-gate-ellie, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
                     wait-animate_(self, ellie-bolt-cutters-check-gate-lock, var_0);
                 }
                 lambda {
@@ -127,25 +127,25 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 45;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(player, ellie-bolt-cutters-exit-abort-ellie, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = ss-bolt-cutter--get-lock-ap();
                     wait-animate_(get-symbol(prop-object, self), ellie-bolt-cutters-exit-abort-bolt-cutters, var_1);
                 }
                 lambda {
@@ -174,22 +174,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
                     animate_(self, ellie-bolt-cutters-enter-lock, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = ss-bolt-cutter--get-lock-ap();
                     animate_(get-symbol(prop-object, self), ellie-bolt-cutters-enter-boltcutters, var_1);
                 }
                 lambda {
@@ -197,15 +197,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 45;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, ellie-bolt-cutters-enter-ellie, var_0);
                 }
                 lambda {
@@ -225,19 +225,19 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = ss-bolt-cutter--get-lock-ap();
                     animate_(player, ellie-bolt-cutters-open^close-ellie, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = ss-bolt-cutter--get-lock-ap();
                     animate_(get-symbol(prop-object, self), ellie-bolt-cutters-open^close-boltcutters, var_1);
                 }
             }
@@ -403,22 +403,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
                     animate_(player, ellie-bolt-cutters-exit-success-ellie, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = ss-bolt-cutter--get-lock-ap();
-                    *(i32*)*(*var_1 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = ss-bolt-cutter--get-lock-ap();
+                    *(i32*)*var_1[1] = 30;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.30;
                     wait-animate_(get-symbol(prop-object, self), ellie-bolt-cutters-exit-success-boltcutters, var_1);
                 }
                 lambda {

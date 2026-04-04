@@ -72,7 +72,7 @@ statescript {
         block event countdown {
             track main {
                 lambda {
-                    broadcast-event(firecrackers-firing, new-boxed-value(18, get-object-locator(self)));
+                    broadcast-event(firecrackers-firing, boxed_boundframe(get-object-locator(self)));
                 }
                 lambda {
                     start-timer(firecracker-timer, get-float(FIRECRACKER-TIME, self), self, 1);
@@ -117,17 +117,7 @@ statescript {
                     audio-gameplay-event(firecracker, get-object-position(self), player);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of-at(var_2, player, get-object-position(self), 3, *npc-awareness-options-firecracker*, 0);
                         }
@@ -135,17 +125,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             if (!(npc-target-missing?(var_3, player)) && npc-can-see?(var_3, player)) {
@@ -156,17 +136,7 @@ statescript {
                     }
                     if (var_1) {
                         if (!(task-node-active?(greenlight))) {
-                            foreach (u64? var_14 : all-enemy-npcs) {
-                                u16 var_15;
-                                if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                    var_15 = *(u64*)var_14;
-                                } else {
-                                    var_15 = 0;
-                                }
+                            foreach (u64? var_15 : all-enemy-npcs) {
                                 if (npc-alive?(var_15)) {
                                     npc-surprise(var_15, get-object-locator(self), 2.00, 1);
                                 }
@@ -206,17 +176,7 @@ statescript {
             track force-surprise {
                 lambda {
                     if (!(task-node-active?(greenlight))) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             npc-surprise(var_4, get-object-locator(self), 2.00, 1);
                         }
                     }
@@ -225,17 +185,7 @@ statescript {
                     wait-boolean(player-spotted?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (!(npc-target-missing?(var_2, player)) || npc-can-see?(var_2, player)) {
                                 npc-using-skill?(var_2, 13);
@@ -264,17 +214,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (!(get-boolean(player-spotted?, self))) {
                                 if (!(npc-target-missing?(var_2, player)) || npc-can-see?(var_2, player)) {
@@ -287,9 +227,9 @@ statescript {
                                 send-event(
                                     bark-at,
                                     var_2,
-                                    new-boxed-value(7, get-self-id()),
-                                    new-boxed-value(18, rotate-locator-lookat(get-object-locator(self), get-object-locator(var_2), 1.00, 0)),
-                                    new-boxed-value(6, 2.00)
+                                    boxed_symbol(get-self-id()),
+                                    boxed_boundframe(rotate-locator-lookat(get-object-locator(self), get-object-locator(var_2), 1.00, 0)),
+                                    boxed_f32(2.00)
                                 );
                             }
                         }
@@ -305,17 +245,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-change-vision-settings(var_2, default);
                         }

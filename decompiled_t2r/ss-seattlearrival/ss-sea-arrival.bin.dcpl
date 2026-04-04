@@ -210,93 +210,93 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(player-horse, horse-main=cin-sea-arrival-intro, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(dina, dina=cin-sea-arrival-intro, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.06;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.06;
                     wait-animate_(player, ellie=cin-sea-arrival-intro, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = riderAP;
-                    *(i32*)*(*var_0 + (1 * 8)) = 77;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.25;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 10;
-                    *(i32*)*(*var_0 + (4 * 8)) = 79;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 14;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = riderAP;
+                    *(i32*)*var_0[1] = 77;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.25;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 10;
+                    *(i32*)*var_0[4] = 79;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(dina, sea-arrival-intro--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
                     animate_(obj-sea-arrival-cam-1, sea-arrival-intro--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-sea-arrival-intro-1, 1);
+                    *(i32*)*var_0[1] = 24;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
                     animate_(player-horse, sea-arrival-intro--horse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = driverAP;
-                    *(i32*)*(*var_0 + (1 * 8)) = 77;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 9;
-                    *(i32*)*(*var_0 + (4 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 288;
-                    *(i32*)*(*var_0 + (5 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 14;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = driverAP;
+                    *(i32*)*var_0[1] = 77;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 9;
+                    *(i32*)*var_0[4] = 61;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 288;
+                    *(i32*)*var_0[5] = 60;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 1.00;
                     wait-animate_(player, sea-arrival-intro--ellie, var_0);
                 }
                 lambda {

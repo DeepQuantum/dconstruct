@@ -318,17 +318,7 @@ statescript {
                     u64? var_0 = event-arg-symbol(0);
                     u64? var_1 = event-arg-int32(2);
                     u16 var_4;
-                    foreach (u64? var_5 : crafting-items) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
+                    foreach (u64? var_6 : crafting-items) {
                         u16 var_7;
                         if (var_6 == var_0) {
                             var_7 = 1;
@@ -358,7 +348,7 @@ statescript {
                                 var_15 = 0;
                             }
                             +=i(get-resource-spent-symbol(var_15), var_1, self);
-                            if (darray-contains?(ingredient-items, new-boxed-value(7, var_0))) {
+                            if (darray-contains?(ingredient-items, boxed_symbol(var_0))) {
                                 var_12 = +=i(task-resources-all-ingredients-spent, var_1, self);
                             }
                         }
@@ -375,7 +365,7 @@ statescript {
                             var_24 = 0;
                         }
                         +=i(get-resource-spent-symbol(var_24), var_1, self);
-                        if (darray-contains?(ingredient-items, new-boxed-value(7, var_0))) {
+                        if (darray-contains?(ingredient-items, boxed_symbol(var_0))) {
                             var_12 = +=i(task-resources-all-ingredients-spent, var_1, self);
                         }
                     }
@@ -452,9 +442,9 @@ statescript {
                     log-event(dc:format("item-given : %s", string-debug(var_0)), var_1, "", get-object-locator(player), 0);
                     if (!main-game-task-active?() && is-focus-test?()) {}
  else if (task-complete?(abby-fights-militia, afm-burning-village-collapse) && is-player-abby?(player) && var_0 == ammo-revolver) {}
- else if (is-player-ellie?(player) && darray-contains?(abby-only-ammo, new-boxed-value(7, var_0))) {
+ else if (is-player-ellie?(player) && darray-contains?(abby-only-ammo, boxed_symbol(var_0))) {
                         script-caption(player, dc:format("@QA: Ellie should not have %s!", string-debug(var_0)), -1.00, 0, 0);
-                    } else if (is-player-abby?(player) && darray-contains?(ellie-only-ammo, new-boxed-value(7, var_0))) {
+                    } else if (is-player-abby?(player) && darray-contains?(ellie-only-ammo, boxed_symbol(var_0))) {
                         script-caption(player, dc:format("@QA: Abby should not have %s!", string-debug(var_0)), -1.00, 0, 0);
                     }
                     if (is-rogue-mode?()) {
@@ -474,7 +464,7 @@ statescript {
                             if (item-is-ammo?(var_0)) {
                                 +=i(task-resources-all-ammo, var_1, self);
                             }
-                            if (darray-contains?(ingredient-items, new-boxed-value(7, var_0))) {
+                            if (darray-contains?(ingredient-items, boxed_symbol(var_0))) {
                                 var_22 = +=i(task-resources-all-ingredients, var_1, self);
                             }
                         }
@@ -494,7 +484,7 @@ statescript {
                         if (item-is-ammo?(var_0)) {
                             +=i(task-resources-all-ammo, var_1, self);
                         }
-                        if (darray-contains?(ingredient-items, new-boxed-value(7, var_0))) {
+                        if (darray-contains?(ingredient-items, boxed_symbol(var_0))) {
                             var_22 = +=i(task-resources-all-ingredients, var_1, self);
                         }
                     }

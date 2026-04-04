@@ -29,9 +29,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = rotate-locator-lookat(get-object-locator(player), get-object-locator(ladder-56), 1.00, 0);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = rotate-locator-lookat(get-object-locator(player), get-object-locator(ladder-56), 1.00, 0);
                     animate_(player, ellie-meatshield-kick-off--ellie, var_0);
                 }
                 lambda {

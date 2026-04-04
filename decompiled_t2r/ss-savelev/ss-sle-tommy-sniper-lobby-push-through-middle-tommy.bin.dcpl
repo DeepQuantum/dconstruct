@@ -118,30 +118,30 @@ statescript {
                     if (get-boolean(already-at-far-perch, self) && !get-boolean(repo-middle-initial-move-up-done, self)) {
                         signal(anim-play, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_2 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.30;
+                        *(i32*)*var_2[3] = 57;
+                        *(u64*)(*var_2[3] + 8) = 0;
                         f32 var_5;
                         if (get-boolean(tommy-shot, ss-sle-tommy-sniper-lobby-fight-from-windows-1)) {
                             var_5 = 37.00;
                         } else {
                             var_5 = 0.00;
                         }
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_2 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (4 * 8)) + 8) = 21;
-                        *(i32*)*(*var_2 + (5 * 8)) = 20;
-                        *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (5 * 8)) + 8) = 110.00;
+                        *(f32*)(*var_2[3] + 8) = var_5;
+                        *(i32*)*var_2[4] = 24;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(i32*)(*var_2[4] + 8) = 21;
+                        *(i32*)*var_2[5] = 20;
+                        *(u64*)(*var_2[5] + 8) = 0;
+                        *(f32*)(*var_2[5] + 8) = 110.00;
                         wait-animate_(npc-tommy-fight-1, sle-tommy-vaults-away--tommy, var_2);
                         wait-npc-use-closest-cover(
                             npc-tommy-fight-1,
@@ -230,18 +230,18 @@ statescript {
                     if (get-boolean(already-at-far-perch, self) && !get-boolean(repo-middle-initial-move-up-done, self)) {
                         signal(tommy-animating, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_2 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 110.00;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.30;
+                        *(i32*)*var_2[3] = 20;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 110.00;
                         wait-animate_(npc-tommy-fight-1, sle-tommy-vaults-away--tommy, var_2);
                         signal(tommy-done-animating, 0);
                         wait-npc-use-closest-cover(
@@ -348,21 +348,21 @@ statescript {
                     if (!get-boolean(repo-middle-initial-move-up-done, self)) {
                         signal(anim-ready, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 110.00;
-                        *(i32*)*(*var_1 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (4 * 8)) + 8) = 21;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-sle-tommy-vaults-away-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.30;
+                        *(i32*)*var_1[3] = 20;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 110.00;
+                        *(i32*)*var_1[4] = 24;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(i32*)(*var_1[4] + 8) = 21;
                         wait-animate_(npc-tommy-fight-1, sle-tommy-vaults-away--tommy, var_1);
                         wait-npc-use-closest-cover(
                             npc-tommy-fight-1,

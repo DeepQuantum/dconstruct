@@ -15,35 +15,15 @@ u16 force-spawn-all-tripwires!() {
     if (!is-final-build?()) {
         display(dc:format("DEB-SK: Spawning all tripwires debug is ON"), 19);
     }
-    foreach (u64? var_3 : grp-skull-tripwires-spawners) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : grp-skull-tripwires-spawners) {
         kill-entity-if-spawned(var_4);
     }
     darray-clear(grp-skull-tripwires-spawners);
     if (!is-final-build?()) {
         display(dc:format("DEB-SK: Destroyed existing tripwires!"), 19);
     }
-    foreach (u64? var_10 : get-spawners-by-tag(tripwire-skull, 0, 0, 0)) {
-        u16 var_11;
-        if (var_10 && *(u16*)(var_10 + 12) == 7) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-            var_11 = *(u64*)var_10;
-        } else {
-            var_11 = 0;
-        }
-        darray-append(grp-skull-tripwires-spawners, new-boxed-value(7, spawn-entity(var_11, 0, 0)), 1);
+    foreach (u64? var_11 : get-spawners-by-tag(tripwire-skull, 0, 0, 0)) {
+        darray-append(grp-skull-tripwires-spawners, boxed_symbol(spawn-entity(var_11, 0, 0)), 1);
         set-targetable-lock-on-aim-priority(var_11, 0.40);
     }
     set-boolean(force-all-tripwire-debug, 1, self);
@@ -90,23 +70,13 @@ statescript {
                     set-symbol(ddict-tripwire-groups, ddict-create(self, -1, 0), self);
                 }
                 lambda {
-                    foreach (u64? var_2 : get-spawners-by-tag(tripwire-skull, 0, 0, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : get-spawners-by-tag(tripwire-skull, 0, 0, 0)) {
                         if (!(tag-symbol(group-id, var_3) == 0)) {
                             if (!ddict-contains-key?(get-symbol(ddict-tripwire-groups, self), tag-symbol(group-id, var_3))) {
                                 if (!is-final-build?()) {
                                     display(dc:format("DEB-SK:  adding key [%s]", string-debug(tag-symbol(group-id, var_3))), 19);
                                 }
-                                ddict-set(get-symbol(ddict-tripwire-groups, self), tag-symbol(group-id, var_3), new-boxed-value(7, darray-create(self, -1, 0)));
+                                ddict-set(get-symbol(ddict-tripwire-groups, self), tag-symbol(group-id, var_3), boxed_symbol(darray-create(self, -1, 0)));
                             }
                             u64? var_18 = ddict-get(get-symbol(ddict-tripwire-groups, self), tag-symbol(group-id, var_3));
                             u16 var_19;
@@ -119,13 +89,13 @@ statescript {
                             } else {
                                 var_19 = 0;
                             }
-                            darray-append(var_19, new-boxed-value(7, var_3), 0);
+                            darray-append(var_19, boxed_symbol(var_3), 0);
                         } else {
                             if (!ddict-contains-key?(get-symbol(ddict-tripwire-groups, self), null)) {
                                 if (!is-final-build?()) {
                                     display(dc:format("DEB-SK:  adding key [null]"), 19);
                                 }
-                                ddict-set(get-symbol(ddict-tripwire-groups, self), null, new-boxed-value(7, darray-create(self, -1, 0)));
+                                ddict-set(get-symbol(ddict-tripwire-groups, self), null, boxed_symbol(darray-create(self, -1, 0)));
                             }
                             u64? var_29 = ddict-get(get-symbol(ddict-tripwire-groups, self), null);
                             u16 var_30;
@@ -138,7 +108,7 @@ statescript {
                             } else {
                                 var_30 = 0;
                             }
-                            darray-append(var_30, new-boxed-value(7, var_3), 0);
+                            darray-append(var_30, boxed_symbol(var_3), 0);
                         }
                     }
                     u64? var_34 = ddict-key-count(get-symbol(ddict-tripwire-groups, self));
@@ -180,7 +150,7 @@ statescript {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-SK:     spawning [%s]", string-debug(var_50)), 19);
                             }
-                            darray-append(grp-skull-tripwires-spawners, new-boxed-value(7, spawn-entity(var_50, 0, 0)), 1);
+                            darray-append(grp-skull-tripwires-spawners, boxed_symbol(spawn-entity(var_50, 0, 0)), 1);
                             set-targetable-lock-on-aim-priority(var_50, 0.40);
                         }
                         if (*skulls-test* != nullptr && *(u8*)(*skulls-test* + 17) && !get-boolean(force-all-tripwire-debug, self)) {
@@ -217,17 +187,7 @@ statescript {
                 lambda {
                     u64? var_1;
                     u16 var_2;
-                    foreach (u64? var_3 : grp-skull-tripwires-spawners) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : grp-skull-tripwires-spawners) {
                         u64? var_7;
                         u16 var_8;
                         if (object-spawned?(var_4) && !has-trip-wire-been-detonated?(var_4)) {
@@ -262,17 +222,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-skull-tripwires-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-skull-tripwires-spawners) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -283,17 +233,7 @@ statescript {
                 lambda {
                     if (!debug-draw-disabled?()) {
                         if (darray-count(grp-skull-tripwires-spawners) > 0) {
-                            foreach (u64? var_3 : grp-skull-tripwires-spawners) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : grp-skull-tripwires-spawners) {
                                 debug-draw-string(get-spawner-position(var_4, 1), dc:format("%s", string-debug(var_4)), 4, 0.00, 0, 1.00, 0, 0);
                             }
                         }

@@ -50,22 +50,12 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : flooded-street-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-infected) {
                         spawn-entity(var_2, 0, 1);
                         set-focusable-ignore(var_2, 1);
                         npc-set-excluded-from-tension-calculation(var_2, 1);
                         listen-mode-visible(var_2, 0, 1, -1.00);
-                        if (darray-contains?(flooded-street-sleeping, new-boxed-value(7, var_2))) {
+                        if (darray-contains?(flooded-street-sleeping, boxed_symbol(var_2))) {
                             npc-disable-perception(var_2);
                         } else {
                             npc-set-script-only-no-perception(var_2);
@@ -103,17 +93,7 @@ statescript {
             track shut-up {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : flooded-street-infected) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : flooded-street-infected) {
                             if (npc-alive?(var_2)) {
                                 if (var_2 == npc-med-fs-runner-3) {
                                     if (!!(npc-using-skill?(var_2, 11))) {
@@ -170,17 +150,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : flooded-street-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-infected) {
                         if (!(entity-exists?(var_2))) {
                             spawn-entity(var_2, 0, 0);
                         }
@@ -223,17 +193,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : flooded-street-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-infected) {
                         npc-set-blind(var_2, 0);
                         npc-set-hearing-multiplier(var_2, 1.00);
                     }
@@ -285,17 +245,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : flooded-street-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-infected) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-deli-front-1);
                             npc-set-blind(var_2, 1);
@@ -307,17 +257,7 @@ statescript {
                 }
                 lambda {
                     while (!(no-npcs-in-group-alive?(flooded-street-infected))) {
-                        foreach (u64? var_3 : flooded-street-infected) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : flooded-street-infected) {
                             if (npc-alive?(var_4)) {
                                 if (distance-between-objects-greater-than?(var_4, player, 25.00, 1) && distance-between-objects-greater-than?(var_4, player, 20.00, 1) && npc-not-visible?(var_4)) {
                                     kill-entity-if-spawned(var_4);

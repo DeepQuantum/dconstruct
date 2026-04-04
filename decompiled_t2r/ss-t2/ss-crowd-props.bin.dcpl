@@ -30,12 +30,12 @@ statescript {
                         if (entity-exists?(var_4)) {
                             if (!(tag-symbol(prop-anim, self) == 0)) {
                                 u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                                *(i32*)*(*var_9 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_9 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
-                                *(i32*)*(*var_9 + (1 * 8)) = 82;
-                                *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_9 + (1 * 8)) + 8) = 1;
+                                *(i32*)*var_9[0] = 58;
+                                *(u64*)(*var_9[0] + 8) = 0;
+                                *(f32*)(*var_9[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                                *(i32*)*var_9[1] = 82;
+                                *(u64*)(*var_9[1] + 8) = 0;
+                                *(u8*)(*var_9[1] + 8) = 1;
                                 animate_(var_4, tag-symbol(prop-anim, self), var_9);
                             }
                         }
@@ -49,12 +49,12 @@ statescript {
                         if (entity-exists?(var_4)) {
                             if (!(tag-symbol(prop-anim-2, self) == 0)) {
                                 u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                                *(i32*)*(*var_9 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_9 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
-                                *(i32*)*(*var_9 + (1 * 8)) = 82;
-                                *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_9 + (1 * 8)) + 8) = 1;
+                                *(i32*)*var_9[0] = 58;
+                                *(u64*)(*var_9[0] + 8) = 0;
+                                *(f32*)(*var_9[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                                *(i32*)*var_9[1] = 82;
+                                *(u64*)(*var_9[1] + 8) = 0;
+                                *(u8*)(*var_9[1] + 8) = 1;
                                 animate_(var_4, tag-symbol(prop-anim-2, self), var_9);
                             }
                         }
@@ -68,12 +68,12 @@ statescript {
                         if (entity-exists?(var_4)) {
                             if (!(tag-symbol(prop-anim-3, self) == 0)) {
                                 u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                                *(i32*)*(*var_9 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_9 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
-                                *(i32*)*(*var_9 + (1 * 8)) = 82;
-                                *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_9 + (1 * 8)) + 8) = 1;
+                                *(i32*)*var_9[0] = 58;
+                                *(u64*)(*var_9[0] + 8) = 0;
+                                *(f32*)(*var_9[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                                *(i32*)*var_9[1] = 82;
+                                *(u64*)(*var_9[1] + 8) = 0;
+                                *(u8*)(*var_9[1] + 8) = 1;
                                 animate_(var_4, tag-symbol(prop-anim-3, self), var_9);
                             }
                         }

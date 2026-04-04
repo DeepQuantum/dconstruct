@@ -252,24 +252,24 @@ u64? update-total-counts(u64? arg_0) {
 
 u16 tooltip-tts--score-encounter(i32 arg_0) {
     if (!get-boolean(spoke-sub-header-tts, self)) {
-        speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(level-cipher, self)), 0, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(mode-cipher, self)), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(get-symbol(level-cipher, self)), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(get-symbol(mode-cipher, self)), 0, 0, 1);
     }
     if (arg_0 == get-int32(performance-heading-index, self) || arg_0 == get-int32(bonus-heading-index, self) && arg_0 == get-int32(multipler-heading-index, self) && !is-final-build?()) {
         display(dc:format("heading"), 19);
     }
     u16 var_11;
     if (!get-boolean(spoke-sub-header-tts, self)) {
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_SCORE_TOTAL_SCORE), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_SCORE_TOTAL_SCORE), 0, 0, 1);
         speak-text-to-speech-formatted(cipher-box-formatted-number-string(SINGLE_NUMBER, get-int32(total-score-goal, self), 0, 0, 0), 0, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_SCORE_TOTAL_MULTIPLER), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_SCORE_TOTAL_MULTIPLER), 0, 0, 1);
         speak-text-to-speech-formatted(get-formatted-score-decimal(get-float(total-multiplier-goal, self), 1, 0), 0, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_ENCOUNTER_TOTAL), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_ENCOUNTER_TOTAL), 0, 0, 1);
         speak-text-to-speech-formatted(cipher-box-formatted-number-string(SINGLE_NUMBER, get-int32(total-encounter-goal, self), 0, 0, 0), 0, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_RANK), 1, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, rogue-score-rank-tts-sid(get-int32(rank, self))), 0, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_RANK), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(rogue-score-rank-tts-sid(get-int32(rank, self))), 0, 0, 1);
         if (get-svar-as-boolean(rogue-cheat-mod-ever-enabled)) {
-            speak-text-to-speech-formatted(new-boxed-value(7, MENU_NO_RETURN_SCORES_MODIFIERS_ENABLED_TIP), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(MENU_NO_RETURN_SCORES_MODIFIERS_ENABLED_TIP), 1, 0, 1);
         }
         var_11 = start-timer-if-not-running(header-tts-reading, 12.00, self);
     } else {
@@ -938,7 +938,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(mod-load-event-sent, self)) {
-                        send-event(load-mods-from-encounter, get-symbol(w-modifiersDetailsGroup, self), new-boxed-value(2, get-int32(ddict-encounter-index, self)));
+                        send-event(load-mods-from-encounter, get-symbol(w-modifiersDetailsGroup, self), boxed_i32(get-int32(ddict-encounter-index, self)));
                         set-boolean(mod-load-event-sent, 1, self);
                     }
                 }

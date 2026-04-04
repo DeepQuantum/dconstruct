@@ -95,7 +95,7 @@ statescript {
                     animate-start(melee-weapon-afm-burning-village-collapse-1, afm-burning-village-prone-squeeze-end--knife-base, ap-afm-burning-village-collapse-1, 0);
                 }
                 lambda {
-                    send-event(set-melee-weapon-blood-blend, melee-weapon-afm-burning-village-collapse-1, new-boxed-value(6, 1.00));
+                    send-event(set-melee-weapon-blood-blend, melee-weapon-afm-burning-village-collapse-1, boxed_f32(1.00));
                 }
                 lambda {
                     if (task-range-active?(abby-fights-militia, afm-burning-village-window-lift, abby-fights-militia, afm-burning-village-rafters-jump) && task-continue-active?(abby-fights-militia, afm-burning-village-collapse, default)) {
@@ -106,9 +106,9 @@ statescript {
                 lambda {
                     if (task-continue-active?(abby-fights-militia, afm-burning-village-collapse, post-doorway-collapse)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                         animate_(obj-afm-burning-village-collapse-roof-1, afm-burning-village-doorway-collapse-wait-loop--scar-greathall-lower-roof-collapse-a, var_1);
                         go(wait-for-interact, 1);
                     }
@@ -216,16 +216,16 @@ statescript {
             track doorway {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                     wait-animate_(obj-afm-burning-village-collapse-roof-1, afm-burning-village-doorway-collapse--scar-greathall-lower-roof-collapse-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                     animate_(obj-afm-burning-village-collapse-roof-1, afm-burning-village-doorway-collapse-wait-loop--scar-greathall-lower-roof-collapse-a, var_0);
                 }
                 lambda {
@@ -438,15 +438,15 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_13 + (2 * 8)) = 27;
-                        *(u64*)(*(*var_13 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_13 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.60;
+                        *(i32*)*var_13[2] = 27;
+                        *(u64*)(*var_13[2] + 8) = 0;
+                        *(u8*)(*var_13[2] + 8) = 2;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -473,15 +473,15 @@ statescript {
                         var_20 = 0;
                     }
                     u64? var_21 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_21 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_21 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_21 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_21 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_21 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_21 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_21 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_21[0] = 10;
+                    *(u64*)(*var_21[0] + 8) = 0;
+                    *(u64*)(*var_21[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_21[1] = 28;
+                    *(u64*)(*var_21[1] + 8) = 0;
+                    *(f32*)(*var_21[1] + 8) = 0.60;
+                    *(i32*)*var_21[2] = 27;
+                    *(u64*)(*var_21[2] + 8) = 0;
+                    *(u8*)(*var_21[2] + 8) = 2;
                     wait-animate_(var_17, var_20, var_21);
                 }
                 lambda {
@@ -545,18 +545,18 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
                         f32 var_16;
                         if (get-boolean(lift-started?, self)) {
                             var_16 = 0.50;
                         } else {
                             var_16 = 0.00;
                         }
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = var_16;
+                        *(f32*)(*var_13[1] + 8) = var_16;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -619,12 +619,12 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.25;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.25;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -874,15 +874,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(player, 2, afm-burning-village-collapse-collapse--abby);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(player, 2, afm-burning-village-collapse-collapse--abby);
                     animate_(obj-afm-burning-village-collapse-plank-pieces-1, afm-burning-village-collapse--extra-planks, var_0);
                 }
             }
@@ -925,12 +925,12 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.25;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.25;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -957,12 +957,12 @@ statescript {
                         var_20 = 0;
                     }
                     u64? var_21 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_21 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_21 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_21 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_21 + (1 * 8)) + 8) = 0.25;
+                    *(i32*)*var_21[0] = 10;
+                    *(u64*)(*var_21[0] + 8) = 0;
+                    *(u64*)(*var_21[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_21[1] = 28;
+                    *(u64*)(*var_21[1] + 8) = 0;
+                    *(f32*)(*var_21[1] + 8) = 0.25;
                     wait-animate_(var_17, var_20, var_21);
                 }
                 lambda {
@@ -1131,9 +1131,9 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -1198,9 +1198,9 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -1285,21 +1285,21 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.25;
-                        *(i32*)*(*var_13 + (2 * 8)) = 57;
-                        *(u64*)(*(*var_13 + (2 * 8)) + 8) = 0;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.25;
+                        *(i32*)*var_13[2] = 57;
+                        *(u64*)(*var_13[2] + 8) = 0;
                         f32 var_16;
                         if (get-boolean(pull-backpack?, self)) {
                             var_16 = 107.00;
                         } else {
                             var_16 = 0.00;
                         }
-                        *(f32*)(*(*var_13 + (2 * 8)) + 8) = var_16;
+                        *(f32*)(*var_13[2] + 8) = var_16;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -1436,18 +1436,18 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.25;
-                    *(i32*)*(*var_1 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 223.00;
-                    *(i32*)*(*var_1 + (3 * 8)) = 82;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_1[1] = 30;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.25;
+                    *(i32*)*var_1[2] = 57;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 223.00;
+                    *(i32*)*var_1[3] = 82;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(u8*)(*var_1[3] + 8) = 1;
                     animate_(player-get-anim-backpack(), afm-burning-village-prone-squeeze--backpack-abby, var_1);
                 }
             }
@@ -1572,22 +1572,22 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.25;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.25;
                     animate_(player-get-anim-backpack(), afm-burning-village-prone-squeeze-bag-stuck--backpack-abby, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.70;
                     animate_(get-weapon-id(player, 1), afm-burning-village-prone-squeeze-bag-stuck--rifle-base, var_1);
                 }
                 lambda {
@@ -1619,12 +1619,12 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.25;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.25;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -1651,12 +1651,12 @@ statescript {
                         var_20 = 0;
                     }
                     u64? var_21 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_21 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_21 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_21 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_21 + (1 * 8)) + 8) = 0.25;
+                    *(i32*)*var_21[0] = 10;
+                    *(u64*)(*var_21[0] + 8) = 0;
+                    *(u64*)(*var_21[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_21[1] = 28;
+                    *(u64*)(*var_21[1] + 8) = 0;
+                    *(f32*)(*var_21[1] + 8) = 0.25;
                     wait-animate_(var_17, var_20, var_21);
                 }
                 lambda {
@@ -1729,32 +1729,32 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                     animate_(melee-weapon-afm-burning-village-collapse-1, afm-burning-village-prone-squeeze-end--knife-base, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
                     animate_(obj-afm-burning-village-collapse-female-1, afm-burning-village-prone-squeeze-end--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 130;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-burning-village-collapse-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 130;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.80;
                     wait-animate_(player, afm-burning-village-prone-squeeze-end--abby, var_0);
                 }
                 lambda {
@@ -1826,7 +1826,7 @@ statescript {
                         give-player-weapon(scythe-scar, 0, 0);
                         player-instant-draw-weapon-by-name(scythe-scar, 0.00, 1);
                         wait-one-frame();
-                        send-event(set-melee-weapon-blood-blend, get-player-best-melee-weapon-id(), new-boxed-value(6, 1.00));
+                        send-event(set-melee-weapon-blood-blend, get-player-best-melee-weapon-id(), boxed_f32(1.00));
                     }
                 }
                 lambda {

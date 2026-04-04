@@ -29,8 +29,8 @@ statescript {
                     event-arg-int32(2);
                     get-object-health(var_0);
                     u64? var_2 = event::get-attack-info(get-event());
-                    if (*(u64*)(var_2 + 8) == player && get-boolean(player-threw-last-molotov, self) && *(u64*)(var_2 + 72) == molotov && !(darray-contains?(npcs-attacked-by-molotov, new-boxed-value(7, var_0)))) {
-                        var_7 = darray-append(npcs-attacked-by-molotov, new-boxed-value(7, var_0), 1);
+                    if (*(u64*)(var_2 + 8) == player && get-boolean(player-threw-last-molotov, self) && *(u64*)(var_2 + 72) == molotov && !(darray-contains?(npcs-attacked-by-molotov, boxed_symbol(var_0)))) {
+                        var_7 = darray-append(npcs-attacked-by-molotov, boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -39,10 +39,10 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    u64? var_4 = darray-contains?(npcs-attacked-by-molotov, new-boxed-value(7, var_0));
+                    u64? var_4 = darray-contains?(npcs-attacked-by-molotov, boxed_symbol(var_0));
                     if (event-arg-symbol(1) == player && var_4 && event-arg-symbol(2) == molotov) {
                         if (var_4) {
-                            darray-find-remove(npcs-attacked-by-molotov, new-boxed-value(7, var_0), 0);
+                            darray-find-remove(npcs-attacked-by-molotov, boxed_symbol(var_0), 0);
                         }
                         set-int32(num-killed, get-int32(num-killed, self) + 1, self);
                         if (get-int32(num-killed, self) >= 4) {

@@ -49,28 +49,28 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(tag-symbol(ap-ref, self), 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(tag-symbol(ap-ref, self), 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
                     wait-animate_(get-symbol(npc, self), tag-symbol(animation-enter, self), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(tag-symbol(ap-ref, self), 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(tag-symbol(ap-ref, self), 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
                     wait-animate_(get-symbol(npc, self), tag-symbol(animation-end, self), var_2);
                 }
                 lambda {

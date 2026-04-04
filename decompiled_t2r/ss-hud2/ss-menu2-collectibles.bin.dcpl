@@ -128,7 +128,7 @@ u16 mark-list-index-treasure-examined--collectibles(u64? arg_0) {
         if (arg_0) {
             data-source-mark-range-dirty(collectibles-list, get-int32(list-index, self), 1, 0);
         }
-        darray-find-remove(get-symbol(new-treasures-in-list, self), new-boxed-value(7, get-treasure-id-by-picked-up-index(var_7)), 0);
+        darray-find-remove(get-symbol(new-treasures-in-list, self), boxed_symbol(get-treasure-id-by-picked-up-index(var_7)), 0);
         u16 var_23;
         if (darray-count(get-symbol(new-treasures-in-list, self)) == 0 && !(get-symbol(category-slot-children-darray, self) == 0)) {
             gui2-go-widget-state(get-category-slot-child(get-int32(category-index, self), 1), off, 0, 0, 0);
@@ -174,9 +174,9 @@ u16 populate-category-slot-children-darray() {
     while (i < 5) {
         u64? var_0 = get-category-slot-widget-path(i);
         u64? var_3 = darray-create(self, -1, 0);
-        darray-append(var_3, new-boxed-value(7, gui2-find-widget-path("iconContainer.icon", var_0)), 0);
-        darray-append(var_3, new-boxed-value(7, gui2-find-widget-path("actionAvailable", var_0)), 0);
-        darray-append(get-symbol(category-slot-children-darray, self), new-boxed-value(7, var_3), 0);
+        darray-append(var_3, boxed_symbol(gui2-find-widget-path("iconContainer.icon", var_0)), 0);
+        darray-append(var_3, boxed_symbol(gui2-find-widget-path("actionAvailable", var_0)), 0);
+        darray-append(get-symbol(category-slot-children-darray, self), boxed_symbol(var_3), 0);
         i = i + 1;
     }
     return i;
@@ -282,7 +282,7 @@ u16 setup-on-focus--collectibles() {
                 var_17 = 0;
             }
             if (has-treasure-been-examined-by-picked-up-index?(var_17) == 0) {
-                darray-append(get-symbol(new-treasures-in-list, self), new-boxed-value(7, get-treasure-id-by-picked-up-index(var_17)), 0);
+                darray-append(get-symbol(new-treasures-in-list, self), boxed_symbol(get-treasure-id-by-picked-up-index(var_17)), 0);
             }
         }
     }
@@ -417,8 +417,8 @@ u16 populate-collectibles-list() {
                     var_8 = i;
                     var_9 = i;
                 } else {
-                    darray-insert(get-symbol(current-category-collectibles, self), new-boxed-value(7, get-treasure-id-by-picked-up-index(i)), 0);
-                    var_9 = darray-insert(get-symbol(current-category-collectibles-raw, self), new-boxed-value(2, i), 0);
+                    darray-insert(get-symbol(current-category-collectibles, self), boxed_symbol(get-treasure-id-by-picked-up-index(i)), 0);
+                    var_9 = darray-insert(get-symbol(current-category-collectibles-raw, self), boxed_i32(i), 0);
                 }
             }
         }
@@ -427,8 +427,8 @@ u16 populate-collectibles-list() {
         i = i + 1;
     }
     if (var_3) {
-        darray-insert(get-symbol(current-category-collectibles, self), new-boxed-value(7, get-treasure-id-by-picked-up-index(var_4)), 0);
-        darray-insert(get-symbol(current-category-collectibles-raw, self), new-boxed-value(2, var_4), 0);
+        darray-insert(get-symbol(current-category-collectibles, self), boxed_symbol(get-treasure-id-by-picked-up-index(var_4)), 0);
+        darray-insert(get-symbol(current-category-collectibles-raw, self), boxed_i32(var_4), 0);
         var_21 = data-source-mark-range-dirty(collectibles-list, 0, 1, 0);
     }
     if (darrays-of-numerics-equal-indexwise?(get-symbol(current-category-collectibles, self), *current-category-collectibles-prev*, 7) && darrays-of-numerics-equal-indexwise?(get-symbol(current-category-collectibles-raw, self), *current-category-collectibles-raw-prev*, 2) == 0) {
@@ -500,7 +500,7 @@ u16 refresh-branch-dots() {
         u64? var_2 = get-treasure-by-id(get-treasure-id-by-picked-up-index(i), 0);
         if (!(var_2 == 0)) {
             if (is-timeline-valid-for-treasure?(var_2) && has-treasure-been-examined?(var_2) == 0 && *(i32*)(var_2 + 96) != 4) {
-                u64? var_9 = darray-find(get-symbol(unlocked-categories, self), new-boxed-value(2, *(i32*)(var_2 + 96)), 0);
+                u64? var_9 = darray-find(get-symbol(unlocked-categories, self), boxed_i32(*(i32*)(var_2 + 96)), 0);
                 gui2-set-widget-visible(get-category-slot-child(var_9, 1), 1);
                 var_3 = gui2-set-widget-state-immediate(get-category-slot-child(var_9, 1), active, 0, 0, 0);
             }
@@ -514,7 +514,7 @@ u16 set-category-counts() {
     darray-clear(get-symbol(category-collectible-count, self));
     u64 i = 0;
     while (i < (5 - 1)) {
-        darray-append(get-symbol(category-collectible-count, self), new-boxed-value(2, 0), 0);
+        darray-append(get-symbol(category-collectible-count, self), boxed_i32(0), 0);
         i = i + 1;
     }
     u64 i = 0;
@@ -538,7 +538,7 @@ u16 set-category-counts() {
             } else {
                 var_12 = 0;
             }
-            var_7 = darray-set(get-symbol(category-collectible-count, self), *(i32*)(var_5 + 96), new-boxed-value(2, var_12 + 1));
+            var_7 = darray-set(get-symbol(category-collectible-count, self), *(i32*)(var_5 + 96), boxed_i32(var_12 + 1));
         }
         i = i + 1;
     }
@@ -782,7 +782,7 @@ statescript {
                                         gui2-set-widget-image(get-category-slot-child(darray-count(get-symbol(unlocked-categories, self)), 0), get-collectible-category-icon(i));
                                         gui2-set-widget-state-immediate(get-category-slot-child(darray-count(get-symbol(unlocked-categories, self)), 0), normal, 0, 0, 0);
                                         gui2-set-widget-state-immediate(get-category-slot-widget-path(darray-count(get-symbol(unlocked-categories, self))), normal, 0, 0, 0);
-                                        darray-append(get-symbol(unlocked-categories, self), new-boxed-value(2, i), 0);
+                                        darray-append(get-symbol(unlocked-categories, self), boxed_i32(i), 0);
                                     }
                                 }
                             }
@@ -839,17 +839,7 @@ statescript {
                         darray-destroy(get-symbol(current-category-collectibles-raw, self));
                         darray-destroy(get-symbol(category-collectible-count, self));
                         darray-destroy(get-symbol(unlocked-categories, self));
-                        foreach (u64? var_9 : get-symbol(category-slot-children-darray, self)) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
+                        foreach (u64? var_10 : get-symbol(category-slot-children-darray, self)) {
                             if (darray-is-valid?(var_10)) {
                                 darray-destroy(var_10);
                             }
@@ -956,11 +946,11 @@ statescript {
                         } else {
                             var_4 = 0;
                         }
-                        speak-text-to-speech-formatted(new-boxed-value(7, get-collectible-category-title(var_4)), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(get-collectible-category-title(var_4)), 1, 0, 1);
                         u64? var_7 = #%alloc-array(single-frame, 1, 2, 0);
-                        *(u64*)(*var_7 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_PART_COUNT);
-                        *(u64*)(*var_7 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(parts));
-                        speak-text-to-speech-formatted(new-boxed-value(21, var_7), 1, 0, 1);
+                        *(u64*)var_7[0] = boxed_symbol(A11Y_MENU_WORKBENCH_PART_COUNT);
+                        *(u64*)var_7[1] = boxed_i32(get-inventory-item-quantity(parts));
+                        speak-text-to-speech-formatted(boxed_array(var_7), 1, 0, 1);
                         set-boolean(play-focus-sound?, 1, self);
                     }
                 }
@@ -982,7 +972,7 @@ statescript {
                     u64? var_4 = get-treasure-by-id(var_3, 0);
                     if (!(var_4 == 0)) {
                         var_5 = speak-text-to-speech-formatted(
-                            new-boxed-value(7, *(u64*)(var_4 + 8)),
+                            boxed_symbol(*(u64*)(var_4 + 8)),
                             1,
                             0,
                             1
@@ -1023,7 +1013,7 @@ statescript {
                                         var_18 = 0;
                                     }
                                     if (has-treasure-been-examined-by-picked-up-index?(var_18) == 0) {
-                                        darray-append(get-symbol(new-treasures-in-list, self), new-boxed-value(7, get-treasure-id-by-picked-up-index(var_18)), 0);
+                                        darray-append(get-symbol(new-treasures-in-list, self), boxed_symbol(get-treasure-id-by-picked-up-index(var_18)), 0);
                                     }
                                 }
                             }
@@ -1233,17 +1223,17 @@ statescript {
                         } else {
                             var_9 = 0;
                         }
-                        speak-text-to-speech-formatted(new-boxed-value(7, get-collectible-category-title(var_9)), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(get-collectible-category-title(var_9)), 1, 0, 1);
                         speak-text-to-speech-formatted(
-                            new-boxed-value(7, *(u64*)(var_4 + 8)),
+                            boxed_symbol(*(u64*)(var_4 + 8)),
                             1,
                             0,
                             1
                         );
                         u64? var_14 = #%alloc-array(single-frame, 1, 2, 0);
-                        *(u64*)(*var_14 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_PART_COUNT);
-                        *(u64*)(*var_14 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(parts));
-                        var_5 = speak-text-to-speech-formatted(new-boxed-value(21, var_14), 1, 0, 1);
+                        *(u64*)var_14[0] = boxed_symbol(A11Y_MENU_WORKBENCH_PART_COUNT);
+                        *(u64*)var_14[1] = boxed_i32(get-inventory-item-quantity(parts));
+                        var_5 = speak-text-to-speech-formatted(boxed_array(var_14), 1, 0, 1);
                     }
                 }
                 lambda {

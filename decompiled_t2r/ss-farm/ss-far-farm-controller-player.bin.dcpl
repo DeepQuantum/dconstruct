@@ -132,12 +132,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 31;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-far-explore-baby-1, baby-hold-pose-1--idle, var_0);
                 }
                 lambda {
@@ -200,9 +200,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(obj-far-explore-baby-1, far-hearding-carry-baby-idle--baby, var_0);
                 }
                 lambda {
@@ -217,17 +217,7 @@ statescript {
                 }
                 lambda {
                     if (!timer-running?(shoo-cooldown, self)) {
-                        foreach (u64? var_2 : sheep-herd) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : sheep-herd) {
                             if (get-player-to-object-distance(var_3) < 4.00 && !(get-script-state(var_3) == complete)) {
                                 ++(num-sheep, self);
                             }
@@ -323,9 +313,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(obj-far-explore-baby-1, far-hearding-carry-baby-idle--baby, var_0);
                 }
                 lambda {

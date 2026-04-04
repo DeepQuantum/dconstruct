@@ -67,27 +67,17 @@ u16 player-in-new-spot-zone?() {
 }
 
 u64? run-target-checks-against-player() {
-    foreach (u64? var_1 : vox-afm-burning-village-all-enemies) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : vox-afm-burning-village-all-enemies) {
         if (npc-alive?(var_2)) {
             if (nth-frame?(15, random-int32-min-max(0, 6, 0)) && npc-get-target(var_2) == player) {
                 if (npc-get-faction(var_2, 1) == Militia && !(get-boolean(vox-wlf-last-spot, self))) {
                     if (enemy-npc-can-call-out-player?(var_2)) {
-                        send-event(vox-afm-burning-village-spot-player, get-self-id(), new-boxed-value(7, var_2));
+                        send-event(vox-afm-burning-village-spot-player, get-self-id(), boxed_symbol(var_2));
                     }
                 }
                 if (npc-get-faction(var_2, 1) == Scar && !(get-boolean(vox-scar-last-spot, self))) {
                     if (enemy-npc-can-call-out-player?(var_2)) {
-                        send-event(vox-afm-burning-village-spot-player, get-self-id(), new-boxed-value(7, var_2));
+                        send-event(vox-afm-burning-village-spot-player, get-self-id(), boxed_symbol(var_2));
                     }
                 }
             }
@@ -352,17 +342,7 @@ statescript {
                     set-int32(vox-wlf-alive-count, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-faction(var_2, 1) == Militia) {
                                 ++(vox-wlf-alive-count, self);

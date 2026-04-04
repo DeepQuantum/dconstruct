@@ -50,17 +50,7 @@ statescript {
                     wait-spawn-npc-group-async(npc-houses-search, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : npc-houses-search) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npc-houses-search) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -75,9 +65,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
                     animate_(npc-house-search-1, thug-p-idle-lost-target-reaction-01, var_0);
                 }
                 lambda {
@@ -87,17 +77,7 @@ statescript {
                     wait(4.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : npc-houses-search) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npc-houses-search) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-stop(var_2);
                     }
@@ -172,12 +152,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
                     wait-animate_(npc-house-search-2, thug-p-idle-lost-target-reaction-01, var_0);
                 }
                 lambda {
@@ -311,17 +291,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : npc-houses-search) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npc-houses-search) {
                         if (!(get-symbol(pair-search-a, self) == 0) && !(get-symbol(pair-search-b, self) == 0) || var_2 == get-symbol(pair-search-a, self) && var_2 == get-symbol(pair-search-b, self)) {
                             character-highlight(var_2, 0, alloc-color(0.00, 1.00, 0.00, 1.00, 0));
                         } else if (!(get-symbol(pair-search-c, self) == 0) && !(get-symbol(pair-search-d, self) == 0) || var_2 == get-symbol(pair-search-c, self) && var_2 == get-symbol(pair-search-d, self)) {

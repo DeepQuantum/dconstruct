@@ -45,11 +45,11 @@ statescript {
                         set-boolean(allow-player-targeting-vox, 0, self);
                         suppress-speech(*suppress-afm-burning-village*, 4);
                         if (task-continue-active?(abby-fights-militia, afm-burning-village-brute-combat, finisher-intro)) {
-                            fact-set(global, scythe-to-face?, new-boxed-value(1, 1));
-                            fact-set(npc-afm-burning-village-collapse-brute-1, scythe-to-face-fx?, new-boxed-value(1, 1));
+                            fact-set(global, scythe-to-face?, boxed_bool(1));
+                            fact-set(npc-afm-burning-village-collapse-brute-1, scythe-to-face-fx?, boxed_bool(1));
                         } else if (task-continue-active?(abby-fights-militia, afm-burning-village-brute-combat, finisher)) {
-                            fact-set(global, scythe-to-face?, new-boxed-value(1, 1));
-                            fact-set(npc-afm-burning-village-collapse-brute-1, scythe-to-face-fx?, new-boxed-value(1, 1));
+                            fact-set(global, scythe-to-face?, boxed_bool(1));
+                            fact-set(npc-afm-burning-village-collapse-brute-1, scythe-to-face-fx?, boxed_bool(1));
                         }
                     } else if (task-active?(abby-fights-militia, afm-burning-village-brute-struggle)) {
                         set-boolean(suppress-enemy-murmuration, 1, self);
@@ -85,17 +85,7 @@ statescript {
             track main {
                 lambda {
                     if (nth-frame?(30, 0) && get-boolean(suppress-enemy-murmuration, self)) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (npc-alive?(var_4)) {
                                 if (!(var_4 == npc-afm-burning-village-collapse-brute-1)) {
                                     shut-up-murmuration(var_4, 2.00);

@@ -74,27 +74,27 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = rotate-locator-lookat(get-object-locator(player), get-object-locator(get-self-id()), 1.00, 0);
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 13;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 2;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 10;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = rotate-locator-lookat(get-object-locator(player), get-object-locator(get-self-id()), 1.00, 0);
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
                     u16 var_6;
                     if (player-is-crouched?()) {
                         var_6 = 18;
                     } else {
                         var_6 = 1;
                     }
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = var_6;
+                    *(i32*)(*var_0[4] + 8) = var_6;
                     animate_(player, idle-hr-fwd, var_0);
                 }
                 lambda {

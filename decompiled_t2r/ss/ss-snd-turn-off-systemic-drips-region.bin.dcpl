@@ -21,14 +21,14 @@ statescript {
         block event inside {
             track main {
                 lambda {
-                    fact-set(global, block-gpu-sounds, new-boxed-value(1, 1));
+                    fact-set(global, block-gpu-sounds, boxed_bool(1));
                 }
             }
         }
         block event exit {
             track main {
                 lambda {
-                    fact-set(global, block-gpu-sounds, new-boxed-value(1, 0));
+                    fact-set(global, block-gpu-sounds, boxed_bool(0));
                 }
             }
         }

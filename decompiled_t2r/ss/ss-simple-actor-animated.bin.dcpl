@@ -23,21 +23,21 @@ statescript {
                             camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         }
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
                         u64? var_5;
                         if (tag-specified?(ap-ref, self)) {
                             var_5 = get-spawner-locator(tag-symbol(ap-ref, self), 1);
                         } else {
                             var_5 = get-object-locator(self);
                         }
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_3 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = tag-float(start-phase, self);
-                        *(i32*)*(*var_3 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = tag-float(speed-pct, self);
+                        *(u64*)(*var_3[0] + 8) = var_5;
+                        *(i32*)*var_3[1] = 58;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = tag-float(start-phase, self);
+                        *(i32*)*var_3[2] = 56;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = tag-float(speed-pct, self);
                         animate_(self, tag-symbol(anim-name, self), var_3);
                     } else {
                         u64? var_11 = dc:format("simple-actor-animated: anim-name property not specified!");

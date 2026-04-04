@@ -43,7 +43,7 @@ statescript {
                 lambda {
                     u64? var_1 = event-arg-symbol(1);
                     u64? var_2 = event-arg-symbol(2);
-                    u64? var_5 = darray-contains?(rogue-headshot-joint-group, new-boxed-value(7, get-symbol(last-joint-hit, self)));
+                    u64? var_5 = darray-contains?(rogue-headshot-joint-group, boxed_symbol(get-symbol(last-joint-hit, self)));
                     u64? var_6 = lookup-weapon-gameplay-def(var_2, 1);
                     u16 var_7;
                     if (!(var_6 == 0)) {

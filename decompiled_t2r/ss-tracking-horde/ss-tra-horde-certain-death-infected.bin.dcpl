@@ -131,21 +131,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 95;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 12;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 95;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 12;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-a-intro--abby--light-skel, var_0);
                 }
                 lambda {
@@ -153,21 +153,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 95;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 12;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 95;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 12;
                     wait-animate_(player, tra-horde-fence-attack-a-intro--abby, var_0);
                 }
                 lambda {
@@ -175,28 +175,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-a-idle--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-a-idle--abby, var_0);
                 }
                 lambda {
@@ -295,41 +295,41 @@ statescript {
                             set-boolean(input-active?, 0, self);
                             send-event(damage-1, ss-tra-horde-certain-death-infected-group-one-1);
                             u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_0 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (3 * 8)) = 3;
-                            *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[1] = 28;
+                            *(u64*)(*var_0[1] + 8) = 0;
+                            *(f32*)(*var_0[1] + 8) = 0.50;
+                            *(i32*)*var_0[2] = 30;
+                            *(u64*)(*var_0[2] + 8) = 0;
+                            *(f32*)(*var_0[2] + 8) = 0.50;
+                            *(i32*)*var_0[3] = 3;
+                            *(u64*)(*var_0[3] + 8) = 0;
+                            *(u8*)(*var_0[3] + 8) = 1;
                             wait-animate_(player, tra-horde-fence-attack-damage-01--abby, var_0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_2 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_2 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[1] = 28;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = 0.50;
+                            *(i32*)*var_2[2] = 30;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(f32*)(*var_2[2] + 8) = 0.50;
                             animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-a-idle--abby--light-skel, var_2);
                             player-set-emotion(fear, 200.00, 0.10, 1.00);
                             u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_4 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_4 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_4[0] = 10;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_4[1] = 28;
+                            *(u64*)(*var_4[1] + 8) = 0;
+                            *(f32*)(*var_4[1] + 8) = 0.50;
+                            *(i32*)*var_4[2] = 30;
+                            *(u64*)(*var_4[2] + 8) = 0;
+                            *(f32*)(*var_4[2] + 8) = 0.50;
                             animate_(player, tra-horde-fence-attack-a-idle--abby, var_4);
                             set-boolean(input-active?, 1, self);
                             wait(2.50);
@@ -342,15 +342,15 @@ statescript {
                                     signal(fail-1-anim-a, 0);
                                     kill-entity(tra-horde-fence-attack-non-stop-light-object-1);
                                     u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_6[0] = 10;
+                                    *(u64*)(*var_6[0] + 8) = 0;
+                                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-01--abby--light-skel, var_6);
                                     signal(start-death-anim, 0);
                                     u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_8 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_8[0] = 10;
+                                    *(u64*)(*var_8[0] + 8) = 0;
+                                    *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     wait-animate_(player, tra-horde-fence-attack-fail-01--abby, var_8);
                                 }
                             }
@@ -531,28 +531,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-b-squeeze--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-b-squeeze--abby, var_0);
                 }
                 lambda {
@@ -563,28 +563,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-b-squeeze-idle-005--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-b-squeeze-idle-005--abby, var_0);
                 }
                 lambda {
@@ -612,15 +612,15 @@ statescript {
                             kill-entity(tra-horde-fence-attack-non-stop-light-object-1);
                             kill-entity(tra-horde-fence-attack-light-object-1);
                             u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-01--abby--light-skel, var_0);
                             signal(start-death-anim, 0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             wait-animate_(player, tra-horde-fence-attack-fail-01--abby, var_2);
                         }
                     }
@@ -799,28 +799,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-b-squeeze-02--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-b-squeeze-02--abby, var_0);
                 }
                 lambda {
@@ -831,28 +831,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-b-squeeze-idle-01--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-b-squeeze-idle-01--abby, var_0);
                 }
                 lambda {
@@ -878,41 +878,41 @@ statescript {
                             send-event(damage-2, ss-tra-horde-certain-death-infected-group-two-1);
                             set-boolean(input-active?, 0, self);
                             u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_0 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (3 * 8)) = 3;
-                            *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[1] = 28;
+                            *(u64*)(*var_0[1] + 8) = 0;
+                            *(f32*)(*var_0[1] + 8) = 0.50;
+                            *(i32*)*var_0[2] = 30;
+                            *(u64*)(*var_0[2] + 8) = 0;
+                            *(f32*)(*var_0[2] + 8) = 0.50;
+                            *(i32*)*var_0[3] = 3;
+                            *(u64*)(*var_0[3] + 8) = 0;
+                            *(u8*)(*var_0[3] + 8) = 1;
                             wait-animate_(player, tra-horde-fence-attack-damage-02--abby, var_0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_2 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_2 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[1] = 28;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = 0.50;
+                            *(i32*)*var_2[2] = 30;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(f32*)(*var_2[2] + 8) = 0.50;
                             animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-b-squeeze-idle-01--abby--light-skel, var_2);
                             player-set-emotion(fear, 200.00, 0.10, 1.00);
                             u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_4 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_4 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_4[0] = 10;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_4[1] = 28;
+                            *(u64*)(*var_4[1] + 8) = 0;
+                            *(f32*)(*var_4[1] + 8) = 0.50;
+                            *(i32*)*var_4[2] = 30;
+                            *(u64*)(*var_4[2] + 8) = 0;
+                            *(f32*)(*var_4[2] + 8) = 0.50;
                             animate_(player, tra-horde-fence-attack-b-squeeze-idle-01--abby, var_4);
                             set-boolean(input-active?, 1, self);
                             wait(2.50);
@@ -925,15 +925,15 @@ statescript {
                                     signal(fail-2-anim-b, 0);
                                     kill-entity(tra-horde-fence-attack-light-object-1);
                                     u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_6[0] = 10;
+                                    *(u64*)(*var_6[0] + 8) = 0;
+                                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-02--abby--light-skel, var_6);
                                     signal(start-death-anim, 0);
                                     u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_8 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_8[0] = 10;
+                                    *(u64*)(*var_8[0] + 8) = 0;
+                                    *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     wait-animate_(player, tra-horde-fence-attack-fail-02--abby, var_8);
                                 }
                             }
@@ -1117,28 +1117,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-b-squeeze--to-grab--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-b-squeeze--to-grab--abby, var_0);
                 }
                 lambda {
@@ -1228,28 +1228,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-b-squeeze-idle-02--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-b-squeeze-idle-02--abby, var_0);
                 }
                 lambda {
@@ -1274,15 +1274,15 @@ statescript {
                             signal(fail-2-anim-crouch, 0);
                             kill-entity(tra-horde-fence-attack-light-object-1);
                             u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-02--abby--light-skel, var_0);
                             signal(start-death-anim, 0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             wait-animate_(player, tra-horde-fence-attack-fail-02--abby, var_2);
                         }
                     }
@@ -1450,12 +1450,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-c-squeeze-01--abby--light-skel, var_0);
                 }
                 lambda {
@@ -1463,12 +1463,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-c-squeeze-01--abby, var_0);
                 }
                 lambda {
@@ -1482,22 +1482,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-c-squeeze-01-to-prone--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-c-squeeze-01-to-prone--abby, var_0);
                 }
                 lambda {
@@ -1505,28 +1505,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-c-squeeze-idle-01--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-c-squeeze-idle-01--abby, var_0);
                 }
                 lambda {
@@ -1557,41 +1557,41 @@ statescript {
                             send-event(damage-3, ss-tra-horde-certain-death-infected-group-three-1);
                             set-boolean(input-active?, 0, self);
                             u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_0 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_0 + (3 * 8)) = 3;
-                            *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[1] = 28;
+                            *(u64*)(*var_0[1] + 8) = 0;
+                            *(f32*)(*var_0[1] + 8) = 0.50;
+                            *(i32*)*var_0[2] = 30;
+                            *(u64*)(*var_0[2] + 8) = 0;
+                            *(f32*)(*var_0[2] + 8) = 0.50;
+                            *(i32*)*var_0[3] = 3;
+                            *(u64*)(*var_0[3] + 8) = 0;
+                            *(u8*)(*var_0[3] + 8) = 1;
                             wait-animate_(player, tra-horde-fence-attack-damage-03--abby, var_0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_2 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_2 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[1] = 28;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = 0.50;
+                            *(i32*)*var_2[2] = 30;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(f32*)(*var_2[2] + 8) = 0.50;
                             animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-c-squeeze-idle-01--abby--light-skel, var_2);
                             player-set-emotion(panic, 200.00, 0.10, 1.00);
                             u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                            *(i32*)*(*var_4 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_4 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_4[0] = 10;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_4[1] = 28;
+                            *(u64*)(*var_4[1] + 8) = 0;
+                            *(f32*)(*var_4[1] + 8) = 0.50;
+                            *(i32*)*var_4[2] = 30;
+                            *(u64*)(*var_4[2] + 8) = 0;
+                            *(f32*)(*var_4[2] + 8) = 0.50;
                             animate_(player, tra-horde-fence-attack-c-squeeze-idle-01--abby, var_4);
                             set-boolean(input-active?, 1, self);
                             wait(2.50);
@@ -1602,15 +1602,15 @@ statescript {
                                     signal(fail-3-anim-prone, 0);
                                     kill-entity(tra-horde-fence-attack-light-object-1);
                                     u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_6[0] = 10;
+                                    *(u64*)(*var_6[0] + 8) = 0;
+                                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-03--abby--light-skel, var_6);
                                     signal(start-death-anim, 0);
                                     u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_8 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                                    *(i32*)*var_8[0] = 10;
+                                    *(u64*)(*var_8[0] + 8) = 0;
+                                    *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                                     wait-animate_(player, tra-horde-fence-attack-fail-03--abby, var_8);
                                 }
                             }
@@ -1791,15 +1791,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-c-squeeze-02--abby--light-skel, var_0);
                 }
                 lambda {
@@ -1807,15 +1807,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-c-squeeze-02--abby, var_0);
                 }
                 lambda {
@@ -1823,28 +1823,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-horde-fence-attack-light-object-1, tra-horde-fence-attack-c-squeeze-idle-02--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, tra-horde-fence-attack-c-squeeze-idle-02--abby, var_0);
                 }
                 lambda {
@@ -1866,9 +1866,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                     animate_(obj-tra-horde-beanie-1, tra-horde-fence-attack-c-squeeze-02--beanie, var_0);
                 }
             }
@@ -1887,15 +1887,15 @@ statescript {
                             signal(fail-3-anim-squeeze, 0);
                             kill-entity(tra-horde-fence-attack-light-object-1);
                             u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_0 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_0[0] = 10;
+                            *(u64*)(*var_0[0] + 8) = 0;
+                            *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             animate_(tra-horde-fence-attack-fail-light-object-1, tra-horde-fence-attack-fail-03--abby--light-skel, var_0);
                             signal(start-death-anim, 0);
                             u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
                             wait-animate_(player, tra-horde-fence-attack-fail-03--abby, var_2);
                         }
                     }
@@ -2073,28 +2073,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
                     animate_(tra-horde-fence-attack-non-stop-light-object-1, tra-horde-fence-attack-c-squeeze-3--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-attack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-fence-attack-c-squeeze-3--abby, var_0);
                 }
                 lambda {

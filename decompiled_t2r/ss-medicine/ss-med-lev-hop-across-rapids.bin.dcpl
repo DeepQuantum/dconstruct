@@ -50,9 +50,9 @@ statescript {
             track anims {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-flooded-street-slope-lev-hopping-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-flooded-street-slope-lev-hopping-1, 1);
                     animate_(obj-med-falling-car-1, med-flooded-street-slope-lev-hopping--car, var_0);
                 }
                 lambda {
@@ -60,21 +60,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-flooded-street-slope-lev-hopping-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-flooded-street-slope-lev-hopping-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_7;
                     if (npc-on-screen-and-visible?(lev, -1, 0) && is-on-screen?(get-locator-position(get-animation-entry(lev, med-flooded-street-slope-lev-hopping--lev, get-spawner-locator(ap-med-flooded-street-slope-lev-hopping-1, 1), 0, 0.00, apReference)), 0.50)) {
                         var_7 = 0.50;
                     } else {
                         var_7 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_7;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_0[1] + 8) = var_7;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(lev, med-flooded-street-slope-lev-hopping--lev, var_0);
                 }
                 lambda {

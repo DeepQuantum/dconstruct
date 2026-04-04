@@ -56,7 +56,7 @@ statescript {
                     if (darray-count(all-enemy-npcs) == 0) {
                         go(complete, 1);
                     } else if (event-arg-symbol(0) != npc-rog-arcade-bloater-1) {
-                        darray-find-remove(rog-arcade-bloater-reinf, new-boxed-value(7, event-arg-symbol(0)), 0);
+                        darray-find-remove(rog-arcade-bloater-reinf, boxed_symbol(event-arg-symbol(0)), 0);
                         ++(enemies-defeated-this-wave, self);
                         if (darray-count(rog-arcade-bloater-reinf) == 0) {
                             set-int32(enemies-defeated-this-wave, 0, self);
@@ -130,20 +130,10 @@ statescript {
             track enemy-shut-up {
                 lambda {
                     while (darray-count(rog-arcade-reinforcement-seen?) < darray-count(rog-arcade-bloater-reinf)) {
-                        foreach (u64? var_3 : rog-arcade-bloater-reinf) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
-                            if (!darray-contains?(rog-arcade-reinforcement-seen?, new-boxed-value(7, var_4)) || npc-get-instantaneous-noticeability(var_4) || distance-between-objects-less-than?(var_4, player, 5.00)) {
+                        foreach (u64? var_4 : rog-arcade-bloater-reinf) {
+                            if (!darray-contains?(rog-arcade-reinforcement-seen?, boxed_symbol(var_4)) || npc-get-instantaneous-noticeability(var_4) || distance-between-objects-less-than?(var_4, player, 5.00)) {
                                 if (npc-on-screen-and-visible?(var_4, -1, 0)) {
-                                    darray-append(rog-arcade-reinforcement-seen?, new-boxed-value(7, var_4), 1);
+                                    darray-append(rog-arcade-reinforcement-seen?, boxed_symbol(var_4), 1);
                                 } else {
                                     shut-up(var_4, 0.10);
                                     shut-up-murmuration(var_4, 0.10);
@@ -207,7 +197,7 @@ statescript {
                         u64? var_13 = spawn-entity(var_12, 0, 0);
                         npc-set-force-drop-table(var_13, *t2r-boss-support-ammo-only-drop-table*);
                         npc-set-zone-region(var_13, rgn-zone-arcade-boss-fight-reinforcements-1);
-                        darray-append(rog-arcade-bloater-reinf, new-boxed-value(7, var_13), 1);
+                        darray-append(rog-arcade-bloater-reinf, boxed_symbol(var_13), 1);
                         ++(enemies-spawned-this-wave, self);
                         wait(get-float(seconds-between-enemy-spawns, self));
                     }

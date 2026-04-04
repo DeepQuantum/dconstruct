@@ -57,17 +57,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : flooded-street-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -187,17 +177,7 @@ statescript {
                     send-event(turn-on, hint-waypoint-flo-flooded-street-militia-fight-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : flooded-street-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -254,17 +234,7 @@ statescript {
                     group-kill-entity(flooded-street-reinf-npcs, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : flooded-street-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flooded-street-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

@@ -28,8 +28,8 @@ u64? epi-wait-draw-bar(i32 arg_0, sid arg_1, u64? arg_2, u64? arg_3, u64? arg_4)
     send-event(
         next-chord-changed,
         get-symbol(menu-name, arg_1),
-        new-boxed-value(2, (i32)arg_0),
-        new-boxed-value(6, var_6 * tag-float(tempo, arg_1))
+        boxed_i32((i32)arg_0),
+        boxed_f32(var_6 * tag-float(tempo, arg_1))
     );
     set-boolean(right-chord?, is-guitar-vibration-cues-enabled?() && =f(get-float(chord-choice, arg_1), get-float(next-chord, arg_1), 0.00), arg_1);
     set-float(beat-wheel, 40.00, arg_1);
@@ -94,7 +94,7 @@ statescript {
                     attach(gtr-epi-guitar-fail-1, player, targSpineProp, 0.00);
                 }
                 lambda {
-                    send-event(force-skip-entry, gtr-epi-guitar-fail-1, new-boxed-value(1, 0));
+                    send-event(force-skip-entry, gtr-epi-guitar-fail-1, boxed_bool(0));
                 }
                 lambda {
                     set-boolean(lock-guitar-listener, 1, self);
@@ -122,7 +122,7 @@ statescript {
                         animate-done(gtr-epi-guitar-fail-1, epi-guitar-fail-play-idle-1--guitar, ap-epi-guitar-playing-1, 0, 0, 2);
                         set-boolean(task-in?, 0, self);
                         wait-one-frame();
-                        send-event(force-skip-entry, gtr-epi-guitar-fail-1, new-boxed-value(1, 0));
+                        send-event(force-skip-entry, gtr-epi-guitar-fail-1, boxed_bool(0));
                     }
                 }
                 lambda {
@@ -194,26 +194,26 @@ statescript {
                         set-boolean(played-wrong-once?, 1, self);
                         wait(0.30);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 40;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(i32*)(*var_1[0] + 8) = 1;
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.40;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(player, guitar-motions-epi-fd-missing-fingers--ellie--part, var_1);
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 40;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(i32*)(*var_2[0] + 8) = 1;
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.40;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         animate_(player, guitar-motions-epi-fd-missing-fingers--ellie--add, var_2);
                     }
                 }
@@ -226,12 +226,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-epi-guitar-playing-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-epi-guitar-playing-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
                     animate_(epi-guitar-fail-play-light-object-1, epi-guitar-fail-play-idle-1--ellie--light-skel, var_0);
                 }
             }

@@ -24,7 +24,7 @@ statescript {
         block event register-hide-post {
             track main {
                 lambda {
-                    darray-append(hide-posts, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(hide-posts, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -61,17 +61,7 @@ statescript {
                 lambda {
                     u16 var_1;
                     u16 var_2;
-                    foreach (u64? var_3 : hide-posts) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : hide-posts) {
                         u16 var_8;
                         if (get-float(score, var_4) > 0.00 && get-float(dist-to-npc, var_4) > 3.00 && get-float(dist-to-npc, var_4) < 10.00 || 0 == 0) {
                             if (get-float(score, var_4) > get-float(score, 0)) {

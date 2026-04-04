@@ -44,7 +44,7 @@ statescript {
         block event buoyant-object-dead {
             track main {
                 lambda {
-                    darray-append(buoyant-objects-to-spawn, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-append(buoyant-objects-to-spawn, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -53,17 +53,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : buoyant-objects-to-spawn-at-start) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : buoyant-objects-to-spawn-at-start) {
                         u64? var_3 = get-spawner-position(var_2, 1);
                         set-spawner-locator(var_2, alloc-bound-frame(
                             alloc-point(
@@ -137,7 +127,7 @@ statescript {
                     }
                     if (is-spawner-on-screen?(var_1)) {
                         darray-remove(buoyant-objects-to-spawn, 0);
-                        var_3 = darray-append(buoyant-objects-to-spawn, new-boxed-value(7, var_1), 0);
+                        var_3 = darray-append(buoyant-objects-to-spawn, boxed_symbol(var_1), 0);
                     } else {
                         spawn-entity(var_1, 0, 0);
                         var_3 = darray-remove(buoyant-objects-to-spawn, 0);

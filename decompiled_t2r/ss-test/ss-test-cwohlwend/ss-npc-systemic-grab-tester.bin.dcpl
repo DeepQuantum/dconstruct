@@ -93,17 +93,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -112,17 +102,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -152,46 +132,16 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-mode(var_2, 0, 0);
                         npc-set-melee-skill-settings(var_2, melee-skill-settings-default-test-grab);
                         npc-make-aware-of(var_2, player, 2, 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         npc-set-script-mode(var_2, 0, 0);
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             npc-make-aware-of(var_2, var_5, 2, 0);
                         }
                     }
@@ -203,17 +153,7 @@ statescript {
             track update {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : all-enemy-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-enemy-npcs) {
                             if (character-in-melee-attack-as-attacker?(var_2)) {
                                 while (!character-in-melee-attack-as-attacker?(var_2) && !characters-in-melee?(player, var_2, 0)) {
                                     wait-one-frame();

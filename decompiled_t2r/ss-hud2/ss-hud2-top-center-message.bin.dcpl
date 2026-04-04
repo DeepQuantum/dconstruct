@@ -21,7 +21,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(show-message, canvas.hudRoot.topCenterMessage, new-boxed-value(7, HINT_LAST_ATTACKER_LOOK));
+                    send-event(show-message, canvas.hudRoot.topCenterMessage, boxed_symbol(HINT_LAST_ATTACKER_LOOK));
                 }
                 lambda {
                     terminate();

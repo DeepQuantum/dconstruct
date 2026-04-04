@@ -213,7 +213,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = group-random(temp-shake-anims);
-                    darray-find-remove(temp-shake-anim, new-boxed-value(7, var_0), 0);
+                    darray-find-remove(temp-shake-anim, boxed_symbol(var_0), 0);
                     if (player-in-state?(Move) && get-player-weapon-process-id() == 0 || !(player-is-crouched?()) && !(get-boolean(in-water, self))) {
                         u64? var_9 = alloc-gesture-play-params();
                         *(u8*)(var_9 + 33) = 1;

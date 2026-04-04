@@ -18,17 +18,7 @@ u64? allow-buddies-to-kill-shambler() {
 }
 
 u64? fob-appliances-force-awareness() {
-    foreach (u64? var_1 : all-infected-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-infected-npcs) {
         if (npc-alive?(var_2)) {
             if (npc-alive?(var_2) && !npc-using-skill?(var_2, 0)) {
                 npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
@@ -41,20 +31,10 @@ u64? fob-appliances-force-awareness() {
 u64? wait-spawn-group-off-screen(u64? arg_0) {
     group-shuffle(spawn-closet-locations);
     bool var_1;
-    foreach (u64? var_2 : spawn-closet-locations) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : spawn-closet-locations) {
         bool var_9;
         if (0 || is-on-screen?(get-spawner-position(var_3, 1), 0.00) && !(distance-between-points(get-spawner-position(var_3, 1), get-object-position(player)) < 10.00)) {
-            darray-append(valid-closets, new-boxed-value(7, var_3), 1);
+            darray-append(valid-closets, boxed_symbol(var_3), 1);
             var_9 = darray-count(valid-closets) == darray-count(arg_0);
         }
         var_1 = var_9;
@@ -243,17 +223,7 @@ statescript {
                     wait-spawn-entity-group-async(fob-appliances-inf-1, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-appliances-inf-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-appliances-inf-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, mel, 2, *npc-awareness-options-no-surprise*);
@@ -359,17 +329,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-appliances-inf-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-appliances-inf-2) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, mel, 2, *npc-awareness-options-no-surprise*);
@@ -446,17 +406,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-appliances-inf-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-appliances-inf-3) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, mel, 2, *npc-awareness-options-no-surprise*);

@@ -101,40 +101,40 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
                     animate_(afd-fence-gate-b-closed-2, san-streets-ellie-sees-resort--gate, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 855;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-ellie-sees-resort-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 855;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.75;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 18;
                     wait-animate_(player, san-streets-ellie-sees-resort--ellie, var_0);
                 }
                 lambda {
@@ -175,32 +175,12 @@ statescript {
                     wait-for(anim-start);
                 }
                 lambda {
-                    foreach (u64? var_1 : slave-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : slave-npcs) {
                         set-high-contrast-mode-type(var_2, 5);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : slaver-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : slaver-npcs) {
                         set-high-contrast-mode-type(var_2, 7);
                     }
                 }
@@ -264,34 +244,14 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : slave-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : slave-npcs) {
                         if (object-spawned?(var_2)) {
                             photo-mode-fake-character/f(var_2, 8);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : slaver-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : slaver-npcs) {
                         if (object-spawned?(var_2)) {
                             photo-mode-fake-character/f(var_2, 4);
                         }

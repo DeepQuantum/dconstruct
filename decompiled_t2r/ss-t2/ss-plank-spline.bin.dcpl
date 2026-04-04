@@ -77,7 +77,7 @@ statescript {
                     u64 i = 0;
                     while (i < (tag-int32(num-splines, self) + 1)) {
                         if (tag-specified?(symbol-concat-int32(plank-spline-, i), self) && spline-exists?(tag-symbol(symbol-concat-int32(plank-spline-, i), self))) {
-                            darray-append(plank-splines, new-boxed-value(7, tag-symbol(symbol-concat-int32(plank-spline-, i), self)), 1);
+                            darray-append(plank-splines, boxed_symbol(tag-symbol(symbol-concat-int32(plank-spline-, i), self)), 1);
                         }
                         i = i + 1;
                     }
@@ -87,7 +87,7 @@ statescript {
                         u64 i = 0;
                         while (i < (tag-int32(num-splines-up, self) + 1)) {
                             if (tag-specified?(symbol-concat-int32(plank-spline-up-, i), self) && spline-exists?(tag-symbol(symbol-concat-int32(plank-spline-up-, i), self))) {
-                                darray-append(plank-up-only-splines, new-boxed-value(7, tag-symbol(symbol-concat-int32(plank-spline-up-, i), self)), 1);
+                                darray-append(plank-up-only-splines, boxed_symbol(tag-symbol(symbol-concat-int32(plank-spline-up-, i), self)), 1);
                             }
                             i = i + 1;
                         }
@@ -236,17 +236,7 @@ statescript {
                         set-boolean(found-spl-up, 0, self);
                         offset-locator(flatten-locator(alloc-bound-frame(get-object-position(player), get-locator-rotation(camera-locator(0)), 0, 0, 0)), alloc-vector(0.00, 1.00, 0.20, 1.00, 0));
                         u64? var_11;
-                        foreach (u64? var_12 : plank-splines) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : plank-splines) {
                             u64? var_19 = offset-locator(alloc-bound-frame(get-object-position(player), get-locator-rotation(camera-locator(0)), 0, 0, 0), alloc-vector(0.00, 0.15, 0.25, 1.00, 0));
                             u64? var_26 = offset-locator(alloc-bound-frame(get-object-position(player), get-locator-rotation(camera-locator(0)), 0, 0, 0), alloc-vector(0.00, 0.15, tag-float(PLANK-LENGTH, self) + 0.25, 1.00, 0));
                             u64? var_34 = offset-locator(flatten-locator(alloc-bound-frame(get-object-position(player), get-locator-rotation(camera-locator(0)), 0, 0, 0)), alloc-vector(0.00, tag-float(PLANK-LENGTH, self), 0.20, 1.00, 0));

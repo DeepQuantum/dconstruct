@@ -61,25 +61,15 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-generator-room-lights) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-generator-room-lights) {
                         turn-on-light(var_2, 0);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 32;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(rt-flickeron-Shape-1, med-hosp-basement-finding-power--rt-flickeron-Shape-1, var_0);
                 }
                 lambda {
@@ -92,17 +82,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-generator-room-lights) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-generator-room-lights) {
                         turn-on-light(var_2, 0);
                     }
                 }

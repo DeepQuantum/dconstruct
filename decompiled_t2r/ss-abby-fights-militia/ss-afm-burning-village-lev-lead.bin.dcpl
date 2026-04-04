@@ -97,15 +97,15 @@ statescript {
                         wait-npc-turn-to(lev, get-spawner-position(ic-vox-afm-dock-block-1, 1), 1, 0);
                         npc-holster-weapon(lev, 2, 1, -1.00, 0);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_3[0] = 28;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(f32*)(*var_3[0] + 8) = 0.50;
+                        *(i32*)*var_3[1] = 30;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 31;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(u8*)(*var_3[2] + 8) = 1;
                         animate_(lev, npc-pap-nw-uneasy-idle-look-around-a, var_3);
                     }
                 }

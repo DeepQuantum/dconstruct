@@ -191,8 +191,8 @@ statescript {
                         send-event(
                             set-team-names,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(7, HUD_SHOOTING_RANGE_ABBY),
-                            new-boxed-value(7, HUD_SHOOTING_RANGE_MANNY)
+                            boxed_symbol(HUD_SHOOTING_RANGE_ABBY),
+                            boxed_symbol(HUD_SHOOTING_RANGE_MANNY)
                         );
                         send-event(scoreboard-hide-total, get-symbol(w-score-root, self));
                     }
@@ -217,8 +217,8 @@ statescript {
                         send-event(
                             hud2-dots-update,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(2, get-int32(player-shots-taken, self)),
-                            new-boxed-value(1, 1)
+                            boxed_i32(get-int32(player-shots-taken, self)),
+                            boxed_bool(1)
                         );
                     }
                 }
@@ -236,17 +236,17 @@ statescript {
                     send-event(
                         hud2-score-update,
                         get-symbol(w-score-root, self),
-                        new-boxed-value(2, get-int32(manny-score, self)),
-                        new-boxed-value(1, 0),
-                        new-boxed-value(1, 0)
+                        boxed_i32(get-int32(manny-score, self)),
+                        boxed_bool(0),
+                        boxed_bool(0)
                     );
                 }
                 lambda {
                     send-event(
                         hud2-dots-update,
                         get-symbol(w-score-root, self),
-                        new-boxed-value(2, get-int32(manny-shots-taken, self)),
-                        new-boxed-value(1, 0)
+                        boxed_i32(get-int32(manny-shots-taken, self)),
+                        boxed_bool(0)
                     );
                 }
             }
@@ -345,9 +345,9 @@ statescript {
                     send-event(
                         hud2-score-update,
                         get-symbol(w-score-root, self),
-                        new-boxed-value(2, get-int32(player-score, self)),
-                        new-boxed-value(1, 1),
-                        new-boxed-value(1, 0)
+                        boxed_i32(get-int32(player-score, self)),
+                        boxed_bool(1),
+                        boxed_bool(0)
                     );
                 }
             }
@@ -402,17 +402,17 @@ statescript {
                     send-event(
                         hud2-score-update,
                         get-symbol(w-score-root, self),
-                        new-boxed-value(2, get-int32(manny-score, self)),
-                        new-boxed-value(1, 0),
-                        new-boxed-value(1, get-int32(manny-shots-taken, self) == 9)
+                        boxed_i32(get-int32(manny-score, self)),
+                        boxed_bool(0),
+                        boxed_bool(get-int32(manny-shots-taken, self) == 9)
                     );
                 }
                 lambda {
                     send-event(
                         hud2-dots-update,
                         get-symbol(w-score-root, self),
-                        new-boxed-value(2, get-int32(manny-shots-taken, self)),
-                        new-boxed-value(1, 0)
+                        boxed_i32(get-int32(manny-shots-taken, self)),
+                        boxed_bool(0)
                     );
                 }
             }

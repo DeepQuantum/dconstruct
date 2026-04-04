@@ -16,7 +16,7 @@ u64? spawn-spore-cloud() {
     wait-one-frame();
     set-visible(var_2, 0);
     disable-collision(var_2, 0);
-    return send-event(spawn-cloud, var_2, new-boxed-value(7, get-self-id()));
+    return send-event(spawn-cloud, var_2, boxed_symbol(get-self-id()));
 }
 
 statescript {
@@ -44,7 +44,7 @@ statescript {
                     if (shambler-should-explode?()) {
                         send-event(weakpoint-explode, get-symbol(npc, self));
                     } else if (event-object-damage() > 0 && event-attack-source?(player) && !event-attack-type?(1) && !event-attack-weapon?(brick) && !event-attack-weapon?(bottle) && !event-attack-weapon?(stun-bomb) && !event-attack-weapon?(smoke-bomb)) {
-                        send-event(attack-weakpoint, get-symbol(npc, self), new-boxed-value(2, event-object-damage() * 4));
+                        send-event(attack-weakpoint, get-symbol(npc, self), boxed_i32(event-object-damage() * 4));
                     }
                 }
             }
@@ -66,12 +66,12 @@ statescript {
             track animation {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 59;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 0;
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(self, gaseous-infected-attack--pustule, var_0);
                 }
                 lambda {
@@ -120,15 +120,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 59;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 0;
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(self, gaseous-infected-attack--pustule, var_0);
                 }
                 lambda {

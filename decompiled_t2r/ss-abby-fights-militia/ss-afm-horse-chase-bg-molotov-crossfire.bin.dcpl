@@ -115,33 +115,13 @@ statescript {
                     wait-spawn-npc-group-async(grp-afm-horse-chase-bg-molotov-crossfire--scars, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--militia) {
                         npc-set-script-only-no-perception(var_2);
                         npc-set-accuracy-multiplier(var_2, 0.00);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--scars) {
                         npc-set-script-only-no-perception(var_2);
                         npc-set-accuracy-multiplier(var_2, 0.00);
                     }
@@ -299,12 +279,12 @@ statescript {
                         npc-fire-at-object(npc-afm-horse-chase-bg-molotov-crossfire--militia-1, npc-afm-horse-chase-bg-molotov-crossfire--scar-2, 1, 3, 0, 0);
                         npc-look-at-object(lev, npc-afm-horse-chase-bg-molotov-crossfire--scar-2, 0, 10.00);
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
+                        *(i32*)*var_2[0] = 28;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(f32*)(*var_2[0] + 8) = 0.50;
+                        *(i32*)*var_2[1] = 30;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.00;
                         wait-animate_(npc-afm-horse-chase-bg-molotov-crossfire--scar-2, npc-m-death-fw-high-l-a, var_2);
                         npc-die-if-alive(npc-afm-horse-chase-bg-molotov-crossfire--scar-2);
                     }
@@ -416,51 +396,21 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--militia) {
                         if (entity-exists?(var_2) && npc-alive?(var_2)) {
                             disable-splashers-this-frame(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--militia-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--militia-2) {
                         if (entity-exists?(var_2) && npc-alive?(var_2)) {
                             disable-splashers-this-frame(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--scars) {
                         if (entity-exists?(var_2) && npc-alive?(var_2)) {
                             disable-splashers-this-frame(var_2);
                         }
@@ -473,32 +423,12 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--all) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--all) {
                         npc-die-if-alive(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-molotov-crossfire--all) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-molotov-crossfire--all) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }

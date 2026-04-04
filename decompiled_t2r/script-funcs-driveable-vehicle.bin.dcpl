@@ -15,12 +15,12 @@ u64? vehicle-set-rider(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
     return send-event(
         enter-vehicle,
         arg_1,
-        new-boxed-value(7, arg_0),
-        new-boxed-value(2, 2),
-        new-boxed-value(2, arg_2),
-        new-boxed-value(13, 0),
-        new-boxed-value(1, 0),
-        new-boxed-value(7, arg_3)
+        boxed_symbol(arg_0),
+        boxed_i32(2),
+        boxed_i32(arg_2),
+        boxed_p64(0),
+        boxed_bool(0),
+        boxed_symbol(arg_3)
     );
 }
 

@@ -62,7 +62,7 @@ u16 issue-reposition(u64? arg_0, u64? arg_1, u64? arg_2) {
             var_18 = angle-in-between-locators(get-object-locator(arg_0), rotate-locator-lookat(get-object-locator(npc-dog-1), get-object-locator(player), 1.00, 0), 2) > get-float(angle-threshold, self);
         }
         if (var_18) {
-            if (darray-contains?(dog-dodges, new-boxed-value(7, get-object-anim(npc-dog-1, 1)))) {
+            if (darray-contains?(dog-dodges, boxed_symbol(get-object-anim(npc-dog-1, 1)))) {
                 stop-animating(npc-dog-1, 2, 0.20, 0, 0);
             }
             if (distance-between-points(get-locator-position(arg_1), get-object-position(npc-dog-1)) > (get-float(min-move-dist, self) * 1.80)) {
@@ -401,12 +401,12 @@ statescript {
                 }
                 lambda {
                     if (debug-mouse-click-l() || debug-mouse-click-r() && debug-mouse-click-m()) {
-                        send-event(move, self, new-boxed-value(1, 1));
+                        send-event(move, self, boxed_bool(1));
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(jump, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
-                        send-event(move, self, new-boxed-value(1, 0));
+                        send-event(move, self, boxed_bool(0));
                     }
                 }
                 lambda {
@@ -528,18 +528,18 @@ statescript {
                 lambda {
                     if (!npc-is-moving?(npc-dog-1)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_2 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_2 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (2 * 8)) + 8) = 5;
-                        *(i32*)*(*var_2 + (3 * 8)) = 44;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (3 * 8)) + 8) = random-boolean();
+                        *(i32*)*var_2[0] = 28;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(f32*)(*var_2[0] + 8) = 0.20;
+                        *(i32*)*var_2[1] = 30;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.20;
+                        *(i32*)*var_2[2] = 13;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(i32*)(*var_2[2] + 8) = 5;
+                        *(i32*)*var_2[3] = 44;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(u8*)(*var_2[3] + 8) = random-boolean();
                         animate_(npc-dog-1, group-random(dog-dodges), var_2);
                         start-timer(performance-timer, rand-range(3.00, 5.00), self, 1);
                         set-boolean(can-strafe?, 1, self);

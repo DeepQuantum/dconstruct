@@ -75,7 +75,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-1, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-1));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-1));
                 }
                 lambda {
                     go(setup, 1);
@@ -94,7 +94,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-2, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-2));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-2));
                 }
                 lambda {
                     go(setup, 1);
@@ -110,7 +110,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-3, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-3));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-3));
                 }
                 lambda {
                     go(setup, 1);
@@ -126,7 +126,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-4, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-4));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-4));
                 }
                 lambda {
                     go(setup, 1);
@@ -142,7 +142,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-5, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-5));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-5));
                 }
                 lambda {
                     go(setup, 1);
@@ -158,7 +158,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-6, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-6));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-6));
                 }
                 lambda {
                     go(setup, 1);
@@ -174,7 +174,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-7, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-7));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-7));
                 }
                 lambda {
                     go(setup, 1);
@@ -190,7 +190,7 @@ statescript {
                     set-symbol(splasher-event, splasher-test-tracking-8, self);
                 }
                 lambda {
-                    fact-set(global, splasher-test-ball-type, new-boxed-value(7, tracking-8));
+                    fact-set(global, splasher-test-ball-type, boxed_symbol(tracking-8));
                 }
                 lambda {
                     go(setup, 1);
@@ -481,17 +481,17 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(is-rolling, self)) {
-                        send-event(splasher-event, get-self-id(), new-boxed-value(7, ball-roll));
+                        send-event(splasher-event, get-self-id(), boxed_symbol(ball-roll));
                     }
                 }
                 lambda {
                     if (get-boolean(is-rolling, self) && !get-boolean(was-rolling, self)) {
-                        send-event(splasher-event, get-self-id(), new-boxed-value(7, ball-roll-start));
+                        send-event(splasher-event, get-self-id(), boxed_symbol(ball-roll-start));
                     }
                 }
                 lambda {
                     if (get-boolean(was-rolling, self) && !get-boolean(is-rolling, self)) {
-                        send-event(splasher-event, get-self-id(), new-boxed-value(7, ball-roll-stop));
+                        send-event(splasher-event, get-self-id(), boxed_symbol(ball-roll-stop));
                     }
                 }
             }

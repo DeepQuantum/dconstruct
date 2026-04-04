@@ -186,15 +186,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (1 * 8)) = 71;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.60;
+                    *(i32*)*var_0[1] = 71;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 0;
+                    *(i32*)*var_0[2] = 70;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
                     wait-animate_(player, abby=cin-ski-scar-hanging, var_0);
                 }
                 lambda {
@@ -257,12 +257,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (1 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.70;
+                    *(i32*)*var_0[1] = 24;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 1;
                     animate_(lev, lev=cin-ski-scar-hanging, var_0);
                 }
                 lambda {
@@ -342,22 +342,22 @@ statescript {
             }
             track fx {
                 lambda {
-                    fact-set(player, fx-mud-drag, new-boxed-value(1, 1));
+                    fact-set(player, fx-mud-drag, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(faction-enemy, fx-scar-ground-deform, new-boxed-value(1, 1));
+                    fact-set(faction-enemy, fx-scar-ground-deform, boxed_bool(1));
                 }
                 lambda {
                     wait-until-cin-maya-frame(-21.00, 0);
                 }
                 lambda {
-                    fact-set(faction-enemy, fx-scar-ground-deform, new-boxed-value(1, 0));
+                    fact-set(faction-enemy, fx-scar-ground-deform, boxed_bool(0));
                 }
                 lambda {
                     wait-until-cin-maya-frame(0.00, 0);
                 }
                 lambda {
-                    fact-set(player, fx-mud-drag, new-boxed-value(1, 0));
+                    fact-set(player, fx-mud-drag, boxed_bool(0));
                 }
                 lambda {
                     wait-until-cin-maya-frame(140.00, 0);
@@ -934,13 +934,13 @@ statescript {
             }
             track main {
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, obj-ski-scar-hanging-emily-1), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(obj-ski-scar-hanging-emily-1), 1);
                 }
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, obj-ski-scar-hanging-reuben-1), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(obj-ski-scar-hanging-reuben-1), 1);
                 }
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, obj-ski-scar-hanging-chris-1), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(obj-ski-scar-hanging-chris-1), 1);
                 }
                 lambda {
                     animate-done(obj-ski-scar-hanging-emily-1, fem-scar=cin-ski-scar-hanging=050, cin-ski-scar-hanging-1, 0, 0, 2);

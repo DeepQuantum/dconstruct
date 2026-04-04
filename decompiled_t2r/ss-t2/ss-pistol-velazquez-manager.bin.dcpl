@@ -49,7 +49,7 @@ statescript {
         block event hide-pistol-scope {
             track main {
                 lambda {
-                    darray-append(pistol-xcaliber-addt-joint-mods, new-boxed-value(7, scope), 0);
+                    darray-append(pistol-xcaliber-addt-joint-mods, boxed_symbol(scope), 0);
                 }
             }
         }

@@ -52,20 +52,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -82,20 +72,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-ext-gen-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -128,20 +108,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-10, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-10, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -158,20 +128,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-10, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-10, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-sml-int-corridor-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);

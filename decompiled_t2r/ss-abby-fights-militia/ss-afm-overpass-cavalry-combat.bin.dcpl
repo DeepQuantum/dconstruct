@@ -16,17 +16,7 @@ bool npc-certain-of-player?(u16 arg_0) {
 }
 
 u64? give-fake-search-entity(u64? arg_0, u64? arg_1) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (npc-alive?(var_2)) {
             u64? var_4 = npc-get-awareness(var_2, player);
             if (var_4 == 2 && !(var_4 == 3)) {
@@ -97,19 +87,9 @@ statescript {
                     wait-spawn-npc-group-async(afm-highway-scars-early, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars-early) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars-early) {
                         if (npc-alive?(var_2)) {
-                            send-event(setup-fake-shooting, self, new-boxed-value(7, var_2));
+                            send-event(setup-fake-shooting, self, boxed_symbol(var_2));
                         }
                     }
                 }
@@ -117,19 +97,9 @@ statescript {
                     wait-spawn-npc-group-async(afm-highway-militia-cheap, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia-cheap) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia-cheap) {
                         if (npc-alive?(var_2)) {
-                            send-event(setup-fake-shooting, self, new-boxed-value(7, var_2));
+                            send-event(setup-fake-shooting, self, boxed_symbol(var_2));
                         }
                     }
                 }
@@ -170,17 +140,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia-cheap) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia-cheap) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-awareness(var_2, player) != 0) {
                                 npc-make-aware-of(var_2, player, 0, 0);
@@ -190,17 +150,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars-early) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars-early) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-awareness(var_2, player) != 0) {
                                 npc-make-aware-of(var_2, player, 0, 0);
@@ -237,7 +187,7 @@ statescript {
                     while (!nth-frame?(30, deterministic-random-int(30, var_0))) {
                         wait-one-frame();
                     }
-                    send-event(fake-shooting, self, new-boxed-value(7, var_0));
+                    send-event(fake-shooting, self, boxed_symbol(var_0));
                 }
             }
         }
@@ -256,7 +206,7 @@ statescript {
                             wait-random(1.00, 2.00);
                             i = i + 1;
                         }
-                        var_2 = send-event(fake-wait-cover, self, new-boxed-value(7, var_0));
+                        var_2 = send-event(fake-wait-cover, self, boxed_symbol(var_0));
                     }
                 }
             }
@@ -273,7 +223,7 @@ statescript {
                     while (!nth-frame?(30, deterministic-random-int(30, var_0))) {
                         wait-one-frame();
                     }
-                    send-event(fake-shooting, self, new-boxed-value(7, var_0));
+                    send-event(fake-shooting, self, boxed_symbol(var_0));
                 }
             }
         }
@@ -295,7 +245,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(afm-highway-militia-cheap, new-boxed-value(7, var_0)) && darray-contains?(afm-highway-scars-early, new-boxed-value(7, var_0)) && event-attack-source?(player)) {
+                    if (darray-contains?(afm-highway-militia-cheap, boxed_symbol(var_0)) && darray-contains?(afm-highway-scars-early, boxed_symbol(var_0)) && event-attack-source?(player)) {
                         var_6 = go(setup, 1);
                     }
                 }
@@ -407,17 +357,7 @@ statescript {
                     npc-set-hard-point-if-alive(npc-highway-scar-4, hard-point-highway-gas-4);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-high-priority(var_2);
                             npc-cancel-fire-command(var_2);
@@ -426,17 +366,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-high-priority(var_2);
                             npc-cancel-fire-command(var_2);
@@ -446,17 +376,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(afm-overpass-allow-taco-npc-death)) {
-                        foreach (u64? var_2 : afm-highway-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-highway-militia) {
                             if (npc-alive?(var_3)) {
                                 npc-set-targeting-params(var_3, never-target-player-or-buddy);
                                 character-set-invincibility(var_3, 3, 0);
@@ -464,17 +384,7 @@ statescript {
                                 set-focusable-ignore(var_3, 0);
                             }
                         }
-                        foreach (u64? var_7 : afm-highway-scars) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : afm-highway-scars) {
                             if (npc-alive?(var_8)) {
                                 character-set-invincibility(var_8, 3, 0);
                                 npc-set-suppressing-fire(var_8, 1);
@@ -484,29 +394,9 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia) {
                         if (npc-alive?(var_2)) {
-                            foreach (u64? var_5 : afm-highway-scars) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : afm-highway-scars) {
                                 if (npc-alive?(var_6)) {
                                     npc-make-aware-of(var_2, var_6, 2, *npc-awareness-options-silent*);
                                     npc-make-aware-of(var_6, var_2, 2, *npc-awareness-options-silent*);
@@ -516,17 +406,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia) {
                         npc-set-targeting-params(var_2, prefer-not-target-player-or-buddy);
                         npc-set-suppressing-fire(var_2, 0);
                         if (npc-alive?(var_2) || var_2 == npc-highway-militia-taco-2) {
@@ -539,17 +419,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars) {
                         if (npc-alive?(var_2)) {
                             character-set-invincibility(var_2, 0, 0);
                             npc-set-targeting-params(var_2, prefer-target-player);
@@ -570,22 +440,12 @@ statescript {
                     wait-spawn-npc-group-async(afm-highway-militia-reinf, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia-reinf) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia-reinf) {
                         if (player-in-region?(rgn-player-in-taco-1, 2)) {
                             npc-disable-hungarian-targeting(var_2);
                             npc-prefer-target(var_2, player);
                         }
-                        darray-append(afm-highway-militia, new-boxed-value(7, var_2), 1);
+                        darray-append(afm-highway-militia, boxed_symbol(var_2), 1);
                     }
                 }
                 lambda {
@@ -608,29 +468,9 @@ statescript {
                 }
                 lambda {
                     if (nth-frame?(10, 0)) {
-                        foreach (u64? var_2 : afm-highway-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-highway-militia) {
                             if (npc-alive?(var_3)) {
-                                foreach (u64? var_6 : afm-highway-scars) {
-                                    u16 var_7;
-                                    if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                        var_7 = *(u64*)var_6;
-                                    } else {
-                                        var_7 = 0;
-                                    }
+                                foreach (u64? var_7 : afm-highway-scars) {
                                     if (npc-alive?(var_7)) {
                                         npc-make-aware-of(var_3, var_7, 2, *npc-awareness-options-silent*);
                                         npc-make-aware-of(var_7, var_3, 2, *npc-awareness-options-silent*);
@@ -641,20 +481,10 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia) {
                         if (npc-alive?(var_2)) {
                             u64? var_4 = npc-get-target(var_2);
-                            if (darray-contains?(all-highway-npcs, new-boxed-value(7, var_4)) || var_4 == player && var_4 == lev) {
+                            if (darray-contains?(all-highway-npcs, boxed_symbol(var_4)) || var_4 == player && var_4 == lev) {
                                 var_7 = npc-set-perfect-aim(var_2, 0);
                             } else {
                                 var_7 = npc-set-perfect-aim(var_2, 1);
@@ -663,20 +493,10 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars) {
                         if (npc-alive?(var_2)) {
                             u64? var_4 = npc-get-target(var_2);
-                            if (darray-contains?(all-highway-npcs, new-boxed-value(7, var_4)) || var_4 == player && var_4 == lev) {
+                            if (darray-contains?(all-highway-npcs, boxed_symbol(var_4)) || var_4 == player && var_4 == lev) {
                                 var_7 = npc-set-perfect-aim(var_2, 0);
                             } else {
                                 var_7 = npc-set-perfect-aim(var_2, 1);
@@ -690,7 +510,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(afm-highway-militia, new-boxed-value(7, var_0)) && darray-contains?(afm-highway-scars, new-boxed-value(7, var_0)) && event-attack-source?(player)) {
+                    if (darray-contains?(afm-highway-militia, boxed_symbol(var_0)) && darray-contains?(afm-highway-scars, boxed_symbol(var_0)) && event-attack-source?(player)) {
                         var_6 = character-set-invincibility(var_0, 0, 0);
                     }
                 }
@@ -706,7 +526,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(afm-highway-militia, new-boxed-value(7, event-arg-symbol(0))) && darray-contains?(afm-highway-scars, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(afm-highway-militia, boxed_symbol(event-arg-symbol(0))) && darray-contains?(afm-highway-scars, boxed_symbol(event-arg-symbol(0)))) {
                         set-svar-as-boolean(afm-overpass-allow-taco-npc-death, 1);
                     }
                 }
@@ -735,17 +555,7 @@ statescript {
         block event militia-prefer-player {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-highway-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-militia) {
                         if (npc-alive?(var_2)) {
                             if (event-arg-boolean(0)) {
                                 npc-prefer-target(var_2, player);
@@ -763,17 +573,7 @@ statescript {
         block event scars-prefer-player {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-highway-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-scars) {
                         if (npc-alive?(var_2)) {
                             if (event-arg-boolean(0)) {
                                 npc-prefer-target(var_2, player);
@@ -801,17 +601,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-highway-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -861,17 +651,7 @@ statescript {
                     kill-entity(npc-highway-scar-intro-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

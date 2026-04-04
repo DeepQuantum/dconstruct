@@ -69,7 +69,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-shambler-callouts?, new-boxed-value(1, 1));
+                    fact-set(global, disable-shambler-callouts?, boxed_bool(1));
                 }
                 lambda {
                     if (task-continue-active?(watchtower, wat-infected-tunnels-shambler-intro-fight, combat-done) && !(get-boolean(vox-see-dead-militia, self))) {
@@ -184,7 +184,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-shambler-callouts?, new-boxed-value(1, 0));
+                    fact-set(global, disable-shambler-callouts?, boxed_bool(0));
                 }
                 lambda {
                     wait-until-non-combat-tension(2.00, 4.00);

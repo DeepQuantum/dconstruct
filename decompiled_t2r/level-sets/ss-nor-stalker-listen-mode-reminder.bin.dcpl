@@ -13,17 +13,7 @@
 
 u64? nor-any-stalker-in-chase?() {
     u64? var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u64? var_6;
         if (npc-alive?(var_3) && npc-stalker?(var_3)) {
             var_6 = 0 && npc-using-skill?(var_3, 5);
@@ -35,17 +25,7 @@ u64? nor-any-stalker-in-chase?() {
 
 u64? nor-any-stalker-in-investigate?() {
     u64? var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u64? var_6;
         if (npc-alive?(var_3) && npc-stalker?(var_3)) {
             var_6 = 0 || npc-using-skill?(var_3, 20) && npc-using-skill?(var_3, 4);

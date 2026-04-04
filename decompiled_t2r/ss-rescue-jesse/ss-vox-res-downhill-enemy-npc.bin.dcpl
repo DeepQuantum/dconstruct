@@ -261,7 +261,7 @@ statescript {
             track suppress-names {
                 lambda {
                     while (1) {
-                        fact-set(faction-enemy, restrict-name-usage, new-boxed-value(8, get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-name-usage, boxed_timeframePOD(get-current-timeframe(0)));
                         wait(10.00);
                     }
                 }
@@ -321,7 +321,7 @@ statescript {
                 }
                 lambda {
                     if (npc-alive?(npc-res-downhill-reverse-2)) {
-                        request-dialog-with-facts(res-downhill-reverse-see-ally-killed-001, new-fact-dictionary(speaker, new-boxed-value(7, npc-res-downhill-reverse-1), target, new-boxed-value(7, npc-res-downhill-reverse-2)), 0);
+                        request-dialog-with-facts(res-downhill-reverse-see-ally-killed-001, new-fact-dictionary(speaker, boxed_symbol(npc-res-downhill-reverse-1), target, boxed_symbol(npc-res-downhill-reverse-2)), 0);
                     }
                 }
                 lambda {
@@ -337,7 +337,7 @@ statescript {
             track suppress-names {
                 lambda {
                     while (1) {
-                        fact-set(faction-enemy, restrict-name-usage, new-boxed-value(8, get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-name-usage, boxed_timeframePOD(get-current-timeframe(0)));
                         wait(10.00);
                     }
                 }

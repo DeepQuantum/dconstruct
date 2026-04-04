@@ -59,7 +59,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 1));
+                    fact-set(global, suppress-stealth-vox?, boxed_bool(1));
                 }
             }
         }
@@ -364,7 +364,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 0));
+                    fact-set(global, suppress-stealth-vox?, boxed_bool(0));
                 }
             }
         }

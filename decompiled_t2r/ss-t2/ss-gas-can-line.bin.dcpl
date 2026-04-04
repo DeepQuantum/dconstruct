@@ -45,7 +45,7 @@ u64? check-for-keg-explosions(u64? arg_0) {
             send-event(exploded, var_3);
             print-string("BOOM", self);
             send-event(Explode, var_3);
-            var_12 = darray-append(var_0, new-boxed-value(7, var_3), 1);
+            var_12 = darray-append(var_0, boxed_symbol(var_3), 1);
         }
     }
     foreach (u64? var_17 : var_0) {
@@ -56,7 +56,7 @@ u64? check-for-keg-explosions(u64? arg_0) {
         } else if (var_17 && *(u16*)(var_17 + 12) == 4) {
             *(u64*)var_17;
         }
-        darray-find-remove(powder-kegs, new-boxed-value(7, var_0), 0);
+        darray-find-remove(powder-kegs, boxed_symbol(var_0), 0);
     }
 }
 
@@ -92,7 +92,7 @@ u64? insert-burn-val(u16 arg_0) {
         var_2 = var_6;
         i = var_7 + 1;
     }
-    return darray-insert(get-symbol(burn-list, self), new-boxed-value(2, arg_0), var_2);
+    return darray-insert(get-symbol(burn-list, self), boxed_i32(arg_0), var_2);
 }
 
 f32 int-to-dist(f32 arg_0) {
@@ -215,9 +215,9 @@ u16 draw-line-segments-for-keg() {
             }
         }
         if (get-boolean(start-burned, self) && get-boolean(end-burned, self)) {
-            darray-find-remove(powder-splines-active, new-boxed-value(7, get-symbol(spline-name, self)), 0);
-            darray-append(powder-splines-inactive, new-boxed-value(7, get-symbol(spline-name, self)), 1);
-            darray-find-remove(powder-lines, new-boxed-value(7, get-self-id()), 0);
+            darray-find-remove(powder-splines-active, boxed_symbol(get-symbol(spline-name, self)), 0);
+            darray-append(powder-splines-inactive, boxed_symbol(get-symbol(spline-name, self)), 1);
+            darray-find-remove(powder-lines, boxed_symbol(get-self-id()), 0);
             terminate();
         }
         i = i + 1;
@@ -346,7 +346,7 @@ u64? check-for-other-lines(u64? arg_0) {
             }
             u64? var_17 = spline-locator-closest-to-locator(get-symbol(spline-name, var_2), spline-locator-at-distance(get-symbol(spline-name, self), int-to-dist(var_14)), 0);
             if (get-locator-distance(spline-locator-at-distance(get-symbol(spline-name, self), int-to-dist(var_7)), var_17) < get-float(ignite-radius, self)) {
-                var_20 = send-event(start-burn, var_2, new-boxed-value(2, dist-to-int(spline-distance-locator(get-symbol(spline-name, var_2), var_17, 0))));
+                var_20 = send-event(start-burn, var_2, boxed_i32(dist-to-int(spline-distance-locator(get-symbol(spline-name, var_2), var_17, 0))));
             }
         }
     }
@@ -395,7 +395,7 @@ statescript {
             track main {
                 lambda {
                     if (is-int-burnable?(event-arg-int32(0))) {
-                        send-event(standing-near-burnable, event-arg-symbol(1), new-boxed-value(2, event-arg-int32(0)), new-boxed-value(7, get-self-id()));
+                        send-event(standing-near-burnable, event-arg-symbol(1), boxed_i32(event-arg-int32(0)), boxed_symbol(get-self-id()));
                     }
                 }
             }
@@ -421,7 +421,7 @@ statescript {
                     u64? var_3 = dist-to-int(spline-distance-locator(get-symbol(spline-name, self), var_0, 0));
                     if (is-int-burnable?(var_3) && get-locator-distance(var_0, spline-locator-closest-to-locator(get-symbol(spline-name, self), var_0, 0)) < get-float(ignite-radius, self)) {
                         print-string("IGNITE!!", self);
-                        var_9 = send-event(start-burn, self, new-boxed-value(2, var_3));
+                        var_9 = send-event(start-burn, self, boxed_i32(var_3));
                     }
                 }
             }
@@ -485,18 +485,18 @@ statescript {
                                         }
                                         var_12 = var_15;
                                     }
-                                    darray-set(get-symbol(burn-list, self), i, new-boxed-value(2, var_11 - var_2));
+                                    darray-set(get-symbol(burn-list, self), i, boxed_i32(var_11 - var_2));
                                     if ((var_11 - var_2) < 0) {
                                         set-boolean(start-burned, 1, self);
                                         print-string("even: deleted because I reached the start!", self);
-                                        darray-append(var_3, new-boxed-value(2, var_11 - var_2), 0);
+                                        darray-append(var_3, boxed_i32(var_11 - var_2), 0);
                                     }
                                     if (var_12 > 0 && (var_11 - var_2) < var_12) {
                                         print-string("even: deleted because I crossed the prev value", self);
                                         print-int32(var_11 - var_2, self);
                                         print-int32(var_12, self);
-                                        darray-append(var_3, new-boxed-value(2, var_11 - var_2), 0);
-                                        var_19 = darray-append(var_3, new-boxed-value(2, var_12), 0);
+                                        darray-append(var_3, boxed_i32(var_11 - var_2), 0);
+                                        var_19 = darray-append(var_3, boxed_i32(var_12), 0);
                                     }
                                 } else {
                                     u64? var_24 = darray-at(get-symbol(burn-list, self), i);
@@ -537,18 +537,18 @@ statescript {
                                         }
                                         var_28 = var_31 - var_2;
                                     }
-                                    darray-set(get-symbol(burn-list, self), i, new-boxed-value(2, var_25 + var_2));
+                                    darray-set(get-symbol(burn-list, self), i, boxed_i32(var_25 + var_2));
                                     if ((var_25 + var_2) > get-int32(end-length, self)) {
                                         set-boolean(end-burned, 1, self);
                                         print-string("odd: deleted because I reached the end", self);
-                                        darray-append(var_3, new-boxed-value(2, var_25 + var_2), 0);
+                                        darray-append(var_3, boxed_i32(var_25 + var_2), 0);
                                     }
                                     if (var_28 > 0 && (var_25 + var_2) > var_28) {
                                         print-string("odd: deleted because I crossed the next value", self);
                                         print-int32(var_25 + var_2, self);
                                         print-int32(var_28, self);
-                                        darray-append(var_3, new-boxed-value(2, var_25 + var_2), 0);
-                                        var_36 = darray-append(var_3, new-boxed-value(2, var_28), 0);
+                                        darray-append(var_3, boxed_i32(var_25 + var_2), 0);
+                                        var_36 = darray-append(var_3, boxed_i32(var_28), 0);
                                     }
                                 }
                             }
@@ -598,12 +598,12 @@ statescript {
                             } else {
                                 var_50 = 0;
                             }
-                            if (!darray-contains?(get-symbol(burn-list, self), new-boxed-value(2, var_50))) {
+                            if (!darray-contains?(get-symbol(burn-list, self), boxed_i32(var_50))) {
                                 if (!is-final-build?()) {
                                     display(dc:format("TRYING TO REMOVE AN ITEM that isn't in the burn list!!: %d ", var_50), 19);
                                 }
                             }
-                            darray-find-remove(get-symbol(burn-list, self), new-boxed-value(2, var_50), 0);
+                            darray-find-remove(get-symbol(burn-list, self), boxed_i32(var_50), 0);
                         }
                         darray-destroy(var_3);
                         draw-line-segments-for-keg();

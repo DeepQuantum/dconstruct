@@ -165,19 +165,9 @@ statescript {
                     set-svar(nor-forest-brute-spillover-count, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
-                            if (!darray-contains?(brute-intro-npcs, new-boxed-value(7, var_2)) || darray-contains?(glt-stripmall-unzoned-npcs, new-boxed-value(7, var_2)) && locator-in-region?(get-object-locator(var_2), rgn-nor-stripmall-1, player)) {
+                            if (!darray-contains?(brute-intro-npcs, boxed_symbol(var_2)) || darray-contains?(glt-stripmall-unzoned-npcs, boxed_symbol(var_2)) && locator-in-region?(get-object-locator(var_2), rgn-nor-stripmall-1, player)) {
                                 increment-svar(nor-forest-brute-spillover-count, 1);
                             }
                         }
@@ -242,53 +232,53 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-brute-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.35;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 1;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-brute-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.35;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 1;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 2;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     animate_(npc-nor-scar-brute-1, nor-scar-forest-brute-reveal-enter--brute, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-brute-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.35;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-brute-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.35;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(door-2078, nor-scar-forest-brute-reveal-enter--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-brute-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-brute-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, nor-scar-forest-brute-reveal-enter--ellie, var_0);
                 }
                 lambda {
@@ -525,11 +515,11 @@ statescript {
                         spawn-npc(npc-nor-scar-brute-1, pos-nor-brute-post-intro-1, 0);
                         u64? var_1 = darray-create(self, -1, 0);
                         if (*(u8*)(get-difficulty-detail-enemies() + 293) && get-svar(nor-forest-brute-spillover-count) < 1 && *(u8*)(get-difficulty-detail-enemies() + 292)) {
-                            darray-append(var_1, new-boxed-value(7, npc-nor-scar-intro-1), 1);
+                            darray-append(var_1, boxed_symbol(npc-nor-scar-intro-1), 1);
                             log-event("nor-brute-intro-shotgun-spawned", 1, "", 0, 0);
                         }
                         if (*(u8*)(get-difficulty-detail-enemies() + 295) && get-svar(nor-forest-brute-spillover-count) < 2 && *(u8*)(get-difficulty-detail-enemies() + 294)) {
-                            darray-append(var_1, new-boxed-value(7, npc-nor-scar-intro-2), 1);
+                            darray-append(var_1, boxed_symbol(npc-nor-scar-intro-2), 1);
                             log-event("nor-brute-intro-bow-spawned", 1, "", 0, 0);
                         }
                         wait-spawn-npc-group-async(var_1, 0, 0);
@@ -587,17 +577,7 @@ statescript {
                     );
                 }
                 lambda {
-                    foreach (u64? var_1 : brute-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : brute-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                             npc-set-script-high-priority(var_2);

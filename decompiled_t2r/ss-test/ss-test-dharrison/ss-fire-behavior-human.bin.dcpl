@@ -120,35 +120,35 @@ statescript {
                 }
                 lambda {
                     if (npc-alive?(get-symbol(ally-on-fire, self))) {
-                        send-event(start-rescue, get-symbol(ally-on-fire, self), new-boxed-value(7, get-self-id()));
+                        send-event(start-rescue, get-symbol(ally-on-fire, self), boxed_symbol(get-self-id()));
                         set-bound-frame(rescue-ap, rotate-locator-lookat(get-object-locator(get-symbol(ally-on-fire, self)), get-object-locator(get-self-id()), 1.00, 0), self);
                         u64? var_11 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-bound-frame(rescue-ap, self);
-                        *(i32*)*(*var_11 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (3 * 8)) = 13;
-                        *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_11 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-bound-frame(rescue-ap, self);
+                        *(i32*)*var_11[1] = 28;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 0.50;
+                        *(i32*)*var_11[2] = 30;
+                        *(u64*)(*var_11[2] + 8) = 0;
+                        *(f32*)(*var_11[2] + 8) = 0.50;
+                        *(i32*)*var_11[3] = 13;
+                        *(u64*)(*var_11[3] + 8) = 0;
+                        *(i32*)(*var_11[3] + 8) = 5;
                         animate_(get-self-id(), abby-fist-kill-ground-and-pound--abby, var_11);
                         u64? var_14 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_14 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = get-bound-frame(rescue-ap, self);
-                        *(i32*)*(*var_14 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_14 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_14 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_14 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_14 + (3 * 8)) = 13;
-                        *(u64*)(*(*var_14 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_14 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_14[0] = 10;
+                        *(u64*)(*var_14[0] + 8) = 0;
+                        *(u64*)(*var_14[0] + 8) = get-bound-frame(rescue-ap, self);
+                        *(i32*)*var_14[1] = 28;
+                        *(u64*)(*var_14[1] + 8) = 0;
+                        *(f32*)(*var_14[1] + 8) = 0.50;
+                        *(i32*)*var_14[2] = 30;
+                        *(u64*)(*var_14[2] + 8) = 0;
+                        *(f32*)(*var_14[2] + 8) = 0.50;
+                        *(i32*)*var_14[3] = 13;
+                        *(u64*)(*var_14[3] + 8) = 0;
+                        *(i32*)(*var_14[3] + 8) = 5;
                         wait-animate_(get-symbol(ally-on-fire, self), abby-fist-kill-ground-and-pound--npc-f, var_14);
                         npc-put-out-fire(get-symbol(ally-on-fire, self));
                     }
@@ -234,15 +234,15 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(rescue-ap, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (2 * 8)) + 8) = 5;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(rescue-ap, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 13;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(i32*)(*var_2[2] + 8) = 5;
                     animate_(get-self-id(), get-symbol(rescuer-anim, self), var_2);
                 }
                 lambda {
@@ -250,24 +250,24 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(rescue-ap-2, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = ap-ref-cover;
-                    *(i32*)*(*var_2 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 32.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_2 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (5 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (5 * 8)) + 8) = 5;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(rescue-ap-2, self);
+                    *(i32*)*var_2[1] = 14;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u64*)(*var_2[1] + 8) = ap-ref-cover;
+                    *(i32*)*var_2[2] = 57;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 32.00;
+                    *(i32*)*var_2[3] = 28;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = 0.80;
+                    *(i32*)*var_2[4] = 30;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(f32*)(*var_2[4] + 8) = 0.50;
+                    *(i32*)*var_2[5] = 13;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(i32*)(*var_2[5] + 8) = 5;
                     wait-animate_(get-self-id(), get-symbol(rescuer-anim, self), var_2);
                 }
                 lambda {
@@ -279,19 +279,19 @@ statescript {
                     wait-for(start-anims);
                 }
                 lambda {
-                    send-event(start-rescue, get-symbol(ally-on-fire, self), new-boxed-value(7, get-self-id()));
+                    send-event(start-rescue, get-symbol(ally-on-fire, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(rescue-ap, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (2 * 8)) + 8) = 5;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(rescue-ap, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.20;
+                    *(i32*)*var_2[2] = 13;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(i32*)(*var_2[2] + 8) = 5;
                     animate_(get-symbol(ally-on-fire, self), get-symbol(rescuee-anim, self), var_2);
                 }
                 lambda {
@@ -299,24 +299,24 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(rescue-ap-2, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = ap-ref-cover;
-                    *(i32*)*(*var_2 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 32.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_2 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (5 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (5 * 8)) + 8) = 5;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(rescue-ap-2, self);
+                    *(i32*)*var_2[1] = 14;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u64*)(*var_2[1] + 8) = ap-ref-cover;
+                    *(i32*)*var_2[2] = 57;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 32.00;
+                    *(i32*)*var_2[3] = 28;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = 0.80;
+                    *(i32*)*var_2[4] = 30;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(f32*)(*var_2[4] + 8) = 0.50;
+                    *(i32*)*var_2[5] = 13;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(i32*)(*var_2[5] + 8) = 5;
                     wait-animate_(get-symbol(ally-on-fire, self), get-symbol(rescuee-anim, self), var_2);
                 }
                 lambda {
@@ -347,17 +347,7 @@ statescript {
             track main {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             u64? var_10 = distance-between-points(get-object-position(var_3), get-object-position(get-self-id()));
@@ -375,7 +365,7 @@ statescript {
                 }
                 lambda {
                     if (!(get-symbol(rescuer-ally, self) == 0)) {
-                        send-event(help-ally-on-fire, get-symbol(rescuer-ally, self), new-boxed-value(7, get-self-id()));
+                        send-event(help-ally-on-fire, get-symbol(rescuer-ally, self), boxed_symbol(get-self-id()));
                     }
                 }
                 lambda {

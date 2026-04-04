@@ -19,7 +19,7 @@ statescript {
                     u64 i = 0;
                     while (i < 300) {
                         if (has-joint?(self, symbol-concat-int32(ball_, i + 1))) {
-                            send-event(physicalize-gamedriven, self, new-boxed-value(7, symbol-concat-int32(ball_, i + 1)));
+                            send-event(physicalize-gamedriven, self, boxed_symbol(symbol-concat-int32(ball_, i + 1)));
                         }
                         i = i + 1;
                     }
@@ -41,7 +41,7 @@ statescript {
                     u64 i = 0;
                     while (i < 300) {
                         if (has-joint?(self, symbol-concat-int32(ball_, i + 1))) {
-                            send-event(physicalize-live, self, new-boxed-value(7, symbol-concat-int32(ball_, i + 1)));
+                            send-event(physicalize-live, self, boxed_symbol(symbol-concat-int32(ball_, i + 1)));
                         }
                         i = i + 1;
                     }

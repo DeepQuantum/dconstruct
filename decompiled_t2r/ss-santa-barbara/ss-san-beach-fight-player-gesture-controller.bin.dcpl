@@ -112,13 +112,13 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = get-object-distance(get-symbol(abby, self), player);
-                    new-boxed-value(7, true);
-                    u64? var_8 = new-boxed-value(7, false);
+                    boxed_symbol(true);
+                    u64? var_8 = boxed_symbol(false);
                     do-melee-log(
                         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                        new-boxed-value(6, var_2),
-                        new-boxed-value(6, 2.25),
-                        new-boxed-value(6, 999.00),
+                        boxed_f32(var_2),
+                        boxed_f32(2.25),
+                        boxed_f32(999.00),
                         var_8
                     );
                     while (!get-current-melee-attack(player) && !(get-symbol(abby, self) == 0) && !(player == 0) && var_2 < 999.00 || var_2 > 2.25 && var_2 > 2.25 || var_2 || var_8 && var_2 > 2.25 && !(get-float(gesture-timer, self) > get-float(gesture-cooldown, self))) {
@@ -138,15 +138,15 @@ statescript {
                         bool var_4 = !(get-symbol(abby, self) == 0) && !(player == 0) && var_2 < 999.00 && var_2 > 2.50;
                         u64? var_8;
                         if (var_4) {
-                            var_8 = new-boxed-value(7, true);
+                            var_8 = boxed_symbol(true);
                         } else {
-                            var_8 = new-boxed-value(7, false);
+                            var_8 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_2),
-                            new-boxed-value(6, 2.50),
-                            new-boxed-value(6, 999.00),
+                            boxed_f32(var_2),
+                            boxed_f32(2.50),
+                            boxed_f32(999.00),
                             var_8
                         );
                         if (var_4) {

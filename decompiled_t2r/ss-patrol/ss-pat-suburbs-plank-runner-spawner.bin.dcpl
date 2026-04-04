@@ -76,17 +76,7 @@ statescript {
                 lambda {
                     if (!get-svar-as-boolean(pat-plank-house-cleared)) {
                         wait-spawn-npc-group-async(plank-runners, 0, 0);
-                        foreach (u64? var_2 : plank-runners) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : plank-runners) {
                             set-focusable-ignore(var_3, 1);
                             npc-set-deaf(var_3, 1);
                         }
@@ -108,17 +98,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : plank-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : plank-runners) {
                         set-focusable-ignore(var_2, 0);
                         npc-set-deaf(var_2, 0);
                     }

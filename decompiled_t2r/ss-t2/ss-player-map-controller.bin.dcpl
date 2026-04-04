@@ -245,11 +245,11 @@ statescript {
                     );
                     stop-animating(player, 1, 0.00, ellie-map-hold-ellie, 0);
                     u64? var_18 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_18 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_18 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_18 + (1 * 8)) = 42;
-                    *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_18[0] = 40;
+                    *(u64*)(*var_18[0] + 8) = 0;
+                    *(i32*)(*var_18[0] + 8) = 1;
+                    *(i32*)*var_18[1] = 42;
+                    *(u64*)(*var_18[1] + 8) = 0;
                     f32 var_21;
                     if ((get-state-time(self) / 0.33) > 0.00) {
                         var_21 = get-state-time(self) / 0.33;
@@ -266,7 +266,7 @@ statescript {
                     } else {
                         var_23 = 1.00;
                     }
-                    *(f32*)(*(*var_18 + (1 * 8)) + 8) = lerp-scale(0.00, 1.00, 1.00, 0.20, var_5) * var_23;
+                    *(f32*)(*var_18[1] + 8) = lerp-scale(0.00, 1.00, 1.00, 0.20, var_5) * var_23;
                     animate_(player, ellie-map-hold-ellie, var_18);
                     ss-update-map-position(rotate-locator-angle(offset-locator(rotate-locator-lookat(get-joint-locator(player, l_hand_prop), camera-locator(0), 1.00, 1), alloc-vector(0.25, lerp-scale(0.00, 1.00, 0.00, -0.20, var_5), 0.00, 1.00, 0)), 2, ss-map-default-rotation() + (180.00 - angle-in-between-locators-plus(ss-map-get-world-center(), get-bound-frame(smooth-player-loc, self), 2, 1))));
                 }
@@ -299,18 +299,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = set-locator-rotation(get-object-locator(player), get-locator-rotation(flatten-locator(camera-locator(0))));
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 10;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = set-locator-rotation(get-object-locator(player), get-locator-rotation(flatten-locator(camera-locator(0))));
                     animate_(player, joel-search-backpack, var_0);
                 }
             }
@@ -387,24 +387,24 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 10.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.10;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 34;
+                    *(i32*)*var_0[0] = 20;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 10.00;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.10;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 34;
                     wait-animate_(player, joel-crouch-search-backpack-outro, var_0);
                 }
                 lambda {
@@ -427,27 +427,27 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.10;
-                    *(i32*)*(*var_0 + (1 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.10;
+                    *(i32*)*var_0[1] = 27;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 29;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
                     u16 var_2;
                     if (get-boolean(started-crouched?, self)) {
                         var_2 = 18;
                     } else {
                         var_2 = 1;
                     }
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = var_2;
+                    *(i32*)(*var_0[4] + 8) = var_2;
                     wait-animate_(player, joel-crouch-search-backpack-outro, var_0);
                 }
                 lambda {

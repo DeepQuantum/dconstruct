@@ -13,8 +13,8 @@
 
 u16 ratking-is-wall-broken?(u64? arg_0) {
     u16 var_2;
-    if (darray-contains?(ratking-destructible-walls, new-boxed-value(7, arg_0))) {
-        var_2 = get-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, new-boxed-value(7, arg_0), 0) + darray-count(ratking-destructible-doors));
+    if (darray-contains?(ratking-destructible-walls, boxed_symbol(arg_0))) {
+        var_2 = get-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, boxed_symbol(arg_0), 0) + darray-count(ratking-destructible-doors));
     } else {
         var_2 = 0;
     }
@@ -22,35 +22,25 @@ u16 ratking-is-wall-broken?(u64? arg_0) {
 }
 
 u64? ratking-access-open-walls() {
-    foreach (u64? var_1 : ratking-accessibility-walls) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : ratking-accessibility-walls) {
         while (!entity-exists?(var_2)) {
             wait-one-frame();
         }
         wait-one-frame();
         send-event(trigger-destroyed, var_2);
-        if (darray-contains?(ratking-destructible-doors, new-boxed-value(7, var_2))) {
-            set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, new-boxed-value(7, var_2), 0), 1);
+        if (darray-contains?(ratking-destructible-doors, boxed_symbol(var_2))) {
+            set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, boxed_symbol(var_2), 0), 1);
         }
-        if (darray-contains?(ratking-destructible-walls, new-boxed-value(7, var_2))) {
-            set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, new-boxed-value(7, var_2), 0) + darray-count(ratking-destructible-doors), 1);
+        if (darray-contains?(ratking-destructible-walls, boxed_symbol(var_2))) {
+            set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, boxed_symbol(var_2), 0) + darray-count(ratking-destructible-doors), 1);
         }
     }
 }
 
 u16 ratking-is-door-destroyed?(u64? arg_0) {
     u16 var_2;
-    if (darray-contains?(ratking-destructible-doors, new-boxed-value(7, arg_0))) {
-        var_2 = get-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, new-boxed-value(7, arg_0), 0));
+    if (darray-contains?(ratking-destructible-doors, boxed_symbol(arg_0))) {
+        var_2 = get-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, boxed_symbol(arg_0), 0));
     } else {
         var_2 = 0;
     }
@@ -106,33 +96,13 @@ statescript {
                         ratking-access-open-walls();
                         broadcast-event(trigger-not-destroyed);
                     } else {
-                        foreach (u64? var_2 : ratking-destructible-doors) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : ratking-destructible-doors) {
                             while (!entity-exists?(var_3)) {
                                 wait-one-frame();
                             }
                             wait-one-frame();
                         }
-                        foreach (u64? var_7 : ratking-destructible-walls) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : ratking-destructible-walls) {
                             while (!entity-exists?(var_8)) {
                                 wait-one-frame();
                             }
@@ -157,17 +127,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : ratking-destructible-doors) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : ratking-destructible-doors) {
                         while (!entity-exists?(var_3)) {
                             wait-one-frame();
                         }
@@ -177,17 +137,7 @@ statescript {
                         }
                         var_1 = 0 + 1;
                     }
-                    foreach (u64? var_8 : ratking-destructible-walls) {
-                        u16 var_9;
-                        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                            var_9 = *(u64*)var_8;
-                        } else {
-                            var_9 = 0;
-                        }
+                    foreach (u64? var_9 : ratking-destructible-walls) {
                         while (!entity-exists?(var_9)) {
                             wait-one-frame();
                         }
@@ -206,8 +156,8 @@ statescript {
         block event door-destroyed {
             track main {
                 lambda {
-                    if (darray-contains?(ratking-destructible-doors, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, new-boxed-value(7, event-arg-symbol(0)), 0), 1);
+                    if (darray-contains?(ratking-destructible-doors, boxed_symbol(event-arg-symbol(0)))) {
+                        set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-doors, boxed_symbol(event-arg-symbol(0)), 0), 1);
                     }
                 }
             }
@@ -215,8 +165,8 @@ statescript {
         block event bloater-broke-wall {
             track main {
                 lambda {
-                    if (darray-contains?(ratking-destructible-walls, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, new-boxed-value(7, event-arg-symbol(0)), 0) + darray-count(ratking-destructible-doors), 1);
+                    if (darray-contains?(ratking-destructible-walls, boxed_symbol(event-arg-symbol(0)))) {
+                        set-svar-bit(med-ratking-destruction, darray-find(ratking-destructible-walls, boxed_symbol(event-arg-symbol(0)), 0) + darray-count(ratking-destructible-doors), 1);
                     }
                 }
             }

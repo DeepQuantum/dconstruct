@@ -192,17 +192,7 @@ embedded@1ec8(u64? arg_0) {
     if (player-in-state?(Move) || player-in-state?(Prone) || player-in-state?(GunMove) || player-in-state?(BowMove) && 0) {
         if (task-complete?(patrol, pat-supermarket-stun-runner) && is-rogue-mode?() && npc-group-alive-count(all-enemy-npcs) > 0 && !tension-mode-is?(1) && !player-in-meatshield-sequence?(1)) {
             u16 var_11;
-            foreach (u64? var_12 : all-enemy-npcs) {
-                u16 var_13;
-                if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                    var_13 = *(u64*)var_12;
-                } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                    var_13 = *(u64*)var_12;
-                } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                    var_13 = *(u64*)var_12;
-                } else {
-                    var_13 = 0;
-                }
+            foreach (u64? var_13 : all-enemy-npcs) {
                 u16 var_15;
                 if (npc-visible-for-stun-strike-reminder?(var_13)) {
                     var_15 = 1;

@@ -32,17 +32,7 @@ statescript {
                 lambda {
                     u64? var_1;
                     u16 var_2;
-                    foreach (u64? var_3 : grp-wat-perimeter-mines) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : grp-wat-perimeter-mines) {
                         u64? var_7;
                         u16 var_8;
                         if (object-spawned?(var_4) && !has-trip-wire-been-detonated?(var_4)) {

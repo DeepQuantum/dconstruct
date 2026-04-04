@@ -89,9 +89,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amp-dont-come-intro-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amp-dont-come-intro-1, 1);
                     wait-animate_(player, abby=cin-amp-dont-come-intro, var_0);
                 }
                 lambda {
@@ -190,21 +190,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.90;
-                    *(i32*)*(*var_0 + (2 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 4;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 5480;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 1.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.90;
+                    *(i32*)*var_0[2] = 29;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 4;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 5480;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 1.50;
                     wait-animate_(player, abby=cin-amp-dont-come, var_0);
                 }
                 lambda {
@@ -269,9 +269,9 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -298,9 +298,9 @@ statescript {
                         var_20 = 0;
                     }
                     u64? var_21 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_21 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
+                    *(i32*)*var_21[0] = 10;
+                    *(u64*)(*var_21[0] + 8) = 0;
+                    *(u64*)(*var_21[0] + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
                     wait-animate_(var_17, var_20, var_21);
                 }
                 lambda {
@@ -340,18 +340,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amp-dont-come-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 29;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(yara, yara=cin-amp-dont-come, var_0);
                 }
                 lambda {

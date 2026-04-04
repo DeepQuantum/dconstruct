@@ -32,17 +32,7 @@ u64? efp-lobby-joel-target() {
     group-copy(all-enemy-npcs, joel-lobby-kill-list);
     darray-clear(all-enemy-npcs);
     darray-copy-into(all-enemy-npcs, darray-clone(all-enemy-npcs, single-frame, 0), darray-sorted-indices(all-enemy-npcs, motel-sort-infected, 0, 1));
-    foreach (u64? var_4 : all-enemy-npcs) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : all-enemy-npcs) {
         if (npc-alive?(var_5)) {
             if (npc-alive?(var_5)) {
                 npc-prefer-target(joel, var_5);

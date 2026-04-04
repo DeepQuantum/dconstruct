@@ -50,17 +50,7 @@ statescript {
         block start {
             track spawn {
                 lambda {
-                    foreach (u64? var_1 : san-streets-construction-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-construction-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -116,17 +106,7 @@ statescript {
                     group-kill-entity(san-streets-construction, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-construction-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-construction-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

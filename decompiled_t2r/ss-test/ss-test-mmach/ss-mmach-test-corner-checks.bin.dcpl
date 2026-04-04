@@ -528,20 +528,20 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 1));
+                            send-event(change-speed, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 0));
+                            send-event(change-speed, self, boxed_i32(0));
                         }
                     }
                 }
@@ -553,10 +553,10 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(object-arc, 0)) {
                         if (debug-joypad-command-active?(select-longgun, 0)) {
-                            send-event(change-weapon, self, new-boxed-value(2, 1));
+                            send-event(change-weapon, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(select-pistol, 0)) {
-                            send-event(change-weapon, self, new-boxed-value(2, 0));
+                            send-event(change-weapon, self, boxed_i32(0));
                         }
                     }
                 }

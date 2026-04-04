@@ -178,9 +178,9 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 2.50;
+                    *(i32*)*var_2[0] = 56;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 2.50;
                     wait-animate_(get-symbol(visor-prop, self), get-symbol(visor-up-anim, self), var_2);
                 }
                 lambda {
@@ -244,9 +244,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 2.50;
+                    *(i32*)*var_2[0] = 56;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 2.50;
                     wait-animate_(get-symbol(visor-prop, self), get-symbol(visor-down-anim, self), var_2);
                 }
                 lambda {

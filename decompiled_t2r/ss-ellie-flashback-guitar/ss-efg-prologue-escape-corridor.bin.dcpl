@@ -90,7 +90,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(go-task-fail, ss-efg-prologue-escape-spawn-controller-1, new-boxed-value(7, get-closest-living-npc-in-group(fireflies, player, 0)));
+                    send-event(go-task-fail, ss-efg-prologue-escape-spawn-controller-1, boxed_symbol(get-closest-living-npc-in-group(fireflies, player, 0)));
                 }
             }
         }

@@ -32,18 +32,8 @@ statescript {
             track main {
                 lambda {
                     if (!(get-boolean(enemies-marked?, self)) && player-is-prone?()) {
-                        broadcast-event(skull-activate, new-boxed-value(7, prone-damage-increase));
-                        foreach (u64? var_5 : all-enemy-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        broadcast-event(skull-activate, boxed_symbol(prone-damage-increase));
+                        foreach (u64? var_6 : all-enemy-npcs) {
                             npc-set-incoming-damage-multiplier(var_6, 1.50);
                         }
                         set-boolean(enemies-marked?, 1, self);
@@ -51,18 +41,8 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(enemies-marked?, self) && !(player-is-prone?())) {
-                        broadcast-event(skull-deactivate, new-boxed-value(7, prone-damage-increase));
-                        foreach (u64? var_5 : all-enemy-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        broadcast-event(skull-deactivate, boxed_symbol(prone-damage-increase));
+                        foreach (u64? var_6 : all-enemy-npcs) {
                             npc-set-incoming-damage-multiplier(var_6, 1.00);
                         }
                         set-boolean(enemies-marked?, 0, self);
@@ -82,17 +62,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-incoming-damage-multiplier(var_2, 1.00);
                     }
                 }

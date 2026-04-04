@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? aqu-relock-all-doors() {
-    foreach (u64? var_1 : aquarium-doors) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : aquarium-doors) {
         if (entity-exists?(var_2)) {
             door-reset-save-state(var_2);
             door-enable-systemic(var_2, 1);
@@ -253,17 +243,7 @@ statescript {
                 }
                 lambda {
                     if (task-continue-active?(saving-kids, ski-aquarium-flashback-target-practice, default)) {
-                        foreach (u64? var_2 : ski-aquarium--target-practice-disable-doors) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : ski-aquarium--target-practice-disable-doors) {
                             interactable-disable(var_3);
                         }
                     }
@@ -296,17 +276,7 @@ statescript {
                 }
                 lambda {
                     if (task-active?(saving-kids, ski-aquarium-flashback-target-practice)) {
-                        foreach (u64? var_2 : ski-aquarium--target-practice-disable-doors) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : ski-aquarium--target-practice-disable-doors) {
                             if (default == task-get-active-continue()) {
                                 interactable-disable(var_3);
                             } else {

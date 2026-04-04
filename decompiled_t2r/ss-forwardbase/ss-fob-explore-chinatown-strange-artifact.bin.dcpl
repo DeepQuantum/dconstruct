@@ -59,7 +59,7 @@ statescript {
                     interactable-disable(obj-fob-chinatown-strange-artifact-1);
                 }
                 lambda {
-                    send-event(add-fake-pickup, ss-player-blind-listen-mode, new-boxed-value(7, obj-fob-chinatown-strange-artifact-1));
+                    send-event(add-fake-pickup, ss-player-blind-listen-mode, boxed_symbol(obj-fob-chinatown-strange-artifact-1));
                 }
             }
         }
@@ -100,7 +100,7 @@ statescript {
                     interactable-disable(obj-fob-chinatown-strange-artifact-1);
                 }
                 lambda {
-                    send-event(remove-fake-pickup, ss-player-blind-listen-mode, new-boxed-value(7, obj-fob-chinatown-strange-artifact-1));
+                    send-event(remove-fake-pickup, ss-player-blind-listen-mode, boxed_symbol(obj-fob-chinatown-strange-artifact-1));
                 }
                 lambda {
                     go(acquire-strange-artifact, 1);

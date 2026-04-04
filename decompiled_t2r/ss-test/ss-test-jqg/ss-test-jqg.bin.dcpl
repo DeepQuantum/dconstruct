@@ -230,8 +230,8 @@ u64? test-darray-mutate(u64? arg_0, u64? arg_1) {
         display(dc:format("test-darray-mutate %s (%s)", string-debug(arg_0), string-debug(arg_1)), 19);
     }
     darray-remove(arg_0, 4);
-    darray-find-remove(arg_0, new-boxed-value(7, grunt-3), 0);
-    darray-insert(arg_0, new-boxed-value(7, jason), 0);
+    darray-find-remove(arg_0, boxed_symbol(grunt-3), 0);
+    darray-insert(arg_0, boxed_symbol(jason), 0);
     darray-reset(arg_0);
     return test-darray-iterate(arg_0, arg_1, 0);
 }
@@ -504,7 +504,7 @@ statescript {
                     set-string(help, "SQUARE = remove tab, TRIANGLE = add tab", self);
                 }
                 lambda {
-                    u64? var_1 = menu2-push-message-box(hudMenuStack, "menu/message-box-yes-no", 0, 0, new-boxed-value(19, "You likey?"), test_message_box, 2, 1);
+                    u64? var_1 = menu2-push-message-box(hudMenuStack, "menu/message-box-yes-no", 0, 0, boxed_stringcopy("You likey?"), test_message_box, 2, 1);
                     u64? var_2 = gui2-build-widget-path(
                         var_1,
                         "flow",
@@ -534,25 +534,25 @@ statescript {
                     test-ddict-iterate(test-dict, 0, 1);
                 }
                 lambda {
-                    ddict-set(test-dict, f, new-boxed-value(19, "f"));
+                    ddict-set(test-dict, f, boxed_stringcopy("f"));
                 }
                 lambda {
-                    ddict-set(test-dict, g, new-boxed-value(19, "g"));
+                    ddict-set(test-dict, g, boxed_stringcopy("g"));
                 }
                 lambda {
-                    ddict-set(test-dict, h, new-boxed-value(19, "h"));
+                    ddict-set(test-dict, h, boxed_stringcopy("h"));
                 }
                 lambda {
-                    ddict-set(test-dict, i, new-boxed-value(19, "i"));
+                    ddict-set(test-dict, i, boxed_stringcopy("i"));
                 }
                 lambda {
-                    ddict-set(test-dict, j, new-boxed-value(19, "j"));
+                    ddict-set(test-dict, j, boxed_stringcopy("j"));
                 }
                 lambda {
-                    ddict-set(test-dict, k, new-boxed-value(19, "k"));
+                    ddict-set(test-dict, k, boxed_stringcopy("k"));
                 }
                 lambda {
-                    ddict-set(test-dict, l, new-boxed-value(19, "l"));
+                    ddict-set(test-dict, l, boxed_stringcopy("l"));
                 }
                 lambda {
                     if (!is-final-build?()) {
@@ -693,16 +693,16 @@ statescript {
                     test-darray-iterate(test-string-array, 0, 1);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, player), 0);
+                    darray-append(test-string-array, boxed_symbol(player), 0);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, joel), 0);
+                    darray-append(test-string-array, boxed_symbol(joel), 0);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, ellie), 1);
+                    darray-append(test-string-array, boxed_symbol(ellie), 1);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(19, "jason gregory"), 0);
+                    darray-append(test-string-array, boxed_stringcopy("jason gregory"), 0);
                 }
                 lambda {
                     print-string("after", self);
@@ -729,19 +729,19 @@ statescript {
                     set-symbol(cloned-ptrs, test-darray-clone(test-ptr-array), self);
                 }
                 lambda {
-                    darray-append(get-symbol(cloned-ptrs, self), new-boxed-value(6, 7.00), 0);
+                    darray-append(get-symbol(cloned-ptrs, self), boxed_f32(7.00), 0);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, player), 0);
+                    darray-append(test-string-array, boxed_symbol(player), 0);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, joel), 0);
+                    darray-append(test-string-array, boxed_symbol(joel), 0);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(7, ellie), 1);
+                    darray-append(test-string-array, boxed_symbol(ellie), 1);
                 }
                 lambda {
-                    darray-append(test-string-array, new-boxed-value(19, "jason gregory"), 0);
+                    darray-append(test-string-array, boxed_stringcopy("jason gregory"), 0);
                 }
                 lambda {
                     wait(5.00);
@@ -1054,8 +1054,8 @@ statescript {
                     start-timer(timer, 1.00, self, 1);
                 }
                 lambda {
-                    new-boxed-value(7, works);
-                    new-boxed-value(6, 3.00);
+                    boxed_symbol(works);
+                    boxed_f32(3.00);
                 }
                 lambda {
                     darray-reset(jqg-group-1);
@@ -1066,22 +1066,12 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_2 : darray-clone(jqg-group-1, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(jqg-group-1, single-frame, 0)) {
                         if (!is-final-build?()) {
                             display(dc:format("  '%s", string-debug(var_3)), 19);
                         }
                         if (var_3 == grunt-3 && var_3 == npc-1) {
-                            darray-find-remove(jqg-group-1, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(jqg-group-1, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -1091,17 +1081,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : jqg-group-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : jqg-group-1) {
                         if (!is-final-build?()) {
                             display(dc:format("  '%s", string-debug(var_2)), 19);
                         }
@@ -1184,7 +1164,7 @@ statescript {
                             0,
                             0,
                             0
-                        ), 1, "menu/components/tab-test-02.widget", new-boxed-value(19, "TabX"));
+                        ), 1, "menu/components/tab-test-02.widget", boxed_stringcopy("TabX"));
                     }
                 }
                 lambda {
@@ -1275,13 +1255,13 @@ statescript {
                     test-ddict-iterate(test-dict, 0, 1);
                 }
                 lambda {
-                    ddict-set(test-dict, f, new-boxed-value(19, "f012345678901234567890123456789012345678901234567890123456789"));
+                    ddict-set(test-dict, f, boxed_stringcopy("f012345678901234567890123456789012345678901234567890123456789"));
                 }
                 lambda {
-                    ddict-set(test-dict, g, new-boxed-value(19, "g0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
+                    ddict-set(test-dict, g, boxed_stringcopy("g0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
                 }
                 lambda {
-                    ddict-set(test-dict, h, new-boxed-value(19, "h012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
+                    ddict-set(test-dict, h, boxed_stringcopy("h012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
                 }
                 lambda {
                     print-string("after add2", self);
@@ -1330,16 +1310,16 @@ statescript {
                     darray-clear(test-float-array);
                 }
                 lambda {
-                    darray-set(test-float-array, 12, new-boxed-value(6, 3.14));
+                    darray-set(test-float-array, 12, boxed_f32(3.14));
                 }
                 lambda {
-                    darray-set(test-float-array, 7, new-boxed-value(6, 2.00));
+                    darray-set(test-float-array, 7, boxed_f32(2.00));
                 }
                 lambda {
-                    darray-set(test-float-array, 1, new-boxed-value(6, -1.00));
+                    darray-set(test-float-array, 1, boxed_f32(-1.00));
                 }
                 lambda {
-                    darray-set(test-float-array, 18, new-boxed-value(6, 7.00));
+                    darray-set(test-float-array, 18, boxed_f32(7.00));
                 }
                 lambda {
                     darray-print(test-float-array);
@@ -1356,16 +1336,16 @@ statescript {
                     go(test-sort, 1);
                 }
                 lambda {
-                    darray-find-remove(test-string-array, new-boxed-value(7, ellie), 0);
+                    darray-find-remove(test-string-array, boxed_symbol(ellie), 0);
                 }
                 lambda {
-                    darray-find-remove(test-string-array, new-boxed-value(7, player), 0);
+                    darray-find-remove(test-string-array, boxed_symbol(player), 0);
                 }
                 lambda {
-                    darray-find-remove(test-string-array, new-boxed-value(7, player), 0);
+                    darray-find-remove(test-string-array, boxed_symbol(player), 0);
                 }
                 lambda {
-                    darray-find-remove(test-string-array, new-boxed-value(7, joel), 0);
+                    darray-find-remove(test-string-array, boxed_symbol(joel), 0);
                 }
                 lambda {
                     print-string("after delete", self);
@@ -1453,13 +1433,13 @@ statescript {
                     ddict-reset(test-dict);
                 }
                 lambda {
-                    ddict-set(test-dict, health, new-boxed-value(0, 0));
+                    ddict-set(test-dict, health, boxed_invalid(0));
                 }
                 lambda {
-                    ddict-set(test-dict, luck, new-boxed-value(0, 0));
+                    ddict-set(test-dict, luck, boxed_invalid(0));
                 }
                 lambda {
-                    ddict-set(test-dict, not-present, new-boxed-value(0, 0));
+                    ddict-set(test-dict, not-present, boxed_invalid(0));
                 }
                 lambda {
                     print-string("after remove", self);
@@ -1630,13 +1610,13 @@ statescript {
         block start {
             track main {
                 lambda {
-                    ddict-set(test-dict, health, new-boxed-value(19, "0ABCDEFGHIJ"));
+                    ddict-set(test-dict, health, boxed_stringcopy("0ABCDEFGHIJ"));
                 }
                 lambda {
-                    ddict-set(test-dict, stamina, new-boxed-value(19, "0KLMNOPQRST"));
+                    ddict-set(test-dict, stamina, boxed_stringcopy("0KLMNOPQRST"));
                 }
                 lambda {
-                    ddict-set(test-dict, name, new-boxed-value(19, "0UVWXYZABCD"));
+                    ddict-set(test-dict, name, boxed_stringcopy("0UVWXYZABCD"));
                 }
                 lambda {
                     print-string("after replace", self);
@@ -1662,11 +1642,11 @@ statescript {
                     fact-set(
                         self,
                         foo,
-                        new-boxed-value(2, 42),
+                        boxed_i32(42),
                         bar,
-                        new-boxed-value(6, 3.14),
+                        boxed_f32(3.14),
                         spam,
-                        new-boxed-value(7, spam)
+                        boxed_symbol(spam)
                     );
                 }
                 lambda {
@@ -1679,25 +1659,25 @@ statescript {
                     test-darray-iterate(test-general-array, 0, 1);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "f"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("f"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "g"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("g"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "h"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("h"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "i"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("i"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "j"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("j"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "k"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("k"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "l"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("l"), 0);
                 }
                 lambda {
                     print-string("after append", self);
@@ -1764,12 +1744,12 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        ddict-set(test-dict, health, new-boxed-value(0, 0));
-                        ddict-set(test-dict, luck, new-boxed-value(0, 0));
-                        ddict-set(test-dict, stamina, new-boxed-value(0, 0));
-                        ddict-set(test-dict, health, new-boxed-value(19, "0ABCDEFGHIJ"));
-                        ddict-set(test-dict, stamina, new-boxed-value(19, "0KLMNOPQRST"));
-                        ddict-set(test-dict, luck, new-boxed-value(19, "0UVWXYZABCD"));
+                        ddict-set(test-dict, health, boxed_invalid(0));
+                        ddict-set(test-dict, luck, boxed_invalid(0));
+                        ddict-set(test-dict, stamina, boxed_invalid(0));
+                        ddict-set(test-dict, health, boxed_stringcopy("0ABCDEFGHIJ"));
+                        ddict-set(test-dict, stamina, boxed_stringcopy("0KLMNOPQRST"));
+                        ddict-set(test-dict, luck, boxed_stringcopy("0UVWXYZABCD"));
                         test-ddict-iterate(test-dict, 0, 1);
                         wait-one-frame();
                         while (!joypad-command-active?(debug-script-press-triangle, 6)) {
@@ -1804,13 +1784,13 @@ statescript {
                     test-darray-iterate(test-general-array, 0, 1);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "f012345678901234567890123456789012345678901234567890123456789"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("f012345678901234567890123456789012345678901234567890123456789"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "g0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("g0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"), 0);
                 }
                 lambda {
-                    darray-append(test-general-array, new-boxed-value(19, "h012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"), 0);
+                    darray-append(test-general-array, boxed_stringcopy("h012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"), 0);
                 }
                 lambda {
                     print-string("after append", self);
@@ -1930,13 +1910,13 @@ statescript {
                     subtitle-show-text("At every party there are two kinds of people -- those who want to go home and those who don't. The trouble is, they are usually married to each other.", SUBTITLE_CHARACTER_DINA, 5.00, 0);
                 }
                 lambda {
-                    darray-set(test-general-array, 15, new-boxed-value(19, "0ABCDEFGHIJ"));
+                    darray-set(test-general-array, 15, boxed_stringcopy("0ABCDEFGHIJ"));
                 }
                 lambda {
-                    darray-set(test-general-array, 14, new-boxed-value(19, "0KLMNOPQRST"));
+                    darray-set(test-general-array, 14, boxed_stringcopy("0KLMNOPQRST"));
                 }
                 lambda {
-                    darray-set(test-general-array, 17, new-boxed-value(19, "0UVWXYZABCD"));
+                    darray-set(test-general-array, 17, boxed_stringcopy("0UVWXYZABCD"));
                 }
                 lambda {
                     print-string("after replace", self);
@@ -1987,9 +1967,9 @@ statescript {
                         darray-remove(test-general-array, 15);
                         darray-remove(test-general-array, 15);
                         darray-remove(test-general-array, 15);
-                        darray-insert(test-general-array, new-boxed-value(19, "0ABCDEFGHIJ"), 15);
-                        darray-insert(test-general-array, new-boxed-value(19, "0KLMNOPQRST"), 15);
-                        darray-insert(test-general-array, new-boxed-value(19, "0UVWXYZABCD"), 15);
+                        darray-insert(test-general-array, boxed_stringcopy("0ABCDEFGHIJ"), 15);
+                        darray-insert(test-general-array, boxed_stringcopy("0KLMNOPQRST"), 15);
+                        darray-insert(test-general-array, boxed_stringcopy("0UVWXYZABCD"), 15);
                         test-darray-iterate(test-general-array, 0, 1);
                         wait-one-frame();
                         while (!joypad-command-active?(debug-script-press-triangle, 6)) {

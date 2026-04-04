@@ -60,17 +60,7 @@ statescript {
                 }
                 lambda {
                     if (get-difficulty-setting-enemies() == 2 || get-difficulty-setting-enemies() == 1 && get-difficulty-setting-enemies() == 0) {
-                        foreach (u64? var_4 : basement-stalkers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : basement-stalkers) {
                             if (npc-stalker?(var_5)) {
                                 npc-set-melee-settings(var_5, *ai-melee-settings-stalker-nor-basement-easy*);
                             }

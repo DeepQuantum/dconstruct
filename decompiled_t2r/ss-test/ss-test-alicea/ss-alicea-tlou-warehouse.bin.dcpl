@@ -24,20 +24,10 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(storage-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(storage-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         if (!get-boolean(spawn-melee-reinf, self) && tension-mode-is?(3) && npc-group-alive-count(storage-npcs) < 9) {
-                            foreach (u64? var_7 : storage-reinf-npcs) {
-                                u16 var_8;
-                                if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                    var_8 = *(u64*)var_7;
-                                } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                    var_8 = *(u64*)var_7;
-                                } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                    var_8 = *(u64*)var_7;
-                                } else {
-                                    var_8 = 0;
-                                }
-                                darray-append(storage-npcs, new-boxed-value(7, spawn-npc(var_8, 0, 0)), 1);
+                            foreach (u64? var_8 : storage-reinf-npcs) {
+                                darray-append(storage-npcs, boxed_symbol(spawn-npc(var_8, 0, 0)), 1);
                             }
                             set-boolean(spawn-melee-reinf, 1, self);
                         } else if (npc-group-alive-count(storage-npcs) < 6) {
@@ -90,18 +80,8 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(spawn-melee-reinf-2, self) && npc-group-alive-count(storage-npcs) < 3) {
-                        foreach (u64? var_3 : exit-reinf-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
-                            darray-append(storage-npcs, new-boxed-value(7, spawn-npc(var_4, 0, 0)), 1);
+                        foreach (u64? var_4 : exit-reinf-npcs) {
+                            darray-append(storage-npcs, boxed_symbol(spawn-npc(var_4, 0, 0)), 1);
                             npc-make-aware-of(var_4, player, 2, 0);
                             script-caption-no-stack(infl-reinfb-1, "Don't let her through!", 2.00, 0);
                         }
@@ -113,51 +93,21 @@ statescript {
         block event unzone-front {
             track main {
                 lambda {
-                    foreach (u64? var_1 : front-upper-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : front-upper-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : front-lower-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : front-lower-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : mid-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : mid-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -191,37 +141,17 @@ statescript {
                     npc-set-hard-point-if-alive(infl-brewery-7, hardpoint-brewery-downstairs-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : storage-reinf-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : storage-reinf-npcs) {
                         if (npc-alive-in-checkpoint?(var_2)) {
-                            darray-append(storage-npcs, new-boxed-value(7, spawn-npc(var_2, 0, 0)), 1);
+                            darray-append(storage-npcs, boxed_symbol(spawn-npc(var_2, 0, 0)), 1);
                             set-boolean(spawn-melee-reinf, 1, self);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : exit-reinf-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : exit-reinf-npcs) {
                         if (npc-alive-in-checkpoint?(var_2)) {
-                            darray-append(storage-npcs, new-boxed-value(7, spawn-npc(var_2, 0, 0)), 1);
+                            darray-append(storage-npcs, boxed_symbol(spawn-npc(var_2, 0, 0)), 1);
                             set-boolean(spawn-melee-reinf-2, 1, self);
                         }
                     }

@@ -72,17 +72,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_18 : get-symbol(group-to-spawn, self)) {
-                        u16 var_19;
-                        if (var_18 && *(u16*)(var_18 + 12) == 7) {
-                            var_19 = *(u64*)var_18;
-                        } else if (var_18 && *(u16*)(var_18 + 12) == 5) {
-                            var_19 = *(u64*)var_18;
-                        } else if (var_18 && *(u16*)(var_18 + 12) == 4) {
-                            var_19 = *(u64*)var_18;
-                        } else {
-                            var_19 = 0;
-                        }
+                    foreach (u64? var_19 : get-symbol(group-to-spawn, self)) {
                         wait-spawn-entity(var_19, 0);
                         npc-set-script-only-no-perception(var_19);
                         if (task-continue-active?(dharrison, dh-fire-test-ellie, all-runners-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-runners-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-infected-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-infected-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-militia-1-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-militia-2-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-militia-3-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-militia-4-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-militia-1-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-militia-2-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-militia-3-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-abby, all-militia-4-dumb-and-invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, all-scar-dumb-and-invincible) && task-continue-active?(dharrison, dh-fire-test-abby, all-scar-dumb-and-invincible)) {
@@ -98,17 +88,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : dh-test-infected-fire) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : dh-test-infected-fire) {
                         spawn-entity(var_2, 0, 0);
                         if (task-continue-active?(dharrison, dh-fire-test-ellie, dumb) && task-continue-active?(dharrison, dh-fire-test-abby, dumb)) {
                             npc-set-script-only-no-perception(var_2);
@@ -125,20 +105,10 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(begin-carried, npc-dh-fire-test-super-stalker-1, new-boxed-value(7, npc-dh-fire-test-rat-king-1));
+                    send-event(begin-carried, npc-dh-fire-test-super-stalker-1, boxed_symbol(npc-dh-fire-test-rat-king-1));
                 }
                 lambda {
-                    foreach (u64? var_1 : dh-test-infected-fire-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : dh-test-infected-fire-patrol) {
                         spawn-entity(var_2, 0, 0);
                         npc-disable-perception(var_2);
                         if (task-continue-active?(dharrison, dh-fire-test-ellie, invincible) || task-continue-active?(dharrison, dh-fire-test-abby, invincible) || task-continue-active?(dharrison, dh-fire-test-ellie, dumb-and-invincible) && task-continue-active?(dharrison, dh-fire-test-abby, dumb-and-invincible)) {

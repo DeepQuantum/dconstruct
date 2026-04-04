@@ -89,51 +89,21 @@ statescript {
         block start {
             track enemies {
                 lambda {
-                    foreach (u64? var_1 : ski-hunting-party-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-hunting-party-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
                 lambda {
                     if (*(u8*)(get-difficulty-detail-enemies() + 365)) {
-                        foreach (u64? var_2 : ski-hunting-party-extra-shotgun) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
-                            darray-append(ski-hunting-party-npcs, new-boxed-value(7, var_3), 1);
+                        foreach (u64? var_3 : ski-hunting-party-extra-shotgun) {
+                            darray-append(ski-hunting-party-npcs, boxed_symbol(var_3), 1);
                         }
                     }
                 }
                 lambda {
                     if (*(u8*)(get-difficulty-detail-enemies() + 366)) {
-                        foreach (u64? var_2 : ski-hunting-party-extra-brute) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
-                            darray-append(ski-hunting-party-npcs, new-boxed-value(7, var_3), 1);
+                        foreach (u64? var_3 : ski-hunting-party-extra-brute) {
+                            darray-append(ski-hunting-party-npcs, boxed_symbol(var_3), 1);
                         }
                     }
                 }
@@ -273,17 +243,7 @@ statescript {
                     group-kill-entity(ski-hunting-party-npcs, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : ski-hunting-party-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-hunting-party-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

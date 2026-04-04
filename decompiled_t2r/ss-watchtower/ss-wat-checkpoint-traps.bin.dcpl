@@ -71,17 +71,7 @@ statescript {
                 lambda {
                     if (has-trip-wire-been-detonated?(trap-mine-trip-wire-2o6m-2)) {
                         wait-spawn-npc-group-async(wat-infected-checkpoint-npcs, 0, 0);
-                        foreach (u64? var_2 : wat-infected-checkpoint-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-infected-checkpoint-npcs) {
                             npc-set-script-low-priority(var_3);
                             npc-make-aware-of(var_3, player, 0, 0);
                         }
@@ -95,17 +85,7 @@ statescript {
                         npc-make-aware-of(npc-wat-infected-checkpoint-1, player, 2, 0);
                         send-event(vox-runner-hits-trap, ss-vox-wat-freeway-infected-traps-1);
                         wait-spawn-npc-group-async(wat-infected-checkpoint-npcs, 0, 0);
-                        foreach (u64? var_7 : wat-infected-checkpoint-npcs) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : wat-infected-checkpoint-npcs) {
                             npc-make-aware-of(var_8, player, 0, 0);
                             npc-set-script-only-no-perception(var_8);
                             npc-request-hold(var_8, 10.00);
@@ -133,17 +113,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-infected-checkpoint-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-infected-checkpoint-npcs) {
                         npc-set-script-low-priority(var_2);
                         npc-make-aware-of(var_2, player, 0, 0);
                         npc-clear-request-movement(var_2);

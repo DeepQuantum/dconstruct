@@ -13,7 +13,7 @@
 
 u64? wait-spawn-at-furthest-in-group(u64? arg_0, u64? arg_1) {
     wait-spawn-entity-at(arg_0, get-spawner-locator(get-furthest-in-group(arg_1, player), 1), 0);
-    return darray-find-remove(arg_1, new-boxed-value(7, get-furthest-in-group(arg_1, player)), 0);
+    return darray-find-remove(arg_1, boxed_symbol(get-furthest-in-group(arg_1, player)), 0);
 }
 
 u64? wait-spawn-wave-1-safe() {
@@ -147,17 +147,7 @@ statescript {
                     set-boolean(vox-enter-car-combat, 1, ss-vox-res-downhill-enemy-npc-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : enter-car-npcs-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : enter-car-npcs-1) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-make-aware-of(var_2, jesse, 2, 0);
                     }
@@ -172,17 +162,7 @@ statescript {
                     log-event("res-downhill-enter-car-wave-2-spawned", 1, "", 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : enter-car-npcs-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : enter-car-npcs-2) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-make-aware-of(var_2, jesse, 2, 0);
                     }
@@ -208,7 +188,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(enter-car-npcs-1, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(enter-car-npcs-1, boxed_symbol(event-arg-symbol(0)))) {
                         set-boolean(spawn-wave-2?, 1, self);
                     }
                 }
@@ -228,34 +208,14 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : enter-car-npcs-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : enter-car-npcs-1) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : enter-car-npcs-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : enter-car-npcs-2) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
@@ -267,32 +227,12 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(rescue-jesse, res-downhill-drive-start)) {
-                        foreach (u64? var_2 : enter-car-npcs-1) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : enter-car-npcs-1) {
                             if (entity-exists?(var_3)) {
                                 kill-entity(var_3);
                             }
                         }
-                        foreach (u64? var_7 : enter-car-npcs-2) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : enter-car-npcs-2) {
                             if (entity-exists?(var_8)) {
                                 kill-entity(var_8);
                             }

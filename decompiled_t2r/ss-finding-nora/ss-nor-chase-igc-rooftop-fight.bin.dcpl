@@ -86,47 +86,47 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 0;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 0;
                     animate_(npc-nor-nora-1, nor-noras-chase-fight-land--nora, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 12;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.10;
-                    *(i32*)*(*var_0 + (3 * 8)) = 22;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.62;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 70;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 12;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.10;
+                    *(i32*)*var_0[3] = 22;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.62;
                     wait-animate_(player, nor-noras-chase-fight-land--ellie, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 66;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 20.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 59;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 66;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 20.00;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.30;
                     wait-animate_(player, nor-noras-chase-fight-land--ellie, var_0);
                 }
                 lambda {
@@ -194,26 +194,26 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(npc-nor-nora-1, nor-noras-chase-fight-tackle--nora, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(obj-nor-chase-fight-shelves-1, nor-noras-chase-fight-tackle--shelving, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 71;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 71;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 1;
                     wait-animate_(player, nor-noras-chase-fight-tackle--ellie, var_0);
                 }
                 lambda {
@@ -239,18 +239,18 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(get-symbol(switchblade, self), nor-noras-chase-fight-tackle--knife, var_1);
                 }
             }
             track ic {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(ic-nor-chase-fight-1, nor-noras-chase-fight-tackle--invisible-cube, var_0);
                 }
             }
@@ -403,24 +403,24 @@ statescript {
             track ellie {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 177;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 36;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 177;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.00;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 36;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 1;
                     wait-animate_(player, nor-noras-chase-fight-success--ellie, var_0);
                 }
                 lambda {
@@ -433,12 +433,12 @@ statescript {
             track door {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     wait-animate_(obj-nor-chase-office-door-1, nor-noras-chase-fight-success--door, var_0);
                 }
                 lambda {
@@ -448,12 +448,12 @@ statescript {
             track nora {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(npc-nor-nora-1, nor-noras-chase-fight-success--nora, var_0);
                 }
                 lambda {
@@ -484,21 +484,21 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_1[1] = 30;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
                     animate_(get-symbol(switchblade, self), nor-noras-chase-fight-success--knife, var_1);
                 }
             }
             track ic {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(ic-nor-chase-fight-1, nor-noras-chase-fight-success--invisible-cube, var_0);
                 }
             }
@@ -589,29 +589,29 @@ statescript {
             track anim {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(npc-nor-nora-1, nor-noras-chase-fight-fail--nora, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(obj-nor-chase-fight-shelves-1, nor-noras-chase-fight-fail--shelving, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 36;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[1] = 70;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 36;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
                     wait-animate_(player, nor-noras-chase-fight-fail--ellie, var_0);
                 }
                 lambda {
@@ -631,21 +631,21 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
                     animate_(get-player-weapon-process-id-from-weapon-id(switchblade), nor-noras-chase-fight-fail--knife, var_1);
                 }
             }
             track ic {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-noras-chase-fight-1, 1);
                     animate_(ic-nor-chase-fight-1, nor-noras-chase-fight-fail--invisible-cube, var_0);
                 }
             }

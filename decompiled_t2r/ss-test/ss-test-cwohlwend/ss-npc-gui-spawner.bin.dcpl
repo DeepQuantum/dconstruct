@@ -30,11 +30,11 @@ u16 gui-spawner-set-npc-perception(u16 arg_0) {
 }
 
 u64? populate-character-spawn-ddict(u64? arg_0, u64? arg_1) {
-    ddict-set(arg_0, name, new-boxed-value(19, get-npc-schema-info(arg_1, name)));
-    ddict-set(arg_0, art-group, new-boxed-value(19, get-npc-schema-info(arg_1, art-group)));
-    ddict-set(arg_0, spawn-class, new-boxed-value(7, string-to-symbol(get-npc-schema-info(arg_1, spawn-class))));
-    ddict-set(arg_0, archetype, new-boxed-value(7, string-to-symbol(get-npc-schema-info(arg_1, archetype))));
-    return ddict-set(arg_0, weapon-loadout, new-boxed-value(7, string-to-symbol(get-npc-schema-info(arg_1, weapon-loadout))));
+    ddict-set(arg_0, name, boxed_stringcopy(get-npc-schema-info(arg_1, name)));
+    ddict-set(arg_0, art-group, boxed_stringcopy(get-npc-schema-info(arg_1, art-group)));
+    ddict-set(arg_0, spawn-class, boxed_symbol(string-to-symbol(get-npc-schema-info(arg_1, spawn-class))));
+    ddict-set(arg_0, archetype, boxed_symbol(string-to-symbol(get-npc-schema-info(arg_1, archetype))));
+    return ddict-set(arg_0, weapon-loadout, boxed_symbol(string-to-symbol(get-npc-schema-info(arg_1, weapon-loadout))));
 }
 
 u64? button-lockout() {
@@ -82,14 +82,14 @@ u16 build-character-look-list-gui-spawner(u64? arg_0, u64? arg_1) {
             var_6 = 0;
         }
         if (var_6 == enemy-boar) {
-            ddict-set(arg_1, boar, new-boxed-value(7, 0));
+            ddict-set(arg_1, boar, boxed_symbol(0));
             var_4 = 1;
         } else {
-            var_4 = ddict-set(arg_1, this-will-eventually-be-a-list-of-looks-just-select-this-for-now, new-boxed-value(7, 0));
+            var_4 = ddict-set(arg_1, this-will-eventually-be-a-list-of-looks-just-select-this-for-now, boxed_symbol(0));
         }
     } else {
         for (u64 i = 0; i < var_3; i++) {
-            ddict-set(arg_1, get-look-id-from-collection-index(var_2, i), new-boxed-value(7, 0));
+            ddict-set(arg_1, get-look-id-from-collection-index(var_2, i), boxed_symbol(0));
         }
         var_4 = i + 1;
     }
@@ -152,7 +152,7 @@ u16 adjust-selector-and-move-window-respawner(i32 arg_0) {
 }
 
 u64? setup-character-ddict(u64? arg_0, u64? arg_1, u64? arg_2) {
-    ddict-set(arg_0, arg_1, new-boxed-value(7, ddict-create(self, -1, 0)));
+    ddict-set(arg_0, arg_1, boxed_symbol(ddict-create(self, -1, 0)));
     u64? var_2 = ddict-get(arg_0, arg_1);
     u16 var_3;
     if (var_2 && *(u16*)(var_2 + 12) == 7) {
@@ -383,17 +383,7 @@ statescript {
                             ddict-clear(get-symbol(npc-respawn-look-ddict, self));
                             ddict-clear(get-symbol(npc-respawn-locator-ddict, self));
                             ddict-clear(get-symbol(npc-respawn-queue-ddict, self));
-                            foreach (u64? var_32 : all-enemy-npcs) {
-                                u16 var_33;
-                                if (var_32 && *(u16*)(var_32 + 12) == 7) {
-                                    var_33 = *(u64*)var_32;
-                                } else if (var_32 && *(u16*)(var_32 + 12) == 5) {
-                                    var_33 = *(u64*)var_32;
-                                } else if (var_32 && *(u16*)(var_32 + 12) == 4) {
-                                    var_33 = *(u64*)var_32;
-                                } else {
-                                    var_33 = 0;
-                                }
+                            foreach (u64? var_33 : all-enemy-npcs) {
                                 kill-entity(var_33);
                             }
                             debug-draw-string(get-locator-position(get-joint-locator(player, headb)), "Respawn npcs cleared", 2, 2.00, 0, 1.00, 0, 0);
@@ -402,7 +392,7 @@ statescript {
                             if (get-symbol(current-menu, self) == get-symbol(look-list, self)) {
                                 set-symbol(character-to-spawn-look, ddict-key-at(get-symbol(current-menu, self), get-int32(index, self)), self);
                                 set-boolean(spawn-new-npc, 1, self);
-                            } else if (darray-contains?(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(current-menu, self)))) {
+                            } else if (darray-contains?(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(current-menu, self)))) {
                                 u64? var_51 = ddict-get(get-symbol(current-menu, self), ddict-key-at(get-symbol(current-menu, self), get-int32(index, self)));
                                 u16 var_52;
                                 if (var_51 && *(u16*)(var_51 + 12) == 7) {
@@ -461,7 +451,7 @@ statescript {
             track main {
                 lambda {
                     if (ddict-contains-key?(get-symbol(npc-respawn-ddict, self), event-arg-symbol(0))) {
-                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), event-arg-symbol(0), new-boxed-value(6, get-current-time(0)));
+                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), event-arg-symbol(0), boxed_f32(get-current-time(0)));
                     }
                 }
             }
@@ -486,16 +476,16 @@ statescript {
                     set-symbol(animal-ddict, ddict-create(self, -1, 0), self);
                 }
                 lambda {
-                    ddict-set(get-symbol(archetypes-ddict, self), Militia, new-boxed-value(7, get-symbol(militia-sub-ddict, self)));
+                    ddict-set(get-symbol(archetypes-ddict, self), Militia, boxed_symbol(get-symbol(militia-sub-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(archetypes-ddict, self), Scar, new-boxed-value(7, get-symbol(scar-sub-ddict, self)));
+                    ddict-set(get-symbol(archetypes-ddict, self), Scar, boxed_symbol(get-symbol(scar-sub-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(archetypes-ddict, self), Infected, new-boxed-value(7, get-symbol(infected-ddict, self)));
+                    ddict-set(get-symbol(archetypes-ddict, self), Infected, boxed_symbol(get-symbol(infected-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(archetypes-ddict, self), Animal, new-boxed-value(7, get-symbol(animal-ddict, self)));
+                    ddict-set(get-symbol(archetypes-ddict, self), Animal, boxed_symbol(get-symbol(animal-ddict, self)));
                 }
                 lambda {
                     set-symbol(militia-melee-ddict, ddict-create(self, -1, 0), self);
@@ -510,16 +500,16 @@ statescript {
                     set-symbol(militia-dog+human-ddict, ddict-create(self, -1, 0), self);
                 }
                 lambda {
-                    ddict-set(get-symbol(militia-sub-ddict, self), Melee, new-boxed-value(7, get-symbol(militia-melee-ddict, self)));
+                    ddict-set(get-symbol(militia-sub-ddict, self), Melee, boxed_symbol(get-symbol(militia-melee-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(militia-sub-ddict, self), Gun, new-boxed-value(7, get-symbol(militia-gun-ddict, self)));
+                    ddict-set(get-symbol(militia-sub-ddict, self), Gun, boxed_symbol(get-symbol(militia-gun-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(militia-sub-ddict, self), Hybrid, new-boxed-value(7, get-symbol(militia-hybrid-ddict, self)));
+                    ddict-set(get-symbol(militia-sub-ddict, self), Hybrid, boxed_symbol(get-symbol(militia-hybrid-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(militia-sub-ddict, self), Dog+Human, new-boxed-value(7, get-symbol(militia-dog+human-ddict, self)));
+                    ddict-set(get-symbol(militia-sub-ddict, self), Dog+Human, boxed_symbol(get-symbol(militia-dog+human-ddict, self)));
                 }
                 lambda {
                     set-symbol(scar-melee-ddict, ddict-create(self, -1, 0), self);
@@ -534,16 +524,16 @@ statescript {
                     set-symbol(scar-brute-ddict, ddict-create(self, -1, 0), self);
                 }
                 lambda {
-                    ddict-set(get-symbol(scar-sub-ddict, self), Melee, new-boxed-value(7, get-symbol(scar-melee-ddict, self)));
+                    ddict-set(get-symbol(scar-sub-ddict, self), Melee, boxed_symbol(get-symbol(scar-melee-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(scar-sub-ddict, self), Gun, new-boxed-value(7, get-symbol(scar-gun-ddict, self)));
+                    ddict-set(get-symbol(scar-sub-ddict, self), Gun, boxed_symbol(get-symbol(scar-gun-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(scar-sub-ddict, self), Hybrid, new-boxed-value(7, get-symbol(scar-hybrid-ddict, self)));
+                    ddict-set(get-symbol(scar-sub-ddict, self), Hybrid, boxed_symbol(get-symbol(scar-hybrid-ddict, self)));
                 }
                 lambda {
-                    ddict-set(get-symbol(scar-sub-ddict, self), Brute, new-boxed-value(7, get-symbol(scar-brute-ddict, self)));
+                    ddict-set(get-symbol(scar-sub-ddict, self), Brute, boxed_symbol(get-symbol(scar-brute-ddict, self)));
                 }
                 lambda {
                     setup-character-ddict(get-symbol(militia-melee-ddict, self), Crowbar, npc-militia-crowbar);
@@ -747,34 +737,34 @@ statescript {
                     set-symbol(npc-selector-darray, darray-create(self, -1, 0), self);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(infected-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(infected-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(animal-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(animal-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(militia-melee-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(militia-melee-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(militia-gun-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(militia-gun-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(militia-hybrid-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(militia-hybrid-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(militia-dog+human-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(militia-dog+human-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(scar-melee-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(scar-melee-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(scar-gun-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(scar-gun-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(scar-hybrid-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(scar-hybrid-ddict, self)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(npc-selector-darray, self), new-boxed-value(7, get-symbol(scar-brute-ddict, self)), 0);
+                    darray-append(get-symbol(npc-selector-darray, self), boxed_symbol(get-symbol(scar-brute-ddict, self)), 0);
                 }
                 lambda {
                     set-symbol(look-list, ddict-create(self, -1, 0), self);
@@ -939,8 +929,8 @@ statescript {
                                 }
                                 u64? var_34 = wait-spawn-npc-debug(var_23, var_26, string-debug(var_20), var_29, var_31, var_33, 0, 0);
                                 gui-spawner-set-npc-perception(var_34);
-                                ddict-set(get-symbol(npc-respawn-ddict, self), var_34, new-boxed-value(7, var_17));
-                                ddict-set(get-symbol(npc-respawn-look-ddict, self), var_34, new-boxed-value(7, var_20));
+                                ddict-set(get-symbol(npc-respawn-ddict, self), var_34, boxed_symbol(var_17));
+                                ddict-set(get-symbol(npc-respawn-look-ddict, self), var_34, boxed_symbol(var_20));
                                 u64? var_41 = ddict-get(get-symbol(npc-respawn-locator-ddict, self), var_14);
                                 u64? var_42;
                                 if (var_41 && *(u16*)(var_41 + 12) == 18) {
@@ -948,9 +938,9 @@ statescript {
                                 } else {
                                     var_42 = identity-bound-frame();
                                 }
-                                ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_34, new-boxed-value(18, var_42));
+                                ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_34, boxed_boundframe(var_42));
                                 ddict-remove-at(get-symbol(npc-respawn-queue-ddict, self), 0);
-                                ddict-set(get-symbol(cleanup-queue-ddict, self), var_14, new-boxed-value(6, get-current-time(0)));
+                                ddict-set(get-symbol(cleanup-queue-ddict, self), var_14, boxed_f32(get-current-time(0)));
                                 if (*(u8*)(*gui-spawner* + 4) && ddict-key-count(get-symbol(npc-respawn-queue-ddict, self)) == 0) {}
 
                             }
@@ -1014,9 +1004,9 @@ statescript {
                             0
                         );
                         gui-spawner-set-npc-perception(var_15);
-                        ddict-set(get-symbol(npc-respawn-ddict, self), var_15, new-boxed-value(7, get-symbol(character-to-spawn-info-ddict, self)));
-                        ddict-set(get-symbol(npc-respawn-look-ddict, self), var_15, new-boxed-value(7, get-symbol(character-to-spawn-look, self)));
-                        ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_15, new-boxed-value(18, get-bound-frame(respawn-boundframe, self)));
+                        ddict-set(get-symbol(npc-respawn-ddict, self), var_15, boxed_symbol(get-symbol(character-to-spawn-info-ddict, self)));
+                        ddict-set(get-symbol(npc-respawn-look-ddict, self), var_15, boxed_symbol(get-symbol(character-to-spawn-look, self)));
+                        ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_15, boxed_boundframe(get-bound-frame(respawn-boundframe, self)));
                         set-boolean(spawn-new-npc, 0, self);
                         wait-one-frame();
                     }

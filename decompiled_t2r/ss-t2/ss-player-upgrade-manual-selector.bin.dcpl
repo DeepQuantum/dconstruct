@@ -61,26 +61,16 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = ddict-create(self, -1, 0);
-                    ddict-set(var_0, upgrade-manual-crafting, new-boxed-value(7, tag-symbol(manual-crafting, self)));
-                    ddict-set(var_0, upgrade-manual-explosives, new-boxed-value(7, tag-symbol(manual-explosives, self)));
-                    ddict-set(var_0, upgrade-manual-hawkeye, new-boxed-value(7, tag-symbol(manual-hawkeye, self)));
-                    ddict-set(var_0, upgrade-manual-stealth, new-boxed-value(7, tag-symbol(manual-stealth, self)));
-                    ddict-set(var_0, upgrade-manual-stress, new-boxed-value(7, tag-symbol(manual-stress, self)));
-                    ddict-set(var_0, upgrade-manual-weapons, new-boxed-value(7, tag-symbol(manual-weapons, self)));
+                    ddict-set(var_0, upgrade-manual-crafting, boxed_symbol(tag-symbol(manual-crafting, self)));
+                    ddict-set(var_0, upgrade-manual-explosives, boxed_symbol(tag-symbol(manual-explosives, self)));
+                    ddict-set(var_0, upgrade-manual-hawkeye, boxed_symbol(tag-symbol(manual-hawkeye, self)));
+                    ddict-set(var_0, upgrade-manual-stealth, boxed_symbol(tag-symbol(manual-stealth, self)));
+                    ddict-set(var_0, upgrade-manual-stress, boxed_symbol(tag-symbol(manual-stress, self)));
+                    ddict-set(var_0, upgrade-manual-weapons, boxed_symbol(tag-symbol(manual-weapons, self)));
                     if (!(tag-symbol(grounded-only-manual, self) == 0) && get-difficulty() != 5) {
-                        ddict-set(var_0, tag-symbol(grounded-only-manual, self), new-boxed-value(0, 0));
+                        ddict-set(var_0, tag-symbol(grounded-only-manual, self), boxed_invalid(0));
                     }
-                    foreach (u64? var_20 : get-available-upgrade-manuals-c()) {
-                        u16 var_21;
-                        if (var_20 && *(u16*)(var_20 + 12) == 7) {
-                            var_21 = *(u64*)var_20;
-                        } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-                            var_21 = *(u64*)var_20;
-                        } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-                            var_21 = *(u64*)var_20;
-                        } else {
-                            var_21 = 0;
-                        }
+                    foreach (u64? var_21 : get-available-upgrade-manuals-c()) {
                         if (get-symbol(spawned-manual, self) == 0) {
                             u64? var_23 = ddict-get(var_0, var_21);
                             u16 var_24;
@@ -135,7 +125,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(upgrade-manual-found, new-boxed-value(7, get-symbol(spawned-manual-id, self)));
+                    broadcast-event(upgrade-manual-found, boxed_symbol(get-symbol(spawned-manual-id, self)));
                 }
                 lambda {
                     while (!(player-inventory-get-item-quantity(get-symbol(spawned-manual-id, self)) > 0)) {

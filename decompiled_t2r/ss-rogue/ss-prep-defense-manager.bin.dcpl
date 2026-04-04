@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? def-stalker-check-overwhelm() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (npc-stalker?(var_4)) {
             npc-set-zone-region(var_4, get-symbol(def-buddy-saved-zone, self));
         }
@@ -35,29 +25,19 @@ u64? def-stalker-check-overwhelm() {
 }
 
 u64? def-exterior-cache-group-setup() {
-    foreach (u64? var_3 : get-spawners-by-tag(def-cache-ext, 0, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-spawners-by-tag(def-cache-ext, 0, 0, 0)) {
         if (tag-int32(def-cache-ext, var_4) == 1) {
-            darray-append(grp-def-ext-cache-1, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-1, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-ext, var_4) == 2) {
-            darray-append(grp-def-ext-cache-2, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-2, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-ext, var_4) == 3) {
-            darray-append(grp-def-ext-cache-3, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-3, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-ext, var_4) == 4) {
-            darray-append(grp-def-ext-cache-4, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-4, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-ext, var_4) == 5) {
-            darray-append(grp-def-ext-cache-5, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-5, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-ext, var_4) == 6) {
-            darray-append(grp-def-ext-cache-6, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-ext-cache-6, boxed_symbol(var_4), 1);
         } else if (!is-final-build?()) {
             display(dc:format("cond fail"), 19);
         }
@@ -95,17 +75,17 @@ u16 defense-rand-dumpsters() {
         } else {
             var_17 = 0;
         }
-        darray-append(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, var_17), 1);
+        darray-append(grp-def-rand-dumpsters-to-spawn, boxed_symbol(var_17), 1);
         darray-remove(grp-def-rand-dumpsters, var_14 % var_15);
     }
     u16 var_27;
-    if (task-active?(t2r-defense, t2r-hospital-defense) && darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-9)) && darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-13)) && darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-31))) {
+    if (task-active?(t2r-defense, t2r-hospital-defense) && darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-9)) && darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-13)) && darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-31))) {
         kill-entity(window-1o3x2o0-rl1-dw910-1);
         enable-action-pack(tap-vault-822, 0);
         wait-one-frame();
         var_27 = enable-action-pack(tap-vault-822, 1);
     } else if (task-active?(t2r-defense, t2r-street-patrol-defense)) {
-        if (darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-37)) && darray-count(grp-def-rand-dumpsters-to-spawn) == 1) {
+        if (darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-37)) && darray-count(grp-def-rand-dumpsters-to-spawn) == 1) {
             u64? var_33 = rogue-get-next-random-number-for-category(rng-templates, 0);
             u64? var_34 = darray-count(grp-def-rand-dumpsters);
             u64? var_35 = darray-at(grp-def-rand-dumpsters, var_33 % var_34);
@@ -119,13 +99,13 @@ u16 defense-rand-dumpsters() {
             } else {
                 var_36 = 0;
             }
-            darray-append(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, var_36), 1);
+            darray-append(grp-def-rand-dumpsters-to-spawn, boxed_symbol(var_36), 1);
             darray-remove(grp-def-rand-dumpsters, var_33 % var_34);
-        } else if (darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-32))) {
-            darray-append(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-32-planks-a-1), 1);
-            darray-append(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-32-planks-b-1), 1);
+        } else if (darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-32))) {
+            darray-append(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-32-planks-a-1), 1);
+            darray-append(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-32-planks-b-1), 1);
         }
-        if (darray-contains?(grp-def-rand-dumpsters-to-spawn, new-boxed-value(7, def-rand-dumpster-38))) {
+        if (darray-contains?(grp-def-rand-dumpsters-to-spawn, boxed_symbol(def-rand-dumpster-38))) {
             var_27 = disable-player-squeeze-through(squeeze-through-768);
         } else {
             var_27 = 0;
@@ -137,17 +117,7 @@ u16 defense-rand-dumpsters() {
 }
 
 u64? defense-dumpsters-disable() {
-    foreach (u64? var_3 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
         if (entity-exists?(var_4)) {
             interactable-disable(var_4);
         }
@@ -155,17 +125,7 @@ u64? defense-dumpsters-disable() {
 }
 
 u64? defense-infected-target-buddies() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (!get-boolean(acc-buddy-distance-warn?, self)) {
             hud-defense-show-message(HUD_ROGUE_DEFENSE_BUDDY_TARGET, 1);
             hud-defense-buddy-critical(1);
@@ -181,33 +141,13 @@ u64? defense-infected-target-buddies() {
 }
 
 u64? def-interior-cache-spawn(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         spawn-entity(var_2, 0, 0);
     }
 }
 
 u64? defense-infected-force-move-to-buddies() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         npc-set-demeanor(var_4, 2, 1);
         npc-move-to(var_4, get-object-locator(get-symbol(def-local-buddy-name, self)), 1, 0, 0, 0, 0, 0);
     }
@@ -215,23 +155,13 @@ u64? defense-infected-force-move-to-buddies() {
 
 u64? tts-defense-wave-incoming-update() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_DEFENSE_PREP_TIMER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(defense-time-countdown, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(HUD_ROGUE_DEFENSE_PREP_TIMER);
+    *(u64*)var_0[1] = boxed_i32(get-int32(defense-time-countdown, self));
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 u64? defense-dumpsters-enable() {
-    foreach (u64? var_3 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
         if (entity-exists?(var_4)) {
             interactable-enable(var_4);
         }
@@ -239,41 +169,21 @@ u64? defense-dumpsters-enable() {
 }
 
 u64? def-exterior-cache-spawn(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         spawn-entity(var_2, 0, 0);
     }
 }
 
 u64? def-rand-dumpster-setup() {
-    foreach (u64? var_3 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        darray-append(grp-def-rand-dumpsters, new-boxed-value(7, var_4), 1);
+    foreach (u64? var_4 : get-spawners-by-tag(def-dumpster-int, 0, 0, 0)) {
+        darray-append(grp-def-rand-dumpsters, boxed_symbol(var_4), 1);
     }
 }
 
 u16 defense-too-far-from-buddy-tts() {
     u16 var_1;
     if (timer-done?(acc-buddy-distance-timer, self)) {
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEFENSE_BUDDY_DANGER), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_DEFENSE_BUDDY_DANGER), 1, 0, 1);
         var_1 = start-timer(acc-buddy-distance-timer, 10.00, self, 1);
     } else {
         var_1 = 0;
@@ -292,17 +202,7 @@ u16 defense-rand-extra-buddy() {
 }
 
 u64? def-rand-dumpster-spawn(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         spawn-entity(var_2, 0, 0);
         if (!is-final-build?()) {
             display(dc:format("DEB-DEF:   Dumpster spawned: %s", string-debug(var_2)), 19);
@@ -364,29 +264,19 @@ u16 def-difficulty-buddy-damage-taken-setup() {
 }
 
 u64? def-interior-cache-group-setup() {
-    foreach (u64? var_3 : get-spawners-by-tag(def-cache-int, 0, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-spawners-by-tag(def-cache-int, 0, 0, 0)) {
         if (tag-int32(def-cache-int, var_4) == 1) {
-            darray-append(grp-def-int-cache-1, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-1, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-int, var_4) == 2) {
-            darray-append(grp-def-int-cache-2, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-2, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-int, var_4) == 3) {
-            darray-append(grp-def-int-cache-3, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-3, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-int, var_4) == 4) {
-            darray-append(grp-def-int-cache-4, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-4, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-int, var_4) == 5) {
-            darray-append(grp-def-int-cache-5, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-5, boxed_symbol(var_4), 1);
         } else if (tag-int32(def-cache-int, var_4) == 6) {
-            darray-append(grp-def-int-cache-6, new-boxed-value(7, var_4), 1);
+            darray-append(grp-def-int-cache-6, boxed_symbol(var_4), 1);
         } else if (!is-final-build?()) {
             display(dc:format("cond fail"), 19);
         }
@@ -395,9 +285,9 @@ u64? def-interior-cache-group-setup() {
 
 u64? tts-wrapup-update-defense() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, ROGUE_EXIT_TIMER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(defense-wrapup-time, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(ROGUE_EXIT_TIMER);
+    *(u64*)var_0[1] = boxed_i32(get-int32(defense-wrapup-time, self));
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 u16 def-int-cache-rand-setup() {
@@ -413,17 +303,7 @@ u16 def-int-cache-rand-setup() {
 }
 
 u64? defense-infected-target-only-buddies() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (!get-boolean(acc-buddy-distance-warn?, self)) {
             hud-defense-show-message(HUD_ROGUE_DEFENSE_BUDDY_TARGET, 1);
             hud-defense-buddy-critical(1);
@@ -439,33 +319,13 @@ u64? defense-infected-target-only-buddies() {
 }
 
 u64? defense-infected-target-player() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         npc-set-targeting-params(var_4, never-target-player-or-buddy);
     }
 }
 
 u64? defense-infected-target-default() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (get-boolean(acc-buddy-distance-warn?, self)) {
             hud-defense-show-message(HUD_ROGUE_DEFENSE_BUDDY_TARGET, 0);
             hud-defense-buddy-critical(0);
@@ -505,48 +365,48 @@ u16 def-enemy-count-difficulty-modifer() {
 u64? tts-defense-ally-health-status-update() {
     if (get-svar-as-boolean(buddy-dina)) {
         u64? var_1 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_1 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_DINA);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_1), 1, 0, 1);
+        *(u64*)var_1[0] = boxed_symbol(PLAYER_NAME_DINA);
+        speak-text-to-speech-formatted(boxed_array(var_1), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-mel)) {
         u64? var_5 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_5 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_MEL);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_5), 1, 0, 1);
+        *(u64*)var_5[0] = boxed_symbol(PLAYER_NAME_MEL);
+        speak-text-to-speech-formatted(boxed_array(var_5), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-tommy)) {
         u64? var_9 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_9 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_TOMMY);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_9), 1, 0, 1);
+        *(u64*)var_9[0] = boxed_symbol(PLAYER_NAME_TOMMY);
+        speak-text-to-speech-formatted(boxed_array(var_9), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-yara)) {
         u64? var_13 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_13 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_YARA);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_13), 1, 0, 1);
+        *(u64*)var_13[0] = boxed_symbol(PLAYER_NAME_YARA);
+        speak-text-to-speech-formatted(boxed_array(var_13), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-jesse)) {
         u64? var_17 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_17 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_JESSE);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_17), 1, 0, 1);
+        *(u64*)var_17[0] = boxed_symbol(PLAYER_NAME_JESSE);
+        speak-text-to-speech-formatted(boxed_array(var_17), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-joel)) {
         u64? var_21 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_21 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_JOEL);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_21), 1, 0, 1);
+        *(u64*)var_21[0] = boxed_symbol(PLAYER_NAME_JOEL);
+        speak-text-to-speech-formatted(boxed_array(var_21), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-lev)) {
         u64? var_25 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_25 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_LEV);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_25), 1, 0, 1);
+        *(u64*)var_25[0] = boxed_symbol(PLAYER_NAME_LEV);
+        speak-text-to-speech-formatted(boxed_array(var_25), 1, 0, 1);
     } else if (get-svar-as-boolean(buddy-manny)) {
         u64? var_29 = #%alloc-array(single-frame, 1, 1, 0);
-        *(u64*)(*var_29 + (0 * 8)) = new-boxed-value(7, PLAYER_NAME_MANNY);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_29), 1, 0, 1);
+        *(u64*)var_29[0] = boxed_symbol(PLAYER_NAME_MANNY);
+        speak-text-to-speech-formatted(boxed_array(var_29), 1, 0, 1);
     }
     u64? var_32 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_32 + (0 * 8)) = new-boxed-value(7, A11Y_STATUS_HEALTH);
-    *(u64*)(*var_32 + (1 * 8)) = new-boxed-value(2, get-int32(def-wounded-health-current, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_32), 1, 0, 1);
+    *(u64*)var_32[0] = boxed_symbol(A11Y_STATUS_HEALTH);
+    *(u64*)var_32[1] = boxed_i32(get-int32(def-wounded-health-current, self));
+    return speak-text-to-speech-formatted(boxed_array(var_32), 1, 0, 1);
 }
 
 u64? tts-defense-status-update() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_DEFENSE_ENEMY_COUNT);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(defense-target-kills-for-complete, self) - get-int32(defense-kills-so-far, self));
-    speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(HUD_ROGUE_DEFENSE_ENEMY_COUNT);
+    *(u64*)var_0[1] = boxed_i32(get-int32(defense-target-kills-for-complete, self) - get-int32(defense-kills-so-far, self));
+    speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
     return tts-defense-ally-health-status-update();
 }
 
@@ -1080,33 +940,13 @@ statescript {
                     broadcast-event(load-skulls);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-lockbox-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(grp-lockbox-spawn-locations, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-lockbox-spawner, 1, 0, 0)) {
+                        darray-append(grp-lockbox-spawn-locations, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(player-spawn-points-defense, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
+                        darray-append(player-spawn-points-defense, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -1188,10 +1028,10 @@ statescript {
                     wait(1.25);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_TITLE_DEFENSE), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_TITLE_DEFENSE), 1, 0, 1);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_TITLE_DEFENSE_DESCR), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_TITLE_DEFENSE_DESCR), 1, 0, 1);
                 }
             }
         }
@@ -1216,7 +1056,7 @@ statescript {
                     hud-message-timer-show(HUD_ROGUE_DEFENSE_BEGINS, ENCOUNTER_CRAFTING_PERIOD_ALT, (f32)get-int32(defense-prep-time, self), 1, 0);
                 }
                 lambda {
-                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, ENCOUNTER_CRAFTING_PERIOD_ALT));
+                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(ENCOUNTER_CRAFTING_PERIOD_ALT));
                 }
                 lambda {
                     set-int32(defense-time-countdown, get-int32(defense-prep-time, self), self);
@@ -1328,7 +1168,7 @@ statescript {
                     }
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_NOTIFICATION_ROGUE_DEFENSE_BEGINS), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_NOTIFICATION_ROGUE_DEFENSE_BEGINS), 1, 0, 1);
                 }
                 lambda {
                     interactable-disable(def-buddy-int-1);
@@ -1487,21 +1327,11 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (!is-final-build?()) {
                             display(dc:format("Alive: %s", string-debug(var_2)), 19);
                         }
-                        send-event(buddy-mark-npc, player, new-boxed-value(7, var_2));
+                        send-event(buddy-mark-npc, player, boxed_symbol(var_2));
                     }
                 }
             }
@@ -1562,7 +1392,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_NOTIFICATION_ROGUE_DEFENSE_COMPLETED), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_NOTIFICATION_ROGUE_DEFENSE_COMPLETED), 1, 0, 1);
                 }
                 lambda {
                     wait(1.00);

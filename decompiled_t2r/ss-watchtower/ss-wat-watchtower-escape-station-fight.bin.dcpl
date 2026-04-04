@@ -51,17 +51,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-watchtower-escape-station-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-watchtower-escape-station-fight-infected) {
                         spawn-npc(var_2, 0, 0);
                     }
                 }
@@ -106,17 +96,7 @@ statescript {
                     npc-set-global-combat-params(*wat-watchtower-escape-station-dark*);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-watchtower-escape-station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-watchtower-escape-station-fight-militia) {
                         npc-set-demeanor(var_2, 5, 0);
                     }
                 }

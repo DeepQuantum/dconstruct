@@ -78,17 +78,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                         }
@@ -146,17 +136,7 @@ statescript {
         block start {
             track kill-npcs-about-to-interupt-player {
                 lambda {
-                    foreach (u64? var_1 : all-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-npcs) {
                         if (npc-alive?(var_2)) {
                             if (distance-between-objects-less-than?(player, var_2, 4.00) && character-in-melee-attack?(var_2)) {
                                 npc-die(var_2, 0, 0, 0, 1);
@@ -168,17 +148,7 @@ statescript {
                     wait-frames(7);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-npcs) {
                         if (npc-alive?(var_2)) {
                             if (distance-between-objects-less-than?(player, var_2, 4.00) && character-in-melee-attack?(var_2)) {
                                 npc-die(var_2, 0, 0, 0, 1);
@@ -219,36 +189,36 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_4;
                     if (get-boolean(mid-igc?, self)) {
                         var_4 = 0.00;
                     } else {
                         var_4 = 0.55;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_4;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 245;
-                    *(i32*)*(*var_0 + (4 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = var_4;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 245;
+                    *(i32*)*var_0[4] = 57;
+                    *(u64*)(*var_0[4] + 8) = 0;
                     f32 var_6;
                     if (get-boolean(mid-igc?, self)) {
                         var_6 = get-float(mid-start-frame, self);
                     } else {
                         var_6 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = var_6;
-                    *(i32*)*(*var_0 + (5 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = var_6;
+                    *(i32*)*var_0[5] = 3;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 0;
                     wait-animate_(player, wat-infected-tunnels-tackle-turn--ellie, var_0);
                 }
                 lambda {
@@ -287,36 +257,36 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_4;
                     if (get-boolean(mid-igc?, self)) {
                         var_4 = get-float(mid-start-frame, self);
                     } else {
                         var_4 = get-animation-frame(player, 2, wat-infected-tunnels-tackle-turn--ellie);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_4;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 6;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (7 * 8)) + 8) = 240.00;
+                    *(f32*)(*var_0[1] + 8) = var_4;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 6;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 82;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 20;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(f32*)(*var_0[7] + 8) = 240.00;
                     wait-animate_(dina, wat-infected-tunnels-tackle-turn--dina, var_0);
                 }
                 lambda {
@@ -377,24 +347,24 @@ statescript {
                     if (npc-alive?(npc-infected-tunnels-tackle-turn-1)) {
                         character-set-invincibility(npc-infected-tunnels-tackle-turn-1, 4, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 57;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 57;
+                        *(u64*)(*var_1[2] + 8) = 0;
                         u64? var_5;
                         if (get-boolean(mid-igc?, self)) {
                             var_5 = get-float(mid-start-frame, self);
                         } else {
                             var_5 = get-animation-frame(player, 2, wat-infected-tunnels-tackle-turn--ellie);
                         }
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_1 + (3 * 8)) = 82;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (3 * 8)) + 8) = 1;
+                        *(f32*)(*var_1[2] + 8) = var_5;
+                        *(i32*)*var_1[3] = 82;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(u8*)(*var_1[3] + 8) = 1;
                         wait-animate_(npc-infected-tunnels-tackle-turn-1, wat-infected-tunnels-tackle-turn--inf2, var_1);
                         character-set-invincibility(npc-infected-tunnels-tackle-turn-1, 0, 0);
                         npc-die(npc-infected-tunnels-tackle-turn-1, 0, 0, 0, 1);

@@ -23,17 +23,7 @@ u64? setup-run-failed-fx() {
     } else {
         var_6 = 0;
     }
-    foreach (u64? var_8 : grp-run-failed-fx) {
-        u16 var_9;
-        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-            var_9 = *(u64*)var_8;
-        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-            var_9 = *(u64*)var_8;
-        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-            var_9 = *(u64*)var_8;
-        } else {
-            var_9 = 0;
-        }
+    foreach (u64? var_9 : grp-run-failed-fx) {
         u64? var_12 = ddict-get(ddict-encounter-photo-joints--template-1, get-symbol(encounter-ref-name, var_6));
         u16 var_13;
         if (var_12 && *(u16*)(var_12 + 12) == 7) {
@@ -176,7 +166,7 @@ u64? setup-fg-map-table() {
         u64? var_19 = encounter--get-faction-enum(var_11);
         u16 var_21;
         if (encounter--has-skulls?(var_11)) {
-            var_21 = darray-contains?(encounter--get-skulls(var_11), new-boxed-value(7, map-mystery));
+            var_21 = darray-contains?(encounter--get-skulls(var_11), boxed_symbol(map-mystery));
         } else {
             var_21 = 0;
         }
@@ -224,25 +214,25 @@ u64? setup-fg-map-table() {
             var_29 = spawn-entity-at-with-look(tag-symbol(map-table-fg-photo-spawner, self), get-spawner-locator(tag-symbol(map-table-fg-photo-spawner, self), 1), rogue-map-photo-aquarium);
         }
         set-object-rotation(var_29, get-object-rotation(get-symbol(object-map-layout, self)));
-        darray-append(current-encounters, new-boxed-value(7, var_29), 0);
-        ddict-set(encounter-objects, get-photo-by-encounter-id(0, template--get-index-ddict-by-id(template--get-current-template-id())), new-boxed-value(7, var_29));
+        darray-append(current-encounters, boxed_symbol(var_29), 0);
+        ddict-set(encounter-objects, get-photo-by-encounter-id(0, template--get-index-ddict-by-id(template--get-current-template-id())), boxed_symbol(var_29));
         send-event(
             setup-fg-photo,
             var_29,
-            new-boxed-value(7, var_29),
-            new-boxed-value(2, 0),
-            new-boxed-value(2, 0),
-            new-boxed-value(1, var_21),
-            new-boxed-value(7, string-to-symbol(rogue-ui--get-mode-name(var_13))),
-            new-boxed-value(7, string-to-symbol(get-starting-perception-title-for-encounter(0))),
-            new-boxed-value(7, var_14),
-            new-boxed-value(7, var_15),
-            new-boxed-value(7, task-get-full-name(var_14, var_15)),
-            new-boxed-value(2, var_19),
-            new-boxed-value(14, get-spawner-position(tag-symbol(map-table-fg-pos, self), 1)),
-            new-boxed-value(7, get-symbol(object-map-layout-template, self)),
-            new-boxed-value(1, encounter--has-skulls?(var_11)),
-            new-boxed-value(7, rogue-ui--get-mat-burn-define(var_12))
+            boxed_symbol(var_29),
+            boxed_i32(0),
+            boxed_i32(0),
+            boxed_bool(var_21),
+            boxed_symbol(string-to-symbol(rogue-ui--get-mode-name(var_13))),
+            boxed_symbol(string-to-symbol(get-starting-perception-title-for-encounter(0))),
+            boxed_symbol(var_14),
+            boxed_symbol(var_15),
+            boxed_symbol(task-get-full-name(var_14, var_15)),
+            boxed_i32(var_19),
+            boxed_point(get-spawner-position(tag-symbol(map-table-fg-pos, self), 1)),
+            boxed_symbol(get-symbol(object-map-layout-template, self)),
+            boxed_bool(encounter--has-skulls?(var_11)),
+            boxed_symbol(rogue-ui--get-mat-burn-define(var_12))
         );
     }
 }
@@ -336,17 +326,7 @@ u16 update-fg-locations() {
 }
 
 u64? update-fg-map-table-hcm-outside() {
-    foreach (u64? var_1 : current-encounters) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : current-encounters) {
         send-event(update-fg-map-hcm-base, var_2);
     }
 }
@@ -365,11 +345,11 @@ u64? setup-run-complete-actors() {
 
 u16 update-fg-map-table-photo() {
     if (!(get-symbol(previous-focus, self) == 0)) {
-        send-event(update-fg-photo, get-symbol(previous-focus, self), new-boxed-value(1, 0));
+        send-event(update-fg-photo, get-symbol(previous-focus, self), boxed_bool(0));
     }
     u16 var_4;
     if (!(get-symbol(current-focus, self) == 0)) {
-        var_4 = send-event(update-fg-photo, get-symbol(current-focus, self), new-boxed-value(1, 1));
+        var_4 = send-event(update-fg-photo, get-symbol(current-focus, self), boxed_bool(1));
     } else {
         var_4 = 0;
     }
@@ -485,34 +465,14 @@ u64? update-fg-camera-full-view(u16 arg_0) {
 }
 
 u64? update-fg-map-table-hcm-base-exiting() {
-    foreach (u64? var_1 : current-encounters) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
-        send-event(update-fg-photo, var_2, new-boxed-value(1, 0));
+    foreach (u64? var_2 : current-encounters) {
+        send-event(update-fg-photo, var_2, boxed_bool(0));
     }
 }
 
 u64? update-fg-map-table-hcm-base-inside() {
-    foreach (u64? var_1 : current-encounters) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
-        send-event(update-fg-photo, var_2, new-boxed-value(1, 0));
+    foreach (u64? var_2 : current-encounters) {
+        send-event(update-fg-photo, var_2, boxed_bool(0));
     }
 }
 
@@ -995,13 +955,13 @@ statescript {
                             if (!*(u8*)(*run-tweaks* + 7)) {
                                 if (get-boolean(map-in-full-view?, self) == 0) {
                                     set-boolean(map-in-full-view?, 1, self);
-                                    broadcast-event(change-map-view, new-boxed-value(1, 1));
+                                    broadcast-event(change-map-view, boxed_bool(1));
                                     zoom-map-table-photos(get-symbol(map-table-path, ss-hub-manager-1), 1, get-symbol(current-camera, self));
                                     update-fg-camera-full-view(1);
                                     play-sound(sfx-select-toggle-view, 0);
                                 } else {
                                     set-boolean(map-in-full-view?, 0, self);
-                                    broadcast-event(change-map-view, new-boxed-value(1, 0));
+                                    broadcast-event(change-map-view, boxed_bool(0));
                                     zoom-map-table-photos(get-symbol(map-table-path, ss-hub-manager-1), 0, get-symbol(current-camera, self));
                                     update-fg-camera-full-view(0);
                                     play-sound(sfx-select-toggle-view, 0);
@@ -1013,7 +973,7 @@ statescript {
                 lambda {
                     if (mouse-button-pressed?(8) && get-boolean(map-in-full-view?, self) == 0) {
                         set-boolean(map-in-full-view?, 1, self);
-                        broadcast-event(change-map-view, new-boxed-value(1, 1));
+                        broadcast-event(change-map-view, boxed_bool(1));
                         zoom-map-table-photos(get-symbol(map-table-path, ss-hub-manager-1), 1, get-symbol(current-camera, self));
                         update-fg-camera-full-view(1);
                         play-sound(sfx-select-toggle-view, 0);
@@ -1026,7 +986,7 @@ statescript {
                 lambda {
                     if (get-boolean(map-in-full-view?, self)) {
                         set-boolean(map-in-full-view?, 0, self);
-                        broadcast-event(change-map-view, new-boxed-value(1, 0));
+                        broadcast-event(change-map-view, boxed_bool(0));
                         zoom-map-table-photos(get-symbol(map-table-path, ss-hub-manager-1), 0, get-symbol(current-camera, self));
                         update-fg-camera-full-view(0);
                         play-sound(sfx-select-toggle-view, 0);

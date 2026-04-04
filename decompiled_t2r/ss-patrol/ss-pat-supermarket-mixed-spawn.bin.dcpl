@@ -57,17 +57,7 @@ statescript {
         block start {
             track infected {
                 lambda {
-                    foreach (u64? var_1 : pat-supermarket-mixed-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : pat-supermarket-mixed-infected) {
                         wait-spawn-entity(var_2, 0);
                         if (var_2 != npc-pat-supermarket-runner-2 && var_2 != npc-pat-supermarket-runner-4) {
                             npc-set-script-only-no-perception(var_2);
@@ -181,17 +171,7 @@ statescript {
             track main {
                 lambda {
                     if (!(get-boolean(all-awake?, self)) && any-enemy-aware-of-player?()) {
-                        foreach (u64? var_4 : pat-supermarket-mixed-infected) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : pat-supermarket-mixed-infected) {
                             npc-set-script-low-priority(var_5);
                             npc-enable-perception(var_5);
                             set-focusable-ignore(var_5, 0);

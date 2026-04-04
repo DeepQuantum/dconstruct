@@ -33,7 +33,7 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-symbol(0) == get-self-id()) {
-                        fact-set(player, tag-symbol(key-name, self), new-boxed-value(1, 1));
+                        fact-set(player, tag-symbol(key-name, self), boxed_bool(1));
                         script-caption(player, "GOT KEY", 1.00, 0, 0);
                         u64? var_4 = alloc-gesture-play-params();
                         *(u64*)(var_4 + 24) = get-object-position(self);

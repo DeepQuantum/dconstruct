@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? rk-split-set-spawn-index(u64? arg_0) {
-    return set-int32(index, darray-find(rk-split-checkpoint-regions, new-boxed-value(7, arg_0), 0), self);
+    return set-int32(index, darray-find(rk-split-checkpoint-regions, boxed_symbol(arg_0), 0), self);
 }
 
 u64? rk-split-get-camera-checkpoint() {

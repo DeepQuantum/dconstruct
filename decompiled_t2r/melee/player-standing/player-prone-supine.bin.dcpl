@@ -482,17 +482,7 @@ player-supine-left-kill-sync
 player-prone-right-kill
 player-prone-left-kill-sync
 embedded@17540(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -889,7 +879,7 @@ player-prone-right-kill-sync
 player-supine-left-kill-sync
 player-prone-left-kill-sync
 embedded@16af8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
 
 u16 player-supine-front-kill-sync
@@ -1141,9 +1131,9 @@ player-prone-left-kill-sync
 embedded@174d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000)
     );
 }
 
@@ -1197,9 +1187,9 @@ embedded@16e58(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;

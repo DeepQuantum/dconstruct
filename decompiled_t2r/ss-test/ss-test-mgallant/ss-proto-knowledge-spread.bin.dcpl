@@ -12,32 +12,12 @@
 // ####################################################################################################
 
 u64? alert-region-npcs-in-range(u16 arg_0, u64? arg_1, u64? arg_2) {
-    foreach (u64? var_1 : knowledge-spread-regions) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : knowledge-spread-regions) {
         if (object-in-region?(arg_0, var_2)) {
-            foreach (u64? var_5 : knowledge-spread-npcs) {
-                u16 var_6;
-                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                    var_6 = *(u64*)var_5;
-                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                    var_6 = *(u64*)var_5;
-                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                    var_6 = *(u64*)var_5;
-                } else {
-                    var_6 = 0;
-                }
+            foreach (u64? var_6 : knowledge-spread-npcs) {
                 if (npc-alive?(var_6)) {
                     if (var_6 != arg_0 && object-in-region?(var_6, var_2) && distance-between-objects-less-than?(arg_0, var_6, arg_1)) {
-                        send-event(make-aware, var_6, new-boxed-value(7, arg_0), new-boxed-value(1, arg_2));
+                        send-event(make-aware, var_6, boxed_symbol(arg_0), boxed_bool(arg_2));
                     }
                 }
             }
@@ -46,21 +26,11 @@ u64? alert-region-npcs-in-range(u16 arg_0, u64? arg_1, u64? arg_2) {
 }
 
 u64? alert-all-npcs-in-range(sid arg_0, u64? arg_1, u64? arg_2) {
-    foreach (u64? var_1 : knowledge-spread-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : knowledge-spread-npcs) {
         if (npc-alive?(var_2)) {
             if (var_2 != arg_0) {
                 if (distance-between-objects-less-than?(arg_0, var_2, arg_1)) {
-                    send-event(make-aware, var_2, new-boxed-value(7, arg_0), new-boxed-value(1, arg_2));
+                    send-event(make-aware, var_2, boxed_symbol(arg_0), boxed_bool(arg_2));
                 }
             }
         }
@@ -84,17 +54,7 @@ statescript {
                     wait-spawn-npc-group-async(knowledge-spread-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : knowledge-spread-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : knowledge-spread-npcs) {
                         spawn-script-multiple("ss-proto-knowledge-spread-npc", var_2, 0);
                     }
                 }
@@ -114,17 +74,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : knowledge-spread-regions) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : knowledge-spread-regions) {
                         if (object-in-region?(self, var_2)) {
                             npc-set-comm-group-id(self, var_2);
                         }
@@ -133,17 +83,7 @@ statescript {
                 lambda {
                     u16 var_1;
                     u16 var_2;
-                    foreach (u64? var_3 : knowledge-spread-npcs) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : knowledge-spread-npcs) {
                         u16 var_6;
                         u16 var_7;
                         if (npc-alive?(var_4)) {
@@ -156,7 +96,7 @@ statescript {
                         var_2 = var_7;
                     }
                     if (var_1 == 1 && !(var_2 == 0)) {
-                        send-event(alert-next-rgn, var_2, new-boxed-value(7, rgn-knowledge-spread-2));
+                        send-event(alert-next-rgn, var_2, boxed_symbol(rgn-knowledge-spread-2));
                         var_10 = go(done, 1);
                     }
                 }
@@ -166,7 +106,7 @@ statescript {
             track main {
                 lambda {
                     if (npc-alive?(self) && npc-is-aware-of?(self, player) && npc-can-see?(self, player)) {
-                        send-event(make-aware, self, new-boxed-value(7, player), new-boxed-value(1, 0));
+                        send-event(make-aware, self, boxed_symbol(player), boxed_bool(0));
                     }
                 }
             }
@@ -176,7 +116,7 @@ statescript {
                 lambda {
                     if (!player-has-silenced-weapon?()) {
                         if (distance-between-objects-less-than?(player, self, 30.00)) {
-                            send-event(make-aware, self, new-boxed-value(7, player), new-boxed-value(1, 0));
+                            send-event(make-aware, self, boxed_symbol(player), boxed_bool(0));
                         }
                     }
                 }
@@ -219,17 +159,7 @@ statescript {
                     npc-set-combat-params(self, *proto-knowledge-spread-combat-params*);
                 }
                 lambda {
-                    foreach (u64? var_1 : knowledge-spread-regions) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : knowledge-spread-regions) {
                         if (object-in-region?(self, var_2)) {
                             npc-set-zone-region(self, var_2);
                         }
@@ -274,17 +204,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : knowledge-spread-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : knowledge-spread-npcs) {
                         if (npc-alive?(var_2)) {
                             if (var_2 != get-self-id() && object-in-region?(var_2, get-symbol(run-for-help-rgn, self))) {
                                 u64? var_9 = distance-between-objects(var_2, get-self-id());

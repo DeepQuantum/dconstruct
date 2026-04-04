@@ -52,15 +52,15 @@ statescript {
             track anim {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-res-stores-squirrel-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_1 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-res-stores-squirrel-1, 1);
+                    *(i32*)*var_1[1] = 30;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.30;
+                    *(i32*)*var_1[2] = 31;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = 1;
                     animate_(get-self-id(), res-neighborhood-ladder-squirrel-idle--squirrel, var_1);
                 }
             }
@@ -162,15 +162,15 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-res-stores-squirrel-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-res-stores-squirrel-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.00;
                     wait-animate_(get-self-id(), res-neighborhood-ladder-squirrel-escape--squirrel, var_1);
                 }
                 lambda {

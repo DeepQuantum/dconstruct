@@ -44,7 +44,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    fact-set/f(global, disable-wi-trail?, new-boxed-value(1, 1));
+                    fact-set/f(global, disable-wi-trail?, boxed_bool(1));
                 }
             }
         }

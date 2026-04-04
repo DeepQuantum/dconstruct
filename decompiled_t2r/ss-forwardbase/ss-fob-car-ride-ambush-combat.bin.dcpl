@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? group-pursue-player(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         npc-set-accuracy-multiplier(var_2, 0.33);
         npc-make-aware-of(var_2, player, 2, 0);
         set-boolean(pursuing-player, 1, var_2);
@@ -37,8 +27,8 @@ u64? reroute-horse(u64? arg_0, u64? arg_1) {
 u64? spawn-cavalry-reinforcement(u64? arg_0, u64? arg_1) {
     u64? var_0 = wait-spawn-npc(arg_0, 0, 0);
     u64? var_1 = wait-spawn-npc(arg_1, 0, 0);
-    darray-append(fob-car-ride-network-scars, new-boxed-value(7, var_0), 1);
-    darray-append(fob-car-ride-network-horses, new-boxed-value(7, var_1), 1);
+    darray-append(fob-car-ride-network-scars, boxed_symbol(var_0), 1);
+    darray-append(fob-car-ride-network-horses, boxed_symbol(var_1), 1);
     set-symbol(my-horse, var_1, var_0);
     npc-set-spline-network-settings(var_1, *fob-car-scar-ambush-spline-network-settings*);
     return horse-set-orphaned-spline-network-movement(var_1, 2, gallop-sprint);
@@ -120,17 +110,7 @@ statescript {
                     wait-spawn-entity-group-async(fob-car-ride-network-scars, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-car-ride-network-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ride-network-horses) {
                         npc-set-spline-network-settings(var_2, *fob-car-scar-ambush-spline-network-settings*);
                         horse-set-orphaned-spline-network-movement(var_2, 2, gallop-sprint);
                     }
@@ -143,24 +123,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 79;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 9;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 79;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 4;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 9;
                     animate_(npc-fob-car-ride-network-scar-1, fob-car-ride-crash-previs-ambush-start-previs--female, var_0);
                 }
                 lambda {
@@ -168,24 +148,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 79;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 9;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 79;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 4;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 9;
                     animate_(npc-fob-car-ride-network-scar-3, fob-car-ride-crash-previs-ambush-start-previs--male, var_0);
                 }
                 lambda {
@@ -193,21 +173,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 4;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-fob-car-ride-network-horse-1, fob-car-ride-crash-previs-ambush-start-previs--horse-main, var_0);
                 }
                 lambda {
@@ -215,21 +195,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 4;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-fob-car-ride-network-horse-3, fob-car-ride-crash-previs-ambush-start-previs--horse-main-a, var_0);
                 }
                 lambda {
@@ -243,30 +223,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(npc-fob-car-ride-network-scar-3, 2, fob-car-ride-crash-previs-ambush-start-previs--male);
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 79;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (7 * 8)) + 8) = 9;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(npc-fob-car-ride-network-scar-3, 2, fob-car-ride-crash-previs-ambush-start-previs--male);
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 79;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 3;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 4;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 24;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(i32*)(*var_0[7] + 8) = 9;
                     animate_(npc-fob-car-ride-network-scar-4, fob-car-ride-crash-previs-ambush-start-previs--female-a, var_0);
                 }
                 lambda {
@@ -274,27 +254,27 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(npc-fob-car-ride-network-scar-3, 2, fob-car-ride-crash-previs-ambush-start-previs--male);
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-ambush-intro-1, 1);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(npc-fob-car-ride-network-scar-3, 2, fob-car-ride-crash-previs-ambush-start-previs--male);
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 3;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 4;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     wait-animate_(npc-fob-car-ride-network-horse-4, fob-car-ride-crash-previs-ambush-start-previs--horse-main-b, var_0);
                 }
                 lambda {
@@ -332,17 +312,7 @@ statescript {
                     wait-spawn-entity-group-async(fob-car-ride-network-scars, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-car-ride-network-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ride-network-horses) {
                         npc-set-spline-network-settings(var_2, *fob-car-scar-ambush-spline-network-settings*);
                         horse-set-orphaned-spline-network-movement(var_2, 2, gallop-sprint);
                     }
@@ -482,17 +452,7 @@ statescript {
         block event new-network-settings {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-car-ride-network-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ride-network-horses) {
                         npc-set-spline-network-settings(var_2, *fob-car-scar-ambush-end-spline-network-settings*);
                     }
                 }
@@ -516,17 +476,7 @@ statescript {
                     wait-spawn-entity-group-async(fob-car-ride-alley-network-scars, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-car-ride-alley-network-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ride-alley-network-horses) {
                         npc-set-spline-network-settings(var_2, *fob-car-scar-ambush-spline-network-settings*);
                         horse-set-orphaned-spline-network-movement(var_2, 2, gallop-sprint);
                     }

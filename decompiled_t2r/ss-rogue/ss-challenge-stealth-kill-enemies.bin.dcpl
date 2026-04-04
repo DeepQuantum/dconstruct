@@ -101,7 +101,7 @@ statescript {
                         var_5 = 1;
                     }
                     u16 var_9;
-                    if (darray-contains?(wave-manager-get-npc-alive-group(ss-wave-manager-1), new-boxed-value(7, var_0))) {
+                    if (darray-contains?(wave-manager-get-npc-alive-group(ss-wave-manager-1), boxed_symbol(var_0))) {
                         if (wave-manager-get-npc-alive-count(ss-wave-manager-1) == 1) {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-EC: Last enemy grabbed.."), 19);
@@ -130,17 +130,7 @@ statescript {
                             }
                             wait(0.50);
                             u16 var_22;
-                            foreach (u64? var_24 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                                u16 var_25;
-                                if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                    var_25 = *(u64*)var_24;
-                                } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                    var_25 = *(u64*)var_24;
-                                } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                    var_25 = *(u64*)var_24;
-                                } else {
-                                    var_25 = 0;
-                                }
+                            foreach (u64? var_25 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                                 u16 var_27;
                                 if (npc-alive?(var_25)) {
                                     if (npc-get-awareness(var_25, player) == 2) {

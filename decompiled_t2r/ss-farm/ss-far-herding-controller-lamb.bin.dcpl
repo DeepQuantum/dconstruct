@@ -136,7 +136,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    u64? var_2 = send-event-box-result(sheep-request-spot, ss-far-herding-controller-sheep-pen-positions-1, new-boxed-value(7, get-self-id()));
+                    u64? var_2 = send-event-box-result(sheep-request-spot, ss-far-herding-controller-sheep-pen-positions-1, boxed_symbol(get-self-id()));
                     u16 var_3;
                     if (var_2 && *(u16*)(var_2 + 12) == 7) {
                         var_3 = *(u64*)var_2;
@@ -165,7 +165,7 @@ statescript {
             }
             track sound {
                 lambda {
-                    send-event(snd-sheep-pushed-to-pen, ss-snd-far-herding-sheep-sound-logic-1, new-boxed-value(7, get-self-id()));
+                    send-event(snd-sheep-pushed-to-pen, ss-snd-far-herding-sheep-sound-logic-1, boxed_symbol(get-self-id()));
                 }
             }
         }
@@ -174,7 +174,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(sheep-should-be-in-spot, int-far-sheep-pen-igc-1, new-boxed-value(7, get-self-id()));
+                    send-event(sheep-should-be-in-spot, int-far-sheep-pen-igc-1, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     npc-set-script-only-no-perception(self);

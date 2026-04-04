@@ -48,16 +48,16 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.50;
                     animate_(tag-symbol(horse, self), get-symbol(anim, self), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.50;
                     animate_(get-self-id(), get-symbol(anim-rider, self), var_2);
                 }
             }
@@ -84,16 +84,16 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.50;
                     animate_(tag-symbol(horse, self), get-symbol(anim, self), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.50;
                     animate_(get-self-id(), get-symbol(anim-rider, self), var_2);
                 }
             }

@@ -179,15 +179,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
                     wait-animate_(player, efm-ellie-climbs-the-trex-balancewalk--ellie, var_0);
                 }
                 lambda {
@@ -231,15 +231,15 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-climbs-the-trex-climb-idle--cube, var_0);
                 }
                 lambda {
@@ -248,23 +248,23 @@ statescript {
                 lambda {
                     if (get-svar(efm-player-hat) != 0) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                         animate_(player-current-hat(), efm-ellie-climbs-the-trex-climb-idle--hat, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, efm-ellie-climbs-the-trex-climb-idle--ellie, var_0);
                 }
             }
@@ -299,29 +299,29 @@ statescript {
                 lambda {
                     if (get-svar(efm-player-hat) != 0) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         animate_(player-current-hat(), efm-ellie-climbs-the-trex-climb-exit--hat, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, efm-ellie-climbs-the-trex-climb-exit--ellie, var_0);
                 }
                 lambda {
@@ -357,37 +357,37 @@ statescript {
             track animate {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-phase(ic-trex-climb-camera-target-1, 2, efm-ellie-climbs-the-trex-climb-reverse--cube);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-phase(ic-trex-climb-camera-target-1, 2, efm-ellie-climbs-the-trex-climb-reverse--cube);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.00;
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-climbs-the-trex-climb--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb-reverse--ellie);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (3 * 8)) = 37;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = apReference-hand-l;
-                    *(i32*)*(*var_0 + (4 * 8)) = 38;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = apReference-hand-r;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb-reverse--ellie);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
+                    *(i32*)*var_0[3] = 37;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = apReference-hand-l;
+                    *(i32*)*var_0[4] = 38;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u64*)(*var_0[4] + 8) = apReference-hand-r;
                     wait-animate_(player, efm-ellie-climbs-the-trex-climb--ellie, var_0);
                 }
                 lambda {
@@ -407,15 +407,15 @@ statescript {
                 lambda {
                     if (get-svar(efm-player-hat) != 0) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb-reverse--hat);
-                        *(i32*)*(*var_2 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.40;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                        *(i32*)*var_2[1] = 58;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb-reverse--hat);
+                        *(i32*)*var_2[2] = 28;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.40;
                         wait-animate_(player-current-hat(), efm-ellie-climbs-the-trex-climb--hat, var_2);
                     }
                 }
@@ -501,37 +501,37 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-phase(ic-trex-climb-camera-target-1, 2, efm-ellie-climbs-the-trex-climb--cube);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-phase(ic-trex-climb-camera-target-1, 2, efm-ellie-climbs-the-trex-climb--cube);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.00;
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-climbs-the-trex-climb-reverse--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb--ellie);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (3 * 8)) = 37;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = apReference-hand-l;
-                    *(i32*)*(*var_0 + (4 * 8)) = 38;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = apReference-hand-r;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb--ellie);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
+                    *(i32*)*var_0[3] = 37;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = apReference-hand-l;
+                    *(i32*)*var_0[4] = 38;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u64*)(*var_0[4] + 8) = apReference-hand-r;
                     wait-animate_(player, efm-ellie-climbs-the-trex-climb-reverse--ellie, var_0);
                 }
                 lambda {
@@ -545,18 +545,18 @@ statescript {
                 lambda {
                     if (get-svar(efm-player-hat) != 0) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb--hat);
-                        *(i32*)*(*var_2 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                        *(i32*)*var_2[1] = 58;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = get-animation-phase(player, 2, efm-ellie-climbs-the-trex-climb--hat);
+                        *(i32*)*var_2[2] = 28;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
+                        *(i32*)*var_2[3] = 30;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 0.50;
                         wait-animate_(player-current-hat(), efm-ellie-climbs-the-trex-climb-reverse--hat, var_2);
                     }
                 }
@@ -631,16 +631,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-poses-on-dinosaur-onward-steed--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     wait-animate_(player, efm-ellie-poses-on-dinosaur-onward-steed--ellie, var_0);
                 }
                 lambda {
@@ -687,16 +687,16 @@ statescript {
             track ellie {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-poses-on-dinosaur-no-pose--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     wait-animate_(player, efm-ellie-poses-on-dinosaur-no-pose--ellie, var_0);
                 }
                 lambda {
@@ -723,30 +723,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-poses-on-dinosaur-onward-steed--cube, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(player-current-hat(), efm-ellie-poses-on-dinosaur-hat--hat, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(ic-trex-climb-camera-target-1, efm-ellie-poses-on-dinosaur-hat--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     wait-animate_(player, efm-ellie-poses-on-dinosaur-hat--ellie, var_0);
                 }
                 lambda {
@@ -783,16 +783,16 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(efm-ellie-climbs-the-trex-top-idle--cube, efm-ellie-poses-on-dinosaur-onward-steed--cube, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
                     animate_(player, efm-ellie-climbs-the-trex-top-idle--ellie, var_0);
                 }
             }
@@ -853,18 +853,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-climb-trex-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 16;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-climb-trex-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 16;
                     wait-animate_(player, efm-ellie-climbs-the-trex-jump-off--ellie, var_0);
                 }
                 lambda {

@@ -13,17 +13,7 @@
 
 u64? med-get-stalker-to-teleport() {
     u16 var_2;
-    foreach (u64? var_3 : gasmask-infected) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : gasmask-infected) {
         u16 var_9;
         if (npc-alive?(var_4) && !(is-object-on-screen?(var_4, 0.00)) && npc-is-melee-behavior-condition-active?(var_4, 26, 0.00)) {
             u64? var_12 = get-locator-distance(get-object-locator(var_4), get-object-locator(player));

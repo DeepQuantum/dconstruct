@@ -45,31 +45,11 @@ statescript {
             track main {
                 lambda {
                     if (player-in-region?(rgn-back-rooms-1, 2) && !(get-animation-playing?(player, abby-open-door-struggle--abby, 2)) && !(get-animation-playing?(player, abby-open-door-idle--abby, 2)) && !(get-animation-playing?(player, med-hospital-basement-exit-clicker-hall--abby, 2)) && !(get-animation-playing?(player, abby-open-door-success--abby, 2))) {
-                        foreach (u64? var_10 : hospital-trap-infected) {
-                            u16 var_11;
-                            if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                                var_11 = *(u64*)var_10;
-                            } else {
-                                var_11 = 0;
-                            }
+                        foreach (u64? var_11 : hospital-trap-infected) {
                             npc-clear-zone-if-alive(var_11);
                         }
                     } else {
-                        foreach (u64? var_14 : hospital-trap-infected) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : hospital-trap-infected) {
                             if (npc-alive?(var_15)) {
                                 npc-set-zone-region(var_15, rgn-back-rooms-stalker-zone-1);
                                 if (npc-using-skill?(var_15, 5)) {

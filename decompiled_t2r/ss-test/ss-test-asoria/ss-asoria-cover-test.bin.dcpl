@@ -436,17 +436,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : move-spawners-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : move-spawners-1) {
                         wait-npc-use-closest-cover(
                             get-symbol(spawned, self),
                             get-spawner-locator(var_2, 1),
@@ -488,17 +478,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : move-spawners-reverse-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : move-spawners-reverse-1) {
                         wait-npc-use-closest-cover(
                             get-symbol(spawned, self),
                             get-spawner-locator(var_2, 1),
@@ -540,17 +520,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : aim-spawners-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : aim-spawners-1) {
                         npc-look-aim-at-locator(get-symbol(spawned, self), get-spawner-locator(var_2, 1), -1.00, 0);
                         wait(1.00);
                     }
@@ -588,17 +558,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : aim-spawners-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : aim-spawners-1) {
                         npc-look-aim-at-locator(get-symbol(spawned, self), get-spawner-locator(var_2, 1), -1.00, 0);
                         wait(1.00);
                     }

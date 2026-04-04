@@ -91,7 +91,7 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(fake-shooting, self, new-boxed-value(7, npc-village-arrive-militia-4-cheap));
+                    send-event(fake-shooting, self, boxed_symbol(npc-village-arrive-militia-4-cheap));
                 }
             }
             track militia-5 {
@@ -120,7 +120,7 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(fake-shooting, self, new-boxed-value(7, npc-village-arrive-militia-5-cheap));
+                    send-event(fake-shooting, self, boxed_symbol(npc-village-arrive-militia-5-cheap));
                 }
             }
             track scar-6 {
@@ -149,7 +149,7 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(fake-shooting, self, new-boxed-value(7, npc-village-arrive-scar-6-cheap));
+                    send-event(fake-shooting, self, boxed_symbol(npc-village-arrive-scar-6-cheap));
                 }
             }
         }
@@ -184,7 +184,7 @@ statescript {
                             wait-random(1.00, 2.00);
                             i = i + 1;
                         }
-                        var_4 = send-event(fake-wait-cover, self, new-boxed-value(7, var_0));
+                        var_4 = send-event(fake-wait-cover, self, boxed_symbol(var_0));
                     }
                 }
             }
@@ -202,7 +202,7 @@ statescript {
                         while (!nth-frame?(30, deterministic-random-int(30, var_0))) {
                             wait-one-frame();
                         }
-                        var_2 = send-event(fake-shooting, self, new-boxed-value(7, var_0));
+                        var_2 = send-event(fake-shooting, self, boxed_symbol(var_0));
                     }
                 }
             }
@@ -210,7 +210,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(afm-vignette-f-npcs-cheap, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(afm-vignette-f-npcs-cheap, boxed_symbol(event-arg-symbol(0)))) {
                         if (npc-alive?(npc-village-arrive-militia-4-cheap)) {
                             if (!npc-alive?(npc-village-arrive-militia-5-cheap)) {
                                 kill-entity-if-spawned(ic-shoot-back-2);
@@ -261,17 +261,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-f-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-f-npcs) {
                         if (npc-alive?(var_2)) {
                             set-vignette-target-group(var_2, grp-afm-vignette-4);
                             npc-set-targeting-params(var_2, afm-burning-village);
@@ -302,9 +292,9 @@ statescript {
                 lambda {
                     if (!npc-alive?(get-symbol(militia-a, self))) {
                         spawn-npc(npc-village-arrive-militia-reinf-1, 0, 0);
-                        darray-append(grp-afm-vignette-4, new-boxed-value(7, npc-village-arrive-militia-reinf-1), 1);
-                        darray-append(afm-vignette-f-npcs, new-boxed-value(7, npc-village-arrive-militia-reinf-1), 1);
-                        darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-reinf-1), 1);
+                        darray-append(grp-afm-vignette-4, boxed_symbol(npc-village-arrive-militia-reinf-1), 1);
+                        darray-append(afm-vignette-f-npcs, boxed_symbol(npc-village-arrive-militia-reinf-1), 1);
+                        darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-reinf-1), 1);
                         character-set-invincibility(npc-village-arrive-militia-reinf-1, 3, 0);
                         set-vignette-target-group(npc-village-arrive-militia-reinf-1, grp-afm-vignette-4);
                         npc-set-hard-point(npc-village-arrive-militia-reinf-1, hard-point-village-arrive-4);
@@ -314,9 +304,9 @@ statescript {
                 lambda {
                     if (!npc-alive?(get-symbol(militia-b, self))) {
                         spawn-npc(npc-village-arrive-militia-reinf-3, 0, 0);
-                        darray-append(grp-afm-vignette-4, new-boxed-value(7, npc-village-arrive-militia-reinf-3), 1);
-                        darray-append(afm-vignette-f-npcs, new-boxed-value(7, npc-village-arrive-militia-reinf-3), 1);
-                        darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-reinf-3), 1);
+                        darray-append(grp-afm-vignette-4, boxed_symbol(npc-village-arrive-militia-reinf-3), 1);
+                        darray-append(afm-vignette-f-npcs, boxed_symbol(npc-village-arrive-militia-reinf-3), 1);
+                        darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-reinf-3), 1);
                         character-set-invincibility(npc-village-arrive-militia-reinf-3, 3, 0);
                         set-vignette-target-group(npc-village-arrive-militia-reinf-3, grp-afm-vignette-4);
                         npc-set-hard-point(npc-village-arrive-militia-reinf-3, hard-point-village-arrive-4);
@@ -362,20 +352,10 @@ statescript {
                         npc-throw-grenade-at-locator(npc-village-arrive-scar-6, get-spawner-locator(pos-molotov-afm-arrive-6, 1));
                     } else {
                         u64? var_6 = darray-create(self, -1, 0);
-                        foreach (u64? var_8 : grp-afm-burning-village-scars) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : grp-afm-burning-village-scars) {
                             if (npc-alive?(var_9)) {
                                 if (object-in-region?(var_9, rgn-find-molotov-thrower-1)) {
-                                    darray-append(var_6, new-boxed-value(7, var_9), 1);
+                                    darray-append(var_6, boxed_symbol(var_9), 1);
                                 }
                             }
                         }

@@ -65,12 +65,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = tag-float(rise-start, self);
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = tag-float(rise-start, self);
                     animate_(self, lift, var_0);
                 }
                 lambda {
@@ -156,7 +156,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, self));
+                    fact-set(player, player-interactable, boxed_symbol(self));
                 }
                 lambda {
                     interactable-disable(tag-symbol(interact, self));
@@ -270,7 +270,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     go(ready, 1);

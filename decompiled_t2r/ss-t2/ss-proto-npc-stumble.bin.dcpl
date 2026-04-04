@@ -36,28 +36,28 @@ statescript {
         block start {
             track animate {
                 lambda {
-                    fact-set(self, stumbling, new-boxed-value(1, 1));
+                    fact-set(self, stumbling, boxed_bool(1));
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = rotate-locator-angle(rotate-locator-lookat(get-object-locator(self), get-object-locator(player), 1.00, 0), 1, 180.00);
-                    *(i32*)*(*var_0 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (5 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = rotate-locator-angle(rotate-locator-lookat(get-object-locator(self), get-object-locator(player), 1.00, 0), 1, 180.00);
+                    *(i32*)*var_0[1] = 13;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.20;
+                    *(i32*)*var_0[4] = 30;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.30;
+                    *(i32*)*var_0[5] = 56;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 0.80;
                     wait-animate_(self, npc-m-1hblade-hr-full-chest-front-center-stun, var_0);
                 }
                 lambda {
@@ -88,17 +88,7 @@ statescript {
             track main {
                 lambda {
                     if (fact-exists?(self, stumbling) && get-boolean(stumble-can-chain, self)) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (var_4 != self && !fact-exists?(var_4, stumbling) && distance-between-objects(var_4, self) < 0.80) {
                                 spawn-script-multiple("ss-proto-npc-stumble", var_4, 0);
                             }

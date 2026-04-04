@@ -106,30 +106,10 @@ statescript {
                         set-table-shader-material-values-param(*sea-horse-note-final-code*, 0.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset0, 0.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset1, 0.00);
-                        foreach (u64? var_4 : sea-map-Q-layers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : sea-map-Q-layers) {
                             set-table-shader-material-values-param(var_5, 0.00);
                         }
-                        foreach (u64? var_8 : sea-map-X-layers) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : sea-map-X-layers) {
                             set-table-shader-material-values-param(var_9, 0.00);
                         }
                     }
@@ -140,38 +120,18 @@ statescript {
                         set-table-shader-material-values-param(*sea-horse-note-final-code*, 1.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset0, 1.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset1, 1.00);
-                        foreach (u64? var_4 : sea-map-Q-layers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : sea-map-Q-layers) {
                             f32 var_9;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-map-Q-layers, new-boxed-value(7, var_5), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-map-Q-layers, boxed_symbol(var_5), 0))) {
                                 var_9 = 0.25;
                             } else {
                                 var_9 = 0.00;
                             }
                             set-table-shader-material-values-param(var_5, var_9);
                         }
-                        foreach (u64? var_12 : sea-map-X-layers) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : sea-map-X-layers) {
                             f32 var_17;
-                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-map-X-layers, new-boxed-value(7, var_13), 0))) {
+                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-map-X-layers, boxed_symbol(var_13), 0))) {
                                 var_17 = 0.25;
                             } else {
                                 var_17 = 0.00;
@@ -242,30 +202,10 @@ statescript {
                         set-table-shader-material-values-param(*sea-horse-note-final-code*, 0.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset0, 1.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset1, 0.00);
-                        foreach (u64? var_4 : sea-map-Q-layers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : sea-map-Q-layers) {
                             set-table-shader-material-values-param(var_5, 0.00);
                         }
-                        foreach (u64? var_8 : sea-map-X-layers) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : sea-map-X-layers) {
                             set-table-shader-material-values-param(var_9, 0.00);
                         }
                     }
@@ -276,38 +216,18 @@ statescript {
                         set-table-shader-material-values-param(*sea-horse-note-final-code*, 1.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset0, 1.00);
                         set-single-shader-instance-param(event-arg-symbol(0), blendOffset1, 1.00);
-                        foreach (u64? var_4 : sea-map-Q-layers) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : sea-map-Q-layers) {
                             f32 var_9;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-map-Q-layers, new-boxed-value(7, var_5), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-map-Q-layers, boxed_symbol(var_5), 0))) {
                                 var_9 = 0.25;
                             } else {
                                 var_9 = 0.00;
                             }
                             set-table-shader-material-values-param(var_5, var_9);
                         }
-                        foreach (u64? var_12 : sea-map-X-layers) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : sea-map-X-layers) {
                             f32 var_17;
-                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-map-X-layers, new-boxed-value(7, var_13), 0))) {
+                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-map-X-layers, boxed_symbol(var_13), 0))) {
                                 var_17 = 0.25;
                             } else {
                                 var_17 = 0.00;

@@ -46,16 +46,16 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-stadium-concessions-mom-with-baby-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-stadium-concessions-mom-with-baby-1, 1);
                     animate_(snpc-fob-stadium-concessions-mom-with-baby--baby-1, fob-stadium-concessions-mom-with-baby--baby, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-stadium-concessions-mom-with-baby-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-stadium-concessions-mom-with-baby-1, 1);
                     animate_(snpc-fob-stadium-concessions-mom-with-baby--female-1, fob-stadium-concessions-mom-with-baby--female, var_0);
                 }
             }

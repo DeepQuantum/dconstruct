@@ -36,22 +36,12 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        if (player-in-meatshield?() && npc-in-meatshield?(var_4) && !darray-contains?(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, var_4))) {
-                            darray-append(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
+                        if (player-in-meatshield?() && npc-in-meatshield?(var_4) && !darray-contains?(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(var_4))) {
+                            darray-append(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(var_4), 1);
                             set-int32(num-enemies-in-meatshield, darray-count(get-symbol(group-enemies-in-meatshield, self)), self);
-                        } else if (!player-in-meatshield?() && !npc-in-meatshield?(var_4) && darray-contains?(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, var_4))) {
-                            send-event(remove-meatshield-npc, self, new-boxed-value(7, var_4));
+                        } else if (!player-in-meatshield?() && !npc-in-meatshield?(var_4) && darray-contains?(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(var_4))) {
+                            send-event(remove-meatshield-npc, self, boxed_symbol(var_4));
                         }
                     }
                 }
@@ -60,7 +50,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
                     set-int32(num-enemies-in-meatshield, darray-count(get-symbol(group-enemies-in-meatshield, self)), self);
@@ -73,8 +63,8 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    if (darray-contains?(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(event-arg-symbol(0)), 0);
                         set-int32(num-enemies-in-meatshield, darray-count(get-symbol(group-enemies-in-meatshield, self)), self);
                     }
                 }
@@ -85,7 +75,7 @@ statescript {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
                     u64? var_2 = event-arg-symbol(2);
-                    if (darray-contains?(get-symbol(group-enemies-in-meatshield, self), new-boxed-value(7, var_2)) || infected-vs-npc-bite-front-left == var_0 && infected-vs-npc-bite-front-right == var_0) {
+                    if (darray-contains?(get-symbol(group-enemies-in-meatshield, self), boxed_symbol(var_2)) || infected-vs-npc-bite-front-left == var_0 && infected-vs-npc-bite-front-right == var_0) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: Infected %s biting NPC %s", string-debug(event-arg-symbol(1)), string-debug(var_2)), 19);
                         }

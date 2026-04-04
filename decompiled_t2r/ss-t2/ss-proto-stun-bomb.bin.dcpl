@@ -63,17 +63,7 @@ statescript {
                             var_6 = get-float(stun-radius, self);
                         }
                         npc-stun-all-npcs-in-radius(get-point(final-position, self), var_6, get-float(stun-duration, self), 1024, 0);
-                        foreach (u64? var_12 : all-enemy-npcs) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : all-enemy-npcs) {
                             if (npc-alive?(var_13)) {
                                 if (get-point-distance(get-object-position(var_13), get-point(final-position, self)) < var_6 && npc-get-awareness(var_13, player) != 2) {
                                     var_19 = npc-make-aware-of-at(var_13, player, get-point(throw-pos, self), 3, 0, 0);

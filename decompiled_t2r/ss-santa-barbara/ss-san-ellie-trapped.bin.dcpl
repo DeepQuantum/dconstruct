@@ -102,28 +102,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-snared-idle-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-snared-idle-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(npc-san-snared-clicker-1, san-snared-hanging-infected--idle, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-snared-idle-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-snared-idle-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-san-snared-snare-2, san-snared-hanging-snare--idle, var_0);
                 }
                 lambda {
@@ -245,85 +245,85 @@ statescript {
                 lambda {
                     if (!get-boolean(started-from-task, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-san-snared-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.00;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.00;
                         animate_(obj-san-snared-snare-2, snare-clicker=cin-san-snared, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(cin-san-snared-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
                         animate_(obj-san-snared-snare-1, snare-ellie=cin-san-snared, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(cin-san-snared-1, 1);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
                         f32 var_8;
                         if (get-boolean(started-from-task, self)) {
                             var_8 = 0.00;
                         } else {
                             var_8 = 0.50;
                         }
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = var_8;
-                        *(i32*)*(*var_5 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.00;
+                        *(f32*)(*var_5[1] + 8) = var_8;
+                        *(i32*)*var_5[2] = 30;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.00;
                         animate_(npc-san-snared-clicker-1, female=cin-san-snared, var_5);
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-san-snared-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
                     f32 var_4;
                     if (get-boolean(started-from-task, self)) {
                         var_4 = 0.00;
                     } else {
                         var_4 = 1.00;
                     }
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                    *(f32*)(*var_1[1] + 8) = var_4;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.00;
                     animate_(player-get-anim-backpack(), backpack=cin-san-snared, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-san-snared-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(started-from-task, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 0.80;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
                     wait-animate_(player, ellie=cin-san-snared, var_0);
                 }
                 lambda {
@@ -525,15 +525,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-escape-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-san-snared-escape-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(npc-san-snared-clicker-2, female=cin-san-snared-escape, var_0);
                 }
                 lambda {
@@ -541,15 +541,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-san-snared-escape-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-san-snared-escape-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(player, ellie=cin-san-snared-escape, var_0);
                 }
                 lambda {

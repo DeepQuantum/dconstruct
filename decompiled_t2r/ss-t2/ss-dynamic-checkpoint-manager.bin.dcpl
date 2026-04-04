@@ -129,17 +129,7 @@ sid safeguard-checkpoint-func() {
 
 u64? player-in-disallow-checkpoint-region?() {
     u64? var_1;
-    foreach (u64? var_2 : disallow-checkpoint-regions) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : disallow-checkpoint-regions) {
         u64? var_4;
         if (!0) {
             var_4 = player-in-region?(var_3, 2);
@@ -419,17 +409,7 @@ statescript {
                 lambda {
                     if (*dynamic-checkpoint* != nullptr && !is-final-build?() && *(u8*)(*dynamic-checkpoint* + 1)) {
                         bool var_3 = timer-running?(new-wave-timer, self) && tension-mode-is?(3);
-                        foreach (u64? var_5 : all-enemy-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : all-enemy-npcs) {
                             string var_8;
                             if (npc-too-close-to-player?(var_6)) {
                                 var_8 = "C";

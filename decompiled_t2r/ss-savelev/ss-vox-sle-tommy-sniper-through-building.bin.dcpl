@@ -459,17 +459,7 @@ statescript {
                         u64? var_1;
                         while (0 == 0) {
                             u16 var_3;
-                            foreach (u64? var_4 : all-infected-npcs) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : all-infected-npcs) {
                                 u16 var_7;
                                 if (npc-alive?(var_5)) {
                                     if (npc-shambler?(var_5)) {

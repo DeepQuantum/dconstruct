@@ -13,17 +13,7 @@
 
 u16 sea-some-infected-alert?() {
     u16 var_1;
-    foreach (u64? var_2 : ration-center-nmes) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : ration-center-nmes) {
         u16 var_10;
         if (npc-alive?(var_3) || npc-using-skill?(var_3, 5) || npc-using-skill?(var_3, 13) || npc-using-skill?(var_3, 8) || npc-using-skill?(var_3, 20) || npc-using-skill?(var_3, 4)) {
             if (npc-using-skill?(var_3, 16)) {
@@ -37,17 +27,7 @@ u16 sea-some-infected-alert?() {
 
 u16 sea-court-get-closest-valid() {
     u16 var_2;
-    foreach (u64? var_3 : ration-center-nmes) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : ration-center-nmes) {
         u16 var_6;
         if (npc-alive?(var_4)) {
             if (npc-get-limb-state(var_4) != 1 && player != var_4) {
@@ -118,17 +98,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ration-center-nmes) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ration-center-nmes) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-limb-state(var_2) == 1) {
                                 npc-die(var_2, 0, 0, 0, 1);
@@ -184,18 +154,18 @@ statescript {
                         var_1 = sea-hub-ration-stairwell-barricade-enter--ellie;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (3 * 8)) = 5;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 3;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(u8*)(*var_2[2] + 8) = 1;
+                    *(i32*)*var_2[3] = 5;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
                     wait-animate_(player, var_1, var_2);
                 }
                 lambda {
@@ -225,21 +195,21 @@ statescript {
                         var_1 = sea-hub-ration-stairwell-barricade-enter--dina;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 57;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = get-animation-frame(player, 2, sea-hub-ration-stairwell-barricade-enter--ellie);
-                    *(i32*)*(*var_2 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (2 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_2 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 57;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = get-animation-frame(player, 2, sea-hub-ration-stairwell-barricade-enter--ellie);
+                    *(i32*)*var_2[1] = 82;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u8*)(*var_2[1] + 8) = 1;
+                    *(i32*)*var_2[2] = 10;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(u64*)(*var_2[2] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_2[3] = 28;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = 0.00;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
                     wait-animate_(dina, var_1, var_2);
                 }
                 lambda {
@@ -250,24 +220,24 @@ statescript {
                         var_1 = sea-hub-ration-stairwell-barricade-idle--dina;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (5 * 8)) = 5;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.20;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
+                    *(i32*)*var_2[5] = 5;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(u8*)(*var_2[5] + 8) = 1;
                     animate_(dina, var_1, var_2);
                 }
             }
@@ -347,24 +317,24 @@ statescript {
                         var_1 = sea-hub-ration-stairwell-barricade-idle--dina;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (5 * 8)) = 5;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.20;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
+                    *(i32*)*var_2[5] = 5;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(u8*)(*var_2[5] + 8) = 1;
                     animate_(dina, var_1, var_2);
                 }
                 lambda {
@@ -375,24 +345,24 @@ statescript {
                         var_1 = sea-hub-ration-stairwell-barricade-idle--ellie;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (5 * 8)) = 5;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.20;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
+                    *(i32*)*var_2[5] = 5;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(u8*)(*var_2[5] + 8) = 1;
                     animate_(player, var_1, var_2);
                 }
                 lambda {
@@ -461,37 +431,37 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(dina, sea-hub-ration-stairwell-barricade-combat-exit--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 5;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 5;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     wait-animate_(player, sea-hub-ration-stairwell-barricade-combat-exit--ellie, var_0);
                 }
                 lambda {
@@ -577,78 +547,78 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 32;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(obj-sea-horse-court-barrel-1, sea-hub-ration-stairwell-barricade-push--bookshelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 32;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(sea-hub-court-double-door-1, sea-hub-ration-stairwell-barricade-push--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 5;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 32;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 5;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(dina, sea-hub-ration-stairwell-barricade-push--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 5;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 32;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 5;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     wait-animate_(player, sea-hub-ration-stairwell-barricade-push--ellie, var_0);
                 }
                 lambda {
@@ -730,28 +700,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = -1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = -1.00;
+                    *(i32*)*var_0[2] = 59;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
                     animate_(sea-hub-court-double-door-1, sea-hub-ration-stairwell-barricade-push--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = -1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = -1.00;
+                    *(i32*)*var_0[2] = 59;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
                     animate_(obj-sea-horse-court-barrel-1, sea-hub-ration-stairwell-barricade-push--bookshelf, var_0);
                 }
                 lambda {
@@ -777,28 +747,28 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(dina, sea-hub-ration-stairwell-barricade-exit--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, sea-hub-ration-stairwell-barricade-exit--ellie, var_0);
                 }
                 lambda {
@@ -829,17 +799,7 @@ statescript {
                     send-event(despawn-infected, ss-sea-horse-court-entry-combat-infected-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : ration-center-nmes) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ration-center-nmes) {
                         if (npc-alive?(var_2)) {
                             set-focusable-ignore(var_2, 1);
                         }
@@ -850,48 +810,48 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-sea-horse-court-barrel-1, sea-hub-ration-stairwell-barricade-success--bookshelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(sea-hub-court-double-door-1, sea-hub-ration-stairwell-barricade-success--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(dina, sea-hub-ration-stairwell-barricade-success--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-ration-barricade-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, sea-hub-ration-stairwell-barricade-success--ellie, var_0);
                 }
                 lambda {
@@ -955,17 +915,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : ration-center-nmes) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ration-center-nmes) {
                         if (npc-alive?(var_2)) {
                             npc-kill(var_2);
                         }
@@ -1022,17 +972,7 @@ statescript {
             }
             track infected {
                 lambda {
-                    foreach (u64? var_1 : ration-center-nmes) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ration-center-nmes) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                             npc-move-to-spawner(

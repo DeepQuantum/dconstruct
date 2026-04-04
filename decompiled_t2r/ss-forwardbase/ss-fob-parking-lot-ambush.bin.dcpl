@@ -26,20 +26,20 @@ statescript {
                         spawn-npc(npc-car-ride-1, 0, 0);
                         spawn-npc(npc-car-ride-2, 0, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 31;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                        *(i32*)*var_2[0] = 31;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u8*)(*var_2[0] + 8) = 1;
+                        *(i32*)*var_2[1] = 10;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(u64*)(*var_2[1] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                         animate_(npc-car-ride-1, fob-car-ride-idle--npc-a, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 31;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                        *(i32*)*var_4[0] = 31;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u8*)(*var_4[0] + 8) = 1;
+                        *(i32*)*var_4[1] = 10;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(u64*)(*var_4[1] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                         animate_(npc-car-ride-2, fob-car-ride-idle--npc-b, var_4);
                         go(ambush, 1);
                     }
@@ -88,17 +88,7 @@ statescript {
                     spawn-npc-group(group-fob-parking-lot-ambush);
                 }
                 lambda {
-                    foreach (u64? var_1 : group-fob-parking-lot-ambush) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-fob-parking-lot-ambush) {
                         npc-set-zone-region(var_2, rgn-fob-store-ambush-npcs-1);
                     }
                 }
@@ -124,17 +114,7 @@ statescript {
                     wait-stub-object-lerp(obj-fob-store-window-1, pos-fob-store-window-1, 0.50, 1, 1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : group-fob-parking-lot-ambush) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-fob-parking-lot-ambush) {
                         npc-make-aware-of(var_2, npc-car-ride-1, 2, 0);
                     }
                 }
@@ -164,12 +144,12 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                     animate_(player, fob-car-ride-temp--abby, var_0);
                 }
                 lambda {
@@ -180,9 +160,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                     wait-animate_(player, fob-car-ride-exit-temp--abby, var_0);
                 }
                 lambda {
@@ -201,9 +181,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                     wait-animate_(npc-car-ride-1, fob-car-ride-exit-r--npc-a, var_0);
                 }
                 lambda {
@@ -216,9 +196,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                     wait-animate_(npc-car-ride-2, fob-car-ride-exit-r--npc-b, var_0);
                 }
                 lambda {
@@ -243,17 +223,7 @@ statescript {
                 lambda {
                     if (npc-group-alive-count(group-fob-parking-lot-ambush) < 2) {
                         wait(1.00);
-                        foreach (u64? var_2 : group-fob-parking-lot-ambush) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : group-fob-parking-lot-ambush) {
                             npc-set-zone-region(var_3, rgn-fob-store-paint-npc-1);
                         }
                         go(complete, 1);

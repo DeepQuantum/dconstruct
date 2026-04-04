@@ -81,7 +81,7 @@ statescript {
                     interactable-disable(tag-symbol(interactable, self));
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, tag-symbol(target-object, self)));
+                    fact-set(player, player-interactable, boxed_symbol(tag-symbol(target-object, self)));
                 }
                 lambda {
                     go(grabbed, 1);
@@ -123,7 +123,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     u64? var_0 = get-joint-locator(player, l_hand_prop_attachment);

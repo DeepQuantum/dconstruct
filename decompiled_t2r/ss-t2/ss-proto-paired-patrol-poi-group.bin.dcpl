@@ -33,7 +33,7 @@ statescript {
         block event script-assign-poi {
             track main {
                 lambda {
-                    ddict-set(get-symbol(script-assign-ddict, self), event-arg-symbol(0), new-boxed-value(7, event-arg-symbol(1)));
+                    ddict-set(get-symbol(script-assign-ddict, self), event-arg-symbol(0), boxed_symbol(event-arg-symbol(1)));
                 }
             }
         }
@@ -57,7 +57,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    darray-append(patrol-poi-groups, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(patrol-poi-groups, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     if (tag-float(fake-used-time, self) > 0.00) {
@@ -82,19 +82,9 @@ statescript {
                     if (get-symbol(poi-group, self) == 0) {
                         set-symbol(poi-group, darray-create(self, -1, 0), self);
                         set-symbol(poi-working-group, darray-create(self, -1, 0), self);
-                        foreach (u64? var_4 : all-patrol-poi) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-patrol-poi) {
                             if (spawner-exists?(var_5) && locator-in-region?(get-spawner-locator(var_5, 1), tag-symbol(region, self), player)) {
-                                darray-append(get-symbol(poi-group, self), new-boxed-value(7, var_5), 1);
+                                darray-append(get-symbol(poi-group, self), boxed_symbol(var_5), 1);
                             }
                         }
                     }
@@ -113,7 +103,7 @@ statescript {
         block event request-poi {
             track main {
                 lambda {
-                    send-event(assign-poi, event-arg-symbol(0), new-boxed-value(7, 0));
+                    send-event(assign-poi, event-arg-symbol(0), boxed_symbol(0));
                 }
             }
         }
@@ -138,9 +128,9 @@ statescript {
             track main {
                 lambda {
                     if (tag-boolean(complete-when-empty, self) && darray-count(get-symbol(poi-working-group, self)) == 0) {
-                        send-event(assign-poi, event-arg-symbol(0), new-boxed-value(7, 0));
+                        send-event(assign-poi, event-arg-symbol(0), boxed_symbol(0));
                     } else if (tag-float(max-time, self) > 0.00 && get-float(npc-enter-time, self) > 0.00 && time-elapsed(get-float(npc-enter-time, self)) > tag-float(max-time, self)) {
-                        send-event(assign-poi, event-arg-symbol(0), new-boxed-value(7, 0));
+                        send-event(assign-poi, event-arg-symbol(0), boxed_symbol(0));
                     } else {
                         if (darray-count(get-symbol(poi-working-group, self)) == 0) {
                             group-copy(get-symbol(poi-group, self), get-symbol(poi-working-group, self));
@@ -158,13 +148,13 @@ statescript {
                         }
                         u16 var_20;
                         if (!(var_19 == 0)) {
-                            ddict-set(get-symbol(script-assign-ddict, self), event-arg-symbol(0), new-boxed-value(0, 0));
+                            ddict-set(get-symbol(script-assign-ddict, self), event-arg-symbol(0), boxed_invalid(0));
                             var_20 = var_19;
                         } else {
                             var_20 = get-next-poi(get-symbol(poi-working-group, self), event-arg-symbol(0));
                         }
-                        darray-find-remove(get-symbol(poi-working-group, self), new-boxed-value(7, var_20), 0);
-                        send-event(assign-poi, event-arg-symbol(0), new-boxed-value(7, var_20));
+                        darray-find-remove(get-symbol(poi-working-group, self), boxed_symbol(var_20), 0);
+                        send-event(assign-poi, event-arg-symbol(0), boxed_symbol(var_20));
                     }
                 }
             }

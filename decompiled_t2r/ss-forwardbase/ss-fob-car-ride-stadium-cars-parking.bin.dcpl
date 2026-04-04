@@ -82,9 +82,9 @@ statescript {
             track person-1 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
                     wait-animate_(snpc-stadium-cars-parking-m-1, fob-car-ride-stadium-cars-parking--male, var_0);
                 }
                 lambda {
@@ -97,9 +97,9 @@ statescript {
             track person-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
                     wait-animate_(snpc-stadium-cars-parking-f-1, fob-car-ride-stadium-cars-parking--female, var_0);
                 }
                 lambda {
@@ -112,9 +112,9 @@ statescript {
             track truck-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
                     wait-animate_(obj-stadium-cars-parking-humvee-1, fob-car-ride-stadium-cars-parking--humvee, var_0);
                 }
                 lambda {
@@ -124,9 +124,9 @@ statescript {
             track truck-1 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-stadium-cars-parking-1, 1);
                     wait-animate_(obj-stadium-cars-parking-truck-1, fob-car-ride-stadium-cars-parking--truck, var_0);
                 }
                 lambda {

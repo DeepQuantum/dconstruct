@@ -135,23 +135,23 @@ statescript {
                             animate_(obj-far-explore-house-record-player-1, phonograph-arm-mid, #%alloc-array(single-frame, 16, 0, 1));
                             wait-one-frame();
                             u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 28;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (0 * 8)) + 8) = 534.00;
+                            *(i32*)*var_3[0] = 28;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(f32*)(*var_3[0] + 8) = 534.00;
                             animate_(obj-far-explore-house-record-player-1, phonograph-arm-end, var_3);
                         } else if (get-int32(current-track-num, self) > -1) {
                             if (!event-arg-boolean(0)) {
                                 u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_6 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_6 + (0 * 8)) + 8) = 0.20;
+                                *(i32*)*var_6[0] = 28;
+                                *(u64*)(*var_6[0] + 8) = 0;
+                                *(f32*)(*var_6[0] + 8) = 0.20;
                                 animate_(obj-far-explore-house-record-player-1, phonograph-arm-start, var_6);
                             }
                             wait-one-frame();
                             u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_7 + (0 * 8)) = 28;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (0 * 8)) + 8) = 1107.00;
+                            *(i32*)*var_7[0] = 28;
+                            *(u64*)(*var_7[0] + 8) = 0;
+                            *(f32*)(*var_7[0] + 8) = 1107.00;
                             animate_(obj-far-explore-house-record-player-1, phonograph-arm-end, var_7);
                         }
                     }

@@ -12,20 +12,10 @@
 // ####################################################################################################
 
 u64? nor-stalker-reinforce() {
-    foreach (u64? var_1 : mid-stalkers--spawners) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : mid-stalkers--spawners) {
         if (!(is-on-screen?(get-spawner-position(var_2, 1), 0.50)) && get-int32(num-reinforcements-spawned, self) < get-int32(wave2-count, self) && get-locator-distance(get-object-locator(player), get-spawner-locator(var_2, 1)) > 4.00 && npc-group-alive-count(intro-stalkers-active) < get-int32(max-stalkers-alive, self)) {
             u64? var_13 = spawn-entity(var_2, 0, 0);
-            darray-append(intro-stalkers-active, new-boxed-value(7, var_13), 1);
+            darray-append(intro-stalkers-active, boxed_symbol(var_13), 1);
             ++(num-reinforcements-spawned, self);
             if (get-boolean(reinforcement-zone-cleared?, self)) {
                 npc-clear-zone(var_13);
@@ -36,18 +26,8 @@ u64? nor-stalker-reinforce() {
             wait-one-frame();
         }
     }
-    foreach (u64? var_20 : intro-stalkers-active) {
-        u16 var_21;
-        if (var_20 && *(u16*)(var_20 + 12) == 7) {
-            var_21 = *(u64*)var_20;
-        } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-            var_21 = *(u64*)var_20;
-        } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-            var_21 = *(u64*)var_20;
-        } else {
-            var_21 = 0;
-        }
-        darray-find-remove(mid-stalkers--spawners, new-boxed-value(7, var_21), 0);
+    foreach (u64? var_21 : intro-stalkers-active) {
+        darray-find-remove(mid-stalkers--spawners, boxed_symbol(var_21), 0);
     }
 }
 
@@ -117,17 +97,7 @@ statescript {
                     set-boolean(player-on-balcony?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : intro-stalkers-active) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : intro-stalkers-active) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-away-from-back-window-1);
                             npc-set-excluded-from-tension-calculation(var_2, 1);
@@ -149,17 +119,7 @@ statescript {
                     set-boolean(player-on-balcony?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : intro-stalkers-active) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : intro-stalkers-active) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                             npc-set-excluded-from-tension-calculation(var_2, 0);
@@ -171,8 +131,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(intro-stalkers-active, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(intro-stalkers-active, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(intro-stalkers-active, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(intro-stalkers-active, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }
@@ -180,17 +140,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : intro-stalkers-active) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : intro-stalkers-active) {
                         send-event(disable-last-stalker-charge, var_2);
                         send-event(disable-overwhelm, var_2);
                         if (get-boolean(player-on-balcony?, self) && npc-alive?(var_2) || npc-using-skill?(var_2, 5)) {

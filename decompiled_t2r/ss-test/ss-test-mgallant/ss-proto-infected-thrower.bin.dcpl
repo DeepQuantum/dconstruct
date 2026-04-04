@@ -22,21 +22,11 @@ u64? thrower-switch-to-melee?() {
 }
 
 u64? proto-thrower-assign-group(u64? arg_0, u16 arg_1) {
-    foreach (u64? var_1 : proto-thrower-roles) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : proto-thrower-roles) {
         if (arg_1 == var_2) {
-            darray-append(var_2, new-boxed-value(7, arg_0), 1);
+            darray-append(var_2, boxed_symbol(arg_0), 1);
         } else {
-            darray-find-remove(var_2, new-boxed-value(7, arg_0), 0);
+            darray-find-remove(var_2, boxed_symbol(arg_0), 0);
         }
     }
 }
@@ -75,17 +65,7 @@ f32 proto-thrower-rating(u64? arg_0) {
 
 u64? should-get-thrower-role?(u16 arg_0) {
     bool var_1;
-    foreach (u64? var_2 : all-proto-throwers) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-proto-throwers) {
         bool var_5;
         if (!(0) && 0 < 3) {
             var_5 = var_3 == arg_0;
@@ -165,7 +145,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(all-proto-throwers, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(all-proto-throwers, boxed_symbol(get-self-id()), 0);
                 }
             }
         }
@@ -219,7 +199,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-append(all-proto-throwers, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(all-proto-throwers, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-bound-frame(last-shot-loc, get-object-locator(self), self);
@@ -448,18 +428,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-ref-throw, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-ref-throw, self);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(self, thrw-idle-throw--male, var_0);
                 }
                 lambda {
@@ -510,9 +490,9 @@ statescript {
                     send-event(
                         set-thrower,
                         get-symbol(bloater-pustule, self),
-                        new-boxed-value(7, get-self-id()),
-                        new-boxed-value(6, 1.00),
-                        new-boxed-value(6, 1.00)
+                        boxed_symbol(get-self-id()),
+                        boxed_f32(1.00),
+                        boxed_f32(1.00)
                     );
                 }
                 lambda {
@@ -553,7 +533,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(throw-at-target, get-symbol(bloater-pustule, self), new-boxed-value(18, get-thrower-target-locator(get-bound-frame(target, self))));
+                    send-event(throw-at-target, get-symbol(bloater-pustule, self), boxed_boundframe(get-thrower-target-locator(get-bound-frame(target, self))));
                 }
                 lambda {
                     set-float(last-shot, current-time(1), self);
@@ -630,9 +610,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
                     wait-animate_(self, idle-bul-hit-head-f, var_0);
                 }
                 lambda {

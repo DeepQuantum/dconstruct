@@ -52,7 +52,7 @@ statescript {
         block event Attack {
             track main {
                 lambda {
-                    broadcast-event(efp-watch-player-hit-sign, new-boxed-value(7, *(u64*)(event::get-attack-info(get-event()) + 16)));
+                    broadcast-event(efp-watch-player-hit-sign, boxed_symbol(*(u64*)(event::get-attack-info(get-event()) + 16)));
                 }
             }
         }

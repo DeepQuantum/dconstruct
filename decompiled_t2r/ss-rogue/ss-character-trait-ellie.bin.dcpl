@@ -44,7 +44,7 @@ statescript {
                             var_13 = 0;
                         }
                         u64? var_16;
-                        while (darray-contains?(selected-upgrade-manuals, new-boxed-value(7, var_13))) {
+                        while (darray-contains?(selected-upgrade-manuals, boxed_symbol(var_13))) {
                             u64? var_19 = darray-at(var_6, rogue-get-next-random-number-for-category(rng-upgrade-manual, 0) % darray-count(var_6));
                             u16 var_20;
                             if (var_19 && *(u16*)(var_19 + 12) == 7) {

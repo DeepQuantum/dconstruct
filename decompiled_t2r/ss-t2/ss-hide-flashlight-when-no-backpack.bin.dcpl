@@ -39,14 +39,14 @@ statescript {
                     u64? var_4;
                     if (get-self-id() == player || !object-has-backpack?(get-self-id())) {
                         u16 var_7;
-                        if (new-boxed-value(7, get-symbol(my-look, self))) {
-                            var_7 = *(u16*)(new-boxed-value(7, get-symbol(my-look, self)) + 12);
+                        if (boxed_symbol(get-symbol(my-look, self))) {
+                            var_7 = *(u16*)(boxed_symbol(get-symbol(my-look, self)) + 12);
                         } else {
                             var_7 = 0;
                         }
                         string var_10;
                         if (var_7 == 1) {
-                            u64? var_12 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_12 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_13;
                             if (var_12 && *(u16*)(var_12 + 12) == 1) {
                                 var_13 = *(u8*)var_12;
@@ -71,7 +71,7 @@ statescript {
                             }
                             var_10 = dc:format("%s", var_14);
                         } else if (var_7 == 2) {
-                            u64? var_17 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_17 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_18;
                             if (var_17 && *(u16*)(var_17 + 12) == 1) {
                                 var_18 = *(u8*)var_17;
@@ -90,7 +90,7 @@ statescript {
                             }
                             var_10 = dc:format("%d", var_18);
                         } else if (var_7 == 3) {
-                            u64? var_21 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_21 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_22;
                             if (var_21 && *(u16*)(var_21 + 12) == 1) {
                                 var_22 = *(u8*)var_21;
@@ -109,7 +109,7 @@ statescript {
                             }
                             var_10 = dc:format("%uU", var_22);
                         } else if (var_7 == 4) {
-                            u64? var_25 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_25 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_26;
                             if (var_25 && *(u16*)(var_25 + 12) == 1) {
                                 var_26 = *(u8*)var_25;
@@ -128,7 +128,7 @@ statescript {
                             }
                             var_10 = dc:format("%lldLL", var_26);
                         } else if (var_7 == 5) {
-                            u64? var_29 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_29 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_30;
                             if (var_29 && *(u16*)(var_29 + 12) == 1) {
                                 var_30 = *(u8*)var_29;
@@ -147,7 +147,7 @@ statescript {
                             }
                             var_10 = dc:format("%lluULL", var_30);
                         } else if (var_7 == 6) {
-                            u64? var_33 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_33 = boxed_symbol(get-symbol(my-look, self));
                             f32 var_34;
                             if (var_33 && *(u16*)(var_33 + 12) == 1) {
                                 var_34 = *(u8*)var_33;
@@ -166,7 +166,7 @@ statescript {
                             }
                             var_10 = dc:format("%f", var_34);
                         } else if (var_7 == 7) {
-                            u64? var_37 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_37 = boxed_symbol(get-symbol(my-look, self));
                             u16 var_38;
                             if (var_37 && *(u16*)(var_37 + 12) == 7) {
                                 var_38 = *(u64*)var_37;
@@ -183,9 +183,9 @@ statescript {
                         } else if (var_7 == 12) {
                             var_10 = "<process-handle>";
                         } else if (var_7 == 13) {
-                            var_10 = dc:format("<pointer #x%p>", *(i64*)new-boxed-value(7, get-symbol(my-look, self)));
+                            var_10 = dc:format("<pointer #x%p>", *(i64*)boxed_symbol(get-symbol(my-look, self)));
                         } else if (var_7 == 14) {
-                            u64? var_45 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_45 = boxed_symbol(get-symbol(my-look, self));
                             string var_46;
                             if (var_45 && *(u16*)(var_45 + 12) == 14) {
                                 var_46 = *var_45;
@@ -199,7 +199,7 @@ statescript {
                                 *(f32*)(var_46 + 8)
                             );
                         } else if (var_7 == 15) {
-                            u64? var_51 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_51 = boxed_symbol(get-symbol(my-look, self));
                             string var_52;
                             if (var_51 && *(u16*)(var_51 + 12) == 15) {
                                 var_52 = *var_51;
@@ -219,7 +219,7 @@ statescript {
                         } else if (var_7 == 18) {
                             var_10 = "<bound-frame>";
                         } else if (var_7 == 19) {
-                            u64? var_57 = new-boxed-value(7, get-symbol(my-look, self));
+                            u64? var_57 = boxed_symbol(get-symbol(my-look, self));
                             string var_58;
                             if (var_57 && *(u16*)(var_57 + 12) == 19) {
                                 var_58 = *(i64*)var_57;

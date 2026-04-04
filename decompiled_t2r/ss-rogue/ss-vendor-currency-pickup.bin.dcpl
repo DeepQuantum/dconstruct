@@ -37,7 +37,7 @@ statescript {
                     set-svar(vendor-currency, get-svar(vendor-currency) + var_6);
                     broadcast-event(vendor-changed);
                     hud2-request-item-pickup-notification(vendor-currency, run-gen--encounter-reward-currency(get-svar(encounter-index)), 1000, 1);
-                    send-event(pick-up-vendor-currency, canvas.hudRoot.healthAndAmmoV2.currency-count, new-boxed-value(2, var_6));
+                    send-event(pick-up-vendor-currency, canvas.hudRoot.healthAndAmmoV2.currency-count, boxed_i32(var_6));
                 }
             }
         }

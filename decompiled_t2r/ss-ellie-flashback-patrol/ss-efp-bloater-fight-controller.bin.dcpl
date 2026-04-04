@@ -139,10 +139,10 @@ statescript {
                     } else {
                         var_1 = 1.06 * *(f32*)(get-difficulty-detail-enemies() + 164);
                     }
-                    send-event(set-bloater-speed-mult, npc-efp-bloater-1, new-boxed-value(6, var_1));
+                    send-event(set-bloater-speed-mult, npc-efp-bloater-1, boxed_f32(var_1));
                 }
                 lambda {
-                    send-event(set-target-speed, npc-efp-bloater-1, new-boxed-value(6, 1.20), new-boxed-value(6, 30.00));
+                    send-event(set-target-speed, npc-efp-bloater-1, boxed_f32(1.20), boxed_f32(30.00));
                 }
                 lambda {
                     melee-fact-set-bool(npc-efp-bloater-1, disable-melee-difficulty-adjustments, 1);

@@ -53,7 +53,7 @@ statescript {
                         u64? var_1 = tag-symbol-at(break-object, i, self);
                         if (entity-exists?(var_1)) {
                             ++(num-break-objects-found, self);
-                            darray-append(get-symbol(group-break-object, self), new-boxed-value(7, var_1), 0);
+                            darray-append(get-symbol(group-break-object, self), boxed_symbol(var_1), 0);
                             var_3 = set-breakable-collapsed(var_1, 0);
                         } else {
                             var_3 = display-error(dc:format("ERROR: Breakable object %s not found!! Can not break.", string-debug(var_1)));
@@ -96,7 +96,7 @@ statescript {
                         u64? var_1 = tag-symbol-at(disable-breakable, i, self);
                         if (entity-exists?(var_1)) {
                             ++(num-disable-objects-found, self);
-                            darray-append(get-symbol(group-disable-breakable, self), new-boxed-value(7, var_1), 0);
+                            darray-append(get-symbol(group-disable-breakable, self), boxed_symbol(var_1), 0);
                             var_3 = send-event(disable-breakable, var_1);
                         } else {
                             var_3 = display-error(dc:format("ERROR: Breakable object %s not found!! Can not disable it..", string-debug(var_1)));
@@ -139,7 +139,7 @@ statescript {
                         u64? var_1 = tag-symbol-at(disable-player-squeeze-through, i, self);
                         if (entity-exists?(var_1)) {
                             ++(num-player-squeeze-through-found, self);
-                            darray-append(get-symbol(group-player-squeeze-through, self), new-boxed-value(7, var_1), 0);
+                            darray-append(get-symbol(group-player-squeeze-through, self), boxed_symbol(var_1), 0);
                             var_3 = disable-player-squeeze-through(var_1);
                         } else {
                             var_3 = display-error(dc:format("ERROR: Squeeze through object %s not found!! Can not disable it..", string-debug(var_1)));
@@ -163,17 +163,7 @@ statescript {
             track main {
                 lambda {
                     if (*encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 46)) {
-                        foreach (u64? var_3 : get-symbol(group-disable-breakable, self)) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : get-symbol(group-disable-breakable, self)) {
                             debug-draw-locator(get-object-locator(var_4), 0.50, 0.00, 0, 1.50, 1);
                             debug-draw-string(
                                 get-object-position(var_4),
@@ -190,17 +180,7 @@ statescript {
                 }
                 lambda {
                     if (*encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 45)) {
-                        foreach (u64? var_3 : get-symbol(group-break-object, self)) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : get-symbol(group-break-object, self)) {
                             debug-draw-locator(get-object-locator(var_4), 0.50, 0.00, 0, 1.50, 1);
                             debug-draw-string(
                                 get-object-position(var_4),
@@ -217,17 +197,7 @@ statescript {
                 }
                 lambda {
                     if (*encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 47)) {
-                        foreach (u64? var_3 : get-symbol(group-player-squeeze-through, self)) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : get-symbol(group-player-squeeze-through, self)) {
                             debug-draw-locator(get-object-locator(var_4), 0.50, 0.00, 0, 1.50, 1);
                             debug-draw-string(
                                 get-object-position(var_4),

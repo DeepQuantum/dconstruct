@@ -163,17 +163,7 @@ statescript {
                         if (get-timer-value(vox-timer-flamethrower-death, self) > 14.00) {
                             wait(4.00);
                         }
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-get-approx-smooth-path-dist-to(var_5, get-object-locator(player)) < 10.00) {
                                 set-boolean(vox-enemies-too-close, 1, self);
                             }

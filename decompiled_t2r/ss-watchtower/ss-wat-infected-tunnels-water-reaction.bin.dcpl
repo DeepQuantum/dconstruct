@@ -105,7 +105,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = group-random(wat-tunnels-temp-shake-anims);
-                    darray-find-remove(wat-tunnels-temp-shake-anims, new-boxed-value(7, var_0), 0);
+                    darray-find-remove(wat-tunnels-temp-shake-anims, boxed_symbol(var_0), 0);
                     if (player-in-state?(Move) && get-player-weapon-process-id() == 0 && !(player-is-crouched?())) {
                         u64? var_7 = alloc-gesture-play-params();
                         *(u8*)(var_7 + 33) = 1;

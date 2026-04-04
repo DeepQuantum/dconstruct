@@ -45,17 +45,7 @@ statescript {
             track main {
                 lambda {
                     if (get-state-time(self) < 1.00) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                             }
@@ -69,19 +59,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : stealth-forest-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : stealth-forest-runners) {
                         spawn-npc(var_2, 0, 0);
-                        darray-append(stalkers-charging, new-boxed-value(7, var_2), 1);
+                        darray-append(stalkers-charging, boxed_symbol(var_2), 1);
                     }
                 }
                 lambda {
@@ -93,17 +73,7 @@ statescript {
             track main {
                 lambda {
                     if (get-state-time(self) < 1.00) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                             }
@@ -115,9 +85,9 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(stealth-forest-runners, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(stalkers-charging, new-boxed-value(7, event-arg-symbol(0)), 0);
-                        darray-find-remove(stealth-forest-runners, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(stealth-forest-runners, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(stalkers-charging, boxed_symbol(event-arg-symbol(0)), 0);
+                        darray-find-remove(stealth-forest-runners, boxed_symbol(event-arg-symbol(0)), 0);
                         start-timer(reinf-timer, random-float-min-max(7.50, 8.50, 0), self, 1);
                     }
                 }
@@ -130,10 +100,10 @@ statescript {
                         u64? var_5 = group-get-first-member(stealth-forest-runner-reinf);
                         u64? var_6 = get-furthest-in-group(stealth-forest-reinf-spawner, player);
                         spawn-entity-at(var_5, get-spawner-locator(var_6, 1), 0);
-                        darray-find-remove(stealth-forest-reinf-spawner, new-boxed-value(7, var_6), 0);
-                        darray-find-remove(stealth-forest-runner-reinf, new-boxed-value(7, var_5), 0);
-                        darray-append(stealth-forest-runners, new-boxed-value(7, var_5), 1);
-                        darray-append(stalkers-charging, new-boxed-value(7, var_5), 1);
+                        darray-find-remove(stealth-forest-reinf-spawner, boxed_symbol(var_6), 0);
+                        darray-find-remove(stealth-forest-runner-reinf, boxed_symbol(var_5), 0);
+                        darray-append(stealth-forest-runners, boxed_symbol(var_5), 1);
+                        darray-append(stalkers-charging, boxed_symbol(var_5), 1);
                     }
                 }
                 lambda {

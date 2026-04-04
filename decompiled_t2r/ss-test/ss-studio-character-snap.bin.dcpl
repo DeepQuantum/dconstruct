@@ -88,18 +88,18 @@ statescript {
             track main {
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = rotate-locator-angle(get-spawner-locator(tag-symbol(position, self), 1), 1, get-float(current-rotation, self));
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_2 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = rotate-locator-angle(get-spawner-locator(tag-symbol(position, self), 1), 1, get-float(current-rotation, self));
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.40;
+                    *(i32*)*var_2[2] = 27;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(u8*)(*var_2[2] + 8) = 2;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
                     animate_(get-symbol(activator, self), get-symbol(current-anim, self), var_2);
                 }
                 lambda {

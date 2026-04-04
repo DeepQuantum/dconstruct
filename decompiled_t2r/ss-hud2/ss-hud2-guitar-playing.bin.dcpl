@@ -55,7 +55,7 @@ u16 toggle-playing-ui(u64? arg_0) {
             if (get-int32(curr-chord-index, self) != -1) {
                 if (!(active == gui2-get-widget-state(get-symbol(w-strum-text, self), 0))) {
                     speak-text-to-speech-formatted(
-                        new-boxed-value(7, gui2-get-widget-text-cipher(gui2-find-widget-path("fader", get-symbol(w-strum-text, self)))),
+                        boxed_symbol(gui2-get-widget-text-cipher(gui2-find-widget-path("fader", get-symbol(w-strum-text, self)))),
                         2,
                         0,
                         1
@@ -172,18 +172,18 @@ u16 populate-guitar-slot-child-darray() {
         u64? var_2 = gui2-find-widget-path(dc:format("chord%i", i), self);
         u64? var_7 = gui2-find-widget-path("nextNoteIndicator", var_2);
         u64? var_13 = darray-create(self, -1, 0);
-        darray-append(var_13, new-boxed-value(7, var_2), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("text", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("textDisableAnim", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("bgDisableAnim", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("strumIndicator", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("image0", var_7)), 0);
-        darray-append(var_13, new-boxed-value(7, var_7), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("nextNotePool", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("bg", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("lines", var_2)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("innerEllipse", var_2)), 0);
-        darray-append(get-symbol(guitar-slot-child-darray, self), new-boxed-value(7, var_13), 0);
+        darray-append(var_13, boxed_symbol(var_2), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("text", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("textDisableAnim", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("bgDisableAnim", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("strumIndicator", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("image0", var_7)), 0);
+        darray-append(var_13, boxed_symbol(var_7), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("nextNotePool", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("bg", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("lines", var_2)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("innerEllipse", var_2)), 0);
+        darray-append(get-symbol(guitar-slot-child-darray, self), boxed_symbol(var_13), 0);
         i = i + 1;
     }
     return i;
@@ -375,22 +375,22 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 6) {
-                        darray-append(get-symbol(w-strings-darray, self), new-boxed-value(7, gui2-find-widget-path(dc:format("string%i", i), self)), 0);
+                        darray-append(get-symbol(w-strings-darray, self), boxed_symbol(gui2-find-widget-path(dc:format("string%i", i), self)), 0);
                         i = i + 1;
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 1, 1, 0);
-                    *(u64*)(*var_1 + (0 * 8)) = new-boxed-value(7, MENU_COLLECTIBLES_BACK_PROMPT);
+                    *(u64*)var_1[0] = boxed_symbol(MENU_COLLECTIBLES_BACK_PROMPT);
                     u64? var_4 = #%alloc-array(single-frame, 1, 1, 0);
-                    *(u64*)(*var_4 + (0 * 8)) = new-boxed-value(19, "puzzle:safe-exit");
+                    *(u64*)var_4[0] = boxed_stringcopy("puzzle:safe-exit");
                     u64? var_7 = #%alloc-array(single-frame, 1, 1, 0);
-                    *(u64*)(*var_7 + (0 * 8)) = new-boxed-value(7, 0);
+                    *(u64*)var_7[0] = boxed_symbol(0);
                     hud2-set-button-prompt-stack-ciphers(
                         get-symbol(w-back-prompt, self),
-                        new-boxed-value(21, var_1),
-                        new-boxed-value(21, var_4),
-                        new-boxed-value(21, var_7),
+                        boxed_array(var_1),
+                        boxed_array(var_4),
+                        boxed_array(var_7),
                         0
                     );
                 }
@@ -400,7 +400,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 5) {
-                        darray-append(get-symbol(w-buttons-darray, self), new-boxed-value(7, gui2-find-widget-path(dc:format("button%i", i), gui2-find-widget-path("tabButtons", self))), 0);
+                        darray-append(get-symbol(w-buttons-darray, self), boxed_symbol(gui2-find-widget-path(dc:format("button%i", i), gui2-find-widget-path("tabButtons", self))), 0);
                         i = i + 1;
                     }
                 }
@@ -509,8 +509,8 @@ statescript {
                         send-event(
                             update-analog-direction-widget,
                             self,
-                            new-boxed-value(1, get-joypad-stick-intensity(var_2, 0.20, 1.00) > 0.10),
-                            new-boxed-value(6, 360.00 - var_4)
+                            boxed_bool(get-joypad-stick-intensity(var_2, 0.20, 1.00) > 0.10),
+                            boxed_f32(360.00 - var_4)
                         );
                     }
                 }
@@ -518,7 +518,7 @@ statescript {
                     if (get-boolean(refocus-requested?, self)) {
                         set-boolean(refocus-requested?, 0, self);
                         if (get-int32(curr-chord-index, self) != -1) {
-                            send-event(chord-changed, self, new-boxed-value(2, get-int32(curr-chord-index, self)));
+                            send-event(chord-changed, self, boxed_i32(get-int32(curr-chord-index, self)));
                         } else {
                             menu2-set-focus-to-component(self, 1);
                         }
@@ -607,7 +607,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 6) {
-                        darray-append(get-symbol(chords-darray, self), new-boxed-value(19, event-arg-string(i)), 0);
+                        darray-append(get-symbol(chords-darray, self), boxed_stringcopy(event-arg-string(i)), 0);
                         i = i + 1;
                     }
                 }

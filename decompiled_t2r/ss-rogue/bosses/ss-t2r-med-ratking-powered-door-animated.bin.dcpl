@@ -131,7 +131,7 @@ statescript {
                     send-event(go-unpowered, tag-symbol(door, get-symbol(orig-ss, self)));
                 }
                 lambda {
-                    broadcast-event(door-destroyed, new-boxed-value(7, get-self-id()));
+                    broadcast-event(door-destroyed, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (tag-boolean(hack-close-behind-ratking?, get-symbol(orig-ss, self))) {

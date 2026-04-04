@@ -289,9 +289,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, obj-pat-packing-dino-book-1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(calculated-ap-loc, obj-pat-packing-dino-book-1);
                     animate_(obj-pat-packing-dino-book-1, pat-packing-dino-enter-2--book, var_0);
                 }
             }
@@ -312,9 +312,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, obj-pat-packing-dino-book-1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(calculated-ap-loc, obj-pat-packing-dino-book-1);
                     animate_(obj-pat-packing-dino-book-1, pat-packing-dino-exit--book, var_0);
                 }
                 lambda {

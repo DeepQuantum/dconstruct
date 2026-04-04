@@ -161,7 +161,7 @@ u16 tra-horde-defend-fight-spawn-runner(i32 arg_0, bool arg_1) {
                 }
                 var_2 = tra-horde-npc-spawn-move(var_26, var_28);
             }
-            darray-append(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_2), 1);
+            darray-append(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_2), 1);
             if (arg_1 && !get-boolean(player-near-gondola?, self)) {
                 npc-set-zone-region(var_2, rgn-tra-horde-defend-fight-push-done-zone-1);
             }
@@ -347,18 +347,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(debug-skip-to-mid-push?, self)) {
                         var_3 = get-float(debug-skip-to-mid-push-phase, self);
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     animate_(obj-tra-horde-gondola-1, tra-horde-push-gondola--gondola, var_0);
                 }
                 lambda {
@@ -366,21 +366,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 58;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(debug-skip-to-mid-push?, self)) {
                         var_3 = get-float(debug-skip-to-mid-push-phase, self);
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[2] + 8) = var_3;
                     animate_(tommy, tra-horde-push-gondola--tommy, var_0);
                 }
                 lambda {
@@ -409,21 +409,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(obj-tra-horde-gondola-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(obj-tra-horde-gondola-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
+                    *(i32*)*var_0[3] = 3;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 78;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
                     animate_(tommy, tra-horde-push-gondola-attack-grab--tommy, var_0);
                 }
                 lambda {
@@ -473,15 +473,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(obj-tra-horde-gondola-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(obj-tra-horde-gondola-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(tommy, tra-horde-push-gondola-restart--tommy, var_0);
                 }
                 lambda {
@@ -495,28 +495,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(push-frame-at-struggle-gondola, self);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(push-frame-at-struggle-gondola, self);
                     animate_(obj-tra-horde-gondola-1, tra-horde-push-gondola--gondola, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-float(push-frame-at-struggle, self);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-float(push-frame-at-struggle, self);
                     wait-animate_(tommy, tra-horde-push-gondola--tommy, var_0);
                 }
                 lambda {
@@ -723,17 +723,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : tra-horde-clicker-spawn-pos) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : tra-horde-clicker-spawn-pos) {
                         u64? var_6 = get-locator-distance(get-object-locator(player), get-spawner-locator(var_3, 1));
                         u16 var_8;
                         if (var_6 > 0.00) {
@@ -752,8 +742,8 @@ statescript {
                     }
                     npc-teleport(get-symbol(npc-clicker, self), var_10);
                     npc-set-demeanor(get-symbol(npc-clicker, self), 2, 0);
-                    darray-append(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, get-symbol(npc-clicker, self)), 1);
-                    u64? var_19 = darray-at(tra-horde-clicker-enter-pos, darray-find(tra-horde-clicker-spawn-pos, new-boxed-value(7, var_10), 0));
+                    darray-append(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(get-symbol(npc-clicker, self)), 1);
+                    u64? var_19 = darray-at(tra-horde-clicker-enter-pos, darray-find(tra-horde-clicker-spawn-pos, boxed_symbol(var_10), 0));
                     u16 var_20;
                     if (var_19 && *(u16*)(var_19 + 12) == 7) {
                         var_20 = *(u64*)var_19;
@@ -849,24 +839,14 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-defend-fight-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-defend-fight-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, joel, 2, *npc-awareness-options-no-surprise*);
@@ -890,12 +870,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[1] = 78;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
                     animate_(obj-tra-horde-gondola-1, tra-horde-push-gondola-end--gondola, var_0);
                 }
                 lambda {
@@ -933,9 +913,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
                     animate_(obj-tra-horde-gondola-1, tra-horde-push-gondola-end--gondola, var_0);
                 }
                 lambda {
@@ -1048,21 +1028,11 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
                         if (npc-alive?(var_3)) {
                             npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                         } else {
-                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -1072,33 +1042,13 @@ statescript {
                 lambda {
                     if (player-in-region?(rgn-tra-horde-defend-fight-push-done-zone-1, 2)) {
                         if (get-boolean(player-near-gondola?, self)) {
-                            foreach (u64? var_3 : tra-horde-joel-tommy-defend-fight-npcs) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : tra-horde-joel-tommy-defend-fight-npcs) {
                                 npc-set-zone-region(var_4, rgn-tra-horde-defend-fight-push-done-zone-1);
                             }
                             set-boolean(player-near-gondola?, 0, self);
                         }
                     } else if (!get-boolean(player-near-gondola?, self)) {
-                        foreach (u64? var_8 : tra-horde-joel-tommy-defend-fight-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : tra-horde-joel-tommy-defend-fight-npcs) {
                             npc-clear-zone(var_9);
                         }
                         set-boolean(player-near-gondola?, 1, self);
@@ -1118,8 +1068,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0))) {
-                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0))) {
+                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0), 0);
                     }
                 }
             }
@@ -1279,21 +1229,11 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
                         if (npc-alive?(var_3)) {
                             npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                         } else {
-                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -1303,33 +1243,13 @@ statescript {
                 lambda {
                     if (player-in-region?(rgn-tra-horde-defend-fight-push-done-zone-1, 2)) {
                         if (get-boolean(player-near-gondola?, self)) {
-                            foreach (u64? var_3 : tra-horde-joel-tommy-defend-fight-npcs) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : tra-horde-joel-tommy-defend-fight-npcs) {
                                 npc-set-zone-region(var_4, rgn-tra-horde-defend-fight-push-done-zone-1);
                             }
                             set-boolean(player-near-gondola?, 0, self);
                         }
                     } else if (!get-boolean(player-near-gondola?, self)) {
-                        foreach (u64? var_8 : tra-horde-joel-tommy-defend-fight-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : tra-horde-joel-tommy-defend-fight-npcs) {
                             npc-clear-zone(var_9);
                         }
                         set-boolean(player-near-gondola?, 1, self);
@@ -1344,8 +1264,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0))) {
-                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0))) {
+                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0), 0);
                     }
                 }
             }
@@ -1443,21 +1363,11 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(tra-horde-joel-tommy-defend-fight-npcs, single-frame, 0)) {
                         if (npc-alive?(var_3)) {
                             npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                         } else {
-                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -1467,33 +1377,13 @@ statescript {
                 lambda {
                     if (player-in-region?(rgn-tra-horde-defend-fight-push-done-zone-1, 2)) {
                         if (get-boolean(player-near-gondola?, self)) {
-                            foreach (u64? var_3 : tra-horde-joel-tommy-defend-fight-npcs) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : tra-horde-joel-tommy-defend-fight-npcs) {
                                 npc-set-zone-region(var_4, rgn-tra-horde-defend-fight-push-done-zone-1);
                             }
                             set-boolean(player-near-gondola?, 0, self);
                         }
                     } else if (!get-boolean(player-near-gondola?, self)) {
-                        foreach (u64? var_8 : tra-horde-joel-tommy-defend-fight-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : tra-horde-joel-tommy-defend-fight-npcs) {
                             npc-clear-zone(var_9);
                         }
                         set-boolean(player-near-gondola?, 1, self);
@@ -1513,8 +1403,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0))) {
-                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0))) {
+                        var_3 = darray-find-remove(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_0), 0);
                     }
                 }
             }
@@ -1570,9 +1460,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-push-gondola-1, 1);
                     animate_(obj-tra-horde-gondola-1, tra-horde-push-gondola-end--gondola, var_0);
                 }
                 lambda {

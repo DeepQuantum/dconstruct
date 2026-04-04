@@ -73,7 +73,7 @@ u16 is-any-branch-spline-active?() {
     u16 var_1;
     for (u64 i = 0; i < horse-get-num-active-barrier-splines(player-horse); i++) {
         u16 var_5;
-        if (darray-contains?(ss-afm-horse-chase-branch-splines, new-boxed-value(7, horse-get-active-barrier-spline-from-index(i, player-horse)))) {
+        if (darray-contains?(ss-afm-horse-chase-branch-splines, boxed_symbol(horse-get-active-barrier-spline-from-index(i, player-horse)))) {
             var_5 = 1;
         }
         var_1 = var_5;

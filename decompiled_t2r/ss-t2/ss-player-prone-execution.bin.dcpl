@@ -25,35 +25,15 @@ u64? raycast-to-valid-execute-npc() {
 
 u16 get-npc-execution-target(f32 arg_0) {
     u64? var_0 = darray-create(self, -1, 0);
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         if (npc-alive?(var_3)) {
             if (fact-exists?(var_3, snared)) {
-                darray-append(var_0, new-boxed-value(7, var_3), 1);
+                darray-append(var_0, boxed_symbol(var_3), 1);
             }
         }
     }
     u16 var_9;
-    foreach (u64? var_10 : var_0) {
-        u16 var_11;
-        if (var_10 && *(u16*)(var_10 + 12) == 7) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-            var_11 = *(u64*)var_10;
-        } else {
-            var_11 = 0;
-        }
+    foreach (u64? var_11 : var_0) {
         u64? var_12 = distance-between-objects(var_11, player);
         u16 var_13;
         if (var_12 < 99999.89 && var_12 < arg_0) {
@@ -173,17 +153,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-melee-behavior-condition(var_2, 6);
                         }

@@ -170,17 +170,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : shambler-den-room-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : shambler-den-room-1) {
                         if (object-in-region?(var_2, rgn-wat-chain-door-interrupt-player-1)) {
                             go(interrupt-player, 1);
                         }
@@ -305,17 +295,7 @@ statescript {
                     set-tension-mode(1);
                 }
                 lambda {
-                    foreach (u64? var_1 : shambler-den-room-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : shambler-den-room-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 3, 0);
                             npc-disable-perception(var_2);
@@ -327,17 +307,7 @@ statescript {
                     wait(4.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : shambler-den-room-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : shambler-den-room-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 0, 0);
                         }
@@ -357,17 +327,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : shambler-den-room-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : shambler-den-room-1) {
                         if (npc-alive?(var_2)) {
                             set-visible(var_2, 0);
                             kill-entity(var_2);

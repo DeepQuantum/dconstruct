@@ -193,17 +193,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-wander-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-wander-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -229,7 +219,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(wat-wander-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(wat-wander-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         if (npc-group-alive-count(wat-wander-npcs) == 0) {
                             send-event(vox-wandering-patrol-combat-done, ss-vox-wat-explore-capitol-hill-1);
                             go(combat-done, 1);

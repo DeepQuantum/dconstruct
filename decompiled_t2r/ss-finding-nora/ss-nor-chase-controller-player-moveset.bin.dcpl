@@ -101,7 +101,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (darray-contains?(nor-ellie-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    if (darray-contains?(nor-ellie-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                         joypad-disable-commands(object-throw, object-throw-hold, object-quick-throw, object-quick-throw-hold, throwable-quick, aim);
                     }
                 }
@@ -177,7 +177,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (darray-contains?(nor-ellie-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    if (darray-contains?(nor-ellie-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                         joypad-disable-commands(object-throw, object-throw-hold, object-quick-throw, object-quick-throw-hold, throwable-quick, aim);
                     }
                 }
@@ -266,7 +266,7 @@ statescript {
                     joypad-disable-commands(inventory-open, inventory-craft, listen-hold, listen-toggle, listen-hold-long);
                 }
                 lambda {
-                    if (darray-contains?(nor-ellie-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    if (darray-contains?(nor-ellie-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                         joypad-disable-commands(object-throw, object-throw-hold, object-quick-throw, object-quick-throw-hold, throwable-quick, aim);
                     }
                 }

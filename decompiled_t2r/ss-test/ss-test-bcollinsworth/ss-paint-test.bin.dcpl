@@ -13,7 +13,7 @@
 
 u64? update-completed-paint-segments--test() {
     set-int32(current-segment, (i32)(spline-percentage-locator(get-symbol(paint-path-spline, self), get-bound-frame(paint-raycast-loc, self), 0) * (f32)get-int32(total-segments, self)), self);
-    darray-append(completed-segments, new-boxed-value(2, get-int32(current-segment, self)), 1);
+    darray-append(completed-segments, boxed_i32(get-int32(current-segment, self)), 1);
     return set-int32(completed-segments-count, darray-count(completed-segments), self);
 }
 
@@ -40,8 +40,8 @@ u16 painting-error-correct--test() {
         var_12 = send-event(
             swap-anim,
             self,
-            new-boxed-value(7, paint-test-center--abby),
-            new-boxed-value(6, get-float(blend-speed, self))
+            boxed_symbol(paint-test-center--abby),
+            boxed_f32(get-float(blend-speed, self))
         );
     } else {
         var_12 = 0;
@@ -71,8 +71,8 @@ u16 painting-error-enter--test(u16 arg_0) {
             var_3 = send-event(
                 swap-anim,
                 self,
-                new-boxed-value(7, arg_0),
-                new-boxed-value(6, get-float(blend-speed, self))
+                boxed_symbol(arg_0),
+                boxed_f32(get-float(blend-speed, self))
             );
         } else {
             var_3 = 0;
@@ -424,49 +424,49 @@ statescript {
                             1
                         );
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-paint-test-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_7 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.20;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-paint-test-1, 1);
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.30;
+                        *(i32*)*var_7[2] = 30;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(f32*)(*var_7[2] + 8) = 0.20;
                         wait-animate_(player, paint-test-enter--abby, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-paint-test-1, 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_9 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_9 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (3 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (4 * 8)) = 22;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (4 * 8)) + 8) = 0.02;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-paint-test-1, 1);
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.20;
+                        *(i32*)*var_9[2] = 30;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(f32*)(*var_9[2] + 8) = 0.00;
+                        *(i32*)*var_9[3] = 56;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(f32*)(*var_9[3] + 8) = 0.50;
+                        *(i32*)*var_9[4] = 22;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(f32*)(*var_9[4] + 8) = 0.02;
                         animate_(obj-paint-test-target-1, paint-center-test--cig, var_9);
                         u64? var_11 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(ap-paint-test-1, 1);
-                        *(i32*)*(*var_11 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_11 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_11 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (3 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (4 * 8)) = 22;
-                        *(u64*)(*(*var_11 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (4 * 8)) + 8) = 0.02;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-spawner-locator(ap-paint-test-1, 1);
+                        *(i32*)*var_11[1] = 28;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 0.20;
+                        *(i32*)*var_11[2] = 30;
+                        *(u64*)(*var_11[2] + 8) = 0;
+                        *(f32*)(*var_11[2] + 8) = 0.00;
+                        *(i32*)*var_11[3] = 56;
+                        *(u64*)(*var_11[3] + 8) = 0;
+                        *(f32*)(*var_11[3] + 8) = 0.50;
+                        *(i32*)*var_11[4] = 22;
+                        *(u64*)(*var_11[4] + 8) = 0;
+                        *(f32*)(*var_11[4] + 8) = 0.02;
                         wait-animate_(player, paint-test-center--abby, var_11);
                         set-float(anim-phase, 0.02, self);
                     }
@@ -493,27 +493,27 @@ statescript {
                         set-bound-frame(paint-raycast-loc, get-bound-frame(paint-target-loc, self), self);
                     } else {
                         u64? var_3 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-paint-test-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (4 * 8)) = 31;
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (5 * 8)) = 58;
-                        *(u64*)(*(*var_3 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (5 * 8)) + 8) = get-float(anim-phase, self);
-                        *(i32*)*(*var_3 + (6 * 8)) = 40;
-                        *(u64*)(*(*var_3 + (6 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (6 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-paint-test-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
+                        *(i32*)*var_3[3] = 56;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(f32*)(*var_3[3] + 8) = 0.00;
+                        *(i32*)*var_3[4] = 31;
+                        *(u64*)(*var_3[4] + 8) = 0;
+                        *(u8*)(*var_3[4] + 8) = 1;
+                        *(i32*)*var_3[5] = 58;
+                        *(u64*)(*var_3[5] + 8) = 0;
+                        *(f32*)(*var_3[5] + 8) = get-float(anim-phase, self);
+                        *(i32*)*var_3[6] = 40;
+                        *(u64*)(*var_3[6] + 8) = 0;
+                        *(i32*)(*var_3[6] + 8) = 0;
                         animate_(player, paint-test-center--abby, var_3);
                         u64? var_6 = alloc-gesture-play-params();
                         *(u64*)(var_6 + 8) = obj-paint-test-aim-target-1;
@@ -531,7 +531,7 @@ statescript {
                     wait-int32(completed-segments-count, floor((f32)get-int32(total-segments, self) * 0.99), self);
                 }
                 lambda {
-                    while (darray-contains?(completed-segments, new-boxed-value(2, 0)) && !darray-contains?(completed-segments, new-boxed-value(2, get-int32(total-segments, self) - 1))) {
+                    while (darray-contains?(completed-segments, boxed_i32(0)) && !darray-contains?(completed-segments, boxed_i32(get-int32(total-segments, self) - 1))) {
                         wait-one-frame();
                     }
                 }

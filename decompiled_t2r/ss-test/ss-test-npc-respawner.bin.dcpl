@@ -38,7 +38,7 @@ u16 build-npc-group() {
     while (i < 101) {
         u64? var_0 = symbol-concat-int32(npc-, i);
         if (tag-specified?(var_0, self)) {
-            var_2 = darray-append(get-symbol(original-spawners-group, self), new-boxed-value(7, tag-symbol(var_0, self)), 1);
+            var_2 = darray-append(get-symbol(original-spawners-group, self), boxed_symbol(tag-symbol(var_0, self)), 1);
         }
         i = i + 1;
     }
@@ -62,27 +62,17 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(spawned-npcs-group, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-append(get-symbol(available-spawners-group, self), new-boxed-value(7, fact-lookup-symbol(fact-get-dictionary(get-self-id()), event-arg-symbol(0), 1)), 1);
-                        darray-find-remove(get-symbol(spawned-npcs-group, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(get-symbol(spawned-npcs-group, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-append(get-symbol(available-spawners-group, self), boxed_symbol(fact-lookup-symbol(fact-get-dictionary(get-self-id()), event-arg-symbol(0), 1)), 1);
+                        darray-find-remove(get-symbol(spawned-npcs-group, self), boxed_symbol(event-arg-symbol(0)), 0);
                         fact-remove(get-self-id(), event-arg-symbol(0));
-                        if (tag-boolean(respawn-buddy-on-kill, self) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
-                            foreach (u64? var_21 : all-buddy-npcs) {
-                                u16 var_22;
-                                if (var_21 && *(u16*)(var_21 + 12) == 7) {
-                                    var_22 = *(u64*)var_21;
-                                } else if (var_21 && *(u16*)(var_21 + 12) == 5) {
-                                    var_22 = *(u64*)var_21;
-                                } else if (var_21 && *(u16*)(var_21 + 12) == 4) {
-                                    var_22 = *(u64*)var_21;
-                                } else {
-                                    var_22 = 0;
-                                }
+                        if (tag-boolean(respawn-buddy-on-kill, self) && !darray-contains?(all-buddy-npcs, boxed_symbol(event-arg-symbol(0)))) {
+                            foreach (u64? var_22 : all-buddy-npcs) {
                                 npc-teleport(var_22, entity-name(get-object-spawner(var_22)));
                             }
                         }
                         if (tag-boolean(kill-body-on-respawn?, self)) {
-                            darray-append(get-symbol(group-to-kill, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                            darray-append(get-symbol(group-to-kill, self), boxed_symbol(event-arg-symbol(0)), 1);
                         }
                     }
                 }
@@ -92,17 +82,7 @@ statescript {
             track main {
                 lambda {
                     if (tag-boolean(buddy-kill-test-task?, self)) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-make-aware-of(var_3, player, 2, 0);
                             }
@@ -167,8 +147,8 @@ statescript {
                             var_4 = 0;
                         }
                         u64? var_5 = spawn-npc(var_4, 0, 0);
-                        fact-set(get-self-id(), var_5, new-boxed-value(7, var_4));
-                        darray-append(get-symbol(spawned-npcs-group, self), new-boxed-value(7, var_5), 1);
+                        fact-set(get-self-id(), var_5, boxed_symbol(var_4));
+                        darray-append(get-symbol(spawned-npcs-group, self), boxed_symbol(var_5), 1);
                         if (!tag-boolean(always-unaware, self) && tag-boolean(aware-on-spawn, self)) {
                             wait-one-frame();
                             npc-make-aware-of(var_5, player, 2, *npc-awareness-options-no-surprise*);
@@ -177,7 +157,7 @@ statescript {
                         if (tag-boolean(spawn-ai-mode-off, self)) {
                             npc-set-script-only-with-perception(var_5);
                         }
-                        if (tag-boolean(buddy-kill-test-task?, self) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_5))) {
+                        if (tag-boolean(buddy-kill-test-task?, self) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_5))) {
                             melee-fact-set-bool(var_5, melee-quick-kill, 1);
                             npc-set-script-only-with-perception(var_5);
                         }
@@ -193,7 +173,7 @@ statescript {
                             } else {
                                 var_20 = 0;
                             }
-                            if (!darray-contains?(all-buddy-npcs, new-boxed-value(7, var_20))) {
+                            if (!darray-contains?(all-buddy-npcs, boxed_symbol(var_20))) {
                                 u64? var_23 = darray-at(all-enemy-npcs, 0);
                                 u16 var_24;
                                 if (var_23 && *(u16*)(var_23 + 12) == 7) {
@@ -218,10 +198,10 @@ statescript {
                                 start-melee-action(var_24, var_26, npc-infected-standing-struggle-tell, 0, 0, 1, 0, 0);
                             }
                         }
-                        if (tag-boolean(start-stunned, self) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_5))) {
+                        if (tag-boolean(start-stunned, self) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_5))) {
                             start-melee-action(0, var_5, switchblade-stun-2, 0, 0, 1, 0, 0);
                         }
-                        if (*(u8*)(*aeinhorn-test* + 5) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_5))) {
+                        if (*(u8*)(*aeinhorn-test* + 5) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_5))) {
                             set-object-health(var_5, 1.00);
                             npc-set-script-only-no-perception(var_5);
                         }
@@ -239,11 +219,11 @@ statescript {
                             npc-unholster-weapon(var_5, 4, -1.00, 0);
                         }
                         if (tag-boolean(buddy-aware, self)) {
-                            if (!darray-contains?(all-buddy-npcs, new-boxed-value(7, var_5))) {
+                            if (!darray-contains?(all-buddy-npcs, boxed_symbol(var_5))) {
                                 npc-set-targeting-params(var_5, always-target-buddies);
                             }
                         }
-                        broadcast-event(respawner-spawned, new-boxed-value(7, get-self-id()), new-boxed-value(7, var_5));
+                        broadcast-event(respawner-spawned, boxed_symbol(get-self-id()), boxed_symbol(var_5));
                     }
                 }
                 lambda {
@@ -251,29 +231,9 @@ statescript {
                 }
                 lambda {
                     if (tag-boolean(aware-on-spawn, self)) {
-                        foreach (u64? var_4 : get-symbol(spawned-npcs-group, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(spawned-npcs-group, self)) {
                             if (npc-alive?(var_5)) {
-                                foreach (u64? var_8 : all-npcs) {
-                                    u16 var_9;
-                                    if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                        var_9 = *(u64*)var_8;
-                                    } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                        var_9 = *(u64*)var_8;
-                                    } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                        var_9 = *(u64*)var_8;
-                                    } else {
-                                        var_9 = 0;
-                                    }
+                                foreach (u64? var_9 : all-npcs) {
                                     if (npc-alive?(var_9)) {
                                         if (var_5 != var_9) {
                                             npc-make-aware-of(var_5, var_9, 2, *npc-awareness-options-no-surprise*);
@@ -308,17 +268,7 @@ statescript {
             track main {
                 lambda {
                     if (tag-boolean(always-aware, self)) {
-                        foreach (u64? var_4 : get-symbol(spawned-npcs-group, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(spawned-npcs-group, self)) {
                             npc-make-aware-of(var_5, player, 2, 0);
                         }
                     }
@@ -354,28 +304,8 @@ statescript {
                 lambda {
                     if (tag-boolean(buddy-aware, self)) {
                         set-tension-mode(3);
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
-                            foreach (u64? var_5 : all-buddy-npcs) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                        foreach (u64? var_3 : all-enemy-npcs) {
+                            foreach (u64? var_6 : all-buddy-npcs) {
                                 npc-make-aware-of(var_3, var_6, 2, *npc-awareness-options-no-surprise*);
                             }
                         }
@@ -390,9 +320,9 @@ statescript {
                 lambda {
                     u64? var_1 = group-random(get-symbol(available-spawners-group, self));
                     u64? var_2 = spawn-npc(var_1, 0, 0);
-                    fact-set(get-self-id(), var_2, new-boxed-value(7, var_1));
-                    darray-append(get-symbol(spawned-npcs-group, self), new-boxed-value(7, var_2), 1);
-                    darray-find-remove(get-symbol(available-spawners-group, self), new-boxed-value(7, var_1), 0);
+                    fact-set(get-self-id(), var_2, boxed_symbol(var_1));
+                    darray-append(get-symbol(spawned-npcs-group, self), boxed_symbol(var_2), 1);
+                    darray-find-remove(get-symbol(available-spawners-group, self), boxed_symbol(var_1), 0);
                     if (!tag-boolean(always-unaware, self) && tag-boolean(aware-on-spawn, self)) {
                         wait-one-frame();
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
@@ -404,7 +334,7 @@ statescript {
                     if (tag-boolean(spawn-ai-mode-off, self)) {
                         npc-set-script-only-with-perception(var_2);
                     }
-                    if (tag-boolean(buddy-kill-test-task?, self) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_2))) {
+                    if (tag-boolean(buddy-kill-test-task?, self) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_2))) {
                         melee-fact-set-bool(var_2, melee-quick-kill, 1);
                         npc-set-script-only-with-perception(var_2);
                     }
@@ -420,7 +350,7 @@ statescript {
                         } else {
                             var_20 = 0;
                         }
-                        if (!darray-contains?(all-buddy-npcs, new-boxed-value(7, var_20))) {
+                        if (!darray-contains?(all-buddy-npcs, boxed_symbol(var_20))) {
                             u64? var_23 = darray-at(all-enemy-npcs, 0);
                             u16 var_24;
                             if (var_23 && *(u16*)(var_23 + 12) == 7) {
@@ -446,10 +376,10 @@ statescript {
                             start-melee-action(var_24, var_26, npc-infected-standing-struggle-tell, 0, 0, 1, 0, 0);
                         }
                     }
-                    if (tag-boolean(start-stunned, self) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_2))) {
+                    if (tag-boolean(start-stunned, self) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_2))) {
                         start-melee-action(0, var_2, switchblade-stun-2, 0, 0, 1, 0, 0);
                     }
-                    if (*(u8*)(*aeinhorn-test* + 5) && !darray-contains?(all-buddy-npcs, new-boxed-value(7, var_2))) {
+                    if (*(u8*)(*aeinhorn-test* + 5) && !darray-contains?(all-buddy-npcs, boxed_symbol(var_2))) {
                         set-object-health(var_2, 1.00);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -460,27 +390,17 @@ statescript {
                         melee-fact-set-bool(var_2, disable-parry, 1);
                     }
                     if (tag-boolean(buddy-aware, self)) {
-                        if (!darray-contains?(all-buddy-npcs, new-boxed-value(7, var_2))) {
+                        if (!darray-contains?(all-buddy-npcs, boxed_symbol(var_2))) {
                             npc-set-targeting-params(var_2, always-target-buddies);
                         }
                     }
                     if (tag-boolean(always-unaware, self) && !npc-is-buddy?(var_2)) {
                         npc-set-script-only-no-perception(var_2);
                     }
-                    broadcast-event(respawner-spawned, new-boxed-value(7, get-self-id()), new-boxed-value(7, var_2));
+                    broadcast-event(respawner-spawned, boxed_symbol(get-self-id()), boxed_symbol(var_2));
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-to-kill, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-to-kill, self)) {
                         kill-entity(var_4);
                     }
                 }

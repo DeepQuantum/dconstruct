@@ -58,72 +58,72 @@ statescript {
                     while (1) {
                         if (!(0 == 0)) {
                             u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_1 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                            *(i32*)*var_1[0] = 10;
+                            *(u64*)(*var_1[0] + 8) = 0;
+                            *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                             animate_(0, buddy-m-fists-stealth-kill-vs-inf--inf-f, var_1);
                         }
                         if (!(0 == 0)) {
                             u64? var_4 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                            *(i32*)*var_4[0] = 10;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(u64*)(*var_4[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                             animate_(0, runr-horde-kills-ellie-beatdown--inf-f-c, var_4);
                         }
                         if (!(0 == 0)) {
                             u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_7 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                            *(i32*)*var_7[0] = 10;
+                            *(u64*)(*var_7[0] + 8) = 0;
+                            *(u64*)(*var_7[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                             animate_(0, runr-horde-kills-ellie-beatdown--inf-f-c, var_7);
                         }
                         if (bindpose == bindpose) {
                             if (!(npc-test-anim-2 == 0)) {
                                 if (!(0 == 0)) {
                                     u64? var_10 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_10 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                    *(i32*)*var_10[0] = 10;
+                                    *(u64*)(*var_10[0] + 8) = 0;
+                                    *(u64*)(*var_10[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                     animate_(0, runr-horde-kills-ellie-beatdown--inf-f-c, var_10);
                                 }
                                 u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_13 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                *(i32*)*var_13[0] = 10;
+                                *(u64*)(*var_13[0] + 8) = 0;
+                                *(u64*)(*var_13[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                 wait-animate_(npc-test-anim-2, buddy-m-fists-stealth-kill-vs-inf--buddy-m, var_13);
                             } else if (!(0 == 0)) {
                                 if (!(npc-test-anim-2 == 0)) {
                                     u64? var_16 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_16 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                    *(i32*)*var_16[0] = 10;
+                                    *(u64*)(*var_16[0] + 8) = 0;
+                                    *(u64*)(*var_16[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                     animate_(npc-test-anim-2, buddy-m-fists-stealth-kill-vs-inf--buddy-m, var_16);
                                 }
                                 u64? var_19 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_19 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_19 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                *(i32*)*var_19[0] = 10;
+                                *(u64*)(*var_19[0] + 8) = 0;
+                                *(u64*)(*var_19[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                 wait-animate_(0, runr-horde-kills-ellie-beatdown--inf-f-c, var_19);
                             }
                         } else {
                             if (!(npc-test-anim-2 == 0)) {
                                 u64? var_22 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_22 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_22 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_22 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                *(i32*)*var_22[0] = 10;
+                                *(u64*)(*var_22[0] + 8) = 0;
+                                *(u64*)(*var_22[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                 animate_(npc-test-anim-2, buddy-m-fists-stealth-kill-vs-inf--buddy-m, var_22);
                             }
                             if (!(0 == 0)) {
                                 u64? var_25 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_25 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_25 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_25 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                                *(i32*)*var_25[0] = 10;
+                                *(u64*)(*var_25[0] + 8) = 0;
+                                *(u64*)(*var_25[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                                 animate_(0, runr-horde-kills-ellie-beatdown--inf-f-c, var_25);
                             }
                             u64? var_28 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_28 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_28 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_28 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
+                            *(i32*)*var_28[0] = 10;
+                            *(u64*)(*var_28[0] + 8) = 0;
+                            *(u64*)(*var_28[0] + 8) = get-spawner-locator(get-symbol(ap-ref, self), 1);
                             wait-animate_(player, bindpose, var_28);
                         }
                         if (!(npc-test-anim-2 == 0)) {

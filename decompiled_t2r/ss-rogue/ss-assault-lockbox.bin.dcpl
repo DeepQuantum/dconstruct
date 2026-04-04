@@ -12,57 +12,17 @@
 // ####################################################################################################
 
 u64? get-all-siege-lockboxes() {
-    foreach (u64? var_3 : get-spawners-by-tag-int32(siege-lockbox-loc-0, 1, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        darray-append(grp-lockbox-locations, new-boxed-value(7, var_4), 1);
+    foreach (u64? var_4 : get-spawners-by-tag-int32(siege-lockbox-loc-0, 1, 0, 0)) {
+        darray-append(grp-lockbox-locations, boxed_symbol(var_4), 1);
     }
-    foreach (u64? var_10 : get-spawners-by-tag-int32(siege-lockbox-loc-1, 1, 0, 0)) {
-        u16 var_11;
-        if (var_10 && *(u16*)(var_10 + 12) == 7) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-            var_11 = *(u64*)var_10;
-        } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-            var_11 = *(u64*)var_10;
-        } else {
-            var_11 = 0;
-        }
-        darray-append(grp-lockbox-locations, new-boxed-value(7, var_11), 1);
+    foreach (u64? var_11 : get-spawners-by-tag-int32(siege-lockbox-loc-1, 1, 0, 0)) {
+        darray-append(grp-lockbox-locations, boxed_symbol(var_11), 1);
     }
-    foreach (u64? var_17 : get-spawners-by-tag-int32(siege-lockbox-loc-2, 1, 0, 0)) {
-        u16 var_18;
-        if (var_17 && *(u16*)(var_17 + 12) == 7) {
-            var_18 = *(u64*)var_17;
-        } else if (var_17 && *(u16*)(var_17 + 12) == 5) {
-            var_18 = *(u64*)var_17;
-        } else if (var_17 && *(u16*)(var_17 + 12) == 4) {
-            var_18 = *(u64*)var_17;
-        } else {
-            var_18 = 0;
-        }
-        darray-append(grp-lockbox-locations, new-boxed-value(7, var_18), 1);
+    foreach (u64? var_18 : get-spawners-by-tag-int32(siege-lockbox-loc-2, 1, 0, 0)) {
+        darray-append(grp-lockbox-locations, boxed_symbol(var_18), 1);
     }
-    foreach (u64? var_24 : get-spawners-by-tag-int32(siege-lockbox-loc-3, 1, 0, 0)) {
-        u16 var_25;
-        if (var_24 && *(u16*)(var_24 + 12) == 7) {
-            var_25 = *(u64*)var_24;
-        } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-            var_25 = *(u64*)var_24;
-        } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-            var_25 = *(u64*)var_24;
-        } else {
-            var_25 = 0;
-        }
-        darray-append(grp-lockbox-locations, new-boxed-value(7, var_25), 1);
+    foreach (u64? var_25 : get-spawners-by-tag-int32(siege-lockbox-loc-3, 1, 0, 0)) {
+        darray-append(grp-lockbox-locations, boxed_symbol(var_25), 1);
     }
 }
 
@@ -88,7 +48,7 @@ u64? populate-pickups() {
         } else {
             var_4 = "";
         }
-        darray-find-remove(arr-lockbox-pickup-offsets-copy, new-boxed-value(15, var_4), 0);
+        darray-find-remove(arr-lockbox-pickup-offsets-copy, boxed_vector(var_4), 0);
         u16 var_6;
         u16 var_7;
         u16 var_8;
@@ -185,7 +145,7 @@ u64? spawn-random-player-upgrade-pickup() {
     } else {
         var_7 = 0;
     }
-    darray-append(player-upgrade-pickups-group, new-boxed-value(7, var_7), 1);
+    darray-append(player-upgrade-pickups-group, boxed_symbol(var_7), 1);
     u64? var_10 = darray-at(symbol-concat-string(player-upgrades, var_1), var_2 % var_4);
     u16 var_11;
     if (var_10 && *(u16*)(var_10 + 12) == 7) {
@@ -210,17 +170,7 @@ u16 spawn-random-weapon-upgrade-pickup() {
     u64? var_2 = rogue-get-next-random-number-for-category(rng-assault-loot, 0);
     u64? var_4 = darray-count(symbol-concat-string(weapon-upgrade-pickups-group, var_1));
     u16 var_7;
-    foreach (u64? var_9 : symbol-concat-string(weapon-upgrade-pickups-group, var_1)) {
-        u16 var_10;
-        if (var_9 && *(u16*)(var_9 + 12) == 7) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-            var_10 = *(u64*)var_9;
-        } else {
-            var_10 = 0;
-        }
+    foreach (u64? var_10 : symbol-concat-string(weapon-upgrade-pickups-group, var_1)) {
         u16 var_12;
         if (player-has-weapon?(var_10)) {
             var_12 = 1;
@@ -321,7 +271,7 @@ u16 spawn-random-weapon-upgrade-pickup() {
             } else {
                 var_44 = 0;
             }
-            darray-append(symbol-concat-string(var_37, "-upgrade-pickups-group"), new-boxed-value(7, var_44), 1);
+            darray-append(symbol-concat-string(var_37, "-upgrade-pickups-group"), boxed_symbol(var_44), 1);
             var_19 = 1;
         }
         u64? var_46 = rogue-get-next-random-number-for-category(rng-assault-loot, 0);
@@ -418,7 +368,7 @@ u16 spawn-random-weapon-upgrade-pickup() {
                 } else {
                     var_78 = 0;
                 }
-                darray-append(symbol-concat-string(var_71, "-upgrade-pickups-group"), new-boxed-value(7, var_78), 1);
+                darray-append(symbol-concat-string(var_71, "-upgrade-pickups-group"), boxed_symbol(var_78), 1);
             }
             rogue-get-next-random-number-for-category(rng-assault-loot, 0);
             darray-count(symbol-concat-string(weapon-upgrade-pickups-group, var_1));
@@ -468,17 +418,7 @@ u64? spawn-loc-in-player-view?(u64? arg_0) {
 u16 get-lockbox-spawner() {
     group-random(grp-lockbox-locations);
     u16 var_2;
-    foreach (u64? var_3 : grp-lockbox-locations) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : grp-lockbox-locations) {
         u16 var_15;
         if (!(spawn-loc-in-player-view?(var_4)) && get-locator-distance(get-spawner-locator(var_4, 1), get-object-locator(player)) < 1000.00 && get-locator-distance(get-spawner-locator(var_4, 1), get-object-locator(player)) > 10.00 && spawn-loc-clear?(var_4)) {
             var_14 = get-locator-distance(get-spawner-locator(var_4, 1), get-object-locator(player));
@@ -486,7 +426,7 @@ u16 get-lockbox-spawner() {
         }
         var_2 = var_15;
     }
-    darray-find-remove(grp-lockbox-locations, new-boxed-value(7, var_2), 0);
+    darray-find-remove(grp-lockbox-locations, boxed_symbol(var_2), 0);
     set-symbol(lockbox-spawner, var_2, self);
     return var_2;
 }
@@ -500,30 +440,10 @@ u16 display-upgrade-pickups(u64? arg_0) {
         var_1 = "-abby";
     }
     u16 var_4;
-    foreach (u64? var_7 : symbol-concat-string(weapon-upgrade-pickups-group, var_1)) {
-        u16 var_8;
-        if (var_7 && *(u16*)(var_7 + 12) == 7) {
-            var_8 = *(u64*)var_7;
-        } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-            var_8 = *(u64*)var_7;
-        } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-            var_8 = *(u64*)var_7;
-        } else {
-            var_8 = 0;
-        }
+    foreach (u64? var_8 : symbol-concat-string(weapon-upgrade-pickups-group, var_1)) {
         u16 var_11;
         u16 var_12;
-        foreach (u64? var_14 : symbol-concat-string(var_8, "-upgrade-pickups-group")) {
-            u16 var_15;
-            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                var_15 = *(u64*)var_14;
-            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                var_15 = *(u64*)var_14;
-            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                var_15 = *(u64*)var_14;
-            } else {
-                var_15 = 0;
-            }
+        foreach (u64? var_15 : symbol-concat-string(var_8, "-upgrade-pickups-group")) {
             u64? var_17 = ddict-get(display-ddict, var_8);
             string var_18;
             if (var_17 && *(u16*)(var_17 + 12) == 19) {
@@ -556,17 +476,7 @@ u16 display-upgrade-pickups(u64? arg_0) {
         var_5 = var_12;
     }
     u16 var_27;
-    foreach (u64? var_28 : player-upgrade-pickups-group) {
-        u16 var_29;
-        if (var_28 && *(u16*)(var_28 + 12) == 7) {
-            var_29 = *(u64*)var_28;
-        } else if (var_28 && *(u16*)(var_28 + 12) == 5) {
-            var_29 = *(u64*)var_28;
-        } else if (var_28 && *(u16*)(var_28 + 12) == 4) {
-            var_29 = *(u64*)var_28;
-        } else {
-            var_29 = 0;
-        }
+    foreach (u64? var_29 : player-upgrade-pickups-group) {
         u64? var_31 = ddict-get(display-ddict, var_29);
         string var_32;
         if (var_31 && *(u16*)(var_31 + 12) == 19) {
@@ -688,7 +598,7 @@ u64? spawn-random-full-item-pickup(u64? arg_0) {
         } else {
             var_15 = 0;
         }
-        ddict-set(full-item-pickups-spawned, var_11, new-boxed-value(2, var_15 + 1));
+        ddict-set(full-item-pickups-spawned, var_11, boxed_i32(var_15 + 1));
     } else {
         u64? var_17 = darray-at(var_1, var_2 % var_3);
         u16 var_18;
@@ -701,7 +611,7 @@ u64? spawn-random-full-item-pickup(u64? arg_0) {
         } else {
             var_18 = 0;
         }
-        ddict-set(full-item-pickups-spawned, var_18, new-boxed-value(2, 1));
+        ddict-set(full-item-pickups-spawned, var_18, boxed_i32(1));
     }
     return spawn-item-pickup(var_5, arg_0, 1, 0, 0);
 }
@@ -803,18 +713,8 @@ statescript {
                     darray-clear(grp-lockbox-locations);
                 }
                 lambda {
-                    foreach (u64? var_5 : get-spawners-by-tag-int32(event-arg-symbol(0), 1, 0, 0)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
-                        darray-append(grp-lockbox-locations, new-boxed-value(7, var_6), 1);
+                    foreach (u64? var_6 : get-spawners-by-tag-int32(event-arg-symbol(0), 1, 0, 0)) {
+                        darray-append(grp-lockbox-locations, boxed_symbol(var_6), 1);
                     }
                 }
             }
@@ -854,18 +754,8 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-lockbox-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(grp-lockbox-locations, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-lockbox-spawner, 1, 0, 0)) {
+                        darray-append(grp-lockbox-locations, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -892,12 +782,12 @@ statescript {
                         var_2 = get-symbol(lockbox-open-anim, self);
                     }
                     u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-object-locator(get-symbol(lockbox, self));
-                    *(i32*)*(*var_5 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = get-object-locator(get-symbol(lockbox, self));
+                    *(i32*)*var_5[1] = 28;
+                    *(u64*)(*var_5[1] + 8) = 0;
+                    *(f32*)(*var_5[1] + 8) = 0.30;
                     animate_(get-symbol(lockbox, self), var_2, var_5);
                 }
                 lambda {
@@ -926,17 +816,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-lockbox-locations) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-lockbox-locations) {
                         if (tag-boolean(is-wooden, var_2)) {
                             set-symbol(lockbox, mp-crate-wood-a-1, self);
                             set-boolean(lockbox-is-wood, 1, self);
@@ -951,11 +831,11 @@ statescript {
                         }
                         set-high-contrast-mode-type(get-symbol(new-lockbox, self), 2);
                         rogue-mark-always-visible-in-listen-mode(get-symbol(new-lockbox, self));
-                        darray-append(highlight-lockbox-group, new-boxed-value(7, get-symbol(new-lockbox, self)), 1);
+                        darray-append(highlight-lockbox-group, boxed_symbol(get-symbol(new-lockbox, self)), 1);
                         if (!is-final-build?()) {
                             display(dc:format("NEW LOCKBOX: %s", string-debug(get-symbol(new-lockbox, self))), 19);
                         }
-                        ddict-set(get-symbol(lockbox-ddict, self), get-symbol(new-interactable, self), new-boxed-value(7, get-symbol(new-lockbox, self)));
+                        ddict-set(get-symbol(lockbox-ddict, self), get-symbol(new-interactable, self), boxed_symbol(get-symbol(new-lockbox, self)));
                     }
                 }
             }
@@ -964,17 +844,7 @@ statescript {
             track main {
                 lambda {
                     if (*encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 139)) {
-                        foreach (u64? var_1 : highlight-lockbox-group) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : highlight-lockbox-group) {
                             object-highlight(var_2, 0, alloc-color(1.00, 1.00, 1.00, 1.00, 0));
                         }
                     }
@@ -1035,7 +905,7 @@ statescript {
                     set-boolean(lockbox-unopened, 1, self);
                 }
                 lambda {
-                    ddict-set(get-symbol(lockbox-ddict, self), get-symbol(new-interactable, self), new-boxed-value(7, get-symbol(new-lockbox, self)));
+                    ddict-set(get-symbol(lockbox-ddict, self), get-symbol(new-interactable, self), boxed_symbol(get-symbol(new-lockbox, self)));
                 }
                 lambda {
                     if (!(rogue-get-current-task-game-mode() == 3)) {
@@ -1106,12 +976,12 @@ statescript {
                         var_2 = get-symbol(lockbox-open-anim, self);
                     }
                     u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-object-locator(get-symbol(interacting-lockbox, self));
-                    *(i32*)*(*var_5 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = get-object-locator(get-symbol(interacting-lockbox, self));
+                    *(i32*)*var_5[1] = 28;
+                    *(u64*)(*var_5[1] + 8) = 0;
+                    *(f32*)(*var_5[1] + 8) = 0.30;
                     animate_(get-symbol(interacting-lockbox, self), var_2, var_5);
                 }
                 lambda {
@@ -1161,7 +1031,7 @@ statescript {
                     set-high-contrast-mode-type(get-symbol(interacting-lockbox, self), 1);
                 }
                 lambda {
-                    ddict-set(get-symbol(lockbox-ddict, self), ddict-get-key-with-value(get-symbol(lockbox-ddict, self), get-symbol(interacting-lockbox, self)), new-boxed-value(0, 0));
+                    ddict-set(get-symbol(lockbox-ddict, self), ddict-get-key-with-value(get-symbol(lockbox-ddict, self), get-symbol(interacting-lockbox, self)), boxed_invalid(0));
                 }
                 lambda {
                     wait-one-frame();

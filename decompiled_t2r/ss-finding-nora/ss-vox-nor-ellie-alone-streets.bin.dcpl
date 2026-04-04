@@ -1174,22 +1174,12 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : workbench-ambushers-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : workbench-ambushers-1) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                            fact-set(global, search-start-played?, new-boxed-value(1, 1));
-                            fact-set(global, ambush-played?, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                            fact-set(global, search-start-played?, boxed_bool(1));
+                            fact-set(global, ambush-played?, boxed_bool(1));
                         }
                     }
                 }

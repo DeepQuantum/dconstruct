@@ -64,7 +64,7 @@ statescript {
                     attach(get-symbol(parcel-id, self), self, tag-symbol(prop-joint, self), 0.00);
                 }
                 lambda {
-                    send-event(set-small-layer-when-dropped, get-symbol(parcel-id, self), new-boxed-value(1, 1));
+                    send-event(set-small-layer-when-dropped, get-symbol(parcel-id, self), boxed_bool(1));
                 }
                 lambda {
                     wait-boolean(carry-box?, 1, self);

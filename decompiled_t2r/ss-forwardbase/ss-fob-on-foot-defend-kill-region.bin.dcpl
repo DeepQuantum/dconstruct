@@ -66,7 +66,7 @@ statescript {
                 lambda {
                     u64? var_0 = event-sender();
                     if (npc-alive?(var_0) && npc-get-faction(var_0, 1) == Scar) {
-                        var_3 = darray-append(get-symbol(enemy-npcs, self), new-boxed-value(7, var_0), 1);
+                        var_3 = darray-append(get-symbol(enemy-npcs, self), boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -76,7 +76,7 @@ statescript {
                 lambda {
                     u64? var_0 = event-sender();
                     if (npc-get-faction(var_0, 1) == Scar) {
-                        var_2 = darray-find-remove(get-symbol(enemy-npcs, self), new-boxed-value(7, var_0), 0);
+                        var_2 = darray-find-remove(get-symbol(enemy-npcs, self), boxed_symbol(var_0), 0);
                     }
                 }
             }
@@ -86,7 +86,7 @@ statescript {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
                     if (!(var_0 == 0)) {
-                        var_1 = darray-append(get-symbol(enemy-npcs, self), new-boxed-value(7, var_0), 1);
+                        var_1 = darray-append(get-symbol(enemy-npcs, self), boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -94,7 +94,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(get-symbol(enemy-npcs, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(get-symbol(enemy-npcs, self), boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }

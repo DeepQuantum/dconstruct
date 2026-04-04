@@ -73,17 +73,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(medicine, med-infected-building-bedrooms-fight-end)) {
-                        foreach (u64? var_2 : grp-med-infected-bedrooms-1) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : grp-med-infected-bedrooms-1) {
                             if (npc-alive?(var_3) || is-speaking?(var_3)) {
                                 if (!npc-on-screen-and-visible?(var_3, -1, 0)) {
                                     kill-entity(var_3);

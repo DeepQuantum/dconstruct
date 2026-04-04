@@ -31,15 +31,15 @@ statescript {
                         send-event(
                             attach-rope-to-spawner,
                             tag-symbol(rope, self),
-                            new-boxed-value(7, tag-symbol(attach-point-1, self)),
-                            new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-1, self), 1))
+                            boxed_symbol(tag-symbol(attach-point-1, self)),
+                            boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-1, self), 1))
                         );
                         wait-one-frame();
                         send-event(
                             attach-rope-to-spawner,
                             tag-symbol(rope, self),
-                            new-boxed-value(7, tag-symbol(attach-point-2, self)),
-                            new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-2, self), 1))
+                            boxed_symbol(tag-symbol(attach-point-2, self)),
+                            boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-2, self), 1))
                         );
                         go(on-horse, 1);
                     }
@@ -74,8 +74,8 @@ statescript {
                     send-event(
                         attach-rope-to-spawner,
                         tag-symbol(rope, self),
-                        new-boxed-value(7, tag-symbol(attach-point-1, self)),
-                        new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-1, self), 1))
+                        boxed_symbol(tag-symbol(attach-point-1, self)),
+                        boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-1, self), 1))
                     );
                 }
                 lambda {
@@ -109,8 +109,8 @@ statescript {
                     send-event(
                         attach-rope-to-spawner,
                         tag-symbol(rope, self),
-                        new-boxed-value(7, tag-symbol(attach-point-2, self)),
-                        new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-2, self), 1))
+                        boxed_symbol(tag-symbol(attach-point-2, self)),
+                        boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-2, self), 1))
                     );
                 }
                 lambda {
@@ -149,12 +149,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -164,8 +164,8 @@ statescript {
                     send-event(
                         attach-rope-to-spawner,
                         tag-symbol(rope, self),
-                        new-boxed-value(7, tag-symbol(attach-point-2, self)),
-                        new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-2, self), 1))
+                        boxed_symbol(tag-symbol(attach-point-2, self)),
+                        boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-2, self), 1))
                     );
                 }
                 lambda {
@@ -197,8 +197,8 @@ statescript {
                     send-event(
                         attach-rope-to-spawner,
                         tag-symbol(rope, self),
-                        new-boxed-value(7, tag-symbol(attach-point-2, self)),
-                        new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-2, self), 1))
+                        boxed_symbol(tag-symbol(attach-point-2, self)),
+                        boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-2, self), 1))
                     );
                 }
                 lambda {
@@ -281,12 +281,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.25;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.25;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.25;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.25;
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -296,8 +296,8 @@ statescript {
                     send-event(
                         detach-rope,
                         tag-symbol(rope, self),
-                        new-boxed-value(7, tag-symbol(attach-point-2, self)),
-                        new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point-2, self), 1))
+                        boxed_symbol(tag-symbol(attach-point-2, self)),
+                        boxed_boundframe(get-spawner-locator(tag-symbol(attach-point-2, self), 1))
                     );
                 }
                 lambda {

@@ -289,17 +289,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected-ground-floor) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected-ground-floor) {
                         if (npc-alive?(var_2)) {
                             unleash-buddy-against-npc(manny, var_2);
                             if (!(npc-buddy-has-kill-token?(manny))) {
@@ -364,17 +354,7 @@ statescript {
                         group-copy(all-infected-npcs, all-through-building-infected);
                         darray-clear(all-through-building-infected);
                         darray-copy-into(all-through-building-infected, darray-clone(all-through-building-infected, single-frame, 0), darray-sorted-indices(all-through-building-infected, through-building-sort-importance-to-player, 0, 1));
-                        foreach (u64? var_4 : all-through-building-infected) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-through-building-infected) {
                             if (npc-alive?(var_5)) {
                                 if (get-boolean(not-found-closest-infected, self) && npc-alive?(var_5) && !npc-shambler?(var_5) || npc-on-screen-and-visible?(var_5, -1, 0) && distance-between-objects(manny, var_5) < 3.50) {
                                     npc-prefer-target(manny, var_5);
@@ -459,7 +439,7 @@ statescript {
                         darray-remove(post-combat-cover-route, 0);
                     }
                     if (darray-count(post-combat-cover-route) == 0 && !(group-get-first-member(post-combat-cover-route) == pos-garage-post-combat-manny-path-4)) {
-                        var_10 = darray-find-remove(post-combat-cover-route, new-boxed-value(7, pos-garage-post-combat-manny-path-4), 0);
+                        var_10 = darray-find-remove(post-combat-cover-route, boxed_symbol(pos-garage-post-combat-manny-path-4), 0);
                     }
                 }
                 lambda {
@@ -637,17 +617,7 @@ statescript {
             track ignore-jumpers {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : all-infected-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-infected-npcs) {
                             if (npc-alive?(var_2)) {
                                 if (npc-using-traversal-action-pack?(var_2)) {
                                     set-focusable-ignore(var_2, 1);
@@ -663,17 +633,7 @@ statescript {
                     wait-boolean(player-interacted-with-elevator, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-die(var_2, 0, 0, 0, 1);
                         }

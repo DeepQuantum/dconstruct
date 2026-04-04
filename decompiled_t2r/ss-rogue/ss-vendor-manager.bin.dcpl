@@ -131,7 +131,7 @@ u16 vendor-initialize-by-type(u16 arg_0, i64 arg_1) {
             0,
             0
         ) && *(i32*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 32) == arg_0) {
-            var_4 = darray-append(vendor-available-group, new-boxed-value(7, *(u64*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 8)), 1);
+            var_4 = darray-append(vendor-available-group, boxed_symbol(*(u64*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 8)), 1);
         }
         i = i + 1;
     }
@@ -153,8 +153,8 @@ u16 vendor-initialize-by-type(u16 arg_0, i64 arg_1) {
                 } else {
                     var_14 = 0;
                 }
-                darray-find-remove(vendor-available-group, new-boxed-value(7, var_14), 0);
-                if (darray-contains?(get-symbol(vendor-available-group-save, self), new-boxed-value(7, var_14)) && arg_0 != 10 && darray-contains?(previous-items, new-boxed-value(7, var_14)) && !is-final-build?()) {
+                darray-find-remove(vendor-available-group, boxed_symbol(var_14), 0);
+                if (darray-contains?(get-symbol(vendor-available-group-save, self), boxed_symbol(var_14)) && arg_0 != 10 && darray-contains?(previous-items, boxed_symbol(var_14)) && !is-final-build?()) {
                     display(dc:format("[DEB-VM] %s was in previous roll or already picked, removing", string-debug(var_14)), 19);
                 }
             }
@@ -177,11 +177,11 @@ u16 vendor-initialize-by-type(u16 arg_0, i64 arg_1) {
                 var_31 = 0;
             }
             set-int32(var_31, 1, self);
-            darray-append(get-symbol(vendor-available-group-save, self), new-boxed-value(7, var_31), 1);
-            darray-append(previous-items, new-boxed-value(7, var_31), 1);
+            darray-append(get-symbol(vendor-available-group-save, self), boxed_symbol(var_31), 1);
+            darray-append(previous-items, boxed_symbol(var_31), 1);
             if (enable-long-gun-holster == var_31 && enable-short-gun-holster == var_31 && 2 <= get-svar(encounter-depth)) {
-                darray-append(previous-items, new-boxed-value(7, enable-short-gun-holster), 1);
-                darray-append(previous-items, new-boxed-value(7, enable-long-gun-holster), 1);
+                darray-append(previous-items, boxed_symbol(enable-short-gun-holster), 1);
+                darray-append(previous-items, boxed_symbol(enable-long-gun-holster), 1);
             }
             if (!is-final-build?()) {
                 var_39 = display(dc:format("[DEB-VM] adding item %s to vendor", string-debug(var_31)), 19);
@@ -336,25 +336,15 @@ u16 vendor-can-roll-item-type?(bool arg_0, i64 arg_1) {
             0,
             0
         ) && *(i32*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 32) == arg_0) {
-            var_4 = darray-append(vendor-available-group, new-boxed-value(7, *(u64*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 8)), 1);
+            var_4 = darray-append(vendor-available-group, boxed_symbol(*(u64*)((**((*var_1 + (arg_1 * 32)) + 24) + (i * 152)) + 8)), 1);
         }
         i = i + 1;
     }
     if (darray-count(vendor-available-group) > 0) {
         if (!(arg_0 == 9)) {
-            foreach (u64? var_10 : previous-items) {
-                u16 var_11;
-                if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                    var_11 = *(u64*)var_10;
-                } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                    var_11 = *(u64*)var_10;
-                } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                    var_11 = *(u64*)var_10;
-                } else {
-                    var_11 = 0;
-                }
-                if (darray-contains?(vendor-available-group, new-boxed-value(7, var_11))) {
-                    darray-find-remove(vendor-available-group, new-boxed-value(7, var_11), 0);
+            foreach (u64? var_11 : previous-items) {
+                if (darray-contains?(vendor-available-group, boxed_symbol(var_11))) {
+                    darray-find-remove(vendor-available-group, boxed_symbol(var_11), 0);
                 }
             }
         }
@@ -392,17 +382,7 @@ u64? vendor-display() {
 
 u64? load-vendor-from-save() {
     set-symbol(vendor-available-group-save, rogue-get-vendor-darray(), self);
-    foreach (u64? var_4 : get-symbol(vendor-available-group-save, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-symbol(vendor-available-group-save, self)) {
         set-int32(var_5, 1, self);
     }
 }
@@ -671,17 +651,7 @@ u64? update-vendor-prng-seeds() {
 
 u16 player-gun-count() {
     u16 var_2;
-    foreach (u64? var_4 : get-player-all-weapons()) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-player-all-weapons()) {
         u16 var_7;
         if (is-firearm?(var_5)) {
             var_7 = 0 + 1;
@@ -725,9 +695,9 @@ u16 vendor-item-transaction(i64 arg_0, i64 arg_1, bool arg_2) {
         var_2 = *((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 120);
     }
     if (arg_2 && get-svar(vendor-currency) < *(i32*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 24)) {
-        speak-text-to-speech-formatted(new-boxed-value(7, VENDOR_PURCHASE_DENIED), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(VENDOR_PURCHASE_DENIED), 1, 0, 1);
         speak-text-to-speech-formatted(
-            new-boxed-value(7, *(u64*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 48)),
+            boxed_symbol(*(u64*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 48)),
             1,
             0,
             1
@@ -753,9 +723,9 @@ u16 vendor-item-transaction(i64 arg_0, i64 arg_1, bool arg_2) {
             0
         );
         set-svar(vendor-currency, get-svar(vendor-currency) - *(i32*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 24));
-        speak-text-to-speech-formatted(new-boxed-value(7, VENDOR_PURCHASE), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(VENDOR_PURCHASE), 1, 0, 1);
         speak-text-to-speech-formatted(
-            new-boxed-value(7, *(u64*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 48)),
+            boxed_symbol(*(u64*)((**((*var_1 + (arg_0 * 32)) + 24) + (arg_1 * 152)) + 48)),
             1,
             0,
             1
@@ -1076,7 +1046,7 @@ statescript {
         block event purchase {
             track main {
                 lambda {
-                    broadcast-event(vendor-purchase, new-boxed-value(2, event-arg-int32(1)), new-boxed-value(2, event-arg-int32(0)));
+                    broadcast-event(vendor-purchase, boxed_i32(event-arg-int32(1)), boxed_i32(event-arg-int32(0)));
                 }
                 lambda {
                     vendor-item-transaction(event-arg-int32(0), event-arg-int32(1), 1);
@@ -1238,16 +1208,16 @@ statescript {
         block event player-upgrade-enabled {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(vendor-available-group-save, self), new-boxed-value(7, enable-stun-bomb))) {
-                        darray-find-remove(get-symbol(vendor-available-group-save, self), new-boxed-value(7, enable-stun-bomb), 0);
-                        darray-append(get-symbol(vendor-available-group-save, self), new-boxed-value(7, enable-smoke-bomb), 0);
+                    if (darray-contains?(get-symbol(vendor-available-group-save, self), boxed_symbol(enable-stun-bomb))) {
+                        darray-find-remove(get-symbol(vendor-available-group-save, self), boxed_symbol(enable-stun-bomb), 0);
+                        darray-append(get-symbol(vendor-available-group-save, self), boxed_symbol(enable-smoke-bomb), 0);
                         set-int32(enable-smoke-bomb, 1, self);
                         set-int32(enable-stun-bomb, 0, self);
                     }
                 }
                 lambda {
-                    if (darray-contains?(get-symbol(vendor-available-group-save, self), new-boxed-value(7, enable-stun-bomb-recipe))) {
-                        darray-find-remove(get-symbol(vendor-available-group-save, self), new-boxed-value(7, enable-stun-bomb-recipe), 0);
+                    if (darray-contains?(get-symbol(vendor-available-group-save, self), boxed_symbol(enable-stun-bomb-recipe))) {
+                        darray-find-remove(get-symbol(vendor-available-group-save, self), boxed_symbol(enable-stun-bomb-recipe), 0);
                         set-int32(enable-stun-bomb-recipe, 0, self);
                     }
                 }

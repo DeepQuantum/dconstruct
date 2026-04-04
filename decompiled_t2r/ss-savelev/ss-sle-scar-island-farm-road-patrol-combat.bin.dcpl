@@ -279,17 +279,7 @@ statescript {
                 lambda {
                     if (!tension-mode-is?(3)) {
                         set-int32(num-npcs-in-rgn, 0, self);
-                        foreach (u64? var_2 : grp-sle-scar-island-farm-road-patrol) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : grp-sle-scar-island-farm-road-patrol) {
                             if (object-in-region?(var_3, rgn-7783)) {
                                 set-int32(num-npcs-in-rgn, get-int32(num-npcs-in-rgn, self) + 1, self);
                             }
@@ -337,17 +327,7 @@ statescript {
                     npc-request-lead-spline(yara, spl-sle-scar-island-to-farm-road-1, player, *sle-scar-island-farm-road-lead-settings*, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-farm-road-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-farm-road-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-stop(var_2);
                             if (tension-mode-is?(3)) {
@@ -445,34 +425,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-patrol-exit-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-patrol-exit-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     animate_(npc-sle-scar-island-farm-road-patrol-1, sle-scar-island-patrol-exit--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-patrol-exit-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-patrol-exit-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(npc-sle-scar-island-farm-road-patrol-2, sle-scar-island-patrol-exit--male, var_0);
                 }
                 lambda {
@@ -518,17 +498,7 @@ statescript {
                     send-event(started-combat, ss-vox-sle-farmland-passing-troops-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-farm-road-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-farm-road-patrol) {
                         if (npc-alive?(var_2)) {
                             stop-animating(var_2, 2, 2.00, 0, 0);
                         }
@@ -582,19 +552,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(grp-sle-scar-island-farm-road-patrol, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(grp-sle-scar-island-farm-road-patrol, single-frame, 0)) {
                         if (npc-alive?(var_3) && distance-between-objects-greater-than?(var_3, player, 30.00, 1)) {
-                            darray-find-remove(grp-sle-scar-island-farm-road-patrol, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(grp-sle-scar-island-farm-road-patrol, boxed_symbol(var_3), 0);
                             kill-entity(var_3);
                         }
                     }
@@ -631,17 +591,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-farm-road-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-farm-road-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-farmland-front-1);
                         }
@@ -653,17 +603,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-farm-road-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-farm-road-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-set-comm-group-id(var_2, farmland);
                             npc-make-aware-of-at(var_2, player, npc-get-target-entity-position(var_2), npc-get-awareness(var_2, player), *npc-awareness-options-silent*, 0);
@@ -675,7 +615,7 @@ statescript {
         block event spillover-to-farmland {
             track main {
                 lambda {
-                    if (darray-contains?(grp-sle-scar-island-farm-road-patrol, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(grp-sle-scar-island-farm-road-patrol, boxed_symbol(event-arg-symbol(0)))) {
                         set-svar-as-boolean(sle-scar-farmland-spillover-knowledge-share, 1);
                     }
                 }

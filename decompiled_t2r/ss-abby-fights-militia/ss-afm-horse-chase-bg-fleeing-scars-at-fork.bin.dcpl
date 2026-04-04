@@ -60,17 +60,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-fleeing-scars-at-fork) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-at-fork) {
                         wait-spawn-entity(var_2, 1);
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 70.00);
@@ -95,17 +85,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-2) {
                         wait-spawn-entity(var_2, 1);
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 70.00);
@@ -119,17 +99,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-3) {
                         wait-spawn-entity(var_2, 1);
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 70.00);
@@ -621,32 +591,12 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-all) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-all) {
                         if (!(var_3 == get-symbol(grapple-npc, ss-afm-horse-chase-grapple-systemic-1))) {
                             npc-die-if-alive(var_3);
                         }
                     }
-                    foreach (u64? var_6 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-all) {
-                        u16 var_7;
-                        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                            var_7 = *(u64*)var_6;
-                        } else {
-                            var_7 = 0;
-                        }
+                    foreach (u64? var_7 : grp-afm-horse-chase-bg-fleeing-scars-at-fork-all) {
                         while (!!(object-on-screen-and-visible?(var_7, -1, 0))) {
                             wait-one-frame();
                         }

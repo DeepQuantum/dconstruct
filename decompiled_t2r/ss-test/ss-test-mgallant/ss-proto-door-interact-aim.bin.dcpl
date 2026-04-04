@@ -13,17 +13,7 @@
 
 u16 npc-using-door-tap() {
     u16 var_1;
-    foreach (u64? var_2 : all-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-npcs) {
         u16 var_6;
         if (0 == 0 && distance-between-objects-less-than?(self, var_3, 1.50) && npc-using-traversal-action-pack?(var_3)) {
             var_6 = var_3;
@@ -190,9 +180,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
                     animate_(self, idle, var_0);
                 }
                 lambda {
@@ -223,9 +213,9 @@ statescript {
  else if (can-lock-unlock-door?()) {
                                 script-caption(player, "Unlocked", 1.00, 0, 0);
                                 u64? var_4 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_4 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_4 + (0 * 8)) + 8) = 0.30;
+                                *(i32*)*var_4[0] = 28;
+                                *(u64*)(*var_4[0] + 8) = 0;
+                                *(f32*)(*var_4[0] + 8) = 0.30;
                                 animate_(self, ajar, var_4);
                                 set-boolean(locked, 0, self);
                                 set-boolean(lock-input, 1, self);
@@ -275,9 +265,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
                     animate_(self, ajar, var_0);
                 }
                 lambda {
@@ -479,7 +469,7 @@ statescript {
                     );
                 }
                 lambda {
-                    broadcast-event(door-opened, new-boxed-value(7, get-self-id()));
+                    broadcast-event(door-opened, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-boolean(allow-interact, 1, self);
@@ -507,17 +497,7 @@ statescript {
                 }
                 lambda {
                     if (deterministic-nth-frame?(10) && !allow-door-interact?()) {
-                        foreach (u64? var_3 : all-buddy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-buddy-npcs) {
                             if (buddy-should-close-door?(var_4)) {
                                 script-caption(var_4, "Closing door", -1.00, 0, 0);
                                 go(closed, 1);

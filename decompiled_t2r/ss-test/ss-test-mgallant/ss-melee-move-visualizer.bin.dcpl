@@ -31,9 +31,9 @@ u64? spawn-visualization-npc(u64? arg_0, u64? arg_1, u64? arg_2) {
     send-event(
         init,
         spawn-entity-at(arg_0, get-bound-frame(spawn-loc, self), 0),
-        new-boxed-value(7, arg_1),
-        new-boxed-value(18, get-bound-frame(spawn-loc, self)),
-        new-boxed-value(7, get-self-id())
+        boxed_symbol(arg_1),
+        boxed_boundframe(get-bound-frame(spawn-loc, self)),
+        boxed_symbol(get-self-id())
     );
     return set-bound-frame(spawn-loc, offset-locator(get-bound-frame(spawn-loc, self), alloc-vector(arg_2, 0.00, 0.00, 1.00, 0)), self);
 }
@@ -67,17 +67,7 @@ statescript {
                 lambda {
                     if (task-active?(melee, tag-symbol(subtask, self))) {
                         set-bound-frame(spawn-loc, get-spawner-locator(self, 1), self);
-                        foreach (u64? var_6 : tag-symbol(attack-group, self)) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : tag-symbol(attack-group, self)) {
                             spawn-visualization-npc(tag-symbol(npc-spawner, self), var_7, tag-float(x-offset, self));
                         }
                         go(repeat-melee-moves, 1);

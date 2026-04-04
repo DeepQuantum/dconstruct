@@ -271,17 +271,7 @@ statescript {
                             promote-post-death-tip(TIP_STUN_STRIKE_1, 0);
                         } else if (player-is-sprinting?(1) && get-post-death-tip-age(TIP_MOVEMENT_NOISE) > 1800.00) {
                             u16 var_7;
-                            foreach (u64? var_8 : all-enemy-npcs) {
-                                u16 var_9;
-                                if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                    var_9 = *(u64*)var_8;
-                                } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                    var_9 = *(u64*)var_8;
-                                } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                    var_9 = *(u64*)var_8;
-                                } else {
-                                    var_9 = 0;
-                                }
+                            foreach (u64? var_9 : all-enemy-npcs) {
                                 u16 var_11;
                                 if (npc-alive?(var_9)) {
                                     if (npc-can-see?(var_9, player) && npc-get-awareness(var_9, player) == 2) {
@@ -305,17 +295,7 @@ statescript {
                         if (darray-count(all-enemy-npcs) == 0) {}
 
                         u16 var_5;
-                        foreach (u64? var_6 : all-enemy-npcs) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : all-enemy-npcs) {
                             u16 var_9;
                             if (!npc-cant-see-player?(var_7)) {
                                 var_9 = 0;

@@ -123,21 +123,21 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, new-boxed-value(1, get-boolean(inside-rope, self)));
+                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, boxed_bool(get-boolean(inside-rope, self)));
                 }
             }
         }
         block event inside {
             track main {
                 lambda {
-                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, new-boxed-value(1, 1));
+                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, boxed_bool(1));
                 }
             }
         }
         block event outside {
             track main {
                 lambda {
-                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, new-boxed-value(1, 0));
+                    send-event(set-character-collision-before-drape-enabled, carry-object-pat-hose-3, boxed_bool(0));
                 }
             }
         }

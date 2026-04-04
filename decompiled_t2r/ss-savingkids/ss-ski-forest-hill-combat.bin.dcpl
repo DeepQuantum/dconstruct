@@ -72,17 +72,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : forest-escape-hill-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : forest-escape-hill-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                         }
@@ -127,17 +117,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : forest-escape-hill-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : forest-escape-hill-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                         }

@@ -52,7 +52,7 @@ statescript {
                     wait-for-object-spawned-with-look(player, ellie-epilogue, 0);
                 }
                 lambda {
-                    send-event(mess-hair, player, new-boxed-value(6, 0.00));
+                    send-event(mess-hair, player, boxed_f32(0.00));
                 }
                 lambda {
                     facial-idle-new-default-emotion(player, exhausted-ambient-no-idle, 1.50, 0.20, 0.25);

@@ -91,7 +91,7 @@ embedded@18d8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? ellie-2h-superheavy-sprinting-attack-1__melee-event-list@1130
 embedded@d510(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, new-boxed-value(7, ellie-2h-superheavy-sprinting-attack-1), new-boxed-value(7, arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(ellie-2h-superheavy-sprinting-attack-1), boxed_symbol(arg_2));
 }
 
 u64? ellie-2h-superheavy-sprinting-attack-1
@@ -313,10 +313,10 @@ embedded@c230(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 302);
     }
     u64? var_3 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_3);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_3);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return !(arg_2 == 0) && is-npc?(arg_2) && npc-alive?(arg_2) && npc-get-limb-state(arg_2) == 1 && var_3 && var_3 && var_3 && var_3 && var_3 && var_3;
 }
 
@@ -328,10 +328,10 @@ embedded@c590(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         melee-debug-text-file-line-fail("(valid-symbol? defender)", "t2r/src/game/scriptx/melee/player-standing/imports/player-standing-macros.dcx", 321);
     }
     u64? var_3 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_3);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_3);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return !(arg_2 == 0) && is-npc?(arg_2) && npc-alive?(arg_2) && npc-get-limb-state(arg_2) == 1 && var_3 && var_3 && var_3 && var_3 && var_3 && var_3;
 }
 
@@ -386,15 +386,15 @@ embedded@cb98(u64? arg_0, bool arg_1, string arg_2, u64? arg_3, u64? arg_4, u64?
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 3.00 && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_7
         );
         var_1 = var_3;
@@ -576,10 +576,10 @@ ellie-2h-superheavy-dodge-forward-attack-1
 ellie-2h-superheavy-dodge-back-attack-1
 embedded@c0f0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_2 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_2);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_2);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && var_2 && var_2 && var_2 && var_2 && var_2 && var_2;
 }
 
@@ -619,9 +619,9 @@ embedded@d140(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -669,9 +669,9 @@ embedded@f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-character?(arg_2) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && !character-melee-event-active?(arg_2, 36, 0) && characters-are-enemies?(arg_1, arg_2)) {
@@ -729,9 +729,9 @@ embedded@f10(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         );
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         spawn-melee-particle-effects(arg_1, arg_2, 0, arg_3, arg_4, arg_5);
         if (!character-in-finisher?(arg_1) && 1) {
@@ -767,7 +767,7 @@ embedded@c368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? ellie-2h-superheavy-attack-2__melee-event-list@f78
 embedded@c7b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, new-boxed-value(7, ellie-2h-superheavy-attack-2), new-boxed-value(7, arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(ellie-2h-superheavy-attack-2), boxed_symbol(arg_2));
 }
 
 u64? ellie-2h-superheavy-attack-2
@@ -829,9 +829,9 @@ embedded@1948(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-character?(arg_2) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && !character-melee-event-active?(arg_2, 36, 0) && characters-are-enemies?(arg_1, arg_2)) {
@@ -889,9 +889,9 @@ embedded@1948(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         );
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         spawn-melee-particle-effects(arg_1, arg_2, 0, arg_3, arg_4, arg_5);
         if (!character-in-finisher?(arg_1) && 1) {
@@ -934,7 +934,7 @@ embedded@b920(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? ellie-2h-superheavy-attack-1__melee-event-list@1ac8
 embedded@b700(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, new-boxed-value(7, ellie-2h-superheavy-attack-1), new-boxed-value(7, arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(ellie-2h-superheavy-attack-1), boxed_symbol(arg_2));
 }
 
 u64? ellie-2h-superheavy-attack-1
@@ -1118,7 +1118,7 @@ embedded@c000(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? ellie-2h-superheaby-attack-hit-2
 ellie-2h-superheaby-attack-hit-1
 embedded@bb98(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
     return melee-log-player-event("melee-player-sync-hit", 1);
 }
 
@@ -1160,7 +1160,7 @@ embedded@d328(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? ellie-2h-superheavy-dodge-forward-attack-1__melee-event-list@1a80
 embedded@cfc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, new-boxed-value(7, ellie-2h-superheavy-dodge-forward-attack-1), new-boxed-value(7, arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(ellie-2h-superheavy-dodge-forward-attack-1), boxed_symbol(arg_2));
 }
 
 u64? ellie-2h-superheavy-dodge-forward-attack-1
@@ -1176,6 +1176,6 @@ embedded@b768(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
 
 u64? ellie-2h-superheavy-dodge-back-attack-1__melee-event-list@1b68
 embedded@bd68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(new-swing, ss-melee-dodge-attack-spam, new-boxed-value(7, ellie-2h-superheavy-dodge-back-attack-1), new-boxed-value(7, arg_2));
+    return send-event(new-swing, ss-melee-dodge-attack-spam, boxed_symbol(ellie-2h-superheavy-dodge-back-attack-1), boxed_symbol(arg_2));
 }
 

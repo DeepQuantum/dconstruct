@@ -164,46 +164,46 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 18;
                     animate_(yara, sle-scar-island-enter-logging-camp--yara, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 20;
                     wait-animate_(player, sle-scar-island-enter-logging-camp--abby, var_0);
                 }
                 lambda {
@@ -295,30 +295,30 @@ statescript {
                             var_6 = 0;
                         }
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 27;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (1 * 8)) + 8) = 2;
-                        *(i32*)*(*var_7 + (2 * 8)) = 29;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                        *(i32*)*var_7[1] = 27;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(u8*)(*var_7[1] + 8) = 2;
+                        *(i32*)*var_7[2] = 29;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(u8*)(*var_7[2] + 8) = 2;
                         animate_(var_2, var_6, var_7);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(obj-sle-scar-island-discover-logging-camp-horse-1, sle-scar-island-enter-logging-camp--horse1, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(obj-sle-scar-village-chauffeur-1, sle-scar-island-enter-logging-camp--scar3, var_0);
                 }
                 lambda {
@@ -326,23 +326,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(obj-sle-scar-island-discover-logging-camp-cart-1, sle-scar-island-enter-logging-camp--cart, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(npc-sle-scar-island-discover-logging-camp-scar-1, sle-scar-island-enter-logging-camp--scar1, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     wait-animate_(npc-sle-scar-village-combat-1, sle-scar-island-enter-logging-camp--scar2, var_0);
                 }
                 lambda {
@@ -352,17 +352,7 @@ statescript {
                     signal(kids-animation-done, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-enter-logging-camp-kid) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-enter-logging-camp-kid) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -419,17 +409,7 @@ statescript {
                     wait-spawn-npc-group-async(igc-horse-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : igc-horse-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : igc-horse-npcs) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -648,23 +628,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(npc-sle-scar-village-vignette-14, sle-scar-island-logging-camp-vignettes--scar1, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     animate_(npc-sle-scar-village-vignette-13, sle-scar-island-logging-camp-vignettes--scar2, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-discover-logging-camp-2, 1);
                     wait-animate_(npc-sle-scar-village-vignette-12, sle-scar-island-logging-camp-vignettes--scar3, var_0);
                 }
                 lambda {
@@ -727,17 +707,7 @@ statescript {
             }
             track high-contrast-mode {
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-enter-logging-camp-kid) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-enter-logging-camp-kid) {
                         set-high-contrast-mode-type(var_2, 5);
                     }
                 }
@@ -769,17 +739,7 @@ statescript {
                     gui2-disable-categories/f(16777216);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-vignette-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-vignette-npcs) {
                         if (npc-alive?(var_2) && npc-on-screen-and-visible?(var_2, -1, 0)) {
                             npc-force-lod(var_2, 0);
                         }
@@ -797,17 +757,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-scar-island-enter-logging-camp-kid) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-scar-island-enter-logging-camp-kid) {
                         kill-entity-if-spawned(var_2);
                     }
                 }

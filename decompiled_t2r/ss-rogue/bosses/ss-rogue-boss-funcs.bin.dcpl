@@ -17,17 +17,7 @@ u64? boss--player-using-blind-settings?() {
 
 u16 player-has-no-ammo?() {
     u16 var_2;
-    foreach (u64? var_4 : get-player-all-weapons()) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-player-all-weapons()) {
         var_2 = 0 + get-total-ammo(var_5);
     }
     u16 var_8;
@@ -53,17 +43,7 @@ u64? boss--subtask-is-boss-encounter(u64 arg_0) {
 
 bool boss--player-has-low-ammo(u16 arg_0) {
     u16 var_2;
-    foreach (u64? var_4 : get-player-all-weapons()) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-player-all-weapons()) {
         var_2 = 0 + get-total-ammo(var_5);
     }
     return var_2 < arg_0;

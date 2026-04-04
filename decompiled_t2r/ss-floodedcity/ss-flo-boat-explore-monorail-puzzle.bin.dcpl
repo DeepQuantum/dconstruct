@@ -104,7 +104,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(put-on-spline, rope-coil-flo-monorail-1, new-boxed-value(7, spl-flo-boat-rope-solved-roof-spline-1));
+                    send-event(put-on-spline, rope-coil-flo-monorail-1, boxed_symbol(spl-flo-boat-rope-solved-roof-spline-1));
                 }
                 lambda {
                     go(complete, 1);
@@ -116,7 +116,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(put-on-spline, rope-coil-flo-monorail-1, new-boxed-value(7, spl-flo-boat-rope-solved-side-spline-1));
+                    send-event(put-on-spline, rope-coil-flo-monorail-1, boxed_symbol(spl-flo-boat-rope-solved-side-spline-1));
                 }
                 lambda {
                     go(complete, 1);

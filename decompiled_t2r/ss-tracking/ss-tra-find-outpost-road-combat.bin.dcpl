@@ -144,17 +144,7 @@ statescript {
                     if (player-in-region?(rgn-tra-road-disable-perception-1, 2)) {
                         npc-enable-perception(npc-listen-mode-tut-runner-4);
                     } else {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             npc-set-script-low-priority(var_3);
                             npc-enable-perception(var_3);
                         }
@@ -250,17 +240,7 @@ statescript {
         block event exit {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-low-priority(var_2);
                         npc-enable-perception(var_2);
                     }
@@ -272,17 +252,7 @@ statescript {
                 lambda {
                     if (!get-boolean(player-exit-early, self)) {
                         if (npc-is-perception-disabled?(event-arg-symbol(1))) {
-                            foreach (u64? var_4 : all-enemy-npcs) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : all-enemy-npcs) {
                                 npc-set-script-low-priority(var_5);
                                 npc-enable-perception(var_5);
                             }
@@ -339,17 +309,7 @@ statescript {
                     set-boolean(player-exit-early, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-only-no-perception(var_2);
                         npc-move-to(var_2, get-spawner-locator(pos-infected-run-away-1, 1), 1, 0, 0, 0, 0, 0);
                         npc-make-aware-of-at(var_2, player, get-spawner-position(npc-listen-mode-tut-runner-4, 1), 4, 0, 0);
@@ -376,17 +336,7 @@ statescript {
                     set-boolean(player-exit-early, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-only-no-perception(var_2);
                         npc-move-to(var_2, get-spawner-locator(pos-infected-run-away-2, 1), 1, 0, 0, 0, 0, 0);
                         npc-make-aware-of-at(var_2, player, get-spawner-position(npc-listen-mode-tut-runner-4, 1), 4, 0, 0);
@@ -402,17 +352,7 @@ statescript {
                     set-boolean(player-exit-early, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-is-perception-disabled?(var_2)) {
                             npc-set-script-low-priority(var_2);
                             infected-allow-sleep(var_2, 0);
@@ -472,28 +412,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-find-outpost-outro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-find-outpost-outro-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(tra-find-outpost-outro-light-object-1, tra-find-outpost-outro--abby--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-find-outpost-outro-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-find-outpost-outro-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-find-outpost-outro--abby, var_0);
                 }
                 lambda {

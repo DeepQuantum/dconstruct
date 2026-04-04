@@ -101,7 +101,7 @@ statescript {
         block event Attack {
             track main {
                 lambda {
-                    broadcast-event(efp-watch-player-hit-infected, new-boxed-value(7, *(u64*)(event::get-attack-info(get-event()) + 16)));
+                    broadcast-event(efp-watch-player-hit-infected, boxed_symbol(*(u64*)(event::get-attack-info(get-event()) + 16)));
                 }
                 lambda {
                     if (!(npc-alive?(self))) {

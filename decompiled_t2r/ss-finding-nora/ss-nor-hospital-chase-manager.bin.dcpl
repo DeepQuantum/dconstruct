@@ -134,26 +134,26 @@ statescript {
                 lambda {
                     if (script-in-state?(ss-nor-hospital-chase-1, door-struggle)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-door-struggle-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-door-struggle-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(obj-nor-door-struggle-1, chase-stuck-at-door-enter--door, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-door-struggle-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.25;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.25;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-nor-door-struggle-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.25;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.25;
                         animate_(npc-nor-nora-1, chase-stuck-at-door-enter--nora, var_3);
                     }
                 }

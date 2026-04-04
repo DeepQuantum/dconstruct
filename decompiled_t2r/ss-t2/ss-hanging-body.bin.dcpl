@@ -35,15 +35,15 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-self-id(), 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (2 * 8)) = 58;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = tag-float(rope-length, self) / 10.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-self-id(), 1);
+                    *(i32*)*var_1[1] = 56;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
+                    *(i32*)*var_1[2] = 58;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = tag-float(rope-length, self) / 10.00;
                     animate_(get-self-id(), length, var_1);
                 }
                 lambda {
@@ -63,18 +63,18 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = tag-float(sway-speed, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 40;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = random-float(0);
+                    *(i32*)*var_1[0] = 31;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 56;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = tag-float(sway-speed, self);
+                    *(i32*)*var_1[2] = 40;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(i32*)(*var_1[2] + 8) = 1;
+                    *(i32*)*var_1[3] = 58;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = random-float(0);
                     animate_(get-self-id(), sway, var_1);
                 }
             }
@@ -90,7 +90,7 @@ statescript {
                                         if (valid-point?(event-arg-point(3))) {
                                             if (distance-between-points(event-arg-point(3), get-joint-position(self, head)) < 0.20) {
                                                 set-boolean(head-already-exploded, 1, self);
-                                                broadcast-event(hanging-body-shot-down, new-boxed-value(7, get-self-id()));
+                                                broadcast-event(hanging-body-shot-down, boxed_symbol(get-self-id()));
                                                 kill-rigid-body(self, head);
                                                 spawn-particles-at-joint(
                                                     phys-headshot,

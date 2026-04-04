@@ -57,17 +57,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-vignette-e-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-e-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-e-npcs) {
                         if (npc-alive?(var_2)) {
                             set-focusable-ignore(var_2, 1);
                             npc-set-script-only-with-perception(var_2);
@@ -83,10 +73,10 @@ statescript {
                     wait-boolean(start-vignette, 1, self);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-9), 1);
+                    darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-9), 1);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-scars, new-boxed-value(7, npc-village-arrive-scar-9), 1);
+                    darray-append(grp-afm-burning-village-scars, boxed_symbol(npc-village-arrive-scar-9), 1);
                 }
                 lambda {
                     wait-one-frame();
@@ -99,17 +89,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-e-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-e-npcs) {
                         if (npc-alive?(var_2) || npc-on-screen-and-visible?(var_2, -1, 0)) {
                             if (npc-visible-in-listen-mode?(var_2, 0)) {
                                 set-boolean(start-vignette, 1, self);
@@ -153,10 +133,10 @@ statescript {
                     send-event(spawn-scar-reinf, ss-afm-burning-village-arrive-combat-1);
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-militia-9), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(npc-village-arrive-militia-9), 1);
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-scar-9), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(npc-village-arrive-scar-9), 1);
                 }
                 lambda {
                     set-focusable-ignore(npc-village-arrive-militia-9, 0);
@@ -258,18 +238,8 @@ statescript {
         block event melee-attack-hit {
             track main {
                 lambda {
-                    if (darray-contains?(afm-vignette-e-npcs, new-boxed-value(7, event-arg-symbol(0))) && event-arg-symbol(1) == player) {
-                        foreach (u64? var_5 : afm-vignette-e-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                    if (darray-contains?(afm-vignette-e-npcs, boxed_symbol(event-arg-symbol(0))) && event-arg-symbol(1) == player) {
+                        foreach (u64? var_6 : afm-vignette-e-npcs) {
                             if (npc-alive?(var_6)) {
                                 npc-make-aware-of(var_6, player, 2, *npc-awareness-options-pretend-seen*);
                             }
@@ -292,17 +262,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-e-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-e-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                             character-set-invincibility(var_2, 0, 0);
@@ -310,8 +270,8 @@ statescript {
                             npc-force-target(var_2, 0);
                             npc-clear-look-aim-at(var_2);
                             set-object-health(var_2, 1.00);
-                            darray-find-remove(npcs-in-vignette, new-boxed-value(7, var_2), 0);
-                            darray-append(grp-afm-vignette-4, new-boxed-value(7, var_2), 1);
+                            darray-find-remove(npcs-in-vignette, boxed_symbol(var_2), 0);
+                            darray-append(grp-afm-vignette-4, boxed_symbol(var_2), 1);
                         }
                     }
                 }

@@ -293,11 +293,11 @@ u16 handle-item-recieved-event--notification-mgr(u16 arg_0, u64? arg_1, u64? arg
                     } else {
                         var_14 = 0;
                     }
-                    ddict-set(var_6, amount, new-boxed-value(2, var_14 + arg_1));
-                    ddict-set(var_6, total, new-boxed-value(2, hud2-pickup-notification-item-total(arg_0)));
-                    ddict-set(var_6, speak?, new-boxed-value(1, arg_2));
-                    darray-set(get-symbol(queued-pickup-darray, self), i, new-boxed-value(7, var_6));
-                    darray-set(get-symbol(queued-pickup-timers, self), i, new-boxed-value(6, 0.00));
+                    ddict-set(var_6, amount, boxed_i32(var_14 + arg_1));
+                    ddict-set(var_6, total, boxed_i32(hud2-pickup-notification-item-total(arg_0)));
+                    ddict-set(var_6, speak?, boxed_bool(arg_2));
+                    darray-set(get-symbol(queued-pickup-darray, self), i, boxed_symbol(var_6));
+                    darray-set(get-symbol(queued-pickup-timers, self), i, boxed_f32(0.00));
                 }
                 var_9 = 1;
                 var_10 = darray-count(get-symbol(queued-pickup-darray, self));
@@ -307,18 +307,18 @@ u16 handle-item-recieved-event--notification-mgr(u16 arg_0, u64? arg_1, u64? arg
         }
         if (!var_3) {
             u64? var_25 = ddict-clone(pickup-notification-data-template, 0);
-            ddict-set(var_25, item-id, new-boxed-value(7, arg_0));
-            ddict-set(var_25, amount, new-boxed-value(2, arg_1));
-            ddict-set(var_25, total, new-boxed-value(2, hud2-pickup-notification-item-total(arg_0)));
+            ddict-set(var_25, item-id, boxed_symbol(arg_0));
+            ddict-set(var_25, amount, boxed_i32(arg_1));
+            ddict-set(var_25, total, boxed_i32(hud2-pickup-notification-item-total(arg_0)));
             u16 var_32;
             if (get-treasure-by-id(arg_0, 0) && *(i32*)(get-treasure-by-id(arg_0, 0) + 96) == 3) {
                 var_32 = 0;
             } else {
                 var_32 = arg_2;
             }
-            ddict-set(var_25, speak?, new-boxed-value(1, var_32));
-            darray-append(get-symbol(queued-pickup-darray, self), new-boxed-value(7, var_25), 0);
-            var_0 = darray-append(get-symbol(queued-pickup-timers, self), new-boxed-value(6, 0.00), 0);
+            ddict-set(var_25, speak?, boxed_bool(var_32));
+            darray-append(get-symbol(queued-pickup-darray, self), boxed_symbol(var_25), 0);
+            var_0 = darray-append(get-symbol(queued-pickup-timers, self), boxed_f32(0.00), 0);
         } else {
             var_0 = 0;
         }
@@ -370,11 +370,11 @@ u64? holster-input-delay?--notification() {
 
 u64? populate-w-notification-widget-list() {
     set-symbol(w-notification-widget-list, darray-create(self, -1, 0), self);
-    darray-append(get-symbol(w-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("itemName", get-symbol(notification-widget, self))), 0);
-    darray-append(get-symbol(w-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("actionText", get-symbol(notification-widget, self))), 0);
-    darray-append(get-symbol(w-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("itemIcon", get-symbol(notification-widget, self))), 0);
-    darray-append(get-symbol(w-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("textGroup", get-symbol(notification-widget, self))), 0);
-    return darray-append(get-symbol(w-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("header", get-symbol(notification-widget, self))), 0);
+    darray-append(get-symbol(w-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("itemName", get-symbol(notification-widget, self))), 0);
+    darray-append(get-symbol(w-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("actionText", get-symbol(notification-widget, self))), 0);
+    darray-append(get-symbol(w-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("itemIcon", get-symbol(notification-widget, self))), 0);
+    darray-append(get-symbol(w-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("textGroup", get-symbol(notification-widget, self))), 0);
+    return darray-append(get-symbol(w-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("header", get-symbol(notification-widget, self))), 0);
 }
 
 u16 get-notification-widget-child(u64? arg_0) {
@@ -445,11 +445,11 @@ u64? refresh-notifications-enabled() {
 
 u64? populate-w-challenge-notification-widget-list() {
     set-symbol(w-challenge-notification-widget-list, darray-create(self, -1, 0), self);
-    darray-append(get-symbol(w-challenge-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("itemName", get-symbol(challenge-notification-widget, self))), 0);
-    darray-append(get-symbol(w-challenge-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("actionText", get-symbol(challenge-notification-widget, self))), 0);
-    darray-append(get-symbol(w-challenge-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("itemIcon", get-symbol(challenge-notification-widget, self))), 0);
-    darray-append(get-symbol(w-challenge-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("textGroup", get-symbol(challenge-notification-widget, self))), 0);
-    return darray-append(get-symbol(w-challenge-notification-widget-list, self), new-boxed-value(7, gui2-find-widget-path("header", get-symbol(challenge-notification-widget, self))), 0);
+    darray-append(get-symbol(w-challenge-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("itemName", get-symbol(challenge-notification-widget, self))), 0);
+    darray-append(get-symbol(w-challenge-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("actionText", get-symbol(challenge-notification-widget, self))), 0);
+    darray-append(get-symbol(w-challenge-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("itemIcon", get-symbol(challenge-notification-widget, self))), 0);
+    darray-append(get-symbol(w-challenge-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("textGroup", get-symbol(challenge-notification-widget, self))), 0);
+    return darray-append(get-symbol(w-challenge-notification-widget-list, self), boxed_symbol(gui2-find-widget-path("header", get-symbol(challenge-notification-widget, self))), 0);
 }
 
 u16 start-new-notification-visibility-timer() {
@@ -541,17 +541,7 @@ u64? debug-send-all-notifications() {
 
 u16 find-notification-for-this-item(u16 arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : notification-queue) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : notification-queue) {
         u64? var_4 = ddict-get(var_3, item-id);
         u16 var_5;
         if (var_4 && *(u16*)(var_4 + 12) == 7) {
@@ -600,17 +590,7 @@ u64? safe-to-open-backpack?() {
 
 u16 find-notification-index-for-this-item(u16 arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : notification-queue) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : notification-queue) {
         u64? var_4 = ddict-get(var_3, item-id);
         u16 var_5;
         if (var_4 && *(u16*)(var_4 + 12) == 7) {
@@ -739,22 +719,22 @@ u64? animate-notification() {
     }
     play-sound(var_11, 0);
     if (!(var_5 == 0)) {
-        speak-text-to-speech-formatted(new-boxed-value(7, var_5), 2, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(var_5), 2, 0, 1);
     }
     if (!(var_14 == 0)) {
         u64? var_19 = #%alloc-array(single-frame, 1, 2, 0);
-        *(u64*)(*var_19 + (0 * 8)) = new-boxed-value(7, var_14);
-        *(u64*)(*var_19 + (1 * 8)) = new-boxed-value(7, var_7);
-        speak-text-to-speech-formatted(new-boxed-value(21, var_19), 2, 0, 1);
+        *(u64*)var_19[0] = boxed_symbol(var_14);
+        *(u64*)var_19[1] = boxed_symbol(var_7);
+        speak-text-to-speech-formatted(boxed_array(var_19), 2, 0, 1);
     } else {
-        speak-text-to-speech-formatted(new-boxed-value(7, var_7), 2, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(var_7), 2, 0, 1);
     }
     if (var_13 == 5) {
         if (get-treasure-by-id(var_3, 0) && *(i32*)(get-treasure-by-id(var_3, 0) + 96) == 1) {
-            speak-text-to-speech-formatted(new-boxed-value(7, HUD_TTS_COIN), 2, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(HUD_TTS_COIN), 2, 0, 1);
         }
     }
-    return speak-text-to-speech-formatted(new-boxed-value(7, var_9), 2, 0, 1);
+    return speak-text-to-speech-formatted(boxed_symbol(var_9), 2, 0, 1);
 }
 
 u16 get-appended-title-cipher(u16 arg_0) {
@@ -889,8 +869,8 @@ statescript {
                         var_6 = !!0;
                     }
                     if (!(var_1 == 0) && var_2 != 0) {
-                        ddict-set(var_1, wait-for-stow?, new-boxed-value(1, 0));
-                        darray-set(notification-queue, var_2, new-boxed-value(7, var_1));
+                        ddict-set(var_1, wait-for-stow?, boxed_bool(0));
+                        darray-set(notification-queue, var_2, boxed_symbol(var_1));
                     }
                     if (var_6 && var_2 == 0) {
                         stop-timer(visible-delayed-timer, self);
@@ -924,8 +904,8 @@ statescript {
                     u64? var_0 = event-arg-symbol(1);
                     u64? var_1 = find-notification-for-this-item(var_0);
                     if (!(var_1 == 0)) {
-                        ddict-set(var_1, wait-for-stow?, new-boxed-value(1, 0));
-                        var_3 = darray-set(notification-queue, find-notification-index-for-this-item(var_0), new-boxed-value(7, var_1));
+                        ddict-set(var_1, wait-for-stow?, boxed_bool(0));
+                        var_3 = darray-set(notification-queue, find-notification-index-for-this-item(var_0), boxed_symbol(var_1));
                     }
                 }
             }
@@ -953,8 +933,8 @@ statescript {
                     u64? var_0 = event-arg-symbol(1);
                     u64? var_1 = find-notification-for-this-item(var_0);
                     if (!(var_1 == 0)) {
-                        ddict-set(var_1, wait-for-stow?, new-boxed-value(1, 0));
-                        var_3 = darray-set(notification-queue, find-notification-index-for-this-item(var_0), new-boxed-value(7, var_1));
+                        ddict-set(var_1, wait-for-stow?, boxed_bool(0));
+                        var_3 = darray-set(notification-queue, find-notification-index-for-this-item(var_0), boxed_symbol(var_1));
                     }
                 }
             }
@@ -1098,17 +1078,7 @@ statescript {
                             set-boolean(override-l1?, 0, self);
                             set-boolean(override-options?, 0, self);
                             set-boolean(suppress-weapons-trophy?, 0, self);
-                            foreach (u64? var_5 : notification-queue) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : notification-queue) {
                                 u64? var_7 = ddict-get(var_6, notification-type);
                                 u16 var_8;
                                 if (var_7 && *(u16*)(var_7 + 12) == 1) {
@@ -1295,7 +1265,7 @@ statescript {
                             var_7 = i - 1;
                             i - 1;
                         } else {
-                            darray-set(get-symbol(queued-pickup-timers, self), var_6, new-boxed-value(6, var_4 + var_5));
+                            darray-set(get-symbol(queued-pickup-timers, self), var_6, boxed_f32(var_4 + var_5));
                             var_6 = var_6 + 1;
                             var_6 + 1;
                         }
@@ -1337,21 +1307,21 @@ statescript {
                                 var_4 = ddict-clone(notification-data-template, 0);
                             }
                             if (!!(var_3 == 0)) {
-                                ddict-set(var_4, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_4, title-cipher, new-boxed-value(7, HUD_NOTIFICATION_MAP_UPDATE_LOCATION_ADDED));
+                                ddict-set(var_4, item-id, boxed_symbol(var_2));
+                                ddict-set(var_4, title-cipher, boxed_symbol(HUD_NOTIFICATION_MAP_UPDATE_LOCATION_ADDED));
                                 sid var_10;
                                 if (safe-to-open-backpack?()) {
                                     var_10 = HUD_NOTIFICATION_MAP_UPDATE_ACTION;
                                 } else {
                                     var_10 = HUD_NOTIFICATION_COLLECTIBLE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_4, action-text-cipher, new-boxed-value(7, var_10));
-                                ddict-set(var_4, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/map-list-notification.png"));
-                                ddict-set(var_4, notification-type, new-boxed-value(2, 1));
-                                ddict-set(var_4, sound-id, new-boxed-value(7, sfx-tutorial-map-update));
-                                ddict-set(var_4, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_4, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                darray-append(notification-queue, new-boxed-value(7, var_4), 0);
+                                ddict-set(var_4, action-text-cipher, boxed_symbol(var_10));
+                                ddict-set(var_4, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/map-list-notification.png"));
+                                ddict-set(var_4, notification-type, boxed_i32(1));
+                                ddict-set(var_4, sound-id, boxed_symbol(sfx-tutorial-map-update));
+                                ddict-set(var_4, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_4, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                darray-append(notification-queue, boxed_symbol(var_4), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_6 = populate-and-animate-notification(0);
                                 }
@@ -1365,21 +1335,21 @@ statescript {
                                 var_23 = ddict-clone(notification-data-template, 0);
                             }
                             if (!!(var_22 == 0)) {
-                                ddict-set(var_23, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_23, title-cipher, new-boxed-value(7, HUD_NOTIFICATION_MAP_UPDATE_LOCATION_COMPLETE));
+                                ddict-set(var_23, item-id, boxed_symbol(var_2));
+                                ddict-set(var_23, title-cipher, boxed_symbol(HUD_NOTIFICATION_MAP_UPDATE_LOCATION_COMPLETE));
                                 sid var_29;
                                 if (safe-to-open-backpack?()) {
                                     var_29 = HUD_NOTIFICATION_MAP_UPDATE_ACTION;
                                 } else {
                                     var_29 = HUD_NOTIFICATION_COLLECTIBLE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_23, action-text-cipher, new-boxed-value(7, var_29));
-                                ddict-set(var_23, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/map-list-notification.png"));
-                                ddict-set(var_23, notification-type, new-boxed-value(2, 1));
-                                ddict-set(var_23, sound-id, new-boxed-value(7, sfx-tutorial-map-location-complete));
-                                ddict-set(var_23, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_23, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                darray-append(notification-queue, new-boxed-value(7, var_23), 0);
+                                ddict-set(var_23, action-text-cipher, boxed_symbol(var_29));
+                                ddict-set(var_23, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/map-list-notification.png"));
+                                ddict-set(var_23, notification-type, boxed_i32(1));
+                                ddict-set(var_23, sound-id, boxed_symbol(sfx-tutorial-map-location-complete));
+                                ddict-set(var_23, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_23, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                darray-append(notification-queue, boxed_symbol(var_23), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_25 = populate-and-animate-notification(0);
                                 }
@@ -1401,21 +1371,21 @@ statescript {
                             lookup-weapon-art-def(var_45, 1);
                             if (!!(var_41 == 0)) {
                                 hud2-mark-recipe-new(var_2);
-                                ddict-set(var_42, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_42, title-cipher, new-boxed-value(7, HUD_NOTIFICATION_SILENCER));
-                                ddict-set(var_42, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/silencer-ellie-notification.png"));
+                                ddict-set(var_42, item-id, boxed_symbol(var_2));
+                                ddict-set(var_42, title-cipher, boxed_symbol(HUD_NOTIFICATION_SILENCER));
+                                ddict-set(var_42, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/silencer-ellie-notification.png"));
                                 sid var_51;
                                 if (safe-to-open-backpack?()) {
                                     var_51 = HUD_NOTIFICATION_NEW_RECIPE_ACTION;
                                 } else {
                                     var_51 = HUD_NOTIFICATION_NEW_RECIPE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_42, action-text-cipher, new-boxed-value(7, var_51));
-                                ddict-set(var_42, notification-type, new-boxed-value(2, 0));
-                                ddict-set(var_42, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_42, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_42, sound-id, new-boxed-value(7, sfx-tutorial-new-recipe));
-                                darray-append(notification-queue, new-boxed-value(7, var_42), 0);
+                                ddict-set(var_42, action-text-cipher, boxed_symbol(var_51));
+                                ddict-set(var_42, notification-type, boxed_i32(0));
+                                ddict-set(var_42, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_42, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_42, sound-id, boxed_symbol(sfx-tutorial-new-recipe));
+                                darray-append(notification-queue, boxed_symbol(var_42), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_46 = populate-and-animate-notification(0);
                                 }
@@ -1438,21 +1408,21 @@ statescript {
                             }
                             if (!!(var_65 == 0)) {
                                 hud2-mark-recipe-new(var_2);
-                                ddict-set(var_66, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_66, title-cipher, new-boxed-value(7, HUD_NOTIFICATION_MELEE_UPGRADE));
-                                ddict-set(var_66, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/melee-upgrade-notification.png"));
+                                ddict-set(var_66, item-id, boxed_symbol(var_2));
+                                ddict-set(var_66, title-cipher, boxed_symbol(HUD_NOTIFICATION_MELEE_UPGRADE));
+                                ddict-set(var_66, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/melee-upgrade-notification.png"));
                                 sid var_73;
                                 if (safe-to-open-backpack?()) {
                                     var_73 = HUD_NOTIFICATION_NEW_RECIPE_ACTION;
                                 } else {
                                     var_73 = HUD_NOTIFICATION_NEW_RECIPE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_66, action-text-cipher, new-boxed-value(7, var_73));
-                                ddict-set(var_66, notification-type, new-boxed-value(2, 0));
-                                darray-append(notification-queue, new-boxed-value(7, var_66), 0);
-                                ddict-set(var_66, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_66, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_66, sound-id, new-boxed-value(7, sfx-tutorial-new-recipe));
+                                ddict-set(var_66, action-text-cipher, boxed_symbol(var_73));
+                                ddict-set(var_66, notification-type, boxed_i32(0));
+                                darray-append(notification-queue, boxed_symbol(var_66), 0);
+                                ddict-set(var_66, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_66, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_66, sound-id, boxed_symbol(sfx-tutorial-new-recipe));
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_68 = populate-and-animate-notification(0);
                                 }
@@ -1468,21 +1438,21 @@ statescript {
                             get-treasure-by-id(var_2, 0);
                             hud2-request-pick-up-notification(var_2, 0);
                             if (!!(var_86 == 0)) {
-                                ddict-set(var_87, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_87, title-cipher, new-boxed-value(7, HUD_NEW_JOURNAL_ENTRY));
-                                ddict-set(var_87, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/journal-notification.png"));
+                                ddict-set(var_87, item-id, boxed_symbol(var_2));
+                                ddict-set(var_87, title-cipher, boxed_symbol(HUD_NEW_JOURNAL_ENTRY));
+                                ddict-set(var_87, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/journal-notification.png"));
                                 sid var_94;
                                 if (safe-to-open-backpack?()) {
                                     var_94 = HUD_NOTIFICATION_NEW_RECIPE_ACTION;
                                 } else {
                                     var_94 = HUD_NOTIFICATION_COLLECTIBLE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_87, action-text-cipher, new-boxed-value(7, var_94));
-                                ddict-set(var_87, notification-type, new-boxed-value(2, 7));
-                                ddict-set(var_87, delay-time, new-boxed-value(6, 0.00));
-                                ddict-set(var_87, wait-for-stow?, new-boxed-value(1, 1));
-                                ddict-set(var_87, sound-id, new-boxed-value(7, sfx-tutorial-journal-entry-added));
-                                darray-append(notification-queue, new-boxed-value(7, var_87), 0);
+                                ddict-set(var_87, action-text-cipher, boxed_symbol(var_94));
+                                ddict-set(var_87, notification-type, boxed_i32(7));
+                                ddict-set(var_87, delay-time, boxed_f32(0.00));
+                                ddict-set(var_87, wait-for-stow?, boxed_bool(1));
+                                ddict-set(var_87, sound-id, boxed_symbol(sfx-tutorial-journal-entry-added));
+                                darray-append(notification-queue, boxed_symbol(var_87), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_89 = populate-and-animate-notification(0);
                                 }
@@ -1497,25 +1467,25 @@ statescript {
                             }
                             u64? var_108 = get-treasure-by-id(var_2, 0);
                             if (!safe-to-open-backpack?() || event-arg-boolean(2) || *(i32*)(var_108 + 96) == 1 && *(i32*)(var_108 + 96) == 2 && !!(var_105 == 0)) {
-                                ddict-set(var_106, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_106, title-cipher, new-boxed-value(7, *(u64*)(var_108 + 8)));
-                                ddict-set(var_106, hud2-icon, new-boxed-value(19, get-collectible-category-icon--large(*(i32*)(var_108 + 96))));
+                                ddict-set(var_106, item-id, boxed_symbol(var_2));
+                                ddict-set(var_106, title-cipher, boxed_symbol(*(u64*)(var_108 + 8)));
+                                ddict-set(var_106, hud2-icon, boxed_stringcopy(get-collectible-category-icon--large(*(i32*)(var_108 + 96))));
                                 sid var_119;
                                 if (safe-to-open-backpack?()) {
                                     var_119 = HUD_NOTIFICATION_NEW_RECIPE_ACTION;
                                 } else {
                                     var_119 = HUD_NOTIFICATION_COLLECTIBLE_COMBAT_ACTION;
                                 }
-                                ddict-set(var_106, action-text-cipher, new-boxed-value(7, var_119));
+                                ddict-set(var_106, action-text-cipher, boxed_symbol(var_119));
                                 if (*(i32*)(var_108 + 96) == 2) {
-                                    ddict-set(var_106, notification-type, new-boxed-value(2, 6));
+                                    ddict-set(var_106, notification-type, boxed_i32(6));
                                 } else {
-                                    ddict-set(var_106, notification-type, new-boxed-value(2, 5));
+                                    ddict-set(var_106, notification-type, boxed_i32(5));
                                 }
-                                ddict-set(var_106, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_106, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_106, sound-id, new-boxed-value(7, sfx-tutorial-collectible-found));
-                                darray-append(notification-queue, new-boxed-value(7, var_106), 0);
+                                ddict-set(var_106, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_106, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_106, sound-id, boxed_symbol(sfx-tutorial-collectible-found));
+                                darray-append(notification-queue, boxed_symbol(var_106), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_111 = populate-and-animate-notification(0);
                                 }
@@ -1531,21 +1501,21 @@ statescript {
                             }
                             if (!!(var_135 == 0)) {
                                 set-svar-bit(unlocked-upgrade-branches, get-branch-index-from-required-item(var_2, 0), 1);
-                                ddict-set(var_136, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_136, title-cipher, new-boxed-value(7, *(u64*)(var_134 + 24)));
-                                ddict-set(var_136, hud2-icon, new-boxed-value(19, *(i64*)(var_134 + 48)));
+                                ddict-set(var_136, item-id, boxed_symbol(var_2));
+                                ddict-set(var_136, title-cipher, boxed_symbol(*(u64*)(var_134 + 24)));
+                                ddict-set(var_136, hud2-icon, boxed_stringcopy(*(i64*)(var_134 + 48)));
                                 sid var_146;
                                 if (safe-to-open-backpack?()) {
                                     var_146 = HUD_NOTIFICATION_NEW_RECIPE_ACTION;
                                 } else {
                                     var_146 = HUD_NOTIFICATION_UPGRADE_BRANCH_COMBAT_ACTION;
                                 }
-                                ddict-set(var_136, action-text-cipher, new-boxed-value(7, var_146));
-                                ddict-set(var_136, notification-type, new-boxed-value(2, 3));
-                                ddict-set(var_136, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_136, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_136, sound-id, new-boxed-value(7, sfx-tutorial-new-upgrade-manual));
-                                darray-append(notification-queue, new-boxed-value(7, var_136), 0);
+                                ddict-set(var_136, action-text-cipher, boxed_symbol(var_146));
+                                ddict-set(var_136, notification-type, boxed_i32(3));
+                                ddict-set(var_136, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_136, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_136, sound-id, boxed_symbol(sfx-tutorial-new-upgrade-manual));
+                                darray-append(notification-queue, boxed_symbol(var_136), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_138 = populate-and-animate-notification(0);
                                 }
@@ -1579,34 +1549,34 @@ statescript {
                                 } else {
                                     var_162 = HUD_NOTIFICATION_SHORT_GUN_HOLSTER;
                                 }
-                                ddict-set(var_160, title-cipher, new-boxed-value(7, var_162));
+                                ddict-set(var_160, title-cipher, boxed_symbol(var_162));
                                 sid var_164;
                                 if (var_2 == long-gun-holster) {
                                     var_164 = weapon-cross-left;
                                 } else {
                                     var_164 = weapon-cross-right;
                                 }
-                                ddict-set(var_160, joypad-command, new-boxed-value(7, var_164));
+                                ddict-set(var_160, joypad-command, boxed_symbol(var_164));
                                 string var_166;
                                 if (var_2 == long-gun-holster) {
                                     var_166 = "hud/notification/notifications_icons/holster-long-notification.png";
                                 } else {
                                     var_166 = "hud/notification/notifications_icons/holster-short-notification.png";
                                 }
-                                ddict-set(var_160, hud2-icon, new-boxed-value(19, var_166));
+                                ddict-set(var_160, hud2-icon, boxed_stringcopy(var_166));
                                 sid var_168;
                                 if (var_2 == long-gun-holster) {
                                     var_168 = HUD_NOTIFICATION_NEW_LONGGUN_HOLSTER_ACTION;
                                 } else {
                                     var_168 = HUD_NOTIFICATION_NEW_SHORTGUN_HOLSTER_ACTION;
                                 }
-                                ddict-set(var_160, action-text-cipher, new-boxed-value(7, var_168));
-                                ddict-set(var_160, notification-type, new-boxed-value(2, 4));
-                                ddict-set(var_160, visible-time, new-boxed-value(6, 10.00));
-                                ddict-set(var_160, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_160, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_160, sound-id, new-boxed-value(7, sfx-tutorial-holster-unlocked));
-                                darray-append(notification-queue, new-boxed-value(7, var_160), 0);
+                                ddict-set(var_160, action-text-cipher, boxed_symbol(var_168));
+                                ddict-set(var_160, notification-type, boxed_i32(4));
+                                ddict-set(var_160, visible-time, boxed_f32(10.00));
+                                ddict-set(var_160, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_160, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_160, sound-id, boxed_symbol(sfx-tutorial-holster-unlocked));
+                                darray-append(notification-queue, boxed_symbol(var_160), 0);
                                 if (!!(get-symbol(notification-widget, self) == 0)) {
                                     var_179 = populate-and-animate-notification(0);
                                 }
@@ -1617,17 +1587,17 @@ statescript {
                                 } else {
                                     var_184 = ddict-clone(notification-data-template, 0);
                                 }
-                                ddict-set(var_184, action-text-cipher, new-boxed-value(7, HUD_NOTIFICATION_CHALLENGE_COMPLETED_ACTION));
-                                ddict-set(var_184, item-id, new-boxed-value(7, var_2));
-                                ddict-set(var_184, hud2-icon, new-boxed-value(19, "hud/notification/notifications_icons/meta_challenge-a.png"));
-                                ddict-set(var_184, tts-title-prefix, new-boxed-value(7, HUD_ROGUE_META_CHALLENGE_COMPLETE));
-                                ddict-set(var_184, title-cipher, new-boxed-value(7, *(u64*)(t2r-meta-trial-get-trial-info-by-completion-svar(var_2) + 32)));
-                                ddict-set(var_184, notification-type, new-boxed-value(2, 8));
-                                ddict-set(var_184, visible-time, new-boxed-value(6, 10.00));
-                                ddict-set(var_184, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                ddict-set(var_184, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                ddict-set(var_184, sound-id, new-boxed-value(7, sfx-hud-rl-challenge-in-game-complete));
-                                darray-append(notification-queue, new-boxed-value(7, var_184), 0);
+                                ddict-set(var_184, action-text-cipher, boxed_symbol(HUD_NOTIFICATION_CHALLENGE_COMPLETED_ACTION));
+                                ddict-set(var_184, item-id, boxed_symbol(var_2));
+                                ddict-set(var_184, hud2-icon, boxed_stringcopy("hud/notification/notifications_icons/meta_challenge-a.png"));
+                                ddict-set(var_184, tts-title-prefix, boxed_symbol(HUD_ROGUE_META_CHALLENGE_COMPLETE));
+                                ddict-set(var_184, title-cipher, boxed_symbol(*(u64*)(t2r-meta-trial-get-trial-info-by-completion-svar(var_2) + 32)));
+                                ddict-set(var_184, notification-type, boxed_i32(8));
+                                ddict-set(var_184, visible-time, boxed_f32(10.00));
+                                ddict-set(var_184, delay-time, boxed_f32(event-arg-float(1)));
+                                ddict-set(var_184, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                ddict-set(var_184, sound-id, boxed_symbol(sfx-hud-rl-challenge-in-game-complete));
+                                darray-append(notification-queue, boxed_symbol(var_184), 0);
                                 if (!(!(get-symbol(challenge-notification-widget, self) == 0)) && !(script-in-state?(ss-survival-manager-1, survival-complete-success))) {
                                     var_204 = populate-and-animate-notification(0);
                                 }
@@ -1644,7 +1614,7 @@ statescript {
                                 }
                                 if (!!(var_209 == 0) || !(var_206 == 0)) {
                                     if (!(var_208 == 0)) {
-                                        ddict-set(var_210, item-id, new-boxed-value(7, var_2));
+                                        ddict-set(var_210, item-id, boxed_symbol(var_2));
                                         if (!(var_208 == 0)) {
                                             u64 var_214;
                                             if (!(*(u64*)(var_208 + 24) == 0)) {
@@ -1652,23 +1622,23 @@ statescript {
                                             } else {
                                                 var_214 = *(u64*)(var_208 + 16);
                                             }
-                                            ddict-set(var_210, title-cipher, new-boxed-value(7, var_214));
+                                            ddict-set(var_210, title-cipher, boxed_symbol(var_214));
                                             i64 var_216;
                                             if (*(i64*)(var_208 + 144) == 0) {
                                                 var_216 = *(i64*)(var_208 + 112);
                                             } else {
                                                 var_216 = *(i64*)(var_208 + 144);
                                             }
-                                            ddict-set(var_210, hud2-icon, new-boxed-value(19, var_216));
+                                            ddict-set(var_210, hud2-icon, boxed_stringcopy(var_216));
                                         } else {
-                                            ddict-set(var_210, title-cipher, new-boxed-value(7, *(u64*)(var_207 + 16)));
+                                            ddict-set(var_210, title-cipher, boxed_symbol(*(u64*)(var_207 + 16)));
                                             i64 var_220;
                                             if (*(i64*)(var_207 + 80) == 0) {
                                                 var_220 = *(i64*)(var_207 + 56);
                                             } else {
                                                 var_220 = *(i64*)(var_207 + 80);
                                             }
-                                            ddict-set(var_210, hud2-icon, new-boxed-value(19, var_220));
+                                            ddict-set(var_210, hud2-icon, boxed_stringcopy(var_220));
                                         }
                                         if (!(var_206 == 0)) {
                                             hud2-mark-recipe-new(var_2);
@@ -1678,17 +1648,17 @@ statescript {
                                             } else {
                                                 var_223 = HUD_NOTIFICATION_NEW_RECIPE_COMBAT_ACTION;
                                             }
-                                            ddict-set(var_210, action-text-cipher, new-boxed-value(7, var_223));
-                                            ddict-set(var_210, notification-type, new-boxed-value(2, 0));
-                                            ddict-set(var_210, sound-id, new-boxed-value(7, sfx-tutorial-new-recipe));
+                                            ddict-set(var_210, action-text-cipher, boxed_symbol(var_223));
+                                            ddict-set(var_210, notification-type, boxed_i32(0));
+                                            ddict-set(var_210, sound-id, boxed_symbol(sfx-tutorial-new-recipe));
                                         } else {
-                                            ddict-set(var_210, action-text-cipher, new-boxed-value(7, HUD_NOTIFICATION_NEW_WEAPON_SUBTITLE));
-                                            ddict-set(var_210, notification-type, new-boxed-value(2, 2));
-                                            ddict-set(var_210, sound-id, new-boxed-value(7, sfx-tutorial-new-weapon));
+                                            ddict-set(var_210, action-text-cipher, boxed_symbol(HUD_NOTIFICATION_NEW_WEAPON_SUBTITLE));
+                                            ddict-set(var_210, notification-type, boxed_i32(2));
+                                            ddict-set(var_210, sound-id, boxed_symbol(sfx-tutorial-new-weapon));
                                         }
-                                        ddict-set(var_210, delay-time, new-boxed-value(6, event-arg-float(1)));
-                                        ddict-set(var_210, wait-for-stow?, new-boxed-value(1, event-arg-boolean(2)));
-                                        darray-append(notification-queue, new-boxed-value(7, var_210), 0);
+                                        ddict-set(var_210, delay-time, boxed_f32(event-arg-float(1)));
+                                        ddict-set(var_210, wait-for-stow?, boxed_bool(event-arg-boolean(2)));
+                                        darray-append(notification-queue, boxed_symbol(var_210), 0);
                                         if (!!(var_206 == 0)) {
                                             set-boolean(suppress-weapons-trophy?, 1, self);
                                             suppress-obtain-all-weapons-trophy-check/f();

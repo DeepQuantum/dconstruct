@@ -56,9 +56,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
                     animate_(sea-truck-trailer-seesaw-2, open-back-doors, var_0);
                 }
                 lambda {
@@ -97,9 +97,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
                     wait-animate_(sea-truck-trailer-seesaw-2, dumpster-open, var_0);
                 }
             }
@@ -208,12 +208,12 @@ statescript {
                     while (1) {
                         wait-boolean(horse-left-side, 1, self);
                         u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_0 + (0 * 8)) = 56;
-                        *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_0 + (0 * 8)) + 8) = -1.00;
-                        *(i32*)*(*var_0 + (1 * 8)) = 59;
-                        *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                        *(i32*)*var_0[0] = 56;
+                        *(u64*)(*var_0[0] + 8) = 0;
+                        *(f32*)(*var_0[0] + 8) = -1.00;
+                        *(i32*)*var_0[1] = 59;
+                        *(u64*)(*var_0[1] + 8) = 0;
+                        *(i32*)(*var_0[1] + 8) = 1;
                         animate_(sea-truck-trailer-seesaw-2, rock, var_0);
                         wait-frames(5);
                         wait-boolean(horse-right-side, 1, self);
@@ -302,12 +302,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = -1.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = -1.00;
+                    *(i32*)*var_0[1] = 59;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 1;
                     wait-animate_(sea-truck-trailer-seesaw-2, rock, var_0);
                 }
                 lambda {
@@ -330,12 +330,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(sea-truck-trailer-seesaw-2, rock, var_0);
                 }
                 lambda {

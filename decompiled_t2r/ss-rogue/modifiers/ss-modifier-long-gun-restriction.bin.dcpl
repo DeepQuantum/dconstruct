@@ -16,7 +16,7 @@ u16 ss-long-gun-restriction--save-and-remove-long-guns() {
     u64 i = 0;
     while (i < *(i32*)var_0) {
         if (player-has-weapon?(*(u64*)(*(var_0 + 8) + (i * 8)))) {
-            ddict-set(get-symbol(ddict-current-long-guns, self), *(u64*)(*(var_0 + 8) + (i * 8)), new-boxed-value(2, get-total-ammo(*(u64*)(*(var_0 + 8) + (i * 8)))));
+            ddict-set(get-symbol(ddict-current-long-guns, self), *(u64*)(*(var_0 + 8) + (i * 8)), boxed_i32(get-total-ammo(*(u64*)(*(var_0 + 8) + (i * 8)))));
             remove-player-weapon(*(u64*)(*(var_0 + 8) + (i * 8)));
         }
         i = i + 1;
@@ -120,7 +120,7 @@ statescript {
                     set-int32(current-weapon-slot, hud2-get-highlighted-weapon-cross-index(), self);
                     if (hud2-get-highlighted-weapon-cross-index() != get-int32(current-weapon-slot, self) || get-int32(current-weapon-slot, self) == 0) {
                         if (get-int32(current-weapon-slot, self) == 1) {
-                            broadcast-event(skull-activate, new-boxed-value(7, long-gun-restriction));
+                            broadcast-event(skull-activate, boxed_symbol(long-gun-restriction));
                         }
                     }
                 }

@@ -13,7 +13,7 @@
 
 u16 is-brute-npc?(u64? arg_0) {
     u16 var_2;
-    if (darray-contains?(grp-brute-npc, new-boxed-value(7, arg_0))) {
+    if (darray-contains?(grp-brute-npc, boxed_symbol(arg_0))) {
         var_2 = 1;
     } else {
         var_2 = 0;

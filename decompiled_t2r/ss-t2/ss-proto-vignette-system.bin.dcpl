@@ -34,26 +34,16 @@ statescript {
                     set-symbol(all-vignettes, darray-create(self, -1, 0), self);
                 }
                 lambda {
-                    darray-append(get-symbol(all-vignettes, self), new-boxed-value(7, *flee-alpha-killed*), 1);
+                    darray-append(get-symbol(all-vignettes, self), boxed_symbol(*flee-alpha-killed*), 1);
                 }
                 lambda {
-                    darray-append(get-symbol(all-vignettes, self), new-boxed-value(7, *charge-ally-killed*), 1);
+                    darray-append(get-symbol(all-vignettes, self), boxed_symbol(*charge-ally-killed*), 1);
                 }
                 lambda {
-                    darray-append(get-symbol(all-vignettes, self), new-boxed-value(7, *alpha-dies-one-flees-others-fight*), 1);
+                    darray-append(get-symbol(all-vignettes, self), boxed_symbol(*alpha-dies-one-flees-others-fight*), 1);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(all-vignettes, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(all-vignettes, self)) {
                         u64? var_5 = lookup-symbol(var_4, vignette-definition);
                         *(f32*)(var_5 + 16) = 0.00;
                     }
@@ -73,24 +63,14 @@ statescript {
                 lambda {
                     if (darray-count(get-symbol(prev-npc-group, self)) > darray-count(all-enemy-npcs)) {
                         u64? var_3 = darray-create(self, -1, 0);
-                        foreach (u64? var_7 : get-symbol(prev-npc-group, self)) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : get-symbol(prev-npc-group, self)) {
                             if (npc-killed?(var_8)) {
                                 if (npc-get-weapon(var_8) == machete) {
                                     set-int32(bravery-reduced-by, get-int32(bravery-reduced-by, self) + 20, self);
-                                    darray-append(var_3, new-boxed-value(7, var_8), 1);
+                                    darray-append(var_3, boxed_symbol(var_8), 1);
                                 } else if (npc-get-weapon(var_8) == pistol-basic) {
                                     set-int32(bravery-reduced-by, get-int32(bravery-reduced-by, self) + 80, self);
-                                    darray-append(var_3, new-boxed-value(7, var_8), 1);
+                                    darray-append(var_3, boxed_symbol(var_8), 1);
                                 }
                             }
                         }
@@ -98,37 +78,17 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(all-vignettes, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(all-vignettes, self)) {
                         u64? var_5 = lookup-symbol(var_4, vignette-definition);
                         if (*(f32*)(var_5 + 16) > 0.00) {
                             if (!is-final-build?()) {
-                                display(dc:format("cooldown %i %f", darray-find(get-symbol(all-vignettes, self), new-boxed-value(7, var_4), 0), *(f32*)(var_5 + 16)), 19);
+                                display(dc:format("cooldown %i %f", darray-find(get-symbol(all-vignettes, self), boxed_symbol(var_4), 0), *(f32*)(var_5 + 16)), 19);
                             }
                         }
                         if (*(f32*)(var_5 + 16) <= 0.00) {
                             if (darray-count(get-symbol(prev-npc-group, self)) > darray-count(all-enemy-npcs) && get-int32(bravery-reduced-by, self) >= *(i32*)var_5 && darray-count(all-enemy-npcs) == *(i32*)(var_5 + 8)) {
                                 u16 var_18;
-                                foreach (u64? var_19 : all-enemy-npcs) {
-                                    u16 var_20;
-                                    if (var_19 && *(u16*)(var_19 + 12) == 7) {
-                                        var_20 = *(u64*)var_19;
-                                    } else if (var_19 && *(u16*)(var_19 + 12) == 5) {
-                                        var_20 = *(u64*)var_19;
-                                    } else if (var_19 && *(u16*)(var_19 + 12) == 4) {
-                                        var_20 = *(u64*)var_19;
-                                    } else {
-                                        var_20 = 0;
-                                    }
+                                foreach (u64? var_20 : all-enemy-npcs) {
                                     u16 var_22;
                                     if (npc-on-screen-and-visible?(var_20, -1, 0)) {
                                         var_22 = 0 + 1;

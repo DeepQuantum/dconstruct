@@ -59,29 +59,29 @@ statescript {
                     while (1) {
                         if (!(npc-test-horde-1 == 0)) {
                             u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_1 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                            *(i32*)*var_1[0] = 10;
+                            *(u64*)(*var_1[0] + 8) = 0;
+                            *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
                             animate_(npc-test-horde-1, runr-horde-kills-ellie-beatdown--inf-f-a, var_1);
                         }
                         if (!(npc-test-horde-2 == 0)) {
                             u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                            *(i32*)*var_3[0] = 10;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
                             animate_(npc-test-horde-2, runr-horde-kills-ellie-beatdown--inf-f-b, var_3);
                         }
                         if (!(npc-test-horde-3 == 0)) {
                             u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_5 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                            *(i32*)*var_5[0] = 10;
+                            *(u64*)(*var_5[0] + 8) = 0;
+                            *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
                             animate_(npc-test-horde-3, runr-horde-kills-ellie-beatdown--inf-f-c, var_5);
                         }
                         u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
                         wait-animate_(player, runr-horde-kills-ellie-beatdown--ellie, var_7);
                         if (!(npc-test-horde-1 == 0)) {
                             animate-done(npc-test-horde-1, runr-horde-kills-ellie-beatdown--inf-f-a, ap-fpark-entry-test-1, 0, 0, 2);
@@ -108,30 +108,30 @@ statescript {
                         if (get-int32(anim-index, self) == 0) {
                             attach-offset(obj-test-arrow-1, player, rightHandAttach90C, get-spawner-locator(pos-5508, 1), 0.00);
                             u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_3 + (0 * 8)) + 8) = 18;
+                            *(i32*)*var_3[0] = 24;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(i32*)(*var_3[0] + 8) = 18;
                             wait-animate_(player, ellie-idle-crouch-fb-arrow-pull-front-l-shldr-end, var_3);
                         } else if (get-int32(anim-index, self) == 1) {
                             attach-offset(obj-test-arrow-1, player, leftHandAttach, get-spawner-locator(pos-5509, 1), 0.00);
                             u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_6 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_6 + (0 * 8)) + 8) = 18;
+                            *(i32*)*var_6[0] = 24;
+                            *(u64*)(*var_6[0] + 8) = 0;
+                            *(i32*)(*var_6[0] + 8) = 18;
                             wait-animate_(player, ellie-idle-crouch-fb-arrow-pull-front-r-shldr-end, var_6);
                         } else if (get-int32(anim-index, self) == 2) {
                             attach-offset(obj-test-arrow-1, player, rightHandAttach90C, get-spawner-locator(pos-5508, 1), 0.00);
                             u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_9 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 6;
+                            *(i32*)*var_9[0] = 24;
+                            *(u64*)(*var_9[0] + 8) = 0;
+                            *(i32*)(*var_9[0] + 8) = 6;
                             wait-animate_(player, ellie-idle-prone-fb-arrow-pull-front-l-shldr-end, var_9);
                         } else if (get-int32(anim-index, self) == 3) {
                             attach-offset(obj-test-arrow-1, player, leftHandAttach, get-spawner-locator(pos-5509, 1), 0.00);
                             u64? var_12 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_12 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_12 + (0 * 8)) + 8) = 6;
+                            *(i32*)*var_12[0] = 24;
+                            *(u64*)(*var_12[0] + 8) = 0;
+                            *(i32*)(*var_12[0] + 8) = 6;
                             wait-animate_(player, ellie-idle-prone-fb-arrow-pull-front-r-shldr-end, var_12);
                         }
                         wait(1.50);
@@ -181,24 +181,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 31;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(dina, pat-suburbs-tower-binoculars--dina-idle, var_0);
                 }
             }
@@ -241,21 +241,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fpark-entry-test-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
                     wait-animate_(player, pat-suburbs-tower-binoculars--ellie-intro, var_0);
                 }
             }

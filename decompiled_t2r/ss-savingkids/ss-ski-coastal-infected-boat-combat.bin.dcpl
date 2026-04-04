@@ -121,17 +121,7 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(infected-boat-mid) <= 3) {
-                        foreach (u64? var_2 : infected-boat-mid) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : infected-boat-mid) {
                             if (npc-alive?(var_3)) {
                                 if (npc-not-visible?(var_3) && distance-between-objects-greater-than?(player, var_3, 12.00, 1)) {
                                     kill-entity-if-spawned(var_3);
@@ -141,17 +131,7 @@ statescript {
                         }
                         wait-spawn-npc-group-async(infected-boat-upper, 0, 0);
                     } else {
-                        foreach (u64? var_9 : infected-boat-mid) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
+                        foreach (u64? var_10 : infected-boat-mid) {
                             if (npc-alive?(var_10)) {
                                 if (npc-not-visible?(var_10) && distance-between-objects-greater-than?(player, var_10, 12.00, 1) && npc-group-alive-count(infected-boat-mid) > 2) {
                                     kill-entity-if-spawned(var_10);
@@ -229,17 +209,7 @@ statescript {
         block start {
             track leave {
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             wait(1.00);
                             npc-set-script-only-no-perception(var_2);
@@ -254,20 +224,10 @@ statescript {
                 }
                 lambda {
                     while (npc-group-alive-count(all-infected-npcs) != 0) {
-                        foreach (u64? var_2 : all-infected-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-infected-npcs) {
                             if (npc-alive?(var_3)) {
                                 if (distance-between-objects-greater-than?(var_3, player, 20.00, 1) && npc-offscreen?(var_3)) {
-                                    darray-append(npcs-to-kill, new-boxed-value(7, var_3), 1);
+                                    darray-append(npcs-to-kill, boxed_symbol(var_3), 1);
                                 }
                             }
                         }

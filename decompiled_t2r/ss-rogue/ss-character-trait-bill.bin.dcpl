@@ -54,10 +54,10 @@ statescript {
                 lambda {
                     if (get-boolean(is-aiming, self) && shotgun-remington-pump-bill == get-symbol(current-weapon, self)) {
                         if (!get-boolean(bill-aiming-pump-shotgun, self)) {
-                            fact-set(player, bill-aiming-pump-shotgun, new-boxed-value(1, 1));
+                            fact-set(player, bill-aiming-pump-shotgun, boxed_bool(1));
                         }
                     } else if (get-boolean(bill-aiming-pump-shotgun, self)) {
-                        fact-set(player, bill-aiming-pump-shotgun, new-boxed-value(1, 0));
+                        fact-set(player, bill-aiming-pump-shotgun, boxed_bool(0));
                     }
                 }
             }

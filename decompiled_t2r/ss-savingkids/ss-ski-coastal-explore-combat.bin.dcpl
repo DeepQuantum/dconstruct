@@ -249,17 +249,7 @@ statescript {
         block start {
             track leave {
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             wait(1.00);
                             npc-set-script-only-no-perception(var_2);
@@ -274,20 +264,10 @@ statescript {
                 }
                 lambda {
                     while (npc-group-alive-count(all-infected-npcs) != 0) {
-                        foreach (u64? var_2 : all-infected-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-infected-npcs) {
                             if (npc-alive?(var_3)) {
                                 if (distance-between-objects-greater-than?(var_3, player, 20.00, 1) && npc-offscreen?(var_3)) {
-                                    darray-append(ski-coastal-npcs-to-kill, new-boxed-value(7, var_3), 1);
+                                    darray-append(ski-coastal-npcs-to-kill, boxed_symbol(var_3), 1);
                                 }
                             }
                         }

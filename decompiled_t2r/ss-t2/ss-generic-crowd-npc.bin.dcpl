@@ -31,9 +31,9 @@ statescript {
                         u64? var_4 = spawn-attachable(tag-string(prop, self, 0, 0), get-self-id(), tag-string(attach-point, self, 0, 0), 0, 0);
                         if (!(tag-symbol(prop-anim, self) == 0)) {
                             u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_7 + (0 * 8)) = 58;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                            *(i32*)*var_7[0] = 58;
+                            *(u64*)(*var_7[0] + 8) = 0;
+                            *(f32*)(*var_7[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
                             animate_(var_4, tag-symbol(prop-anim, self), var_7);
                         }
                         set-symbol(prop-id, var_4, self);
@@ -44,9 +44,9 @@ statescript {
                         u64? var_4 = spawn-attachable(tag-string(prop2, self, 0, 0), get-self-id(), tag-string(attach-point2, self, 0, 0), 0, 0);
                         if (!(tag-symbol(prop-anim2, self) == 0)) {
                             u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_7 + (0 * 8)) = 58;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                            *(i32*)*var_7[0] = 58;
+                            *(u64*)(*var_7[0] + 8) = 0;
+                            *(f32*)(*var_7[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
                             animate_(var_4, tag-symbol(prop-anim2, self), var_7);
                         }
                         set-symbol(prop-id-2, var_4, self);

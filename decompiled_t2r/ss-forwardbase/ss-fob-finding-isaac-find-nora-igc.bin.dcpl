@@ -547,32 +547,32 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-nora-morgue-walk-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-best-entry-phase(nora, fob-nora-morgue-walk--nora, get-spawner-locator(ap-fob-nora-morgue-walk-1, 1), 40.00, apReference, 0);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-nora-morgue-walk-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 58;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-best-entry-phase(nora, fob-nora-morgue-walk--nora, get-spawner-locator(ap-fob-nora-morgue-walk-1, 1), 40.00, apReference, 0);
                     wait-animate_(nora, fob-nora-morgue-walk--nora, var_0);
                 }
                 lambda {
                     if (!(get-boolean(morgue-cine-started, self))) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-nora-morgue-walk-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-fob-nora-morgue-walk-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.30;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         animate_(nora, fob-nora-morgue-walk-idle--nora, var_2);
                     }
                 }

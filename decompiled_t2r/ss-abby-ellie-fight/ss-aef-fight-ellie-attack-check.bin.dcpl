@@ -160,7 +160,7 @@ u64? aef-ellie-should-go-for-stealth-kill?() {
 u16 aef-ellie-put-away-throwable-async(u64? arg_0, u64? arg_1) {
     u16 var_1;
     if (!get-boolean(throwable-put-away-async-request-made, self)) {
-        send-event(put-away-throwable, get-self-id(), new-boxed-value(1, arg_0), new-boxed-value(1, arg_1));
+        send-event(put-away-throwable, get-self-id(), boxed_bool(arg_0), boxed_bool(arg_1));
         var_1 = set-boolean(throwable-put-away-async-request-made, 1, self);
     } else {
         var_1 = 0;
@@ -182,7 +182,7 @@ u16 aef-hunt-ellie-check-sightlines(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_
             u64? var_7 = get-random-in-group-with-parameters(var_3, get-object-locator(npc-enemy-ellie-pistol-1), 4.00, 30.00, arg_4, arg_5);
             u16 var_9;
             if (!(var_7 == 0)) {
-                darray-find-remove(var_3, new-boxed-value(7, var_7), 0);
+                darray-find-remove(var_3, boxed_symbol(var_7), 0);
                 u64? var_14 = offset-locator(flatten-locator(get-object-locator(npc-enemy-ellie-pistol-1)), alloc-vector(0.00, 0.75, 0.00, 1.00, 0));
                 u64? var_21 = offset-locator-world-space(var_14, vector-scale(arg_3, vector-normalize(vector-to-vector-xz(vector-between-points(get-locator-position(var_14), get-spawner-position(var_7, 1))), 0)));
                 set-bound-frame(scope-out-secondary-bf, var_21, self);
@@ -317,21 +317,21 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_9 = aef-ellie-craft-right-intro--backpack;
     }
     u64? var_10 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_10 + (0 * 8)) = 10;
-    *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
-    *(i32*)*(*var_10 + (1 * 8)) = 14;
-    *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-    *(u64*)(*(*var_10 + (1 * 8)) + 8) = apReference-spine-d;
-    *(i32*)*(*var_10 + (2 * 8)) = 28;
-    *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_10 + (2 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_10 + (3 * 8)) = 45;
-    *(u64*)(*(*var_10 + (3 * 8)) + 8) = 0;
-    *(f32*)(*(*var_10 + (3 * 8)) + 8) = 0.00;
-    *(i32*)*(*var_10 + (4 * 8)) = 30;
-    *(u64*)(*(*var_10 + (4 * 8)) + 8) = 0;
-    *(f32*)(*(*var_10 + (4 * 8)) + 8) = 0.30;
+    *(i32*)*var_10[0] = 10;
+    *(u64*)(*var_10[0] + 8) = 0;
+    *(u64*)(*var_10[0] + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
+    *(i32*)*var_10[1] = 14;
+    *(u64*)(*var_10[1] + 8) = 0;
+    *(u64*)(*var_10[1] + 8) = apReference-spine-d;
+    *(i32*)*var_10[2] = 28;
+    *(u64*)(*var_10[2] + 8) = 0;
+    *(f32*)(*var_10[2] + 8) = 0.50;
+    *(i32*)*var_10[3] = 45;
+    *(u64*)(*var_10[3] + 8) = 0;
+    *(f32*)(*var_10[3] + 8) = 0.00;
+    *(i32*)*var_10[4] = 30;
+    *(u64*)(*var_10[4] + 8) = 0;
+    *(f32*)(*var_10[4] + 8) = 0.30;
     animate_(get-symbol(backpack, self), var_9, var_10);
     set-mesh-visible(self, ellie-backpack, 0);
     set-visible(get-symbol(backpack, self), 1);
@@ -343,18 +343,18 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_14 = aef-ellie-craft-right-intro;
     }
     u64? var_15 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_15 + (0 * 8)) = 28;
-    *(u64*)(*(*var_15 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_15 + (0 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_15 + (1 * 8)) = 30;
-    *(u64*)(*(*var_15 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_15 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_15 + (2 * 8)) = 24;
-    *(u64*)(*(*var_15 + (2 * 8)) + 8) = 0;
-    *(i32*)(*(*var_15 + (2 * 8)) + 8) = 18;
-    *(i32*)*(*var_15 + (3 * 8)) = 3;
-    *(u64*)(*(*var_15 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_15 + (3 * 8)) + 8) = 1;
+    *(i32*)*var_15[0] = 28;
+    *(u64*)(*var_15[0] + 8) = 0;
+    *(f32*)(*var_15[0] + 8) = 0.50;
+    *(i32*)*var_15[1] = 30;
+    *(u64*)(*var_15[1] + 8) = 0;
+    *(f32*)(*var_15[1] + 8) = 0.30;
+    *(i32*)*var_15[2] = 24;
+    *(u64*)(*var_15[2] + 8) = 0;
+    *(i32*)(*var_15[2] + 8) = 18;
+    *(i32*)*var_15[3] = 3;
+    *(u64*)(*var_15[3] + 8) = 0;
+    *(u8*)(*var_15[3] + 8) = 1;
     wait-animate_(npc-enemy-ellie-pistol-1, var_14, var_15);
     sid var_16;
     if (var_4) {
@@ -363,21 +363,21 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_16 = aef-ellie-craft-right-idle;
     }
     u64? var_17 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_17 + (0 * 8)) = 28;
-    *(u64*)(*(*var_17 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_17 + (0 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_17 + (1 * 8)) = 30;
-    *(u64*)(*(*var_17 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_17 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_17 + (2 * 8)) = 31;
-    *(u64*)(*(*var_17 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_17 + (2 * 8)) + 8) = 1;
-    *(i32*)*(*var_17 + (3 * 8)) = 24;
-    *(u64*)(*(*var_17 + (3 * 8)) + 8) = 0;
-    *(i32*)(*(*var_17 + (3 * 8)) + 8) = 18;
-    *(i32*)*(*var_17 + (4 * 8)) = 3;
-    *(u64*)(*(*var_17 + (4 * 8)) + 8) = 0;
-    *(u8*)(*(*var_17 + (4 * 8)) + 8) = 1;
+    *(i32*)*var_17[0] = 28;
+    *(u64*)(*var_17[0] + 8) = 0;
+    *(f32*)(*var_17[0] + 8) = 0.30;
+    *(i32*)*var_17[1] = 30;
+    *(u64*)(*var_17[1] + 8) = 0;
+    *(f32*)(*var_17[1] + 8) = 0.30;
+    *(i32*)*var_17[2] = 31;
+    *(u64*)(*var_17[2] + 8) = 0;
+    *(u8*)(*var_17[2] + 8) = 1;
+    *(i32*)*var_17[3] = 24;
+    *(u64*)(*var_17[3] + 8) = 0;
+    *(i32*)(*var_17[3] + 8) = 18;
+    *(i32*)*var_17[4] = 3;
+    *(u64*)(*var_17[4] + 8) = 0;
+    *(u8*)(*var_17[4] + 8) = 1;
     animate_(npc-enemy-ellie-pistol-1, var_16, var_17);
     sid var_19;
     if (var_4) {
@@ -386,21 +386,21 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_19 = aef-ellie-craft-right-idle--backpack;
     }
     u64? var_20 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_20 + (0 * 8)) = 10;
-    *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_20 + (0 * 8)) + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
-    *(i32*)*(*var_20 + (1 * 8)) = 14;
-    *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-    *(u64*)(*(*var_20 + (1 * 8)) + 8) = apReference-spine-d;
-    *(i32*)*(*var_20 + (2 * 8)) = 28;
-    *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_20 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_20 + (3 * 8)) = 30;
-    *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-    *(f32*)(*(*var_20 + (3 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_20 + (4 * 8)) = 31;
-    *(u64*)(*(*var_20 + (4 * 8)) + 8) = 0;
-    *(u8*)(*(*var_20 + (4 * 8)) + 8) = 1;
+    *(i32*)*var_20[0] = 10;
+    *(u64*)(*var_20[0] + 8) = 0;
+    *(u64*)(*var_20[0] + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
+    *(i32*)*var_20[1] = 14;
+    *(u64*)(*var_20[1] + 8) = 0;
+    *(u64*)(*var_20[1] + 8) = apReference-spine-d;
+    *(i32*)*var_20[2] = 28;
+    *(u64*)(*var_20[2] + 8) = 0;
+    *(f32*)(*var_20[2] + 8) = 0.30;
+    *(i32*)*var_20[3] = 30;
+    *(u64*)(*var_20[3] + 8) = 0;
+    *(f32*)(*var_20[3] + 8) = 0.30;
+    *(i32*)*var_20[4] = 31;
+    *(u64*)(*var_20[4] + 8) = 0;
+    *(u8*)(*var_20[4] + 8) = 1;
     animate_(get-symbol(backpack, self), var_19, var_20);
     broadcast-event(aef-ellie-craft-item);
     if (arg_1 > 0.00) {
@@ -481,18 +481,18 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_46 = aef-ellie-craft-right-outro--backpack;
     }
     u64? var_47 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_47 + (0 * 8)) = 10;
-    *(u64*)(*(*var_47 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_47 + (0 * 8)) + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
-    *(i32*)*(*var_47 + (1 * 8)) = 14;
-    *(u64*)(*(*var_47 + (1 * 8)) + 8) = 0;
-    *(u64*)(*(*var_47 + (1 * 8)) + 8) = apReference-spine-d;
-    *(i32*)*(*var_47 + (2 * 8)) = 28;
-    *(u64*)(*(*var_47 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_47 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_47 + (3 * 8)) = 30;
-    *(u64*)(*(*var_47 + (3 * 8)) + 8) = 0;
-    *(f32*)(*(*var_47 + (3 * 8)) + 8) = 0.20;
+    *(i32*)*var_47[0] = 10;
+    *(u64*)(*var_47[0] + 8) = 0;
+    *(u64*)(*var_47[0] + 8) = get-joint-parented-bound-frame(npc-enemy-ellie-pistol-1, spined);
+    *(i32*)*var_47[1] = 14;
+    *(u64*)(*var_47[1] + 8) = 0;
+    *(u64*)(*var_47[1] + 8) = apReference-spine-d;
+    *(i32*)*var_47[2] = 28;
+    *(u64*)(*var_47[2] + 8) = 0;
+    *(f32*)(*var_47[2] + 8) = 0.30;
+    *(i32*)*var_47[3] = 30;
+    *(u64*)(*var_47[3] + 8) = 0;
+    *(f32*)(*var_47[3] + 8) = 0.20;
     animate_(get-symbol(backpack, self), var_46, var_47);
     broadcast-event(aef-ellie-close-backpack);
     sid var_49;
@@ -502,21 +502,21 @@ u64? aef-ellie-craft-item(sid arg_0, f32 arg_1) {
         var_49 = aef-ellie-craft-right-outro;
     }
     u64? var_50 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_50 + (0 * 8)) = 28;
-    *(u64*)(*(*var_50 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_50 + (0 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_50 + (1 * 8)) = 30;
-    *(u64*)(*(*var_50 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_50 + (1 * 8)) + 8) = 0.70;
-    *(i32*)*(*var_50 + (2 * 8)) = 46;
-    *(u64*)(*(*var_50 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_50 + (2 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_50 + (3 * 8)) = 24;
-    *(u64*)(*(*var_50 + (3 * 8)) + 8) = 0;
-    *(i32*)(*(*var_50 + (3 * 8)) + 8) = 18;
-    *(i32*)*(*var_50 + (4 * 8)) = 3;
-    *(u64*)(*(*var_50 + (4 * 8)) + 8) = 0;
-    *(u8*)(*(*var_50 + (4 * 8)) + 8) = 1;
+    *(i32*)*var_50[0] = 28;
+    *(u64*)(*var_50[0] + 8) = 0;
+    *(f32*)(*var_50[0] + 8) = 0.30;
+    *(i32*)*var_50[1] = 30;
+    *(u64*)(*var_50[1] + 8) = 0;
+    *(f32*)(*var_50[1] + 8) = 0.70;
+    *(i32*)*var_50[2] = 46;
+    *(u64*)(*var_50[2] + 8) = 0;
+    *(f32*)(*var_50[2] + 8) = 0.50;
+    *(i32*)*var_50[3] = 24;
+    *(u64*)(*var_50[3] + 8) = 0;
+    *(i32*)(*var_50[3] + 8) = 18;
+    *(i32*)*var_50[4] = 3;
+    *(u64*)(*var_50[4] + 8) = 0;
+    *(u8*)(*var_50[4] + 8) = 1;
     wait-animate_(npc-enemy-ellie-pistol-1, var_49, var_50);
     while (var_4 || arg_0 || arg_48 && !object-anim-reached-phase?(get-symbol(backpack, self), aef-ellie-craft-right-outro--backpack, 0.95, 2)) {
         wait-one-frame();
@@ -849,7 +849,7 @@ u64? aef-hunt-ellie-choose-new-entity-location() {
             var_17 = get-random-in-group-with-parameters(var_7, var_4, 4.00, 9999.00, -360.00, 360.00);
         }
     }
-    darray-find-remove(var_7, new-boxed-value(7, var_17), 0);
+    darray-find-remove(var_7, boxed_symbol(var_17), 0);
     set-boolean(entity-groups-dirty, 1, self);
     set-point(current-entity-position, get-spawner-position(var_17, 1), self);
     npc-make-aware-of-at(npc-enemy-ellie-pistol-1, player, get-spawner-position(var_17, 1), 3, 0, 1);
@@ -882,7 +882,7 @@ u64? aef-search-for-trap-mine-position() {
             u64? var_23;
             if (!(get-closest-in-group-to-locator(trap-bomb-array, get-spawner-locator(var_8, 1), 0.00, get-float(trap-mine-lockout-dist, self), -360.00, 360.00) == 0) && !(distance-between-points-xz(get-spawner-position(var_8, 1), get-object-position(npc-enemy-ellie-pistol-1)) < distance-between-points-xz(get-spawner-position(var_8, 1), var_2))) {
                 var_22 = 0;
-                var_23 = darray-find-remove(var_0, new-boxed-value(7, var_8), 0);
+                var_23 = darray-find-remove(var_0, boxed_symbol(var_8), 0);
             } else {
                 var_22 = var_8;
                 var_23 = var_8;
@@ -1679,17 +1679,7 @@ statescript {
                         }
                         if (aef-hunt-get-fight-phase(0) == 3) {
                             if (get-boolean(debug-trap-mine-positions, self)) {
-                                foreach (u64? var_112 : available-trapbomb-chokepoints) {
-                                    u16 var_113;
-                                    if (var_112 && *(u16*)(var_112 + 12) == 7) {
-                                        var_113 = *(u64*)var_112;
-                                    } else if (var_112 && *(u16*)(var_112 + 12) == 5) {
-                                        var_113 = *(u64*)var_112;
-                                    } else if (var_112 && *(u16*)(var_112 + 12) == 4) {
-                                        var_113 = *(u64*)var_112;
-                                    } else {
-                                        var_113 = 0;
-                                    }
+                                foreach (u64? var_113 : available-trapbomb-chokepoints) {
                                     if (var_113 == get-symbol(current-trap-mine-pos, self)) {
                                         debug-draw-string(
                                             offset-position(get-spawner-position(var_113, 1), alloc-vector(0.00, 0.25, 0.00, 1.00, 0)),
@@ -1852,27 +1842,27 @@ statescript {
                         if (get-boolean(task-in?, self)) {
                             set-object-teleport(npc-enemy-ellie-pistol-1);
                             u64? var_9 = #%alloc-array(single-frame, 16, 7, 1);
-                            *(i32*)*(*var_9 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-or-object-locator(ap-aef-hunt-through-floor-2);
-                            *(i32*)*(*var_9 + (1 * 8)) = 59;
-                            *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                            *(i32*)*(*var_9 + (2 * 8)) = 58;
-                            *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_9 + (2 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_9 + (3 * 8)) = 56;
-                            *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_9 + (3 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_9 + (4 * 8)) = 28;
-                            *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_9 + (4 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_9 + (5 * 8)) = 45;
-                            *(u64*)(*(*var_9 + (5 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_9 + (5 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_9 + (6 * 8)) = 24;
-                            *(u64*)(*(*var_9 + (6 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_9 + (6 * 8)) + 8) = 1;
+                            *(i32*)*var_9[0] = 10;
+                            *(u64*)(*var_9[0] + 8) = 0;
+                            *(u64*)(*var_9[0] + 8) = get-spawner-or-object-locator(ap-aef-hunt-through-floor-2);
+                            *(i32*)*var_9[1] = 59;
+                            *(u64*)(*var_9[1] + 8) = 0;
+                            *(i32*)(*var_9[1] + 8) = 0;
+                            *(i32*)*var_9[2] = 58;
+                            *(u64*)(*var_9[2] + 8) = 0;
+                            *(f32*)(*var_9[2] + 8) = 1.00;
+                            *(i32*)*var_9[3] = 56;
+                            *(u64*)(*var_9[3] + 8) = 0;
+                            *(f32*)(*var_9[3] + 8) = 0.00;
+                            *(i32*)*var_9[4] = 28;
+                            *(u64*)(*var_9[4] + 8) = 0;
+                            *(f32*)(*var_9[4] + 8) = 0.00;
+                            *(i32*)*var_9[5] = 45;
+                            *(u64*)(*var_9[5] + 8) = 0;
+                            *(f32*)(*var_9[5] + 8) = 0.00;
+                            *(i32*)*var_9[6] = 24;
+                            *(u64*)(*var_9[6] + 8) = 0;
+                            *(i32*)(*var_9[6] + 8) = 1;
                             animate_(npc-enemy-ellie-pistol-1, aef-fight-hunt-through-floor-landing-fail--ellie, var_9);
                             wait(0.50);
                         }
@@ -2286,15 +2276,15 @@ statescript {
                             }
                             set-symbol(look-around-anim, var_4, self);
                             u64? var_8 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 28;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_8 + (1 * 8)) = 30;
-                            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_8 + (2 * 8)) = 3;
-                            *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_8 + (2 * 8)) + 8) = 1;
+                            *(i32*)*var_8[0] = 28;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(f32*)(*var_8[0] + 8) = 0.50;
+                            *(i32*)*var_8[1] = 30;
+                            *(u64*)(*var_8[1] + 8) = 0;
+                            *(f32*)(*var_8[1] + 8) = 0.50;
+                            *(i32*)*var_8[2] = 3;
+                            *(u64*)(*var_8[2] + 8) = 0;
+                            *(u8*)(*var_8[2] + 8) = 1;
                             wait-animate_(npc-enemy-ellie-pistol-1, var_4, var_8);
                             var_7 = set-symbol(look-around-anim, 0, self);
                         }
@@ -2770,70 +2760,70 @@ statescript {
                     broadcast-event(aef-ellie-prepping-trap-mine);
                     npc-stop-and-face(npc-enemy-ellie-pistol-1, aef-hunt-get-entity-position());
                     u64? var_22 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_22 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_22 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_22 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_22 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_22 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_22 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_22 + (2 * 8)) = 1;
-                    *(u64*)(*(*var_22 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_22 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_22 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_22 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_22 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_22 + (4 * 8)) = 40;
-                    *(u64*)(*(*var_22 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_22 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_22[0] = 28;
+                    *(u64*)(*var_22[0] + 8) = 0;
+                    *(f32*)(*var_22[0] + 8) = 0.50;
+                    *(i32*)*var_22[1] = 30;
+                    *(u64*)(*var_22[1] + 8) = 0;
+                    *(f32*)(*var_22[1] + 8) = 0.50;
+                    *(i32*)*var_22[2] = 1;
+                    *(u64*)(*var_22[2] + 8) = 0;
+                    *(u8*)(*var_22[2] + 8) = 1;
+                    *(i32*)*var_22[3] = 3;
+                    *(u64*)(*var_22[3] + 8) = 0;
+                    *(u8*)(*var_22[3] + 8) = 1;
+                    *(i32*)*var_22[4] = 40;
+                    *(u64*)(*var_22[4] + 8) = 0;
+                    *(i32*)(*var_22[4] + 8) = 1;
                     animate_(npc-enemy-ellie-pistol-1, ellie-boss-light-trap-mine-crouch-add, var_22);
                     u64? var_23 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_23 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_23 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_23 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_23 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_23 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_23 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_23 + (2 * 8)) = 1;
-                    *(u64*)(*(*var_23 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_23 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_23 + (3 * 8)) = 3;
-                    *(u64*)(*(*var_23 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_23 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_23 + (4 * 8)) = 40;
-                    *(u64*)(*(*var_23 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_23 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_23[0] = 28;
+                    *(u64*)(*var_23[0] + 8) = 0;
+                    *(f32*)(*var_23[0] + 8) = 0.50;
+                    *(i32*)*var_23[1] = 30;
+                    *(u64*)(*var_23[1] + 8) = 0;
+                    *(f32*)(*var_23[1] + 8) = 0.20;
+                    *(i32*)*var_23[2] = 1;
+                    *(u64*)(*var_23[2] + 8) = 0;
+                    *(u8*)(*var_23[2] + 8) = 1;
+                    *(i32*)*var_23[3] = 3;
+                    *(u64*)(*var_23[3] + 8) = 0;
+                    *(u8*)(*var_23[3] + 8) = 1;
+                    *(i32*)*var_23[4] = 40;
+                    *(u64*)(*var_23[4] + 8) = 0;
+                    *(i32*)(*var_23[4] + 8) = 1;
                     animate_(npc-enemy-ellie-pistol-1, ellie-boss-light-trap-mine-crouch-part, var_23);
                     u64? var_24 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_24 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_24 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_24 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_24 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_24 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_24 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_24 + (2 * 8)) = 40;
-                    *(u64*)(*(*var_24 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_24 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_24[0] = 28;
+                    *(u64*)(*var_24[0] + 8) = 0;
+                    *(f32*)(*var_24[0] + 8) = 0.00;
+                    *(i32*)*var_24[1] = 30;
+                    *(u64*)(*var_24[1] + 8) = 0;
+                    *(f32*)(*var_24[1] + 8) = 0.20;
+                    *(i32*)*var_24[2] = 40;
+                    *(u64*)(*var_24[2] + 8) = 0;
+                    *(i32*)(*var_24[2] + 8) = 1;
                     animate_(var_20, ellie-boss-light-trap-mine-crouch-throwable-part, var_24);
                     start-timer(place-trap-mine-anti-stuck-timer, get-animation-duration(npc-enemy-ellie-pistol-1, ellie-boss-light-trap-mine-crouch-add), self, 1);
                     while (object-anim-reached-phase?(npc-enemy-ellie-pistol-1, ellie-boss-light-trap-mine-crouch-add, 0.90, 2) && !!timer-running?(place-trap-mine-anti-stuck-timer, self)) {
                         wait-one-frame();
                     }
                     u64? var_28 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_28 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_28 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_28 + (0 * 8)) + 8) = rotate-locator-lookat(get-object-locator(npc-enemy-ellie-pistol-1), alloc-bound-frame(aef-hunt-get-entity-position(), 0, 0, 0, 0), 1.00, 0);
-                    *(i32*)*(*var_28 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_28 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_28 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_28 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_28 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_28 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_28 + (3 * 8)) = 1;
-                    *(u64*)(*(*var_28 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_28 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_28 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_28 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_28 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_28[0] = 10;
+                    *(u64*)(*var_28[0] + 8) = 0;
+                    *(u64*)(*var_28[0] + 8) = rotate-locator-lookat(get-object-locator(npc-enemy-ellie-pistol-1), alloc-bound-frame(aef-hunt-get-entity-position(), 0, 0, 0, 0), 1.00, 0);
+                    *(i32*)*var_28[1] = 28;
+                    *(u64*)(*var_28[1] + 8) = 0;
+                    *(f32*)(*var_28[1] + 8) = 0.50;
+                    *(i32*)*var_28[2] = 30;
+                    *(u64*)(*var_28[2] + 8) = 0;
+                    *(f32*)(*var_28[2] + 8) = 0.50;
+                    *(i32*)*var_28[3] = 1;
+                    *(u64*)(*var_28[3] + 8) = 0;
+                    *(u8*)(*var_28[3] + 8) = 1;
+                    *(i32*)*var_28[4] = 3;
+                    *(u64*)(*var_28[4] + 8) = 0;
+                    *(u8*)(*var_28[4] + 8) = 1;
                     animate_(npc-enemy-ellie-pistol-1, ellie-boss-crouch-plant-trap-mine, var_28);
                     broadcast-event(aef-trap-mine-being-placed);
                     start-timer(place-trap-mine-anti-stuck-timer, frames-to-sec(24), self, 1);
@@ -2868,10 +2858,10 @@ statescript {
                         0
                     );
                     set-effect-float(var_47, rate, 1.00);
-                    ddict-set(trap-bomb-dict, get-symbol(trap-bomb-id, self), new-boxed-value(7, get-symbol(current-trap-mine-pos, self)));
-                    darray-append(trap-bomb-array, new-boxed-value(7, get-symbol(trap-bomb-id, self)), 0);
-                    ddict-set(trap-bomb-particle-dict, get-symbol(trap-bomb-id, self), new-boxed-value(5, var_47));
-                    darray-find-remove(available-trapbomb-chokepoints, new-boxed-value(7, get-symbol(current-trap-mine-pos, self)), 0);
+                    ddict-set(trap-bomb-dict, get-symbol(trap-bomb-id, self), boxed_symbol(get-symbol(current-trap-mine-pos, self)));
+                    darray-append(trap-bomb-array, boxed_symbol(get-symbol(trap-bomb-id, self)), 0);
+                    ddict-set(trap-bomb-particle-dict, get-symbol(trap-bomb-id, self), boxed_u64(var_47));
+                    darray-find-remove(available-trapbomb-chokepoints, boxed_symbol(get-symbol(current-trap-mine-pos, self)), 0);
                     listen-mode-visible(get-symbol(trap-bomb-id, self), 0, 1, -1.00);
                     set-boolean(placing-trap-bomb, 0, self);
                     aef-ellie-do-flank();
@@ -3402,7 +3392,7 @@ statescript {
                 }
                 lambda {
                     if (aef-hunt-get-fight-phase(1) == 2) {
-                        broadcast-event(aef-ellie-audio-stimulus, new-boxed-value(6, distance-between-objects(npc-enemy-ellie-pistol-1, player)));
+                        broadcast-event(aef-ellie-audio-stimulus, boxed_f32(distance-between-objects(npc-enemy-ellie-pistol-1, player)));
                         go(ellie-debug-advance, 1);
                     } else if (aef-hunt-get-fight-phase(0) == 3 || get-int32(ellie-throwable-inventory, self) > 0) {
                         if (*aef-fight-debug-settings* != nullptr && *(u8*)(*aef-fight-debug-settings* + 14)) {

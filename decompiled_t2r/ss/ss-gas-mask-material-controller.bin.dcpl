@@ -51,7 +51,7 @@ statescript {
                         var_2 = convert-player-to-name(var_0);
                     }
                     u64? var_4 = get-gas-mask-material-param(var_2);
-                    if (darray-contains?(characters-wearing-gas-masks, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(characters-wearing-gas-masks, boxed_symbol(event-arg-symbol(0)))) {
                         if (!is-final-build?()) {
                             var_8 = display(dc:format("Failed to set gas mask materials: Already set!"), 19);
                         }
@@ -65,7 +65,7 @@ statescript {
                         }
                     } else {
                         set-table-shader-material-values-param(var_4, 1.00);
-                        var_8 = darray-append(characters-wearing-gas-masks, new-boxed-value(7, event-arg-symbol(0)), 1);
+                        var_8 = darray-append(characters-wearing-gas-masks, boxed_symbol(event-arg-symbol(0)), 1);
                     }
                 }
             }
@@ -87,13 +87,13 @@ statescript {
                         if (!is-final-build?()) {
                             var_6 = display(dc:format("Failed to set gas mask materials: Invalid material params!"), 19);
                         }
-                    } else if (!darray-contains?(characters-wearing-gas-masks, new-boxed-value(7, event-arg-symbol(0)))) {
+                    } else if (!darray-contains?(characters-wearing-gas-masks, boxed_symbol(event-arg-symbol(0)))) {
                         u64? var_17 = dc:format("Character was not wearing a registered gas mask!");
                         display(var_17, 8);
                         var_6 = display-error(var_17);
                     } else {
                         set-table-shader-material-values-param(var_4, 0.00);
-                        var_6 = darray-find-remove(characters-wearing-gas-masks, new-boxed-value(7, event-arg-symbol(0)), 0);
+                        var_6 = darray-find-remove(characters-wearing-gas-masks, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }

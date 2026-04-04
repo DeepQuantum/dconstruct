@@ -44,7 +44,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, splashers-rapids, new-boxed-value(1, 1));
+                    fact-set(global, splashers-rapids, boxed_bool(1));
                 }
             }
         }
@@ -52,7 +52,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(t2r-sewers, t2r-nor-sewers-puzzle-complete)) {
-                        fact-set(global, splashers-rapids, new-boxed-value(1, 0));
+                        fact-set(global, splashers-rapids, boxed_bool(0));
                         go(complete, 1);
                     }
                 }

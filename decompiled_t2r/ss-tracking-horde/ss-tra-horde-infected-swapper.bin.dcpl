@@ -13,8 +13,8 @@
 
 u16 tra-horde-get-corresponding-look(u64? arg_0) {
     u16 var_3;
-    if (darray-contains?(tra-horde-runner-winter-looks, new-boxed-value(7, get-object-look(arg_0, 0)))) {
-        u64? var_7 = darray-at(tra-horde-simple-runner-winter-looks, darray-find(tra-horde-runner-winter-looks, new-boxed-value(7, get-object-look(arg_0, 0)), 0));
+    if (darray-contains?(tra-horde-runner-winter-looks, boxed_symbol(get-object-look(arg_0, 0)))) {
+        u64? var_7 = darray-at(tra-horde-simple-runner-winter-looks, darray-find(tra-horde-runner-winter-looks, boxed_symbol(get-object-look(arg_0, 0)), 0));
         u16 var_8;
         if (var_7 && *(u16*)(var_7 + 12) == 7) {
             var_8 = *(u64*)var_7;
@@ -26,8 +26,8 @@ u16 tra-horde-get-corresponding-look(u64? arg_0) {
             var_8 = 0;
         }
         var_3 = var_8;
-    } else if (darray-contains?(tra-horde-simple-runner-winter-looks, new-boxed-value(7, get-object-look(arg_0, 0)))) {
-        u64? var_15 = darray-at(tra-horde-runner-winter-looks, darray-find(tra-horde-simple-runner-winter-looks, new-boxed-value(7, get-object-look(arg_0, 0)), 0));
+    } else if (darray-contains?(tra-horde-simple-runner-winter-looks, boxed_symbol(get-object-look(arg_0, 0)))) {
+        u64? var_15 = darray-at(tra-horde-runner-winter-looks, darray-find(tra-horde-simple-runner-winter-looks, boxed_symbol(get-object-look(arg_0, 0)), 0));
         u16 var_16;
         if (var_15 && *(u16*)(var_15 + 12) == 7) {
             var_16 = *(u64*)var_15;
@@ -50,23 +50,23 @@ u64? tra-horde-swap-npc-and-snpc(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3,
     u64? var_3 = wait-snpc-swap-for-npc(arg_1, arg_2, 0.50, 0, 1, tra-horde-get-corresponding-look(arg_1));
     wait-for-entity-spawned(var_1);
     wait-for-entity-spawned(var_3);
-    darray-find-remove(arg_4, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(arg_5, new-boxed-value(7, arg_1), 0);
-    darray-find-remove(horde-all-npcs, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(horde-all-snpcs, new-boxed-value(7, arg_1), 0);
+    darray-find-remove(arg_4, boxed_symbol(arg_0), 0);
+    darray-find-remove(arg_5, boxed_symbol(arg_1), 0);
+    darray-find-remove(horde-all-npcs, boxed_symbol(arg_0), 0);
+    darray-find-remove(horde-all-snpcs, boxed_symbol(arg_1), 0);
     kill-entity(arg_0);
     kill-entity(arg_1);
     set-int32(index, arg_6, var_3);
-    darray-append(arg_4, new-boxed-value(7, var_3), 1);
-    darray-append(horde-all-npcs, new-boxed-value(7, var_3), 1);
+    darray-append(arg_4, boxed_symbol(var_3), 1);
+    darray-append(horde-all-npcs, boxed_symbol(var_3), 1);
     set-int32(my-group-count, arg_8, var_3);
     set-symbol(chase-track, arg_10, var_3);
     set-symbol(catchup-spawners, arg_12, var_3);
     set-boolean(force-awareness?, arg_13, var_3);
     set-symbol(manager-script, arg_14, var_3);
     set-int32(index, arg_7, var_1);
-    darray-append(arg_5, new-boxed-value(7, var_1), 1);
-    darray-append(horde-all-snpcs, new-boxed-value(7, var_1), 1);
+    darray-append(arg_5, boxed_symbol(var_1), 1);
+    darray-append(horde-all-snpcs, boxed_symbol(var_1), 1);
     set-int32(my-group-count, arg_9, var_1);
     set-symbol(chase-track, arg_11, var_1);
     set-symbol(catchup-spawners, arg_12, var_1);

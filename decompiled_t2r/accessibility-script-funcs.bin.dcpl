@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? accessibility-set-custom-state(u16 arg_0, u64? arg_1) {
-    return send-event(set-custom-state, ss-accessibility-status, new-boxed-value(7, arg_0), new-boxed-value(7, arg_1));
+    return send-event(set-custom-state, ss-accessibility-status, boxed_symbol(arg_0), boxed_symbol(arg_1));
 }
 
 u16 play-accessibility-interact-sound-at-position(u64? arg_0, bool arg_1, f32 arg_2, bool arg_3) {
@@ -60,7 +60,7 @@ u16 play-accessibility-interact-sound-at-position(u64? arg_0, bool arg_1, f32 ar
 }
 
 u64? remove-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
-    return send-event(remove-fake-enemy, ss-player-blind-listen-mode, new-boxed-value(7, arg_0));
+    return send-event(remove-fake-enemy, ss-player-blind-listen-mode, boxed_symbol(arg_0));
 }
 
 u16 play-accessibility-circle-hold-sound-at-position(u64? arg_0) {
@@ -151,7 +151,7 @@ u16 play-accessibility-jump-sound-at-position(u64? arg_0, bool arg_1, bool arg_2
 }
 
 u64? set-accessibility-pathfind-goal(u64? arg_0) {
-    return send-event(set-goal, ss-accessibility-pathfind, new-boxed-value(7, arg_0));
+    return send-event(set-goal, ss-accessibility-pathfind, boxed_symbol(arg_0));
 }
 
 u16 play-accessibility-control-regained-control-sound() {
@@ -265,7 +265,7 @@ u64? player-is-accessibility-invisible?() {
 }
 
 u64? set-accessibility-pathfind-goal-boat(u64? arg_0) {
-    return send-event(set-goal-boat, ss-accessibility-pathfind, new-boxed-value(7, arg_0));
+    return send-event(set-goal-boat, ss-accessibility-pathfind, boxed_symbol(arg_0));
 }
 
 u64? clear-accessibility-pathfind-goal-boat() {
@@ -354,13 +354,13 @@ u16 notify-skippable-puzzle(i64 arg_0, u64? arg_1) {
     if (arg_1 && is-text-to-speech-enabled?() && current-task-elapsed-time() > 1.50 && !text-to-speech-playing?() && !is-any-major-character-speaking?()) {
         u16 var_9;
         if (enough-time-since-player-fact?(puzzle-skip-cue, 60.00) && arg_0 != fact-lookup-symbol(fact-get-dictionary(player), puzzle-skip, 0) && is-skip-puzzle-enabled?()) {
-            speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT), 2, 0, 1);
-            fact-set(player, puzzle-skip, new-boxed-value(7, arg_0));
+            speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_SKIP_PUZZLE_PROMPT), 2, 0, 1);
+            fact-set(player, puzzle-skip, boxed_symbol(arg_0));
             var_9 = set-player-fact-time(puzzle-skip-cue);
         } else if (!get-svar-as-boolean(skip-puzzle-tutorial)) {
             set-svar-as-boolean(skip-puzzle-tutorial, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, ACCESSIBILITY_SKIP_PUZZLE_PROMPT_2), 2, 0, 1);
-            fact-set(player, puzzle-skip, new-boxed-value(7, arg_0));
+            speak-text-to-speech-formatted(boxed_symbol(ACCESSIBILITY_SKIP_PUZZLE_PROMPT_2), 2, 0, 1);
+            fact-set(player, puzzle-skip, boxed_symbol(arg_0));
             var_9 = set-player-fact-time(puzzle-skip-cue);
         } else {
             var_9 = 0;
@@ -466,17 +466,7 @@ u64? accessibility-suppress-control-sounds/f() {
 }
 
 u64? enable-closest-tap(u64? arg_0, u64? arg_1) {
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         if (var_3 == get-closest-in-group(arg_0, arg_1, 0, 0, 1, 0)) {
             enable-action-pack(var_3, 1);
         } else {
@@ -531,7 +521,7 @@ sid get-nav-assist-combat-icon-placement() {
 }
 
 u64? add-fake-enemy-for-enhanced-listen-mode(u64? arg_0) {
-    return send-event(add-fake-enemy, ss-player-blind-listen-mode, new-boxed-value(7, arg_0));
+    return send-event(add-fake-enemy, ss-player-blind-listen-mode, boxed_symbol(arg_0));
 }
 
 u64? player-can-break-throw-glass?() {
@@ -543,7 +533,7 @@ u64? clear-accessibility-pathfind-goal-horse() {
 }
 
 u64? set-player-fact-time(u64? arg_0) {
-    return fact-set(player, arg_0, new-boxed-value(8, get-current-timeframe(0)));
+    return fact-set(player, arg_0, boxed_timeframePOD(get-current-timeframe(0)));
 }
 
 u64? set-accessibility-pathfind-unavailable() {
@@ -574,7 +564,7 @@ u16 clear-accessibility-pathfind-goal(i64 arg_0) {
 }
 
 u64? set-accessibility-pathfind-goal-horse(u64? arg_0) {
-    return send-event(set-goal-horse, ss-accessibility-pathfind, new-boxed-value(7, arg_0));
+    return send-event(set-goal-horse, ss-accessibility-pathfind, boxed_symbol(arg_0));
 }
 
 u16 play-accessibility-circle-sound-at-position(u64? arg_0) {

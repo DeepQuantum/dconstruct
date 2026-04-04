@@ -33,17 +33,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : noscript-infiltration-hps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : noscript-infiltration-hps) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -51,17 +41,7 @@ statescript {
                     wait-spawn-npc-group-async(noscript-infiltration-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : noscript-infiltration-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : noscript-infiltration-npcs) {
                         npc-set-zone-region(var_2, 0);
                         npc-clear-hard-point(var_2);
                     }

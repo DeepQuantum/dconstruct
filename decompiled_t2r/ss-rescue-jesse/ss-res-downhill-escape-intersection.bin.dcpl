@@ -94,17 +94,7 @@ statescript {
                     wait-spawn-npc-group-async(res-downhill-car-npcs-intersection, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-downhill-car-npcs-intersection) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-downhill-car-npcs-intersection) {
                         set-npc-hit-tick-by-damage(var_2, 1);
                         npc-enable-stun(var_2, 0);
                     }
@@ -148,20 +138,20 @@ statescript {
                         wait(get-animation-duration(npc-res-downhill-militia-car-back-1, res-downhill-sideswipe-crash-intro--female));
                     } else {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
                         wait-animate_(npc-res-downhill-militia-car-back-1, res-downhill-sideswipe-crash-intro--female, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     wait-animate_(npc-res-downhill-militia-car-back-1, res-downhill-sideswipe-crash--female, var_0);
                 }
                 lambda {
@@ -174,20 +164,20 @@ statescript {
                         wait(get-animation-duration(npc-res-downhill-militia-car-back-2, res-downhill-sideswipe-crash-intro--male));
                     } else {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
                         wait-animate_(npc-res-downhill-militia-car-back-2, res-downhill-sideswipe-crash-intro--male, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     wait-animate_(npc-res-downhill-militia-car-back-2, res-downhill-sideswipe-crash--male, var_0);
                 }
                 lambda {
@@ -207,52 +197,52 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = humvee;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = humvee;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_3;
                     if (object-anim-playing?(npc-res-downhill-militia-car-driver-1, res-downhill-car-chase-end-kill--male-b, 0)) {
                         var_3 = 60.00;
                     } else {
                         var_3 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = var_3;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
                     f32 var_5;
                     if (object-anim-playing?(npc-res-downhill-militia-car-driver-1, res-downhill-car-chase-end-kill--male-b, 0)) {
                         var_5 = 0.50;
                     } else {
                         var_5 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_0 + (4 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(f32*)(*var_0[3] + 8) = var_5;
+                    *(i32*)*var_0[4] = 86;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     wait-animate_(npc-res-downhill-militia-car-driver-1, res-downhill-car-chase-end-kill--male-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = humvee;
-                    *(i32*)*(*var_0 + (2 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = humvee;
+                    *(i32*)*var_0[2] = 58;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
+                    *(i32*)*var_0[3] = 56;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.00;
+                    *(i32*)*var_0[4] = 86;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-res-downhill-militia-car-driver-1, res-downhill-car-chase-end-kill--male-b, var_0);
                 }
             }
@@ -264,30 +254,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = humvee;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-res-downhill-militia-car-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = humvee;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_3;
                     if (object-anim-playing?(npc-res-downhill-militia-car-shotgun-1, res-downhill-car-chase-end-kill--male-a, 0)) {
                         var_3 = 60.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = var_3;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
                     f32 var_5;
                     if (object-anim-playing?(npc-res-downhill-militia-car-shotgun-1, res-downhill-car-chase-end-kill--male-a, 0)) {
                         var_5 = 0.50;
                     } else {
                         var_5 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = var_5;
+                    *(f32*)(*var_0[3] + 8) = var_5;
                     animate_(npc-res-downhill-militia-car-shotgun-1, res-downhill-car-chase-end-kill--male-a, var_0);
                 }
                 lambda {
@@ -303,16 +293,16 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     animate_(obj-res-downhill-sideswipe-pole-1, res-downhill-sideswipe-crash--pole, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     animate_(obj-res-downhill-militia-car-1, res-downhill-sideswipe-crash--humvee, var_0);
                 }
                 lambda {
@@ -320,16 +310,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-sideswipe-crash--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-sideswipe-1, 1);
                     wait-animate_(jesse, res-downhill-sideswipe-crash--jesse, var_0);
                 }
                 lambda {
@@ -413,12 +403,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     wait-animate_(player, res-downhill-sideswipe-crash--ellie, var_0);
                 }
                 lambda {

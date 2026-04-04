@@ -18,8 +18,8 @@ u16 claim-tra-horde-npc(u16 arg_0, u64? arg_1) {
     } else {
         var_0 = arg_0;
     }
-    send-event(reassign, arg_1, new-boxed-value(7, var_0));
-    darray-append(get-symbol(live-horde-group, self), new-boxed-value(7, arg_1), 1);
+    send-event(reassign, arg_1, boxed_symbol(var_0));
+    darray-append(get-symbol(live-horde-group, self), boxed_symbol(arg_1), 1);
     set-symbol(chase-track, tag-symbol(chase-track, self), arg_1);
     set-symbol(catchup-spawners, tag-symbol(catchups-group, self), arg_1);
     u16 var_10;
@@ -43,8 +43,8 @@ u16 wait-spawn-tra-horde-npc(u16 arg_0) {
         var_0 = arg_0;
     }
     u64? var_3 = wait-spawn-horde-npc-with-look(var_0);
-    darray-append(get-symbol(live-horde-group, self), new-boxed-value(7, var_3), 1);
-    darray-append(horde-all-npcs, new-boxed-value(7, var_3), 1);
+    darray-append(get-symbol(live-horde-group, self), boxed_symbol(var_3), 1);
+    darray-append(horde-all-npcs, boxed_symbol(var_3), 1);
     set-symbol(chase-track, tag-symbol(chase-track, self), var_3);
     set-symbol(catchup-spawners, tag-symbol(catchups-group, self), var_3);
     u16 var_11;
@@ -116,31 +116,11 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(allow-despawning?, self)) {
-                        foreach (u64? var_4 : get-symbol(live-npc-group, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
-                            send-event(update-chase-track, var_5, new-boxed-value(7, event-arg-symbol(0)));
+                        foreach (u64? var_5 : get-symbol(live-npc-group, self)) {
+                            send-event(update-chase-track, var_5, boxed_symbol(event-arg-symbol(0)));
                         }
-                        foreach (u64? var_12 : get-symbol(live-horde-group, self)) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
-                            send-event(update-chase-track, var_13, new-boxed-value(7, event-arg-symbol(0)));
+                        foreach (u64? var_13 : get-symbol(live-horde-group, self)) {
+                            send-event(update-chase-track, var_13, boxed_symbol(event-arg-symbol(0)));
                         }
                     }
                 }
@@ -164,13 +144,13 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(live-npc-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-npc-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-npc-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-npc-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                     }
-                    if (darray-contains?(get-symbol(live-horde-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-horde-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-horde-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-horde-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                         var_10 = adjust-horde-look-count(var_0, -1);
                     }
                 }
@@ -181,17 +161,7 @@ statescript {
                 lambda {
                     if (!get-boolean(target-player?, self)) {
                         set-boolean(target-player?, 1, self);
-                        foreach (u64? var_4 : get-symbol(live-horde-group, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(live-horde-group, self)) {
                             send-event(stop-move-to, var_5);
                         }
                     }
@@ -234,7 +204,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(tracking-horde, tra-infected-horde-approach) && tag-boolean(start-unaware?, self)) {
-                        darray-append(horde-managers, new-boxed-value(7, get-self-id()), 1);
+                        darray-append(horde-managers, boxed_symbol(get-self-id()), 1);
                         if (!(tag-int32(manager-id, self) == 0)) {
                             set-int32(manager-id, -1, self);
                         } else {
@@ -242,7 +212,7 @@ statescript {
                         }
                         go(spawn-initial-npcs, 1);
                     } else {
-                        darray-append(horde-managers, new-boxed-value(7, get-self-id()), 1);
+                        darray-append(horde-managers, boxed_symbol(get-self-id()), 1);
                         set-int32(manager-id, darray-count(horde-managers), self);
                         go(spawn-initial-horde, 1);
                     }
@@ -259,18 +229,8 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_7 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-npc"), 0, 0, 0)) {
-                        u16 var_8;
-                        if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                            var_8 = *(u64*)var_7;
-                        } else {
-                            var_8 = 0;
-                        }
-                        darray-append(get-symbol(npc-spawners-group, self), new-boxed-value(7, var_8), 1);
+                    foreach (u64? var_8 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-npc"), 0, 0, 0)) {
+                        darray-append(get-symbol(npc-spawners-group, self), boxed_symbol(var_8), 1);
                     }
                 }
                 lambda {
@@ -289,8 +249,8 @@ statescript {
                                 var_8 = 0;
                             }
                             u64? var_9 = wait-spawn-entity(var_8, 0);
-                            darray-append(get-symbol(live-npc-group, self), new-boxed-value(7, var_9), 1);
-                            darray-append(horde-all-npcs, new-boxed-value(7, var_9), 1);
+                            darray-append(get-symbol(live-npc-group, self), boxed_symbol(var_9), 1);
+                            darray-append(horde-all-npcs, boxed_symbol(var_9), 1);
                             set-symbol(chase-track, tag-symbol(chase-track, self), var_9);
                             set-symbol(catchup-spawners, tag-symbol(catchups-group, self), var_9);
                             i = i + 1;
@@ -310,18 +270,8 @@ statescript {
                     set-tension-mode(3);
                 }
                 lambda {
-                    foreach (u64? var_5 : get-spawners-by-tag(tag-symbol(spawners-tag, self), 0, 0, 0)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
-                        darray-append(get-symbol(horde-spawners-group, self), new-boxed-value(7, var_6), 1);
+                    foreach (u64? var_6 : get-spawners-by-tag(tag-symbol(spawners-tag, self), 0, 0, 0)) {
+                        darray-append(get-symbol(horde-spawners-group, self), boxed_symbol(var_6), 1);
                     }
                 }
                 lambda {
@@ -342,9 +292,9 @@ statescript {
                             send-event(
                                 spawn-request,
                                 ss-tra-horde-chase-manager-1,
-                                new-boxed-value(7, get-self-id()),
-                                new-boxed-value(7, var_8),
-                                new-boxed-value(1, 1)
+                                boxed_symbol(get-self-id()),
+                                boxed_symbol(var_8),
+                                boxed_bool(1)
                             );
                             i = i + 1;
                         }
@@ -361,17 +311,7 @@ statescript {
             track awareness {
                 lambda {
                     while (get-boolean(still-unaware?, self)) {
-                        foreach (u64? var_4 : get-symbol(live-npc-group, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(live-npc-group, self)) {
                             if (npc-has-awareness?(var_5, player, 2)) {
                                 set-boolean(still-unaware?, 0, self);
                             }
@@ -383,17 +323,7 @@ statescript {
                     set-tension-mode(3);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(live-npc-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(live-npc-group, self)) {
                         set-boolean(force-awareness?, 1, var_4);
                     }
                 }
@@ -409,38 +339,18 @@ statescript {
                     wait(7.00);
                 }
                 lambda {
-                    foreach (u64? var_3 : darray-clone(get-symbol(live-npc-group, self), single-frame, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : darray-clone(get-symbol(live-npc-group, self), single-frame, 0)) {
                         if (npc-alive?(var_4) && npc-not-visible?(var_4) && get-float(dist-to-player, var_4) > 7.00) {
-                            darray-find-remove(get-symbol(live-npc-group, self), new-boxed-value(7, var_4), 0);
-                            darray-find-remove(horde-all-npcs, new-boxed-value(7, var_4), 0);
+                            darray-find-remove(get-symbol(live-npc-group, self), boxed_symbol(var_4), 0);
+                            darray-find-remove(horde-all-npcs, boxed_symbol(var_4), 0);
                             kill-entity(var_4);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_5 : get-spawners-by-tag(tag-symbol(spawners-tag, self), 0, 0, 0)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
+                    foreach (u64? var_6 : get-spawners-by-tag(tag-symbol(spawners-tag, self), 0, 0, 0)) {
                         if (!(var_6 == cnpc-horde-main-runner-horde-6)) {
-                            darray-append(get-symbol(horde-spawners-group, self), new-boxed-value(7, var_6), 1);
+                            darray-append(get-symbol(horde-spawners-group, self), boxed_symbol(var_6), 1);
                         }
                     }
                 }
@@ -463,17 +373,17 @@ statescript {
                                 var_10 = send-event(
                                     spawn-request,
                                     ss-tra-horde-chase-manager-1,
-                                    new-boxed-value(7, get-self-id()),
-                                    new-boxed-value(7, 0),
-                                    new-boxed-value(1, 1)
+                                    boxed_symbol(get-self-id()),
+                                    boxed_symbol(0),
+                                    boxed_bool(1)
                                 );
                             } else {
                                 var_10 = send-event(
                                     spawn-request,
                                     ss-tra-horde-chase-manager-1,
-                                    new-boxed-value(7, get-self-id()),
-                                    new-boxed-value(7, var_8),
-                                    new-boxed-value(1, 1)
+                                    boxed_symbol(get-self-id()),
+                                    boxed_symbol(var_8),
+                                    boxed_bool(1)
                                 );
                             }
                             i = i + 1;
@@ -489,13 +399,13 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(live-npc-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-npc-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-npc-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-npc-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                     }
-                    if (darray-contains?(get-symbol(live-horde-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-horde-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-horde-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-horde-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                         var_10 = adjust-horde-look-count(var_0, -1);
                     }
                 }
@@ -518,7 +428,7 @@ statescript {
                 lambda {
                     while (!get-boolean(allow-despawning?, self)) {
                         if (npc-group-alive-count(get-symbol(live-horde-group, self)) < tra-horde-manager-max()) {
-                            send-event(spawn-request, ss-tra-horde-chase-manager-1, new-boxed-value(7, get-self-id()), new-boxed-value(7, 0));
+                            send-event(spawn-request, ss-tra-horde-chase-manager-1, boxed_symbol(get-self-id()), boxed_symbol(0));
                         }
                         wait(0.10);
                     }
@@ -529,13 +439,13 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(live-npc-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-npc-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-npc-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-npc-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                     }
-                    if (darray-contains?(get-symbol(live-horde-group, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(live-horde-group, self), new-boxed-value(7, var_0), 0);
-                        darray-find-remove(horde-all-npcs, new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(live-horde-group, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(live-horde-group, self), boxed_symbol(var_0), 0);
+                        darray-find-remove(horde-all-npcs, boxed_symbol(var_0), 0);
                         var_10 = adjust-horde-look-count(var_0, -1);
                     }
                 }
@@ -552,20 +462,10 @@ statescript {
             track main {
                 lambda {
                     if (darray-count(get-symbol(live-npc-group, self)) > 0) {
-                        foreach (u64? var_5 : darray-clone(get-symbol(live-npc-group, self), single-frame, 0)) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : darray-clone(get-symbol(live-npc-group, self), single-frame, 0)) {
                             if (npc-alive?(var_6) && npc-not-visible?(var_6) && get-float(dist-to-player, var_6) > 4.00) {
-                                darray-find-remove(get-symbol(live-npc-group, self), new-boxed-value(7, var_6), 0);
-                                darray-find-remove(horde-all-npcs, new-boxed-value(7, var_6), 0);
+                                darray-find-remove(get-symbol(live-npc-group, self), boxed_symbol(var_6), 0);
+                                darray-find-remove(horde-all-npcs, boxed_symbol(var_6), 0);
                                 kill-entity(var_6);
                             }
                         }
@@ -581,34 +481,14 @@ statescript {
                     set-boolean(allow-despawning?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(live-npc-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(live-npc-group, self)) {
                         set-boolean(allow-despawning?, 1, var_4);
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : darray-clone(get-symbol(live-horde-group, self), single-frame, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        send-event(reassign-npc, ss-tra-horde-chase-manager-1, new-boxed-value(7, var_4));
-                        darray-find-remove(live-horde-group, new-boxed-value(7, var_4), 0);
+                    foreach (u64? var_4 : darray-clone(get-symbol(live-horde-group, self), single-frame, 0)) {
+                        send-event(reassign-npc, ss-tra-horde-chase-manager-1, boxed_symbol(var_4));
+                        darray-find-remove(live-horde-group, boxed_symbol(var_4), 0);
                     }
                 }
                 lambda {
@@ -624,32 +504,12 @@ statescript {
                     set-boolean(allow-despawning?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(live-npc-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(live-npc-group, self)) {
                         set-boolean(allow-despawning?, 1, var_4);
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(live-horde-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(live-horde-group, self)) {
                         set-boolean(allow-despawning?, 1, var_4);
                     }
                 }

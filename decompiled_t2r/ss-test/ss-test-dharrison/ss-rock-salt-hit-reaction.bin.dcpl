@@ -34,7 +34,7 @@ statescript {
                             start-melee-action(0, var_0, switchblade-stun-2, 0, 0, 1, 0, 0);
                         }
                         melee-fact-set-bool(var_0, being-held-up, 1);
-                        var_3 = ddict-set(all-stunned-npcs, var_0, new-boxed-value(6, get-current-time(0)));
+                        var_3 = ddict-set(all-stunned-npcs, var_0, boxed_f32(get-current-time(0)));
                     }
                 }
                 lambda {
@@ -67,7 +67,7 @@ statescript {
                         }
                         if ((get-current-time(0) - var_4) > get-float(stun-time, self)) {
                             melee-fact-set-bool(get-self-id(), being-held-up, 0);
-                            ddict-set(all-stunned-npcs, var_1, new-boxed-value(0, 0));
+                            ddict-set(all-stunned-npcs, var_1, boxed_invalid(0));
                             cancel-melee-action(var_1);
                         }
                     }

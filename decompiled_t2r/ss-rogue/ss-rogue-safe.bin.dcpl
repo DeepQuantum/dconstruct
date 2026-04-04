@@ -13,17 +13,7 @@
 
 u64? populate-safe-pickups() {
     group-copy(safe-pickups-group, lockbox-pickups-group-temp);
-    foreach (u64? var_1 : lockbox-pickups-group-temp) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : lockbox-pickups-group-temp) {
         print-symbol(var_2, self);
     }
     darray-count(lockbox-pickups-group-temp);
@@ -323,7 +313,7 @@ u64? populate-safe-pickups() {
             var_19 = var_19 + 1;
         }
     }
-    darray-find-remove(lockbox-pickups-group-temp, new-boxed-value(7, var_7), 0);
+    darray-find-remove(lockbox-pickups-group-temp, boxed_symbol(var_7), 0);
     if (darray-count(lockbox-pickups-group-temp) == 0) {
         group-copy(safe-pickups-group, lockbox-pickups-group-temp);
     }
@@ -571,7 +561,7 @@ u64? populate-safe-pickups() {
                 var_60 = var_60 + 1;
             }
         }
-        darray-find-remove(lockbox-pickups-group-temp, new-boxed-value(7, var_57), 0);
+        darray-find-remove(lockbox-pickups-group-temp, boxed_symbol(var_57), 0);
         if (darray-count(lockbox-pickups-group-temp) == 0) {
             group-copy(safe-pickups-group, lockbox-pickups-group-temp);
         }

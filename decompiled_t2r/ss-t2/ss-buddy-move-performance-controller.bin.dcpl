@@ -54,7 +54,7 @@ u64? npc-request-conversation-move-performance(u64? arg_0, f32 arg_1, sid arg_2,
     set-boolean(turn-to-target-if-not-moving?, arg_2, var_0);
     u64? var_1;
     if (arg_1 < 0.00) {
-        var_1 = fact-set(arg_0, try-convo-move-performance, new-boxed-value(1, 1));
+        var_1 = fact-set(arg_0, try-convo-move-performance, boxed_bool(1));
     } else {
         var_1 = start-timer(try-convo-move-performance-timer, arg_1, var_0, 1);
     }
@@ -107,7 +107,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(get-self-id(), move-performance-controller, new-boxed-value(7, symbol-concat-string(ss-buddy-move-performance-controller--, get-self-name())));
+                    fact-set(get-self-id(), move-performance-controller, boxed_symbol(symbol-concat-string(ss-buddy-move-performance-controller--, get-self-name())));
                 }
                 lambda {
                     set-boolean(block-all-move-performances?, 0, self);
@@ -156,10 +156,10 @@ statescript {
                     if (var_2 || !!(var_1 == 0) && var_1 != var_3) {
                         broadcast-event(
                             move-performance-end,
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(7, get-symbol(current-move-performance-type, self)),
-                            new-boxed-value(7, get-symbol(current-move-performance, self)),
-                            new-boxed-value(7, get-symbol(current-move-performance-poi, self))
+                            boxed_symbol(get-self-id()),
+                            boxed_symbol(get-symbol(current-move-performance-type, self)),
+                            boxed_symbol(get-symbol(current-move-performance, self)),
+                            boxed_symbol(get-symbol(current-move-performance-poi, self))
                         );
                         set-symbol(current-move-performance, 0, self);
                         set-symbol(current-move-performance-poi, 0, self);
@@ -171,10 +171,10 @@ statescript {
                         set-symbol(current-move-performance-type, tag-symbol(poi-type, get-symbol(current-move-performance-poi, self)), self);
                         broadcast-event(
                             move-performance-start,
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(7, get-symbol(current-move-performance-type, self)),
-                            new-boxed-value(7, get-symbol(current-move-performance, self)),
-                            new-boxed-value(7, get-symbol(current-move-performance-poi, self))
+                            boxed_symbol(get-self-id()),
+                            boxed_symbol(get-symbol(current-move-performance-type, self)),
+                            boxed_symbol(get-symbol(current-move-performance, self)),
+                            boxed_symbol(get-symbol(current-move-performance-poi, self))
                         );
                     }
                     set-boolean(move-performance-playing?, !(var_1 == 0), self);
@@ -196,7 +196,7 @@ statescript {
                 }
                 lambda {
                     if (timer-running?(try-convo-move-performance-timer, self)) {
-                        fact-set/f(get-self-id(), try-convo-move-performance, new-boxed-value(1, 1));
+                        fact-set/f(get-self-id(), try-convo-move-performance, boxed_bool(1));
                     }
                 }
                 lambda {
@@ -224,9 +224,9 @@ statescript {
                                 send-event(
                                     set-poi-radius,
                                     get-symbol(my-poi, self),
-                                    new-boxed-value(6, tag-float(max-poi-collect-radius, get-symbol(my-poi, self))),
-                                    new-boxed-value(6, tag-float(min-poi-collect-radius, get-symbol(my-poi, self))),
-                                    new-boxed-value(7, get-symbol(try-convo-move-performance-type, self))
+                                    boxed_f32(tag-float(max-poi-collect-radius, get-symbol(my-poi, self))),
+                                    boxed_f32(tag-float(min-poi-collect-radius, get-symbol(my-poi, self))),
+                                    boxed_symbol(get-symbol(try-convo-move-performance-type, self))
                                 );
                             }
                         }

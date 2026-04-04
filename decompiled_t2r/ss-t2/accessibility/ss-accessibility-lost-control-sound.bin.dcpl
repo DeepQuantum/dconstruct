@@ -29,8 +29,8 @@ statescript {
             track main {
                 lambda {
                     if (is-traversal-audio-cues?() && get-black-fade() < 1.00) {
-                        darray-append(player-state-stack, new-boxed-value(7, event-arg-symbol(1)), 1);
-                        darray-append(player-state-stack, new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(player-state-stack, boxed_symbol(event-arg-symbol(1)), 1);
+                        darray-append(player-state-stack, boxed_symbol(event-arg-symbol(0)), 1);
                         start-timer(play-sound-timer, 0.10, self, 1);
                     }
                 }

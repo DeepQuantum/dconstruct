@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? far-turn-on-lights-in-group(u64? arg_0, u64? arg_1) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (arg_1) {
             send-event(turn-on-instantly, var_2);
         } else {
@@ -32,17 +22,7 @@ u64? far-turn-on-lights-in-group(u64? arg_0, u64? arg_1) {
 }
 
 u64? far-turn-off-lights-in-group(u64? arg_0, u64? arg_1) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (arg_1) {
             send-event(turn-off-instantly, var_2);
         } else {

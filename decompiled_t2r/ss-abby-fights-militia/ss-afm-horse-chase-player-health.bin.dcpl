@@ -183,7 +183,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = event::get-attack-info(get-event());
-                    if (darray-contains?(grp-afm-horse-chase-valid-damage-dealers, new-boxed-value(7, *(u64*)(var_1 + 8)))) {
+                    if (darray-contains?(grp-afm-horse-chase-valid-damage-dealers, boxed_symbol(*(u64*)(var_1 + 8)))) {
                         var_5 = afm-horse-chase-update-player-health(*(u64*)(var_1 + 8));
                     }
                 }
@@ -272,17 +272,7 @@ statescript {
                 lambda {
                     if (task-active?(abby-fights-militia, afm-horse-chase-field-arrive) && get-boolean(allowed-to-die?, self)) {
                         u16 var_3;
-                        foreach (u64? var_4 : grp-afm-horse-chase-valid-field-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : grp-afm-horse-chase-valid-field-npcs) {
                             u16 var_9;
                             if (0 == 0 && npc-alive?(var_5) && is-centered-on-screen?(get-object-position(var_5), 300.00)) {
                                 var_9 = 1;
@@ -356,43 +346,43 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 77;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 9;
-                    *(i32*)*(*var_0 + (4 * 8)) = 71;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 77;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 9;
+                    *(i32*)*var_0[4] = 71;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 1;
                     animate_(player, ellie-death-horse-frnt-r-shldr, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 83;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = alloc-horse-binding(get-player-horse-id(1, 1), 0, 1);
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 10;
-                    *(i32*)*(*var_0 + (4 * 8)) = 69;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (5 * 8)) = 71;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 83;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = alloc-horse-binding(get-player-horse-id(1, 1), 0, 1);
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 10;
+                    *(i32*)*var_0[4] = 69;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 0;
+                    *(i32*)*var_0[5] = 71;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 1;
                     animate_(lev, lev-horse-death, var_0);
                 }
                 lambda {

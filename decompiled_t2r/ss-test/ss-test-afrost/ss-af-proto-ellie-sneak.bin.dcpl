@@ -41,17 +41,7 @@ u16 ellie-sneak-get-ai-post-selector() {
 u64? HACK-ellie-in-cover?(u64? arg_0) {
     print-symbol(get-object-anim(player, 1), self);
     u64? var_2;
-    foreach (u64? var_3 : ellie-cover-animations) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : ellie-cover-animations) {
         u64? var_5;
         if (!0) {
             var_5 = object-anim-playing?(arg_0, var_4, 0);
@@ -548,16 +538,16 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(stalkers-moving, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-moving, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(stalkers-charging, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-charging, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(stalkers-vs-buddy, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-vs-buddy, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(all-stalkers, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(all-stalkers, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

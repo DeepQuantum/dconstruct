@@ -48,9 +48,9 @@ statescript {
                         var_1 = wat-horse-explore-hotel-upper-door--door;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-horse-explore-hotel-upper-door-1, 1);
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-wat-horse-explore-hotel-upper-door-1, 1);
                     animate_(obj-wat-horse-explore-hotel-upper-door-right-1, var_1, var_2);
                 }
                 lambda {
@@ -61,15 +61,15 @@ statescript {
                         var_1 = wat-horse-explore-hotel-upper-door--ellie;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-horse-explore-hotel-upper-door-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-wat-horse-explore-hotel-upper-door-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
                     wait-animate_(player, var_1, var_2);
                 }
                 lambda {

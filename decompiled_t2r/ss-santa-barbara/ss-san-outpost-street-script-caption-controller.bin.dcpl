@@ -189,17 +189,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(has-found-infected, self)) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-on-screen-and-visible?(var_3, -1, 0)) {
                                 set-boolean(has-found-infected, 1, self);
                             }

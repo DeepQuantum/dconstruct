@@ -176,7 +176,7 @@ statescript {
                 lambda {
                     if (task-active?(forward-base, fob-stadium-play-fetch)) {
                         if (nth-frame?(15, 0)) {
-                            send-event(no-adjust-to-player, npc-fob-stadium-bear-1, new-boxed-value(6, 1.00));
+                            send-event(no-adjust-to-player, npc-fob-stadium-bear-1, boxed_f32(1.00));
                         }
                     }
                 }
@@ -400,18 +400,18 @@ statescript {
             track bear-back-away {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(npc-fob-stadium-bear-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(npc-fob-stadium-bear-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(npc-fob-stadium-bear-1, dog-mm-ambi-reposition-bw, var_0);
                 }
                 lambda {
@@ -841,18 +841,18 @@ statescript {
                                         var_32 = 0;
                                     }
                                     u64? var_33 = #%alloc-array(single-frame, 16, 4, 1);
-                                    *(i32*)*(*var_33 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_33 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_33 + (0 * 8)) + 8) = alloc-bound-frame(get-object-position(npc-fob-stadium-bear-1), get-locator-rotation(get-bound-frame(bear-move-to-goal-loc, self)), 0, 0, 0);
-                                    *(i32*)*(*var_33 + (1 * 8)) = 28;
-                                    *(u64*)(*(*var_33 + (1 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_33 + (1 * 8)) + 8) = 0.50;
-                                    *(i32*)*(*var_33 + (2 * 8)) = 30;
-                                    *(u64*)(*(*var_33 + (2 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_33 + (2 * 8)) + 8) = 0.50;
-                                    *(i32*)*(*var_33 + (3 * 8)) = 13;
-                                    *(u64*)(*(*var_33 + (3 * 8)) + 8) = 0;
-                                    *(i32*)(*(*var_33 + (3 * 8)) + 8) = 2;
+                                    *(i32*)*var_33[0] = 10;
+                                    *(u64*)(*var_33[0] + 8) = 0;
+                                    *(u64*)(*var_33[0] + 8) = alloc-bound-frame(get-object-position(npc-fob-stadium-bear-1), get-locator-rotation(get-bound-frame(bear-move-to-goal-loc, self)), 0, 0, 0);
+                                    *(i32*)*var_33[1] = 28;
+                                    *(u64*)(*var_33[1] + 8) = 0;
+                                    *(f32*)(*var_33[1] + 8) = 0.50;
+                                    *(i32*)*var_33[2] = 30;
+                                    *(u64*)(*var_33[2] + 8) = 0;
+                                    *(f32*)(*var_33[2] + 8) = 0.50;
+                                    *(i32*)*var_33[3] = 13;
+                                    *(u64*)(*var_33[3] + 8) = 0;
+                                    *(i32*)(*var_33[3] + 8) = 2;
                                     wait-animate_(npc-fob-stadium-bear-1, var_32, var_33);
                                     npc-turn-to(npc-fob-stadium-bear-1, get-object-position(get-symbol(ball-id, self)), 1, 0);
                                 }
@@ -1154,24 +1154,24 @@ statescript {
             track anim {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(bear-drop-ball-target-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = get-best-entry-phase(npc-fob-stadium-bear-1, fob-alice-fetch-drop-get-ball--alice, get-bound-frame(bear-drop-ball-target-ap, self), 15.00, apReference, 0);
-                    *(i32*)*(*var_0 + (5 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = random-float-range(1.00, 2.00, 0);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(bear-drop-ball-target-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 58;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = get-best-entry-phase(npc-fob-stadium-bear-1, fob-alice-fetch-drop-get-ball--alice, get-bound-frame(bear-drop-ball-target-ap, self), 15.00, apReference, 0);
+                    *(i32*)*var_0[5] = 56;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = random-float-range(1.00, 2.00, 0);
                     wait-animate_(npc-fob-stadium-bear-1, fob-alice-fetch-drop-get-ball--alice, var_0);
                 }
                 lambda {
@@ -1680,37 +1680,37 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(pick-up-ball-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_1 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.15;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(pick-up-ball-ap, self);
+                    *(i32*)*var_1[1] = 13;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(i32*)(*var_1[1] + 8) = 2;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.30;
+                    *(i32*)*var_1[3] = 30;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 0.15;
                     wait-animate_(npc-fob-stadium-bear-1, get-symbol(pick-up-ball-anim, self), var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(pick-up-ball-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.15;
-                    *(i32*)*(*var_1 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_1 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(pick-up-ball-ap, self);
+                    *(i32*)*var_1[1] = 13;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(i32*)(*var_1[1] + 8) = 2;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.15;
+                    *(i32*)*var_1[3] = 30;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 1.00;
+                    *(i32*)*var_1[4] = 24;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(i32*)(*var_1[4] + 8) = 2;
                     wait-animate_(npc-fob-stadium-bear-1, get-symbol(pick-up-ball-exit, self), var_1);
                 }
                 lambda {
@@ -1731,7 +1731,7 @@ statescript {
                     fob-dog-murmur-controller--go-to-state(dog-holding-toy);
                 }
                 lambda {
-                    broadcast-event(bear-picked-up-ball, new-boxed-value(7, get-symbol(ball-id, self)));
+                    broadcast-event(bear-picked-up-ball, boxed_symbol(get-symbol(ball-id, self)));
                 }
             }
         }
@@ -1793,12 +1793,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     wait-animate_(npc-fob-stadium-bear-1, dog-ambi-lie-down-chew-toy-enter, var_0);
                 }
                 lambda {
@@ -1806,12 +1806,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(npc-fob-stadium-bear-1, dog-ambi-lie-down-chew-toy-loop, var_0);
                 }
             }
@@ -1861,17 +1861,7 @@ statescript {
                     set-symbol(closest-cap, cap-fob-stadium-sad-bear-1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : group-fob-stadium-sad-bear-caps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-fob-stadium-sad-bear-caps) {
                         if (distance-between-points(get-spawner-position(var_2, 1), get-object-position(get-symbol(ball-id, self))) < distance-between-points(get-spawner-position(get-symbol(closest-cap, self), 1), get-object-position(get-symbol(ball-id, self)))) {
                             set-symbol(closest-cap, var_2, self);
                         }
@@ -1907,19 +1897,19 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
                     wait-animate_(npc-fob-stadium-bear-1, dog-ambi-sit-enter, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
                     animate_(npc-fob-stadium-bear-1, dog-ambi-sit-idle, var_0);
                 }
             }
@@ -2004,12 +1994,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(npc-fob-stadium-bear-1, dog-ambi-sit-exit, var_0);
                 }
                 lambda {

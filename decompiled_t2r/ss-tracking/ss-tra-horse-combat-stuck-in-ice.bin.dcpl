@@ -74,7 +74,7 @@ statescript {
                     } else {
                         var_2 = 0;
                     }
-                    darray-append(tra-stuck-in-ice-runners, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    darray-append(tra-stuck-in-ice-runners, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                     ++(spawner-index, self);
                 }
                 lambda {
@@ -104,7 +104,7 @@ statescript {
                     } else {
                         var_2 = 0;
                     }
-                    darray-append(tra-stuck-in-ice-runners, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    darray-append(tra-stuck-in-ice-runners, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                     ++(spawner-index, self);
                 }
                 lambda {
@@ -122,7 +122,7 @@ statescript {
                     } else {
                         var_2 = 0;
                     }
-                    darray-append(tra-stuck-in-ice-runners, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    darray-append(tra-stuck-in-ice-runners, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                     ++(spawner-index, self);
                 }
                 lambda {
@@ -145,17 +145,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-stuck-in-ice-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-stuck-in-ice-runners) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }

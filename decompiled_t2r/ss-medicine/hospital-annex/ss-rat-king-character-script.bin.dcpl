@@ -70,7 +70,7 @@ statescript {
                         fact-set-bool-safe(npc-superstalker-3, hide-from-enhanced-listen-mode, 1);
                         character-set-invincibility(npc-superstalker-3, 1, 0);
                         if (!(get-animation-playing?(self, ratking-split-attacked--ratking-stalker, 2))) {
-                            send-event(begin-carried, npc-superstalker-3, new-boxed-value(7, get-self-id()));
+                            send-event(begin-carried, npc-superstalker-3, boxed_symbol(get-self-id()));
                         }
                         melee-fact-set-bool(npc-superstalker-3, super-stalker-disengaging?, 1);
                         send-event(disable-high-contrast-toggling, npc-superstalker-3);

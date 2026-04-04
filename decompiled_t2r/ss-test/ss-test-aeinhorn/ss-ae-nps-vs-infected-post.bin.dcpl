@@ -45,7 +45,7 @@ statescript {
                     recalculate-post-score(self);
                 }
                 lambda {
-                    if (darray-contains?(get-symbol(occupied-posts, ss-ae-vs-infected-post-manager), new-boxed-value(7, get-self-id()))) {
+                    if (darray-contains?(get-symbol(occupied-posts, ss-ae-vs-infected-post-manager), boxed_symbol(get-self-id()))) {
                         debug-draw-string(
                             get-spawner-position(self, 1),
                             dc:format("%.2f", get-float(score, self)),

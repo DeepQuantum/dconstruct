@@ -37,7 +37,7 @@ statescript {
                 lambda {
                     if (get-player-health() <= get-int32(low-hp-threshold, self)) {
                         if (!get-boolean(skull-active?, self)) {
-                            broadcast-event(alternate-audio-cue, new-boxed-value(7, low-health-damage-increase));
+                            broadcast-event(alternate-audio-cue, boxed_symbol(low-health-damage-increase));
                             set-boolean(skull-active?, 1, self);
                         }
                         override-render-settings(
@@ -57,34 +57,14 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(enemies-marked?, self) && get-player-health() <= get-int32(low-hp-threshold, self)) {
-                        broadcast-event(skull-activate, new-boxed-value(7, low-health-damage-increase));
-                        foreach (u64? var_5 : all-enemy-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        broadcast-event(skull-activate, boxed_symbol(low-health-damage-increase));
+                        foreach (u64? var_6 : all-enemy-npcs) {
                             npc-set-incoming-damage-multiplier(var_6, 2.00);
                         }
                         set-boolean(enemies-marked?, 1, self);
                     } else if (get-boolean(enemies-marked?, self) && get-player-health() > get-int32(low-hp-threshold, self)) {
-                        broadcast-event(skull-deactivate, new-boxed-value(7, low-health-damage-increase));
-                        foreach (u64? var_13 : all-enemy-npcs) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        broadcast-event(skull-deactivate, boxed_symbol(low-health-damage-increase));
+                        foreach (u64? var_14 : all-enemy-npcs) {
                             npc-set-incoming-damage-multiplier(var_14, 1.00);
                         }
                         set-boolean(enemies-marked?, 0, self);
@@ -99,7 +79,7 @@ statescript {
                 }
                 lambda {
                     if (!player-in-dodge?()) {
-                        broadcast-event(alternate-audio-cue-secondary, new-boxed-value(7, low-health-damage-increase));
+                        broadcast-event(alternate-audio-cue-secondary, boxed_symbol(low-health-damage-increase));
                         start-timer(over-sample-protection-timer, get-float(over-sample-protection-time-seconds, self), self, 1);
                     }
                 }
@@ -108,7 +88,7 @@ statescript {
         block event melee-attack-hit {
             track main {
                 lambda {
-                    broadcast-event(alternate-audio-cue-tertiary, new-boxed-value(7, low-health-damage-increase));
+                    broadcast-event(alternate-audio-cue-tertiary, boxed_symbol(low-health-damage-increase));
                 }
             }
         }
@@ -131,22 +111,12 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-incoming-damage-multiplier(var_2, 1.00);
                     }
                 }
                 lambda {
-                    broadcast-event(skull-deactivate, new-boxed-value(7, low-health-damage-increase));
+                    broadcast-event(skull-deactivate, boxed_symbol(low-health-damage-increase));
                 }
             }
         }

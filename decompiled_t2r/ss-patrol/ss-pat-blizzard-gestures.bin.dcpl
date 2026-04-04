@@ -13,17 +13,7 @@
 
 u64? is-blizz-gesture-playing?(u64? arg_0, u64? arg_1) {
     u64? var_1;
-    foreach (u64? var_2 : arg_1) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_1) {
         var_1 = 0 && is-gesture-playing?(arg_0, var_3, -1);
     }
     return var_1;
@@ -194,9 +184,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(player, spined);
                     wait-animate_(obj-hood-simple-1, patrol-hoodie-gestures--hood, var_0);
                 }
             }

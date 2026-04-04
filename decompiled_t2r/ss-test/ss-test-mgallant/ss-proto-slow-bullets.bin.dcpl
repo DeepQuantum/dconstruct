@@ -39,7 +39,7 @@ statescript {
                     u64? var_4 = spawn-entity-at(proto-slow-bullet, get-joint-locator(npc-get-weapon-process-id(event-arg-symbol(0)), silencer), 0);
                     set-symbol(npc, event-arg-symbol(0), var_4);
                     set-symbol(bullet-spline, var_2, var_4);
-                    darray-find-remove(bullet-splines, new-boxed-value(7, var_2), 0);
+                    darray-find-remove(bullet-splines, boxed_symbol(var_2), 0);
                 }
             }
         }

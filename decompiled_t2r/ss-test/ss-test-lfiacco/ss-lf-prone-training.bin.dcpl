@@ -45,17 +45,7 @@ statescript {
                     spawn-entity(npc-737, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : setup-one-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : setup-one-npcs) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
@@ -96,17 +86,7 @@ statescript {
         block event spawn-npcs {
             track main {
                 lambda {
-                    foreach (u64? var_1 : setup-two-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : setup-two-npcs) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
@@ -139,17 +119,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : setup-three-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : setup-three-npcs) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }

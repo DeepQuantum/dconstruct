@@ -28,73 +28,63 @@ statescript {
                     print-int32(darray-count(all-pickups), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-pickups) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-pickups) {
                         if (item-pickup-get-item-id(var_2) == alcohol) {
-                            darray-append(alcohol, new-boxed-value(7, var_2), 1);
+                            darray-append(alcohol, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == rag) {
-                            darray-append(rag, new-boxed-value(7, var_2), 1);
+                            darray-append(rag, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == explosive) {
-                            darray-append(explosive, new-boxed-value(7, var_2), 1);
+                            darray-append(explosive, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == canister) {
-                            darray-append(canister, new-boxed-value(7, var_2), 1);
+                            darray-append(canister, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == blade) {
-                            darray-append(blade, new-boxed-value(7, var_2), 1);
+                            darray-append(blade, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == binding) {
-                            darray-append(binding, new-boxed-value(7, var_2), 1);
+                            darray-append(binding, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-pistol) {
-                            darray-append(ammo-pistol, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-pistol, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-revolver) {
-                            darray-append(ammo-revolver, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-revolver, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-xcaliber) {
-                            darray-append(ammo-xcaliber, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-xcaliber, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-xcaliber-shot-shell) {
-                            darray-append(ammo-xcaliber-shot-shell, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-xcaliber-shot-shell, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-rifle) {
-                            darray-append(ammo-rifle, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-rifle, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-rifle-vepr) {
-                            darray-append(ammo-rifle-vepr, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-rifle-vepr, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-rifle-galil) {
-                            darray-append(ammo-rifle-galil, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-rifle-galil, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-shotgun) {
-                            darray-append(ammo-shotgun, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-shotgun, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-shotgun-dragons-breath) {
-                            darray-append(ammo-shotgun-dragons-breath, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-shotgun-dragons-breath, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-arrow) {
-                            darray-append(ammo-arrow, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-arrow, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-crossbow) {
-                            darray-append(ammo-crossbow, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-crossbow, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-arrow-explosive) {
-                            darray-append(ammo-arrow-explosive, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-arrow-explosive, boxed_symbol(var_2), 1);
                         }
                         if (item-pickup-get-item-id(var_2) == ammo-flamethrower) {
-                            darray-append(ammo-flamethrower, new-boxed-value(7, var_2), 1);
+                            darray-append(ammo-flamethrower, boxed_symbol(var_2), 1);
                         }
                     }
                 }
@@ -121,17 +111,7 @@ statescript {
                     set-float(original-group-count, (f32)darray-count(alcohol), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : rag) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : rag) {
                         print-float(*(f32*)get-locator-position(get-object-locator(var_2)), self);
                         print-float(perlin-noise(get-float(count, self), 0.00, 1.00, 1, 1.00), self);
                         if (!is-final-build?()) {
@@ -147,7 +127,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(rag) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(rag), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(rag, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(rag, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -159,7 +139,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(explosive) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(explosive), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(explosive, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(explosive, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -171,7 +151,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(canister) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(canister), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(canister, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(canister, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -183,7 +163,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(blade) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(blade), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(blade, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(blade, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -195,7 +175,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(binding) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(binding), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(binding, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(binding, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -207,7 +187,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-pistol) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-pistol), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-pistol, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-pistol, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -219,7 +199,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-revolver) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-revolver), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-revolver, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-revolver, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -231,7 +211,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-xcaliber) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-xcaliber), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-xcaliber, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-xcaliber, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -243,7 +223,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-xcaliber-shot-shell) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-xcaliber-shot-shell), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-xcaliber-shot-shell, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-xcaliber-shot-shell, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -255,7 +235,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-rifle) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-rifle), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-rifle, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-rifle, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -267,7 +247,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-rifle-vepr) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-rifle-vepr), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-rifle-vepr, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-rifle-vepr, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -279,7 +259,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-rifle-galil) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-rifle-galil), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-rifle-galil, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-rifle-galil, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -291,7 +271,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-shotgun) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-shotgun), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-shotgun, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-shotgun, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -303,7 +283,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-shotgun-dragons-breath) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-shotgun-dragons-breath), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-shotgun-dragons-breath, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-shotgun-dragons-breath, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -315,7 +295,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-arrow) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-arrow), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-arrow, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-arrow, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -327,7 +307,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-crossbow) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-crossbow), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-crossbow, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-crossbow, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -339,7 +319,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-arrow-explosive) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-arrow-explosive), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-arrow-explosive, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-arrow-explosive, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }
@@ -351,7 +331,7 @@ statescript {
                         while (0.50 < ((f32)darray-count(ammo-flamethrower) / get-float(original-group-count, self))) {
                             set-symbol(to-delete, group-random(ammo-flamethrower), self);
                             kill-entity(get-symbol(to-delete, self));
-                            darray-find-remove(ammo-flamethrower, new-boxed-value(7, get-symbol(to-delete, self)), 0);
+                            darray-find-remove(ammo-flamethrower, boxed_symbol(get-symbol(to-delete, self)), 0);
                         }
                     }
                 }

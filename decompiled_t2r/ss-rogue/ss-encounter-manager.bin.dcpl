@@ -505,17 +505,7 @@ statescript {
                         u64? var_11 = encounter--get-task(var_9);
                         log-event("encounter-select", 1, string-debug(var_10), 0, 0);
                         u64? var_16;
-                        foreach (u64? var_18 : get-player-all-weapons()) {
-                            u16 var_19;
-                            if (var_18 && *(u16*)(var_18 + 12) == 7) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 5) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 4) {
-                                var_19 = *(u64*)var_18;
-                            } else {
-                                var_19 = 0;
-                            }
+                        foreach (u64? var_19 : get-player-all-weapons()) {
                             var_16 = dc:format("%s%s", "weapons: ", dc:format("%s ", string-debug(var_19)));
                         }
                         log-event("weapons-at-run-depth", get-svar(encounter-depth), var_16, 0, 0);
@@ -547,9 +537,9 @@ statescript {
                             display(dc:format("DEB-EM: assigning layout for [%s]: %i", string-debug(encounter--get-id(var_9)), get-svar(encounter-layout-variant)), 19);
                         }
                         if (encounter--has-skulls?(var_9)) {
-                            fact-set(global, all-recipes-skull, new-boxed-value(1, darray-contains?(encounter--get-skulls(var_9), new-boxed-value(7, unlock-all-recipes))));
+                            fact-set(global, all-recipes-skull, boxed_bool(darray-contains?(encounter--get-skulls(var_9), boxed_symbol(unlock-all-recipes))));
                         } else {
-                            fact-set(global, all-recipes-skull, new-boxed-value(1, 0));
+                            fact-set(global, all-recipes-skull, boxed_bool(0));
                         }
                         rogue-force-remember-checkpoint();
                         task-play-rogue(var_11, var_10, 1, 0, 2.00);
@@ -900,7 +890,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, ENCOUNTER_MISSION_FAILED), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(ENCOUNTER_MISSION_FAILED), 1, 0, 1);
                 }
                 lambda {
                     if (!is-final-build?()) {

@@ -14,17 +14,7 @@
 u16 tra-horde-get-closest-offscreen-spawner-along-spline(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, f32 arg_5, u64? arg_6) {
     u64? var_0 = spline-distance-object(arg_1, arg_2);
     u16 var_2;
-    foreach (u64? var_3 : arg_0) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : arg_0) {
         u64? var_7 = get-locator-distance(get-object-locator(arg_2), get-spawner-locator(var_4, 1));
         u16 var_8;
         if (var_7 < 9999999.00 && var_7 > arg_5) {
@@ -108,7 +98,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(allow-despawning?, self) && npc-offscreen?(self) && get-float(dist-to-player, self) > get-float(despawn-dist, self)) {
-                        broadcast-event(npc-removed, new-boxed-value(7, get-self-id()));
+                        broadcast-event(npc-removed, boxed_symbol(get-self-id()));
                         kill-entity(self);
                         go(done, 1);
                     }
@@ -123,13 +113,13 @@ statescript {
                     npc-set-demeanor(get-self-id(), 2, 0);
                 }
                 lambda {
-                    fact-set(self, override-max-travel-dist, new-boxed-value(6, 10.00));
+                    fact-set(self, override-max-travel-dist, boxed_f32(10.00));
                 }
                 lambda {
-                    fact-set(self, override-max-expansion-radius, new-boxed-value(6, 8.00));
+                    fact-set(self, override-max-expansion-radius, boxed_f32(8.00));
                 }
                 lambda {
-                    fact-set(self, player-blockage-distance-start, new-boxed-value(6, 1.00));
+                    fact-set(self, player-blockage-distance-start, boxed_f32(1.00));
                 }
                 lambda {
                     go(chase, 1);
@@ -238,34 +228,34 @@ statescript {
                 }
                 lambda {
                     u64? var_4 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_4 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-trucks-idle-, get-int32(fence-idle-num, self)), 1);
-                    *(i32*)*(*var_4 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_4 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_4 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_4 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_4[0] = 10;
+                    *(u64*)(*var_4[0] + 8) = 0;
+                    *(u64*)(*var_4[0] + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-trucks-idle-, get-int32(fence-idle-num, self)), 1);
+                    *(i32*)*var_4[1] = 28;
+                    *(u64*)(*var_4[1] + 8) = 0;
+                    *(f32*)(*var_4[1] + 8) = 0.30;
+                    *(i32*)*var_4[2] = 30;
+                    *(u64*)(*var_4[2] + 8) = 0;
+                    *(f32*)(*var_4[2] + 8) = 0.30;
+                    *(i32*)*var_4[3] = 2;
+                    *(u64*)(*var_4[3] + 8) = 0;
+                    *(u8*)(*var_4[3] + 8) = 1;
                     wait-animate_(get-self-id(), symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-enter-idle-0, get-int32(fence-idle-num, self)), "--male"), var_4);
                 }
                 lambda {
                     u64? var_4 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_4 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-trucks-idle-, get-int32(fence-idle-num, self)), 1);
-                    *(i32*)*(*var_4 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_4 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_4 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_4 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_4[0] = 10;
+                    *(u64*)(*var_4[0] + 8) = 0;
+                    *(u64*)(*var_4[0] + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-trucks-idle-, get-int32(fence-idle-num, self)), 1);
+                    *(i32*)*var_4[1] = 28;
+                    *(u64*)(*var_4[1] + 8) = 0;
+                    *(f32*)(*var_4[1] + 8) = 0.30;
+                    *(i32*)*var_4[2] = 30;
+                    *(u64*)(*var_4[2] + 8) = 0;
+                    *(f32*)(*var_4[2] + 8) = 0.30;
+                    *(i32*)*var_4[3] = 2;
+                    *(u64*)(*var_4[3] + 8) = 0;
+                    *(u8*)(*var_4[3] + 8) = 1;
                     animate_(get-self-id(), symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-idle-0, get-int32(fence-idle-num, self)), "--male"), var_4);
                 }
             }

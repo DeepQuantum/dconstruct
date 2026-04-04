@@ -57,7 +57,7 @@ u64? manny-take-gun-range-shot() {
         0,
         0
     );
-    return send-event(evt-manny-shot, ss-fob-stadium-exit-gun-range-minigame-1, new-boxed-value(2, var_8));
+    return send-event(evt-manny-shot, ss-fob-stadium-exit-gun-range-minigame-1, boxed_i32(var_8));
 }
 
 statescript {

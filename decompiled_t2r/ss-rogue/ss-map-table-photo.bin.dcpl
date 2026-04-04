@@ -54,7 +54,7 @@ statescript {
                         set-boolean(widget-focused?, 1, self);
                         set-float(photo-shimmer-time, 0.00, self);
                         set-table-shader-material-values-param(*rogue-map-photo-shimmer*, get-float(photo-shimmer-time, self));
-                        broadcast-event(photo-focused, new-boxed-value(2, get-int32(associated-encounter-index, self)), new-boxed-value(2, get-int32(widget-status-index-acc, self)));
+                        broadcast-event(photo-focused, boxed_i32(get-int32(associated-encounter-index, self)), boxed_i32(get-int32(widget-status-index-acc, self)));
                     } else if (get-boolean(widget-focused?, self)) {
                         set-vector(photo-shimmer-tangent, get-local-x(get-object-rotation(get-symbol(current-focus, ss-map-table-fg-controller-1))), self);
                         set-vector(local-down, vector-neg(get-local-y(get-object-rotation(get-symbol(current-focus, ss-map-table-fg-controller-1)))), self);
@@ -81,7 +81,7 @@ statescript {
                     if (menu2-component-focused?(get-self-id()) && gui2-widget-is-currently-mouse-hovered-and-clicked?(get-self-id(), 1)) {
                         if (get-boolean(map-in-full-view?, ss-map-table-fg-controller-1) == 0 && get-boolean(is-open?, self) && !get-boolean(has-been-selected?, self)) {
                             set-boolean(has-been-selected?, 1, self);
-                            broadcast-event(player-next-task, new-boxed-value(2, get-int32(associated-encounter-index, self)));
+                            broadcast-event(player-next-task, boxed_i32(get-int32(associated-encounter-index, self)));
                             play-sound(sfx-rl-hub-interact-map-select, 0);
                             play-hfx-id(hfx-ui-confirm, 0, 2);
                         }
@@ -207,7 +207,7 @@ statescript {
             track main {
                 lambda {
                     if (menu2-component-focused?(get-self-id()) || joypad-command-active?(menu-select, 0) && joypad-command-active?(menu-select, 6) && !gui2-widget-is-currently-mouse-hovered-and-clicked?(get-self-id(), 1) && !prog-paused-last-frame?()) {
-                        broadcast-event(player-next-task, new-boxed-value(2, get-int32(associated-encounter-index, self)), new-boxed-value(1, get-boolean(is-path-reroute?, self)));
+                        broadcast-event(player-next-task, boxed_i32(get-int32(associated-encounter-index, self)), boxed_bool(get-boolean(is-path-reroute?, self)));
                         play-sound(sfx-rl-hub-interact-map-select, 0);
                         play-hfx-id(hfx-ui-confirm, 0, 2);
                     }
@@ -238,10 +238,10 @@ statescript {
                             } else {
                                 var_6 = 0;
                             }
-                            broadcast-event(skip-dead-drop-reward, new-boxed-value(2, var_6));
+                            broadcast-event(skip-dead-drop-reward, boxed_i32(var_6));
                         }
                         run--complete-encounters-to-this-index(get-int32(associated-encounter-index, self));
-                        broadcast-event(player-next-task, new-boxed-value(2, get-int32(associated-encounter-index, self)));
+                        broadcast-event(player-next-task, boxed_i32(get-int32(associated-encounter-index, self)));
                     }
                 }
             }

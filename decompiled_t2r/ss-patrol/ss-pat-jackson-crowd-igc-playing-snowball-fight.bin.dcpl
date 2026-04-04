@@ -22,52 +22,52 @@ statescript {
                 lambda {
                     if (task-continue-active?(patrol-jackson, pat-jackson-mainstreet, butcher-street-trailer-shot--DEBUG)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_1[1] = 57;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 250.00;
                         animate_(obj-pat-jackson-crowd-igc-playing-snowball-fight-door-1, pat-crowd-kids-playing-snowball-fight--door, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_3[1] = 57;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 250.00;
                         animate_(obj-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight--snowball, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_5[1] = 57;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 250.00;
                         animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight--kid-male, var_5);
                         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_7[1] = 57;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 250.00;
                         animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-4, pat-crowd-kids-playing-snowball-fight--kid-male-a, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_9[1] = 57;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 250.00;
                         animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-2, pat-crowd-kids-playing-snowball-fight--kid-female, var_9);
                         u64? var_11 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
-                        *(i32*)*(*var_11 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 250.00;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                        *(i32*)*var_11[1] = 57;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 250.00;
                         wait-animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-3, pat-crowd-kids-playing-snowball-fight--kid-female-a, var_11);
                     }
                 }
@@ -103,37 +103,37 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(obj-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight-idle-start--snowball, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight-idle-start--kid-male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-4, pat-crowd-kids-playing-snowball-fight-idle-start--kid-male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-2, pat-crowd-kids-playing-snowball-fight-idle-start--kid-female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-3, pat-crowd-kids-playing-snowball-fight-idle-start--kid-female-a, var_0);
                 }
             }
@@ -160,44 +160,44 @@ statescript {
             track anims {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(obj-pat-jackson-crowd-igc-playing-snowball-fight-door-1, pat-crowd-kids-playing-snowball-fight--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(obj-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight--snowball, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-1, pat-crowd-kids-playing-snowball-fight--kid-male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-4, pat-crowd-kids-playing-snowball-fight--kid-male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-2, pat-crowd-kids-playing-snowball-fight--kid-female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-playing-snowball-fight-1, 1);
                     wait-animate_(snpc-pat-jackson-crowd-igc-playing-snowball-fight-3, pat-crowd-kids-playing-snowball-fight--kid-female-a, var_0);
                 }
                 lambda {

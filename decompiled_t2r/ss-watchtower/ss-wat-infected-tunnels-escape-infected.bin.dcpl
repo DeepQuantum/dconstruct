@@ -84,17 +84,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--seattle-tunnels-cinematic) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--seattle-tunnels-cinematic) {
                         npc-set-demeanor(var_2, 2, 0);
                         npc-move-to(var_2, get-spawner-locator(pos-wat-horde-attract-point-1, 1), 1, 0, 0, 0, 0, 0);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
@@ -114,17 +104,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat--seattle-tunnels-cinematic) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--seattle-tunnels-cinematic) {
                         kill-entity(var_2);
                     }
                 }
@@ -141,35 +121,15 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-start-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-insert(wat--escape-station-start, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 0);
+                    foreach (u64? var_2 : wat--escape-station-start-spawners) {
+                        darray-insert(wat--escape-station-start, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 0);
                     }
                 }
                 lambda {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-start) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--escape-station-start) {
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                     }
                 }
@@ -194,17 +154,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-stairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--escape-station-stairs) {
                         spawn-npc(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -214,17 +164,7 @@ statescript {
         block event activate-bottom-group {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-stairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--escape-station-stairs) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                     }
@@ -242,8 +182,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = group-random(wat--escape-station-start-spawners);
-                    if (darray-contains?(wat--escape-station-start, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-insert(wat--escape-station-start, new-boxed-value(7, spawn-npc(var_1, var_1, 0)), 0);
+                    if (darray-contains?(wat--escape-station-start, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-insert(wat--escape-station-start, boxed_symbol(spawn-npc(var_1, var_1, 0)), 0);
                     }
                     u64? var_6 = darray-at(wat--escape-station-start, 0);
                     u16 var_7;
@@ -265,51 +205,21 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-stairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--escape-station-stairs) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--seattle-tunnels-cinematic) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--seattle-tunnels-cinematic) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--escape-station-start) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--escape-station-start) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
@@ -330,53 +240,23 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--tackle-turn-start-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-insert(wat--tackle-turn-start, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 0);
+                    foreach (u64? var_2 : wat--tackle-turn-start-spawners) {
+                        darray-insert(wat--tackle-turn-start, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 0);
                     }
                 }
                 lambda {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--tackle-turn-chase-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-insert(wat--tackle-turn-chase, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 0);
+                    foreach (u64? var_2 : wat--tackle-turn-chase-spawners) {
+                        darray-insert(wat--tackle-turn-chase, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 0);
                     }
                 }
                 lambda {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--gate-approach) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--gate-approach) {
                         spawn-npc(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                         npc-set-demeanor(var_2, 2, 0);
@@ -386,17 +266,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--tackle-turn-start) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--tackle-turn-start) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         npc-set-demeanor(var_2, 2, 0);
@@ -406,17 +276,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--tackle-turn-chase) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--tackle-turn-chase) {
                         npc-set-script-high-priority(var_2);
                         npc-set-demeanor(var_2, 2, 0);
                     }
@@ -459,8 +319,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(wat--tackle-turn-start, new-boxed-value(7, var_0))) {
-                        darray-insert(wat--tackle-turn-start, new-boxed-value(7, spawn-npc(npc-wat-chase-clicker-respawner-1, npc-wat-chase-clicker-respawner-1, 0)), 0);
+                    if (darray-contains?(wat--tackle-turn-start, boxed_symbol(var_0))) {
+                        darray-insert(wat--tackle-turn-start, boxed_symbol(spawn-npc(npc-wat-chase-clicker-respawner-1, npc-wat-chase-clicker-respawner-1, 0)), 0);
                         u64? var_5 = darray-at(wat--tackle-turn-start, 0);
                         u16 var_6;
                         if (var_5 && *(u16*)(var_5 + 12) == 7) {
@@ -474,8 +334,8 @@ statescript {
                         }
                         npc-make-aware-of(var_6, player, 2, *npc-awareness-options-silent*);
                     }
-                    if (darray-contains?(wat--tackle-turn-chase, new-boxed-value(7, var_0))) {
-                        darray-insert(wat--tackle-turn-chase, new-boxed-value(7, spawn-npc(npc-wat-chase-clicker-respawner-1, npc-wat-chase-clicker-respawner-1, 0)), 0);
+                    if (darray-contains?(wat--tackle-turn-chase, boxed_symbol(var_0))) {
+                        darray-insert(wat--tackle-turn-chase, boxed_symbol(spawn-npc(npc-wat-chase-clicker-respawner-1, npc-wat-chase-clicker-respawner-1, 0)), 0);
                         u64? var_12 = darray-at(wat--tackle-turn-chase, 0);
                         u16 var_13;
                         if (var_12 && *(u16*)(var_12 + 12) == 7) {
@@ -497,17 +357,7 @@ statescript {
         block start {
             track spawning {
                 lambda {
-                    foreach (u64? var_1 : wat--gate-approach) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--gate-approach) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                     }
@@ -516,20 +366,10 @@ statescript {
                     signal(shamblers-spawned, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--tackle-turn-start) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--tackle-turn-start) {
                         if (npc-alive?(var_2)) {
                             if (npc-on-screen-and-visible?(var_2, -1, 0)) {
-                                darray-insert(wat--tackle-turn-chase, new-boxed-value(7, var_2), 0);
+                                darray-insert(wat--tackle-turn-chase, boxed_symbol(var_2), 0);
                             } else {
                                 kill-entity(var_2);
                             }
@@ -543,17 +383,7 @@ statescript {
                     wait-spawn-npc-group-async(wat--gate-approach-more, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--gate-approach-more) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--gate-approach-more) {
                         npc-set-demeanor(var_2, 2, 0);
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
@@ -599,12 +429,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.40;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
                     animate_(npc-wat-chase-shambler-1, inf-shambler-explode-attack-v2--moving-explode, var_0);
                 }
                 lambda {
@@ -658,12 +488,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.40;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
                     animate_(npc-wat-chase-shambler-2, inf-shambler-explode-attack-v2--moving-explode, var_0);
                 }
                 lambda {
@@ -712,35 +542,15 @@ statescript {
             }
             track clickers {
                 lambda {
-                    foreach (u64? var_1 : wat--exit-turnstile-clickers-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-insert(wat--exit-turnstile-clickers, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 0);
+                    foreach (u64? var_2 : wat--exit-turnstile-clickers-spawners) {
+                        darray-insert(wat--exit-turnstile-clickers, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 0);
                     }
                 }
                 lambda {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : wat--exit-turnstile-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--exit-turnstile-clickers) {
                         npc-set-script-only-no-perception(var_2);
                         npc-request-hold(var_2, 10.00);
                     }
@@ -748,17 +558,7 @@ statescript {
             }
             track runners {
                 lambda {
-                    foreach (u64? var_1 : wat--exit-turnstile-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--exit-turnstile-runners) {
                         spawn-npc(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -777,17 +577,7 @@ statescript {
         block start {
             track clickers {
                 lambda {
-                    foreach (u64? var_1 : wat--exit-turnstile-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--exit-turnstile-clickers) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         npc-force-target(var_2, player);
@@ -818,17 +608,7 @@ statescript {
             }
             track runners {
                 lambda {
-                    foreach (u64? var_1 : wat--exit-turnstile-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat--exit-turnstile-runners) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         npc-force-target(var_2, player);
@@ -870,17 +650,7 @@ statescript {
                     wait(0.30);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         npc-force-target(var_2, player);
                     }
@@ -898,7 +668,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(stop-respawning-infected, self)) {
-                        darray-insert(wat--exit-turnstile-clickers, new-boxed-value(7, spawn-npc(npc-wat-chase-clicker-respawner-2, npc-wat-chase-clicker-respawner-2, 0)), 0);
+                        darray-insert(wat--exit-turnstile-clickers, boxed_symbol(spawn-npc(npc-wat-chase-clicker-respawner-2, npc-wat-chase-clicker-respawner-2, 0)), 0);
                         if (get-boolean(dina-available-to-eat?, self)) {
                             u64? var_5 = darray-at(wat--exit-turnstile-clickers, 0);
                             u16 var_6;
@@ -940,17 +710,7 @@ statescript {
                     set-invisible-to-npcs(dina, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-stop-behavior(var_2);
                             npc-set-script-only-no-perception(var_2);

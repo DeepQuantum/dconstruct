@@ -115,9 +115,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
                     animate_(player, fob-car-ride-ambush-death--abby, var_0);
                 }
                 lambda {

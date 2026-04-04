@@ -19,7 +19,7 @@ u16 attempt-ammo-quick-swap(u64? arg_0) {
             u64? var_9 = get-weapon-ammo-names(get-player-weapon-id(), 0);
             u16 var_11;
             if (darray-count(var_9) > 1) {
-                u64? var_17 = darray-at(var_9, mod-int32(darray-find(var_9, new-boxed-value(7, player-get-weapon-current-ammo-name(get-player-weapon-id())), 0) + 1, 2));
+                u64? var_17 = darray-at(var_9, mod-int32(darray-find(var_9, boxed_symbol(player-get-weapon-current-ammo-name(get-player-weapon-id())), 0) + 1, 2));
                 u16 var_18;
                 if (var_17 && *(u16*)(var_17 + 12) == 7) {
                     var_18 = *(u64*)var_17;
@@ -45,9 +45,9 @@ u16 attempt-ammo-quick-swap(u64? arg_0) {
                     var_11 = send-event(
                         switch-ammo,
                         hud2-get-health-ammo-path(),
-                        new-boxed-value(1, 1),
-                        new-boxed-value(7, var_18),
-                        new-boxed-value(7, player-get-weapon-current-ammo-name(get-player-weapon-id()))
+                        boxed_bool(1),
+                        boxed_symbol(var_18),
+                        boxed_symbol(player-get-weapon-current-ammo-name(get-player-weapon-id()))
                     );
                 } else {
                     var_11 = 0;
@@ -102,7 +102,7 @@ statescript {
                 lambda {
                     if (get-player-weapon-total-ammo() == 0) {
                         u64? var_2 = get-weapon-ammo-names(get-player-weapon-id(), 0);
-                        if (darray-find(var_2, new-boxed-value(7, player-get-weapon-current-ammo-name(get-player-weapon-id())), 0) == 1) {
+                        if (darray-find(var_2, boxed_symbol(player-get-weapon-current-ammo-name(get-player-weapon-id())), 0) == 1) {
                             u64? var_8 = darray-at(var_2, 0);
                             u16 var_9;
                             if (var_8 && *(u16*)(var_8 + 12) == 7) {

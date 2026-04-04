@@ -27,7 +27,7 @@ u64? wait-pat-light-flicker(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64?
     u64 i = 0;
     while (i < random-int32-min-max(arg_2, arg_3, 0)) {
         if (arg_9) {
-            darray-append(workbench-spawned-light-effects, new-boxed-value(7, spawn-entity(fx-workbench-light-flare-beam-1, 0, 0)), 0);
+            darray-append(workbench-spawned-light-effects, boxed_symbol(spawn-entity(fx-workbench-light-flare-beam-1, 0, 0)), 0);
         }
         wait-lerp-emissive-and-lights(
             arg_0,

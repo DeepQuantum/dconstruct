@@ -81,17 +81,7 @@ statescript {
                     npc-move-to(npc-nor-stalker-door-ambush-drop-stalker-9, get-spawner-locator(pos-nor-stalker-ambush-spawner-15, 1), 1, 2, 0, 0, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : non-igc-run-stalkers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : non-igc-run-stalkers) {
                         npc-set-movement-speed-scale(var_2, 0.75);
                     }
                 }

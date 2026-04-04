@@ -296,17 +296,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-horse-trap-fight-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-horse-trap-fight-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-request-movement(var_2);
                             npc-stop-script(var_2, 0);
@@ -325,21 +315,11 @@ statescript {
                     wait-boolean(spawn-reinf, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-horse-trap-reinf-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-horse-trap-reinf-npcs) {
                         if (npc-group-alive-count(wat-horse-trap-fight-npcs) < 6) {
                             spawn-npc(var_2, 0, 0);
                             npc-set-zone-region(var_2, rgn-zone-horse-trap-fight-2);
-                            darray-append(wat-horse-trap-fight-npcs, new-boxed-value(7, var_2), 1);
+                            darray-append(wat-horse-trap-fight-npcs, boxed_symbol(var_2), 1);
                         }
                     }
                 }

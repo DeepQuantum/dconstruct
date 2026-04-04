@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? send-message-to-test-text-widget(u64? arg_0) {
-    return send-event(draw-test-text, get-symbol(text-script, self), new-boxed-value(19, dc:format("<font color="#74B9D6">%s</font>", arg_0)));
+    return send-event(draw-test-text, get-symbol(text-script, self), boxed_stringcopy(dc:format("<font color="#74B9D6">%s</font>", arg_0)));
 }
 
 statescript {

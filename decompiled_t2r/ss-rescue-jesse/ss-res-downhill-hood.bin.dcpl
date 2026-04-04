@@ -177,9 +177,9 @@ statescript {
                         }
                         npc-set-script-only-no-perception(var_2);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(var_2, 1);
                         animate_(var_2, bindpose, var_5);
                         i = i + 1;
                     }
@@ -295,23 +295,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-start--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(jesse, res-downhill-hood-jump-sequence-start--jesse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     wait-animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-start--male, var_0);
                 }
                 lambda {
@@ -324,22 +324,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(cam-res-downhill-hood-camera-1, res-downhill-hood-jump-sequence-start--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, res-downhill-hood-jump-sequence-start--ellie, var_0);
                 }
                 lambda {
@@ -453,9 +453,9 @@ statescript {
                             var_4 = 0;
                         }
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                         animate_(var_2, var_4, var_5);
                         i = i + 1;
                     }
@@ -478,52 +478,52 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-end--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(res-downhill-chainlink-fence-in1-sj092-1, res-downhill-hood-jump--res-downhill-chainlink-fence, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-intro-part--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     animate_(jesse, res-downhill-hood-jump-sequence-intro--jesse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 38;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = apReference-hand-r;
-                    *(i32*)*(*var_0 + (4 * 8)) = 35;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 38;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = apReference-hand-r;
+                    *(i32*)*var_0[4] = 35;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
                     wait-animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-intro--male, var_0);
                 }
                 lambda {
@@ -553,28 +553,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     animate_(cam-res-downhill-hood-camera-1, res-downhill-hood-jump-sequence-intro--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 71;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 71;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 1;
                     wait-animate_(player, res-downhill-hood-jump-sequence-intro--ellie, var_0);
                 }
                 lambda {
@@ -639,63 +639,63 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.10;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.10;
                     animate_(cam-res-downhill-hood-camera-1, res-downhill-hood-jump-sequence-exit--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.10;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.10;
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-exit-part--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 38;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = apReference-hand-r;
-                    *(i32*)*(*var_0 + (4 * 8)) = 35;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 4;
-                    *(i32*)*(*var_0 + (5 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 0.10;
-                    *(i32*)*(*var_0 + (6 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 38;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = apReference-hand-r;
+                    *(i32*)*var_0[4] = 35;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 4;
+                    *(i32*)*var_0[5] = 30;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 0.10;
+                    *(i32*)*var_0[6] = 86;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-exit--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.10;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.10;
                     wait-animate_(jesse, res-downhill-hood-jump-sequence-exit--jesse, var_0);
                 }
                 lambda {
@@ -721,17 +721,7 @@ statescript {
             }
             track systemic-infected {
                 lambda {
-                    foreach (u64? var_1 : res-downhill-hood-systemic-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-downhill-hood-systemic-npcs) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -776,42 +766,42 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     animate_(jesse, res-downhill-hood-jump-sequence-end--jesse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-fail--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     animate_(cam-res-downhill-hood-camera-1, res-downhill-hood-jump-sequence-fail--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 86;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-fail--male, var_0);
                 }
                 lambda {
@@ -819,12 +809,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
                     wait-animate_(player, res-downhill-hood-jump-sequence-fail--ellie, var_0);
                 }
                 lambda {
@@ -926,15 +916,15 @@ statescript {
             track progression {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
-                    *(i32*)*(*var_0 + (2 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
+                    *(i32*)*var_0[2] = 82;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     wait-animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-end--pickup, var_0);
                 }
                 lambda {
@@ -961,74 +951,74 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 86;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-head-shot--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
-                    *(i32*)*(*var_0 + (3 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
+                    *(i32*)*var_0[3] = 82;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 86;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 28;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 0.50;
                     animate_(npc-res-downhill-hood-infected-main-1, res-downhill-hood-jump-sequence-end--male, var_0);
                 }
             }
             track jesse {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 57;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 40;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-hood-jump-sequence-end-part--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
-                    *(i32*)*(*var_0 + (3 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(obj-jeep-res-downhill-escape-1, 0, res-downhill-hood-jump-sequence-end--pickup);
+                    *(i32*)*var_0[3] = 82;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 28;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
                     animate_(jesse, res-downhill-hood-jump-sequence-end--jesse, var_0);
                 }
             }
@@ -1045,17 +1035,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : res-downhill-hood-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-downhill-hood-npcs) {
                         kill-entity-if-spawned(var_2);
                     }
                 }

@@ -44,28 +44,18 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         u64? var_3 = npc-alive?(var_2);
                         u64? var_4 = npc-is-stunned?(var_2);
-                        u64? var_7 = darray-contains?(get-symbol(group-currently-stunned-npcs, self), new-boxed-value(7, var_2));
+                        u64? var_7 = darray-contains?(get-symbol(group-currently-stunned-npcs, self), boxed_symbol(var_2));
                         if (!npc-is-buddy?(var_2)) {
                             if (var_3 && var_4 && !var_7 && var_3 && !(get-symbol(stun-bomb-explosion-process, self) == 0) && 5.00 > distance-between-locators(get-object-locator(var_2), get-bound-frame(stun-bomb-explosion-location, self))) {
-                                darray-append(get-symbol(group-currently-stunned-npcs, self), new-boxed-value(7, var_2), 1);
-                                send-event(npc-just-got-stunned, self, new-boxed-value(7, var_2));
+                                darray-append(get-symbol(group-currently-stunned-npcs, self), boxed_symbol(var_2), 1);
+                                send-event(npc-just-got-stunned, self, boxed_symbol(var_2));
                             } else if (var_3 && !var_4 && var_7) {
-                                darray-find-remove(get-symbol(group-currently-stunned-npcs, self), new-boxed-value(7, var_2), 0);
+                                darray-find-remove(get-symbol(group-currently-stunned-npcs, self), boxed_symbol(var_2), 0);
                             } else if (!var_3 && var_7) {
-                                darray-find-remove(get-symbol(group-currently-stunned-npcs, self), new-boxed-value(7, var_2), 0);
+                                darray-find-remove(get-symbol(group-currently-stunned-npcs, self), boxed_symbol(var_2), 0);
                             }
                         }
                         set-int32(num-currently-stunned-npcs, darray-count(get-symbol(group-currently-stunned-npcs, self)), self);

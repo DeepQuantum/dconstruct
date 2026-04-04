@@ -50,23 +50,13 @@ statescript {
             track main {
                 lambda {
                     if (is-japan?()) {
-                        darray-find-remove(sle-pier-streets-corpses, new-boxed-value(7, m-sle-street-corpse-sniped-1), 0);
-                        darray-find-remove(sle-pier-streets-corpses, new-boxed-value(7, m-sle-street-corpse-sniped-3), 0);
-                        darray-find-remove(sle-pier-streets-corpses, new-boxed-value(7, m-sle-street-corpse-sniped-4), 0);
+                        darray-find-remove(sle-pier-streets-corpses, boxed_symbol(m-sle-street-corpse-sniped-1), 0);
+                        darray-find-remove(sle-pier-streets-corpses, boxed_symbol(m-sle-street-corpse-sniped-3), 0);
+                        darray-find-remove(sle-pier-streets-corpses, boxed_symbol(m-sle-street-corpse-sniped-4), 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-pier-streets-corpses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-pier-streets-corpses) {
                         wait-spawn-entity(var_2, 0);
                     }
                 }

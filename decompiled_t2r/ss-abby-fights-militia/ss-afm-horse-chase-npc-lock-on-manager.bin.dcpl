@@ -54,17 +54,7 @@ statescript {
                     wait-boolean(suppress-cavalry-lock-on, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-suppress-lock-on-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-suppress-lock-on-npcs) {
                         player-allow-lock-on-to-object(var_2, 0);
                         player-disable-aim-assist-on-object(var_2);
                     }
@@ -73,17 +63,7 @@ statescript {
                     wait(3.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-suppress-lock-on-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-suppress-lock-on-npcs) {
                         player-allow-lock-on-to-object(var_2, 1);
                         player-enable-aim-assist-on-object(var_2);
                     }
@@ -108,14 +88,14 @@ statescript {
                             } else {
                                 var_6 = 0;
                             }
-                            if (!darray-contains?(get-symbol(lock-on-disabled-npcs-darray, self), new-boxed-value(7, var_6)) && !darray-contains?(afm-horse-chase-allow-lock-on-at-any-distance, new-boxed-value(7, var_6))) {
+                            if (!darray-contains?(get-symbol(lock-on-disabled-npcs-darray, self), boxed_symbol(var_6)) && !darray-contains?(afm-horse-chase-allow-lock-on-at-any-distance, boxed_symbol(var_6))) {
                                 if (is-behind?(
                                     spline-locator-at-distance(var_0, spline-distance-object(var_0, player) + 15.00),
                                     get-object-locator(var_6),
                                     2,
                                     90.00
                                 )) {
-                                    darray-append(get-symbol(lock-on-disabled-npcs-darray, self), new-boxed-value(7, var_6), 0);
+                                    darray-append(get-symbol(lock-on-disabled-npcs-darray, self), boxed_symbol(var_6), 0);
                                     player-allow-lock-on-to-object(var_6, 0);
                                     player-disable-aim-assist-on-object(var_6);
                                 }
@@ -129,12 +109,12 @@ statescript {
         block event npc-spawned {
             track main {
                 lambda {
-                    if (darray-contains?(afm-horse-chase-disable-lock-on-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(afm-horse-chase-disable-lock-on-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         player-allow-lock-on-to-object(event-arg-symbol(0), 0);
                     }
                 }
                 lambda {
-                    if (darray-contains?(afm-horse-chase-disable-lock-on-horses, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(afm-horse-chase-disable-lock-on-horses, boxed_symbol(event-arg-symbol(0)))) {
                         set-targetable-lock-on-aim-priority(event-arg-symbol(0), 0.50);
                     }
                 }
@@ -144,7 +124,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = get-npc-horse-id(event-arg-symbol(0), 1, 1);
-                    if (!(var_1 == 0) && darray-contains?(afm-horse-chase-disable-lock-on-horses, new-boxed-value(7, get-npc-horse-id(event-arg-symbol(0), 1, 1)))) {
+                    if (!(var_1 == 0) && darray-contains?(afm-horse-chase-disable-lock-on-horses, boxed_symbol(get-npc-horse-id(event-arg-symbol(0), 1, 1)))) {
                         player-allow-lock-on-to-object(var_1, 0);
                         var_6 = player-disable-aim-assist-on-object(var_1);
                     }

@@ -81,10 +81,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(faction-enemy, whisper-mode, new-boxed-value(1, 1));
+                    fact-set(faction-enemy, whisper-mode, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-clear-entity, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-clear-entity, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     wait-spawn-npc-group-async(steakhouse-melee-npcs, 0, 0);
@@ -106,7 +106,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(faction-enemy, whisper-mode, new-boxed-value(1, 0));
+                    fact-set(faction-enemy, whisper-mode, boxed_bool(0));
                 }
             }
         }

@@ -43,31 +43,11 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : burning-grass-objects) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        foreach (u64? var_4 : burning-grass-objects) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                    foreach (u64? var_2 : burning-grass-objects) {
+                        foreach (u64? var_5 : burning-grass-objects) {
                             if (!(var_2 == var_5)) {
                                 if (distance-between-points(get-object-position(var_2), get-object-position(var_5)) < get-float(grass-neighbor-radius, self)) {
-                                    send-event(add-neighbor, var_2, new-boxed-value(7, var_5));
+                                    send-event(add-neighbor, var_2, boxed_symbol(var_5));
                                 }
                             }
                         }
@@ -129,7 +109,7 @@ statescript {
                                     } else {
                                         var_11 = 0;
                                     }
-                                    send-event(add-neighbor, var_3, new-boxed-value(7, var_11));
+                                    send-event(add-neighbor, var_3, boxed_symbol(var_11));
                                     u16 var_14;
                                     if (var_13 && *(u16*)(var_13 + 12) == 7) {
                                         var_14 = *(u64*)var_13;
@@ -140,7 +120,7 @@ statescript {
                                     } else {
                                         var_14 = 0;
                                     }
-                                    send-event(add-neighbor, var_14, new-boxed-value(7, var_3));
+                                    send-event(add-neighbor, var_14, boxed_symbol(var_3));
                                 }
                             }
                             if (get-boolean(use-smoke-screen?, self)) {
@@ -200,7 +180,7 @@ statescript {
                     set-symbol(neighbor-group, darray-create(self, -1, 0), self);
                 }
                 lambda {
-                    send-event(register-grass, ss-test-burning-grass-manager-1, new-boxed-value(7, get-self-id()));
+                    send-event(register-grass, ss-test-burning-grass-manager-1, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     wait-one-frame();
@@ -216,10 +196,10 @@ statescript {
         block event spawned-new-burnable {
             track main {
                 lambda {
-                    darray-append(new-burnables, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(new-burnables, boxed_symbol(event-arg-symbol(0)), 1);
                 }
                 lambda {
-                    darray-append(get-symbol(neighbor-group, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(get-symbol(neighbor-group, self), boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -253,17 +233,7 @@ statescript {
                     print-symbol(event-arg-symbol(1), self);
                 }
                 lambda {
-                    foreach (u64? var_2 : burning-grass-objects) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : burning-grass-objects) {
                         if (distance-between-points(get-locator-position(event-arg-bound-frame(2)), get-object-position(var_3)) < get-float(molotov-burn-radius, self)) {
                             send-event(burning, var_3);
                         }
@@ -274,17 +244,7 @@ statescript {
         block event flaming-arrow-hit {
             track main {
                 lambda {
-                    foreach (u64? var_2 : burning-grass-objects) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : burning-grass-objects) {
                         if (distance-between-points(get-locator-position(event-arg-bound-frame(0)), get-object-position(var_3)) < get-float(fire-arrow-burn-radius, self)) {
                             send-event(burning, var_3);
                         }
@@ -295,17 +255,7 @@ statescript {
         block event npc-molotov {
             track main {
                 lambda {
-                    foreach (u64? var_2 : burning-grass-objects) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : burning-grass-objects) {
                         if (distance-between-points(get-locator-position(event-arg-bound-frame(0)), get-object-position(var_3)) < get-float(molotov-burn-radius, self)) {
                             send-event(burning, var_3);
                         }
@@ -316,17 +266,7 @@ statescript {
         block event grenade-exploded {
             track main {
                 lambda {
-                    foreach (u64? var_2 : burning-grass-objects) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : burning-grass-objects) {
                         if (get-locator-distance(get-object-locator(var_3), event-arg-bound-frame(0)) < get-float(molotov-burn-radius, self)) {
                             send-event(burning, var_3);
                         }
@@ -337,17 +277,7 @@ statescript {
         block event explosion {
             track main {
                 lambda {
-                    foreach (u64? var_2 : burning-grass-objects) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : burning-grass-objects) {
                         if (get-locator-distance(get-object-locator(var_3), event-arg-bound-frame(0)) < get-float(molotov-burn-radius, self)) {
                             send-event(burning, var_3);
                         }
@@ -358,7 +288,7 @@ statescript {
         block event register-grass {
             track main {
                 lambda {
-                    darray-append(burning-grass-objects, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(burning-grass-objects, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -367,7 +297,7 @@ statescript {
         block event add-neighbor {
             track main {
                 lambda {
-                    darray-append(get-symbol(neighbor-group, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(get-symbol(neighbor-group, self), boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -467,17 +397,7 @@ statescript {
                         if (get-locator-distance(get-object-locator(player), get-object-locator(get-self-id())) < 1.00) {
                             player-take-melee-damage(get-self-id(), 4, 1, 1);
                         }
-                        foreach (u64? var_8 : get-symbol(neighbor-group, self)) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : get-symbol(neighbor-group, self)) {
                             u64? var_14 = vector-dot(get-vector(wind-direction, self), get-z-vec-from-bound-frame(rotate-object-lookat-object(get-self-id(), var_9, 1.00, 0)));
                             f32 var_15;
                             if (var_14 > 0.00) {
@@ -485,7 +405,7 @@ statescript {
                             } else {
                                 var_15 = 0.50;
                             }
-                            send-event(heating, var_9, new-boxed-value(6, get-float(base-heating-increment, self) * var_15));
+                            send-event(heating, var_9, boxed_f32(get-float(base-heating-increment, self) * var_15));
                             -=f(base-heating-increment, get-float(heat-decay, self), self);
                             if (get-float(base-heating-increment, self) < 0.10) {
                                 var_20 = set-float(base-heating-increment, 0.10, self);

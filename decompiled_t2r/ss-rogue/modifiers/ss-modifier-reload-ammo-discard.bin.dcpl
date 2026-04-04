@@ -48,7 +48,7 @@ statescript {
                         display(dc:format("DEB-SK: ammo-in-magazine = %i", var_1), 19);
                     }
                     if (var_1 > 0) {
-                        broadcast-event(skull-activate, new-boxed-value(7, reload-ammo-discard));
+                        broadcast-event(skull-activate, boxed_symbol(reload-ammo-discard));
                         if (!is-final-build?()) {
                             display(dc:format("DEB-SK: Player does not have an empty clip!"), 19);
                         }

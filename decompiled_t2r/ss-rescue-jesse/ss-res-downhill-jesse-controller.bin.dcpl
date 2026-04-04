@@ -48,30 +48,30 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-or-spawner-parented-locator(get-symbol(current-ap, self));
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-object-or-spawner-parented-locator(get-symbol(current-ap, self));
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(start-fresh?, self)) {
                         var_5 = 0.00;
                     } else {
                         var_5 = 0.50;
                     }
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_1 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = var_5;
+                    *(i32*)*var_1[2] = 57;
+                    *(u64*)(*var_1[2] + 8) = 0;
                     f32 var_9;
                     if (!(get-symbol(reverence-obj, self) == 0) && !(get-boolean(start-fresh?, self))) {
                         var_9 = get-animation-frame(get-symbol(reverence-obj, self), 2, 0);
                     } else {
                         var_9 = 0.00;
                     }
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = var_9;
-                    *(i32*)*(*var_1 + (3 * 8)) = 82;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (3 * 8)) + 8) = !(get-symbol(reverence-obj, self) == 0) && !(get-boolean(start-fresh?, self));
+                    *(f32*)(*var_1[2] + 8) = var_9;
+                    *(i32*)*var_1[3] = 82;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(u8*)(*var_1[3] + 8) = !(get-symbol(reverence-obj, self) == 0) && !(get-boolean(start-fresh?, self));
                     animate_(jesse, get-symbol(current-anim, self), var_1);
                 }
                 lambda {
@@ -158,30 +158,30 @@ statescript {
                         var_4 = res-downhill-backup-reload-fw--jesse;
                     }
                     u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
                     animate_(obj-res-downhill-jesse-reload-mag-1, var_1, var_5);
                     u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_7 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
+                    *(i32*)*var_7[0] = 10;
+                    *(u64*)(*var_7[0] + 8) = 0;
+                    *(u64*)(*var_7[0] + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
                     animate_(obj-res-downhill-jesse-reload-mag-2, var_2, var_7);
                     u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_9 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
+                    *(i32*)*var_9[0] = 10;
+                    *(u64*)(*var_9[0] + 8) = 0;
+                    *(u64*)(*var_9[0] + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
                     animate_(obj-res-downhill-jesse-reload-mag-3, var_3, var_9);
                     u64? var_11 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_11 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
-                    *(i32*)*(*var_11 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_11 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_11[0] = 10;
+                    *(u64*)(*var_11[0] + 8) = 0;
+                    *(u64*)(*var_11[0] + 8) = get-object-parented-bound-frame(obj-jeep-res-downhill-escape-1);
+                    *(i32*)*var_11[1] = 28;
+                    *(u64*)(*var_11[1] + 8) = 0;
+                    *(f32*)(*var_11[1] + 8) = 0.50;
+                    *(i32*)*var_11[2] = 30;
+                    *(u64*)(*var_11[2] + 8) = 0;
+                    *(f32*)(*var_11[2] + 8) = 0.50;
                     wait-animate_(jesse, var_4, var_11);
                     parent(obj-res-downhill-jesse-reload-mag-1, obj-jeep-res-downhill-escape-1, body_up);
                     parent(obj-res-downhill-jesse-reload-mag-2, obj-jeep-res-downhill-escape-1, body_up);

@@ -15,17 +15,7 @@ u64? spawn-middle-group() {
     if (!get-boolean(spawned-mid-group?, self)) {
         despawn-offscreen-npcs-in-group(darray-count(middle-area-group), all-enemy-npcs, 100.00);
         wait-spawn-npc-group-async(middle-area-group, 0, 0);
-        foreach (u64? var_3 : middle-area-group) {
-            u16 var_4;
-            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                var_4 = *(u64*)var_3;
-            } else {
-                var_4 = 0;
-            }
+        foreach (u64? var_4 : middle-area-group) {
             if (npc-alive?(var_4)) {
                 npc-set-zone-region-if-alive(var_4, rgn-zone-mid-1);
             }
@@ -40,17 +30,7 @@ u64? spawn-garden-group() {
     if (!get-boolean(spawned-rear-garden-group?, self)) {
         despawn-offscreen-npcs-in-group(darray-count(rear-garden-group), all-enemy-npcs, 100.00);
         wait-spawn-npc-group-async(rear-garden-group, 0, 0);
-        foreach (u64? var_3 : rear-garden-group) {
-            u16 var_4;
-            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                var_4 = *(u64*)var_3;
-            } else {
-                var_4 = 0;
-            }
+        foreach (u64? var_4 : rear-garden-group) {
             if (npc-alive?(var_4)) {
                 npc-set-zone-region-if-alive(var_4, rgn-zone-rear-garden-1);
             }
@@ -61,17 +41,7 @@ u64? spawn-garden-group() {
 
 u64? spawn-lower-group() {
     wait-spawn-npc-group-async(lower-parking-lot-group, 0, 0);
-    foreach (u64? var_1 : lower-parking-lot-group) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : lower-parking-lot-group) {
         if (npc-alive?(var_2)) {
             if (npc-get-weapon(var_2) != shotgun-basic) {
                 npc-set-zone-region-if-alive(var_2, rgn-zone-lower-parking-lot-1);
@@ -84,17 +54,7 @@ u64? spawn-living-area() {
     if (!get-boolean(spawned-living-area-group?, self)) {
         despawn-offscreen-npcs-in-group(darray-count(living-area-group), all-enemy-npcs, 100.00);
         wait-spawn-npc-group-async(living-area-group, 0, 0);
-        foreach (u64? var_3 : living-area-group) {
-            u16 var_4;
-            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                var_4 = *(u64*)var_3;
-            } else {
-                var_4 = 0;
-            }
+        foreach (u64? var_4 : living-area-group) {
             if (npc-alive?(var_4)) {
                 npc-set-zone-region-if-alive(var_4, rgn-zone-living-area-1);
             }
@@ -184,70 +144,30 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : lower-parking-lot-group) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : lower-parking-lot-group) {
                         if (npc-alive-in-checkpoint?(var_3)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
-                    foreach (u64? var_8 : rear-garden-group) {
-                        u16 var_9;
-                        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                            var_9 = *(u64*)var_8;
-                        } else {
-                            var_9 = 0;
-                        }
+                    foreach (u64? var_9 : rear-garden-group) {
                         if (npc-alive-in-checkpoint?(var_9)) {
-                            darray-append(var_0, new-boxed-value(7, var_9), 1);
+                            darray-append(var_0, boxed_symbol(var_9), 1);
                         }
                         if (is-npc-in-checkpoint?(var_9)) {
                             set-boolean(spawned-rear-garden-group?, 1, self);
                         }
                     }
-                    foreach (u64? var_15 : middle-area-group) {
-                        u16 var_16;
-                        if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                            var_16 = *(u64*)var_15;
-                        } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                            var_16 = *(u64*)var_15;
-                        } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                            var_16 = *(u64*)var_15;
-                        } else {
-                            var_16 = 0;
-                        }
+                    foreach (u64? var_16 : middle-area-group) {
                         if (npc-alive-in-checkpoint?(var_16)) {
-                            darray-append(var_0, new-boxed-value(7, var_16), 1);
+                            darray-append(var_0, boxed_symbol(var_16), 1);
                         }
                         if (is-npc-in-checkpoint?(var_16)) {
                             set-boolean(spawned-mid-group?, 1, self);
                         }
                     }
-                    foreach (u64? var_22 : living-area-group) {
-                        u16 var_23;
-                        if (var_22 && *(u16*)(var_22 + 12) == 7) {
-                            var_23 = *(u64*)var_22;
-                        } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-                            var_23 = *(u64*)var_22;
-                        } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-                            var_23 = *(u64*)var_22;
-                        } else {
-                            var_23 = 0;
-                        }
+                    foreach (u64? var_23 : living-area-group) {
                         if (npc-alive-in-checkpoint?(var_23)) {
-                            darray-append(var_0, new-boxed-value(7, var_23), 1);
+                            darray-append(var_0, boxed_symbol(var_23), 1);
                         }
                         if (is-npc-in-checkpoint?(var_23)) {
                             set-boolean(spawned-living-area-group?, 1, self);
@@ -371,17 +291,7 @@ statescript {
             track main {
                 lambda {
                     if (darray-count(all-npcs) < 5) {
-                        foreach (u64? var_2 : all-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-npcs) {
                             npc-clear-zone(var_3);
                         }
                     }

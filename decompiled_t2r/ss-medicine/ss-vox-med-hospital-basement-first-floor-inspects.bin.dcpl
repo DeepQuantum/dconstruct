@@ -120,17 +120,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-hosp-trauma-sign-group) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hosp-trauma-sign-group) {
                         interactable-disable(var_2);
                     }
                 }
@@ -141,17 +131,7 @@ statescript {
                     set-boolean(vox-trauma-sign?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hosp-trauma-sign-group-loc) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hosp-trauma-sign-group-loc) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }

@@ -40,7 +40,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 1));
+                    fact-set(global, disable-scent-trail, boxed_bool(1));
                 }
             }
         }
@@ -54,7 +54,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 0));
+                    fact-set(global, disable-scent-trail, boxed_bool(0));
                 }
             }
         }
@@ -63,7 +63,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 0));
+                    fact-set(global, disable-scent-trail, boxed_bool(0));
                 }
                 lambda {
                     go(complete, 1);

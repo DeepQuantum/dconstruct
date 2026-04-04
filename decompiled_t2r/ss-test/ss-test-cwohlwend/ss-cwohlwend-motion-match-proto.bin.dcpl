@@ -31,17 +31,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (distance-between-objects-greater-than?(var_2, player, 3.00, 1)) {
                             if (angle-in-between-locators(get-object-locator(var_2), rotate-locator-lookat(get-object-locator(var_2), get-object-locator(player), 1.00, 0), 2) < 45.00) {
                                 npc-move-to(var_2, get-object-locator(player), 1, 0, melee-tells, 0, 0, 0);

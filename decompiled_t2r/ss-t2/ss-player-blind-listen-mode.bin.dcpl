@@ -78,54 +78,44 @@ statescript {
         block event add-fake-enemy {
             track main {
                 lambda {
-                    darray-append(fake-enemies-to-ping, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(fake-enemies-to-ping, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event remove-fake-enemy {
             track main {
                 lambda {
-                    darray-find-remove(fake-enemies-to-ping, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(fake-enemies-to-ping, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block event add-fake-pickup {
             track main {
                 lambda {
-                    darray-append(fake-pickups-to-ping, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(fake-pickups-to-ping, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event remove-fake-pickup {
             track main {
                 lambda {
-                    darray-find-remove(fake-pickups-to-ping, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(fake-pickups-to-ping, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block event weapon-dropped {
             track main {
                 lambda {
-                    darray-append(dropped-melee-weapons, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(dropped-melee-weapons, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event task-complete {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(dropped-melee-weapons, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(dropped-melee-weapons, single-frame, 0)) {
                         if (!object-spawned?(var_3)) {
-                            darray-find-remove(dropped-melee-weapons, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(dropped-melee-weapons, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -272,7 +262,7 @@ statescript {
                         u64? var_6 = hours-since-last-action?(accessibility-scan-tutorial);
                         u64? var_7 = hours-since-last-action?(accessibility-pathfind-enemy-tutorial);
                         u64? var_8 = hours-since-last-action?(accessibility-pathfind-pickup-tutorial);
-                        if (is-navigation-assistance-accessibility?() && !(var_2 == 0) && entity-exists?(var_2) || is-npc?(var_2) && darray-contains?(fake-enemies-to-ping, new-boxed-value(7, var_2)) || var_7 < 0.00 && var_7 > 0.10 || var_4 < 0.00 || var_4 > 0.10 && task-node-active?(tracking)) {
+                        if (is-navigation-assistance-accessibility?() && !(var_2 == 0) && entity-exists?(var_2) || is-npc?(var_2) && darray-contains?(fake-enemies-to-ping, boxed_symbol(var_2)) || var_7 < 0.00 && var_7 > 0.10 || var_4 < 0.00 || var_4 > 0.10 && task-node-active?(tracking)) {
                             set-int64(tutorial-request-frame, get-current-frame-count(), self);
                             hud2-play-prompt-stack-tutorial(*stack-enhanced-listen-mode-navigate-enemy*, 0.00, 0, 0, 0);
                             player-save-action-time(accessibility-pathfind-enemy-tutorial);
@@ -294,17 +284,7 @@ statescript {
                 }
                 lambda {
                     if (is-combat-audio-cues?() && is-command-currently-occluded?(melee-grab) && !timer-running?(distant-triangle-timer, self)) {
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (distance-between-objects-less-than?(player, var_5, 2.50) && is-in-front?(camera-locator(0), get-object-locator(var_5), 2, 180.00) && can-run-melee-list?(player, var_5, player-meat-shield-grab-attacks)) {
                                     play-sound-at-position(sfx-ui-acc-prompt-distant-triangle-button, get-joint-position(var_5, pelvis), 0, 0);
@@ -362,38 +342,18 @@ statescript {
                     darray-clear(enemies-to-ping);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (!fact-get-bool-safe(var_2, hide-from-enhanced-listen-mode)) {
-                                darray-append(enemies-to-ping, new-boxed-value(7, var_2), 1);
+                                darray-append(enemies-to-ping, boxed_symbol(var_2), 1);
                             }
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fake-enemies-to-ping) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fake-enemies-to-ping) {
                         if (entity-exists?(var_2)) {
-                            darray-append(enemies-to-ping, new-boxed-value(7, var_2), 1);
+                            darray-append(enemies-to-ping, boxed_symbol(var_2), 1);
                         }
                     }
                 }
@@ -449,21 +409,11 @@ statescript {
                         1,
                         get-float(scan-range-buffer, self) + get-float(scan-range-max, self)
                     );
-                    foreach (u64? var_9 : enemies-to-ping) {
-                        u16 var_10;
-                        if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                            var_10 = *(u64*)var_9;
-                        } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                            var_10 = *(u64*)var_9;
-                        } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                            var_10 = *(u64*)var_9;
-                        } else {
-                            var_10 = 0;
-                        }
+                    foreach (u64? var_10 : enemies-to-ping) {
                         u64? var_15 = approx-path-dist-from-undirected(get-int32(pathfind-pickup, self), var_10);
                         if (var_15 < var_3 && var_15 > 9999.00 && get-point-distance(get-point(scan-center, self), get-object-position(var_10)) < var_3) {
                             u64? var_19 = get-locator-distance-y-signed(get-joint-locator(var_10, root), get-joint-locator(player, root));
-                            darray-append(var_4, new-boxed-value(7, var_10), 1);
+                            darray-append(var_4, boxed_symbol(var_10), 1);
                             if (npc-get-faction(var_10, 1) == Civilian || !npc-alive?(var_10) && !object-spawned?(var_10)) {}
  else if (var_10 == npc-far-boar-1) {
                                 var_24 = play-sound-at-joint(sfx-ui-acc-sonar-npc-infected, var_10, head_end, 0, 0);
@@ -507,18 +457,8 @@ statescript {
                             }
                         }
                     }
-                    foreach (u64? var_44 : var_4) {
-                        u16 var_45;
-                        if (var_44 && *(u16*)(var_44 + 12) == 7) {
-                            var_45 = *(u64*)var_44;
-                        } else if (var_44 && *(u16*)(var_44 + 12) == 5) {
-                            var_45 = *(u64*)var_44;
-                        } else if (var_44 && *(u16*)(var_44 + 12) == 4) {
-                            var_45 = *(u64*)var_44;
-                        } else {
-                            var_45 = 0;
-                        }
-                        darray-find-remove(enemies-to-ping, new-boxed-value(7, var_45), 0);
+                    foreach (u64? var_45 : var_4) {
+                        darray-find-remove(enemies-to-ping, boxed_symbol(var_45), 0);
                     }
                     darray-destroy(var_4);
                 }
@@ -625,19 +565,9 @@ statescript {
                         get-float(scan-range-buffer, self) + get-float(scan-range-max, self)
                     );
                     u64? var_12;
-                    foreach (u64? var_13 : fake-pickups-to-ping) {
-                        u16 var_14;
-                        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                            var_14 = *(u64*)var_13;
-                        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                            var_14 = *(u64*)var_13;
-                        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                            var_14 = *(u64*)var_13;
-                        } else {
-                            var_14 = 0;
-                        }
+                    foreach (u64? var_14 : fake-pickups-to-ping) {
                         if (!(var_7 == 0)) {
-                            darray-find-remove(var_7, new-boxed-value(7, var_14), 0);
+                            darray-find-remove(var_7, boxed_symbol(var_14), 0);
                         }
                         u64? var_21;
                         if (float-in-range?(get-point-distance(get-point(scan-center, self), get-object-position(var_14)), get-float(scan-radius, self), var_3)) {
@@ -646,24 +576,14 @@ statescript {
                                 var_23 = darray-create(self, -1, 0);
                             }
                             var_21 = var_23;
-                            var_22 = darray-append(var_23, new-boxed-value(7, var_14), 1);
+                            var_22 = darray-append(var_23, boxed_symbol(var_14), 1);
                         }
                         var_12 = var_21;
                     }
                     set-float(scan-radius, var_3, self);
                     if (!(var_12 == 0)) {
-                        foreach (u64? var_29 : var_12) {
-                            u16 var_30;
-                            if (var_29 && *(u16*)(var_29 + 12) == 7) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 5) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 4) {
-                                var_30 = *(u64*)var_29;
-                            } else {
-                                var_30 = 0;
-                            }
-                            if (player-cant-pickup?(var_30) || darray-contains?(dropped-melee-weapons, new-boxed-value(7, var_30)) || interactable-get-interact-radius(var_30) <= 0.00 && interactable-get-activation-radius(var_30) <= 0.00 && interactable-get-activation-region(var_30) == 0 && interactable-get-interaction-region(var_30) == 0 && !interactable-should-disable-accessibility-cue?(var_30)) {
+                        foreach (u64? var_30 : var_12) {
+                            if (player-cant-pickup?(var_30) || darray-contains?(dropped-melee-weapons, boxed_symbol(var_30)) || interactable-get-interact-radius(var_30) <= 0.00 && interactable-get-activation-radius(var_30) <= 0.00 && interactable-get-activation-region(var_30) == 0 && interactable-get-interaction-region(var_30) == 0 && !interactable-should-disable-accessibility-cue?(var_30)) {
                                 u64? var_42 = lookup-interactable-def(tag-symbol(interactable-def, var_30));
                                 u64? var_48 = offset-locator(get-object-locator(var_30), alloc-vector(
                                     *(f32*)(var_42 + 92),

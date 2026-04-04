@@ -157,9 +157,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
                     animate_(npc-afm--horse-cavalry-field-enemy-4, afm-horse-chase-riding-flinch-heavy-rt--horse-main-add, var_0);
                 }
             }

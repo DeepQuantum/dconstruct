@@ -27,13 +27,13 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(self, override-max-travel-dist, new-boxed-value(6, 10.00));
+                    fact-set(self, override-max-travel-dist, boxed_f32(10.00));
                 }
                 lambda {
-                    fact-set(self, override-max-expansion-radius, new-boxed-value(6, 8.00));
+                    fact-set(self, override-max-expansion-radius, boxed_f32(8.00));
                 }
                 lambda {
-                    fact-set(self, player-blockage-distance-start, new-boxed-value(6, 1.50));
+                    fact-set(self, player-blockage-distance-start, boxed_f32(1.50));
                 }
                 lambda {
                     while (!!(get-symbol(chase-track, self) == 0)) {
@@ -90,7 +90,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(allow-despawning?, self) && npc-not-visible?(self) && get-float(dist-to-player, self) > get-float(despawn-dist, self)) {
-                        broadcast-event(npc-removed, new-boxed-value(7, get-self-id()));
+                        broadcast-event(npc-removed, boxed_symbol(get-self-id()));
                         kill-entity(self);
                         go(done, 1);
                     }
@@ -133,7 +133,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(allow-despawning?, self) && npc-not-visible?(self) && get-float(dist-to-player, self) > get-float(despawn-dist, self)) {
-                        broadcast-event(npc-removed, new-boxed-value(7, get-self-id()));
+                        broadcast-event(npc-removed, boxed_symbol(get-self-id()));
                         kill-entity(self);
                         go(done, 1);
                     }

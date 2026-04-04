@@ -266,14 +266,14 @@ statescript {
         block event add-override-region {
             track main {
                 lambda {
-                    darray-append(override-regions, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(override-regions, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event remove-override-region {
             track main {
                 lambda {
-                    darray-find-remove(override-regions, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(override-regions, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -692,7 +692,7 @@ statescript {
                     set-uint64(waypoint-fx, var_61, self);
                     set-effect-color-vec(get-uint64(waypoint-fx, self), lookup-hud-color-vector(t2-white));
                     if (!(var_1 == 0) || is-npc?(var_1)) {
-                        if (darray-contains?(fake-enemies-to-ping, new-boxed-value(7, var_1))) {
+                        if (darray-contains?(fake-enemies-to-ping, boxed_symbol(var_1))) {
                             player-save-action-time(accessibility-pathfind-enemy);
                         } else {
                             player-save-action-time(accessibility-pathfind-pickup);
@@ -717,7 +717,7 @@ statescript {
                         sid var_87;
                         if (is-npc?(var_1) && npc-is-infected?(var_1)) {
                             var_87 = sfx-ui-acc-path-locate-enemy-infected;
-                        } else if (is-npc?(var_1) && darray-contains?(fake-enemies-to-ping, new-boxed-value(7, var_1))) {
+                        } else if (is-npc?(var_1) && darray-contains?(fake-enemies-to-ping, boxed_symbol(var_1))) {
                             var_87 = sfx-ui-acc-path-locate-enemy;
                         } else if (sonar-goal-is-beneath-you-underwater?(var_1)) {
                             var_87 = sfx-ui-acc-path-locate-underwater;

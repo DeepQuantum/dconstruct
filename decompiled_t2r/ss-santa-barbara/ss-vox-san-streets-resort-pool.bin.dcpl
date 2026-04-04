@@ -13,17 +13,7 @@
 
 u16 infected-chained-or-dead?() {
     u16 var_1;
-    foreach (u64? var_2 : vox-san-pool-chained-infected) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : vox-san-pool-chained-infected) {
         u16 var_5;
         if (npc-alive?(var_3)) {
             if (!script-in-state?(var_3, unchained)) {
@@ -93,7 +83,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(vox-pool-combat-done, self)) {
-                        if (no-npcs-in-group-alive?(vox-san-resort-pool-npcs-phase-1) && infected-chained-or-dead?() && darray-contains?(vox-san-resort-pool-npcs-phase-1, new-boxed-value(7, event-arg-symbol(0)))) {
+                        if (no-npcs-in-group-alive?(vox-san-resort-pool-npcs-phase-1) && infected-chained-or-dead?() && darray-contains?(vox-san-resort-pool-npcs-phase-1, boxed_symbol(event-arg-symbol(0)))) {
                             set-boolean(vox-pool-combat-done, 1, self);
                             go(pool-combat-done, 1);
                         }
@@ -101,7 +91,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(vox-landing-combat-done, self)) {
-                        if (no-npcs-in-group-alive?(vox-san-resort-pool-npcs-phase-2) && infected-chained-or-dead?() && darray-contains?(vox-san-resort-pool-npcs-phase-2, new-boxed-value(7, event-arg-symbol(0)))) {
+                        if (no-npcs-in-group-alive?(vox-san-resort-pool-npcs-phase-2) && infected-chained-or-dead?() && darray-contains?(vox-san-resort-pool-npcs-phase-2, boxed_symbol(event-arg-symbol(0)))) {
                             set-boolean(vox-landing-combat-done, 1, self);
                             go(landing-combat-done, 1);
                         }

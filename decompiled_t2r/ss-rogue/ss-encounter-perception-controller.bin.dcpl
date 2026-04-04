@@ -108,25 +108,15 @@ statescript {
                     for (u64 i = 0; i < encounter--get-total-encounters-generated(); i++) {
                         u64? var_2 = darray-create(single-frame, -1, 0);
                         for (u64 j = 0; j < var_0; j++) {
-                            darray-append(var_2, new-boxed-value(7, search), 0);
+                            darray-append(var_2, boxed_symbol(search), 0);
                         }
                         u64 j = 0;
                         while (j < (run--get-encounter-depth-at-index(i) + 1)) {
-                            darray-set(var_2, j, new-boxed-value(7, pursue));
+                            darray-set(var_2, j, boxed_symbol(pursue));
                             j = j + 1;
                         }
                         u64? var_7;
-                        foreach (u64? var_8 : var_2) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : var_2) {
                             string var_10;
                             if (search == var_9) {
                                 var_10 = "s";
@@ -156,7 +146,7 @@ statescript {
                                 var_20 = *pursue-encounter-start*;
                             }
                         }
-                        darray-append(get-symbol(group-starting-perception-ptr, self), new-boxed-value(7, var_20), 0);
+                        darray-append(get-symbol(group-starting-perception-ptr, self), boxed_symbol(var_20), 0);
                         if (!is-final-build?()) {
                             string var_25;
                             if (var_20 != nullptr) {

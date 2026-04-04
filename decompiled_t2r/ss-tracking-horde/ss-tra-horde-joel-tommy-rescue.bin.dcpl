@@ -93,32 +93,22 @@ statescript {
                     disable-nav-blocker-object(nav-blocker-rect-1025);
                 }
                 lambda {
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, wait-spawn-npc(npc-tra-horde-tommy-molotov-1, 0, 0)), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(wait-spawn-npc(npc-tra-horde-tommy-molotov-1, 0, 0)), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, wait-spawn-npc(npc-tra-horde-tommy-molotov-2, 0, 0)), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(wait-spawn-npc(npc-tra-horde-tommy-molotov-2, 0, 0)), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, wait-spawn-npc(npc-tra-horde-tommy-molotov-3, 0, 0)), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(wait-spawn-npc(npc-tra-horde-tommy-molotov-3, 0, 0)), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, wait-spawn-npc(npc-tra-horde-tommy-molotov-4, 0, 0)), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(wait-spawn-npc(npc-tra-horde-tommy-molotov-4, 0, 0)), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, wait-spawn-npc(npc-tra-horde-tommy-molotov-5, 0, 0)), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(wait-spawn-npc(npc-tra-horde-tommy-molotov-5, 0, 0)), 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-molotov-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-molotov-infected) {
                         animate_(var_2, bindpose, #%alloc-array(single-frame, 16, 0, 1));
                     }
                 }
@@ -248,21 +238,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.20;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 10;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 78;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
                     wait-animate_(tommy, tra-horde-tommy-molotov--tommy, var_0);
                 }
                 lambda {
@@ -314,33 +304,33 @@ statescript {
                         npc-set-ignore(tommy, 0);
                         npc-set-force-player-push(tommy, 0, 0.00, -1.00);
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                         animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-enter-tommy--dbl-door, var_1);
                         set-boolean(tommy-took-squeeze?, 1, self);
                         u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
                         f32 var_6;
                         if (get-boolean(tommy-start-squeeze-offscreen?, self)) {
                             var_6 = 0.00;
                         } else {
                             var_6 = 0.80;
                         }
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = var_6;
-                        *(i32*)*(*var_3 + (2 * 8)) = 27;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (4 * 8)) = 78;
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (4 * 8)) + 8) = 2;
+                        *(f32*)(*var_3[1] + 8) = var_6;
+                        *(i32*)*var_3[2] = 27;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(u8*)(*var_3[2] + 8) = 1;
+                        *(i32*)*var_3[3] = 30;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(f32*)(*var_3[3] + 8) = 0.50;
+                        *(i32*)*var_3[4] = 78;
+                        *(u64*)(*var_3[4] + 8) = 0;
+                        *(i32*)(*var_3[4] + 8) = 2;
                         wait-animate_(tommy, tra-horde-barricade-door-enter--tommy, var_3);
                     } else {
                         stop-animating(tommy, 2, 0.00, 0, 0);
@@ -372,24 +362,24 @@ statescript {
                         npc-set-ignore(tommy, 0);
                         npc-set-force-player-push(tommy, 0, 0.00, -1.00);
                         u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                         animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-enter-tommy--dbl-door, var_9);
                         set-boolean(tommy-took-squeeze?, 1, self);
                         u64? var_11 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_11 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_11 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (3 * 8)) = 78;
-                        *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_11 + (3 * 8)) + 8) = 2;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_11[1] = 28;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 1.00;
+                        *(i32*)*var_11[2] = 30;
+                        *(u64*)(*var_11[2] + 8) = 0;
+                        *(f32*)(*var_11[2] + 8) = 0.50;
+                        *(i32*)*var_11[3] = 78;
+                        *(u64*)(*var_11[3] + 8) = 0;
+                        *(i32*)(*var_11[3] + 8) = 2;
                         wait-animate_(tommy, tra-horde-barricade-door-enter--tommy, var_11);
                     }
                 }
@@ -549,28 +539,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-enter--dbl-door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(joel, tra-horde-barricade-door-enter--joel, var_0);
                 }
                 lambda {
@@ -591,18 +581,18 @@ statescript {
                         signal(joel-beckons, 0);
                         npc-weapon-down(joel);
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (3 * 8)) = 78;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (3 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
+                        *(i32*)*var_1[3] = 78;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(i32*)(*var_1[3] + 8) = 2;
                         wait-animate_(joel, tra-horde-barricade-door-enter-wave--joel, var_1);
                     } else if (player-in-region?(rgn-tra-horde-rescue-wave-2, 2)) {
                         stop-animating(joel, 2, 0.00, 0, 0);
@@ -639,18 +629,18 @@ statescript {
                         signal(joel-beckons, 0);
                         npc-weapon-down(joel);
                         u64? var_9 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (3 * 8)) = 78;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (3 * 8)) + 8) = 2;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 30;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(f32*)(*var_9[2] + 8) = 0.50;
+                        *(i32*)*var_9[3] = 78;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(i32*)(*var_9[3] + 8) = 2;
                         animate_(joel, tra-horde-barricade-door-beckon--joel, var_9);
                     }
                 }
@@ -750,12 +740,12 @@ statescript {
                         var_1 = 0;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
                     wait-animate_(var_1, tra-horde-tommy-molotov--female, var_2);
                 }
                 lambda {
@@ -779,16 +769,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
                     animate_(door-tra-horde-joel-tommy-rescue-molotov-door-1, tra-horde-tommy-molotov--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
                     animate_(door-tra-horde-joel-tommy-rescue-molotov-door-a-1, tra-horde-tommy-molotov--door-a, var_0);
                 }
                 lambda {
@@ -804,12 +794,12 @@ statescript {
                         var_1 = 0;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
                     animate_(var_1, tra-horde-tommy-molotov--female-a, var_2);
                 }
                 lambda {
@@ -825,12 +815,12 @@ statescript {
                         var_1 = 0;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
                     animate_(var_1, tra-horde-tommy-molotov--female-c, var_2);
                 }
                 lambda {
@@ -846,12 +836,12 @@ statescript {
                         var_1 = 0;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
                     animate_(var_1, tra-horde-tommy-molotov--female-d, var_2);
                 }
                 lambda {
@@ -867,12 +857,12 @@ statescript {
                         var_1 = 0;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-tommy-molotov-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
                     wait-animate_(var_1, tra-horde-tommy-molotov--female-e, var_2);
                 }
                 lambda {
@@ -1299,10 +1289,10 @@ statescript {
                 lambda {
                     u64? var_0 = wait-spawn-npc(npc-tra-horde-rescue-1, 0, 0);
                     u64? var_1 = wait-spawn-npc(npc-tra-horde-rescue-2, 0, 0);
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-molotov-infected, new-boxed-value(7, var_1), 1);
-                    darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_1), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-molotov-infected, boxed_symbol(var_1), 1);
+                    darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_1), 1);
                     signal(spawned-attacking-infected, 0);
                     wait(9.00);
                     npc-set-on-fire(var_0, 0, person-on-fire);
@@ -1315,12 +1305,12 @@ statescript {
                         wait-boolean(spawn-additional-fire-infected?, 1, self);
                         u64? var_0 = wait-spawn-npc(npc-tra-horde-rescue-1, 0, 0);
                         u64? var_1 = wait-spawn-npc(npc-tra-horde-rescue-2, 0, 0);
-                        darray-append(tra-horde-molotov-infected, new-boxed-value(7, var_0), 1);
-                        darray-append(tra-horde-molotov-infected, new-boxed-value(7, var_1), 1);
-                        darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_0), 1);
-                        darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_1), 1);
-                        darray-append(tra-horde-fence-climbers, new-boxed-value(7, var_0), 1);
-                        darray-append(tra-horde-fence-climbers, new-boxed-value(7, var_1), 1);
+                        darray-append(tra-horde-molotov-infected, boxed_symbol(var_0), 1);
+                        darray-append(tra-horde-molotov-infected, boxed_symbol(var_1), 1);
+                        darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_0), 1);
+                        darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_1), 1);
+                        darray-append(tra-horde-fence-climbers, boxed_symbol(var_0), 1);
+                        darray-append(tra-horde-fence-climbers, boxed_symbol(var_1), 1);
                         wait(9.00);
                         npc-set-on-fire(var_0, 0, person-on-fire);
                         npc-set-on-fire(var_1, 0, person-on-fire);
@@ -1363,24 +1353,14 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(tra-horde-rescue-attacking-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(tra-horde-rescue-attacking-infected, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-molotov-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-molotov-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, joel, 2, *npc-awareness-options-no-surprise*);
@@ -1408,56 +1388,56 @@ statescript {
                 lambda {
                     if (get-boolean(tommy-took-squeeze?, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(tommy, tra-horde-barricade-door-squeeze-through-door--tommy, var_1);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-exit--dbl-door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-vending-1, tra-horde-barricade-door-exit--vending-machine, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(snpc-tra-horde-barricade-door-enter-1, tra-horde-barricade-door-enter--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 12;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[1] = 45;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 12;
                     wait-animate_(player, tra-horde-barricade-door-enter--abby, var_0);
                 }
                 lambda {
@@ -1476,17 +1456,7 @@ statescript {
                     signal(player-igc-done, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-molotov-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-molotov-infected) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
@@ -1551,15 +1521,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 78;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
                     animate_(joel, tra-horde-barricade-door-squeeze-through-door--joel, var_0);
                 }
                 lambda {
@@ -1573,18 +1543,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 78;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(joel, tra-horde-vending-machine-search--joel, var_0);
                 }
                 lambda {
@@ -1606,21 +1576,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 78;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 1;
                     wait-animate_(joel, tra-horde-cabinet-search--joel, var_0);
                 }
                 lambda {
@@ -1665,24 +1635,24 @@ statescript {
                     if (!get-boolean(tommy-took-squeeze?, self)) {
                         wait-frames(33);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 78;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (1 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_1[1] = 78;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(i32*)(*var_1[1] + 8) = 2;
                         animate_(tommy, tra-horde-barricade-door-enter--tommy, var_1);
                         wait-frames(90);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.50;
                         animate_(tommy, tra-horde-barricade-door-squeeze-through-door--tommy, var_3);
                         npc-unholster-weapon(tommy, 0, -1.00, 0);
                     }
@@ -1695,12 +1665,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 45.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 45.00;
                     wait-animate_(tommy, tra-horde-clearing-room--tommy, var_0);
                 }
                 lambda {
@@ -1710,24 +1680,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 45.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 78;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 45.00;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 78;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 2;
                     wait-animate_(tommy, tra-horde-clearing-room--tommy, var_0);
                 }
                 lambda {
@@ -1792,17 +1762,7 @@ statescript {
                     wait-frames(56);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-molotov-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-molotov-infected) {
                         send-event(put-out-fire, var_2);
                     }
                 }
@@ -1810,17 +1770,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-molotov-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-molotov-infected) {
                         send-event(put-out-fire, var_2);
                     }
                 }
@@ -1876,44 +1826,44 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-cabinet-1, tra-horde-clearing-room--cabinet, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-door-1, tra-horde-clearing-room--door-dbl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-1, tra-horde-clearing-room--chair, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-2, tra-horde-clearing-room--chair-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-shelf-1, tra-horde-clearing-room--box-shelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-table-1, tra-horde-clearing-room--table, var_0);
                 }
                 lambda {
@@ -1945,16 +1895,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-idle--dbl-door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-vending-1, tra-horde-barricade-door-end-idle--vending-machine, var_0);
                 }
                 lambda {
@@ -1962,62 +1912,62 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-tra-horde-cafeteria-cabinet-1, tra-horde-clearing-room-transition--cabinet, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-tra-horde-cafeteria-stool-1, tra-horde-clearing-room-transition--chair, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-tra-horde-cafeteria-stool-2, tra-horde-clearing-room-transition--chair-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-tra-horde-cafeteria-shelf-1, tra-horde-clearing-room-transition--box-shelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(obj-tra-horde-cafeteria-table-1, tra-horde-clearing-room-transition--table, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[1] = 32;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     wait-animate_(obj-tra-horde-cafeteria-door-1, tra-horde-clearing-room-transition--door-dbl, var_0);
                 }
                 lambda {
@@ -2031,44 +1981,44 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-cabinet-1, tra-horde-clearing-room-end--cabinet, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-door-1, tra-horde-clearing-room-end--door-dbl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-1, tra-horde-clearing-room-end--chair, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-2, tra-horde-clearing-room-end--chair-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-shelf-1, tra-horde-clearing-room-end--box-shelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-table-1, tra-horde-clearing-room-end--table, var_0);
                 }
             }
@@ -2077,17 +2027,7 @@ statescript {
                     wait-frames(38);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
@@ -2160,16 +2100,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-enter-doors-1, tra-horde-barricade-door-idle--dbl-door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-barricade-door-1, 1);
                     animate_(obj-tra-horde-joel-tommy-rescue-vending-1, tra-horde-barricade-door-end-idle--vending-machine, var_0);
                 }
                 lambda {
@@ -2219,23 +2159,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.10;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.10;
                     animate_(cnpc-tra-horde-cafeteria-1, tra-horde-infected-door-idle-01--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.10;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.10;
                     animate_(cnpc-tra-horde-cafeteria-2, tra-horde-infected-door-idle-02--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.10;
+                    *(i32*)*var_0[0] = 56;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.10;
                     animate_(cnpc-tra-horde-cafeteria-3, tra-horde-infected-door-idle-03--male, var_0);
                 }
                 lambda {
@@ -2246,44 +2186,44 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-cabinet-1, tra-horde-clearing-room-end--cabinet, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-door-1, tra-horde-clearing-room-end--door-dbl, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-1, tra-horde-clearing-room-end--chair, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-stool-2, tra-horde-clearing-room-end--chair-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-shelf-1, tra-horde-clearing-room-end--box-shelf, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-clearing-room-1, 1);
                     animate_(obj-tra-horde-cafeteria-table-1, tra-horde-clearing-room-end--table, var_0);
                 }
                 lambda {

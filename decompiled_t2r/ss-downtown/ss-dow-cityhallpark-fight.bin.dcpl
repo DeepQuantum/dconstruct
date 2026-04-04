@@ -299,17 +299,7 @@ statescript {
         block event expand-forest-zone {
             track main {
                 lambda {
-                    foreach (u64? var_1 : dow-cityhallpark-forest-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : dow-cityhallpark-forest-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-dow-cityhallpark-forest-zone-2);
                         }
@@ -354,17 +344,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(spawned-bridge?, self)) {
-                        foreach (u64? var_2 : dow-cityhallpark-bridge-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : dow-cityhallpark-bridge-npcs) {
                             spawn-npc(var_3, 0, 0);
                             npc-set-demeanor(var_3, 5, 0);
                             npc-set-zone-region(var_3, rgn-dow-cityhallpark-bridge-zone-1);

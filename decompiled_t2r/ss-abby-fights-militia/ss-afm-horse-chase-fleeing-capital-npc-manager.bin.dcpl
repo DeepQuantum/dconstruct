@@ -63,17 +63,7 @@ statescript {
                     wait(1.25);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-9) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-9) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -81,17 +71,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-10) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-10) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -115,17 +95,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-1) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -133,48 +103,18 @@ statescript {
                     wait(0.10);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-12) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-12) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-11) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-11) {
                         spawn-entity(var_2, 1, 0);
                         wait(1.20);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-7) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-7) {
                         spawn-entity(var_2, 1, 0);
                         wait(0.50);
                     }
@@ -184,17 +124,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-4) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-4) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -202,64 +132,24 @@ statescript {
                     wait(0.10);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-12) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-12) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-3) {
                         spawn-entity(var_2, 1, 0);
                         wait(0.50);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-11) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-11) {
                         spawn-entity(var_2, 1, 0);
                         wait(1.20);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-7) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-7) {
                         spawn-entity(var_2, 1, 0);
                         wait(0.50);
                     }
@@ -269,17 +159,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-6) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-6) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -287,17 +167,7 @@ statescript {
                     wait(2.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-5) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-5) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -309,17 +179,7 @@ statescript {
                     set-boolean(militia-ready-to-shoot-at-snpcs?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-13) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-13) {
                         spawn-entity(var_2, 1, 0);
                         wait(0.10);
                     }
@@ -340,17 +200,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-fleeing-npcs-all) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-fleeing-npcs-all) {
                         kill-entity-if-spawned(var_2);
                     }
                 }

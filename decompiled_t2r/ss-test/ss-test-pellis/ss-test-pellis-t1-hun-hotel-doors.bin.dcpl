@@ -51,17 +51,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-hotel-infected, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-hotel-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-hotel-infected) {
                         npc-remove-traversal-skill(var_2, 14);
                     }
                 }

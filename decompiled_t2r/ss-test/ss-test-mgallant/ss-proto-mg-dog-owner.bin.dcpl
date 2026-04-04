@@ -243,15 +243,15 @@ statescript {
                     if (npc-alive?(tag-symbol(dog-npc, self))) {
                         u64? var_12;
                         if (tension-mode-is?(3) && tension-mode-is?(4)) {
-                            var_12 = new-boxed-value(6, 5.00);
+                            var_12 = boxed_f32(5.00);
                         } else {
-                            var_12 = new-boxed-value(6, 30.00);
+                            var_12 = boxed_f32(30.00);
                         }
                         send-event(
                             bark-at,
                             tag-symbol(dog-npc, self),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, rotate-locator-lookat(get-object-locator(self), get-object-locator(tag-symbol(dog-npc, self)), 1.00, 0)),
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(rotate-locator-lookat(get-object-locator(self), get-object-locator(tag-symbol(dog-npc, self)), 1.00, 0)),
                             var_12
                         );
                     }

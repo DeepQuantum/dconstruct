@@ -747,7 +747,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 1));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(1));
                 }
                 lambda {
                     hub-conversations-ok();
@@ -836,7 +836,7 @@ statescript {
                     wait(0.30);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 1));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(1));
                 }
                 lambda {
                     wait-say(player, vox-igc-ell-gam-sea-hub-explore-courthouse-exterior-sp-005, 2, 0);

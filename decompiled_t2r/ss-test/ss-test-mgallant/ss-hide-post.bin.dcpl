@@ -43,7 +43,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(register-hide-post, tag-symbol(hiding-npc, self), new-boxed-value(7, get-self-id()));
+                    send-event(register-hide-post, tag-symbol(hiding-npc, self), boxed_symbol(get-self-id()));
                 }
             }
         }

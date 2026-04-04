@@ -17,7 +17,7 @@ u64? spawn-random-gun(u64? arg_0, i32 arg_1) {
     }
     u64? var_1 = get-furthest-in-group(arg_0, player);
     spawn-npc(var_1, 0, 0);
-    return darray-find-remove(arg_0, new-boxed-value(7, var_1), 0);
+    return darray-find-remove(arg_0, boxed_symbol(var_1), 0);
 }
 
 statescript {

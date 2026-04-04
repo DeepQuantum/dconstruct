@@ -478,7 +478,7 @@ u16 issue-mm-move(u64? arg_0, sid arg_1, u64? arg_2) {
 u64? issue-mm-teleport(u64? arg_0) {
     u64? var_1;
     if (get-boolean(player?, self)) {
-        var_1 = send-event(teleport-player, player, new-boxed-value(18, arg_0));
+        var_1 = send-event(teleport-player, player, boxed_boundframe(arg_0));
     } else {
         var_1 = npc-teleport-to(get-symbol(active-npc, self), arg_0);
     }
@@ -863,40 +863,40 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(jump, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(aim, 0)) {
-                            send-event(move, self, new-boxed-value(1, 1));
+                            send-event(move, self, boxed_bool(1));
                         } else {
-                            send-event(move, self, new-boxed-value(1, 0));
+                            send-event(move, self, boxed_bool(0));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 1));
+                            send-event(change-speed, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 0));
+                            send-event(change-speed, self, boxed_i32(0));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim-hold, 0) && debug-joypad-command-active?(melee-attack, 0)) {
-                        send-event(change-reach-type, self, new-boxed-value(2, 0));
+                        send-event(change-reach-type, self, boxed_i32(0));
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim-hold, 0) && debug-joypad-command-active?(crouch-press, 0)) {
-                        send-event(change-reach-type, self, new-boxed-value(2, 1));
+                        send-event(change-reach-type, self, boxed_i32(1));
                     }
                 }
                 lambda {
@@ -937,12 +937,12 @@ statescript {
                             get-symbol(active-entry-table, self)
                         );
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (0 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_13 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = get-spawner-locator(pos-igc-ap-1, 1);
+                        *(i32*)*var_13[0] = 28;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(f32*)(*var_13[0] + 8) = 0.30;
+                        *(i32*)*var_13[1] = 10;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(u64*)(*var_13[1] + 8) = get-spawner-locator(pos-igc-ap-1, 1);
                         wait-animate_(get-symbol(active-npc, self), get-symbol(igc-anim, self), var_13);
                     }
                 }

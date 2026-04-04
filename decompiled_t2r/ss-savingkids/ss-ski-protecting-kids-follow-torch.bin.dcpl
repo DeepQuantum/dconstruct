@@ -76,17 +76,7 @@ statescript {
             }
             track main {
                 lambda {
-                    foreach (u64? var_1 : protecting-kids-stalker-slots) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : protecting-kids-stalker-slots) {
                         set-boolean(active?, 1, var_2);
                     }
                 }
@@ -137,17 +127,7 @@ statescript {
             track main {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u64? var_4 = distance-between-objects(var_3, yara);
                         u16 var_5;
                         if (var_4 < 10.00) {

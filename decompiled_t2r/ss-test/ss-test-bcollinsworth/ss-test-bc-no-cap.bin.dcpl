@@ -61,15 +61,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(player);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
                     animate_(player, dina-hands-on-hips-look-around-loop, var_0);
                 }
             }
@@ -107,7 +107,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        darray-append(unused-perf-locs, new-boxed-value(18, offset-locator-world-space(rotate-locator-axis-angle(get-object-locator(player), get-world-y-vec(), ((f32)i / 10.00) * 360.00), vector-scale(random-float-range(1.00, 5.00, 0), get-z-vec-from-bound-frame(rotate-locator-axis-angle(get-object-locator(player), get-world-y-vec(), 360.00 * random-float(0)))))), 0);
+                        darray-append(unused-perf-locs, boxed_boundframe(offset-locator-world-space(rotate-locator-axis-angle(get-object-locator(player), get-world-y-vec(), ((f32)i / 10.00) * 360.00), vector-scale(random-float-range(1.00, 5.00, 0), get-z-vec-from-bound-frame(rotate-locator-axis-angle(get-object-locator(player), get-world-y-vec(), 360.00 * random-float(0)))))), 0);
                         i = i + 1;
                     }
                 }
@@ -213,37 +213,37 @@ statescript {
                 lambda {
                     u64? var_2 = rotate-locator-lookat(get-object-locator(yara), get-bound-frame(perf-ap-loc, self), 1.00, 0);
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = var_2;
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.50;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.50;
                     wait-animate_(yara, cap-npc-f-look-around-enter, var_3);
                     u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_4 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_4 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_4 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_4[0] = 10;
+                    *(u64*)(*var_4[0] + 8) = 0;
+                    *(u64*)(*var_4[0] + 8) = var_2;
+                    *(i32*)*var_4[1] = 28;
+                    *(u64*)(*var_4[1] + 8) = 0;
+                    *(f32*)(*var_4[1] + 8) = 0.50;
+                    *(i32*)*var_4[2] = 30;
+                    *(u64*)(*var_4[2] + 8) = 0;
+                    *(f32*)(*var_4[2] + 8) = 0.50;
                     wait-animate_(yara, cap-npc-f-look-around, var_4);
                     u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_5 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_5 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = var_2;
+                    *(i32*)*var_5[1] = 28;
+                    *(u64*)(*var_5[1] + 8) = 0;
+                    *(f32*)(*var_5[1] + 8) = 0.50;
+                    *(i32*)*var_5[2] = 30;
+                    *(u64*)(*var_5[2] + 8) = 0;
+                    *(f32*)(*var_5[2] + 8) = 0.50;
                     wait-animate_(yara, cap-npc-f-look-around-exit, var_5);
                 }
                 lambda {
@@ -291,50 +291,50 @@ statescript {
             track main {
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(perf-ap-loc, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(perf-ap-loc, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.70;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
+                    *(i32*)*var_2[3] = 13;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(i32*)(*var_2[3] + 8) = 2;
                     wait-animate_(yara, symbol-concat-string(get-symbol(perf-name, self), "enter"), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(perf-ap-loc, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(perf-ap-loc, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
+                    *(i32*)*var_2[3] = 13;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(i32*)(*var_2[3] + 8) = 2;
                     wait-animate_(yara, symbol-concat-string(get-symbol(perf-name, self), "loop"), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(perf-ap-loc, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_2 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(perf-ap-loc, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.60;
+                    *(i32*)*var_2[3] = 13;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(i32*)(*var_2[3] + 8) = 2;
                     wait-animate_(yara, symbol-concat-string(get-symbol(perf-name, self), "exit"), var_2);
                 }
                 lambda {

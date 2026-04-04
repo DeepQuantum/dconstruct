@@ -50,17 +50,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-machete-kill) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-machete-kill) {
                         wait-spawn-entity(var_2, 1);
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 70.00);
@@ -80,58 +70,58 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     sid var_2;
                     if (get-boolean(last-branch-left-chosen?, ss-afm-horse-chase-spline-manager-1)) {
                         var_2 = ap-afm-horse-chase-machete-2;
                     } else {
                         var_2 = ap-afm-horse-chase-machete-1;
                     }
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(var_2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(npc-afm-horse-chase-machete-militia-1, afm-horse-chase-firefight-enemy-knockout--male-idle, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     sid var_2;
                     if (get-boolean(last-branch-left-chosen?, ss-afm-horse-chase-spline-manager-1)) {
                         var_2 = ap-afm-horse-chase-machete-2;
                     } else {
                         var_2 = ap-afm-horse-chase-machete-1;
                     }
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(var_2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(npc-afm-horse-chase-machete-scar-1, afm-horse-chase-firefight-enemy-knockout--male-a-idle, var_0);
                 }
             }
@@ -156,30 +146,30 @@ statescript {
             track scar {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     sid var_2;
                     if (get-boolean(last-branch-left-chosen?, ss-afm-horse-chase-spline-manager-1)) {
                         var_2 = ap-afm-horse-chase-machete-2;
                     } else {
                         var_2 = ap-afm-horse-chase-machete-1;
                     }
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(var_2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     wait-animate_(npc-afm-horse-chase-machete-scar-1, afm-horse-chase-firefight-enemy-knockout--male-a-attack, var_0);
                 }
                 lambda {
@@ -190,33 +180,33 @@ statescript {
                 lambda {
                     bool var_0 = get-boolean(right-branch-taken?, self);
                     u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
                     sid var_2;
                     if (var_0) {
                         var_2 = ap-afm-horse-chase-machete-1;
                     } else {
                         var_2 = ap-afm-horse-chase-machete-2;
                     }
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_1 + (3 * 8)) = 22;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_1 + (4 * 8)) = 2;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (5 * 8)) = 3;
-                    *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (6 * 8)) = 4;
-                    *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(var_2, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.20;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.20;
+                    *(i32*)*var_1[3] = 22;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 0.30;
+                    *(i32*)*var_1[4] = 2;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(u8*)(*var_1[4] + 8) = 1;
+                    *(i32*)*var_1[5] = 3;
+                    *(u64*)(*var_1[5] + 8) = 0;
+                    *(u8*)(*var_1[5] + 8) = 1;
+                    *(i32*)*var_1[6] = 4;
+                    *(u64*)(*var_1[6] + 8) = 0;
+                    *(u8*)(*var_1[6] + 8) = 1;
                     wait-animate_(npc-afm-horse-chase-machete-militia-1, afm-horse-chase-firefight-enemy-knockout--male-attack, var_1);
                     if (npc-alive?(npc-afm-horse-chase-machete-militia-1)) {
                         npc-unholster-pistol(npc-afm-horse-chase-machete-militia-1, 2, 1, -1.00, 0);

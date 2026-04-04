@@ -509,30 +509,30 @@ statescript {
             track manny-lead {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-finding-isaac-exit-morgue-manny-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-finding-isaac-exit-morgue-manny-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in-outside-morgue, self)) {
                         var_3 = 60.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(task-in-outside-morgue, self)) {
                         var_5 = 0.00;
                     } else {
                         var_5 = 0.30;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.20;
+                    *(f32*)(*var_0[2] + 8) = var_5;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.20;
                     wait-animate_(manny, fob-finding-isaac-exit-morgue-manny--manny, var_0);
                 }
                 lambda {
@@ -602,15 +602,15 @@ statescript {
                 lambda {
                     if (npc-is-using-cinematic-action-pack?(manny)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 0.50;
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.50;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(manny, cap-npc-m-wait-shoulder-lean-exit-90-l, var_1);
                     }
                 }

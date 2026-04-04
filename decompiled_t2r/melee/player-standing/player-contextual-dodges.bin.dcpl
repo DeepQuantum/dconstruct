@@ -1577,15 +1577,15 @@ embedded@3ae98(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 3.50 && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.50),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.50),
             var_7
         );
         if (var_3) {

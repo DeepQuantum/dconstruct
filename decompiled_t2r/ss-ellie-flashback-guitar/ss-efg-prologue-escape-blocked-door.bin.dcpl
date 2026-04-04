@@ -45,10 +45,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(fireflies, new-boxed-value(7, spawn-entity(npc-lab-escape-b-1, 0, 0)), 1);
+                    darray-append(fireflies, boxed_symbol(spawn-entity(npc-lab-escape-b-1, 0, 0)), 1);
                 }
                 lambda {
-                    darray-append(fireflies, new-boxed-value(7, spawn-entity(npc-lab-escape-b-2, 0, 0)), 1);
+                    darray-append(fireflies, boxed_symbol(spawn-entity(npc-lab-escape-b-2, 0, 0)), 1);
                 }
                 lambda {
                     wait(1.00);
@@ -91,10 +91,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(fireflies, new-boxed-value(7, spawn-entity-at(npc-lab-escape-b-1, get-spawner-locator(pos-lab-escape-b-1-1, 1), 0)), 1);
+                    darray-append(fireflies, boxed_symbol(spawn-entity-at(npc-lab-escape-b-1, get-spawner-locator(pos-lab-escape-b-1-1, 1), 0)), 1);
                 }
                 lambda {
-                    darray-append(fireflies, new-boxed-value(7, spawn-entity-at(npc-lab-escape-b-2, get-spawner-locator(pos-lab-escape-b-2-1, 1), 0)), 1);
+                    darray-append(fireflies, boxed_symbol(spawn-entity-at(npc-lab-escape-b-2, get-spawner-locator(pos-lab-escape-b-2-1, 1), 0)), 1);
                 }
                 lambda {
                     go(bash-door, 1);
@@ -111,14 +111,14 @@ statescript {
                 lambda {
                     while (!(get-boolean(door-bashed, self))) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
                         animate_(sa-escape-double-doors-gurney-1, efg-escape-door-bash-gurney--gurney, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
                         wait-animate_(sa-lab-double-doors-wash-room-3, efg-escape-door-bash-gurney--door, var_4);
                         wait(1.50);
                     }
@@ -134,26 +134,26 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
                     wait-animate_(sa-lab-double-doors-wash-room-3, efg-escape-door-bash-open-gurney--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-lab-door-ram-ap-1, 1);
                     animate_(sa-escape-double-doors-gurney-1, efg-escape-door-bash-open-gurney--gurney, var_0);
                 }
                 lambda {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(set-post, npc-lab-escape-b-1, new-boxed-value(7, pos-lab-escape-b-1-2));
+                    send-event(set-post, npc-lab-escape-b-1, boxed_symbol(pos-lab-escape-b-1-2));
                 }
                 lambda {
-                    send-event(set-post, npc-lab-escape-b-2, new-boxed-value(7, pos-lab-escape-b-2-2));
+                    send-event(set-post, npc-lab-escape-b-2, boxed_symbol(pos-lab-escape-b-2-2));
                 }
                 lambda {
                     go(complete, 1);

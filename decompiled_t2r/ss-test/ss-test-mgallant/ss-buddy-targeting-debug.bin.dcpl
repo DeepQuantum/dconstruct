@@ -40,17 +40,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         if (npc-alive?(var_2)) {
                             u64? var_4 = npc-get-target(var_2);
                             if (!(var_4 == 0)) {
@@ -78,17 +68,7 @@ statescript {
                                     );
                                 }
                             }
-                            foreach (u64? var_14 : all-enemy-npcs) {
-                                u16 var_15;
-                                if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                    var_15 = *(u64*)var_14;
-                                } else {
-                                    var_15 = 0;
-                                }
+                            foreach (u64? var_15 : all-enemy-npcs) {
                                 if (npc-alive?(var_15)) {
                                     if (npc-get-target(var_15) == var_2) {
                                         debug-draw-string(
@@ -125,17 +105,7 @@ statescript {
         block event npc-attacked {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         if (npc-alive?(var_2)) {
                             if (event-attack-source?(var_2)) {
                                 script-caption(event-arg-symbol(1), dc:format("%i", event-object-damage()), 2.00, 0, 0);

@@ -233,17 +233,7 @@ statescript {
                     wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -261,17 +251,7 @@ statescript {
                     teleport-npc(npc-nor-scar-intro-ambush-3, pos-nor-scar-intro-ambush-3-r-mid-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -378,17 +358,7 @@ statescript {
                     wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -399,17 +369,7 @@ statescript {
                         teleport-npc(npc-nor-scar-intro-ambush-2, pos-nor-scar-intro-ambush-2-m-mid-1);
                         teleport-npc(npc-nor-scar-intro-ambush-3, pos-nor-scar-intro-ambush-3-m-mid-1);
                         spawn-script-multiple("ss-proto-torch-attach", npc-nor-scar-intro-ambush-3, 0);
-                        foreach (u64? var_2 : nor-scar-intro-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : nor-scar-intro-npcs) {
                             npc-set-demeanor(var_3, 5, 0);
                             npc-set-script-only-no-perception(var_3);
                         }
@@ -427,17 +387,7 @@ statescript {
                         teleport-npc(npc-nor-scar-intro-ambush-2, pos-nor-scar-intro-ambush-2-m-mid-2);
                         teleport-npc(npc-nor-scar-intro-ambush-3, pos-nor-scar-intro-ambush-3-m-mid-2);
                         spawn-script-multiple("ss-proto-torch-attach", npc-nor-scar-intro-ambush-3, 0);
-                        foreach (u64? var_2 : nor-scar-intro-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : nor-scar-intro-npcs) {
                             npc-set-demeanor(var_3, 5, 0);
                             npc-set-script-only-no-perception(var_3);
                         }
@@ -534,17 +484,7 @@ statescript {
                     wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -559,17 +499,7 @@ statescript {
                     teleport-npc(npc-nor-scar-intro-ambush-3, pos-nor-scar-intro-ambush-3-l-mid-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         npc-set-demeanor(var_2, 5, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -658,17 +588,7 @@ statescript {
                         wait-spawn-npc(npc-nor-scar-intro-ambush-4, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-5, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
-                        foreach (u64? var_6 : nor-scar-intro-npcs) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : nor-scar-intro-npcs) {
                             npc-set-demeanor(var_7, 5, 0);
                         }
                     } else if (get-boolean(ambush-right, self)) {
@@ -678,17 +598,7 @@ statescript {
                         wait-spawn-npc(npc-nor-scar-intro-ambush-4, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-5, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
-                        foreach (u64? var_14 : nor-scar-intro-npcs) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : nor-scar-intro-npcs) {
                             npc-set-demeanor(var_15, 5, 0);
                         }
                     } else {
@@ -698,17 +608,7 @@ statescript {
                         wait-spawn-npc(npc-nor-scar-intro-ambush-4, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-5, 0, 0);
                         wait-spawn-npc(npc-nor-scar-intro-ambush-6, 0, 0);
-                        foreach (u64? var_21 : nor-scar-intro-npcs) {
-                            u16 var_22;
-                            if (var_21 && *(u16*)(var_21 + 12) == 7) {
-                                var_22 = *(u64*)var_21;
-                            } else if (var_21 && *(u16*)(var_21 + 12) == 5) {
-                                var_22 = *(u64*)var_21;
-                            } else if (var_21 && *(u16*)(var_21 + 12) == 4) {
-                                var_22 = *(u64*)var_21;
-                            } else {
-                                var_22 = 0;
-                            }
+                        foreach (u64? var_22 : nor-scar-intro-npcs) {
                             npc-set-demeanor(var_22, 5, 0);
                         }
                     }
@@ -736,17 +636,7 @@ statescript {
         block start {
             track setup {
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-high-priority(var_2);
                             npc-set-demeanor(var_2, 5, 0);
@@ -757,19 +647,9 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
-                            if (darray-contains?(nor-scar-intro-back-npcs, new-boxed-value(7, var_2))) {
+                            if (darray-contains?(nor-scar-intro-back-npcs, boxed_symbol(var_2))) {
                                 npc-set-zone-region(var_2, rgn-zone-scar-intro-2);
                             } else {
                                 npc-set-zone-region(var_2, rgn-zone-scar-intro-1);
@@ -808,38 +688,18 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-hardpoints) {
                         set-hardpoint-enabled(var_2);
                         set-hardpoint-min-npcs(var_2, 0);
                         set-hardpoint-max-npcs(var_2, 1);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                             npc-clear-request-movement(var_2);
-                            if (!darray-contains?(nor-scar-intro-back-npcs, new-boxed-value(7, var_2))) {
+                            if (!darray-contains?(nor-scar-intro-back-npcs, boxed_symbol(var_2))) {
                                 npc-clear-zone(var_2);
                             }
                         }
@@ -965,17 +825,7 @@ statescript {
                         *(u8*)(var_1 + 34) = 1;
                         gesture_(npc-nor-scar-intro-ambush-2, this-way-gesture, var_1);
                         wait(0.50);
-                        foreach (u64? var_4 : nor-scar-intro-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-using-skill?(var_5, 0)) {
                                     say(npc-nor-scar-intro-ambush-2, vox-event-ai-gen-enmy-invstgt-start-pair-whstl, 2, 0);
@@ -985,21 +835,21 @@ statescript {
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_9 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_9[0] = 28;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(f32*)(*var_9[0] + 8) = 0.50;
+                        *(i32*)*var_9[1] = 30;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 13;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(i32*)(*var_9[2] + 8) = 2;
+                        *(i32*)*var_9[3] = 3;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(u8*)(*var_9[3] + 8) = 1;
+                        *(i32*)*var_9[4] = 4;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(u8*)(*var_9[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-glance-lt-r-foot-1, var_9);
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 0, self);
@@ -1012,17 +862,7 @@ statescript {
                         *(u8*)(var_10 + 112) = 1;
                         gesture_(npc-nor-scar-intro-ambush-3, npc-m-p-search-command-watch-out-torch-gesture, var_10);
                         wait(0.20);
-                        foreach (u64? var_13 : nor-scar-intro-npcs) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        foreach (u64? var_14 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_14)) {
                                 if (npc-using-skill?(var_14, 0)) {
                                     say(npc-nor-scar-intro-ambush-3, vox-event-ai-gen-enmy-invstgt-start-cmd-whstl, 2, 0);
@@ -1035,18 +875,18 @@ statescript {
                         wait(1.00);
                         npc-unholster-melee(npc-nor-scar-intro-ambush-3, 1, 0, -1.00, 0);
                         u64? var_18 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_18 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_18 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_18 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_18 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_18[0] = 28;
+                        *(u64*)(*var_18[0] + 8) = 0;
+                        *(f32*)(*var_18[0] + 8) = 0.50;
+                        *(i32*)*var_18[1] = 30;
+                        *(u64*)(*var_18[1] + 8) = 0;
+                        *(f32*)(*var_18[1] + 8) = 0.50;
+                        *(i32*)*var_18[2] = 3;
+                        *(u64*)(*var_18[2] + 8) = 0;
+                        *(u8*)(*var_18[2] + 8) = 1;
+                        *(i32*)*var_18[3] = 4;
+                        *(u64*)(*var_18[3] + 8) = 0;
+                        *(u8*)(*var_18[3] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-1, npc-m-nw-search-lost-target^search-idle-c, var_18);
                         wait(3.50);
                         set-boolean(npc-hold-position-3, 1, self);
@@ -1054,42 +894,42 @@ statescript {
                         wait(0.25);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_19 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_19 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_19 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_19 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_19 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_19 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_19 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_19[0] = 28;
+                        *(u64*)(*var_19[0] + 8) = 0;
+                        *(f32*)(*var_19[0] + 8) = 0.50;
+                        *(i32*)*var_19[1] = 30;
+                        *(u64*)(*var_19[1] + 8) = 0;
+                        *(f32*)(*var_19[1] + 8) = 0.50;
+                        *(i32*)*var_19[2] = 13;
+                        *(u64*)(*var_19[2] + 8) = 0;
+                        *(i32*)(*var_19[2] + 8) = 2;
+                        *(i32*)*var_19[3] = 3;
+                        *(u64*)(*var_19[3] + 8) = 0;
+                        *(u8*)(*var_19[3] + 8) = 1;
+                        *(i32*)*var_19[4] = 4;
+                        *(u64*)(*var_19[4] + 8) = 0;
+                        *(u8*)(*var_19[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-lost-target^search-idle, var_19);
                         wait(1.75);
                         u64? var_20 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_20 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_20 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_20 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (3 * 8)) + 8) = 155.00;
-                        *(i32*)*(*var_20 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_20 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_20 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_20 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_20[0] = 28;
+                        *(u64*)(*var_20[0] + 8) = 0;
+                        *(f32*)(*var_20[0] + 8) = 0.50;
+                        *(i32*)*var_20[1] = 30;
+                        *(u64*)(*var_20[1] + 8) = 0;
+                        *(f32*)(*var_20[1] + 8) = 0.50;
+                        *(i32*)*var_20[2] = 13;
+                        *(u64*)(*var_20[2] + 8) = 0;
+                        *(i32*)(*var_20[2] + 8) = 2;
+                        *(i32*)*var_20[3] = 20;
+                        *(u64*)(*var_20[3] + 8) = 0;
+                        *(f32*)(*var_20[3] + 8) = 155.00;
+                        *(i32*)*var_20[4] = 3;
+                        *(u64*)(*var_20[4] + 8) = 0;
+                        *(u8*)(*var_20[4] + 8) = 1;
+                        *(i32*)*var_20[5] = 4;
+                        *(u64*)(*var_20[5] + 8) = 0;
+                        *(u8*)(*var_20[5] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-3, npc-pap-nw-uneasy-idle-look-around-a, var_20);
                         wait(0.50);
                         signal(vox-ambush-into-search, 0);
@@ -1110,17 +950,7 @@ statescript {
                         *(u8*)(var_1 + 34) = 1;
                         gesture_(npc-nor-scar-intro-ambush-2, this-way-gesture, var_1);
                         wait(0.50);
-                        foreach (u64? var_4 : nor-scar-intro-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-using-skill?(var_5, 0)) {
                                     say(npc-nor-scar-intro-ambush-2, vox-event-ai-gen-enmy-invstgt-start-pair-whstl, 2, 0);
@@ -1130,21 +960,21 @@ statescript {
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_9 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_9[0] = 28;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(f32*)(*var_9[0] + 8) = 0.50;
+                        *(i32*)*var_9[1] = 30;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 13;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(i32*)(*var_9[2] + 8) = 2;
+                        *(i32*)*var_9[3] = 3;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(u8*)(*var_9[3] + 8) = 1;
+                        *(i32*)*var_9[4] = 4;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(u8*)(*var_9[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-glance-rt-r-foot-1, var_9);
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 0, self);
@@ -1157,17 +987,7 @@ statescript {
                         *(u8*)(var_10 + 112) = 1;
                         gesture_(npc-nor-scar-intro-ambush-3, npc-m-p-search-command-watch-out-torch-gesture, var_10);
                         wait(0.20);
-                        foreach (u64? var_13 : nor-scar-intro-npcs) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        foreach (u64? var_14 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_14)) {
                                 if (npc-using-skill?(var_14, 0)) {
                                     say(npc-nor-scar-intro-ambush-3, vox-event-ai-gen-enmy-invstgt-start-cmd-whstl, 2, 0);
@@ -1180,18 +1000,18 @@ statescript {
                         wait(1.00);
                         npc-unholster-melee(npc-nor-scar-intro-ambush-3, 1, 0, -1.00, 0);
                         u64? var_18 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_18 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_18 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_18 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_18 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_18[0] = 28;
+                        *(u64*)(*var_18[0] + 8) = 0;
+                        *(f32*)(*var_18[0] + 8) = 0.50;
+                        *(i32*)*var_18[1] = 30;
+                        *(u64*)(*var_18[1] + 8) = 0;
+                        *(f32*)(*var_18[1] + 8) = 0.50;
+                        *(i32*)*var_18[2] = 3;
+                        *(u64*)(*var_18[2] + 8) = 0;
+                        *(u8*)(*var_18[2] + 8) = 1;
+                        *(i32*)*var_18[3] = 4;
+                        *(u64*)(*var_18[3] + 8) = 0;
+                        *(u8*)(*var_18[3] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-1, npc-m-nw-search-lost-target^search-idle-c, var_18);
                         wait(3.50);
                         set-boolean(npc-hold-position-3, 1, self);
@@ -1199,42 +1019,42 @@ statescript {
                         wait(0.50);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_19 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_19 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_19 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_19 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_19 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_19 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_19 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_19[0] = 28;
+                        *(u64*)(*var_19[0] + 8) = 0;
+                        *(f32*)(*var_19[0] + 8) = 0.50;
+                        *(i32*)*var_19[1] = 30;
+                        *(u64*)(*var_19[1] + 8) = 0;
+                        *(f32*)(*var_19[1] + 8) = 0.50;
+                        *(i32*)*var_19[2] = 13;
+                        *(u64*)(*var_19[2] + 8) = 0;
+                        *(i32*)(*var_19[2] + 8) = 2;
+                        *(i32*)*var_19[3] = 3;
+                        *(u64*)(*var_19[3] + 8) = 0;
+                        *(u8*)(*var_19[3] + 8) = 1;
+                        *(i32*)*var_19[4] = 4;
+                        *(u64*)(*var_19[4] + 8) = 0;
+                        *(u8*)(*var_19[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-lost-target^search-idle, var_19);
                         wait(1.75);
                         u64? var_20 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_20 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_20 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_20 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (3 * 8)) + 8) = 155.00;
-                        *(i32*)*(*var_20 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_20 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_20 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_20 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_20[0] = 28;
+                        *(u64*)(*var_20[0] + 8) = 0;
+                        *(f32*)(*var_20[0] + 8) = 0.50;
+                        *(i32*)*var_20[1] = 30;
+                        *(u64*)(*var_20[1] + 8) = 0;
+                        *(f32*)(*var_20[1] + 8) = 0.50;
+                        *(i32*)*var_20[2] = 13;
+                        *(u64*)(*var_20[2] + 8) = 0;
+                        *(i32*)(*var_20[2] + 8) = 2;
+                        *(i32*)*var_20[3] = 20;
+                        *(u64*)(*var_20[3] + 8) = 0;
+                        *(f32*)(*var_20[3] + 8) = 155.00;
+                        *(i32*)*var_20[4] = 3;
+                        *(u64*)(*var_20[4] + 8) = 0;
+                        *(u8*)(*var_20[4] + 8) = 1;
+                        *(i32*)*var_20[5] = 4;
+                        *(u64*)(*var_20[5] + 8) = 0;
+                        *(u8*)(*var_20[5] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-3, npc-pap-nw-uneasy-idle-look-around-a, var_20);
                         wait(0.50);
                         signal(vox-ambush-into-search, 0);
@@ -1255,17 +1075,7 @@ statescript {
                         *(u8*)(var_3 + 34) = 1;
                         gesture_(npc-nor-scar-intro-ambush-2, this-way-gesture, var_3);
                         wait(0.50);
-                        foreach (u64? var_6 : nor-scar-intro-npcs) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_7)) {
                                 if (npc-using-skill?(var_7, 0)) {
                                     say(npc-nor-scar-intro-ambush-2, vox-event-ai-gen-enmy-invstgt-start-pair-whstl, 2, 0);
@@ -1275,21 +1085,21 @@ statescript {
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_11 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_11 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_11 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_11 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_11 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_11 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_11 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_11 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_11[0] = 28;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(f32*)(*var_11[0] + 8) = 0.50;
+                        *(i32*)*var_11[1] = 30;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 0.50;
+                        *(i32*)*var_11[2] = 13;
+                        *(u64*)(*var_11[2] + 8) = 0;
+                        *(i32*)(*var_11[2] + 8) = 2;
+                        *(i32*)*var_11[3] = 3;
+                        *(u64*)(*var_11[3] + 8) = 0;
+                        *(u8*)(*var_11[3] + 8) = 1;
+                        *(i32*)*var_11[4] = 4;
+                        *(u64*)(*var_11[4] + 8) = 0;
+                        *(u8*)(*var_11[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-glance-lt-r-foot-1, var_11);
                         wait(1.50);
                         set-boolean(npc-start-performance-2, 0, self);
@@ -1302,17 +1112,7 @@ statescript {
                         *(u8*)(var_12 + 112) = 1;
                         gesture_(npc-nor-scar-intro-ambush-3, npc-m-p-search-command-watch-out-torch-gesture, var_12);
                         wait(0.20);
-                        foreach (u64? var_15 : nor-scar-intro-npcs) {
-                            u16 var_16;
-                            if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                var_16 = *(u64*)var_15;
-                            } else {
-                                var_16 = 0;
-                            }
+                        foreach (u64? var_16 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_16)) {
                                 if (npc-using-skill?(var_16, 0)) {
                                     say(npc-nor-scar-intro-ambush-3, vox-event-ai-gen-enmy-invstgt-start-cmd-whstl, 2, 0);
@@ -1325,18 +1125,18 @@ statescript {
                         wait(1.00);
                         npc-unholster-melee(npc-nor-scar-intro-ambush-3, 1, 0, -1.00, 0);
                         u64? var_20 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_20 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_20 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_20[0] = 28;
+                        *(u64*)(*var_20[0] + 8) = 0;
+                        *(f32*)(*var_20[0] + 8) = 0.50;
+                        *(i32*)*var_20[1] = 30;
+                        *(u64*)(*var_20[1] + 8) = 0;
+                        *(f32*)(*var_20[1] + 8) = 0.50;
+                        *(i32*)*var_20[2] = 3;
+                        *(u64*)(*var_20[2] + 8) = 0;
+                        *(u8*)(*var_20[2] + 8) = 1;
+                        *(i32*)*var_20[3] = 4;
+                        *(u64*)(*var_20[3] + 8) = 0;
+                        *(u8*)(*var_20[3] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-1, npc-m-nw-search-lost-target^search-idle-c, var_20);
                         wait(5.75);
                         set-boolean(npc-hold-position-3, 1, self);
@@ -1344,42 +1144,42 @@ statescript {
                         wait(0.25);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_21 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_21 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_21 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_21 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_21 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_21 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_21 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_21 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_21 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_21 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_21 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_21 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_21 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_21 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_21 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_21[0] = 28;
+                        *(u64*)(*var_21[0] + 8) = 0;
+                        *(f32*)(*var_21[0] + 8) = 0.50;
+                        *(i32*)*var_21[1] = 30;
+                        *(u64*)(*var_21[1] + 8) = 0;
+                        *(f32*)(*var_21[1] + 8) = 0.50;
+                        *(i32*)*var_21[2] = 13;
+                        *(u64*)(*var_21[2] + 8) = 0;
+                        *(i32*)(*var_21[2] + 8) = 2;
+                        *(i32*)*var_21[3] = 3;
+                        *(u64*)(*var_21[3] + 8) = 0;
+                        *(u8*)(*var_21[3] + 8) = 1;
+                        *(i32*)*var_21[4] = 4;
+                        *(u64*)(*var_21[4] + 8) = 0;
+                        *(u8*)(*var_21[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-lost-target^search-idle, var_21);
                         wait(1.75);
                         u64? var_22 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_22 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_22 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_22 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_22 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_22 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_22 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_22 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_22 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_22 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_22 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_22 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_22 + (3 * 8)) + 8) = 155.00;
-                        *(i32*)*(*var_22 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_22 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_22 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_22 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_22 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_22 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_22[0] = 28;
+                        *(u64*)(*var_22[0] + 8) = 0;
+                        *(f32*)(*var_22[0] + 8) = 0.50;
+                        *(i32*)*var_22[1] = 30;
+                        *(u64*)(*var_22[1] + 8) = 0;
+                        *(f32*)(*var_22[1] + 8) = 0.50;
+                        *(i32*)*var_22[2] = 13;
+                        *(u64*)(*var_22[2] + 8) = 0;
+                        *(i32*)(*var_22[2] + 8) = 2;
+                        *(i32*)*var_22[3] = 20;
+                        *(u64*)(*var_22[3] + 8) = 0;
+                        *(f32*)(*var_22[3] + 8) = 155.00;
+                        *(i32*)*var_22[4] = 3;
+                        *(u64*)(*var_22[4] + 8) = 0;
+                        *(u8*)(*var_22[4] + 8) = 1;
+                        *(i32*)*var_22[5] = 4;
+                        *(u64*)(*var_22[5] + 8) = 0;
+                        *(u8*)(*var_22[5] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-3, npc-pap-nw-uneasy-idle-look-around-a, var_22);
                         wait(0.50);
                         signal(vox-ambush-into-search, 0);
@@ -1400,17 +1200,7 @@ statescript {
                         *(u8*)(var_1 + 34) = 1;
                         gesture_(npc-nor-scar-intro-ambush-2, this-way-gesture, var_1);
                         wait(0.50);
-                        foreach (u64? var_4 : nor-scar-intro-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-using-skill?(var_5, 0)) {
                                     say(npc-nor-scar-intro-ambush-2, vox-event-ai-gen-enmy-invstgt-start-pair-whstl, 2, 0);
@@ -1420,21 +1210,21 @@ statescript {
                         wait(1.00);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_9 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_9[0] = 28;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(f32*)(*var_9[0] + 8) = 0.50;
+                        *(i32*)*var_9[1] = 30;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 13;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(i32*)(*var_9[2] + 8) = 2;
+                        *(i32*)*var_9[3] = 3;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(u8*)(*var_9[3] + 8) = 1;
+                        *(i32*)*var_9[4] = 4;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(u8*)(*var_9[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-glance-rt-r-foot-1, var_9);
                         wait(1.00);
                         set-boolean(npc-start-performance-2, 0, self);
@@ -1447,17 +1237,7 @@ statescript {
                         *(u8*)(var_10 + 112) = 1;
                         gesture_(npc-nor-scar-intro-ambush-3, npc-m-p-search-command-watch-out-torch-gesture, var_10);
                         wait(0.20);
-                        foreach (u64? var_13 : nor-scar-intro-npcs) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        foreach (u64? var_14 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_14)) {
                                 if (npc-using-skill?(var_14, 0)) {
                                     say(npc-nor-scar-intro-ambush-3, vox-event-ai-gen-enmy-invstgt-start-cmd-whstl, 2, 0);
@@ -1470,18 +1250,18 @@ statescript {
                         wait(1.00);
                         npc-unholster-melee(npc-nor-scar-intro-ambush-3, 1, 0, -1.00, 0);
                         u64? var_18 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_18 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_18 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_18 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_18 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_18 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_18 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_18[0] = 28;
+                        *(u64*)(*var_18[0] + 8) = 0;
+                        *(f32*)(*var_18[0] + 8) = 0.50;
+                        *(i32*)*var_18[1] = 30;
+                        *(u64*)(*var_18[1] + 8) = 0;
+                        *(f32*)(*var_18[1] + 8) = 0.50;
+                        *(i32*)*var_18[2] = 3;
+                        *(u64*)(*var_18[2] + 8) = 0;
+                        *(u8*)(*var_18[2] + 8) = 1;
+                        *(i32*)*var_18[3] = 4;
+                        *(u64*)(*var_18[3] + 8) = 0;
+                        *(u8*)(*var_18[3] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-1, npc-m-nw-search-lost-target^search-idle-c, var_18);
                         wait(4.50);
                         set-boolean(npc-hold-position-3, 1, self);
@@ -1489,42 +1269,42 @@ statescript {
                         wait(0.50);
                         set-boolean(npc-start-performance-2, 1, self);
                         u64? var_19 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_19 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_19 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_19 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_19 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_19 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_19 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_19 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_19[0] = 28;
+                        *(u64*)(*var_19[0] + 8) = 0;
+                        *(f32*)(*var_19[0] + 8) = 0.50;
+                        *(i32*)*var_19[1] = 30;
+                        *(u64*)(*var_19[1] + 8) = 0;
+                        *(f32*)(*var_19[1] + 8) = 0.50;
+                        *(i32*)*var_19[2] = 13;
+                        *(u64*)(*var_19[2] + 8) = 0;
+                        *(i32*)(*var_19[2] + 8) = 2;
+                        *(i32*)*var_19[3] = 3;
+                        *(u64*)(*var_19[3] + 8) = 0;
+                        *(u8*)(*var_19[3] + 8) = 1;
+                        *(i32*)*var_19[4] = 4;
+                        *(u64*)(*var_19[4] + 8) = 0;
+                        *(u8*)(*var_19[4] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-2, npc-m-nw-search-lost-target^search-idle, var_19);
                         wait(1.75);
                         u64? var_20 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_20 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_20 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_20 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_20 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (3 * 8)) + 8) = 155.00;
-                        *(i32*)*(*var_20 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_20 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_20 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_20 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_20[0] = 28;
+                        *(u64*)(*var_20[0] + 8) = 0;
+                        *(f32*)(*var_20[0] + 8) = 0.50;
+                        *(i32*)*var_20[1] = 30;
+                        *(u64*)(*var_20[1] + 8) = 0;
+                        *(f32*)(*var_20[1] + 8) = 0.50;
+                        *(i32*)*var_20[2] = 13;
+                        *(u64*)(*var_20[2] + 8) = 0;
+                        *(i32*)(*var_20[2] + 8) = 2;
+                        *(i32*)*var_20[3] = 20;
+                        *(u64*)(*var_20[3] + 8) = 0;
+                        *(f32*)(*var_20[3] + 8) = 155.00;
+                        *(i32*)*var_20[4] = 3;
+                        *(u64*)(*var_20[4] + 8) = 0;
+                        *(u8*)(*var_20[4] + 8) = 1;
+                        *(i32*)*var_20[5] = 4;
+                        *(u64*)(*var_20[5] + 8) = 0;
+                        *(u8*)(*var_20[5] + 8) = 1;
                         animate_(npc-nor-scar-intro-ambush-3, npc-pap-nw-uneasy-idle-look-around-a, var_20);
                         wait(0.50);
                         signal(vox-ambush-into-search, 0);
@@ -1541,34 +1321,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-scar-intro-2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-hardpoints) {
                         set-hardpoint-min-npcs(var_2, 0);
                     }
                 }
@@ -1581,17 +1341,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-using-skill?(var_2, 0)) {
                                 say(npc-nor-scar-intro-ambush-2, vox-event-ai-gen-enmy-pursue-trgt-mssng-whstl, 2, 0);
@@ -1611,17 +1361,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-svar-as-boolean(nor-scar-intro-combat-started)) {
-                        foreach (u64? var_2 : nor-scar-intro-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : nor-scar-intro-npcs) {
                             if (npc-alive?(var_3)) {
                                 u64? var_5 = npc-get-target-entity-awareness(var_3);
                                 if (var_5 == 2 || var_5 == 3 && npc-has-investigate-entity?(var_3)) {
@@ -1648,17 +1388,7 @@ statescript {
         block event npc-attacked {
             track main {
                 lambda {
-                    foreach (u64? var_1 : nor-scar-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : nor-scar-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                             npc-clear-request-movement(var_2);

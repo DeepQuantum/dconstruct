@@ -91,7 +91,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(vox-infected-combat-done, self)) {
-                        if (darray-contains?(vox-wat-infected-checkpoint-npcs, new-boxed-value(7, event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-wat-infected-checkpoint-npcs)) {
+                        if (darray-contains?(vox-wat-infected-checkpoint-npcs, boxed_symbol(event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-wat-infected-checkpoint-npcs)) {
                             if (event-arg-symbol(2) == trip-wire-bomb) {
                                 set-boolean(vox-last-runner-hit-trap, 1, self);
                             }

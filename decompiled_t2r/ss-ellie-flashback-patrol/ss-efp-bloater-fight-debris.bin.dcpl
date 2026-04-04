@@ -89,17 +89,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : efp-bloater-fight-big-debris) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : efp-bloater-fight-big-debris) {
                         u64? var_6 = get-locator-distance(get-object-locator(var_2), get-spawner-locator(get-symbol(selected-ap, self), 1));
                         if (is-breakable-collapsed?(var_2)) {
                             efp-blo-kill-collapsed-objs(var_2);

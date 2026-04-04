@@ -41,31 +41,11 @@ statescript {
             track main {
                 lambda {
                     if (deterministic-nth-frame?(darray-count(all-enemy-npcs))) {
-                        foreach (u64? var_3 : all-buddy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-buddy-npcs) {
                             if (npc-alive?(var_4)) {
                                 u16 var_7;
                                 u16 var_8;
-                                foreach (u64? var_9 : all-enemy-npcs) {
-                                    u16 var_10;
-                                    if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                        var_10 = *(u64*)var_9;
-                                    } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                        var_10 = *(u64*)var_9;
-                                    } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                        var_10 = *(u64*)var_9;
-                                    } else {
-                                        var_10 = 0;
-                                    }
+                                foreach (u64? var_10 : all-enemy-npcs) {
                                     u16 var_13;
                                     u16 var_14;
                                     if (!(var_10 == 0) && is-npc?(var_10) && *(i32*)npc-get-archetype(var_10) == 4) {

@@ -33,9 +33,9 @@ u64? aef-cleanup-trap-bomb(u16 arg_0) {
         var_2 = 0;
     }
     kill-particles(var_2, 0);
-    ddict-set(trap-bomb-particle-dict, arg_0, new-boxed-value(0, 0));
-    ddict-set(trap-bomb-dict, arg_0, new-boxed-value(0, 0));
-    darray-find-remove(trap-bomb-array, new-boxed-value(7, arg_0), 0);
+    ddict-set(trap-bomb-particle-dict, arg_0, boxed_invalid(0));
+    ddict-set(trap-bomb-dict, arg_0, boxed_invalid(0));
+    darray-find-remove(trap-bomb-array, boxed_symbol(arg_0), 0);
     u64? var_6 = ddict-get(trap-bomb-dict, arg_0);
     u16 var_7;
     if (var_6 && *(u16*)(var_6 + 12) == 7) {
@@ -47,7 +47,7 @@ u64? aef-cleanup-trap-bomb(u16 arg_0) {
     } else {
         var_7 = 0;
     }
-    return darray-append(available-trapbomb-chokepoints, new-boxed-value(7, var_7), 1);
+    return darray-append(available-trapbomb-chokepoints, boxed_symbol(var_7), 1);
 }
 
 u64? aef-hunt-task-range-active?() {
@@ -110,21 +110,21 @@ u16 aef-hunt-set-light-dangling() {
         enable-collision(hanging-florescent-light-1, 1, 0, 0.00);
         if (task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-2)) {
             u64? var_6 = #%alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_6 + (0 * 8)) = 28;
-            *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-            *(f32*)(*(*var_6 + (0 * 8)) + 8) = 0.00;
-            *(i32*)*(*var_6 + (1 * 8)) = 31;
-            *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_6 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_6[0] = 28;
+            *(u64*)(*var_6[0] + 8) = 0;
+            *(f32*)(*var_6[0] + 8) = 0.00;
+            *(i32*)*var_6[1] = 31;
+            *(u64*)(*var_6[1] + 8) = 0;
+            *(u8*)(*var_6[1] + 8) = 1;
             var_1 = animate_(hanging-florescent-light-1, idle-b, var_6);
         } else {
             u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 28;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.00;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 28;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(f32*)(*var_8[0] + 8) = 0.00;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             var_1 = animate_(hanging-florescent-light-1, idle-a, var_8);
         }
     } else {

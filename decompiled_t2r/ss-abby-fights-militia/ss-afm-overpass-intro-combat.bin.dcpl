@@ -98,34 +98,14 @@ statescript {
                         npc-set-hard-point-if-alive(npc-highway-militia-3, hard-point-highway-intro-4);
                         npc-set-hard-point-if-alive(npc-highway-scar-intro-1, hard-point-highway-intro-2);
                         npc-set-hard-point-if-alive(npc-highway-scar-intro-2, hard-point-highway-intro-2);
-                        foreach (u64? var_2 : afm-highway-intro-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-highway-intro-militia) {
                             if (npc-alive?(var_3)) {
                                 character-set-invincibility(var_3, 3, 0);
                                 npc-set-suppressing-fire(var_3, 1);
                                 npc-set-accuracy-multiplier(var_3, 0.20);
                             }
                         }
-                        foreach (u64? var_7 : afm-highway-intro-scars) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : afm-highway-intro-scars) {
                             if (npc-alive?(var_8)) {
                                 character-set-invincibility(var_8, 3, 0);
                                 npc-set-suppressing-fire(var_8, 1);
@@ -142,17 +122,7 @@ statescript {
                         npc-clear-zone(npc-highway-militia-3);
                         npc-clear-hard-point(npc-highway-militia-3);
                         npc-set-combat-params(npc-highway-militia-3, *melee-1h-no-hardpoint-combat-params*);
-                        foreach (u64? var_2 : afm-highway-intro-scars) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-highway-intro-scars) {
                             if (npc-alive?(var_3)) {
                                 npc-prefer-target(var_3, npc-highway-militia-3);
                             }
@@ -160,17 +130,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-intro-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-intro-militia) {
                         if (npc-alive?(var_2)) {
                             character-set-invincibility(var_2, 0, 0);
                             npc-set-suppressing-fire(var_2, 0);
@@ -179,17 +139,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-highway-intro-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-highway-intro-scars) {
                         if (npc-alive?(var_2)) {
                             character-set-invincibility(var_2, 0, 0);
                             npc-set-suppressing-fire(var_2, 0);
@@ -214,29 +164,9 @@ statescript {
             track main {
                 lambda {
                     if (nth-frame?(10, 0)) {
-                        foreach (u64? var_2 : afm-highway-intro-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-highway-intro-militia) {
                             if (npc-alive?(var_3)) {
-                                foreach (u64? var_6 : afm-highway-intro-scars) {
-                                    u16 var_7;
-                                    if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                        var_7 = *(u64*)var_6;
-                                    } else {
-                                        var_7 = 0;
-                                    }
+                                foreach (u64? var_7 : afm-highway-intro-scars) {
                                     if (npc-alive?(var_7)) {
                                         npc-make-aware-of(var_3, var_7, 2, *npc-awareness-options-silent*);
                                         npc-make-aware-of(var_7, var_3, 2, *npc-awareness-options-silent*);
@@ -244,17 +174,7 @@ statescript {
                                 }
                             }
                         }
-                        foreach (u64? var_12 : afm-highway-intro-scars) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : afm-highway-intro-scars) {
                             if (npc-alive?(var_13)) {
                                 if (npc-get-awareness(var_13, player) == 2 && distance-between-objects-less-than?(var_13, player, 6.00)) {
                                     npc-prefer-target(var_13, 0);
@@ -296,7 +216,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(afm-highway-intro-militia, new-boxed-value(7, event-arg-symbol(0))) && darray-contains?(afm-highway-intro-scars, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(afm-highway-intro-militia, boxed_symbol(event-arg-symbol(0))) && darray-contains?(afm-highway-intro-scars, boxed_symbol(event-arg-symbol(0)))) {
                         set-svar-as-boolean(afm-overpass-allow-intro-npc-death, 1);
                     }
                 }
@@ -319,17 +239,7 @@ statescript {
         block event real-npcs-spawned {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-highway-intro-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-highway-intro-npcs) {
                         if (npc-alive?(var_2)) {
                             set-object-health(var_2, 5.00);
                         }
@@ -360,17 +270,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(spillover-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(spillover-group, self)) {
                         if (npc-alive?(var_4)) {
                             npc-clear-zone(var_4);
                             npc-clear-hard-point(var_4);
@@ -394,17 +294,7 @@ statescript {
                     set-boolean(vox-afm-overpass-investigate-done, 1, ss-vox-afm-overpass-cavalry-combat-1);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(spillover-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(spillover-group, self)) {
                         if (npc-alive?(var_4)) {
                             u64? var_6 = npc-get-awareness(var_4, player);
                             if (var_6 == 2 && !(var_6 == 3) && get-symbol(spillover-group, self) == afm-highway-intro-militia) {
@@ -424,7 +314,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (event-arg-symbol(1) == player && darray-contains?(get-symbol(spillover-group, self), new-boxed-value(7, var_0)) || npc-get-awareness(var_0, player) == 2 && npc-get-awareness(var_0, player) == 3) {
+                    if (event-arg-symbol(1) == player && darray-contains?(get-symbol(spillover-group, self), boxed_symbol(var_0)) || npc-get-awareness(var_0, player) == 2 && npc-get-awareness(var_0, player) == 3) {
                         var_7 = npc-clear-zone-if-alive(var_0);
                     }
                 }

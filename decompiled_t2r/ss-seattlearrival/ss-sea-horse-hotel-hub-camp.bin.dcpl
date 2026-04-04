@@ -79,16 +79,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-3194, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-3194, 1);
                     animate_(dina, bindpose, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-3193, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-3193, 1);
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -113,13 +113,13 @@ statescript {
                     auto-save-game();
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 3));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(3));
                 }
                 lambda {
                     wait-one-frame();
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 0));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(0));
                 }
                 lambda {
                     send-event(spawn-infected, ss-sea-horse-hotel-infected-1);

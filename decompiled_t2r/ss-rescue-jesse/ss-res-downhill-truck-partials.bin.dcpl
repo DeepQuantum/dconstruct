@@ -60,16 +60,16 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
                     wait-animate_(obj-jeep-res-downhill-escape-1, res-downhill-pickup-rearview--pickup, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-pickup-partials-02--pickup, var_0);
                 }
                 lambda {
@@ -83,9 +83,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
                     animate_(obj-jeep-res-downhill-escape-1, res-downhill-pickup-partials-02--pickup, var_0);
                 }
                 lambda {

@@ -35,19 +35,9 @@ u64? ski-boat-update-player-region() {
 }
 
 u64? ski-boat-update-infected-perception() {
-    foreach (u64? var_1 : ski-boat-undisturbed-infected) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : ski-boat-undisturbed-infected) {
         if (npc-alive?(var_2)) {
-            if (darray-contains?(ski-boat-enabled-infected, new-boxed-value(7, var_2))) {
+            if (darray-contains?(ski-boat-enabled-infected, boxed_symbol(var_2))) {
                 set-focusable-ignore(var_2, 0);
                 npc-enable-perception(var_2);
                 npc-set-script-low-priority(var_2);
@@ -64,36 +54,26 @@ u64? ski-boat-update-infected-perception() {
 }
 
 u64? ski-boat-add-group-to-enabled(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (npc-alive?(var_2)) {
-            darray-append(ski-boat-enabled-infected, new-boxed-value(7, var_2), 1);
+            darray-append(ski-boat-enabled-infected, boxed_symbol(var_2), 1);
         }
     }
 }
 
 u16 ski-boat-get-containing-group(u64? arg_0) {
     u16 var_2;
-    if (darray-contains?(ski-boat-lower-infected, new-boxed-value(7, arg_0))) {
+    if (darray-contains?(ski-boat-lower-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-lower-infected;
-    } else if (darray-contains?(ski-boat-mid-front-infected, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(ski-boat-mid-front-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-mid-front-infected;
-    } else if (darray-contains?(ski-boat-mid-back-hall-infected, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(ski-boat-mid-back-hall-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-mid-back-hall-infected;
-    } else if (darray-contains?(ski-boat-mid-rear-infected, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(ski-boat-mid-rear-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-mid-rear-infected;
-    } else if (darray-contains?(ski-boat-mid-upper-infected, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(ski-boat-mid-upper-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-mid-upper-infected;
-    } else if (darray-contains?(ski-boat-undisturbed-infected, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(ski-boat-undisturbed-infected, boxed_symbol(arg_0))) {
         var_2 = ski-boat-undisturbed-infected;
     } else {
         var_2 = 0;
@@ -102,13 +82,13 @@ u16 ski-boat-get-containing-group(u64? arg_0) {
 }
 
 u64? ski-boat-set-disturbed(u64? arg_0) {
-    darray-find-remove(ski-boat-enabled-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-undisturbed-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-lower-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-mid-front-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-mid-back-hall-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-mid-rear-infected, new-boxed-value(7, arg_0), 0);
-    darray-find-remove(ski-boat-mid-upper-infected, new-boxed-value(7, arg_0), 0);
+    darray-find-remove(ski-boat-enabled-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-undisturbed-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-lower-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-mid-front-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-mid-back-hall-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-mid-rear-infected, boxed_symbol(arg_0), 0);
+    darray-find-remove(ski-boat-mid-upper-infected, boxed_symbol(arg_0), 0);
     set-focusable-ignore(arg_0, 0);
     npc-enable-perception(arg_0);
     return npc-set-script-low-priority(arg_0);
@@ -157,19 +137,9 @@ statescript {
                     if (task-active?(saving-kids, ski-coastal-explore-boat-upper)) {
                         darray-clear(ski-boat-undisturbed-infected);
                         wait-boolean(boat-top-spawned, 1, self);
-                        foreach (u64? var_2 : ski-boat-mid-upper-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : ski-boat-mid-upper-infected) {
                             if (npc-alive?(var_3)) {
-                                darray-append(ski-boat-undisturbed-infected, new-boxed-value(7, var_3), 1);
+                                darray-append(ski-boat-undisturbed-infected, boxed_symbol(var_3), 1);
                             }
                         }
                         ski-boat-add-group-to-enabled(ski-boat-mid-upper-infected);
@@ -234,19 +204,9 @@ statescript {
         block event boat-top-spawned {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-boat-mid-upper-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-boat-mid-upper-infected) {
                         if (npc-alive?(var_2)) {
-                            darray-append(ski-boat-undisturbed-infected, new-boxed-value(7, var_2), 1);
+                            darray-append(ski-boat-undisturbed-infected, boxed_symbol(var_2), 1);
                         }
                     }
                 }

@@ -89,153 +89,153 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-nor-nora-1, nora=cin-nor-nora-cornered, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(door-double-hospital-placeholder-1, med-doors=cin-nor-nora-cornered, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     f32 var_2;
                     if (get-boolean(task-in?, self)) {
                         var_2 = 0.00;
                     } else {
                         var_2 = 5.00;
                     }
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_0[0] + 8) = var_2;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-nor-chase-militia-at-end-1, male=cin-nor-nora-cornered, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 5.00;
                     }
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_1[0] + 8) = var_3;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-get-weapon-process-id(npc-nor-chase-militia-at-end-1), rifle=cin-nor-nora-cornered, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     f32 var_2;
                     if (get-boolean(task-in?, self)) {
                         var_2 = 0.00;
                     } else {
                         var_2 = 5.00;
                     }
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_0[0] + 8) = var_2;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-nor-chase-militia-at-end-2, female=cin-nor-nora-cornered, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 5.00;
                     }
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_1[0] + 8) = var_3;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-get-weapon-process-id(npc-nor-chase-militia-at-end-2), rifle-a=cin-nor-nora-cornered, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     f32 var_2;
                     if (get-boolean(task-in?, self)) {
                         var_2 = 0.00;
                     } else {
                         var_2 = 5.00;
                     }
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_0[0] + 8) = var_2;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-nor-chase-militia-at-end-3, female-a=cin-nor-nora-cornered, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 5.00;
                     }
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_1[0] + 8) = var_3;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(npc-get-weapon-process-id(npc-nor-chase-militia-at-end-3), rifle-c=cin-nor-nora-cornered, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(f32*)(*var_1[0] + 8) = var_3;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
                     animate_(get-weapon-id(player, -1), pistol=cin-nor-nora-cornered, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     f32 var_2;
                     if (get-boolean(task-in?, self)) {
                         var_2 = 0.00;
                     } else {
                         var_2 = 0.50;
                     }
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = var_2;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 18;
+                    *(f32*)(*var_0[0] + 8) = var_2;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-nor-nora-cornered-1, 1);
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 18;
                     wait-animate_(player, ellie=cin-nor-nora-cornered, var_0);
                 }
                 lambda {

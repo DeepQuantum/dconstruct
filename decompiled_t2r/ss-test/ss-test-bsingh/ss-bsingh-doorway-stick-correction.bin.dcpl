@@ -75,21 +75,21 @@ statescript {
         block event door-opened {
             track main {
                 lambda {
-                    darray-append(bsingh-door-spawners, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(bsingh-door-spawners, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event door-closed {
             track main {
                 lambda {
-                    darray-find-remove(bsingh-door-spawners, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(bsingh-door-spawners, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block event door-destroyed {
             track main {
                 lambda {
-                    darray-find-remove(bsingh-door-spawners, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(bsingh-door-spawners, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -101,17 +101,7 @@ statescript {
                         u64? var_1 = get-object-locator(player);
                         u64? var_3 = set-locator-z-direction(var_1, ss-doorway--get-ws-stick-input(), 0);
                         u64? var_5;
-                        foreach (u64? var_6 : bsingh-doorway-spawners) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : bsingh-doorway-spawners) {
                             u64? var_8 = get-spawner-locator(var_7, 1);
                             u64? var_10 = lerp-scale(10.00, 3.00, 0.00, 1.00, get-locator-distance(var_1, var_8));
                             u64? var_13 = lerp-scale(0.00, 1.00, 0.00, 2.00, dot-product-locators(var_3, rotate-locator-lookat(var_3, var_8, 1.00, 0), 2));
@@ -124,17 +114,7 @@ statescript {
                             }
                             var_5 = var_14;
                         }
-                        foreach (u64? var_18 : bsingh-door-spawners) {
-                            u16 var_19;
-                            if (var_18 && *(u16*)(var_18 + 12) == 7) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 5) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 4) {
-                                var_19 = *(u64*)var_18;
-                            } else {
-                                var_19 = 0;
-                            }
+                        foreach (u64? var_19 : bsingh-door-spawners) {
                             u64? var_22 = offset-locator(get-spawner-locator(var_19, 1), alloc-vector(1.25 / 2.00, 0.00, 0.00, 1.00, 0));
                             u64? var_24 = lerp-scale(10.00, 3.00, 0.00, 1.00, get-locator-distance(var_1, var_22));
                             u64? var_27 = lerp-scale(0.00, 1.00, 0.00, 2.00, dot-product-locators(var_3, rotate-locator-lookat(var_3, var_22, 1.00, 0), 2));

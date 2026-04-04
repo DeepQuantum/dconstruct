@@ -16,7 +16,7 @@ u16 fob-aquarium--spawn-fish-on-spline(u64? arg_0, f32 arg_1, u64? arg_2, u64? a
         u64? var_1 = symbol-concat-int32(symbol-concat-string(arg_0, "-"), i + 1);
         if (!entity-exists?(var_1)) {
             spawn-entity-at(var_1, offset-locator-world-space(spline-locator-at-percentage(arg_2, (f32)i / (f32)arg_1), vector-scale(random-float-range(0.20, arg_3, 0), get-z-vec-from-quat(quat-from-axis-angle(get-world-y-vec(), 360.00 * random-float(0))))), 0);
-            var_3 = darray-append(arg_0, new-boxed-value(7, var_1), 1);
+            var_3 = darray-append(arg_0, boxed_symbol(var_1), 1);
         }
     }
     return i + 1;
@@ -27,7 +27,7 @@ u16 fob-aquarium--spawn-fish(u64? arg_0, u16 arg_1, u64? arg_2, u64? arg_3) {
         u64? var_1 = symbol-concat-int32(symbol-concat-string(arg_0, "-"), i + 1);
         if (!entity-exists?(var_1)) {
             spawn-entity-at(var_1, offset-locator-world-space(alloc-bound-frame(arg_2, 0, 0, 0, 0), vector-scale(random-float-range(0.20, arg_3, 0), get-z-vec-from-quat(quat-from-axis-angle(get-world-y-vec(), 360.00 * random-float(0))))), 0);
-            var_3 = darray-append(arg_0, new-boxed-value(7, var_1), 1);
+            var_3 = darray-append(arg_0, boxed_symbol(var_1), 1);
         }
     }
     return i + 1;
@@ -131,17 +131,7 @@ statescript {
                     fob-aquarium--spawn-fish-on-spline(fob-aquarium-stadium-flocking-fish, get-int32(stadium-fish-count, self), spl-fob-aquarium-stadium-fish-dome-spawn-1, 0.75);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-stadium-flocking-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-stadium-flocking-fish) {
                         flocking-add(var_2, get-symbol(active-flocking-spline, self));
                     }
                 }
@@ -181,17 +171,7 @@ statescript {
                     set-symbol(active-flocking-spline, spl-fob-aquarium-tunnel-fish-1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-stadium-flocking-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-stadium-flocking-fish) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -208,17 +188,7 @@ statescript {
                     fob-aquarium--spawn-fish(fob-aquarium-tunnel-flocking-fish, get-int32(tunnel-fish-count, self), get-point(active-fish-spawn-point, self), 0.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-tunnel-flocking-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-tunnel-flocking-fish) {
                         flocking-add(var_2, get-symbol(active-flocking-spline, self));
                     }
                 }
@@ -295,17 +265,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-tunnel-flocking-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-tunnel-flocking-fish) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -358,17 +318,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-stadium-flocking-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-stadium-flocking-fish) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -400,17 +350,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-fleeing-birds) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-fleeing-birds) {
                         wait(random-float-range(0.00, 0.50, 0));
                         send-event(force-flee, var_2);
                     }
@@ -461,17 +401,7 @@ statescript {
                     );
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-aquarium-atrium-fleeing-fish) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-aquarium-atrium-fleeing-fish) {
                         flocking-add(var_2, spl-fob-aquarium-atrium-fish-hero-1);
                     }
                 }

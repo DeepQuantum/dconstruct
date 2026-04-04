@@ -23,17 +23,7 @@ u16 afm-overpass-npc-targeting-player?(sid arg_0) {
 
 u16 afm-overpass-any-npc-targeting-player?(u64? arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         u16 var_5;
         if (npc-alive?(var_3)) {
             if (!(npc-using-skill?(var_3, 27)) && !(npc-using-skill?(var_3, 0)) && npc-get-target-entity-object(var_3) == player && npc-has-awareness?(var_3, player, 2)) {
@@ -337,17 +327,7 @@ statescript {
                         stop-speaking(vox-afm-overpass-fake-scar-female-2);
                         stop-speaking(vox-afm-overpass-fake-scar-male-1);
                         stop-speaking(vox-afm-overpass-fake-scar-male-2);
-                        foreach (u64? var_2 : vox-afm-highway-intro-scars) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : vox-afm-highway-intro-scars) {
                             if (npc-alive?(var_3)) {
                                 stop-speaking(var_3);
                             }
@@ -372,17 +352,7 @@ statescript {
                     stop-speaking(vox-afm-overpass-fake-scar-male-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : vox-afm-highway-intro-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : vox-afm-highway-intro-scars) {
                         if (npc-alive?(var_2)) {
                             stop-speaking(var_2);
                         }
@@ -433,17 +403,7 @@ statescript {
                         stop-speaking(vox-afm-overpass-fake-scar-female-2);
                         stop-speaking(vox-afm-overpass-fake-scar-male-1);
                         stop-speaking(vox-afm-overpass-fake-scar-male-2);
-                        foreach (u64? var_2 : vox-afm-highway-intro-scars) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : vox-afm-highway-intro-scars) {
                             if (npc-alive?(var_3)) {
                                 stop-speaking(var_3);
                             }
@@ -468,17 +428,7 @@ statescript {
                     stop-speaking(vox-afm-overpass-fake-scar-male-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : vox-afm-highway-intro-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : vox-afm-highway-intro-scars) {
                         if (npc-alive?(var_2)) {
                             stop-speaking(var_2);
                         }
@@ -532,17 +482,7 @@ statescript {
                         stop-speaking(vox-afm-overpass-fake-wlf-female-2);
                         stop-speaking(vox-afm-overpass-fake-wlf-male-1);
                         stop-speaking(vox-afm-overpass-fake-wlf-male-2);
-                        foreach (u64? var_2 : vox-afm-highway-intro-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : vox-afm-highway-intro-militia) {
                             if (npc-alive?(var_3)) {
                                 stop-speaking(var_3);
                             }
@@ -567,17 +507,7 @@ statescript {
                     stop-speaking(vox-afm-overpass-fake-wlf-male-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : vox-afm-highway-intro-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : vox-afm-highway-intro-militia) {
                         if (npc-alive?(var_2)) {
                             stop-speaking(var_2);
                         }
@@ -628,17 +558,7 @@ statescript {
                         stop-speaking(vox-afm-overpass-fake-wlf-female-2);
                         stop-speaking(vox-afm-overpass-fake-wlf-male-1);
                         stop-speaking(vox-afm-overpass-fake-wlf-male-2);
-                        foreach (u64? var_2 : vox-afm-highway-intro-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : vox-afm-highway-intro-militia) {
                             if (npc-alive?(var_3)) {
                                 stop-speaking(var_3);
                             }
@@ -663,17 +583,7 @@ statescript {
                     stop-speaking(vox-afm-overpass-fake-wlf-male-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : vox-afm-highway-intro-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : vox-afm-highway-intro-militia) {
                         if (npc-alive?(var_2)) {
                             stop-speaking(var_2);
                         }
@@ -860,17 +770,7 @@ statescript {
             track main {
                 lambda {
                     if (any-enemy-aware-of-player?() && no-npcs-in-group-alive?(all-enemy-npcs)) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (npc-alive?(var_4)) {
                                 stop-speaking(var_4);
                             }

@@ -30,17 +30,7 @@ statescript {
                     if (task-active?(cwohlwend, buddy-pickup-test)) {
                         script-caption-no-stack(player, "*Gasping* We barely made it out of there", -1.00, 0);
                         wait(0.50);
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             npc-die(var_3, 0, 0, 0, 1);
                         }
                         go(pickup-prep, 1);
@@ -89,7 +79,7 @@ statescript {
                 lambda {
                     if (darray-count(drawers) > 0) {
                         set-symbol(current-drawer, get-closest-in-group-to-locator(drawers, get-object-locator(dina), 0.00, 1000000000.00, -360.00, 360.00), self);
-                        u64? var_6 = darray-at(pickups, darray-find(drawers, new-boxed-value(7, get-symbol(current-drawer, self)), 0));
+                        u64? var_6 = darray-at(pickups, darray-find(drawers, boxed_symbol(get-symbol(current-drawer, self)), 0));
                         u16 var_7;
                         if (var_6 && *(u16*)(var_6 + 12) == 7) {
                             var_7 = *(u64*)var_6;
@@ -207,10 +197,10 @@ statescript {
         block end {
             track main {
                 lambda {
-                    darray-find-remove(drawers, new-boxed-value(7, get-symbol(current-drawer, self)), 0);
+                    darray-find-remove(drawers, boxed_symbol(get-symbol(current-drawer, self)), 0);
                 }
                 lambda {
-                    darray-find-remove(pickups, new-boxed-value(7, get-symbol(current-drawer-pickup, self)), 0);
+                    darray-find-remove(pickups, boxed_symbol(get-symbol(current-drawer-pickup, self)), 0);
                 }
             }
         }

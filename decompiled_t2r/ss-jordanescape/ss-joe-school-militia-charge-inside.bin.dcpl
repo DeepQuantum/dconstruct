@@ -47,17 +47,7 @@ statescript {
                     wait-spawn-entity-group-async(roof-patrol, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : roof-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : roof-patrol) {
                         npc-set-script-only-with-perception(var_2);
                         wait(1.00);
                         npc-make-aware-of(var_2, player, 2, 0);
@@ -77,17 +67,7 @@ statescript {
                     wait(2.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : roof-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : roof-patrol) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }

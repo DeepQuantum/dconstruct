@@ -398,12 +398,12 @@ statescript {
                         set-symbol(last-poi-symbol, symbol-concat-string(get-symbol(last-poi-symbol, self), string-debug(task-get-current-symbol())), self);
                         set-symbol(last-poi-symbol, symbol-concat-string(get-symbol(last-poi-symbol, self), "-"), self);
                         set-symbol(last-poi-symbol, symbol-concat-int32(get-symbol(last-poi-symbol, self), (i32)floor-float((get-current-time(0) * random-float(0)) * 100000.00)), self);
-                        darray-append(added-poi-symbols, new-boxed-value(7, get-symbol(last-poi-symbol, self)), 0);
-                        darray-append(added-poi-x, new-boxed-value(6, *(f32*)var_9), 0);
-                        darray-append(added-poi-y, new-boxed-value(6, *(f32*)(var_9 + 4)), 0);
-                        darray-append(added-poi-z, new-boxed-value(6, *(f32*)(var_9 + 8)), 0);
-                        darray-append(added-poi-r, new-boxed-value(6, var_6), 0);
-                        darray-append(added-poi-type, new-boxed-value(19, get-string(poi-type-to-place, self)), 0);
+                        darray-append(added-poi-symbols, boxed_symbol(get-symbol(last-poi-symbol, self)), 0);
+                        darray-append(added-poi-x, boxed_f32(*(f32*)var_9), 0);
+                        darray-append(added-poi-y, boxed_f32(*(f32*)(var_9 + 4)), 0);
+                        darray-append(added-poi-z, boxed_f32(*(f32*)(var_9 + 8)), 0);
+                        darray-append(added-poi-r, boxed_f32(var_6), 0);
+                        darray-append(added-poi-type, boxed_stringcopy(get-string(poi-type-to-place, self)), 0);
                         u64? var_44 = spawn-object(
                             invisible-cube,
                             SimpleObject,
@@ -419,9 +419,9 @@ statescript {
                         send-event(
                             set-poi-radius,
                             var_44,
-                            new-boxed-value(6, var_6),
-                            new-boxed-value(6, 0.00),
-                            new-boxed-value(7, string-to-symbol(get-string(poi-type-to-place, self)))
+                            boxed_f32(var_6),
+                            boxed_f32(0.00),
+                            boxed_symbol(string-to-symbol(get-string(poi-type-to-place, self)))
                         );
                         select-object(var_44, 0);
                     }

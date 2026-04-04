@@ -66,9 +66,9 @@ statescript {
                         send-event(
                             bark-at,
                             get-symbol(dog-npc, self),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, obstacle-investigate-loc(get-symbol(dog-npc, self))),
-                            new-boxed-value(6, 2.00)
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(obstacle-investigate-loc(get-symbol(dog-npc, self))),
+                            boxed_f32(2.00)
                         );
                         wait(0.50);
                     }

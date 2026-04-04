@@ -30,7 +30,7 @@ statescript {
             track main {
                 lambda {
                     if (tag-exists?(script-receiver, self)) {
-                        send-event(detonate-via-attack, tag-symbol(script-receiver, self), new-boxed-value(7, tag-symbol(claymore, self)));
+                        send-event(detonate-via-attack, tag-symbol(script-receiver, self), boxed_symbol(tag-symbol(claymore, self)));
                     }
                 }
                 lambda {
@@ -47,8 +47,8 @@ statescript {
                             send-event(
                                 detonate-via-trigger,
                                 tag-symbol(script-receiver, self),
-                                new-boxed-value(7, tag-symbol(claymore, self)),
-                                new-boxed-value(7, event-arg-symbol(1))
+                                boxed_symbol(tag-symbol(claymore, self)),
+                                boxed_symbol(event-arg-symbol(1))
                             );
                         }
                         var_3 = send-event(detonate, tag-symbol(claymore, self));

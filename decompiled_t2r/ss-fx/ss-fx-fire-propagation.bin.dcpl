@@ -111,9 +111,9 @@ u64? propagate-burn(f32 arg_0) {
                 }
                 u16 var_26;
                 if (var_12 > 0) {
-                    darray-set(get-symbol(is-burned, self), var_12, new-boxed-value(2, 1));
-                    darray-append(get-symbol(burners, self), new-boxed-value(2, var_12), 0);
-                    darray-append(get-symbol(burner-state, self), new-boxed-value(2, 0), 0);
+                    darray-set(get-symbol(is-burned, self), var_12, boxed_i32(1));
+                    darray-append(get-symbol(burners, self), boxed_i32(var_12), 0);
+                    darray-append(get-symbol(burner-state, self), boxed_i32(0), 0);
                     spawn-fire(var_12, var_4);
                     var_26 = 1;
                 }
@@ -121,7 +121,7 @@ u64? propagate-burn(f32 arg_0) {
                 j = j + 1;
             }
             if (var_10 == 0) {
-                darray-set(get-symbol(burner-state, self), i, new-boxed-value(2, 1));
+                darray-set(get-symbol(burner-state, self), i, boxed_i32(1));
             }
             var_9 = wait(0.10);
         }
@@ -164,8 +164,8 @@ u64? propagate-burn(f32 arg_0) {
             } else {
                 var_46 = 0;
             }
-            darray-append(var_37, new-boxed-value(2, var_46), 0);
-            darray-append(var_38, new-boxed-value(2, 0), 0);
+            darray-append(var_37, boxed_i32(var_46), 0);
+            darray-append(var_38, boxed_i32(0), 0);
             wait-one-frame();
         }
     }
@@ -232,7 +232,7 @@ statescript {
                     while (i < 100) {
                         u64? var_1 = symbol-concat-int32(tag-symbol(target-name, self), i);
                         if (spawner-exists?(var_1)) {
-                            var_3 = darray-append(get-symbol(grass, self), new-boxed-value(7, var_1), 0);
+                            var_3 = darray-append(get-symbol(grass, self), boxed_symbol(var_1), 0);
                         }
                         i = i + 1;
                     }
@@ -240,7 +240,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < get-object-count()) {
-                        darray-append(get-symbol(is-burned, self), new-boxed-value(2, 0), 0);
+                        darray-append(get-symbol(is-burned, self), boxed_i32(0), 0);
                         i = i + 1;
                     }
                 }
@@ -265,10 +265,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(get-symbol(burners, self), new-boxed-value(2, get-nearest-locator(get-locator-position(get-object-locator(player)))), 0);
+                    darray-append(get-symbol(burners, self), boxed_i32(get-nearest-locator(get-locator-position(get-object-locator(player)))), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(burner-state, self), new-boxed-value(2, 0), 0);
+                    darray-append(get-symbol(burner-state, self), boxed_i32(0), 0);
                 }
                 lambda {
                     while (darray-count(get-symbol(burners, self)) > 0) {

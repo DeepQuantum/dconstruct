@@ -55,7 +55,7 @@ statescript {
                             var_2 = 0;
                         }
                         u64? var_3 = get-closest-in-group(wat-streets-barrier-npcs, var_2, wat-streets-barrier-npcs-used, 1, 1, 0);
-                        darray-append(wat-streets-barrier-npcs-used, new-boxed-value(7, var_3), 1);
+                        darray-append(wat-streets-barrier-npcs-used, boxed_symbol(var_3), 1);
                         u16 var_8;
                         if (var_7 && *(u16*)(var_7 + 12) == 7) {
                             var_8 = *(u64*)var_7;
@@ -66,7 +66,7 @@ statescript {
                         } else {
                             var_8 = 0;
                         }
-                        send-event(npc-hit-barrier, var_8, new-boxed-value(7, var_3));
+                        send-event(npc-hit-barrier, var_8, boxed_symbol(var_3));
                     }
                 }
             }

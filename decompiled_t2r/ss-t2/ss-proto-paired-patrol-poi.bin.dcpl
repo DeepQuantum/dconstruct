@@ -38,7 +38,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-append(all-patrol-poi, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(all-patrol-poi, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     if (!(tag-symbol(cap, self) == 0)) {
@@ -52,7 +52,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    darray-find-remove(all-patrol-poi, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(all-patrol-poi, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

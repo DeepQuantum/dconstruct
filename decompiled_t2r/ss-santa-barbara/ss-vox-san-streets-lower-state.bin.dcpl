@@ -73,7 +73,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(vox-train-tracks-combat-done, self)) {
-                        if (darray-contains?(vox-san-streets-first-two-slavers, new-boxed-value(7, event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-san-streets-first-two-slavers) && tension-mode-is?(2)) {
+                        if (darray-contains?(vox-san-streets-first-two-slavers, boxed_symbol(event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-san-streets-first-two-slavers) && tension-mode-is?(2)) {
                             set-boolean(vox-train-tracks-combat-done, 1, self);
                             go(first-two-slavers-dead, 1);
                         }

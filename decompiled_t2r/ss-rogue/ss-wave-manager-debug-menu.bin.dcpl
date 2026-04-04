@@ -141,17 +141,7 @@ statescript {
                             darray-clear(var_1);
                             darray-copy-into(var_1, darray-clone(var_1, single-frame, 0), darray-sorted-indices(var_1, rank-regions-from-furthest, 0, 1));
                         }
-                        foreach (u64? var_15 : var_1) {
-                            u16 var_16;
-                            if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                var_16 = *(u64*)var_15;
-                            } else {
-                                var_16 = 0;
-                            }
+                        foreach (u64? var_16 : var_1) {
                             u16 var_17;
                             u16 var_18;
                             if (((0 % ((9 + 1) - 1)) + 1) == 8) {
@@ -163,7 +153,7 @@ statescript {
                                 1 + var_17;
                                 var_20 = 6;
                             }
-                            ddict-set(get-symbol(ddict-spawn-regions, self), var_16, new-boxed-value(2, var_20));
+                            ddict-set(get-symbol(ddict-spawn-regions, self), var_16, boxed_i32(var_20));
                         }
                         darray-destroy(var_1);
                     }
@@ -240,17 +230,7 @@ statescript {
                 lambda {
                     while (1) {
                         if (*(u8*)(*encounter-tweaks* + 41)) {
-                            foreach (u64? var_3 : get-symbol(group-spawn-positions, self)) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : get-symbol(group-spawn-positions, self)) {
                                 u64? var_5 = get-spawner-position(var_4, 1);
                                 u64? var_6 = alloc-bound-frame(var_5, 0, 0, 0, 0);
                                 u64? var_7 = find-closest-point-on-nav-mesh(var_6, 3.00, 1.00, 1.00, 1, 0);
@@ -366,17 +346,7 @@ statescript {
                 lambda {
                     while (1) {
                         if (*(u8*)(*encounter-tweaks* + 41)) {
-                            foreach (u64? var_3 : get-symbol(group-excluded-spawn-positions, self)) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : get-symbol(group-excluded-spawn-positions, self)) {
                                 u64? var_5 = get-spawner-position(var_4, 1);
                                 debug-draw-cross(var_5, 0.25, 8, 0.00, 0, 1, 0);
                                 debug-draw-string(var_5, string-debug(var_4), 8, 0.00, 0, 0.50, 1, 0);
@@ -395,22 +365,12 @@ statescript {
                             }
                             set-symbol(group-player-positions, darray-create(self, -1, 0), self);
                             u64? var_3 = ddict-create(single-frame, -1, 0);
-                            ddict-set(var_3, rogue-player-spawner, new-boxed-value(2, 1));
+                            ddict-set(var_3, rogue-player-spawner, boxed_i32(1));
                             group-copy(get-spawners-by-criteria(var_3, 0, 0, 0, 0, 0), get-symbol(group-player-positions, self));
                             set-int32(num-player-positions, darray-count(get-symbol(group-player-positions, self)), self);
                             if (!(darray-count(get-symbol(group-player-positions, self)) == 0)) {
                                 while (*(u8*)(*encounter-tweaks* + 40)) {
-                                    foreach (u64? var_15 : get-symbol(group-player-positions, self)) {
-                                        u16 var_16;
-                                        if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                            var_16 = *(u64*)var_15;
-                                        } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                            var_16 = *(u64*)var_15;
-                                        } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                            var_16 = *(u64*)var_15;
-                                        } else {
-                                            var_16 = 0;
-                                        }
+                                    foreach (u64? var_16 : get-symbol(group-player-positions, self)) {
                                         u64? var_17 = get-spawner-position(var_16, 1);
                                         debug-draw-cross(var_17, 0.25, 4, 0.00, 0, 1, 0);
                                         debug-draw-string(var_17, string-debug(var_16), 4, 0.00, 0, 0.50, 1, 0);

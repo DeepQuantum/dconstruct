@@ -529,31 +529,31 @@ statescript {
                 }
                 lambda {
                     if (debug-joypad-command-active?(jump, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
-                        send-event(ping-distraction, self, new-boxed-value(1, 0));
+                        send-event(ping-distraction, self, boxed_bool(0));
                     }
                 }
                 lambda {
                     if (debug-mouse-click-l() || debug-mouse-click-r() && debug-mouse-click-m()) {
-                        send-event(ping-distraction, self, new-boxed-value(1, 1));
+                        send-event(ping-distraction, self, boxed_bool(1));
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-sleep, self, new-boxed-value(2, 0));
+                            send-event(change-sleep, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-sleep, self, new-boxed-value(2, 1));
+                            send-event(change-sleep, self, boxed_i32(1));
                         }
                     }
                 }
@@ -827,7 +827,7 @@ statescript {
                         u64? var_21 = wait-raycast(var_18);
                         debug-draw-sphere(get-locator-position(var_21), 0.25, 3, 1.00, 0, 0);
                         if (get-boolean(strong-surprises?, self)) {
-                            send-event(teleport-player, player, new-boxed-value(18, var_21));
+                            send-event(teleport-player, player, boxed_boundframe(var_21));
                             audio-gameplay-event(weapon-fire, get-locator-position(var_21), player);
                         } else {
                             npc-ping-distraction-at(get-symbol(active-npc, self), get-locator-position(var_21), get-boolean(seen?, self));
@@ -842,7 +842,7 @@ statescript {
                     if (!(active-npc == 0)) {
                         spawn-test-npc(get-symbol(active-npc, self));
                         if (get-boolean(strong-surprises?, self)) {
-                            send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(cp-1, 1)));
+                            send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(cp-1, 1)));
                         }
                         wait(0.50);
                     }

@@ -113,12 +113,12 @@ statescript {
                     if (!get-animation-playing?(player, ellie-death-waterfall, 2)) {
                         signal(start-death, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(pos-nor-sinkhole-water-death-1, 1);
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 0.00;
+                        *(i32*)*var_1[1] = 10;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u64*)(*var_1[1] + 8) = get-spawner-locator(pos-nor-sinkhole-water-death-1, 1);
                         wait-animate_(player, ellie-death-waterfall, var_1);
                         kill-player-no-anim(0, 1, 0.06);
                         camera-disable-animated();

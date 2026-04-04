@@ -47,17 +47,7 @@ statescript {
                     wait-spawn-entity-group-async(med-hospital-approach-bonfire-props, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hospital-approach-bonfire-props) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-approach-bonfire-props) {
                         set-visible(var_2, 0);
                     }
                 }
@@ -104,17 +94,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-hospital-approach-bonfire-props) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-approach-bonfire-props) {
                         set-visible(var_2, 1);
                     }
                 }
@@ -123,23 +103,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
                     animate_(obj-med-hospital-approach-bonfire-corpse-1, med-hospital-explore-corpse-pile-entry--runner, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-entry--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
                     wait-animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-entry--female, var_0);
                 }
                 lambda {
@@ -181,41 +161,41 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-med-hospital-approach-bonfire-corpse-1, med-hospital-explore-corpse-pile-idle-1--runner, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-idle-1--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-idle-1--female, var_0);
                 }
                 lambda {
@@ -250,42 +230,42 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-corpse-pile-1, med-hospital-explore-corpse-pile--corpses, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-corpse-1, med-hospital-explore-corpse-pile-toss--runner, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-toss--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-toss--female, var_0);
                 }
                 lambda {
@@ -365,32 +345,32 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-corpse-1, med-hospital-explore-corpse-pile-idle-2--runner, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-ambient-idle-2--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-ambient-idle-2--female, var_0);
                 }
                 lambda {
@@ -398,28 +378,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 43;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = npc-m-head-look-ambi-tpose-gesture;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 43;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = npc-m-head-look-ambi-tpose-gesture;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-conversation--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 43;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = npc-m-head-look-ambi-tpose-gesture;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 43;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = npc-m-head-look-ambi-tpose-gesture;
                     wait-animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-conversation--female, var_0);
                 }
                 lambda {
@@ -435,28 +415,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 43;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = npc-m-head-look-ambi-part-gesture;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 43;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = npc-m-head-look-ambi-part-gesture;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-idle-2--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 43;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = npc-m-head-look-ambi-part-gesture;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 43;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = npc-m-head-look-ambi-part-gesture;
                     animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-idle-2--female, var_0);
                 }
             }
@@ -469,18 +449,18 @@ statescript {
                         }
                         if (!get-boolean(player-chatting?, self)) {
                             u64? var_8 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                            *(i32*)*(*var_8 + (1 * 8)) = 58;
-                            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_8 + (1 * 8)) + 8) = 1;
-                            *(i32*)*(*var_8 + (2 * 8)) = 28;
-                            *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (2 * 8)) + 8) = 0.70;
-                            *(i32*)*(*var_8 + (3 * 8)) = 43;
-                            *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (3 * 8)) + 8) = npc-m-head-look-ambi-part-gesture;
+                            *(i32*)*var_8[0] = 10;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                            *(i32*)*var_8[1] = 58;
+                            *(u64*)(*var_8[1] + 8) = 0;
+                            *(i32*)(*var_8[1] + 8) = 1;
+                            *(i32*)*var_8[2] = 28;
+                            *(u64*)(*var_8[2] + 8) = 0;
+                            *(f32*)(*var_8[2] + 8) = 0.70;
+                            *(i32*)*var_8[3] = 43;
+                            *(u64*)(*var_8[3] + 8) = 0;
+                            *(u64*)(*var_8[3] + 8) = npc-m-head-look-ambi-part-gesture;
                             animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-idle-2--female, var_8);
                         }
                         wait-boolean(player-chatting?, 0, self);
@@ -490,15 +470,15 @@ statescript {
                         }
                         if (!get-boolean(player-chatting?, self)) {
                             u64? var_23 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_23 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_23 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_23 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                            *(i32*)*(*var_23 + (1 * 8)) = 58;
-                            *(u64*)(*(*var_23 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_23 + (1 * 8)) + 8) = 1;
-                            *(i32*)*(*var_23 + (2 * 8)) = 28;
-                            *(u64*)(*(*var_23 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_23 + (2 * 8)) + 8) = 0.70;
+                            *(i32*)*var_23[0] = 10;
+                            *(u64*)(*var_23[0] + 8) = 0;
+                            *(u64*)(*var_23[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                            *(i32*)*var_23[1] = 58;
+                            *(u64*)(*var_23[1] + 8) = 0;
+                            *(i32*)(*var_23[1] + 8) = 1;
+                            *(i32*)*var_23[2] = 28;
+                            *(u64*)(*var_23[2] + 8) = 0;
+                            *(f32*)(*var_23[2] + 8) = 0.70;
                             animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-ambient-idle-2--female, var_23);
                             wait-random(2.50, 4.00);
                         }
@@ -514,18 +494,18 @@ statescript {
                         }
                         if (!get-boolean(player-chatting?, self)) {
                             u64? var_8 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                            *(i32*)*(*var_8 + (1 * 8)) = 58;
-                            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_8 + (1 * 8)) + 8) = 1;
-                            *(i32*)*(*var_8 + (2 * 8)) = 28;
-                            *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (2 * 8)) + 8) = 0.70;
-                            *(i32*)*(*var_8 + (3 * 8)) = 43;
-                            *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (3 * 8)) + 8) = npc-m-head-look-ambi-part-gesture;
+                            *(i32*)*var_8[0] = 10;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                            *(i32*)*var_8[1] = 58;
+                            *(u64*)(*var_8[1] + 8) = 0;
+                            *(i32*)(*var_8[1] + 8) = 1;
+                            *(i32*)*var_8[2] = 28;
+                            *(u64*)(*var_8[2] + 8) = 0;
+                            *(f32*)(*var_8[2] + 8) = 0.70;
+                            *(i32*)*var_8[3] = 43;
+                            *(u64*)(*var_8[3] + 8) = 0;
+                            *(u64*)(*var_8[3] + 8) = npc-m-head-look-ambi-part-gesture;
                             animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-idle-2--male, var_8);
                         }
                         wait-boolean(player-chatting?, 0, self);
@@ -535,15 +515,15 @@ statescript {
                         }
                         if (!get-boolean(player-chatting?, self)) {
                             u64? var_23 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_23 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_23 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_23 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                            *(i32*)*(*var_23 + (1 * 8)) = 58;
-                            *(u64*)(*(*var_23 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_23 + (1 * 8)) + 8) = 1;
-                            *(i32*)*(*var_23 + (2 * 8)) = 28;
-                            *(u64*)(*(*var_23 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_23 + (2 * 8)) + 8) = 0.70;
+                            *(i32*)*var_23[0] = 10;
+                            *(u64*)(*var_23[0] + 8) = 0;
+                            *(u64*)(*var_23[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                            *(i32*)*var_23[1] = 58;
+                            *(u64*)(*var_23[1] + 8) = 0;
+                            *(i32*)(*var_23[1] + 8) = 1;
+                            *(i32*)*var_23[2] = 28;
+                            *(u64*)(*var_23[2] + 8) = 0;
+                            *(f32*)(*var_23[2] + 8) = 0.70;
                             animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-ambient-idle-2--male, var_23);
                             wait-random(2.50, 4.00);
                         }
@@ -662,39 +642,39 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
                     animate_(obj-med-hosp-abby-arrested-door-1, med-hospital-explore-corpse-pile-exit--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-corpse-1, med-hospital-explore-corpse-pile-exit--runner, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hospital-approach-bonfire-guard-2, med-hospital-explore-corpse-pile-exit--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hospital-approach-bonfire-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(obj-med-hospital-approach-bonfire-guard-1, med-hospital-explore-corpse-pile-exit--female, var_0);
                 }
                 lambda {

@@ -12,19 +12,9 @@
 // ####################################################################################################
 
 u64? challenge-populate-group-brutes() {
-    foreach (u64? var_2 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (npc-get-character-class(var_3) == 16) {
-            darray-append(get-symbol(group-alive-scar-brutes, self), new-boxed-value(7, var_3), 1);
+            darray-append(get-symbol(group-alive-scar-brutes, self), boxed_symbol(var_3), 1);
             character-set-invincibility(var_3, 3, 0);
         }
     }
@@ -58,17 +48,7 @@ statescript {
                     set-int32(num-alive-scar-brutes, darray-count(get-symbol(group-alive-scar-brutes, self)), self);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-alive-scar-brutes, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-alive-scar-brutes, self)) {
                         u64? var_6 = lerp-scale(0.00, 10.00, 0.00, 1.00, distance-between-objects(player, var_4));
                         if (is-high-contrast-mode-toggled-on?()) {
                             var_8 = hud2-buddy-mark-npc(var_4);
@@ -91,8 +71,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(group-alive-scar-brutes, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(group-alive-scar-brutes, self), new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(group-alive-scar-brutes, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(group-alive-scar-brutes, self), boxed_symbol(var_0), 0);
                         if (event-arg-symbol(1) == player) {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-EC: Player killed %s all by melee!", string-debug(var_0)), 19);
@@ -114,9 +94,9 @@ statescript {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
                     u64? var_2 = event::get-attack-info(get-event());
-                    if (darray-contains?(get-symbol(group-alive-scar-brutes, self), new-boxed-value(7, var_0)) && *(u64*)(var_2 + 8) == player || *(i32*)(var_2 + 52) != 0) {
+                    if (darray-contains?(get-symbol(group-alive-scar-brutes, self), boxed_symbol(var_0)) && *(u64*)(var_2 + 8) == player || *(i32*)(var_2 + 52) != 0) {
                         if (*(i32*)(var_2 + 48) != 0 && *(u64*)(var_2 + 72) != bottle && *(u64*)(var_2 + 72) != brick && *(u64*)(var_2 + 72) != stun-bomb && *(u64*)(var_2 + 72) != smoke-bomb) {
-                            darray-find-remove(get-symbol(group-alive-scar-brutes, self), new-boxed-value(7, var_0), 0);
+                            darray-find-remove(get-symbol(group-alive-scar-brutes, self), boxed_symbol(var_0), 0);
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-EC: %s can't be counted towards challenge. Player either used projectile or explosive for damage!", string-debug(var_0)), 19);
                             }
@@ -131,17 +111,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : group-alive-scar-brutes) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-alive-scar-brutes) {
                         character-set-invincibility(var_2, 0, 0);
                     }
                 }

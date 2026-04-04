@@ -85,21 +85,11 @@ u16 skull--get-best-modifier-index(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3
             var_5 = 0;
         }
         f32 var_9;
-        if (!darray-contains?(arg_0, new-boxed-value(7, *(u64*)(**t2r-skulls-array* + (var_5 * 152))))) {
+        if (!darray-contains?(arg_0, boxed_symbol(*(u64*)(**t2r-skulls-array* + (var_5 * 152))))) {
             var_9 = 0.00 + *(f32*)*standard-modifier-score-criteria*;
         } else {
             u16 var_11;
-            foreach (u64? var_12 : arg_0) {
-                u16 var_13;
-                if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                    var_13 = *(u64*)var_12;
-                } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                    var_13 = *(u64*)var_12;
-                } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                    var_13 = *(u64*)var_12;
-                } else {
-                    var_13 = 0;
-                }
+            foreach (u64? var_13 : arg_0) {
                 u16 var_14;
                 if (var_13 == *(u64*)(**t2r-skulls-array* + (var_5 * 152))) {
                     var_14 = 0 + 1;
@@ -157,7 +147,7 @@ u16 skull--get-best-modifier-index(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3
                 var_23 = i;
             }
         }
-        darray-append(var_0, new-boxed-value(6, var_21), 0);
+        darray-append(var_0, boxed_f32(var_21), 0);
         var_3 = var_23;
         i = i + 1;
     }
@@ -198,7 +188,7 @@ u16 skull--get-best-modifier-index(u64? arg_0, u64? arg_1, f32 arg_2, u64? arg_3
             var_31 = 0.00;
         }
         if (var_29 == var_31) {
-            darray-append(var_1, new-boxed-value(2, i), 0);
+            darray-append(var_1, boxed_i32(i), 0);
         }
         i = i + 1;
     }
@@ -391,7 +381,7 @@ u64? skull--get-skulls-by-track(i32 arg_0) {
     u64 i = 0;
     while (i < *(i32*)(*t2r-skulls-array* + 8)) {
         if (*(i32*)((**t2r-skulls-array* + (i * 152)) + 96) == arg_0) {
-            darray-append(var_0, new-boxed-value(2, i), 0);
+            darray-append(var_0, boxed_i32(i), 0);
         }
         i = i + 1;
     }
@@ -411,7 +401,7 @@ u64? skull--populate-potential-modifier-choices(u64? arg_0, u64? arg_1, u64? arg
     u64? var_1 = custom-run--get-blacklisted-skulls();
     u64 i = 0;
     while (i < *(i32*)(*t2r-skulls-array* + 8)) {
-        if (!((**t2r-skulls-array* + (i * 152)) == 0) || !!(var_1 == 0) && !(var_1 == 0) && !darray-contains?(var_1, new-boxed-value(7, *(u64*)(**t2r-skulls-array* + (i * 152)))) || !*(u8*)((**t2r-skulls-array* + (i * 152)) + 120) && *(u8*)((**t2r-skulls-array* + (i * 152)) + 120) && !skull--already-using-category-in-darray?(arg_2, *(i32*)((**t2r-skulls-array* + (i * 152)) + 100)) || *(u8*)((**t2r-skulls-array* + (i * 152)) + 148) && !*(u8*)((**t2r-skulls-array* + (i * 152)) + 148) && arg_3 > 0.00 && !darray-contains?(arg_2, new-boxed-value(7, *(u64*)(**t2r-skulls-array* + (i * 152)))) && script-eval-condition(
+        if (!((**t2r-skulls-array* + (i * 152)) == 0) || !!(var_1 == 0) && !(var_1 == 0) && !darray-contains?(var_1, boxed_symbol(*(u64*)(**t2r-skulls-array* + (i * 152)))) || !*(u8*)((**t2r-skulls-array* + (i * 152)) + 120) && *(u8*)((**t2r-skulls-array* + (i * 152)) + 120) && !skull--already-using-category-in-darray?(arg_2, *(i32*)((**t2r-skulls-array* + (i * 152)) + 100)) || *(u8*)((**t2r-skulls-array* + (i * 152)) + 148) && !*(u8*)((**t2r-skulls-array* + (i * 152)) + 148) && arg_3 > 0.00 && !darray-contains?(arg_2, boxed_symbol(*(u64*)(**t2r-skulls-array* + (i * 152)))) && script-eval-condition(
             *((**t2r-skulls-array* + (i * 152)) + 104),
             arg_1,
             0,
@@ -422,7 +412,7 @@ u64? skull--populate-potential-modifier-choices(u64? arg_0, u64? arg_1, u64? arg
             0,
             0
         ) && *(i32*)((**t2r-skulls-array* + (i * 152)) + 96) <= skull--get-modifier-track-status()) {
-            darray-append(arg_0, new-boxed-value(2, i), 0);
+            darray-append(arg_0, boxed_i32(i), 0);
         }
         i = i + 1;
     }
@@ -549,14 +539,14 @@ u16 skull--get-curated-skull-combination(u64? arg_0, u64? arg_1) {
         u64? var_1;
         while (j < *(i32*)(*((**skull-curations* + (i * 16)) + 8) + 8)) {
             u16 var_5;
-            if (darray-contains?(arg_0, new-boxed-value(7, *(u64*)*(**((**skull-curations* + (i * 16)) + 8) + (j * 8))))) {
+            if (darray-contains?(arg_0, boxed_symbol(*(u64*)*(**((**skull-curations* + (i * 16)) + 8) + (j * 8))))) {
                 var_5 = 1;
             }
             var_1 = var_5;
             j = j + 1;
         }
         if (!(var_1)) {
-            darray-append(var_0, new-boxed-value(2, i), 0);
+            darray-append(var_0, boxed_i32(i), 0);
             var_7 = var_1;
         }
         i = i + 1;
@@ -583,11 +573,11 @@ u16 skull--get-curated-skull-combination(u64? arg_0, u64? arg_1) {
         }
         u64 i = 0;
         while (i < *(i32*)(*((**skull-curations* + (var_15 * 16)) + 8) + 8)) {
-            darray-append(arg_0, new-boxed-value(7, *(u64*)*(**((**skull-curations* + (var_15 * 16)) + 8) + (i * 8))), 0);
-            darray-append(var_13, new-boxed-value(7, *(u64*)*(**((**skull-curations* + (var_15 * 16)) + 8) + (i * 8))), 0);
+            darray-append(arg_0, boxed_symbol(*(u64*)*(**((**skull-curations* + (var_15 * 16)) + 8) + (i * 8))), 0);
+            darray-append(var_13, boxed_symbol(*(u64*)*(**((**skull-curations* + (var_15 * 16)) + 8) + (i * 8))), 0);
             i = i + 1;
         }
-        var_10 = ddict-set(arg_1, skulls, new-boxed-value(7, var_13));
+        var_10 = ddict-set(arg_1, skulls, boxed_symbol(var_13));
     } else {
         var_10 = 0;
     }
@@ -598,17 +588,7 @@ u16 skull--is-skull-active?(u64 arg_0) {
     u16 var_1;
     if (is-script-running?(ss-modifiers-manager-1)) {
         if (darray-count(grp-added-skull-indices) > 0) {
-            foreach (u64? var_4 : grp-added-skull-indices) {
-                u16 var_5;
-                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                    var_5 = *(u64*)var_4;
-                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                    var_5 = *(u64*)var_4;
-                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                    var_5 = *(u64*)var_4;
-                } else {
-                    var_5 = 0;
-                }
+            foreach (u64? var_5 : grp-added-skull-indices) {
                 if (arg_0 == *(u64*)(**t2r-skulls-array* + (var_5 * 152))) {}
 
             }
@@ -651,7 +631,7 @@ u64? skull--get-collected-recipes() {
             if (!is-final-build?()) {
                 display(dc:format("DEB-SK: 			Adding to collected recipes...", string-debug(var_6)), 19);
             }
-            var_13 = darray-append(var_2, new-boxed-value(7, var_6), 0);
+            var_13 = darray-append(var_2, boxed_symbol(var_6), 0);
         }
         i = i + 1;
     }
@@ -660,17 +640,7 @@ u64? skull--get-collected-recipes() {
 
 u16 skull--combo-contains-positive-modifier?(u64? arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         u16 var_4;
         if (!0) {
             if (*(u8*)(skull--get-skull-by-id(var_3) + 81)) {
@@ -710,12 +680,12 @@ u64? skull--attach-modifiers-to-encounter(u64? arg_0, u64? arg_1, u64? arg_2) {
         skull--populate-potential-modifier-choices(var_0, arg_1, var_1, arg_2);
         if (darray-count(var_0) > 0) {
             u64? var_5 = skull--get-best-modifier-index(arg_0, var_0, arg_2, var_1);
-            darray-append(var_1, new-boxed-value(7, *(u64*)(**t2r-skulls-array* + (var_5 * 152))), 0);
-            darray-append(arg_0, new-boxed-value(7, *(u64*)(**t2r-skulls-array* + (var_5 * 152))), 0);
+            darray-append(var_1, boxed_symbol(*(u64*)(**t2r-skulls-array* + (var_5 * 152))), 0);
+            darray-append(arg_0, boxed_symbol(*(u64*)(**t2r-skulls-array* + (var_5 * 152))), 0);
         }
     }
     if (darray-count(var_1) > 0) {
-        ddict-set(arg_1, skulls, new-boxed-value(7, var_1));
+        ddict-set(arg_1, skulls, boxed_symbol(var_1));
     } else {
         darray-destroy(var_1);
     }
@@ -727,17 +697,7 @@ u64? skull--restore-cached-recipes(u64? arg_0) {
     if (!is-final-build?()) {
         display(dc:format("DEB-SK: Adding back all cached recipes..."), 19);
     }
-    foreach (u64? var_3 : arg_0) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : arg_0) {
         if (!is-final-build?()) {
             display(dc:format("DEB-SK: 	%s", string-debug(var_4)), 19);
         }

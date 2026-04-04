@@ -164,7 +164,7 @@ statescript {
                     while (i < 20) {
                         u64? var_0 = symbol-concat-int32(post-, i);
                         if (tag-specified?(var_0, self)) {
-                            var_2 = darray-append(get-symbol(posts, self), new-boxed-value(7, tag-symbol(var_0, self)), 1);
+                            var_2 = darray-append(get-symbol(posts, self), boxed_symbol(tag-symbol(var_0, self)), 1);
                         }
                         i = i + 1;
                     }
@@ -222,13 +222,13 @@ statescript {
             }
             track move {
                 lambda {
-                    for (u64 i = 0; i < darray-find(get-symbol(posts, self), new-boxed-value(7, get-symbol(curr-post, self)), 0); i++) {
+                    for (u64 i = 0; i < darray-find(get-symbol(posts, self), boxed_symbol(get-symbol(curr-post, self)), 0); i++) {
                         darray-remove(get-symbol(posts, self), 0);
                         print-int32(i, self);
                     }
                 }
                 lambda {
-                    darray-find-remove(get-symbol(posts, self), new-boxed-value(7, get-symbol(curr-post, self)), 0);
+                    darray-find-remove(get-symbol(posts, self), boxed_symbol(get-symbol(curr-post, self)), 0);
                 }
                 lambda {
                     wait(random-float-min-max(0.00, 0.70, 0));
@@ -328,7 +328,7 @@ statescript {
                     wait(random-float-min-max(0.00, 0.50, 0));
                 }
                 lambda {
-                    while (tag-boolean(encroach, self) && darray-contains?(get-symbol(posts, self), new-boxed-value(7, get-symbol(curr-post, self)))) {
+                    while (tag-boolean(encroach, self) && darray-contains?(get-symbol(posts, self), boxed_symbol(get-symbol(curr-post, self)))) {
                         if (get-float(move-dist-max, self) < get-locator-distance(get-object-locator(get-self-id()), get-spawner-locator(get-symbol(curr-post, self), 1))) {
                             wait-npc-move-to(
                                 get-self-id(),
@@ -368,7 +368,7 @@ statescript {
                                 0,
                                 0
                             );
-                            darray-find-remove(get-symbol(posts, self), new-boxed-value(7, get-symbol(curr-post, self)), 0);
+                            darray-find-remove(get-symbol(posts, self), boxed_symbol(get-symbol(curr-post, self)), 0);
                         }
                         wait(random-float-min-max(get-float(time-between-moves-min, self), get-float(time-between-moves-max, self), 0));
                     }
@@ -457,7 +457,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(go-task-fail, ss-efg-prologue-escape-spawn-controller-1, new-boxed-value(7, get-self-id()));
+                    send-event(go-task-fail, ss-efg-prologue-escape-spawn-controller-1, boxed_symbol(get-self-id()));
                 }
             }
         }

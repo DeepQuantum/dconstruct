@@ -61,12 +61,12 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 56;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = get-bound-frame(ap-ref-var, self);
+                    *(i32*)*var_2[0] = 56;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.00;
+                    *(i32*)*var_2[1] = 10;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u64*)(*var_2[1] + 8) = get-bound-frame(ap-ref-var, self);
                     animate_(self, get-infected-attack-anim(tag-symbol(letter, self)), var_2);
                 }
                 lambda {
@@ -74,9 +74,9 @@ statescript {
                         set-bound-frame(forground-piece-ap-ref-var, get-spawner-locator(tag-symbol(forground-piece, self), 1), self);
                         enable-collision(tag-symbol(forground-piece, self), 0, 0, 0.00);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-bound-frame(forground-piece-ap-ref-var, self);
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-bound-frame(forground-piece-ap-ref-var, self);
                         animate_(tag-symbol(forground-piece, self), idle, var_5);
                     }
                 }
@@ -245,23 +245,23 @@ statescript {
                     if (tag-exists?(forground-piece, self)) {
                         enable-collision(tag-symbol(forground-piece, self), 1, 0, 0.00);
                         u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(forground-piece-ap-ref-var, self);
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-bound-frame(forground-piece-ap-ref-var, self);
                         animate_(tag-symbol(forground-piece, self), attack, var_3);
                     }
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(ap-ref-var, self);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.30;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(ap-ref-var, self);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.20;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.30;
                     wait-animate_(self, get-infected-attack-anim(tag-symbol(letter, self)), var_2);
                 }
                 lambda {

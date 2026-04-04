@@ -56,7 +56,7 @@ u64? ope-attempt-boat-teleport(u64? arg_0) {
             darray-clear(get-symbol(teleport-test-group, self));
             var_9 = 1;
         } else {
-            darray-find-remove(get-symbol(teleport-test-group, self), new-boxed-value(7, var_6), 0);
+            darray-find-remove(get-symbol(teleport-test-group, self), boxed_symbol(var_6), 0);
             var_9 = 0;
         }
         var_4 = var_9;
@@ -290,16 +290,16 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(locator-group, new-boxed-value(7, locator-1), 1);
+                    darray-append(locator-group, boxed_symbol(locator-1), 1);
                 }
                 lambda {
-                    darray-append(locator-group, new-boxed-value(7, locator-2), 1);
+                    darray-append(locator-group, boxed_symbol(locator-2), 1);
                 }
                 lambda {
-                    darray-append(locator-group, new-boxed-value(7, locator-3), 1);
+                    darray-append(locator-group, boxed_symbol(locator-3), 1);
                 }
                 lambda {
-                    darray-append(locator-group, new-boxed-value(7, locator-4), 1);
+                    darray-append(locator-group, boxed_symbol(locator-4), 1);
                 }
                 lambda {
                     spawn-entity(obj-ope-boat-ropes-1, 0, 0);
@@ -529,7 +529,7 @@ statescript {
                     while (1) {
                         if (get-boolean(boat-at-reef?, self)) {
                             if (!(get-symbol(point-of-interest, self) == player)) {
-                                send-event(set-point-of-interest-object, boat, new-boxed-value(7, player));
+                                send-event(set-point-of-interest-object, boat, boxed_symbol(player));
                             }
                             ope-boat-sam-use-points-of-interest();
                         } else {
@@ -874,12 +874,12 @@ statescript {
                             }
                             signal(start-anim, 0);
                             u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-object-parented-bound-frame(boat);
-                            *(i32*)*(*var_8 + (1 * 8)) = 30;
-                            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.50;
+                            *(i32*)*var_8[0] = 10;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(u64*)(*var_8[0] + 8) = get-object-parented-bound-frame(boat);
+                            *(i32*)*var_8[1] = 30;
+                            *(u64*)(*var_8[1] + 8) = 0;
+                            *(f32*)(*var_8[1] + 8) = 0.50;
                             wait-animate_(samuel, ope-boat-sam-left-behind-right, var_8);
                         } else {
                             signal(start-anim, 0);
@@ -887,12 +887,12 @@ statescript {
                                 camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                             }
                             u64? var_11 = #%alloc-array(single-frame, 16, 2, 1);
-                            *(i32*)*(*var_11 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-object-parented-bound-frame(boat);
-                            *(i32*)*(*var_11 + (1 * 8)) = 30;
-                            *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.50;
+                            *(i32*)*var_11[0] = 10;
+                            *(u64*)(*var_11[0] + 8) = 0;
+                            *(u64*)(*var_11[0] + 8) = get-object-parented-bound-frame(boat);
+                            *(i32*)*var_11[1] = 30;
+                            *(u64*)(*var_11[1] + 8) = 0;
+                            *(f32*)(*var_11[1] + 8) = 0.50;
                             wait-animate_(samuel, ope-boat-sam-left-behind-left, var_11);
                         }
                     }
@@ -1188,15 +1188,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(pos-ope-boat-drive-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(pos-ope-boat-drive-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
                     wait-animate_(samuel, hero-boat-enter-driver-idle, var_0);
                 }
                 lambda {
@@ -1234,21 +1234,21 @@ statescript {
                     if (signal-raised?(started-animating, 0)) {
                         signal(perform-reverse, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(pos-ope-boat-drive-1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-animation-phase(samuel, 2, hero-boat-enter-driver-idle);
-                        *(i32*)*(*var_2 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = -1.00;
-                        *(i32*)*(*var_2 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_2 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(pos-ope-boat-drive-1);
+                        *(i32*)*var_2[1] = 58;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = get-animation-phase(samuel, 2, hero-boat-enter-driver-idle);
+                        *(i32*)*var_2[2] = 56;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = -1.00;
+                        *(i32*)*var_2[3] = 28;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 0.20;
+                        *(i32*)*var_2[4] = 30;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(f32*)(*var_2[4] + 8) = 0.50;
                         animate_(samuel, hero-boat-enter-driver-idle, var_2);
                         while (!(get-animation-phase(samuel, 2, hero-boat-enter-driver-idle) < 0.10)) {
                             wait-one-frame();
@@ -1306,7 +1306,7 @@ statescript {
                     boat-set-driver(boat, samuel);
                 }
                 lambda {
-                    send-event(set-driver, boat, new-boxed-value(7, samuel));
+                    send-event(set-driver, boat, boxed_symbol(samuel));
                 }
                 lambda {
                     set-bound-frame(target-drive-position, get-object-locator(boat), self);
@@ -1462,17 +1462,7 @@ statescript {
                         set-bound-frame(locator-4, offset-locator-world-space(get-bound-frame(target-drive-position, self), alloc-vector(-10.00, 0.00, 0.00, 1.00, 0)), self);
                         get-bound-frame(target-drive-position, self);
                         u64? var_55;
-                        foreach (u64? var_56 : locator-group) {
-                            u16 var_57;
-                            if (var_56 && *(u16*)(var_56 + 12) == 7) {
-                                var_57 = *(u64*)var_56;
-                            } else if (var_56 && *(u16*)(var_56 + 12) == 5) {
-                                var_57 = *(u64*)var_56;
-                            } else if (var_56 && *(u16*)(var_56 + 12) == 4) {
-                                var_57 = *(u64*)var_56;
-                            } else {
-                                var_57 = 0;
-                            }
+                        foreach (u64? var_57 : locator-group) {
                             debug-draw-locator(get-bound-frame(var_57, self), 0.30, 0.00, 1, 2.00, 0);
                             u64? var_62;
                             if (get-locator-distance(get-bound-frame(var_57, self), get-object-locator(boat)) < get-locator-distance(get-bound-frame(target-drive-position, self), get-object-locator(boat))) {
@@ -1569,15 +1559,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(pos-ope-boat-stand-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(pos-ope-boat-stand-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(samuel, hero-boat-exit-driver^idle, var_0);
                 }
                 lambda {
@@ -1664,7 +1654,7 @@ statescript {
                     boat-set-driver(boat, samuel);
                 }
                 lambda {
-                    send-event(set-driver, boat, new-boxed-value(7, samuel));
+                    send-event(set-driver, boat, boxed_symbol(samuel));
                 }
                 lambda {
                     wait-one-frame();

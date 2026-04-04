@@ -36,7 +36,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(legless-infected-npcs, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(legless-infected-npcs, boxed_symbol(get-self-id()), 1);
                 }
             }
         }
@@ -46,9 +46,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(self, ellie-prone-idle, var_0);
                 }
             }
@@ -68,12 +68,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
                     animate_(self, ellie-prone-move-fw, var_0);
                 }
             }
@@ -97,7 +97,7 @@ statescript {
                     }
                 }
                 lambda {
-                    set-float(speed, lerp-scale(0.00, 5.00, 0.80, 0.20, (f32)darray-find(legless-infected-npcs, new-boxed-value(7, get-self-id()), 0)), self);
+                    set-float(speed, lerp-scale(0.00, 5.00, 0.80, 0.20, (f32)darray-find(legless-infected-npcs, boxed_symbol(get-self-id()), 0)), self);
                     set-animation-speed(get-self-id(), get-float(speed, self), 2, 0);
                 }
                 lambda {
@@ -140,9 +140,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(self, ellie-prone-idle, var_0);
                 }
                 lambda {

@@ -214,7 +214,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    fact-set/f(global, is-important-conversation, new-boxed-value(1, 1));
+                    fact-set/f(global, is-important-conversation, boxed_bool(1));
                 }
                 lambda {
                     suspend-idle-gestures/f(player);

@@ -37,9 +37,9 @@ u16 wait-npc-died-event-check-progress() {
         var_6 = event-arg-symbol(2);
     } else if (character-in-finisher?(var_0) && is-firearm?(var_6)) {
         var_6 = challenge-get-player-melee-weapon();
-    } else if (var_1 == 0 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), new-boxed-value(7, var_0))) {
+    } else if (var_1 == 0 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), boxed_symbol(var_0))) {
         var_6 = flamethrower;
-    } else if (var_1 == 0 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), new-boxed-value(7, var_0))) {
+    } else if (var_1 == 0 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), boxed_symbol(var_0))) {
         var_6 = molotov;
     }
     u64? var_21;
@@ -47,10 +47,10 @@ u16 wait-npc-died-event-check-progress() {
         var_21 = get-player-weapon-id();
     }
     u16 var_26;
-    if (player == var_1 || !darray-contains?(get-symbol(darray-weapons-used, self), new-boxed-value(7, var_21))) {
-        if (var_1 == 0 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), new-boxed-value(7, var_0)) || !darray-contains?(get-symbol(darray-weapons-used, self), new-boxed-value(7, var_21))) {
-            if (var_1 == 0 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), new-boxed-value(7, var_0)) && !darray-contains?(get-symbol(darray-weapons-used, self), new-boxed-value(7, var_21))) {
-                darray-append(get-symbol(darray-weapons-used, self), new-boxed-value(7, var_21), 1);
+    if (player == var_1 || !darray-contains?(get-symbol(darray-weapons-used, self), boxed_symbol(var_21))) {
+        if (var_1 == 0 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), boxed_symbol(var_0)) || !darray-contains?(get-symbol(darray-weapons-used, self), boxed_symbol(var_21))) {
+            if (var_1 == 0 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), boxed_symbol(var_0)) && !darray-contains?(get-symbol(darray-weapons-used, self), boxed_symbol(var_21))) {
+                darray-append(get-symbol(darray-weapons-used, self), boxed_symbol(var_21), 1);
                 set-int32(num-different-weapon-kills-done, darray-count(get-symbol(darray-weapons-used, self)), self);
                 if (tag-boolean(is-mixed-bag-trophy-tracker, self) && !get-svar-as-boolean(rogue-cheat-mod-ever-enabled) && rogue-get-current-task-game-mode() == 0 && get-int32(num-different-weapon-kills-done, self) > stat-value?(trophy-win-assault-mixed)) {
                     increment-stat(trophy-win-assault-mixed, get-int32(num-different-weapon-kills-done, self) - stat-value?(trophy-win-assault-mixed));
@@ -164,13 +164,13 @@ statescript {
                     u64? var_1 = event::get-attack-info(get-event());
                     u64? var_2 = event-arg-symbol(1);
                     u64? var_3 = get-object-health(var_2);
-                    if (*(u64*)(var_1 + 8) == 0 && var_3 <= 0.00 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), new-boxed-value(7, var_2)) && !darray-contains?(get-symbol(darray-weapons-used, self), new-boxed-value(7, flamethrower))) {
+                    if (*(u64*)(var_1 + 8) == 0 && var_3 <= 0.00 && get-boolean(recent-flamethrower-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), boxed_symbol(var_2)) && !darray-contains?(get-symbol(darray-weapons-used, self), boxed_symbol(flamethrower))) {
                         send-event(
                             npc-died,
                             self,
-                            new-boxed-value(7, var_2),
-                            new-boxed-value(7, player),
-                            new-boxed-value(7, flamethrower)
+                            boxed_symbol(var_2),
+                            boxed_symbol(player),
+                            boxed_symbol(flamethrower)
                         );
                     }
                     if (player == *(u64*)(var_1 + 8) && *(u64*)(var_1 + 72) == flamethrower) {
@@ -178,18 +178,18 @@ statescript {
                             display(dc:format("DEB-EC: player hit npc %s flamethrower", string-debug(var_2)), 19);
                         }
                         set-boolean(recent-flamethrower-hit, 1, self);
-                        if (!darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), new-boxed-value(7, var_2))) {
-                            darray-append(get-symbol(darray-targets-hit-by-flamethrower, self), new-boxed-value(7, var_2), 1);
+                        if (!darray-contains?(get-symbol(darray-targets-hit-by-flamethrower, self), boxed_symbol(var_2))) {
+                            darray-append(get-symbol(darray-targets-hit-by-flamethrower, self), boxed_symbol(var_2), 1);
                         }
                         start-timer(flamethrower-hit-timer, get-float(flamethrower-hit-time, self), self, 1);
                     }
-                    if (*(u64*)(var_1 + 8) == 0 && var_3 <= 0.00 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), new-boxed-value(7, var_2)) && !darray-contains?(get-symbol(darray-weapons-used, self), new-boxed-value(7, molotov))) {
+                    if (*(u64*)(var_1 + 8) == 0 && var_3 <= 0.00 && get-boolean(recent-molotov-hit, self) && darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), boxed_symbol(var_2)) && !darray-contains?(get-symbol(darray-weapons-used, self), boxed_symbol(molotov))) {
                         send-event(
                             npc-died,
                             self,
-                            new-boxed-value(7, var_2),
-                            new-boxed-value(7, player),
-                            new-boxed-value(7, molotov)
+                            boxed_symbol(var_2),
+                            boxed_symbol(player),
+                            boxed_symbol(molotov)
                         );
                     }
                     if (player == *(u64*)(var_1 + 8) && *(u64*)(var_1 + 72) == molotov) {
@@ -197,8 +197,8 @@ statescript {
                             display(dc:format("DEB-EC: player hit npc %s molotov", string-debug(var_2)), 19);
                         }
                         set-boolean(recent-molotov-hit, 1, self);
-                        if (!darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), new-boxed-value(7, var_2))) {
-                            darray-append(get-symbol(darray-targets-hit-by-molotov, self), new-boxed-value(7, var_2), 1);
+                        if (!darray-contains?(get-symbol(darray-targets-hit-by-molotov, self), boxed_symbol(var_2))) {
+                            darray-append(get-symbol(darray-targets-hit-by-molotov, self), boxed_symbol(var_2), 1);
                         }
                         var_33 = start-timer(molotov-hit-timer, get-float(molotov-hit-time, self), self, 1);
                     }

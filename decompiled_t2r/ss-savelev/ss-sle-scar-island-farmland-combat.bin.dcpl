@@ -93,7 +93,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 1));
+                    fact-set(global, disable-scent-trail, boxed_bool(1));
                 }
                 lambda {
                     wait-spawn-npc-group-async(grp-sle-farmland-scars, 0, 0);
@@ -102,17 +102,7 @@ statescript {
                     set-boolean(farmland-scars-spawned-or-done?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-farmand-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-farmand-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -214,22 +204,12 @@ statescript {
                     group-kill-entity(grp-sle-scar-island-farm-road-patrol, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-sle-farmand-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-sle-farmand-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 0));
+                    fact-set(global, disable-scent-trail, boxed_bool(0));
                 }
                 lambda {
                     go(done, 1);

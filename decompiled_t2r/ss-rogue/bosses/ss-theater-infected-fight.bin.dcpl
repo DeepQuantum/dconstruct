@@ -29,7 +29,7 @@ u64? theater-infected-fight--spawn-reinforcement-wave(u64? arg_0) {
             var_2 = 0;
         }
         u64? var_3 = wait-spawn-npc(var_2, 0, 0);
-        darray-append(get-symbol(grp-spawned-infected, self), new-boxed-value(7, var_3), 1);
+        darray-append(get-symbol(grp-spawned-infected, self), boxed_symbol(var_3), 1);
         npc-set-force-drop-table(var_3, *t2r-boss-support-ammo-only-drop-table*);
         npc-make-aware-of(var_3, player, 4, 0);
         npc-set-script-low-priority(var_3);
@@ -159,17 +159,7 @@ statescript {
                     set-symbol(name, HUD_ROGUE_BOSS_SUPER_STALKER, spawn-script-multiple("ss-accessbility-boss-health-tts", npc-infected-super-stalker-3, 0));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -196,7 +186,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    broadcast-event(sending-boss-card-data, new-boxed-value(7, ROGUE_TITLE_INTRO_BOSS), new-boxed-value(7, MENU_ROGUE_BOSS_SUPER_STALKER_CAPS));
+                    broadcast-event(sending-boss-card-data, boxed_symbol(ROGUE_TITLE_INTRO_BOSS), boxed_symbol(MENU_ROGUE_BOSS_SUPER_STALKER_CAPS));
                 }
                 lambda {
                     while (!get-boolean(boss-card-intro-done, self)) {
@@ -204,17 +194,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-script-high-priority(var_2);
                     }
                 }
@@ -270,17 +250,7 @@ statescript {
                             send-event(vox-match-start, ss-vox-rl-encounter-controller-1);
                             set-boolean(vox-ready?, 1, self);
                         }
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             npc-set-script-low-priority(var_5);
                         }
                         go(combat, 1);
@@ -314,12 +284,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 50.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 50.00;
                     wait-animate_(obj-the-flo-sliding-stage-door-1, aef-fight-chase-abby-enters-backstage-start--door, var_0);
                 }
                 lambda {
@@ -334,12 +304,12 @@ statescript {
                     if (!get-boolean(door-open?, self)) {
                         set-boolean(door-open?, 1, self);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 20;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 50.00;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
+                        *(i32*)*var_1[1] = 20;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 50.00;
                         wait-animate_(obj-the-flo-sliding-stage-door-1, aef-fight-chase-abby-enters-backstage-start--door, var_1);
                     }
                 }
@@ -371,8 +341,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(grp-spawned-infected, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(get-symbol(grp-spawned-infected, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(get-symbol(grp-spawned-infected, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(get-symbol(grp-spawned-infected, self), boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }
@@ -385,17 +355,7 @@ statescript {
                 lambda {
                     while (!0) {
                         u16 var_3;
-                        foreach (u64? var_5 : get-symbol(grp-spawned-infected, self)) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : get-symbol(grp-spawned-infected, self)) {
                             u16 var_8;
                             if (object-in-region?(var_6, rgn-theater-infected-1)) {
                                 var_8 = 0 + 1;
@@ -412,15 +372,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = -1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-aef-chase-abby-enters-backstage-1, 1);
+                    *(i32*)*var_0[1] = 59;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = -1.00;
                     animate_(obj-the-flo-sliding-stage-door-1, aef-fight-chase-abby-enters-backstage-start--door, var_0);
                 }
                 lambda {

@@ -88,7 +88,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(sea-courthouse-entry-infected, new-boxed-value(7, event-arg-symbol(0))) && npc-group-alive-count(sea-courthouse-entry-infected) == 0) {
+                    if (darray-contains?(sea-courthouse-entry-infected, boxed_symbol(event-arg-symbol(0))) && npc-group-alive-count(sea-courthouse-entry-infected) == 0) {
                         go(barricade, 1);
                     }
                 }

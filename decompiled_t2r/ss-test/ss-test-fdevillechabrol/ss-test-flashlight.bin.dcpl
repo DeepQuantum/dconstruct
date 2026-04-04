@@ -115,7 +115,7 @@ statescript {
                 }
                 lambda {
                     if (button-pressed?(debug-script-press-square)) {
-                        send-event(spawn-flashlight, npc, new-boxed-value(7, *test-flashlight-on-weapon*));
+                        send-event(spawn-flashlight, npc, boxed_symbol(*test-flashlight-on-weapon*));
                     }
                 }
                 lambda {

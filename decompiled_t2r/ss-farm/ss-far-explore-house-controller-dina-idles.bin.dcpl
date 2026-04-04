@@ -111,24 +111,24 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-explore-house-dina-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-explore-house-dina-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 1.50;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 0;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 0;
                     animate_(dina, far-explore-dina-dishes--dina, var_0);
                 }
             }
@@ -159,27 +159,27 @@ statescript {
                         var_1 = 1.07;
                     }
                     u64? var_4 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_4 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-far-explore-house-dina-1, 1);
-                    *(i32*)*(*var_4 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_4[0] = 10;
+                    *(u64*)(*var_4[0] + 8) = 0;
+                    *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-far-explore-house-dina-1, 1);
+                    *(i32*)*var_4[1] = 28;
+                    *(u64*)(*var_4[1] + 8) = 0;
                     f32 var_7;
                     if (get-boolean(task-in?, self)) {
                         var_7 = 0.00;
                     } else {
                         var_7 = 0.50;
                     }
-                    *(f32*)(*(*var_4 + (1 * 8)) + 8) = var_7;
-                    *(i32*)*(*var_4 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_4 + (3 * 8)) = 0;
-                    *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                    *(i32*)*(*var_4 + (4 * 8)) = 56;
-                    *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_4 + (4 * 8)) + 8) = var_1;
+                    *(f32*)(*var_4[1] + 8) = var_7;
+                    *(i32*)*var_4[2] = 30;
+                    *(u64*)(*var_4[2] + 8) = 0;
+                    *(f32*)(*var_4[2] + 8) = 0.00;
+                    *(i32*)*var_4[3] = 0;
+                    *(u64*)(*var_4[3] + 8) = 0;
+                    *(u8*)(*var_4[3] + 8) = 0;
+                    *(i32*)*var_4[4] = 56;
+                    *(u64*)(*var_4[4] + 8) = 0;
+                    *(f32*)(*var_4[4] + 8) = var_1;
                     animate_(dina, far-explore-dina-dancing-fast-idle--dina, var_4);
                     set-boolean(task-in?, 0, self);
                 }

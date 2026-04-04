@@ -54,17 +54,7 @@ statescript {
                             }
                             if (darray-is-valid?(var_4)) {
                                 darray-print(var_4);
-                                foreach (u64? var_12 : var_4) {
-                                    u16 var_13;
-                                    if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                        var_13 = *(u64*)var_12;
-                                    } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                        var_13 = *(u64*)var_12;
-                                    } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                        var_13 = *(u64*)var_12;
-                                    } else {
-                                        var_13 = 0;
-                                    }
+                                foreach (u64? var_13 : var_4) {
                                     if (!is-final-build?()) {
                                         display(dc:format("Attempting to Remove Uprade: %s", string-debug(var_13)), 19);
                                     }

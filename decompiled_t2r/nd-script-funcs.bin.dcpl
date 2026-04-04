@@ -178,7 +178,7 @@ bool get-bit(i64 arg_0, i8 arg_1) {
 }
 
 u64? box-event-arg-string(u64? arg_0) {
-    return new-boxed-value(19, event-arg-string(arg_0));
+    return boxed_stringcopy(event-arg-string(arg_0));
 }
 
 u16 print-vector2(f32 arg_0, u16 arg_1) {
@@ -548,7 +548,7 @@ u16 task-play-fadeout!(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_
 }
 
 u64? box-event-arg-int32(u64? arg_0) {
-    return new-boxed-value(2, event-arg-int32(arg_0));
+    return boxed_i32(event-arg-int32(arg_0));
 }
 
 u64? task-or-continue-active?(u64? arg_0, u64? arg_1, u64? arg_2) {
@@ -652,7 +652,7 @@ u16 task-complete!(u64? arg_0, u64? arg_1) {
 }
 
 u64? box-event-arg-boolean(u64? arg_0) {
-    return new-boxed-value(1, event-arg-boolean(arg_0));
+    return boxed_bool(event-arg-boolean(arg_0));
 }
 
 u64? simple-npc-move-to-entry(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6) {
@@ -668,7 +668,7 @@ u64? simple-npc-move-to-entry(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u6
 }
 
 u64? box-event-arg-uint64(u64? arg_0) {
-    return new-boxed-value(5, event-arg-uint64(arg_0));
+    return boxed_u64(event-arg-uint64(arg_0));
 }
 
 u64? joypad-stick-pulled-away?(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
@@ -679,9 +679,9 @@ u64? cloth-disable-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
     return send-event(
         enable-cloth-collider,
         arg_0,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(1, 0),
-        new-boxed-value(7, arg_2)
+        boxed_symbol(arg_1),
+        boxed_bool(0),
+        boxed_symbol(arg_2)
     );
 }
 
@@ -715,7 +715,7 @@ u16 print-bits-uint64(u64? arg_0, u64? arg_1) {
 }
 
 u64? box-event-arg-float(u64? arg_0) {
-    return new-boxed-value(6, event-arg-float(arg_0));
+    return boxed_f32(event-arg-float(arg_0));
 }
 
 u64? camera-abandon-animated() {
@@ -822,7 +822,7 @@ bool invalid-symbol-var?(u64? arg_0, u64? arg_1) {
 }
 
 u64? box-event-arg-point(u64? arg_0) {
-    return new-boxed-value(14, event-arg-point(arg_0));
+    return boxed_point(event-arg-point(arg_0));
 }
 
 u64?* task-get-full-name(u64? arg_0, u64? arg_1) {
@@ -1148,7 +1148,7 @@ bool object-in-namespace?(u64? arg_0, i64 arg_1) {
 }
 
 u64? cloth-connect-external-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(cloth-connect-external-collider, arg_0, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2));
+    return send-event(cloth-connect-external-collider, arg_0, boxed_symbol(arg_1), boxed_symbol(arg_2));
 }
 
 u16 print-int32(u64? arg_0, u16 arg_1) {
@@ -1203,11 +1203,11 @@ u16 task-complete-if-active!(u64? arg_0, u64? arg_1) {
 }
 
 u64? box-event-arg-symbol(u64? arg_0) {
-    return new-boxed-value(7, event-arg-symbol(arg_0));
+    return boxed_symbol(event-arg-symbol(arg_0));
 }
 
 u64? simple-npc-set-config(u64? arg_0, u64? arg_1) {
-    return send-event(set-config, arg_0, new-boxed-value(7, arg_1));
+    return send-event(set-config, arg_0, boxed_symbol(arg_1));
 }
 
 u64? set-int64(u64? arg_0, u64? arg_1, u64? arg_2) {
@@ -1215,7 +1215,7 @@ u64? set-int64(u64? arg_0, u64? arg_1, u64? arg_2) {
 }
 
 u64? box-event-arg-bound-frame(u64? arg_0) {
-    return new-boxed-value(18, event-arg-bound-frame(arg_0));
+    return boxed_boundframe(event-arg-bound-frame(arg_0));
 }
 
 u64? vector-random(u64? arg_0, u64? arg_1) {
@@ -1254,7 +1254,7 @@ u64? get-shader-instance-blend-offset(u64? arg_0, u16 arg_1) {
 }
 
 u64? box-event-arg-vector(u64? arg_0) {
-    return new-boxed-value(15, event-arg-vector(arg_0));
+    return boxed_vector(event-arg-vector(arg_0));
 }
 
 u16 task-complete-current!() {
@@ -1396,9 +1396,9 @@ u64? cloth-enable-collider(u64? arg_0, u64? arg_1, u64? arg_2) {
     return send-event(
         enable-cloth-collider,
         arg_0,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(1, 1),
-        new-boxed-value(7, arg_2)
+        boxed_symbol(arg_1),
+        boxed_bool(1),
+        boxed_symbol(arg_2)
     );
 }
 
@@ -1437,7 +1437,7 @@ u64? spawn-camera(u64? arg_0, u64? arg_1, u64? arg_2) {
         0,
         0
     );
-    send-event(suppress-camera-updates, var_0, new-boxed-value(1, 0));
+    send-event(suppress-camera-updates, var_0, boxed_bool(0));
     return var_0;
 }
 

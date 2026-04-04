@@ -42,16 +42,16 @@ u64? set-material-abby(u64? arg_0, u64? arg_1, u64? arg_2) {
         } else {
             var_7 = 0.00;
         }
-        darray-set(var_5, 1, new-boxed-value(6, minmax(var_7 + arg_1, 0.00, 1.00)));
-        darray-set(var_5, 2, new-boxed-value(6, get-current-time(0)));
-        var_2 = darray-set(var_5, 3, new-boxed-value(6, get-current-time(0) + arg_2));
+        darray-set(var_5, 1, boxed_f32(minmax(var_7 + arg_1, 0.00, 1.00)));
+        darray-set(var_5, 2, boxed_f32(get-current-time(0)));
+        var_2 = darray-set(var_5, 3, boxed_f32(get-current-time(0) + arg_2));
     } else {
         u64? var_15 = darray-create(self, -1, 0);
-        darray-append(var_15, new-boxed-value(6, 0.00), 0);
-        darray-append(var_15, new-boxed-value(6, minmax(arg_1, 0.00, 1.00)), 0);
-        darray-append(var_15, new-boxed-value(6, get-current-time(0)), 0);
-        darray-append(var_15, new-boxed-value(6, get-current-time(0) + arg_2), 0);
-        var_2 = ddict-set(get-symbol(material-ddict, self), arg_0, new-boxed-value(7, var_15));
+        darray-append(var_15, boxed_f32(0.00), 0);
+        darray-append(var_15, boxed_f32(minmax(arg_1, 0.00, 1.00)), 0);
+        darray-append(var_15, boxed_f32(get-current-time(0)), 0);
+        darray-append(var_15, boxed_f32(get-current-time(0) + arg_2), 0);
+        var_2 = ddict-set(get-symbol(material-ddict, self), arg_0, boxed_symbol(var_15));
     }
     return var_2;
 }
@@ -138,7 +138,7 @@ u16 update-abby-materials() {
         } else {
             var_14 = 0.00;
         }
-        darray-set(var_6, 0, new-boxed-value(6, minmax(curve-scale(var_8, var_10, var_12, var_14, get-current-time(0), 4), 0.00, 1.00)));
+        darray-set(var_6, 0, boxed_f32(minmax(curve-scale(var_8, var_10, var_12, var_14, get-current-time(0), 4), 0.00, 1.00)));
         u64? var_19 = darray-at(var_6, 0);
         f32 var_20;
         if (var_19 && *(u16*)(var_19 + 12) == 1) {

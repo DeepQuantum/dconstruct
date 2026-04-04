@@ -14,43 +14,43 @@
 u64? efm-open-book-animations() {
     animate_(obj-journal-dino-1, efm-ellie-dinosaur-book-converse-pose--book, #%alloc-array(single-frame, 16, 0, 1));
     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_1 + (0 * 8)) = 40;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-    *(i32*)(*(*var_1 + (0 * 8)) + 8) = 1;
-    *(i32*)*(*var_1 + (1 * 8)) = 28;
-    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-    *(i32*)*(*var_1 + (2 * 8)) = 41;
-    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-    *(u64*)(*(*var_1 + (2 * 8)) + 8) = s_script-gesture-0;
-    *(i32*)*(*var_1 + (3 * 8)) = 75;
-    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-    *(u64*)(*(*var_1 + (3 * 8)) + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
+    *(i32*)*var_1[0] = 40;
+    *(u64*)(*var_1[0] + 8) = 0;
+    *(i32*)(*var_1[0] + 8) = 1;
+    *(i32*)*var_1[1] = 28;
+    *(u64*)(*var_1[1] + 8) = 0;
+    *(f32*)(*var_1[1] + 8) = 1.00;
+    *(i32*)*var_1[2] = 41;
+    *(u64*)(*var_1[2] + 8) = 0;
+    *(u64*)(*var_1[2] + 8) = s_script-gesture-0;
+    *(i32*)*var_1[3] = 75;
+    *(u64*)(*var_1[3] + 8) = 0;
+    *(u64*)(*var_1[3] + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
     return animate_(player, efm-ellie-dinosaur-book-converse-pose, var_1);
 }
 
 u64? efm-reading-animations() {
     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 31;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 31;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u8*)(*var_0[0] + 8) = 1;
     animate_(obj-journal-dino-1, efm-ellie-dinosaur-book-read-pose--book, var_0);
     u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_1 + (0 * 8)) = 31;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-    *(i32*)*(*var_1 + (1 * 8)) = 40;
-    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 1;
-    *(i32*)*(*var_1 + (2 * 8)) = 41;
-    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-    *(u64*)(*(*var_1 + (2 * 8)) + 8) = s_script-gesture-0;
-    *(i32*)*(*var_1 + (3 * 8)) = 75;
-    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-    *(u64*)(*(*var_1 + (3 * 8)) + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
-    *(i32*)*(*var_1 + (4 * 8)) = 28;
-    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (4 * 8)) + 8) = 1.00;
+    *(i32*)*var_1[0] = 31;
+    *(u64*)(*var_1[0] + 8) = 0;
+    *(u8*)(*var_1[0] + 8) = 1;
+    *(i32*)*var_1[1] = 40;
+    *(u64*)(*var_1[1] + 8) = 0;
+    *(i32*)(*var_1[1] + 8) = 1;
+    *(i32*)*var_1[2] = 41;
+    *(u64*)(*var_1[2] + 8) = 0;
+    *(u64*)(*var_1[2] + 8) = s_script-gesture-0;
+    *(i32*)*var_1[3] = 75;
+    *(u64*)(*var_1[3] + 8) = 0;
+    *(u64*)(*var_1[3] + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
+    *(i32*)*var_1[4] = 28;
+    *(u64*)(*var_1[4] + 8) = 0;
+    *(f32*)(*var_1[4] + 8) = 1.00;
     return animate_(player, efm-ellie-dinosaur-book-read-pose, var_1);
 }
 
@@ -66,7 +66,7 @@ u64? fade-in-book-page(u64? arg_0) {
     } else {
         var_2 = 0;
     }
-    u64? var_5 = darray-at(linked-interact-pages, darray-find(book-interacts, new-boxed-value(7, arg_0), 0));
+    u64? var_5 = darray-at(linked-interact-pages, darray-find(book-interacts, boxed_symbol(arg_0), 0));
     u16 var_6;
     if (var_5 && *(u16*)(var_5 + 12) == 7) {
         var_6 = *(u64*)var_5;
@@ -90,7 +90,7 @@ u64? fade-in-book-page(u64? arg_0) {
         var_9 = 0;
     }
     print-symbol(var_9, self);
-    u64? var_12 = darray-at(linked-interact-pages, darray-find(book-interacts, new-boxed-value(7, arg_0), 0));
+    u64? var_12 = darray-at(linked-interact-pages, darray-find(book-interacts, boxed_symbol(arg_0), 0));
     u16 var_13;
     if (var_12 && *(u16*)(var_12 + 12) == 7) {
         var_13 = *(u64*)var_12;
@@ -102,14 +102,14 @@ u64? fade-in-book-page(u64? arg_0) {
         var_13 = 0;
     }
     print-symbol(var_13, self);
-    return set-int32(last-index, darray-find(book-interacts, new-boxed-value(7, arg_0), 0), self);
+    return set-int32(last-index, darray-find(book-interacts, boxed_symbol(arg_0), 0), self);
 }
 
 u16 efm-book-on-interact() {
     u16 var_5;
-    if (!(darray-contains?(book-interacts, new-boxed-value(7, event-arg-symbol(0)))) && script-in-state?(self, exit-reading)) {
+    if (!(darray-contains?(book-interacts, boxed_symbol(event-arg-symbol(0)))) && script-in-state?(self, exit-reading)) {
         var_5 = go(exit-reading-interupted, 1);
-    } else if (darray-contains?(book-interacts, new-boxed-value(7, event-arg-symbol(0)))) {
+    } else if (darray-contains?(book-interacts, boxed_symbol(event-arg-symbol(0)))) {
         set-symbol(subject-of-convo-dino, event-arg-symbol(0), self);
         fade-in-book-page(event-arg-symbol(0));
         sid var_13;
@@ -178,7 +178,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    if (darray-contains?(book-interacts, new-boxed-value(7, event-arg-symbol(0))) || script-in-state?(self, exit-reading) || script-in-state?(self, holster-book) && script-in-state?(self, holster-book-from-reading)) {
+                    if (darray-contains?(book-interacts, boxed_symbol(event-arg-symbol(0))) || script-in-state?(self, exit-reading) || script-in-state?(self, holster-book) && script-in-state?(self, holster-book-from-reading)) {
                         fade-in-book-page(event-arg-symbol(0));
                         if (script-in-state?(self, exit-reading)) {
                             go(read-enter, 1);
@@ -269,23 +269,23 @@ statescript {
                     if (get-boolean(book-out, self)) {
                         start-timer(holster-book-timer, 4.00, self, 1);
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 31;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u8*)(*var_1[0] + 8) = 1;
                         animate_(obj-journal-dino-1, efm-ellie-dinosaur-book--hold-pose--book, var_1);
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (1 * 8)) = 41;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = s_script-gesture-0;
-                        *(i32*)*(*var_2 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 1.00;
+                        *(i32*)*var_2[0] = 40;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(i32*)(*var_2[0] + 8) = 1;
+                        *(i32*)*var_2[1] = 41;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(u64*)(*var_2[1] + 8) = s_script-gesture-0;
+                        *(i32*)*var_2[2] = 31;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(u8*)(*var_2[2] + 8) = 1;
+                        *(i32*)*var_2[3] = 28;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 1.00;
                         wait-animate_(player, efm-ellie-dinosaur-book--hold-pose, var_2);
                     }
                 }
@@ -348,31 +348,31 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 41;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = s_script-gesture-add-0;
                     animate_(player, efm-ellie-dinosaur-book-idle^read--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.10;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.10;
                     wait-animate_(player, efm-ellie-dinosaur-book-idle^read--part, var_0);
                 }
                 lambda {
@@ -397,9 +397,9 @@ statescript {
             track book {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
                     wait-animate_(obj-journal-dino-1, efm-ellie-dinosaur-book-idle^read--book, var_0);
                 }
             }
@@ -422,15 +422,15 @@ statescript {
                         var_1 = event-arg-float(1);
                     }
                     if (event-arg-symbol(0) == book) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, obj-journal-dino-1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(obj-journal-dino-1));
                     } else if (event-arg-symbol(0) == joel) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, joel), new-boxed-value(6, var_1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(joel), boxed_f32(var_1));
                     } else if (event-arg-symbol(0) == dino) {
                         var_4 = send-event(
                             look-at,
                             ss-efm-player-look-at-manager-1,
-                            new-boxed-value(7, get-symbol(subject-of-convo-dino, self)),
-                            new-boxed-value(6, var_1)
+                            boxed_symbol(get-symbol(subject-of-convo-dino, self)),
+                            boxed_f32(var_1)
                         );
                     }
                 }
@@ -442,34 +442,34 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 41;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = s_script-gesture-add-0;
                     animate_(player, efm-ellie-dinosaur-book--hold^read--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 75;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[2] = 75;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = *upperbody--left-none--right-medium--fb--EFM-Book-read*;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.00;
                     wait-animate_(player, efm-ellie-dinosaur-book--hold^read--part, var_0);
                 }
                 lambda {
@@ -494,9 +494,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
                     wait-animate_(obj-journal-dino-1, efm-ellie-dinosaur-book--hold^read--book, var_0);
                 }
             }
@@ -519,15 +519,15 @@ statescript {
                         var_1 = event-arg-float(1);
                     }
                     if (event-arg-symbol(0) == book) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, obj-journal-dino-1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(obj-journal-dino-1));
                     } else if (event-arg-symbol(0) == joel) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, joel), new-boxed-value(6, var_1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(joel), boxed_f32(var_1));
                     } else if (event-arg-symbol(0) == dino) {
                         var_4 = send-event(
                             look-at,
                             ss-efm-player-look-at-manager-1,
-                            new-boxed-value(7, get-symbol(subject-of-convo-dino, self)),
-                            new-boxed-value(6, var_1)
+                            boxed_symbol(get-symbol(subject-of-convo-dino, self)),
+                            boxed_f32(var_1)
                         );
                     }
                 }
@@ -570,15 +570,15 @@ statescript {
                         var_1 = event-arg-float(1);
                     }
                     if (event-arg-symbol(0) == book) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, obj-journal-dino-1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(obj-journal-dino-1));
                     } else if (event-arg-symbol(0) == joel) {
-                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, joel), new-boxed-value(6, var_1));
+                        var_4 = send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(joel), boxed_f32(var_1));
                     } else if (event-arg-symbol(0) == dino) {
                         var_4 = send-event(
                             look-at,
                             ss-efm-player-look-at-manager-1,
-                            new-boxed-value(7, get-symbol(subject-of-convo-dino, self)),
-                            new-boxed-value(6, var_1)
+                            boxed_symbol(get-symbol(subject-of-convo-dino, self)),
+                            boxed_f32(var_1)
                         );
                     }
                 }
@@ -591,28 +591,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-add-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.30;
                     animate_(player, efm-ellie-dinosaur-book--read^converse--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
                     wait-animate_(player, efm-ellie-dinosaur-book--read^converse--part, var_0);
                 }
                 lambda {
@@ -627,28 +627,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-add-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.30;
                     animate_(player, efm-ellie-dinosaur-book-converse^read--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
                     wait-animate_(player, efm-ellie-dinosaur-book-converse^read--part, var_0);
                 }
                 lambda {
@@ -682,31 +682,31 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 41;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = s_script-gesture-add-0;
                     animate_(player, efm-ellie-dinosaur-book--read^hold--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
                     wait-animate_(player, efm-ellie-dinosaur-book--read^hold--part, var_0);
                 }
                 lambda {
@@ -716,9 +716,9 @@ statescript {
             track book {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
                     wait-animate_(obj-journal-dino-1, efm-ellie-dinosaur-book--read^hold--book, var_0);
                 }
             }
@@ -763,40 +763,40 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 2.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 56;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 2.00;
+                    *(i32*)*var_0[4] = 41;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u64*)(*var_0[4] + 8) = s_script-gesture-add-0;
                     animate_(player, efm-ellie-dinosaur-book--read^idle--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (4 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 2.00;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.30;
+                    *(i32*)*var_0[4] = 56;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 2.00;
                     animate_(player, efm-ellie-dinosaur-book--hold^idle--part, var_0);
                 }
                 lambda {
@@ -831,31 +831,31 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = s_script-gesture-add-0;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 41;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u64*)(*var_0[3] + 8) = s_script-gesture-add-0;
                     animate_(player, efm-ellie-dinosaur-book--read^idle--add, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 41;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = s_script-gesture-0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 40;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 41;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = s_script-gesture-0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
                     wait-animate_(player, efm-ellie-dinosaur-book--read^idle--part, var_0);
                 }
                 lambda {
@@ -868,9 +868,9 @@ statescript {
             track book {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
                     wait-animate_(obj-journal-dino-1, efm-ellie-dinosaur-book--read^idle--book, var_0);
                 }
             }
@@ -882,32 +882,32 @@ statescript {
                 lambda {
                     if (!get-boolean(holster-book-no-anim, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (3 * 8)) = 41;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = s_script-gesture-add-0;
+                        *(i32*)*var_1[0] = 40;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(i32*)(*var_1[0] + 8) = 1;
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
+                        *(i32*)*var_1[3] = 41;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(u64*)(*var_1[3] + 8) = s_script-gesture-add-0;
                         animate_(player, efm-ellie-dinosaur-book--hold^idle--add, var_1);
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (1 * 8)) = 41;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = s_script-gesture-0;
-                        *(i32*)*(*var_2 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_2 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 40;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(i32*)(*var_2[0] + 8) = 1;
+                        *(i32*)*var_2[1] = 41;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(u64*)(*var_2[1] + 8) = s_script-gesture-0;
+                        *(i32*)*var_2[2] = 28;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 1.00;
+                        *(i32*)*var_2[3] = 30;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 0.50;
                         wait-animate_(player, efm-ellie-dinosaur-book--hold^idle--part, var_2);
                     }
                 }
@@ -928,9 +928,9 @@ statescript {
                 lambda {
                     if (!get-boolean(holster-book-no-anim, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 1.00;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 1.00;
                         wait-animate_(obj-journal-dino-1, efm-ellie-dinosaur-book--hold^idle--book, var_1);
                     }
                 }

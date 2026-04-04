@@ -13,21 +13,21 @@
 
 u64? hitReactIntoRun(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 10;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(arg_3, self);
-    *(i32*)*(*var_0 + (1 * 8)) = 28;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.10;
-    *(i32*)*(*var_0 + (2 * 8)) = 30;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-    *(i32*)*(*var_0 + (3 * 8)) = 24;
-    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-    *(i32*)*(*var_0 + (4 * 8)) = 3;
-    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 10;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u64*)(*var_0[0] + 8) = get-bound-frame(arg_3, self);
+    *(i32*)*var_0[1] = 28;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.10;
+    *(i32*)*var_0[2] = 30;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(f32*)(*var_0[2] + 8) = 0.40;
+    *(i32*)*var_0[3] = 24;
+    *(u64*)(*var_0[3] + 8) = 0;
+    *(i32*)(*var_0[3] + 8) = 2;
+    *(i32*)*var_0[4] = 3;
+    *(u64*)(*var_0[4] + 8) = 0;
+    *(u8*)(*var_0[4] + 8) = 1;
     wait-animate_(arg_0, arg_1, var_0);
     wait-frames(1);
     return wait-npc-use-closest-cover(
@@ -420,12 +420,12 @@ statescript {
                 }
                 lambda {
                     if (get-int32(active-npc-wall-hit-string-index, self) == 0) {
-                        send-event(update-wall-hit, get-symbol(active-npc, self), new-boxed-value(1, 0));
+                        send-event(update-wall-hit, get-symbol(active-npc, self), boxed_bool(0));
                     }
                 }
                 lambda {
                     if (get-int32(active-npc-wall-hit-string-index, self) == 1) {
-                        send-event(update-wall-hit, get-symbol(active-npc, self), new-boxed-value(1, 1));
+                        send-event(update-wall-hit, get-symbol(active-npc, self), boxed_bool(1));
                     }
                 }
                 lambda {
@@ -440,7 +440,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(update-run-behavior, get-symbol(active-npc, self), new-boxed-value(1, get-int32(active-npc-behavior-index, self) == 2));
+                    send-event(update-run-behavior, get-symbol(active-npc, self), boxed_bool(get-int32(active-npc-behavior-index, self) == 2));
                 }
             }
         }
@@ -503,38 +503,38 @@ statescript {
                             wait-raycast-set-collision(get-object-locator(self), offset-locator(get-object-locator(self), ""), temp-loc, temp-boolean);
                             if (get-boolean(enable-wall-hit, self) && get-boolean(temp-boolean, self) && vector-magnitude(point-sub(get-object-position(self), get-locator-position(get-bound-frame(temp-loc, self)))) >= 0.40 && 10.00 >= angle-in-between-vectors(get-local-y(get-locator-rotation(get-bound-frame(temp-loc, self))), get-local-z(get-object-rotation(self)))) {
                                 u64? var_32 = #%alloc-array(single-frame, 16, 3, 1);
-                                *(i32*)*(*var_32 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_32 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_32 + (0 * 8)) + 8) = 0.10;
-                                *(i32*)*(*var_32 + (1 * 8)) = 30;
-                                *(u64*)(*(*var_32 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_32 + (1 * 8)) + 8) = 0.00;
-                                *(i32*)*(*var_32 + (2 * 8)) = 10;
-                                *(u64*)(*(*var_32 + (2 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_32 + (2 * 8)) + 8) = alloc-bound-frame(get-locator-position(get-bound-frame(temp-loc, self)), get-object-rotation(self), 0, 0, 0);
+                                *(i32*)*var_32[0] = 28;
+                                *(u64*)(*var_32[0] + 8) = 0;
+                                *(f32*)(*var_32[0] + 8) = 0.10;
+                                *(i32*)*var_32[1] = 30;
+                                *(u64*)(*var_32[1] + 8) = 0;
+                                *(f32*)(*var_32[1] + 8) = 0.00;
+                                *(i32*)*var_32[2] = 10;
+                                *(u64*)(*var_32[2] + 8) = 0;
+                                *(u64*)(*var_32[2] + 8) = alloc-bound-frame(get-locator-position(get-bound-frame(temp-loc, self)), get-object-rotation(self), 0, 0, 0);
                                 wait-animate_(self, npc-m-death-crossbow-wall-pin, var_32);
                                 u64? var_37 = #%alloc-array(single-frame, 16, 2, 1);
-                                *(i32*)*(*var_37 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_37 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_37 + (0 * 8)) + 8) = 0.00;
-                                *(i32*)*(*var_37 + (1 * 8)) = 30;
-                                *(u64*)(*(*var_37 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_37 + (1 * 8)) + 8) = 0.00;
+                                *(i32*)*var_37[0] = 28;
+                                *(u64*)(*var_37[0] + 8) = 0;
+                                *(f32*)(*var_37[0] + 8) = 0.00;
+                                *(i32*)*var_37[1] = 30;
+                                *(u64*)(*var_37[1] + 8) = 0;
+                                *(f32*)(*var_37[1] + 8) = 0.00;
                                 var_15 = animate_(self, npc-m-death-crossbow-wall-pin--loop, var_37);
                             }
                         } else {
                             wait-raycast-set-collision(get-object-locator(self), offset-locator(get-object-locator(self), ""), temp-loc, temp-boolean);
                             if (*(u64*)(var_3 + 16) == spinec && *(u64*)(var_3 + 16) == spined && get-boolean(enable-wall-hit, self) && get-boolean(temp-boolean, self) && vector-magnitude(point-sub(get-object-position(self), get-locator-position(get-bound-frame(temp-loc, self)))) >= 0.40 && 10.00 >= angle-in-between-vectors(get-local-y(get-locator-rotation(get-bound-frame(temp-loc, self))), get-local-z(get-object-rotation(self)))) {
                                 u64? var_55 = #%alloc-array(single-frame, 16, 3, 1);
-                                *(i32*)*(*var_55 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_55 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_55 + (0 * 8)) + 8) = 0.10;
-                                *(i32*)*(*var_55 + (1 * 8)) = 30;
-                                *(u64*)(*(*var_55 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_55 + (1 * 8)) + 8) = 0.40;
-                                *(i32*)*(*var_55 + (2 * 8)) = 10;
-                                *(u64*)(*(*var_55 + (2 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_55 + (2 * 8)) + 8) = alloc-bound-frame(get-locator-position(get-bound-frame(temp-loc, self)), get-object-rotation(self), 0, 0, 0);
+                                *(i32*)*var_55[0] = 28;
+                                *(u64*)(*var_55[0] + 8) = 0;
+                                *(f32*)(*var_55[0] + 8) = 0.10;
+                                *(i32*)*var_55[1] = 30;
+                                *(u64*)(*var_55[1] + 8) = 0;
+                                *(f32*)(*var_55[1] + 8) = 0.40;
+                                *(i32*)*var_55[2] = 10;
+                                *(u64*)(*var_55[2] + 8) = 0;
+                                *(u64*)(*var_55[2] + 8) = alloc-bound-frame(get-locator-position(get-bound-frame(temp-loc, self)), get-object-rotation(self), 0, 0, 0);
                                 var_15 = wait-animate_(self, npc-m-nw-idle-wall-bump-hr-fw-chest, var_55);
                             } else if (get-boolean(enable-react-into-run, self)) {
                                 var_15 = hitReactIntoRunMaster(self, npc-m-nw-idle^run-bw-hr-fw-chest-rt, "", 0.00);

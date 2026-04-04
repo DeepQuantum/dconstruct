@@ -39,17 +39,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-flooded-street-deli-windows) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-flooded-street-deli-windows) {
                         disintegrate-breakable(var_2, alloc-vector(0.00, 0.00, 0.00, 1.00, 0), 0.00, 0, 0);
                     }
                 }

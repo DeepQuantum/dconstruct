@@ -261,9 +261,9 @@ embedded@760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-character?(arg_2) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && !character-melee-event-active?(arg_2, 36, 0) && characters-are-enemies?(arg_1, arg_2)) {
@@ -321,9 +321,9 @@ embedded@760(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? ar
         );
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         spawn-melee-particle-effects(arg_1, arg_2, 0, arg_3, arg_4, arg_5);
         if (!character-in-finisher?(arg_1) && 1) {

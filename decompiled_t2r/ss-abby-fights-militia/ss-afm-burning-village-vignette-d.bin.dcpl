@@ -53,17 +53,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-vignette-d-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-d-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-d-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-targeting-params(var_2, afm-burning-village);
                             set-vignette-target-group(var_2, grp-afm-vignette-3);
@@ -108,8 +98,8 @@ statescript {
                 lambda {
                     if (!npc-alive?(get-symbol(crows-nest-npc, self))) {
                         spawn-npc(npc-village-arrive-militia-6-alt, 0, 0);
-                        darray-append(afm-vignette-d-npcs, new-boxed-value(7, npc-village-arrive-militia-6-alt), 1);
-                        darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-6-alt), 1);
+                        darray-append(afm-vignette-d-npcs, boxed_symbol(npc-village-arrive-militia-6-alt), 1);
+                        darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-6-alt), 1);
                         npc-set-hard-point(npc-village-arrive-militia-6-alt, hard-point-village-arrive-3);
                         set-vignette-target-group(npc-village-arrive-militia-6-alt, grp-afm-vignette-3);
                         npc-set-targeting-params(npc-village-arrive-militia-6-alt, afm-burning-village);
@@ -162,14 +152,14 @@ statescript {
                 lambda {
                     if (!npc-alive?(get-symbol(throw-molotov-npc, self))) {
                         spawn-npc(npc-village-arrive-scar-8-alt, 0, 0);
-                        darray-append(afm-vignette-d-npcs, new-boxed-value(7, npc-village-arrive-scar-8-alt), 1);
-                        darray-append(grp-afm-burning-village-scars, new-boxed-value(7, npc-village-arrive-scar-8-alt), 1);
+                        darray-append(afm-vignette-d-npcs, boxed_symbol(npc-village-arrive-scar-8-alt), 1);
+                        darray-append(grp-afm-burning-village-scars, boxed_symbol(npc-village-arrive-scar-8-alt), 1);
                         npc-override-post-selector-set-id(npc-village-arrive-scar-8-alt, *afm-burning-village-selector-set*);
                         set-symbol(throw-molotov-npc, npc-village-arrive-scar-8-alt, self);
                     }
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, get-symbol(throw-molotov-npc, self)), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(get-symbol(throw-molotov-npc, self)), 1);
                 }
                 lambda {
                     npc-clear-zone(get-symbol(throw-molotov-npc, self));
@@ -190,10 +180,10 @@ statescript {
                     npc-set-script-only-with-perception(npc-village-arrive-militia-10);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-10), 1);
+                    darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-10), 1);
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-militia-10), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(npc-village-arrive-militia-10), 1);
                 }
                 lambda {
                     set-vignette-target-group(get-symbol(throw-molotov-npc, self), 0);
@@ -238,7 +228,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(vox-vignette-d, ss-vox-afm-burning-village-arrive-1, new-boxed-value(7, get-symbol(throw-molotov-npc, self)));
+                    send-event(vox-vignette-d, ss-vox-afm-burning-village-arrive-1, boxed_symbol(get-symbol(throw-molotov-npc, self)));
                 }
                 lambda {
                     wait-npc-throw-grenade-at-locator(get-symbol(throw-molotov-npc, self), get-spawner-locator(pos-molotov-afm-arrive-4, 1));
@@ -274,7 +264,7 @@ statescript {
                     spawn-npc(npc-village-arrive-militia-8, 0, 0);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-8), 1);
+                    darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-8), 1);
                 }
                 lambda {
                     npc-set-targeting-params(npc-village-arrive-militia-8, afm-burning-village);
@@ -340,7 +330,7 @@ statescript {
                     spawn-npc(npc-village-arrive-militia-8, 0, 0);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-8), 1);
+                    darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-8), 1);
                 }
                 lambda {
                     npc-set-targeting-params(npc-village-arrive-militia-8, afm-burning-village);
@@ -383,21 +373,21 @@ statescript {
                         npc-force-target(get-symbol(throw-molotov-npc, self), 0);
                         set-vignette-target-group(get-symbol(throw-molotov-npc, self), grp-afm-vignette-3);
                         character-set-invincibility(get-symbol(throw-molotov-npc, self), 0, 0);
-                        darray-find-remove(npcs-in-vignette, new-boxed-value(7, get-symbol(throw-molotov-npc, self)), 0);
-                        darray-append(grp-afm-vignette-4, new-boxed-value(7, get-symbol(throw-molotov-npc, self)), 1);
+                        darray-find-remove(npcs-in-vignette, boxed_symbol(get-symbol(throw-molotov-npc, self)), 0);
+                        darray-append(grp-afm-vignette-4, boxed_symbol(get-symbol(throw-molotov-npc, self)), 1);
                     }
                 }
                 lambda {
                     if (npc-alive?(npc-village-arrive-militia-8)) {
                         npc-set-script-high-priority(npc-village-arrive-militia-8);
-                        darray-find-remove(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-militia-8), 0);
+                        darray-find-remove(npcs-in-vignette, boxed_symbol(npc-village-arrive-militia-8), 0);
                     }
                 }
                 lambda {
-                    darray-append(grp-afm-vignette-4, new-boxed-value(7, npc-village-arrive-scar-4), 1);
+                    darray-append(grp-afm-vignette-4, boxed_symbol(npc-village-arrive-scar-4), 1);
                 }
                 lambda {
-                    darray-append(grp-afm-vignette-4, new-boxed-value(7, npc-village-arrive-scar-8), 1);
+                    darray-append(grp-afm-vignette-4, boxed_symbol(npc-village-arrive-scar-8), 1);
                 }
                 lambda {
                     set-boolean(vignette-done, 1, self);
@@ -432,21 +422,11 @@ statescript {
         block event reinforcement-militia-spawned {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-d-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-d-npcs) {
                         if (npc-alive?(var_2)) {
                             set-object-health(var_2, 1.00);
                             character-set-invincibility(var_2, 0, 0);
-                            darray-append(npcs-to-die, new-boxed-value(7, var_2), 1);
+                            darray-append(npcs-to-die, boxed_symbol(var_2), 1);
                         }
                     }
                 }

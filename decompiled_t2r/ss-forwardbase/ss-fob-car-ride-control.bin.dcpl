@@ -13,29 +13,29 @@
 
 u64? bind-mel-to-car() {
     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 10;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_0 + (2 * 8)) = 31;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 10;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.50;
+    *(i32*)*var_0[2] = 31;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(u8*)(*var_0[2] + 8) = 1;
     return animate_(mel, fob-car-ride-idle--mel, var_0);
 }
 
 u16 bind-player-to-car(u64? arg_0) {
     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 10;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_0 + (2 * 8)) = 31;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 10;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.50;
+    *(i32*)*var_0[2] = 31;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(u8*)(*var_0[2] + 8) = 1;
     animate_(player, fob-car-ride-look-idle--abby, var_0);
     u16 var_2;
     if (arg_0) {
@@ -56,15 +56,15 @@ u64? set-speed-and-acceleration(u64? arg_0, u64? arg_1, u64? arg_2) {
 
 u64? bind-alice-to-car() {
     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 10;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_0 + (2 * 8)) = 31;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 10;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.50;
+    *(i32*)*var_0[2] = 31;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(u8*)(*var_0[2] + 8) = 1;
     return animate_(alice, fob-car-ride-idle--dog, var_0);
 }
 
@@ -87,12 +87,12 @@ u64? wait-spawn-checkpoint-igc(u64? arg_0) {
 u64? restart-rail-car-behavior() {
     rail-set-igc-ap-ref(obj-fob-car-ride-humvee-1, 0);
     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 31;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-    *(i32*)*(*var_0 + (1 * 8)) = 10;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+    *(i32*)*var_0[0] = 31;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u8*)(*var_0[0] + 8) = 1;
+    *(i32*)*var_0[1] = 10;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(u64*)(*var_0[1] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
     return animate_(obj-fob-car-ride-humvee-1, fob-car-ride-crash-previs-humvee-only--humvee-base, var_0);
 }
 
@@ -106,15 +106,15 @@ u64? wait-car-spline-distance-from-end(f32 arg_0, u64? arg_1) {
 
 u64? bind-manny-to-car() {
     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 10;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_0 + (2 * 8)) = 31;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+    *(i32*)*var_0[0] = 10;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.50;
+    *(i32*)*var_0[2] = 31;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(u8*)(*var_0[2] + 8) = 1;
     animate_(manny, fob-car-ride-idle--manny, var_0);
     return set-ambient-scale(manny, 0.50);
 }
@@ -258,15 +258,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-backpack-1, fob-car-ride-idle--backpack-manny, var_0);
                 }
                 lambda {
@@ -280,15 +280,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-shotgun-1, fob-car-ride-idle--rifle, var_0);
                 }
                 lambda {
@@ -302,15 +302,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-hatchet-1, fob-car-ride-idle--knife-base, var_0);
                 }
             }
@@ -342,15 +342,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-backpack-1, fob-car-ride-idle--backpack-manny, var_0);
                 }
                 lambda {
@@ -364,15 +364,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-shotgun-1, fob-car-ride-idle--rifle, var_0);
                 }
                 lambda {
@@ -386,75 +386,75 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-hatchet-1, fob-car-ride-idle--knife-base, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (task-continue-active?(forward-base, fob-car-ride-ambush-combat, swerve-igc--DEBUG)) {
                         var_3 = 900.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(manny, fob-car-ride-ambush-truck--manny, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (task-continue-active?(forward-base, fob-car-ride-ambush-combat, swerve-igc--DEBUG)) {
                         var_3 = 900.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(alice, fob-car-ride-ambush-combat-idle--dog, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (task-continue-active?(forward-base, fob-car-ride-ambush-combat, swerve-igc--DEBUG)) {
                         var_3 = 900.00;
                     } else {
                         var_3 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     animate_(obj-fob-car-ride-humvee-1, fob-car-ride-ambush-truck--humvee-open-bed-fob, var_0);
                 }
                 lambda {
@@ -579,15 +579,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-backpack-1, fob-car-ride-idle--backpack-manny, var_0);
                 }
                 lambda {
@@ -601,15 +601,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-shotgun-1, fob-car-ride-idle--rifle, var_0);
                 }
                 lambda {
@@ -623,57 +623,57 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = apReference-truck;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = apReference-truck;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-fob-enter-truck-hatchet-1, fob-car-ride-idle--knife-base, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.86;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.86;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(manny, fob-car-ride-ambush-truck--manny, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.86;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-parented-bound-frame(obj-fob-car-ride-humvee-1, body_up);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.86;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(alice, fob-car-ride-ambush-combat-idle--dog, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.86;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-car-ride-combat-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.86;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(obj-fob-car-ride-humvee-1, fob-car-ride-ambush-truck--humvee-open-bed-fob, var_0);
                 }
                 lambda {

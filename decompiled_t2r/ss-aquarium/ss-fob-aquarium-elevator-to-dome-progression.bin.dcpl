@@ -314,27 +314,27 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(owen-anim-entry, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_1 + (3 * 8)) = 44;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (4 * 8)) = 56;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (4 * 8)) + 8) = 1.10;
-                    *(i32*)*(*var_1 + (5 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (5 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (6 * 8)) = 24;
-                    *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (6 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(owen-anim-entry, self);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.70;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.70;
+                    *(i32*)*var_1[3] = 44;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(u8*)(*var_1[3] + 8) = 1;
+                    *(i32*)*var_1[4] = 56;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(f32*)(*var_1[4] + 8) = 1.10;
+                    *(i32*)*var_1[5] = 13;
+                    *(u64*)(*var_1[5] + 8) = 0;
+                    *(i32*)(*var_1[5] + 8) = 2;
+                    *(i32*)*var_1[6] = 24;
+                    *(u64*)(*var_1[6] + 8) = 0;
+                    *(i32*)(*var_1[6] + 8) = 2;
                     wait-animate_(owen, get-symbol(owen-move-perf-anim, self), var_1);
                 }
                 lambda {
@@ -349,7 +349,7 @@ statescript {
                 lambda {
                     while (1) {
                         wait-npc-turn-to(owen, get-object-position(player), 1, 0);
-                        send-event(request-gesture-now, owen, new-boxed-value(1, 1), new-boxed-value(1, 0));
+                        send-event(request-gesture-now, owen, boxed_bool(1), boxed_bool(0));
                         wait(random-float-range(4.00, 8.00, 0));
                         while (npc-is-playing-idle-performance?(owen)) {
                             wait-one-frame();
@@ -357,7 +357,7 @@ statescript {
                         wait-npc-turn-to(owen, get-locator-position(get-bound-frame(player-anim-entry, ss-fob-aquarium-outro-enter-igc-1)), 1, 0);
                         start-timer(look-at-goal-timer, random-float-range(5.00, 9.00, 0), self, 1);
                         while (timer-running?(look-at-goal-timer, self)) {
-                            fact-set/f(owen, lead-idle-performance-requested?, new-boxed-value(1, 1));
+                            fact-set/f(owen, lead-idle-performance-requested?, boxed_bool(1));
                             wait-one-frame();
                         }
                         fact-remove(owen, lead-idle-performance-requested?);

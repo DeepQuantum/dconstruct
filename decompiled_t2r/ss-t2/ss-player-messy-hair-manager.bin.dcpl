@@ -16,7 +16,7 @@ u16 tuck-hair-immediate(u64? arg_0) {
     if (get-boolean(messy-hair?, self)) {
         set-table-shader-material-values-param(tucked-hair-table(), 0.00);
         set-boolean(messy-hair?, 0, self);
-        var_1 = fact-set(player, messy-hair?, new-boxed-value(1, 0));
+        var_1 = fact-set(player, messy-hair?, boxed_bool(0));
     } else {
         var_1 = 0;
     }
@@ -28,7 +28,7 @@ u16 mess-hair-immediate(u64? arg_0) {
     if (!(get-boolean(messy-hair?, self)) && !(fact-bool(player, wearing-gas-mask?, 1, 0))) {
         set-table-shader-material-values-param(tucked-hair-table(), 1.00);
         set-boolean(messy-hair?, 1, self);
-        var_4 = fact-set(player, messy-hair?, new-boxed-value(1, 1));
+        var_4 = fact-set(player, messy-hair?, boxed_bool(1));
     } else {
         var_4 = 0;
     }
@@ -40,7 +40,7 @@ u16 tuck-hair(u64? arg_0, u64? arg_1) {
     if (get-boolean(messy-hair?, self)) {
         wait-set-table-shader-material-values-param(tucked-hair-table(), 1.00, 0.00, arg_1, 1);
         set-boolean(messy-hair?, 0, self);
-        var_1 = fact-set(player, messy-hair?, new-boxed-value(1, 0));
+        var_1 = fact-set(player, messy-hair?, boxed_bool(0));
     } else {
         var_1 = 0;
     }
@@ -64,7 +64,7 @@ u16 mess-hair(u64? arg_0, u64? arg_1) {
     if (!(get-boolean(messy-hair?, self)) && !(fact-bool(player, wearing-gas-mask?, 1, 0))) {
         wait-set-table-shader-material-values-param(tucked-hair-table(), 0.00, 1.00, arg_1, 1);
         set-boolean(messy-hair?, 1, self);
-        var_4 = fact-set(player, messy-hair?, new-boxed-value(1, 1));
+        var_4 = fact-set(player, messy-hair?, boxed_bool(1));
     } else {
         var_4 = 0;
     }
@@ -88,7 +88,7 @@ statescript {
                     set-boolean(messy-hair?, 1, self);
                 }
                 lambda {
-                    fact-set(player, messy-hair?, new-boxed-value(1, 0));
+                    fact-set(player, messy-hair?, boxed_bool(0));
                 }
                 lambda {
                     tuck-hair(player, 0.00);

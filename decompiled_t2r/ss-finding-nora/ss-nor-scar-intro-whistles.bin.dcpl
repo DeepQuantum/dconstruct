@@ -47,7 +47,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, stealth-whistle-mode, new-boxed-value(1, 1));
+                    fact-set(global, stealth-whistle-mode, boxed_bool(1));
                 }
             }
         }
@@ -125,7 +125,7 @@ statescript {
                     wait-say(vox-scar-intro-whistle-1, vox-igc-scrma-eff-nor-whstl-intro-4-001, 2, 0);
                 }
                 lambda {
-                    fact-set(global, stealth-whistle-mode, new-boxed-value(1, 1));
+                    fact-set(global, stealth-whistle-mode, boxed_bool(1));
                 }
                 lambda {
                     go(wait-whistles, 1);
@@ -144,19 +144,19 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, stealth-whistle-mode, new-boxed-value(1, 1));
+                    fact-set(global, stealth-whistle-mode, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-search-check-in-whistle, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-search-check-in-whistle, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-search-location-whistle, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-search-location-whistle, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
             }
         }
@@ -164,7 +164,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(find-nora, nor-scar-intro-transition)) {
-                        fact-set(global, stealth-whistle-mode, new-boxed-value(1, 0));
+                        fact-set(global, stealth-whistle-mode, boxed_bool(0));
                         go(done, 1);
                     }
                 }
@@ -173,7 +173,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(global, stealth-whistle-mode, new-boxed-value(1, 0));
+                    fact-set(global, stealth-whistle-mode, boxed_bool(0));
                 }
             }
         }

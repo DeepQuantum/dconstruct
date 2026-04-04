@@ -84,7 +84,7 @@ meatshield-stealth-attack-grab__melee-event-list@3550
 embedded@ce70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_2;
     if (is-player?(arg_1) && is-rogue-mode?()) {
-        var_2 = send-event(buddy-unmark-npc, player, new-boxed-value(7, arg_2));
+        var_2 = send-event(buddy-unmark-npc, player, boxed_symbol(arg_2));
     } else {
         var_2 = 0;
     }

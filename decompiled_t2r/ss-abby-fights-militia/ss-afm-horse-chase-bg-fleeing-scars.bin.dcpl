@@ -54,17 +54,7 @@ statescript {
                     wait-spawn-npc-group-async(grp-afm-horse-chase-bg-fleeing-scars-phase-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 60.00);
                     }
@@ -76,17 +66,7 @@ statescript {
                     set-object-health(npc-afm-horse-chase-bg-fleeing-scars--scar-2, 40.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-fleeing-scars-phase-1-shoot-at-objects) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-phase-1-shoot-at-objects) {
                         spawn-entity(var_2, 1, 0);
                     }
                 }
@@ -292,7 +272,7 @@ statescript {
                     npc-fire-at-object(npc-afm-horse-chase-bg-fleeing-scars--militia-2, player, 0, 2, 8, targChest);
                 }
                 lambda {
-                    send-event(assign-new-grapple-npc, ss-afm-horse-chase-grapple-systemic-1, new-boxed-value(7, npc-afm-horse-chase-bg-fleeing-scars--militia-2));
+                    send-event(assign-new-grapple-npc, ss-afm-horse-chase-grapple-systemic-1, boxed_symbol(npc-afm-horse-chase-bg-fleeing-scars--militia-2));
                 }
             }
             track miltia-3-pre-grapple {
@@ -351,45 +331,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = get-symbol(grapple-npc, ss-afm-horse-chase-grapple-systemic-1);
-                    foreach (u64? var_2 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
                         if (!(var_3 == var_0)) {
                             npc-die-if-alive(var_3);
                         }
                     }
-                    foreach (u64? var_6 : grp-afm-horse-chase-bg-fleeing-scars-phase-1-shoot-at-objects) {
-                        u16 var_7;
-                        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                            var_7 = *(u64*)var_6;
-                        } else {
-                            var_7 = 0;
-                        }
+                    foreach (u64? var_7 : grp-afm-horse-chase-bg-fleeing-scars-phase-1-shoot-at-objects) {
                         kill-entity(var_7);
                     }
-                    foreach (u64? var_10 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
-                        u16 var_11;
-                        if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                            var_11 = *(u64*)var_10;
-                        } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                            var_11 = *(u64*)var_10;
-                        } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                            var_11 = *(u64*)var_10;
-                        } else {
-                            var_11 = 0;
-                        }
+                    foreach (u64? var_11 : grp-afm-horse-chase-bg-fleeing-scars-phase-1) {
                         if (!(var_11 == var_0)) {
                             while (!!(object-on-screen-and-visible?(var_11, -1, 0))) {
                                 wait-one-frame();

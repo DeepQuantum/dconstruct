@@ -89,20 +89,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-int-small-1, 1));
                         }
@@ -118,20 +108,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-int-large-1, 1));
                         }
@@ -147,20 +127,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-ext-gen-1, 1));
                         }
@@ -182,20 +152,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -256,7 +216,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog-patrol-ownerless-1, get-spline-point-locator(spl-patrol-bjimenez-test--ext-1, 2));
@@ -271,7 +231,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog-patrol-ownerless-2, get-spline-point-locator(spl-patrol-bjimenez-test--int-sml-1, 1));
@@ -286,7 +246,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog-patrol-ownerless-3, get-spline-point-locator(spl-patrol-bjimenez-test--int-lrg-1, 7));
@@ -301,20 +261,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -375,7 +325,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-militia-f-owner-1, get-spline-point-locator(spl-patrol-bjimenez-test--ext-1, 2));
@@ -393,7 +343,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-militia-f-owner-2, get-spline-point-locator(spl-patrol-bjimenez-test--int-sml-1, 1));
@@ -411,7 +361,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-militia-f-owner-3, get-spline-point-locator(spl-patrol-bjimenez-test--int-lrg-1, 7));
@@ -429,20 +379,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -503,7 +443,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog--ext-gen-patrol-1, get-spline-point-locator(spl-patrol-bjimenez-test--ext-1, 2));
@@ -533,7 +473,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog--int-sml-patrol-1, get-spline-point-locator(spl-patrol-bjimenez-test--int-sml-1, 0));
@@ -563,7 +503,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(npc-attack-dog--int-lrg-patrol-1, get-spline-point-locator(spl-patrol-bjimenez-test--int-lrg-1, 0));
@@ -593,20 +533,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -667,7 +597,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(alice, get-spawner-locator(pos-snd-ext-gen-2, 1));
@@ -685,7 +615,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(alice, get-spawner-locator(pos-snd-int-small-2, 1));
@@ -706,7 +636,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
                     npc-teleport-to(alice, get-spawner-locator(pos-snd-int-large-2, 1));
@@ -727,7 +657,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
                     npc-teleport-to(alice, get-spawner-locator(pos-snd-npc-kennel-1, 1));
@@ -736,17 +666,7 @@ statescript {
                     npc-teleport-to(mel, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -809,7 +729,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
                     go(task-check, 1);
@@ -821,7 +741,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
                     go(task-check, 1);
@@ -833,7 +753,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
                     go(task-check, 1);
@@ -845,7 +765,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
                     go(task-check, 1);
@@ -936,20 +856,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-ext-gen-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-ext-gen-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);
@@ -966,20 +876,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-small-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-small-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spline-point-locator(spl-patrol-bjimenez-test--int-sml-1, 0));
                         }
@@ -995,20 +895,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-int-large-2, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-int-large-2, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spline-point-locator(spl-patrol-bjimenez-test--int-lrg-1, 0));
                         }
@@ -1024,20 +914,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-spawner-locator(pos-snd-go-back-1, 1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-spawner-locator(pos-snd-go-back-1, 1)));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-teleport-to(var_2, get-spawner-locator(pos-snd-npc-kennel-1, 1));
                             npc-reset-knowledge-debug-only-beau-hack(var_2);

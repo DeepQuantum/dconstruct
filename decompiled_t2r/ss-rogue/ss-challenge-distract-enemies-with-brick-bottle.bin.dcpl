@@ -99,7 +99,7 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: Distraction of %s from %s noted!", string-debug(var_1), string-debug(var_0)), 19);
                         }
-                        var_2 = darray-append(get-symbol(group-distraction-bottles-bricks, self), new-boxed-value(7, var_0), 1);
+                        var_2 = darray-append(get-symbol(group-distraction-bottles-bricks, self), boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -110,7 +110,7 @@ statescript {
                     u64? var_0 = event-arg-symbol(0);
                     u64? var_1 = event-arg-symbol(1);
                     wait(0.10);
-                    if (!event-arg-boolean(3) && event-arg-int32(2) == 2 && darray-contains?(wave-manager-get-npc-alive-group(ss-wave-manager-1), new-boxed-value(7, var_0)) && darray-contains?(get-symbol(group-distraction-bottles-bricks, self), new-boxed-value(7, var_1)) && !get-boolean(hit-npc?, self)) {
+                    if (!event-arg-boolean(3) && event-arg-int32(2) == 2 && darray-contains?(wave-manager-get-npc-alive-group(ss-wave-manager-1), boxed_symbol(var_0)) && darray-contains?(get-symbol(group-distraction-bottles-bricks, self), boxed_symbol(var_1)) && !get-boolean(hit-npc?, self)) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: %s got awareness of %s", string-debug(var_0), string-debug(var_1)), 19);
                         }

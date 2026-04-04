@@ -156,34 +156,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(adjusted-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = get-int32(feather-abort-frame, self);
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (5 * 8)) = 63;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (6 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(adjusted-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = get-int32(feather-abort-frame, self);
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 1.00;
+                    *(i32*)*var_0[5] = 63;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 0;
+                    *(i32*)*var_0[6] = 29;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 2;
                     wait-animate_(player, ski-aquarium-flashback-see-mural--abby, var_0);
                 }
                 lambda {
                     camera-fade-out-auto-gen-animated(2.00, 3.00, 0);
                 }
                 lambda {
-                    send-event(interactable-done, ss-ski-aquarium-flashback-interactable-manager-1, new-boxed-value(7, int-ski-aquarium-flashback-see-mural-1));
+                    send-event(interactable-done, ss-ski-aquarium-flashback-interactable-manager-1, boxed_symbol(int-ski-aquarium-flashback-see-mural-1));
                 }
                 lambda {
                     if (get-animation-phase(player, 0, ski-aquarium-flashback-see-mural--abby) < 0.90) {
@@ -207,30 +207,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 40;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 75;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = *upperbody-soft-spine-no-head-fb*;
-                    *(i32*)*(*var_0 + (6 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (6 * 8)) + 8) = get-animation-frame(player, 0, ski-aquarium-flashback-see-mural--abby);
-                    *(i32*)*(*var_0 + (7 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (7 * 8)) + 8) = 360.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 29;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 40;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 75;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u64*)(*var_0[5] + 8) = *upperbody-soft-spine-no-head-fb*;
+                    *(i32*)*var_0[6] = 57;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(f32*)(*var_0[6] + 8) = get-animation-frame(player, 0, ski-aquarium-flashback-see-mural--abby);
+                    *(i32*)*var_0[7] = 20;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(f32*)(*var_0[7] + 8) = 360.00;
                     animate_(player, ski-aquarium-flashback-see-mural--abby, var_0);
                 }
                 lambda {
@@ -256,27 +256,27 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(adjusted-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (6 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (6 * 8)) + 8) = get-animation-frame(player, 0, ski-aquarium-flashback-see-mural--abby);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(adjusted-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.50;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 13;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 2;
+                    *(i32*)*var_0[6] = 57;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(f32*)(*var_0[6] + 8) = get-animation-frame(player, 0, ski-aquarium-flashback-see-mural--abby);
                     animate_(owen, ski-aquarium-flashback-see-mural--owen, var_0);
                 }
                 lambda {
@@ -291,24 +291,24 @@ statescript {
                     if (!get-animation-playing?(owen, ski-aquarium-flashback-see-mural--owen, 2) && !object-anim-reached-phase?(owen, ski-aquarium-flashback-see-mural--owen, 0.90, 2)) {
                         set-boolean(owen-should-feather-blend?, 1, self);
                         u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (0 * 8)) + 8) = get-animation-frame(owen, 0, ski-aquarium-flashback-see-mural--owen);
-                        *(i32*)*(*var_2 + (1 * 8)) = 40;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_2 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_2 + (4 * 8)) = 75;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = *upperbody-soft-spine-no-head-fb*;
-                        *(i32*)*(*var_2 + (5 * 8)) = 52;
-                        *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (5 * 8)) + 8) = 0;
+                        *(i32*)*var_2[0] = 57;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(f32*)(*var_2[0] + 8) = get-animation-frame(owen, 0, ski-aquarium-flashback-see-mural--owen);
+                        *(i32*)*var_2[1] = 40;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(i32*)(*var_2[1] + 8) = 1;
+                        *(i32*)*var_2[2] = 28;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.75;
+                        *(i32*)*var_2[3] = 30;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 0.75;
+                        *(i32*)*var_2[4] = 75;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(u64*)(*var_2[4] + 8) = *upperbody-soft-spine-no-head-fb*;
+                        *(i32*)*var_2[5] = 52;
+                        *(u64*)(*var_2[5] + 8) = 0;
+                        *(u8*)(*var_2[5] + 8) = 0;
                         animate_(owen, ski-aquarium-flashback-see-mural--owen, var_2);
                         stop-animating(owen, 0, 1.50, 0, 0);
                         while (!object-anim-reached-phase?(owen, ski-aquarium-flashback-see-mural--owen, 0.90, 2)) {

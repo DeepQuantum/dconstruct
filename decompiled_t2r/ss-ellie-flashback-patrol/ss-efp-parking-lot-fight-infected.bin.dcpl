@@ -22,17 +22,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : parking-lot-live-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : parking-lot-live-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -45,18 +35,8 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : efp-parking-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-append(parking-lot-live-infected, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    foreach (u64? var_2 : efp-parking-wave-1) {
+                        darray-append(parking-lot-live-infected, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                         wait-one-frame();
                     }
                 }
@@ -82,8 +62,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
                 lambda {
@@ -108,18 +88,8 @@ statescript {
                     script-caption(joel, "Thank God Tommy found that rifle. More coming.", -1.00, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : efp-parking-wave-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-append(parking-lot-live-infected, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    foreach (u64? var_2 : efp-parking-wave-2) {
+                        darray-append(parking-lot-live-infected, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                         wait-one-frame();
                     }
                 }
@@ -133,19 +103,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(parking-lot-live-infected, self, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(parking-lot-live-infected, self, 0)) {
                         if (!(npc-alive?(var_3))) {
-                            darray-find-remove(parking-lot-live-infected, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(parking-lot-live-infected, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -154,8 +114,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
                 lambda {
@@ -177,18 +137,8 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : efp-parking-wave-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-append(parking-lot-live-infected, new-boxed-value(7, wait-spawn-npc(var_2, 0, 0)), 1);
+                    foreach (u64? var_2 : efp-parking-wave-3) {
+                        darray-append(parking-lot-live-infected, boxed_symbol(wait-spawn-npc(var_2, 0, 0)), 1);
                         wait-one-frame();
                     }
                 }
@@ -202,19 +152,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(parking-lot-live-infected, self, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(parking-lot-live-infected, self, 0)) {
                         if (!(npc-alive?(var_3))) {
-                            darray-find-remove(parking-lot-live-infected, new-boxed-value(7, var_3), 0);
+                            darray-find-remove(parking-lot-live-infected, boxed_symbol(var_3), 0);
                         }
                     }
                 }
@@ -223,8 +163,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(parking-lot-live-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(parking-lot-live-infected, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
                 lambda {

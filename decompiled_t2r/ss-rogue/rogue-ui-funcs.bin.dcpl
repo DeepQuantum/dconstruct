@@ -30,13 +30,13 @@ u64? hud-challenge-set-timed(u64? arg_0) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(set-timed-challenge, hud-challenge-get-path(), new-boxed-value(1, arg_0));
+    return send-event(set-timed-challenge, hud-challenge-get-path(), boxed_bool(arg_0));
 }
 
 u16 hud-challenge-set-paused(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-challenge-get-path())) {
-        var_2 = send-event(set-paused, hud-challenge-get-path(), new-boxed-value(1, arg_0));
+        var_2 = send-event(set-paused, hud-challenge-get-path(), boxed_bool(arg_0));
     } else {
         var_2 = 0;
     }
@@ -50,7 +50,7 @@ u64? hud-siege-hide() {
 u16 hud-survival-update-spawn-countdown(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-survival-get-path())) {
-        var_2 = send-event(update-spawn-countdown, hud-survival-get-path(), new-boxed-value(6, arg_0));
+        var_2 = send-event(update-spawn-countdown, hud-survival-get-path(), boxed_f32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -68,12 +68,12 @@ u64? hud-challenge-reset(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? ar
     send-event(
         setup,
         hud-challenge-get-path(),
-        new-boxed-value(7, arg_0),
-        new-boxed-value(7, arg_1),
-        new-boxed-value(19, arg_2),
-        new-boxed-value(2, arg_3),
-        new-boxed-value(2, arg_4),
-        new-boxed-value(19, arg_5)
+        boxed_symbol(arg_0),
+        boxed_symbol(arg_1),
+        boxed_stringcopy(arg_2),
+        boxed_i32(arg_3),
+        boxed_i32(arg_4),
+        boxed_stringcopy(arg_5)
     );
     return hud-generic-hide(hud-challenge-get-path());
 }
@@ -101,7 +101,7 @@ u16 hud-title-create(u16 arg_0, u64? arg_1) {
     if (!gui2-widget-exists?(hud-title-get-path())) {
         hud-generic-create("t2r-hud-rogue/t2r-hud-title-card", "hud-title");
         gui2-assign-to-category(hud-title-get-path(), 65536);
-        var_2 = send-event(setup, hud-title-get-path(), new-boxed-value(7, arg_0), new-boxed-value(7, arg_1));
+        var_2 = send-event(setup, hud-title-get-path(), boxed_symbol(arg_0), boxed_symbol(arg_1));
     } else {
         var_2 = 0;
     }
@@ -111,7 +111,7 @@ u16 hud-title-create(u16 arg_0, u64? arg_1) {
 u16 hud-message-timer-pause(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(rogue-ui--get-t2r-timer-path())) {
-        var_2 = send-event(pause-countdown, rogue-ui--get-t2r-timer-path(), new-boxed-value(6, arg_0));
+        var_2 = send-event(pause-countdown, rogue-ui--get-t2r-timer-path(), boxed_f32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -132,7 +132,7 @@ u16 hud-defense-create() {
 u16 hud-title-wait-destroy(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-title-get-path())) {
-        var_2 = send-event(wait-destroy, hud-title-get-path(), new-boxed-value(6, arg_0));
+        var_2 = send-event(wait-destroy, hud-title-get-path(), boxed_f32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -141,13 +141,13 @@ u16 hud-title-wait-destroy(u64? arg_0) {
 
 u64? hud-message-show-simple(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     send-event(reset, rogue-ui--get-t2r-timer-path());
-    send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_0));
+    send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_0));
     send-event(
         countdown,
         rogue-ui--get-t2r-timer-path(),
-        new-boxed-value(6, arg_1),
-        new-boxed-value(1, arg_2),
-        new-boxed-value(1, arg_3)
+        boxed_f32(arg_1),
+        boxed_bool(arg_2),
+        boxed_bool(arg_3)
     );
     return send-event(hide-countdown-numbers, rogue-ui--get-t2r-timer-path());
 }
@@ -159,7 +159,7 @@ u64? hud-challenge-fade-out() {
 u16 hud-survival-update-enemies(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-survival-get-path())) {
-        var_2 = send-event(update-enemies, hud-survival-get-path(), new-boxed-value(2, arg_0));
+        var_2 = send-event(update-enemies, hud-survival-get-path(), boxed_i32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -184,14 +184,14 @@ u16 hud-message-timer-show-plus-extra(u64? arg_0, u64? arg_1, u64? arg_2, u64? a
     u16 var_2;
     if (gui2-widget-exists?(rogue-ui--get-t2r-timer-path())) {
         send-event(reset, rogue-ui--get-t2r-timer-path());
-        send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_0), new-boxed-value(7, arg_1));
-        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_2));
+        send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_0), boxed_symbol(arg_1));
+        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_2));
         var_2 = send-event(
             countdown,
             rogue-ui--get-t2r-timer-path(),
-            new-boxed-value(6, arg_3),
-            new-boxed-value(1, arg_4),
-            new-boxed-value(1, arg_5)
+            boxed_f32(arg_3),
+            boxed_bool(arg_4),
+            boxed_bool(arg_5)
         );
     } else {
         var_2 = 0;
@@ -222,7 +222,7 @@ u64? hud-encounter-over-create(u64? arg_0, u64? arg_1, u64? arg_2) {
         hud-generic-create-category-deathtips("t2r-hud-rogue/t2r-hud-encounter-over", "hud-encounter-over");
     }
     if (arg_2) {
-        speak-text-to-speech-formatted(new-boxed-value(7, arg_0), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(arg_0), 1, 0, 1);
     }
     gui2-set-widget-text-cipher(gui2-build-widget-path(
         hud-encounter-over-get-path(),
@@ -252,10 +252,10 @@ u64? hud-boss-add-new-bar(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return send-event(
         add-health-bar,
         hud-boss-get-path(),
-        new-boxed-value(7, arg_0),
-        new-boxed-value(2, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(19, arg_3)
+        boxed_symbol(arg_0),
+        boxed_i32(arg_1),
+        boxed_symbol(arg_2),
+        boxed_stringcopy(arg_3)
     );
 }
 
@@ -280,7 +280,7 @@ u64? hud-survival-destroy() {
 u16 hud-defense-show-message(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-defense-get-path())) {
-        var_2 = send-event(show-message, hud-defense-get-path(), new-boxed-value(7, arg_0), new-boxed-value(1, arg_1));
+        var_2 = send-event(show-message, hud-defense-get-path(), boxed_symbol(arg_0), boxed_bool(arg_1));
     } else {
         var_2 = 0;
     }
@@ -319,9 +319,9 @@ u16 hud-set-encounter-time-limit(u64? arg_0, u64? arg_1, u64? arg_2) {
         var_2 = send-event(
             set-encounter-countdown-time,
             hud-assault-get-path(),
-            new-boxed-value(6, arg_0),
-            new-boxed-value(1, arg_1),
-            new-boxed-value(1, arg_2)
+            boxed_f32(arg_0),
+            boxed_bool(arg_1),
+            boxed_bool(arg_2)
         );
     } else {
         var_2 = 0;
@@ -335,10 +335,10 @@ u64? hud-skulls-show-status-effect(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_
         send-event(
             show-status-effect,
             hud-skulls-get-path(),
-            new-boxed-value(1, arg_0),
-            new-boxed-value(19, arg_1),
-            new-boxed-value(7, arg_2),
-            new-boxed-value(1, arg_3)
+            boxed_bool(arg_0),
+            boxed_stringcopy(arg_1),
+            boxed_symbol(arg_2),
+            boxed_bool(arg_3)
         );
         var_2 = gui2-build-widget-path(
             hud-skulls-get-path(),
@@ -358,7 +358,7 @@ u64? hud-skulls-show-status-effect(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_
 u16 hud-defense-set-buddy-healthbar-percent(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-defense-get-path())) {
-        var_2 = send-event(set-buddy-healthbar-percent, hud-defense-get-path(), new-boxed-value(6, arg_0), new-boxed-value(1, arg_1));
+        var_2 = send-event(set-buddy-healthbar-percent, hud-defense-get-path(), boxed_f32(arg_0), boxed_bool(arg_1));
     } else {
         var_2 = 0;
     }
@@ -400,7 +400,7 @@ u64? hud-challenge-update-progress-count(u64? arg_0, u64? arg_1) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(challenge-progress-update, hud-challenge-get-path(), new-boxed-value(2, arg_0), new-boxed-value(2, arg_1));
+    return send-event(challenge-progress-update, hud-challenge-get-path(), boxed_i32(arg_0), boxed_i32(arg_1));
 }
 
 u64? hud-siege-fade-out() {
@@ -408,7 +408,7 @@ u64? hud-siege-fade-out() {
 }
 
 u64? hud-defense-buddy-critical(u64? arg_0) {
-    return broadcast-event(defend-buddy-critical, new-boxed-value(1, arg_0));
+    return broadcast-event(defend-buddy-critical, boxed_bool(arg_0));
 }
 
 u64? hud-siege-fade-in() {
@@ -432,7 +432,7 @@ u16 hud-generic-hide(u64? arg_0) {
 u16 hud-assault-update-waves(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-assault-get-path())) {
-        var_2 = send-event(update-wave, hud-assault-get-path(), new-boxed-value(2, arg_0), new-boxed-value(2, arg_1));
+        var_2 = send-event(update-wave, hud-assault-get-path(), boxed_i32(arg_0), boxed_i32(arg_1));
     } else {
         var_2 = 0;
     }
@@ -529,14 +529,14 @@ u16 hud-message-timer-show(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? 
     u16 var_2;
     if (gui2-widget-exists?(rogue-ui--get-t2r-timer-path())) {
         send-event(reset, rogue-ui--get-t2r-timer-path());
-        send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_0));
-        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_1));
+        send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_0));
+        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_1));
         var_2 = send-event(
             countdown,
             rogue-ui--get-t2r-timer-path(),
-            new-boxed-value(6, arg_2),
-            new-boxed-value(1, arg_3),
-            new-boxed-value(1, arg_4)
+            boxed_f32(arg_2),
+            boxed_bool(arg_3),
+            boxed_bool(arg_4)
         );
     } else {
         var_2 = 0;
@@ -548,23 +548,23 @@ u64? hud-challenge-update-progress-text(u64? arg_0) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(challenge-progress-update, hud-challenge-get-path(), new-boxed-value(7, arg_0));
+    return send-event(challenge-progress-update, hud-challenge-get-path(), boxed_symbol(arg_0));
 }
 
 u16 hud-message-show(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5) {
     u16 var_2;
     if (gui2-widget-exists?(rogue-ui--get-t2r-timer-path())) {
         send-event(reset, rogue-ui--get-t2r-timer-path());
-        send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_0));
-        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, arg_0));
-        send-event(set-secondary-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_EXITING));
-        send-event(set-hide-delay, rogue-ui--get-t2r-timer-path(), new-boxed-value(6, arg_3));
+        send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_0));
+        send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(arg_0));
+        send-event(set-secondary-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_EXITING));
+        send-event(set-hide-delay, rogue-ui--get-t2r-timer-path(), boxed_f32(arg_3));
         var_2 = send-event(
             countdown,
             rogue-ui--get-t2r-timer-path(),
-            new-boxed-value(6, arg_2),
-            new-boxed-value(1, arg_4),
-            new-boxed-value(1, arg_5)
+            boxed_f32(arg_2),
+            boxed_bool(arg_4),
+            boxed_bool(arg_5)
         );
     } else {
         var_2 = 0;
@@ -600,9 +600,9 @@ u16 hud-skulls-set-percent(u64? arg_0, u64? arg_1, u64? arg_2) {
     if (gui2-widget-exists?(hud-skulls-get-path())) {
         var_2 = broadcast-event(
             skull-set-percent,
-            new-boxed-value(7, arg_0),
-            new-boxed-value(6, arg_1),
-            new-boxed-value(1, arg_2)
+            boxed_symbol(arg_0),
+            boxed_f32(arg_1),
+            boxed_bool(arg_2)
         );
     } else {
         var_2 = 0;
@@ -627,7 +627,7 @@ u64? hud-challenge-show-new-challenge(u64? arg_0) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(new-challenge, hud-challenge-get-path(), new-boxed-value(6, arg_0));
+    return send-event(new-challenge, hud-challenge-get-path(), boxed_f32(arg_0));
 }
 
 u16 hud-message-timer-unpause-now() {
@@ -672,9 +672,9 @@ u16 hud-assault-update-enemies(u64? arg_0, u64? arg_1, u64? arg_2) {
         var_2 = send-event(
             update-enemies,
             hud-assault-get-path(),
-            new-boxed-value(2, arg_0),
-            new-boxed-value(1, arg_1),
-            new-boxed-value(2, arg_2)
+            boxed_i32(arg_0),
+            boxed_bool(arg_1),
+            boxed_i32(arg_2)
         );
     } else {
         var_2 = 0;
@@ -689,7 +689,7 @@ sid hud-challenge-get-path() {
 u16 hud-defense-set-buddy-healthbar-title(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-defense-get-path())) {
-        var_2 = send-event(set-buddy-healthbar-title, hud-defense-get-path(), new-boxed-value(7, arg_0));
+        var_2 = send-event(set-buddy-healthbar-title, hud-defense-get-path(), boxed_symbol(arg_0));
     } else {
         var_2 = 0;
     }
@@ -703,7 +703,7 @@ u64? hud-boss-fade-out() {
 u16 hud-survival-set-spawn-countdown(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-survival-get-path())) {
-        var_2 = send-event(set-spawn-countdown, hud-survival-get-path(), new-boxed-value(6, arg_0), new-boxed-value(6, arg_1));
+        var_2 = send-event(set-spawn-countdown, hud-survival-get-path(), boxed_f32(arg_0), boxed_f32(arg_1));
     } else {
         var_2 = 0;
     }
@@ -713,7 +713,7 @@ u16 hud-survival-set-spawn-countdown(u64? arg_0, u64? arg_1) {
 u16 hud-skulls-activate-skull(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-skulls-get-path())) {
-        var_2 = broadcast-event(skull-activate, new-boxed-value(7, arg_0), new-boxed-value(7, arg_1));
+        var_2 = broadcast-event(skull-activate, boxed_symbol(arg_0), boxed_symbol(arg_1));
     } else {
         var_2 = 0;
     }
@@ -723,7 +723,7 @@ u16 hud-skulls-activate-skull(u64? arg_0, u64? arg_1) {
 u16 hud-skulls-deactivate-skull(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-skulls-get-path())) {
-        var_2 = broadcast-event(skull-deactivate, new-boxed-value(7, arg_0));
+        var_2 = broadcast-event(skull-deactivate, boxed_symbol(arg_0));
     } else {
         var_2 = 0;
     }
@@ -780,7 +780,7 @@ u64? hud-skulls-destroy() {
 u16 hud-challenge-update-time(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-challenge-get-path())) {
-        var_2 = send-event(update-time, hud-challenge-get-path(), new-boxed-value(6, arg_0));
+        var_2 = send-event(update-time, hud-challenge-get-path(), boxed_f32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -790,7 +790,7 @@ u16 hud-challenge-update-time(u64? arg_0) {
 u16 hud-defense-set-buddy-danger(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-defense-get-path())) {
-        var_2 = send-event(set-buddy-danger, hud-defense-get-path(), new-boxed-value(1, arg_0));
+        var_2 = send-event(set-buddy-danger, hud-defense-get-path(), boxed_bool(arg_0));
     } else {
         var_2 = 0;
     }
@@ -804,7 +804,7 @@ sid hud-siege-get-path() {
 u16 hud-defense-update-enemies(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-defense-get-path())) {
-        var_2 = send-event(update-enemies, hud-defense-get-path(), new-boxed-value(2, arg_0), new-boxed-value(1, arg_1));
+        var_2 = send-event(update-enemies, hud-defense-get-path(), boxed_i32(arg_0), boxed_bool(arg_1));
     } else {
         var_2 = 0;
     }
@@ -823,7 +823,7 @@ u64? hud-challenge-show-challenge-complete(u64? arg_0) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(challenge-complete, hud-challenge-get-path(), new-boxed-value(6, arg_0));
+    return send-event(challenge-complete, hud-challenge-get-path(), boxed_f32(arg_0));
 }
 
 u16 rogue-ui--get-rank-score-limit(u16 arg_0) {
@@ -845,7 +845,7 @@ u16 rogue-ui--get-rank-score-limit(u16 arg_0) {
 u16 hud-survival-update-time(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud-survival-get-path())) {
-        var_2 = send-event(update-time, hud-survival-get-path(), new-boxed-value(2, arg_0));
+        var_2 = send-event(update-time, hud-survival-get-path(), boxed_i32(arg_0));
     } else {
         var_2 = 0;
     }
@@ -905,7 +905,7 @@ u64? hud-skulls-fade-in() {
 u16 hud-siege-update-enemies(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (gui2-widget-exists?(hud-siege-get-path())) {
-        var_2 = send-event(update-enemies, hud-siege-get-path(), new-boxed-value(2, arg_0), new-boxed-value(1, arg_1));
+        var_2 = send-event(update-enemies, hud-siege-get-path(), boxed_i32(arg_0), boxed_bool(arg_1));
     } else {
         var_2 = 0;
     }
@@ -920,7 +920,7 @@ u64? hud-challenge-show-challenge-failed(u64? arg_0, u64? arg_1) {
     while (!gui2-widget-exists?(hud-challenge-get-path())) {
         wait-one-frame();
     }
-    return send-event(challenge-failed, hud-challenge-get-path(), new-boxed-value(6, arg_0), new-boxed-value(1, arg_1));
+    return send-event(challenge-failed, hud-challenge-get-path(), boxed_f32(arg_0), boxed_bool(arg_1));
 }
 
 u16 hud-generic-destroy(u64? arg_0, u64? arg_1) {
@@ -967,9 +967,9 @@ u64? hud-boss-set-progress(u64? arg_0, u64? arg_1, u64? arg_2) {
     return send-event(
         set-percent,
         hud-boss-get-path(),
-        new-boxed-value(7, arg_0),
-        new-boxed-value(2, arg_1),
-        new-boxed-value(6, arg_2)
+        boxed_symbol(arg_0),
+        boxed_i32(arg_1),
+        boxed_f32(arg_2)
     );
 }
 
@@ -979,14 +979,14 @@ u16 hud-siege-set-safe-time(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64?
         var_2 = send-event(
             set-safe-time,
             hud-siege-get-path(),
-            new-boxed-value(6, arg_0),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(1, arg_2),
-            new-boxed-value(1, arg_3),
-            new-boxed-value(1, arg_4),
-            new-boxed-value(1, arg_5),
-            new-boxed-value(6, arg_6),
-            new-boxed-value(1, arg_7)
+            boxed_f32(arg_0),
+            boxed_symbol(arg_1),
+            boxed_bool(arg_2),
+            boxed_bool(arg_3),
+            boxed_bool(arg_4),
+            boxed_bool(arg_5),
+            boxed_f32(arg_6),
+            boxed_bool(arg_7)
         );
     } else {
         var_2 = 0;

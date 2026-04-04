@@ -57,17 +57,7 @@ u64? player-can-hold-up?() {
 
 u16 npcs-investigate-holdup() {
     u16 var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u16 var_9;
         if (!0 && var_3 != get-symbol(npc-held-up, self) && is-in-front?-symbol(var_3, get-symbol(npc-held-up, self), 2, 180.00) && npc-can-see?(var_3, get-symbol(npc-held-up, self))) {
             var_9 = 1;
@@ -148,17 +138,7 @@ statescript {
                 }
                 lambda {
                     if (player-can-hold-up?() && !tension-mode-is?(3)) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (get-symbol(npc-candidate, self) == 0 && !npc-on-screen?(get-symbol(npc-candidate, self), 0.00) && npc-can-be-held-up?(var_4, tag-float(max-holdup-dist, self))) {
                                 if (is-in-front?-symbol(var_4, player, 2, 180.00) && npc-can-see?(var_4, player)) {
                                     set-symbol(npc-candidate, var_4, self);
@@ -230,18 +210,18 @@ statescript {
                 }
                 lambda {
                     u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = rotate-locator-lookat(get-object-locator(get-symbol(npc-held-up, self)), get-object-locator(player), 1.00, 0);
-                    *(i32*)*(*var_3 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 20.00;
-                    *(i32*)*(*var_3 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_3 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.30;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = rotate-locator-lookat(get-object-locator(get-symbol(npc-held-up, self)), get-object-locator(player), 1.00, 0);
+                    *(i32*)*var_3[1] = 20;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 20.00;
+                    *(i32*)*var_3[2] = 28;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.30;
+                    *(i32*)*var_3[3] = 30;
+                    *(u64*)(*var_3[3] + 8) = 0;
+                    *(f32*)(*var_3[3] + 8) = 0.30;
                     animate_(get-symbol(npc-held-up, self), npc-m-p-ambi-idle^hands-up-fw, var_3);
                 }
                 lambda {

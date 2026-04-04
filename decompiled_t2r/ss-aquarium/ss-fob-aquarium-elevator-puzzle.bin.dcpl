@@ -55,7 +55,7 @@ statescript {
                     wait-npc-request-lead-spline(owen, spl-fob-owen-lead-5, player, *fob-aquarium-explore-lead-settings*, 0, 0);
                 }
                 lambda {
-                    send-event(go-vox, ss-fob-aquarium-flashback-vox-1, new-boxed-value(7, elevator-intro-vox));
+                    send-event(go-vox, ss-fob-aquarium-flashback-vox-1, boxed_symbol(elevator-intro-vox));
                 }
                 lambda {
                     wait-for(rope-setup-done);

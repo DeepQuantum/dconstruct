@@ -355,15 +355,15 @@ statescript {
                 lambda {
                     if (player-in-state?(Investigate)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.20;
+                        *(i32*)*var_1[0] = 40;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(i32*)(*var_1[0] + 8) = 1;
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.20;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.20;
                         animate_(player, pat-library-marijuana-jar-facial--ellie, var_1);
                         wait-say(player, vox-igc-ell-gen-fnd-items-slf-001, 2, 0);
                     }

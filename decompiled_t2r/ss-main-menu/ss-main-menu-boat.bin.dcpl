@@ -215,7 +215,7 @@ statescript {
                         u64? var_4 = menu2-push-message-box(main, "t2r-meta-challenges/message-box-ok-meta-challenge-unlock", 0, 0, 0, 0, 2, 1);
                         prev-unlock--set-reward-unlock-header(var_4);
                         play-sound(sfx-hud-rl-challenge-new-unlock, 0);
-                        send-event(populate-rewards-page, var_4, new-boxed-value(7, var_0));
+                        send-event(populate-rewards-page, var_4, boxed_symbol(var_0));
                         var_3 = send-event(started-animating-reward-unlocks, var_4);
                     }
                 }
@@ -352,9 +352,9 @@ statescript {
                     } else {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-main-menu-boat-catalina-1, 1);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-main-menu-boat-catalina-1, 1);
                         animate_(cam-main-menu-boat-1, t2-title-catalina--camera, var_2);
                     }
                 }
@@ -550,24 +550,24 @@ statescript {
                     } else {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
                         animate_(cam-main-menu-boat-1, t2-title-screen--camera, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
                     animate_(obj-main-menu-post-rope-1, t2-title-screen--post, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-main-menu-boat-1, 1);
                     animate_(obj-main-menu-boat-1, t2-title-screen--boat, var_0);
                 }
                 lambda {

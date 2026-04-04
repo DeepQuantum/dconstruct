@@ -118,9 +118,9 @@ statescript {
             track mil-1 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-chase-block-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-chase-block-door-1, 1);
                     wait-animate_(npc-nor-chase-militia-at-end-1, nor-nora-chase-blocked-door-bash-follow--npc-1, var_0);
                 }
                 lambda {
@@ -133,9 +133,9 @@ statescript {
             track mil-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-chase-block-door-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-chase-block-door-1, 1);
                     wait-animate_(npc-nor-chase-militia-at-end-2, nor-nora-chase-blocked-door-bash-follow--npc-3, var_0);
                 }
                 lambda {

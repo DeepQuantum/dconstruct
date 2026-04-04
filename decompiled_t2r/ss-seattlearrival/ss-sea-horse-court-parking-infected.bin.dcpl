@@ -116,17 +116,7 @@ statescript {
                     wait-spawn-npc-group-async(sea-hub-court-parking-infected-wave-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : sea-hub-court-parking-infected-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-court-parking-infected-wave-1) {
                         if (entity-exists?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -160,17 +150,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-court-parking-infected-wave-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-court-parking-infected-wave-2) {
                         spawn-entity(var_2, 0, 0);
                         npc-make-aware-of(var_2, player, 2, 0);
                         wait(2.00);
@@ -270,17 +250,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sea-hub-court-parking-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-court-parking-infected) {
                         if (entity-exists?(var_2)) {
                             npc-kill(var_2);
                         }

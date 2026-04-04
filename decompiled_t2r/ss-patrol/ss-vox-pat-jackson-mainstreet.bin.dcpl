@@ -281,15 +281,15 @@ statescript {
             track snpc-anim {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 43;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = npc-m-head-look-ambi-part-gesture;
-                    *(i32*)*(*var_1 + (1 * 8)) = 27;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (2 * 8)) = 29;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 43;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = npc-m-head-look-ambi-part-gesture;
+                    *(i32*)*var_1[1] = 27;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u8*)(*var_1[1] + 8) = 2;
+                    *(i32*)*var_1[2] = 29;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = 2;
                     animate_(snpc-quad-46, get-object-anim(snpc-quad-46, 1), var_1);
                 }
             }

@@ -18,7 +18,7 @@ bool is-abby-skel?() {
 sid convert-cur-skel-to-abby-ellie() {
     u64? var_0 = get-object-skeleton(player);
     sid var_3;
-    if (var_0 == abby-skel && darray-contains?(grp-abby-skel-char, new-boxed-value(7, var_0))) {
+    if (var_0 == abby-skel && darray-contains?(grp-abby-skel-char, boxed_symbol(var_0))) {
         var_3 = abby-skel;
     }
     return var_3;
@@ -32,7 +32,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    fact-set/f(player, is-abby-skel, new-boxed-value(1, is-abby-skel?()));
+                    fact-set/f(player, is-abby-skel, boxed_bool(is-abby-skel?()));
                 }
             }
         }

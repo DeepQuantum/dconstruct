@@ -118,7 +118,7 @@ statescript {
             }
             track vox {
                 lambda {
-                    fact-set(global, enter-backpack?, new-boxed-value(1, 1));
+                    fact-set(global, enter-backpack?, boxed_bool(1));
                 }
             }
         }
@@ -160,7 +160,7 @@ statescript {
             }
             track vox {
                 lambda {
-                    fact-set(global, enter-backpack?, new-boxed-value(1, 0));
+                    fact-set(global, enter-backpack?, boxed_bool(0));
                 }
             }
         }

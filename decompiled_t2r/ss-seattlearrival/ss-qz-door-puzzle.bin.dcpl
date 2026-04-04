@@ -276,49 +276,49 @@ statescript {
                             0,
                             1
                         );
-                        send-event(set-player-holds-rope-end, carry-object-sea-rope-6, new-boxed-value(1, 1), new-boxed-value(6, 0.30));
+                        send-event(set-player-holds-rope-end, carry-object-sea-rope-6, boxed_bool(1), boxed_f32(0.30));
                         interactable-disable(int-sea-lever-gate-2);
                         camera-enable-animated(2.00, -1.00, 1, 1000, 0, 0, 0);
                         signal(anim-start, 0);
                         signal(has-cord, 0);
                         u64? var_5 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_5 + (2 * 8)) = 27;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_5 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (3 * 8)) + 8) = 0.60;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.60;
+                        *(i32*)*var_5[2] = 27;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(u8*)(*var_5[2] + 8) = 2;
+                        *(i32*)*var_5[3] = 30;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(f32*)(*var_5[3] + 8) = 0.60;
                         animate_(obj-sea-qz-junc-box-2, sea-qz-door-start-circuit-breaker-2--fusebox, var_5);
                         u64? var_7 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_7 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_7 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (3 * 8)) + 8) = 164;
-                        *(i32*)*(*var_7 + (4 * 8)) = 60;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.60;
+                        *(i32*)*var_7[2] = 30;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(f32*)(*var_7[2] + 8) = 0.60;
+                        *(i32*)*var_7[3] = 61;
+                        *(u64*)(*var_7[3] + 8) = 0;
+                        *(i32*)(*var_7[3] + 8) = 164;
+                        *(i32*)*var_7[4] = 60;
+                        *(u64*)(*var_7[4] + 8) = 0;
+                        *(f32*)(*var_7[4] + 8) = 0.50;
                         wait-animate_(player, sea-qz-door-start-circuit-breaker-2--ellie, var_7);
                         set-high-contrast-mode-type(carry-object-sea-rope-6, 1);
                         set-high-contrast-mode-type(free-rope-31, 1);
                         send-event(
                             attach-rope-to-spawner,
                             player-get-carried-object(),
-                            new-boxed-value(7, obj-7724),
-                            new-boxed-value(18, get-spawner-locator(obj-7724, 1))
+                            boxed_symbol(obj-7724),
+                            boxed_boundframe(get-spawner-locator(obj-7724, 1))
                         );
                         set-object-locator(carry-rope-get-rope-end(carry-object-sea-rope-6), get-spawner-locator(obj-7724, 1));
                         set-boolean(plugged-in-2, 1, ss-qz-door-puzzle-2);
@@ -349,51 +349,51 @@ statescript {
                         interactable-disable(int-sea-transformer-2);
                         signal(no-cord, 0);
                         u64? var_16 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_16 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
-                        *(i32*)*(*var_16 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_16 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_16 + (1 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_16 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_16 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_16 + (2 * 8)) + 8) = 0.60;
+                        *(i32*)*var_16[0] = 10;
+                        *(u64*)(*var_16[0] + 8) = 0;
+                        *(u64*)(*var_16[0] + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
+                        *(i32*)*var_16[1] = 28;
+                        *(u64*)(*var_16[1] + 8) = 0;
+                        *(f32*)(*var_16[1] + 8) = 0.40;
+                        *(i32*)*var_16[2] = 30;
+                        *(u64*)(*var_16[2] + 8) = 0;
+                        *(f32*)(*var_16[2] + 8) = 0.60;
                         animate_(obj-sea-qz-junc-box-2, sea-qz-door-start-circuit-breaker-2-attempt--fusebox, var_16);
                         u64? var_18 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_18 + (0 * 8)) = 30;
-                        *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (0 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_18 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_18 + (1 * 8)) + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
-                        *(i32*)*(*var_18 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_18 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (2 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_18 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_18 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_18 + (3 * 8)) + 8) = 118;
-                        *(i32*)*(*var_18 + (4 * 8)) = 60;
-                        *(u64*)(*(*var_18 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_18 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_18[0] = 30;
+                        *(u64*)(*var_18[0] + 8) = 0;
+                        *(f32*)(*var_18[0] + 8) = 0.60;
+                        *(i32*)*var_18[1] = 10;
+                        *(u64*)(*var_18[1] + 8) = 0;
+                        *(u64*)(*var_18[1] + 8) = get-spawner-locator(pos-sea-qz-second-circuit-1, 1);
+                        *(i32*)*var_18[2] = 28;
+                        *(u64*)(*var_18[2] + 8) = 0;
+                        *(f32*)(*var_18[2] + 8) = 0.40;
+                        *(i32*)*var_18[3] = 61;
+                        *(u64*)(*var_18[3] + 8) = 0;
+                        *(i32*)(*var_18[3] + 8) = 118;
+                        *(i32*)*var_18[4] = 60;
+                        *(u64*)(*var_18[4] + 8) = 0;
+                        *(f32*)(*var_18[4] + 8) = 0.50;
                         wait-animate_(player, sea-qz-door-start-circuit-breaker-2-attempt--ellie, var_18);
                         bool var_24 = !(get-animation-playing?(player, sea-qz-door-start-circuit-breaker-2-attempt--ellie, 2)) && get-animation-frame(player, 2, sea-qz-door-start-circuit-breaker-2-attempt--ellie) >= ((get-animation-duration(player, sea-qz-door-start-circuit-breaker-2-attempt--ellie) - 0.60) * 30.00);
                         if (!var_24) {
                             u64? var_25 = #%alloc-array(single-frame, 16, 5, 1);
-                            *(i32*)*(*var_25 + (0 * 8)) = 40;
-                            *(u64*)(*(*var_25 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_25 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_25 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_25 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_25 + (1 * 8)) + 8) = 0.10;
-                            *(i32*)*(*var_25 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_25 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_25 + (2 * 8)) + 8) = 0.70;
-                            *(i32*)*(*var_25 + (3 * 8)) = 57;
-                            *(u64*)(*(*var_25 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_25 + (3 * 8)) + 8) = get-animation-frame(player, 2, sea-qz-door-start-circuit-breaker-2-attempt--ellie);
-                            *(i32*)*(*var_25 + (4 * 8)) = 75;
-                            *(u64*)(*(*var_25 + (4 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_25 + (4 * 8)) + 8) = *upperbody--left-soft--right-hard--fb*;
+                            *(i32*)*var_25[0] = 40;
+                            *(u64*)(*var_25[0] + 8) = 0;
+                            *(i32*)(*var_25[0] + 8) = 1;
+                            *(i32*)*var_25[1] = 28;
+                            *(u64*)(*var_25[1] + 8) = 0;
+                            *(f32*)(*var_25[1] + 8) = 0.10;
+                            *(i32*)*var_25[2] = 30;
+                            *(u64*)(*var_25[2] + 8) = 0;
+                            *(f32*)(*var_25[2] + 8) = 0.70;
+                            *(i32*)*var_25[3] = 57;
+                            *(u64*)(*var_25[3] + 8) = 0;
+                            *(f32*)(*var_25[3] + 8) = get-animation-frame(player, 2, sea-qz-door-start-circuit-breaker-2-attempt--ellie);
+                            *(i32*)*var_25[4] = 75;
+                            *(u64*)(*var_25[4] + 8) = 0;
+                            *(u64*)(*var_25[4] + 8) = *upperbody--left-soft--right-hard--fb*;
                             animate_(player, sea-qz-door-start-circuit-breaker-2-attempt--ellie, var_25);
                             wait-one-frame();
                         }
@@ -608,22 +608,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
                     animate_(obj-12916, sea-qz-door-open-gates-attempt--button, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
                     wait-animate_(player, sea-qz-door-open-gates-attempt--ellie, var_0);
                 }
                 lambda {
@@ -732,67 +732,67 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(sea-qz-main-gate-1, sea-qz-door-open-gates-enter--gates, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(player-horse, sea-qz-door-open-gates-enter--horse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(dina, sea-qz-door-open-gates-enter--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player-horse, sea-qz-door-open-gates-idle--horse, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(dina, sea-qz-door-open-gates-idle--dina, var_0);
                 }
                 lambda {
@@ -1127,18 +1127,18 @@ statescript {
                         }
                         if (!get-boolean(dina-on-horse, self)) {
                             u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
-                            *(i32*)*(*var_3 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_3 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_3 + (3 * 8)) = 13;
-                            *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_3 + (3 * 8)) + 8) = 2;
+                            *(i32*)*var_3[0] = 10;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-sea-horse-gate-open-3, 1);
+                            *(i32*)*var_3[1] = 28;
+                            *(u64*)(*var_3[1] + 8) = 0;
+                            *(f32*)(*var_3[1] + 8) = 0.00;
+                            *(i32*)*var_3[2] = 30;
+                            *(u64*)(*var_3[2] + 8) = 0;
+                            *(f32*)(*var_3[2] + 8) = 0.50;
+                            *(i32*)*var_3[3] = 13;
+                            *(u64*)(*var_3[3] + 8) = 0;
+                            *(i32*)(*var_3[3] + 8) = 2;
                             animate_(player-horse, sea-qz-door-open-gates-idle--horse, var_3);
                         }
                     }

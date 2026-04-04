@@ -19,7 +19,7 @@ u16 spawn-san-suburb-yard-infected(u16 arg_0) {
         } else {
             var_1 = npc-san-wilds-suburbs-runner-1;
         }
-        darray-append(san-wilds-suburbs-reinforcements, new-boxed-value(7, wait-spawn-npc(var_1, get-furthest-in-group(san-wilds-suburbs-reinforcement-spawners, player), 0)), 1);
+        darray-append(san-wilds-suburbs-reinforcements, boxed_symbol(wait-spawn-npc(var_1, get-furthest-in-group(san-wilds-suburbs-reinforcement-spawners, player), 0)), 1);
         wait(1.00);
     }
     return i + 1;
@@ -335,17 +335,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-wilds-suburbs-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-suburbs-npcs) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -361,17 +351,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(santa-barbara, san-infected-wilds-suburbs-street)) {
-                        foreach (u64? var_2 : san-wilds-suburbs-end-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : san-wilds-suburbs-end-npcs) {
                             kill-entity-if-spawned(var_3);
                         }
                         go(done, 1);

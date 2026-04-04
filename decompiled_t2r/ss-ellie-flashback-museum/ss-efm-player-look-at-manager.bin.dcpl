@@ -140,7 +140,7 @@ statescript {
                 lambda {
                     if (nth-frame?(5, 0)) {
                         if (player-facing-position?(get-object-position(get-symbol(subject-of-convo, self)), 180.00) && distance-between-objects-less-than?(player, get-symbol(subject-of-convo, self), 8.00)) {
-                            u64? var_9 = darray-at(dino-look-at-targets, darray-find(dino-look-at-interacts, new-boxed-value(7, get-symbol(subject-of-convo, self)), 0));
+                            u64? var_9 = darray-at(dino-look-at-targets, darray-find(dino-look-at-interacts, boxed_symbol(get-symbol(subject-of-convo, self)), 0));
                             u16 var_10;
                             if (var_9 && *(u16*)(var_9 + 12) == 7) {
                                 var_10 = *(u64*)var_9;

@@ -92,8 +92,8 @@ statescript {
                             set-int32(frame-counter, 0, self);
                             set-symbol(curr-anim, get-symbol(temp-anim, self), self);
                             if (!(get-symbol(anims-array, self) == 0)) {
-                                darray-append(get-symbol(anims-array, self), new-boxed-value(7, get-symbol(curr-anim, self)), 0);
-                                darray-append(get-symbol(times-array, self), new-boxed-value(6, time-elapsed(get-float(curr-time, self))), 0);
+                                darray-append(get-symbol(anims-array, self), boxed_symbol(get-symbol(curr-anim, self)), 0);
+                                darray-append(get-symbol(times-array, self), boxed_f32(time-elapsed(get-float(curr-time, self))), 0);
                             }
                         }
                         set-float(curr-anim-phase, get-float(temp-anim-phase, self), self);

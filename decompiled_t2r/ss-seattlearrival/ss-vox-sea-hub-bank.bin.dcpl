@@ -71,7 +71,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(vox-marked-map?, self)) {
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 5));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(5));
                     }
                 }
                 lambda {
@@ -327,7 +327,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(vox-marked-map?, self)) {
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 5));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(5));
                     }
                 }
                 lambda {
@@ -375,7 +375,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(vox-marked-map?, self)) {
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 5));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(5));
                     }
                 }
                 lambda {
@@ -924,7 +924,7 @@ statescript {
                     set-svar(vox-sea-hub-bank-done, 1);
                 }
                 lambda {
-                    send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 5), new-boxed-value(6, 10.00));
+                    send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(5), boxed_f32(10.00));
                 }
                 lambda {
                     wait-say(dina, vox-igc-din-gam-sea-hub-explore-bank-return-to-surface-sp-001, 2, 0);
@@ -1070,7 +1070,7 @@ statescript {
                     set-svar(vox-sea-hub-leave-bank-complete, 1);
                 }
                 lambda {
-                    send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 5), new-boxed-value(6, 10.00));
+                    send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(5), boxed_f32(10.00));
                 }
                 lambda {
                     select-mode-mark-complete(0.00);

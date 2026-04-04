@@ -24,7 +24,7 @@ statescript {
         block event Attack {
             track main {
                 lambda {
-                    broadcast-event(efp-watch-player-hit-gondola, new-boxed-value(7, *(u64*)(event::get-attack-info(get-event()) + 16)));
+                    broadcast-event(efp-watch-player-hit-gondola, boxed_symbol(*(u64*)(event::get-attack-info(get-event()) + 16)));
                 }
                 lambda {
                     if (task-active?(ellie-flashback-patrol, efp-walking-with-tommy-sniping-ski-lift-ridge)) {

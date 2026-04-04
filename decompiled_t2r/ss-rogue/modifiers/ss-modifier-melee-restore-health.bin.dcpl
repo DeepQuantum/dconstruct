@@ -46,8 +46,8 @@ statescript {
                         } else {
                             var_14 = get-player-max-health() - get-player-health();
                         }
-                        send-event(character-healed, ss-meta-abby-heal-1, new-boxed-value(2, var_14));
-                        var_3 = broadcast-event(skull-activate, new-boxed-value(7, melee-restore-health));
+                        send-event(character-healed, ss-meta-abby-heal-1, boxed_i32(var_14));
+                        var_3 = broadcast-event(skull-activate, boxed_symbol(melee-restore-health));
                     }
                 }
             }

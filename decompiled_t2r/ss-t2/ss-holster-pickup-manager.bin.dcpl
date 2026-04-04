@@ -252,7 +252,7 @@ statescript {
                 }
                 lambda {
                     if (is-text-to-speech-enabled?() && !get-svar-as-boolean(player-holster-tts-tutorial)) {
-                        speak-text-to-speech-formatted(new-boxed-value(7, HUD_HOLSTER_TUTORIAL), 1, 0, 0);
+                        speak-text-to-speech-formatted(boxed_symbol(HUD_HOLSTER_TUTORIAL), 1, 0, 0);
                         set-svar-as-boolean(player-holster-tts-tutorial, 1);
                     }
                 }

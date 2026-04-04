@@ -35,7 +35,7 @@ statescript {
             track setup {
                 lambda {
                     u64? var_0 = ddict-create(single-frame, -1, 0);
-                    ddict-set(var_0, per-bone-vol-probe-lighting, new-boxed-value(2, 1));
+                    ddict-set(var_0, per-bone-vol-probe-lighting, boxed_i32(1));
                     u64? var_2 = get-spawners-by-criteria(var_0, 0, 0, rgn-tra-horde-defend-fight-windows-1, 0, 0);
                     set-symbol(left-window, get-closest-spawner-in-group-to-locator(var_2, get-spawner-locator(pos-tra-horde-gondola-idle-1, 1)), self);
                     set-symbol(center-window, get-closest-spawner-in-group-to-locator(var_2, get-spawner-locator(pos-tra-horde-gondola-idle-2, 1)), self);

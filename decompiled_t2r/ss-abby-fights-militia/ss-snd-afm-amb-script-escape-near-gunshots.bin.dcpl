@@ -56,7 +56,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(afm-escape-village-task-in?, self)) {
-                        send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, ss-rgn-afm-exit-home-distant-gunshots-1));
+                        send-event(enter, self, boxed_symbol(player), boxed_symbol(ss-rgn-afm-exit-home-distant-gunshots-1));
                     }
                 }
             }

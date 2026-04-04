@@ -54,21 +54,21 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 58;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = get-animation-phase(player, 2, afd-inspect-caterpillar-enter);
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-attach-point-parented-bound-frame(player, targRWrist);
-                    *(i32*)*(*var_1 + (2 * 8)) = 14;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = apReference-caterpillar;
-                    *(i32*)*(*var_1 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (4 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 58;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = get-animation-phase(player, 2, afd-inspect-caterpillar-enter);
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-attach-point-parented-bound-frame(player, targRWrist);
+                    *(i32*)*var_1[2] = 14;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u64*)(*var_1[2] + 8) = apReference-caterpillar;
+                    *(i32*)*var_1[3] = 28;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 0.00;
+                    *(i32*)*var_1[4] = 28;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(f32*)(*var_1[4] + 8) = 0.50;
                     wait-animate_(tag-symbol(investigate-obj, self), afd-inspect-caterpillar-enter-2--caterpillar, var_1);
                 }
             }

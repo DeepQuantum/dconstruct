@@ -62,17 +62,7 @@ statescript {
                     spawn-entity(obj-res-downhill-windshield-blocker-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : car-defend-taps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : car-defend-taps) {
                         disable-action-pack(var_2);
                     }
                 }
@@ -89,17 +79,7 @@ statescript {
                     wait-spawn-npc-group-async(car-defend-npcs-wave-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : car-defend-npcs-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : car-defend-npcs-wave-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-disable-skill(var_2, 38);
@@ -186,17 +166,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : defend-hardpoints-all) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : defend-hardpoints-all) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -365,17 +335,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : car-defend-npcs-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : car-defend-npcs-wave-1) {
                         if (npc-alive?(var_2)) {
                             npc-set-accuracy-multiplier(var_2, lerp-scale(5.00, 0.00, 0.00, 1.00, get-float(kill-shooter-timer, self)));
                         }
@@ -417,7 +377,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (darray-contains?(car-defend-npcs-wave-1, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(car-defend-npcs-wave-1, boxed_symbol(event-arg-symbol(0)))) {
                         start-timer(kill-shooter-timer, 5.00, self, 1);
                     }
                 }
@@ -478,17 +438,7 @@ statescript {
                     character-set-invincibility(jesse, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : car-defend-npcs-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : car-defend-npcs-wave-1) {
                         if (npc-alive?(var_2)) {
                             npc-set-accuracy-multiplier(var_2, 0.00);
                         }
@@ -501,17 +451,7 @@ statescript {
                 lambda {
                     if (task-complete?(rescue-jesse, res-downhill-drive-start)) {
                         group-kill-entity(car-defend-npcs, 0);
-                        foreach (u64? var_2 : defend-hardpoints-all) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : defend-hardpoints-all) {
                             set-hardpoint-disabled(var_3);
                         }
                         go(complete, 1);

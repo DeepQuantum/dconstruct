@@ -50,7 +50,7 @@ u16 wait-spawn-burn-info-list(u64? arg_0) {
     for (u64 i = 0; i < *(i32*)(var_0 + 12); i++) {
         set-int32(cur-list-index, i, self);
         u64? var_8 = map-lookup-ptr(lookup-symbol(*default-burn-wound-info-map*, map), *(u64*)((*(var_0 + 16) + (i * 40)) + 24));
-        u64? var_11 = darray-find(all-damage-joints, new-boxed-value(7, *(u64*)((*(var_0 + 16) + (i * 40)) + 24)), 0);
+        u64? var_11 = darray-find(all-damage-joints, boxed_symbol(*(u64*)((*(var_0 + 16) + (i * 40)) + 24)), 0);
         u16 var_12;
         if (var_11 >= 0) {
             u64? var_13 = darray-at(all-damage-areas, var_11);
@@ -137,7 +137,7 @@ u16 wait-spawn-burn-info-list(u64? arg_0) {
                     set-effect-float(var_45, burnFadeIn, 6.00);
                     set-effect-float(var_45, maxBurnValue, calculate-max-burn-value());
                     set-effect-float(var_45, customLifespan, 20.00);
-                    darray-append(get-symbol(burn-handle-array, self), new-boxed-value(5, var_45), 0);
+                    darray-append(get-symbol(burn-handle-array, self), boxed_u64(var_45), 0);
                     if (*(f32*)((*(var_0 + 16) + (i * 40)) + 8) > 0.00) {
                         var_55 = update-max-burn-values();
                     }
@@ -159,7 +159,7 @@ u16 wait-spawn-burn-info-list(u64? arg_0) {
             if (!(npc-alive?(get-self-id()))) {
                 set-effect-float(var_65, toggleGeoFire, 0.00);
             }
-            darray-append(get-symbol(handle-array, self), new-boxed-value(5, var_65), 0);
+            darray-append(get-symbol(handle-array, self), boxed_u64(var_65), 0);
             set-effect-sprite-scale(var_65, *(*var_58 + 32));
             set-effect-float(var_65, decayStartTime, get-timer-value(main-timer, self));
             set-effect-float(var_65, decayDuration, 3.00);
@@ -170,7 +170,7 @@ u16 wait-spawn-burn-info-list(u64? arg_0) {
                 0,
                 0
             )), 0);
-            darray-append(get-symbol(joint-array, self), new-boxed-value(7, *(u64*)(*var_58 + 8)), 0);
+            darray-append(get-symbol(joint-array, self), boxed_symbol(*(u64*)(*var_58 + 8)), 0);
             wait-one-frame();
             set-float(light-scale, *(f32*)((*(var_0 + 16) + (i * 40)) + 20), self);
             u16 var_84;
@@ -1049,17 +1049,7 @@ statescript {
                         f32 var_18;
                         f32 var_19;
                         f32 var_20;
-                        foreach (u64? var_22 : get-symbol(joint-array, self)) {
-                            u16 var_23;
-                            if (var_22 && *(u16*)(var_22 + 12) == 7) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-                                var_23 = *(u64*)var_22;
-                            } else {
-                                var_23 = 0;
-                            }
+                        foreach (u64? var_23 : get-symbol(joint-array, self)) {
                             var_18 = 0.00 + *(f32*)get-joint-position(self, var_23);
                             var_19 = 0.00 + *(f32*)(get-joint-position(self, var_23) + 4);
                             var_20 = 0.00 + *(f32*)(get-joint-position(self, var_23) + 8);

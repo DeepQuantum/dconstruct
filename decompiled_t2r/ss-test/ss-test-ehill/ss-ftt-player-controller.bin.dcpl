@@ -44,28 +44,8 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tutorial-weapons) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        foreach (u64? var_5 : player-weapon-upgrade-get-active-bundles(var_2)) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                    foreach (u64? var_2 : tutorial-weapons) {
+                        foreach (u64? var_6 : player-weapon-upgrade-get-active-bundles(var_2)) {
                             player-weapon-upgrade-remove-bundle(player, var_2, var_6);
                         }
                     }

@@ -141,7 +141,7 @@ embedded@3a698(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-wall-standing-struggle-finisher
 embedded@38b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-infected-wall-standing-struggle-finisher), 0, 0);
 }
@@ -175,17 +175,17 @@ embedded@37368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, inf-runner-vs-ellie-wall-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(inf-runner-vs-ellie-wall-struggle-fail--tendon == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, inf-runner-vs-ellie-wall-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -225,17 +225,17 @@ embedded@3f378(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, inf-runner-vs-abby-wall-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(inf-runner-vs-abby-wall-struggle-fail--tendon == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, inf-runner-vs-abby-wall-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -275,17 +275,17 @@ embedded@3cb48(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-finisher-ellie-neck-bite-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -325,17 +325,17 @@ embedded@379c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-finisher-abby-neck-bite-l, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -790,9 +790,9 @@ npc-infected-low-cover-standing-struggle-finisher
 embedded@39b78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000.00)
     );
 }
 
@@ -908,7 +908,7 @@ embedded@390a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? npc-infected-standing-struggle-finisher
 embedded@3bdd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-infected-standing-struggle-finisher), 0, 0);
 }
@@ -935,17 +935,17 @@ embedded@37638(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(clicker-muscle-tendon, arg_1, infected-standing-struggle-fail--tendon, arg_6, 1, 1);
         } else if (!(infected-standing-struggle-fail--tendon == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_1, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_1, infected-standing-struggle-fail--tendon, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -986,17 +986,17 @@ embedded@3f188(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-finisher-ellie-neck-bite-r, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -1037,17 +1037,17 @@ embedded@3fae8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-finisher-abby-neck-bite-r, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -1699,15 +1699,15 @@ embedded@3cc40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.50 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.50 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.50 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -1716,15 +1716,15 @@ embedded@3cc40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.50 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.50),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.50),
             var_15
         );
         var_1 = var_11;
@@ -1847,15 +1847,15 @@ embedded@3c4c8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_12 = !(arg_1 == 0) && !(arg_2 == 0) && var_11 < 7.00 && var_11 > 0.00;
         u64? var_16;
         if (var_12) {
-            var_16 = new-boxed-value(7, true);
+            var_16 = boxed_symbol(true);
         } else {
-            var_16 = new-boxed-value(7, false);
+            var_16 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_11),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 7.00),
+            boxed_f32(var_11),
+            boxed_f32(0.00),
+            boxed_f32(7.00),
             var_16
         );
         if (var_12) {
@@ -1869,15 +1869,15 @@ embedded@3c4c8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_21 = !(arg_1 == 0) && !(arg_2 == 0) && var_20 < 5.00 && var_20 > 0.00;
         u64? var_25;
         if (var_21) {
-            var_25 = new-boxed-value(7, true);
+            var_25 = boxed_symbol(true);
         } else {
-            var_25 = new-boxed-value(7, false);
+            var_25 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_20),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 5.00),
+            boxed_f32(var_20),
+            boxed_f32(0.00),
+            boxed_f32(5.00),
             var_25
         );
         if (var_21 && !npc-enemy-abby?(arg_1)) {
@@ -2356,7 +2356,7 @@ npc-infected-back-standing-struggle-enter
 npc-infected-front-standing-struggle-enter
 embedded@3e6d8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (npc-runner?(arg_1)) {
-        broadcast-event(player-grabbed-by-runner, new-boxed-value(7, arg_1));
+        broadcast-event(player-grabbed-by-runner, boxed_symbol(arg_1));
     }
     u16 var_3;
     if (is-rogue-mode?()) {
@@ -2428,7 +2428,7 @@ embedded@37b20(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
 u64? npc-infected-low-cover-standing-struggle-finisher
 embedded@3a110(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-infected-low-cover-standing-struggle-finisher), 0, 0);
 }
@@ -2532,15 +2532,15 @@ embedded@3cba0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -2549,15 +2549,15 @@ embedded@3cba0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.00),
             var_15
         );
         var_1 = var_11;
@@ -2693,15 +2693,15 @@ embedded@3ddb0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -2710,15 +2710,15 @@ embedded@3ddb0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.00),
             var_15
         );
         var_1 = var_11;
@@ -2824,15 +2824,15 @@ embedded@380b8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -2841,15 +2841,15 @@ embedded@380b8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.00),
             var_15
         );
         var_1 = var_11;
@@ -2928,15 +2928,15 @@ embedded@3d1d0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 3.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
         var_5
     );
     if (!var_1) {
@@ -3076,17 +3076,7 @@ embedded@3d110(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? a
     if (0 && 0) {
         camera-override-near-clip/f(0.01);
     }
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-get-target(var_2) == arg_2) {
             npc-set-melee-behavior-condition(var_2, 10);
         }
@@ -3337,9 +3327,9 @@ npc-infected-low-cover-standing-struggle
 embedded@38358(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 200.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(200.00)
     );
 }
 
@@ -3479,7 +3469,7 @@ u16 npc-infected-standing-struggle
 embedded@3c7b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (task-active?(ellie-flashback-patrol, efp-bloater-fight)) {
-        var_1 = broadcast-event(go-to-bloater-kill, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2));
+        var_1 = broadcast-event(go-to-bloater-kill, boxed_symbol(arg_1), boxed_symbol(arg_2));
     } else {
         var_1 = 0;
     }
@@ -3598,17 +3588,7 @@ npc-infected-standing-struggle-success-abby
 npc-infected-low-cover-standing-struggle-success-ellie
 npc-infected-wall-standing-struggle-success-ellie
 embedded@3fd68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-buddy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-buddy-npcs) {
         if (npc-buddy-should-play-aborted-save-jumpback?(var_2) && !get-current-melee-attack(var_2)) {
             sid var_5;
             if (var_2 == dina || var_2 == mel && var_2 == lev) {
@@ -3679,7 +3659,7 @@ embedded@3e800(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? #702F871BCAF9DFC6
 embedded@3b320(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(#702F871BCAF9DFC6), 0, 0);
 }
@@ -3708,15 +3688,15 @@ embedded@3d8f8(u64?* arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64?
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 3.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
         var_5
     );
     npc-stunner?(arg_1);
@@ -3770,15 +3750,15 @@ embedded@38110(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 5.00 && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 5.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(5.00),
             var_7
         );
         if (var_3) {
@@ -3789,15 +3769,15 @@ embedded@38110(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_13 = !(arg_1 == 0) && !(arg_2 == 0) && var_12 < 5.00 && var_12 > 0.00;
     u64? var_17;
     if (var_13) {
-        var_17 = new-boxed-value(7, true);
+        var_17 = boxed_symbol(true);
     } else {
-        var_17 = new-boxed-value(7, false);
+        var_17 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_12),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 5.00),
+        boxed_f32(var_12),
+        boxed_f32(0.00),
+        boxed_f32(5.00),
         var_17
     );
     u16 var_21;
@@ -4159,7 +4139,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_6 = -1.00;
             } else {
                 f32 var_10;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_10 = 0.00;
                 } else {
                     var_10 = 0.00;
@@ -4187,9 +4167,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && !(is-player?(arg_1)) || npc-clicker?(arg_2) || npc-runner?(arg_2) && npc-stalker?(arg_2)) {
@@ -4212,7 +4192,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_38 = 1.00;
                 }
                 f32 var_41;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_41 = 0.00;
                 } else {
                     var_41 = 0.00;
@@ -4291,7 +4271,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_59 = get-melee-weapon-damage(arg_1, arg_2);
                 }
                 f32 var_63;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_63 = 0.00;
                 } else {
                     var_63 = 0.00;
@@ -4340,9 +4320,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             }
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-clicker?(arg_1) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) || characters-are-enemies?(arg_1, arg_2) && player-get-meatshield() == arg_2) {
@@ -4405,7 +4385,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                         var_113 = -1.00;
                     } else {
                         f32 var_117;
-                        if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                        if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                             var_117 = 0.00;
                         } else if (is-player?(arg_2)) {
                             var_117 = 0.00;
@@ -4456,9 +4436,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
                 broadcast-event(
                     melee-attack-hit,
-                    new-boxed-value(7, arg_2),
-                    new-boxed-value(7, arg_1),
-                    new-boxed-value(7, arg_5)
+                    boxed_symbol(arg_2),
+                    boxed_symbol(arg_1),
+                    boxed_symbol(arg_5)
                 );
                 var_1 = 1;
             } else {
@@ -4509,7 +4489,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_148 = -1.00;
                 } else {
                     f32 var_152;
-                    if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                    if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                         var_152 = 0.00;
                     } else {
                         var_152 = 0.00;
@@ -4545,9 +4525,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-enemy-ellie?(arg_1) && !character-in-i-frame?(arg_2)) {
@@ -4596,7 +4576,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_174 = -1.00;
             } else {
                 f32 var_178;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_178 = 0.00;
                 } else {
                     var_178 = 0.00;
@@ -4637,9 +4617,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             melee-fact-set-time(arg_1, ellie-landed-hit);
             if (npc-enemy-ellie?(arg_1)) {
@@ -4694,7 +4674,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_215 = -1.00;
             } else {
                 f32 var_219;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_219 = 0.00;
                 } else {
                     var_219 = 0.00;
@@ -4735,9 +4715,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (!character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && characters-are-enemies?(arg_1, arg_2) && !(*(u64*)(get-current-melee-attack(arg_1) + 16) == melee-npc-meatshield-kick)) {
@@ -4786,7 +4766,7 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_250 = -1.00;
             } else {
                 f32 var_254;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_254 = 0.00;
                 } else {
                     var_254 = 0.00;
@@ -4827,9 +4807,9 @@ embedded@7130(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else {
@@ -4862,17 +4842,7 @@ embedded@3d2d8(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? a
     if (1 && 0) {
         camera-override-near-clip/f(0.01);
     }
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-get-target(var_2) == arg_2) {
             npc-set-melee-behavior-condition(var_2, 10);
         }
@@ -5207,7 +5177,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_6 = -1.00;
             } else {
                 f32 var_10;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_10 = 0.50;
                 } else {
                     var_10 = 1.00;
@@ -5235,9 +5205,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && !(is-player?(arg_1)) || npc-clicker?(arg_2) || npc-runner?(arg_2) && npc-stalker?(arg_2)) {
@@ -5260,7 +5230,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_38 = 1.00;
                 }
                 f32 var_41;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_41 = 0.50;
                 } else {
                     var_41 = 1.00;
@@ -5339,7 +5309,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_59 = get-melee-weapon-damage(arg_1, arg_2);
                 }
                 f32 var_63;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_63 = 0.50;
                 } else {
                     var_63 = 1.00;
@@ -5388,9 +5358,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             }
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-clicker?(arg_1) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) || characters-are-enemies?(arg_1, arg_2) && player-get-meatshield() == arg_2) {
@@ -5453,7 +5423,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                         var_113 = -1.00;
                     } else {
                         f32 var_117;
-                        if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                        if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                             var_117 = 0.50;
                         } else if (is-player?(arg_2)) {
                             var_117 = 1.00;
@@ -5504,9 +5474,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
                 broadcast-event(
                     melee-attack-hit,
-                    new-boxed-value(7, arg_2),
-                    new-boxed-value(7, arg_1),
-                    new-boxed-value(7, arg_5)
+                    boxed_symbol(arg_2),
+                    boxed_symbol(arg_1),
+                    boxed_symbol(arg_5)
                 );
                 var_1 = 1;
             } else {
@@ -5557,7 +5527,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_148 = -1.00;
                 } else {
                     f32 var_152;
-                    if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                    if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                         var_152 = 0.50;
                     } else {
                         var_152 = 1.00;
@@ -5593,9 +5563,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-enemy-ellie?(arg_1) && !character-in-i-frame?(arg_2)) {
@@ -5644,7 +5614,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_174 = -1.00;
             } else {
                 f32 var_178;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_178 = 0.50;
                 } else {
                     var_178 = 1.00;
@@ -5685,9 +5655,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             melee-fact-set-time(arg_1, ellie-landed-hit);
             if (npc-enemy-ellie?(arg_1)) {
@@ -5742,7 +5712,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_215 = -1.00;
             } else {
                 f32 var_219;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_219 = 0.50;
                 } else {
                     var_219 = 1.00;
@@ -5783,9 +5753,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (!character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && characters-are-enemies?(arg_1, arg_2) && !(*(u64*)(get-current-melee-attack(arg_1) + 16) == melee-npc-meatshield-kick)) {
@@ -5834,7 +5804,7 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_250 = -1.00;
             } else {
                 f32 var_254;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_254 = 0.50;
                 } else {
                     var_254 = 1.00;
@@ -5875,9 +5845,9 @@ embedded@68e8(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else {
@@ -6007,17 +5977,7 @@ embedded@3d4a8(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? a
     if (0 && 1) {
         camera-override-near-clip/f(0.01);
     }
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-get-target(var_2) == arg_2) {
             npc-set-melee-behavior-condition(var_2, 10);
         }
@@ -6370,15 +6330,15 @@ embedded@3c8f0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -6387,15 +6347,15 @@ embedded@3c8f0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.00),
             var_15
         );
         var_1 = var_11;
@@ -6503,15 +6463,15 @@ embedded@3a1d0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.25 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.25 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.25 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -6520,15 +6480,15 @@ embedded@3a1d0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.25 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.25),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.25),
             var_15
         );
         var_1 = var_11;
@@ -6604,15 +6564,15 @@ embedded@39bf0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -6621,15 +6581,15 @@ embedded@39bf0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_15
         );
         var_1 = var_11;
@@ -6956,15 +6916,15 @@ embedded@39a60(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -6973,15 +6933,15 @@ embedded@39a60(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_15
         );
         var_1 = var_11;
@@ -7072,15 +7032,15 @@ embedded@395e8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -7089,15 +7049,15 @@ embedded@395e8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_15
         );
         var_1 = var_11;
@@ -7176,15 +7136,15 @@ embedded@3f568(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -7193,15 +7153,15 @@ embedded@3f568(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_15
         );
         var_1 = var_11;
@@ -7309,15 +7269,15 @@ embedded@3fb40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (2.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(2.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -7326,15 +7286,15 @@ embedded@3fb40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 2.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 2.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(2.00),
             var_15
         );
         var_1 = var_11;
@@ -7413,15 +7373,15 @@ embedded@3f3e0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (3.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(3.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -7430,15 +7390,15 @@ embedded@3f3e0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 3.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 3.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(3.00),
             var_15
         );
         var_1 = var_11;

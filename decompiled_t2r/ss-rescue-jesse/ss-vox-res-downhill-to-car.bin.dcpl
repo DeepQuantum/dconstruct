@@ -13,17 +13,7 @@
 
 u16 any-res-downhill-npc-investigating?() {
     u16 var_1;
-    foreach (u64? var_2 : vox-to-car-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : vox-to-car-npcs) {
         u16 var_5;
         if (npc-using-skill?(var_3, 20)) {
             var_5 = 1;
@@ -177,7 +167,7 @@ statescript {
                     wait(2.00);
                 }
                 lambda {
-                    request-dialog-with-facts(res-downhill-to-car-check-missing-ally-001, new-fact-dictionary(speaker, new-boxed-value(7, npc-res-downhill-to-car-1), investigate-object, new-boxed-value(7, npc-res-downhill-to-car-3)), 0);
+                    request-dialog-with-facts(res-downhill-to-car-check-missing-ally-001, new-fact-dictionary(speaker, boxed_symbol(npc-res-downhill-to-car-1), investigate-object, boxed_symbol(npc-res-downhill-to-car-3)), 0);
                 }
                 lambda {
                     go(wait-for-event, 1);

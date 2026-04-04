@@ -13,17 +13,7 @@
 
 u16 flo-bloater-get-safe-pos(u64? arg_0) {
     u16 var_2;
-    foreach (u64? var_3 : arg_0) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : arg_0) {
         u64? var_6 = get-locator-distance(get-spawner-locator(var_4, 1), get-object-locator(npc-arcade-bloater-1));
         u16 var_17;
         if (var_6 > 0.00 && absf(get-angle-between-vectors(vector-between-locators(get-object-locator(player), get-spawner-locator(var_4, 1)), vector-between-objects(player, npc-arcade-bloater-1), alloc-vector(0.00, 1.00, 0.00, 1.00, 0))) > 20.00 && !(point-is-in-infected-cloud?(get-spawner-position(var_4, 1)))) {

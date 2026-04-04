@@ -47,8 +47,8 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: %s was attacked by dragons breath ammo", string-debug(var_2)), 19);
                         }
-                        darray-append(get-symbol(group-npcs-just-hit-with-dragons-breath, self), new-boxed-value(7, var_2), 0);
-                        var_4 = send-event(remove-npc-from-hit-list, self, new-boxed-value(7, var_2));
+                        darray-append(get-symbol(group-npcs-just-hit-with-dragons-breath, self), boxed_symbol(var_2), 0);
+                        var_4 = send-event(remove-npc-from-hit-list, self, boxed_symbol(var_2));
                     }
                 }
             }
@@ -76,11 +76,11 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(group-npcs-just-hit-with-dragons-breath, self), new-boxed-value(7, var_0)) && !darray-contains?(get-symbol(group-npcs-burnt-with-dragons-breath, self), new-boxed-value(7, var_0))) {
+                    if (darray-contains?(get-symbol(group-npcs-just-hit-with-dragons-breath, self), boxed_symbol(var_0)) && !darray-contains?(get-symbol(group-npcs-burnt-with-dragons-breath, self), boxed_symbol(var_0))) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC: %s confirmed buring", string-debug(var_0)), 19);
                         }
-                        darray-append(get-symbol(group-npcs-burnt-with-dragons-breath, self), new-boxed-value(7, var_0), 1);
+                        darray-append(get-symbol(group-npcs-burnt-with-dragons-breath, self), boxed_symbol(var_0), 1);
                         set-int32(current-burnt-targets, darray-count(get-symbol(group-npcs-burnt-with-dragons-breath, self)), self);
                         var_7 = send-event(npc-on-fire-with-dragons-breath, self);
                     }
@@ -92,8 +92,8 @@ statescript {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
                     wait(0.50);
-                    if (darray-contains?(get-symbol(group-npcs-just-hit-with-dragons-breath, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(group-npcs-just-hit-with-dragons-breath, self), new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(group-npcs-just-hit-with-dragons-breath, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(group-npcs-just-hit-with-dragons-breath, self), boxed_symbol(var_0), 0);
                         if (!is-final-build?()) {
                             var_4 = display(dc:format("DEB-EC: %s removed from hit by dragons breath group", string-debug(var_0)), 19);
                         }

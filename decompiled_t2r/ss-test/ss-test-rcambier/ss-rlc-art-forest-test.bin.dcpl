@@ -20,17 +20,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-cover-aps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-cover-aps) {
                         disable-action-pack(var_2);
                     }
                 }
@@ -56,17 +46,7 @@ statescript {
                     wait-spawn-npc-group-async(npcs-rlc-art-forest-test, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : npcs-rlc-art-forest-test) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npcs-rlc-art-forest-test) {
                         npc-set-combat-params(var_2, *proto-forest-no-cover*);
                     }
                 }
@@ -93,17 +73,7 @@ statescript {
             track main {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : npcs-rlc-art-forest-test-line-search) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : npcs-rlc-art-forest-test-line-search) {
                             wait-random(1.00, 3.00);
                             wait-script-caption(var_2, "Check-in", -1.00, 0, 0);
                         }
@@ -126,17 +96,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : npcs-rlc-art-forest-test-line-search) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npcs-rlc-art-forest-test-line-search) {
                         npc-make-aware-of(var_2, player, 2, 0);
                     }
                 }
@@ -147,10 +107,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(faction-enemy, whisper-mode, new-boxed-value(1, 1));
+                    fact-set(faction-enemy, whisper-mode, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-clear-entity, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-clear-entity, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     wait-spawn-npc-group-async(npcs-rlc-art-forest-test-line-search, 0, 0);
@@ -159,17 +119,7 @@ statescript {
                     npc-make-aware-of(npc-723, player, 2, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-cover-aps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-cover-aps) {
                         enable-action-pack(var_2, 1);
                     }
                 }

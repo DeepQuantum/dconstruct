@@ -301,7 +301,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, splashers-snow, new-boxed-value(1, 1));
+                    fact-set(global, splashers-snow, boxed_bool(1));
                 }
             }
         }

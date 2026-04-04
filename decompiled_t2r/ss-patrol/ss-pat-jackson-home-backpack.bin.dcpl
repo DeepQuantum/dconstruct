@@ -319,15 +319,15 @@ statescript {
             track jacket {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.50;
                     animate_(obj-pat-jackson-home-jacket-1, pat-jackson-home-backpack--jacket, var_0);
                 }
                 lambda {
@@ -365,92 +365,92 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 1.50;
                     animate_(player-get-anim-backpack(), pat-jackson-home-backpack--backpack, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.50;
                     animate_(obj-pat-jackson-home-pistol-1, pat-jackson-home-backpack--pistol, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.50;
                     animate_(obj-pat-jackson-home-notebook-1, pat-jackson-home-backpack--notebook, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.50;
                     animate_(obj-pat-jackson-home-walkman-1, pat-jackson-home-backpack--walkman, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 520;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.75;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.60;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(ap-igc-pat-jackson-home-backpack-1, 1);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 520;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.75;
                     wait-animate_(player, pat-jackson-home-backpack--ellie, var_0);
                     bool var_6 = !(get-animation-playing?(player, pat-jackson-home-backpack--ellie, 2)) && get-animation-frame(player, 2, pat-jackson-home-backpack--ellie) >= ((get-animation-duration(player, pat-jackson-home-backpack--ellie) - 0.60) * 30.00);
                     if (!var_6) {
                         u64? var_7 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_7 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.70;
-                        *(i32*)*(*var_7 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (3 * 8)) + 8) = get-animation-frame(player, 2, pat-jackson-home-backpack--ellie);
-                        *(i32*)*(*var_7 + (4 * 8)) = 75;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = *default-upperbody-gestures*;
+                        *(i32*)*var_7[0] = 40;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(i32*)(*var_7[0] + 8) = 1;
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.10;
+                        *(i32*)*var_7[2] = 30;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(f32*)(*var_7[2] + 8) = 0.70;
+                        *(i32*)*var_7[3] = 57;
+                        *(u64*)(*var_7[3] + 8) = 0;
+                        *(f32*)(*var_7[3] + 8) = get-animation-frame(player, 2, pat-jackson-home-backpack--ellie);
+                        *(i32*)*var_7[4] = 75;
+                        *(u64*)(*var_7[4] + 8) = 0;
+                        *(u64*)(*var_7[4] + 8) = *default-upperbody-gestures*;
                         animate_(player, pat-jackson-home-backpack--ellie, var_7);
                         wait-one-frame();
                     }
@@ -462,18 +462,18 @@ statescript {
                 lambda {
                     if (object-playing-feather-blend?(player, pat-jackson-home-backpack--ellie)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                        *(i32*)*(*var_2 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = apReference-spine-d;
-                        *(i32*)*(*var_2 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.00;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                        *(i32*)*var_2[1] = 14;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(u64*)(*var_2[1] + 8) = apReference-spine-d;
+                        *(i32*)*var_2[2] = 59;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(i32*)(*var_2[2] + 8) = 1;
+                        *(i32*)*var_2[3] = 28;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 0.00;
                         animate_(player-get-anim-backpack(), pat-jackson-home-backpack--backpack, var_2);
                     }
                 }

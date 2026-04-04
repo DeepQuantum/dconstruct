@@ -13,7 +13,7 @@
 
 u64? tra-horde-outpost-spawn-horde-infected(u64? arg_0) {
     u64? var_0 = wait-spawn-horde-npc-with-look(arg_0);
-    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
+    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
     return var_0;
 }
 
@@ -32,33 +32,33 @@ u64? tra-horde-play-fence-anim-outpost(u64? arg_0, u64? arg_1, u64? arg_2) {
         npc-m-search-entry-table
     );
     u64? var_6 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_6 + (0 * 8)) = 10;
-    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(pos-tra-horde-find-outpost-idle-, arg_1), 1);
-    *(i32*)*(*var_6 + (1 * 8)) = 28;
-    *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_6 + (2 * 8)) = 30;
-    *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_6 + (3 * 8)) = 2;
-    *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_6 + (3 * 8)) + 8) = 1;
+    *(i32*)*var_6[0] = 10;
+    *(u64*)(*var_6[0] + 8) = 0;
+    *(u64*)(*var_6[0] + 8) = get-spawner-locator(symbol-concat-int32(pos-tra-horde-find-outpost-idle-, arg_1), 1);
+    *(i32*)*var_6[1] = 28;
+    *(u64*)(*var_6[1] + 8) = 0;
+    *(f32*)(*var_6[1] + 8) = 0.30;
+    *(i32*)*var_6[2] = 30;
+    *(u64*)(*var_6[2] + 8) = 0;
+    *(f32*)(*var_6[2] + 8) = 0.30;
+    *(i32*)*var_6[3] = 2;
+    *(u64*)(*var_6[3] + 8) = 0;
+    *(u8*)(*var_6[3] + 8) = 1;
     wait-animate_(arg_0, symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-enter-idle-0, arg_2), "--male"), var_6);
     npc-set-script-only-no-perception(arg_0);
     u64? var_11 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_11 + (0 * 8)) = 10;
-    *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(pos-tra-horde-find-outpost-idle-, arg_1), 1);
-    *(i32*)*(*var_11 + (1 * 8)) = 28;
-    *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_11 + (2 * 8)) = 30;
-    *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_11 + (3 * 8)) = 2;
-    *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_11 + (3 * 8)) + 8) = 1;
+    *(i32*)*var_11[0] = 10;
+    *(u64*)(*var_11[0] + 8) = 0;
+    *(u64*)(*var_11[0] + 8) = get-spawner-locator(symbol-concat-int32(pos-tra-horde-find-outpost-idle-, arg_1), 1);
+    *(i32*)*var_11[1] = 28;
+    *(u64*)(*var_11[1] + 8) = 0;
+    *(f32*)(*var_11[1] + 8) = 0.30;
+    *(i32*)*var_11[2] = 30;
+    *(u64*)(*var_11[2] + 8) = 0;
+    *(f32*)(*var_11[2] + 8) = 0.30;
+    *(i32*)*var_11[3] = 2;
+    *(u64*)(*var_11[3] + 8) = 0;
+    *(u8*)(*var_11[3] + 8) = 1;
     return animate_(arg_0, symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-idle-0, arg_2), "--male"), var_11);
 }
 
@@ -146,7 +146,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-1, 0, 0);
-                    darray-append(tra-horde-outpost-fence-left-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-fence-left-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 1, 1);
                 }
             }
@@ -156,7 +156,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-2, 0, 0);
-                    darray-append(tra-horde-outpost-fence-left-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-fence-left-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 2, 2);
                 }
             }
@@ -166,7 +166,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-3, 0, 0);
-                    darray-append(tra-horde-outpost-fence-left-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-fence-left-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 3, 3);
                 }
             }
@@ -176,7 +176,7 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-4, 0, 0);
-                    darray-append(tra-horde-outpost-fence-left-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-fence-left-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 4, 4);
                 }
             }
@@ -185,36 +185,16 @@ statescript {
                     wait-boolean(spawn-flank-front?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-defend-fight-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-defend-fight-npcs) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-outpost-flank-front-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-outpost-flank-front-spawners) {
                         u64? var_3 = tra-horde-outpost-spawn-horde-infected(var_2);
-                        darray-append(tra-horde-outpost-flank-front-group, new-boxed-value(7, var_3), 1);
+                        darray-append(tra-horde-outpost-flank-front-group, boxed_symbol(var_3), 1);
                         npc-set-demeanor(var_3, 2, 0);
                     }
                 }
@@ -224,19 +204,9 @@ statescript {
                     wait-boolean(spawn-flank-right?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-outpost-flank-right-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-outpost-flank-right-spawners) {
                         u64? var_3 = tra-horde-outpost-spawn-horde-infected(var_2);
-                        darray-append(tra-horde-outpost-flank-right-group, new-boxed-value(7, var_3), 1);
+                        darray-append(tra-horde-outpost-flank-right-group, boxed_symbol(var_3), 1);
                         npc-set-demeanor(var_3, 2, 0);
                     }
                 }
@@ -247,8 +217,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-7, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 7, 7);
                 }
             }
@@ -258,8 +228,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-8, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 8, 8);
                 }
             }
@@ -269,8 +239,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-9, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 9, 9);
                 }
             }
@@ -280,8 +250,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-10, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 10, 5);
                 }
             }
@@ -291,8 +261,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-11, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 11, 4);
                 }
             }
@@ -302,8 +272,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = wait-spawn-npc(cnpc-tra-horde-outpost-13, 0, 0);
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_0), 1);
-                    darray-append(tra-horde-outpost-fence-right-group, new-boxed-value(7, var_0), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_0), 1);
+                    darray-append(tra-horde-outpost-fence-right-group, boxed_symbol(var_0), 1);
                     tra-horde-play-fence-anim-outpost(var_0, 13, 2);
                 }
             }
@@ -317,24 +287,14 @@ statescript {
                     } else {
                         var_2 = spawn-npc(tra-horde-get-backup-spawner(0), 0, 0);
                     }
-                    darray-append(tra-horde-outpost-npcs, new-boxed-value(7, var_2), 1);
+                    darray-append(tra-horde-outpost-npcs, boxed_symbol(var_2), 1);
                 }
             }
         }
         block event remove-fence-left-infected {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-outpost-fence-left-group) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-outpost-fence-left-group) {
                         kill-entity(var_2);
                     }
                 }
@@ -352,17 +312,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-outpost-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-outpost-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, tommy, 2, *npc-awareness-options-no-surprise*);
@@ -376,17 +326,7 @@ statescript {
                 lambda {
                     if (get-boolean(grabs-disabled?, self)) {
                         if (!player-in-region?(rgn-tra-horde-find-outpost-transition-1, 2)) {
-                            foreach (u64? var_3 : tra-horde-outpost-npcs) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : tra-horde-outpost-npcs) {
                                 if (npc-alive?(var_4)) {
                                     npc-disable-melee-grabs(var_4, 0);
                                 }
@@ -394,17 +334,7 @@ statescript {
                             set-boolean(grabs-disabled?, 0, self);
                         }
                     } else if (player-in-region?(rgn-tra-horde-find-outpost-transition-1, 2)) {
-                        foreach (u64? var_9 : tra-horde-outpost-npcs) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
+                        foreach (u64? var_10 : tra-horde-outpost-npcs) {
                             if (npc-alive?(var_10)) {
                                 npc-disable-melee-grabs(var_10, 1);
                             }
@@ -423,17 +353,7 @@ statescript {
                     set-focusable-ignore(player, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-outpost-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-outpost-npcs) {
                         kill-entity(var_2);
                     }
                 }

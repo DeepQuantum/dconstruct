@@ -76,7 +76,7 @@ statescript {
                     set-symbol(rope-plug, fact-symbol(player, player-interactable, 0, 0), self);
                 }
                 lambda {
-                    broadcast-event(player-drop, new-boxed-value(7, fact-symbol(player, player-interactable, 0, 0)));
+                    broadcast-event(player-drop, boxed_symbol(fact-symbol(player, player-interactable, 0, 0)));
                 }
                 lambda {
                     wait-one-frame();

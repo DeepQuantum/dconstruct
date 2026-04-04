@@ -55,18 +55,8 @@ statescript {
         block event wm-new-wave-spawned {
             track main {
                 lambda {
-                    foreach (u64? var_2 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
-                        if (!darray-contains?(get-symbol(group-flashlight-npcs, self), new-boxed-value(7, var_3)) && tag-specified?(rogue-weapon-flashlight, var_3)) {
+                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
+                        if (!darray-contains?(get-symbol(group-flashlight-npcs, self), boxed_symbol(var_3)) && tag-specified?(rogue-weapon-flashlight, var_3)) {
                             spawn-flashlight-with-settings(var_3, tag-symbol(rogue-weapon-flashlight, var_3));
                             turn-on-flashlight(var_3, 0);
                             u64? var_9 = npc-get-weapon-name(var_3, -1);
@@ -102,7 +92,7 @@ statescript {
                                     var_25 = display(dc:format("DEB-WM-FL:       -> overlay: %s", string-debug(var_24)), 19);
                                 }
                             }
-                            darray-append(get-symbol(group-flashlight-npcs, self), new-boxed-value(7, var_3), 1);
+                            darray-append(get-symbol(group-flashlight-npcs, self), boxed_symbol(var_3), 1);
                             ++(num-flashlight-npcs, self);
                         }
                     }
@@ -112,7 +102,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(group-flashlight-npcs, self), new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(get-symbol(group-flashlight-npcs, self), boxed_symbol(event-arg-symbol(0)))) {
                         var_4 = --(num-flashlight-npcs, self);
                     }
                 }
@@ -128,17 +118,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-flashlight-npcs, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-flashlight-npcs, self)) {
                         turn-off-flashlight(var_4, 1);
                     }
                 }

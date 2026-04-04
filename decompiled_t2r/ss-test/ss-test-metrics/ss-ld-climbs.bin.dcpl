@@ -13,46 +13,46 @@
 
 u64? ss-ld-update-climb-groups() {
     darray-clear(ss-ld-climb-heights);
-    darray-append(ss-ld-climb-heights, new-boxed-value(6, 2.00), 0);
+    darray-append(ss-ld-climb-heights, boxed_f32(2.00), 0);
     if (get-boolean(test-jump-heights?, self)) {
-        darray-append(ss-ld-climb-heights, new-boxed-value(6, 1.50), 0);
-        darray-append(ss-ld-climb-heights, new-boxed-value(6, 1.00), 0);
-        darray-append(ss-ld-climb-heights, new-boxed-value(6, 0.50), 0);
+        darray-append(ss-ld-climb-heights, boxed_f32(1.50), 0);
+        darray-append(ss-ld-climb-heights, boxed_f32(1.00), 0);
+        darray-append(ss-ld-climb-heights, boxed_f32(0.50), 0);
     }
     darray-clear(ss-ld-climb-move-mode);
-    darray-append(ss-ld-climb-move-mode, new-boxed-value(7, run), 0);
+    darray-append(ss-ld-climb-move-mode, boxed_symbol(run), 0);
     if (get-boolean(test-move-modes?, self)) {
-        darray-append(ss-ld-climb-move-mode, new-boxed-value(7, sprint), 0);
-        darray-append(ss-ld-climb-move-mode, new-boxed-value(7, crouch), 0);
+        darray-append(ss-ld-climb-move-mode, boxed_symbol(sprint), 0);
+        darray-append(ss-ld-climb-move-mode, boxed_symbol(crouch), 0);
     }
     darray-clear(ss-ld-climb-distance);
-    darray-append(ss-ld-climb-distance, new-boxed-value(6, 2.00), 0);
+    darray-append(ss-ld-climb-distance, boxed_f32(2.00), 0);
     if (get-boolean(test-climb-distances?, self)) {
-        darray-append(ss-ld-climb-distance, new-boxed-value(6, 0.50), 0);
+        darray-append(ss-ld-climb-distance, boxed_f32(0.50), 0);
     }
     darray-clear(ss-ld-climb-edge-angles);
-    darray-append(ss-ld-climb-edge-angles, new-boxed-value(6, 0.00), 0);
+    darray-append(ss-ld-climb-edge-angles, boxed_f32(0.00), 0);
     if (get-boolean(test-tilted-edge?, self)) {
-        darray-append(ss-ld-climb-edge-angles, new-boxed-value(6, -10.00), 0);
-        darray-append(ss-ld-climb-edge-angles, new-boxed-value(6, 10.00), 0);
+        darray-append(ss-ld-climb-edge-angles, boxed_f32(-10.00), 0);
+        darray-append(ss-ld-climb-edge-angles, boxed_f32(10.00), 0);
     }
     darray-clear(ss-ld-climb-wall-angles);
-    darray-append(ss-ld-climb-wall-angles, new-boxed-value(6, 0.00), 0);
+    darray-append(ss-ld-climb-wall-angles, boxed_f32(0.00), 0);
     if (get-boolean(test-tilted-wall?, self)) {
-        darray-append(ss-ld-climb-wall-angles, new-boxed-value(6, -10.00), 0);
-        darray-append(ss-ld-climb-wall-angles, new-boxed-value(6, 10.00), 0);
+        darray-append(ss-ld-climb-wall-angles, boxed_f32(-10.00), 0);
+        darray-append(ss-ld-climb-wall-angles, boxed_f32(10.00), 0);
     }
     darray-clear(ss-ld-climb-wall-player-starts);
-    darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-1), 0);
+    darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-1), 0);
     if (get-boolean(test-approach-angle?, self)) {
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-3), 0);
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-4), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-3), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-4), 0);
     }
     if (get-boolean(test-directional-enters?, self)) {
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-5), 0);
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-6), 0);
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-7), 0);
-        darray-append(ss-ld-climb-wall-player-starts, new-boxed-value(7, pos-auto-climb-start-8), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-5), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-6), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-7), 0);
+        darray-append(ss-ld-climb-wall-player-starts, boxed_symbol(pos-auto-climb-start-8), 0);
     }
     return set-int32(total-iterations, ((((darray-count(ss-ld-climb-heights) * darray-count(ss-ld-climb-move-mode)) * darray-count(ss-ld-climb-distance)) * darray-count(ss-ld-climb-edge-angles)) * darray-count(ss-ld-climb-wall-angles)) * darray-count(ss-ld-climb-wall-player-starts), self);
 }
@@ -141,17 +141,7 @@ statescript {
                     set-object-locator(obj-climb-1, get-spawner-locator(obj-climb-1, 1));
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         stop-animating(var_2, 2, 0.00, 0, 0);
                     }
                 }
@@ -330,17 +320,7 @@ statescript {
                     ss-ld-update-climb-groups();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         animate-start(var_2, bindpose-anim, pos-auto-climb-start-2, 0);
                     }
                 }
@@ -351,17 +331,7 @@ statescript {
                     set-symbol(player-spawner, pos-auto-climb-start-1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : ss-ld-climb-wall-player-starts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ss-ld-climb-wall-player-starts) {
                         foreach (u64? var_4 : ss-ld-climb-edge-angles) {
                             f32 var_5;
                             if (var_4 && *(u16*)(var_4 + 12) == 1) {
@@ -413,17 +383,7 @@ statescript {
                                     } else {
                                         var_11 = 0.00;
                                     }
-                                    foreach (u64? var_13 : ss-ld-climb-move-mode) {
-                                        u16 var_14;
-                                        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                            var_14 = *(u64*)var_13;
-                                        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                            var_14 = *(u64*)var_13;
-                                        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                            var_14 = *(u64*)var_13;
-                                        } else {
-                                            var_14 = 0;
-                                        }
+                                    foreach (u64? var_14 : ss-ld-climb-move-mode) {
                                         foreach (u64? var_16 : ss-ld-climb-heights) {
                                             f32 var_17;
                                             if (var_16 && *(u16*)(var_16 + 12) == 1) {

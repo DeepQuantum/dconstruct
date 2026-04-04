@@ -12,33 +12,13 @@
 // ####################################################################################################
 
 u64? rest-turn-off-lights-in-group(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         turn-off-light(var_2, 1);
     }
 }
 
 u64? rest-turn-on-lights-in-group(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         turn-on-light(var_2, 1);
     }
 }
@@ -60,8 +40,8 @@ u64? far-wait-draw-bar(i32 arg_0, sid arg_1, u64? arg_2, u64? arg_3, sid arg_4) 
     send-event(
         next-chord-changed,
         get-symbol(menu-name, arg_1),
-        new-boxed-value(2, (i32)arg_0),
-        new-boxed-value(6, var_6 * tag-float(tempo, arg_1))
+        boxed_i32((i32)arg_0),
+        boxed_f32(var_6 * tag-float(tempo, arg_1))
     );
     set-float(beat-wheel, 40.00, arg_1);
     set-boolean(right-chord?, is-guitar-vibration-cues-enabled?() && =f(get-float(chord-choice, arg_1), get-float(next-chord, arg_1), 0.00), arg_1);
@@ -120,14 +100,14 @@ statescript {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         animate-done(player, far-restless-at-night-guitar--ellie, ap-far-restless-guitar-window-1, 0, 0, 2);
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                         animate_(far-restless-guitar-light-object-1, far-ellie-plays-guitar-idle--ellie--light-skel, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                         animate_(player, far-ellie-plays-guitar-idle--ellie, var_3);
                         go(guitar-igc, 1);
                     }
@@ -183,26 +163,26 @@ statescript {
                 lambda {
                     while (1) {
                         u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_0 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_0 + (0 * 8)) + 8) = 2.00;
-                        *(i32*)*(*var_0 + (1 * 8)) = 22;
-                        *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.90;
-                        *(i32*)*(*var_0 + (2 * 8)) = 32;
-                        *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_0[0] = 28;
+                        *(u64*)(*var_0[0] + 8) = 0;
+                        *(f32*)(*var_0[0] + 8) = 2.00;
+                        *(i32*)*var_0[1] = 22;
+                        *(u64*)(*var_0[1] + 8) = 0;
+                        *(f32*)(*var_0[1] + 8) = 0.90;
+                        *(i32*)*var_0[2] = 32;
+                        *(u64*)(*var_0[2] + 8) = 0;
+                        *(u8*)(*var_0[2] + 8) = 1;
                         wait-animate_(obj-far-restless-downstairs-curtains-1, night, var_0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 2.00;
-                        *(i32*)*(*var_1 + (1 * 8)) = 22;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.90;
-                        *(i32*)*(*var_1 + (2 * 8)) = 32;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 2.00;
+                        *(i32*)*var_1[1] = 22;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.90;
+                        *(i32*)*var_1[2] = 32;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u8*)(*var_1[2] + 8) = 1;
                         wait-animate_(obj-far-restless-downstairs-curtains-1, night, var_1);
                     }
                 }
@@ -257,69 +237,69 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
                     animate_(obj-far-restless-downstairs-curtains-1, calm-down, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(obj-far-restless-guitar-case-1, far-restless-at-night-guitar--guitar-case, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(gtr-far-restless-1, far-restless-at-night-guitar--guitar, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(obj-far-restless-guitar-window-1, far-restless-at-night-guitar--window, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(obj-far-wood-stool-1, far-restless-at-night-guitar--stool, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 29;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
                     animate_(far-restless-guitar-light-object-1, far-restless-at-night-guitar--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 27;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 29;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
                     wait-animate_(player, far-restless-at-night-guitar--ellie, var_0);
                 }
                 lambda {
@@ -354,16 +334,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(far-restless-guitar-light-object-1, far-ellie-plays-guitar-idle--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
                     animate_(player, far-ellie-plays-guitar-idle--ellie, var_0);
                 }
                 lambda {
@@ -638,36 +618,36 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(complete, gtr-far-restless-1, new-boxed-value(1, 1));
+                    send-event(complete, gtr-far-restless-1, boxed_bool(1));
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
                     animate_(gtr-far-restless-1, far-ellie-plays-guitar-exit--guitar, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(far-restless-guitar-light-object-1, far-ellie-plays-guitar-exit--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-far-restless-guitar-window-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
                     wait-animate_(player, far-ellie-plays-guitar-exit--ellie, var_0);
                 }
                 lambda {

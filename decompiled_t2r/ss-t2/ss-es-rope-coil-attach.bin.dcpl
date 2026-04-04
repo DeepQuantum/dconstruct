@@ -35,11 +35,11 @@ statescript {
                     set-symbol(rope-obj, event-arg-symbol(0), self);
                 }
                 lambda {
-                    broadcast-event(thrown-over, new-boxed-value(7, get-self-id()), new-boxed-value(7, get-symbol(rope-obj, self)));
+                    broadcast-event(thrown-over, boxed_symbol(get-self-id()), boxed_symbol(get-symbol(rope-obj, self)));
                 }
                 lambda {
                     if (task-node-active?(medicine)) {
-                        broadcast-event(hack-throw-temp, new-boxed-value(7, get-self-id()));
+                        broadcast-event(hack-throw-temp, boxed_symbol(get-self-id()));
                     }
                 }
                 lambda {
@@ -97,15 +97,15 @@ statescript {
                         send-event(
                             attach-rope-to-spawner,
                             player-get-carried-object(),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point, self), 1))
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(get-spawner-locator(tag-symbol(attach-point, self), 1))
                         );
                     } else {
                         send-event(
                             attach-rope-to-spawner,
                             player-get-carried-object(),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, get-spawner-locator(get-self-id(), 1))
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(get-spawner-locator(get-self-id(), 1))
                         );
                     }
                 }
@@ -152,15 +152,15 @@ statescript {
                         send-event(
                             detach-rope,
                             player-get-carried-object(),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, get-spawner-locator(tag-symbol(attach-point, self), 1))
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(get-spawner-locator(tag-symbol(attach-point, self), 1))
                         );
                     } else {
                         send-event(
                             detach-rope,
                             player-get-carried-object(),
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, get-spawner-locator(get-self-id(), 1))
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(get-spawner-locator(get-self-id(), 1))
                         );
                     }
                 }

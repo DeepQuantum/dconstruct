@@ -121,8 +121,8 @@ statescript {
                     send-event(
                         attach-rope-to-npc,
                         player-get-carried-object(),
-                        new-boxed-value(7, tag-symbol(buddy, self)),
-                        new-boxed-value(18, get-joint-locator(tag-symbol(buddy, self), r_hand_prop_attachment))
+                        boxed_symbol(tag-symbol(buddy, self)),
+                        boxed_boundframe(get-joint-locator(tag-symbol(buddy, self), r_hand_prop_attachment))
                     );
                 }
             }
@@ -168,8 +168,8 @@ statescript {
                     send-event(
                         rope-detach,
                         player-get-carried-object(),
-                        new-boxed-value(7, tag-symbol(buddy, self)),
-                        new-boxed-value(18, get-joint-locator(tag-symbol(buddy, self), r_hand_prop_attachment))
+                        boxed_symbol(tag-symbol(buddy, self)),
+                        boxed_boundframe(get-joint-locator(tag-symbol(buddy, self), r_hand_prop_attachment))
                     );
                 }
                 lambda {

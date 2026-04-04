@@ -52,8 +52,8 @@ statescript {
                         set-boolean(intro-video-playing?, 1, ss-vox-t2r-far-boar-hunting-intro-1);
                         go(play-movie, 1);
                     } else {
-                        speak-text-to-speech-formatted(new-boxed-value(7, MENU_CUTTING_ROOM_FLOOR_DISCLAIMER), 1, 0, 1);
-                        speak-text-to-speech-formatted(new-boxed-value(7, MENU_PROMPT_CONTINUE_BUTTON), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(MENU_CUTTING_ROOM_FLOOR_DISCLAIMER), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(MENU_PROMPT_CONTINUE_BUTTON), 1, 0, 1);
                         wait-gui2-show-pause-card(*cut-levels-disclaimer*, 2, 2, 2);
                         send-event(crf-intro-done, get-symbol(end-event-reciever, self));
                         go(done, 1);

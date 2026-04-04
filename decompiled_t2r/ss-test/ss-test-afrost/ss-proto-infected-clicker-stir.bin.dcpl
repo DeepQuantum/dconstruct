@@ -74,18 +74,18 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 3;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 4;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_1 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
+                    *(i32*)*var_1[0] = 3;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 4;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u8*)(*var_1[1] + 8) = 1;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.30;
+                    *(i32*)*var_1[3] = 30;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 0.30;
                     wait-animate_(self, clicker-stir-pick-anim(), var_1);
                 }
                 lambda {
@@ -112,7 +112,7 @@ statescript {
                     while (1) {
                         if (get-joypad-stick-intensity(move, 0.20, 1.00) > 0.99 && !(npc-has-awareness?(self, player, 2)) && !(npc-has-awareness?(self, player, 1))) {
                             stop-animating(self, 2, 0.50, 0, 0);
-                            send-event(force-bark, self, new-boxed-value(18, get-bound-frame(bark-location, self)));
+                            send-event(force-bark, self, boxed_boundframe(get-bound-frame(bark-location, self)));
                             start-timer(stir-cd, 0.80, self, 1);
                             go(initial, 1);
                         }

@@ -152,7 +152,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(buoyant-object-dead, ss-flo-stormy-seas-buoyant-object-manager-1, new-boxed-value(7, get-spawner-name(self)));
+                    send-event(buoyant-object-dead, ss-flo-stormy-seas-buoyant-object-manager-1, boxed_symbol(get-spawner-name(self)));
                 }
                 lambda {
                     kill-entity(self);

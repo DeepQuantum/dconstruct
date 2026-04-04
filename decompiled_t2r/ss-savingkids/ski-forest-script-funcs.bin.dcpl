@@ -52,7 +52,7 @@ u64? wait-respawn-forest-stalkers(u64? arg_0) {
         } else {
             var_12 = 0;
         }
-        darray-append(var_8, new-boxed-value(7, var_12), 1);
+        darray-append(var_8, boxed_symbol(var_12), 1);
         i = i + 1;
     }
     wait-spawn-npc-group-async(var_8, 0, 0);

@@ -302,9 +302,9 @@ statescript {
                             send-event(
                                 refresh-dialogues-list,
                                 get-symbol(dialogueProcess, self),
-                                new-boxed-value(2, get-int32(currentLanguageIndex, self)),
-                                new-boxed-value(2, (get-int32(currentPage, self) - 1) * 50),
-                                new-boxed-value(2, 50)
+                                boxed_i32(get-int32(currentLanguageIndex, self)),
+                                boxed_i32((get-int32(currentPage, self) - 1) * 50),
+                                boxed_i32(50)
                             );
                             set-int32(mode, 2, self);
                         }

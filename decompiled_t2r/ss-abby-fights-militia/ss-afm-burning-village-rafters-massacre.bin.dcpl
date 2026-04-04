@@ -47,17 +47,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-rafters-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-rafters-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-rafters-npcs) {
                         npc-set-script-only-with-perception(var_2);
                         npc-move-to-spawner(
                             var_2,
@@ -180,17 +170,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-rafters-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-rafters-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-awareness(var_2, player) != 0) {
                                 go(search, 1);
@@ -214,17 +194,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-rafters-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-rafters-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-cancel-fire-command(var_2);
                             npc-set-script-low-priority(var_2);

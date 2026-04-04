@@ -51,14 +51,14 @@ statescript {
                 }
                 lambda {
                     if (task-range-active?(santa-barbara, san-resort-exit, santa-barbara, san-resort-beach)) {
-                        send-event(mess-hair, player, new-boxed-value(6, 0.00));
+                        send-event(mess-hair, player, boxed_f32(0.00));
                         player-inv-selection-replace-item(weapon-slot-to-player-inv-selection-slot(0), rifle-mpx5);
                         go(pre-rescue, 1);
                     }
                 }
                 lambda {
                     if (task-range-active?(santa-barbara, san-free-abby-a, santa-barbara, san-free-abby-fight)) {
-                        send-event(mess-hair, player, new-boxed-value(6, 0.00));
+                        send-event(mess-hair, player, boxed_f32(0.00));
                         player-inv-selection-replace-item(weapon-slot-to-player-inv-selection-slot(0), rifle-mpx5);
                         go(post-rescue, 1);
                     }
@@ -69,7 +69,7 @@ statescript {
             track main {
                 lambda {
                     if (task-range-active?(santa-barbara, san-resort-exit, santa-barbara, san-resort-beach)) {
-                        send-event(mess-hair, player, new-boxed-value(6, 0.00));
+                        send-event(mess-hair, player, boxed_f32(0.00));
                         go(pre-rescue, 1);
                     }
                 }
@@ -90,7 +90,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(player, beach-walk, new-boxed-value(1, 1));
+                    fact-set(player, beach-walk, boxed_bool(1));
                 }
                 lambda {
                     while (1) {
@@ -139,7 +139,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(player, beach-walk, new-boxed-value(1, 1));
+                    fact-set(player, beach-walk, boxed_bool(1));
                 }
             }
         }
@@ -153,7 +153,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(player, beach-walk, new-boxed-value(1, 1));
+                    fact-set(player, beach-walk, boxed_bool(1));
                 }
                 lambda {
                     while (1) {
@@ -198,7 +198,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(player, beach-walk, new-boxed-value(1, 0));
+                    fact-set(player, beach-walk, boxed_bool(0));
                 }
             }
         }

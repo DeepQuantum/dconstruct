@@ -229,8 +229,8 @@ statescript {
                     send-event(
                         rope-detach,
                         player-get-carried-object(),
-                        new-boxed-value(7, jesse),
-                        new-boxed-value(18, get-joint-locator(jesse, r_hand_prop_attachment))
+                        boxed_symbol(jesse),
+                        boxed_boundframe(get-joint-locator(jesse, r_hand_prop_attachment))
                     );
                 }
                 lambda {

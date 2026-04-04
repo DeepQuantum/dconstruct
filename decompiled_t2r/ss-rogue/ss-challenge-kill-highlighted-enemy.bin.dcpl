@@ -52,17 +52,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-selected-npcs, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-selected-npcs, self)) {
                         if (!(var_4 == 0) && npc-alive?(var_4)) {
                             if (is-high-contrast-mode-toggled-on?()) {
                                 hud2-buddy-mark-npc(var_4);
@@ -70,7 +60,7 @@ statescript {
                                 if (get-boolean(lerp-highlight-complete, self)) {
                                     character-highlight(var_4, 0, alloc-color(1.00, 1.00, 1.00, 1.00, 0));
                                 } else {
-                                    send-event(highlight-npc, self, new-boxed-value(7, var_4));
+                                    send-event(highlight-npc, self, boxed_symbol(var_4));
                                 }
                                 hud2-buddy-unmark-npc(var_4);
                             }
@@ -97,17 +87,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-selected-npcs, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-selected-npcs, self)) {
                         if (npc-alive?(var_4)) {
                             hud2-buddy-unmark-npc(var_4);
                         }
@@ -127,18 +107,8 @@ statescript {
         block event wm-new-wave-spawned {
             track main {
                 lambda {
-                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(get-symbol(group-this-wave-npcs, self), new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
+                        darray-append(get-symbol(group-this-wave-npcs, self), boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -156,34 +126,14 @@ statescript {
                         darray-clear(get-symbol(group-this-wave-npcs, self));
                         darray-copy-into(get-symbol(group-this-wave-npcs, self), darray-clone(get-symbol(group-this-wave-npcs, self), single-frame, 0), darray-sorted-indices(get-symbol(group-this-wave-npcs, self), closest-from-player-rating, 0, 1));
                         u64? var_12 = darray-create(single-frame, -1, 0);
-                        foreach (u64? var_16 : get-symbol(group-this-wave-npcs, self)) {
-                            u16 var_17;
-                            if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                                var_17 = *(u64*)var_16;
-                            } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                                var_17 = *(u64*)var_16;
-                            } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                                var_17 = *(u64*)var_16;
-                            } else {
-                                var_17 = 0;
-                            }
-                            if (!darray-contains?(get-symbol(group-selected-npcs, self), new-boxed-value(7, var_17))) {
-                                darray-append(var_12, new-boxed-value(7, var_17), 1);
+                        foreach (u64? var_17 : get-symbol(group-this-wave-npcs, self)) {
+                            if (!darray-contains?(get-symbol(group-selected-npcs, self), boxed_symbol(var_17))) {
+                                darray-append(var_12, boxed_symbol(var_17), 1);
                             }
                         }
-                        foreach (u64? var_24 : var_12) {
-                            u16 var_25;
-                            if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                var_25 = *(u64*)var_24;
-                            } else {
-                                var_25 = 0;
-                            }
+                        foreach (u64? var_25 : var_12) {
                             if (darray-count(get-symbol(group-selected-npcs, self)) < tag-int32(num-highlighted-enemies, self)) {
-                                darray-append(get-symbol(group-selected-npcs, self), new-boxed-value(7, var_25), 1);
+                                darray-append(get-symbol(group-selected-npcs, self), boxed_symbol(var_25), 1);
                             }
                         }
                         u64? var_32 = rogue-get-current-buddy();
@@ -213,8 +163,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    darray-find-remove(get-symbol(group-this-wave-npcs, self), new-boxed-value(7, var_0), 0);
-                    if (darray-contains?(get-symbol(group-selected-npcs, self), new-boxed-value(7, var_0))) {
+                    darray-find-remove(get-symbol(group-this-wave-npcs, self), boxed_symbol(var_0), 0);
+                    if (darray-contains?(get-symbol(group-selected-npcs, self), boxed_symbol(var_0))) {
                         ++(num-enemies-killed, self);
                         if (get-int32(num-enemies-killed, self) == tag-int32(num-highlighted-enemies, self)) {
                             hud-challenge-update-progress-count(get-int32(num-enemies-killed, self), tag-int32(num-highlighted-enemies, self));

@@ -21,7 +21,7 @@ u16 apply-takedown-increase!(i64 arg_0) {
             display(dc:format("DEB-SK: Player stealth killed %s", string-debug(arg_0)), 19);
         }
         set-symbol(last-stealth-killed-npc, arg_0, self);
-        broadcast-event(skull-activate, new-boxed-value(7, takedown-speed-increase), new-boxed-value(7, arg_0));
+        broadcast-event(skull-activate, boxed_symbol(takedown-speed-increase), boxed_symbol(arg_0));
         set-boolean(apply-increase?, 1, self);
         var_1 = set-float(elapsed, 0.00, self);
     } else {
@@ -132,17 +132,7 @@ statescript {
                                 }
                                 wait(0.50);
                                 u16 var_22;
-                                foreach (u64? var_24 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                                    u16 var_25;
-                                    if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                        var_25 = *(u64*)var_24;
-                                    } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                        var_25 = *(u64*)var_24;
-                                    } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                        var_25 = *(u64*)var_24;
-                                    } else {
-                                        var_25 = 0;
-                                    }
+                                foreach (u64? var_25 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                                     u16 var_27;
                                     if (npc-alive?(var_25)) {
                                         if (npc-has-awareness?(var_25, player, 2)) {
@@ -205,17 +195,7 @@ statescript {
                         }
                         wait(0.50);
                         u16 var_17;
-                        foreach (u64? var_19 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                            u16 var_20;
-                            if (var_19 && *(u16*)(var_19 + 12) == 7) {
-                                var_20 = *(u64*)var_19;
-                            } else if (var_19 && *(u16*)(var_19 + 12) == 5) {
-                                var_20 = *(u64*)var_19;
-                            } else if (var_19 && *(u16*)(var_19 + 12) == 4) {
-                                var_20 = *(u64*)var_19;
-                            } else {
-                                var_20 = 0;
-                            }
+                        foreach (u64? var_20 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                             u16 var_22;
                             if (npc-alive?(var_20)) {
                                 if (npc-has-awareness?(var_0, player, 2)) {
@@ -308,7 +288,7 @@ statescript {
                 lambda {
                     if (get-boolean(apply-increase?, self)) {
                         if (get-float(elapsed, self) > get-float(speed-increase-duration, self)) {
-                            broadcast-event(skull-deactivate, new-boxed-value(7, takedown-speed-increase));
+                            broadcast-event(skull-deactivate, boxed_symbol(takedown-speed-increase));
                             hud-skulls-set-percent(takedown-speed-increase, 0.00, 0);
                             set-boolean(apply-increase?, 0, self);
                             set-float(elapsed, 0.00, self);

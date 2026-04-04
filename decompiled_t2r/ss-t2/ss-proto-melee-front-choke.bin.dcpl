@@ -13,17 +13,7 @@
 
 u16 player-is-being-choked?() {
     u16 var_1;
-    foreach (u64? var_2 : player-choke-animations) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : player-choke-animations) {
         u16 var_5;
         if (!0 && object-anim-playing?(player, var_3, 0)) {
             var_5 = 1;
@@ -77,17 +67,7 @@ statescript {
                 lambda {
                     if (tension-mode-is?(3)) {
                         u64? var_2;
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             u64? var_5;
                             if (!0) {
                                 var_5 = distance-between-objects-less-than?(player, var_4, 5.00);

@@ -201,17 +201,7 @@ u16 check-and-restore-loadout() {
 
 u16 get-alternate-loadout-number(i64 arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : loadout-set) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : loadout-set) {
         sid var_5;
         if (is-player-ellie?(player)) {
             var_5 = ellie;
@@ -220,7 +210,7 @@ u16 get-alternate-loadout-number(i64 arg_0) {
         }
         u16 var_9;
         if (get-symbol(symbol-concat-string(var_5, string-debug(var_3)), self) == arg_0) {
-            var_9 = ((darray-find(loadout-set, new-boxed-value(7, var_3), 0) + 1) % darray-count(loadout-set)) + 1;
+            var_9 = ((darray-find(loadout-set, boxed_symbol(var_3), 0) + 1) % darray-count(loadout-set)) + 1;
         }
         var_1 = var_9;
     }

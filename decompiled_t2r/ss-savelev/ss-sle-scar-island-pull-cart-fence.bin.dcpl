@@ -270,15 +270,15 @@ statescript {
                     if (get-boolean(from-gate-attempt, self)) {
                         npc-holster-weapon(yara, 0, 1, -1.00, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.00;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(yara, sle-scar-island-pull-cart-fence-idle--yara, var_1);
                         npc-request-buddy-look(yara, 1);
                     } else {
@@ -297,35 +297,35 @@ statescript {
                         npc-holster-weapon(yara, 0, 1, -1.00, 0);
                         signal(anim-start, 0);
                         u64? var_4 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                        *(i32*)*(*var_4 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_4 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (3 * 8)) = 27;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_4 + (4 * 8)) = 29;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (4 * 8)) + 8) = 2;
-                        *(i32*)*(*var_4 + (5 * 8)) = 59;
-                        *(u64*)(*(*var_4 + (5 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (5 * 8)) + 8) = 4;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                        *(i32*)*var_4[1] = 28;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 1.00;
+                        *(i32*)*var_4[2] = 30;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(f32*)(*var_4[2] + 8) = 0.50;
+                        *(i32*)*var_4[3] = 27;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(u8*)(*var_4[3] + 8) = 2;
+                        *(i32*)*var_4[4] = 29;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(u8*)(*var_4[4] + 8) = 2;
+                        *(i32*)*var_4[5] = 59;
+                        *(u64*)(*var_4[5] + 8) = 0;
+                        *(i32*)(*var_4[5] + 8) = 4;
                         wait-animate_(yara, sle-scar-island-gate-attempt--yara, var_4);
                         u64? var_6 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                        *(i32*)*(*var_6 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_6 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                        *(i32*)*var_6[1] = 28;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(f32*)(*var_6[1] + 8) = 0.50;
+                        *(i32*)*var_6[2] = 30;
+                        *(u64*)(*var_6[2] + 8) = 0;
+                        *(f32*)(*var_6[2] + 8) = 0.50;
                         animate_(yara, sle-scar-island-pull-cart-fence-idle--yara, var_6);
                         npc-request-buddy-look(yara, 1);
                     }
@@ -414,17 +414,7 @@ statescript {
                     interactable-disable(int-sle-scar-island-pull-cart-fence-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         set-focusable-ignore(var_2, 1);
                     }
                 }
@@ -455,53 +445,53 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-sle-scar-island-pull-cart-fence-board-1, sle-scar-island-pull-cart-fence--board, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 0;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
                     animate_(yara, sle-scar-island-pull-cart-fence--yara, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 225;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-sle-scar-island-pull-cart-fence-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 225;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 1.00;
                     wait-animate_(player, sle-scar-island-pull-cart-fence--abby, var_0);
                 }
                 lambda {

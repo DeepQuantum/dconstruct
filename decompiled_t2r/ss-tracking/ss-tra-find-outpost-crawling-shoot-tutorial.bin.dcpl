@@ -80,15 +80,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = offset-locator-on-axis(get-spawner-locator(ap-tra-outpost-infected-crawling-1, 1), 0.10, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = offset-locator-on-axis(get-spawner-locator(ap-tra-outpost-infected-crawling-1, 1), 0.10, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(npc-shoot-tutorial-1, tra-outpost-infected-crawling-idle--infected, var_0);
                 }
             }
@@ -182,15 +182,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-outpost-infected-crawling-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-outpost-infected-crawling-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(npc-shoot-tutorial-1, tra-outpost-infected-crawling-charge--infected, var_0);
                 }
                 lambda {
@@ -217,26 +217,26 @@ statescript {
                         spawn-gore-piece(gore-finisher-abby-neck-bite-r, player, 0, 0, 1, 1);
                         signal(player-dead, 0);
                         u64? var_14 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_14 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = get-bound-frame(fake-ap, self);
-                        *(i32*)*(*var_14 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_14 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_14 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_14 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_14[0] = 10;
+                        *(u64*)(*var_14[0] + 8) = 0;
+                        *(u64*)(*var_14[0] + 8) = get-bound-frame(fake-ap, self);
+                        *(i32*)*var_14[1] = 28;
+                        *(u64*)(*var_14[1] + 8) = 0;
+                        *(f32*)(*var_14[1] + 8) = 0.00;
+                        *(i32*)*var_14[2] = 30;
+                        *(u64*)(*var_14[2] + 8) = 0;
+                        *(f32*)(*var_14[2] + 8) = 0.00;
                         animate_(npc-shoot-tutorial-1, tra-outpost-infected-crawling-fail--infected, var_14);
                         u64? var_16 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_16 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-bound-frame(fake-ap, self);
-                        *(i32*)*(*var_16 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_16 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_16 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_16 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_16 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_16 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_16[0] = 10;
+                        *(u64*)(*var_16[0] + 8) = 0;
+                        *(u64*)(*var_16[0] + 8) = get-bound-frame(fake-ap, self);
+                        *(i32*)*var_16[1] = 28;
+                        *(u64*)(*var_16[1] + 8) = 0;
+                        *(f32*)(*var_16[1] + 8) = 0.00;
+                        *(i32*)*var_16[2] = 30;
+                        *(u64*)(*var_16[2] + 8) = 0;
+                        *(f32*)(*var_16[2] + 8) = 0.00;
                         wait-animate_(player, tra-outpost-infected-crawling-fail--abby, var_16);
                     }
                 }
@@ -333,8 +333,8 @@ statescript {
                 lambda {
                     if (!(get-float(anim-death-frame, self) == 0.00)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
                         u64? var_4;
                         if (70.00 > get-float(anim-death-frame, self) && 60.00 <= get-float(anim-death-frame, self)) {
                             var_4 = offset-locator-on-axis(alloc-bound-frame(
@@ -402,16 +402,16 @@ statescript {
                                 0
                             );
                         }
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = var_4;
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (3 * 8)) = 86;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (3 * 8)) + 8) = 1;
+                        *(u64*)(*var_1[0] + 8) = var_4;
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.20;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
+                        *(i32*)*var_1[3] = 86;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(u8*)(*var_1[3] + 8) = 1;
                         wait-animate_(npc-shoot-tutorial-1, tra-outpost-infected-crawling-death--infected, var_1);
                     }
                 }

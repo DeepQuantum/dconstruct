@@ -16,15 +16,15 @@ u64? npc-2h-should-combo-swing(bool arg_0, bool arg_1) {
     bool var_1 = !(arg_0 == 0) && !(arg_1 == 0) && var_0 < 3.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 3.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
         var_5
     );
     return var_1 && melee-weapon-bit-check(arg_0, #0000000010000000, 1, 0) && random-float-min-max(0.00, 1.00, 0) < 0.60;

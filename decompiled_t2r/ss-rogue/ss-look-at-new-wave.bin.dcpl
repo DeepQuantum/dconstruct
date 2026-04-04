@@ -102,17 +102,7 @@ statescript {
                 }
                 lambda {
                     u16 var_2;
-                    foreach (u64? var_4 : get-symbol(group-alive-npcs, self)) {
-                        u16 var_5;
-                        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                            var_5 = *(u64*)var_4;
-                        } else {
-                            var_5 = 0;
-                        }
+                    foreach (u64? var_5 : get-symbol(group-alive-npcs, self)) {
                         u16 var_8;
                         if (npc-alive?(var_5)) {
                             if (distance-between-objects(player, var_5) <= 1000000.00) {
@@ -186,17 +176,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(player-pressed-l3, self) && *encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 139)) {
-                        foreach (u64? var_4 : get-symbol(group-alive-npcs, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(group-alive-npcs, self)) {
                             if (npc-alive?(var_5)) {
                                 object-highlight(var_5, 0, alloc-color(1.00, 1.00, 1.00, 1.00, 0));
                             }

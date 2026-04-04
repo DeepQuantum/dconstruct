@@ -13,17 +13,7 @@
 
 u16 fob-store-lead--get-player-region() {
     u16 var_1;
-    foreach (u64? var_2 : fob-store-lead-regions) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : fob-store-lead-regions) {
         u16 var_5;
         if (0 == 0 && player-in-region?(var_3, 2)) {
             var_5 = var_3;
@@ -80,17 +70,7 @@ statescript {
             track main {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : fob-store-lead-regions) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : fob-store-lead-regions) {
                             if (player-in-region?(var_2, 2)) {
                                 print-symbol(var_2, self);
                                 if (var_2 == rgn-fob-store-lead-start-1) {
@@ -174,7 +154,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
         }
@@ -209,7 +189,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
         }
@@ -244,7 +224,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
         }
@@ -287,7 +267,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
         }
@@ -330,7 +310,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
             track manny {
@@ -381,7 +361,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
             track manny {
@@ -451,7 +431,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
             track manny {
@@ -509,7 +489,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter, self, new-boxed-value(7, player), new-boxed-value(7, fob-store-lead--get-player-region()));
+                    send-event(enter, self, boxed_symbol(player), boxed_symbol(fob-store-lead--get-player-region()));
                 }
             }
             track manny {
@@ -621,7 +601,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    if (get-symbol(lead-buddy, self) == mel && !(event-arg-symbol(1) == rgn-fob-store-lead-final-1) && darray-contains?(fob-store-lead-regions, new-boxed-value(7, event-arg-symbol(1)))) {
+                    if (get-symbol(lead-buddy, self) == mel && !(event-arg-symbol(1) == rgn-fob-store-lead-final-1) && darray-contains?(fob-store-lead-regions, boxed_symbol(event-arg-symbol(1)))) {
                         go(detect-player, 1);
                     }
                 }

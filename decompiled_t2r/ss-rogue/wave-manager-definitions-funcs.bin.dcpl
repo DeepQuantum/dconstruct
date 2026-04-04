@@ -65,8 +65,8 @@ u16 get-num-egagers-per-intensity-point-curve-for-task(u64? arg_0) {
 
 u64? wave-manager-darray-restrict(u64? arg_0, u64? arg_1) {
     u64? var_2;
-    while (darray-contains?(arg_0, new-boxed-value(2, arg_1))) {
-        darray-find-remove(arg_0, new-boxed-value(2, arg_1), 0);
+    while (darray-contains?(arg_0, boxed_i32(arg_1))) {
+        darray-find-remove(arg_0, boxed_i32(arg_1), 0);
     }
     return var_2;
 }
@@ -88,7 +88,7 @@ u64? get-blacklisted-wave-factions-darray-for-task(u64? arg_0, u64? arg_1) {
     if (var_0 && *(var_0 + 16)) {
         u64 i = 0;
         while (i < *(i32*)(*(var_0 + 16) + 8)) {
-            darray-append(var_1, new-boxed-value(2, *(i32*)(**(var_0 + 16) + (i * 4))), 1);
+            darray-append(var_1, boxed_i32(*(i32*)(**(var_0 + 16) + (i * 4))), 1);
             i = i + 1;
         }
     }
@@ -102,12 +102,12 @@ u64? get-wave-factions-darray-for-task(u64? arg_0, u64? arg_1) {
     u64? var_3 = custom-run--get-blacklisted-factions();
     u64? var_4 = darray-create(arg_1, -1, 0);
     if (var_0 && *(i32*)(*(var_0 + 40) + 8) > 0) {
-        darray-append(var_4, new-boxed-value(2, *(i32*)((**(var_0 + 40) + (0 * 40)) + 8)), 1);
+        darray-append(var_4, boxed_i32(*(i32*)((**(var_0 + 40) + (0 * 40)) + 8)), 1);
     }
     if (var_1) {
         u64 i = 0;
         while (i < *(i32*)(*(var_1 + 40) + 8)) {
-            darray-append(var_4, new-boxed-value(2, *(i32*)((**(var_1 + 40) + (i * 40)) + 8)), 1);
+            darray-append(var_4, boxed_i32(*(i32*)((**(var_1 + 40) + (i * 40)) + 8)), 1);
             i = i + 1;
         }
     }
@@ -128,7 +128,7 @@ u64? get-wave-factions-darray-for-task(u64? arg_0, u64? arg_1) {
         } else {
             var_13 = 0;
         }
-        darray-find-remove(var_4, new-boxed-value(2, var_13), 0);
+        darray-find-remove(var_4, boxed_i32(var_13), 0);
     }
     if (custom-run--has-blacklisted-factions?()) {
         foreach (u64? var_18 : var_3) {
@@ -148,7 +148,7 @@ u64? get-wave-factions-darray-for-task(u64? arg_0, u64? arg_1) {
             } else {
                 var_19 = 0;
             }
-            darray-find-remove(var_4, new-boxed-value(2, var_19), 0);
+            darray-find-remove(var_4, boxed_i32(var_19), 0);
         }
     }
     darray-destroy(var_2);
@@ -161,8 +161,8 @@ u64? get-wave-factions-darray-for-task(u64? arg_0, u64? arg_1) {
 
 u16 wave-manager-darray-add-copy(u64? arg_0, u64? arg_1) {
     u16 var_2;
-    if (darray-contains?(arg_0, new-boxed-value(2, arg_1))) {
-        var_2 = darray-append(arg_0, new-boxed-value(2, arg_1), 0);
+    if (darray-contains?(arg_0, boxed_i32(arg_1))) {
+        var_2 = darray-append(arg_0, boxed_i32(arg_1), 0);
     } else {
         var_2 = 0;
     }

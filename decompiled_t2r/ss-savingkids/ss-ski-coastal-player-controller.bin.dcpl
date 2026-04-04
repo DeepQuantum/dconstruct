@@ -39,7 +39,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, moist-breath?, new-boxed-value(1, 1));
+                    fact-set(global, moist-breath?, boxed_bool(1));
                 }
             }
         }
@@ -56,7 +56,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(global, moist-breath?, new-boxed-value(1, 0));
+                    fact-set(global, moist-breath?, boxed_bool(0));
                 }
             }
         }

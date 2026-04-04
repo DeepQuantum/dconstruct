@@ -35,9 +35,9 @@ bool better-bayonet-angle?(u64? arg_0, u64? arg_1) {
 u64? apply-bayonet-durability-upgrade() {
     u64? var_1;
     if (player-upgrade-active?(bayonet-durability-increase)) {
-        var_1 = fact-set(player, bayonet-durability-max, new-boxed-value(2, 4));
+        var_1 = fact-set(player, bayonet-durability-max, boxed_i32(4));
     } else {
-        var_1 = fact-set(player, bayonet-durability-max, new-boxed-value(2, 2));
+        var_1 = fact-set(player, bayonet-durability-max, boxed_i32(2));
     }
     return var_1;
 }
@@ -82,7 +82,7 @@ u64? randomize-bayonet-look() {
 }
 
 u64? bayonet-set-durability(u64? arg_0) {
-    fact-set(player, bayonet-durability, new-boxed-value(2, arg_0));
+    fact-set(player, bayonet-durability, boxed_i32(arg_0));
     return set-svar(bayonet-durability, arg_0);
 }
 
@@ -167,7 +167,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, bayonet-equipped, new-boxed-value(1, 0));
+                    fact-set(player, bayonet-equipped, boxed_bool(0));
                 }
                 lambda {
                     kill-entity-if-spawned(get-symbol(bayonet, self));
@@ -230,7 +230,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, bayonet-equipped, new-boxed-value(1, 0));
+                    fact-set(player, bayonet-equipped, boxed_bool(0));
                 }
                 lambda {
                     if (weapon-visibly-holstered?(rifle-vepr)) {
@@ -263,7 +263,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, bayonet-equipped, new-boxed-value(1, 1));
+                    fact-set(player, bayonet-equipped, boxed_bool(1));
                 }
                 lambda {
                     spawn-bayonet();
@@ -307,10 +307,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, bayonet-equipped, new-boxed-value(1, 1));
+                    fact-set(player, bayonet-equipped, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(player, bayonet-charge, new-boxed-value(1, 1));
+                    fact-set(player, bayonet-charge, boxed_bool(1));
                 }
                 lambda {
                     u64? var_0 = alloc-gesture-play-params();
@@ -350,19 +350,9 @@ statescript {
                     player-disable-auto-holster();
                 }
                 lambda {
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         if (npc-alive?(var_3)) {
-                            if (characters-in-melee?(player, var_3, 1) && darray-contains?(bayonet-finisher-anims, new-boxed-value(7, get-current-melee-action-name(player)))) {
+                            if (characters-in-melee?(player, var_3, 1) && darray-contains?(bayonet-finisher-anims, boxed_symbol(get-current-melee-action-name(player)))) {
                                 set-boolean(finisher-already-playing, 1, self);
                                 set-symbol(kill-npc, var_3, self);
                             } else if (character-in-uninterruptible-melee-move?(player)) {
@@ -396,7 +386,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(player, bayonet-charge, new-boxed-value(1, 0));
+                    fact-set(player, bayonet-charge, boxed_bool(0));
                 }
                 lambda {
                     if (object-spawned?(player)) {
@@ -413,7 +403,7 @@ statescript {
                     set-boolean(finisher-success, 0, self);
                 }
                 lambda {
-                    fact-set(player, bayonet-finisher, new-boxed-value(1, 1));
+                    fact-set(player, bayonet-finisher, boxed_bool(1));
                 }
                 lambda {
                     if (get-boolean(finisher-already-playing, self)) {
@@ -501,7 +491,7 @@ statescript {
                     wait-frames(get-int32(finisher-kill-frame, self));
                 }
                 lambda {
-                    if (player-in-state?(Melee) && darray-contains?(bayonet-finisher-anims, new-boxed-value(7, get-current-melee-action-name(player))) && characters-in-melee?(player, get-symbol(kill-npc, self), 1)) {
+                    if (player-in-state?(Melee) && darray-contains?(bayonet-finisher-anims, boxed_symbol(get-current-melee-action-name(player))) && characters-in-melee?(player, get-symbol(kill-npc, self), 1)) {
                         set-boolean(finisher-success, 1, self);
                         u16 var_8;
                         if ((bayonet-get-durability() - 1) > 0) {
@@ -523,7 +513,7 @@ statescript {
                         if (!(bayonet-get-durability() > 0)) {
                             player-inventory-consume-item(bayonet, 1);
                             break-bayonet(get-symbol(kill-npc, self));
-                            fact-set(player, bayonet-equipped, new-boxed-value(1, 0));
+                            fact-set(player, bayonet-equipped, boxed_bool(0));
                         }
                         var_6 = hud2-refresh-upgrade-health-ammo();
                     }
@@ -558,7 +548,7 @@ statescript {
                     log-event(var_1, 1, string-debug(npc-get-weapon(get-symbol(kill-npc, self))), get-object-locator(player), 0);
                 }
                 lambda {
-                    fact-set(player, bayonet-finisher, new-boxed-value(1, 0));
+                    fact-set(player, bayonet-finisher, boxed_bool(0));
                 }
                 lambda {
                     set-symbol(kill-npc, 0, self);

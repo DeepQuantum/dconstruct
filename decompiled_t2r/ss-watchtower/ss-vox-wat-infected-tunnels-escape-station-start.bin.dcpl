@@ -307,7 +307,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(faction-buddy, wat-theater-dina-carry, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-buddy, wat-theater-dina-carry, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     wait-say(player, vox-igc-ell-gam-wat-infected-tunnels-help-dina-to-theater-sp-001, 2, 0);

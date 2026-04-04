@@ -140,13 +140,13 @@ u64? set-chord-wheel-strings(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64
     return send-event(
         set-chord-wheel-strings,
         get-symbol(menu-name, self),
-        new-boxed-value(19, arg_0),
-        new-boxed-value(19, arg_1),
-        new-boxed-value(19, arg_2),
-        new-boxed-value(19, arg_3),
-        new-boxed-value(19, arg_4),
-        new-boxed-value(19, arg_5),
-        new-boxed-value(2, arg_6)
+        boxed_stringcopy(arg_0),
+        boxed_stringcopy(arg_1),
+        boxed_stringcopy(arg_2),
+        boxed_stringcopy(arg_3),
+        boxed_stringcopy(arg_4),
+        boxed_stringcopy(arg_5),
+        boxed_i32(arg_6)
     );
 }
 
@@ -468,8 +468,8 @@ u16 check-second-string() {
                         send-event(
                             strummed,
                             get-symbol(menu-name, self),
-                            new-boxed-value(2, var_49),
-                            new-boxed-value(1, get-boolean(progress, self))
+                            boxed_i32(var_49),
+                            boxed_bool(get-boolean(progress, self))
                         );
                         if (!timer-running?(chord-timer, self)) {
                             start-timer(chord-timer, 0.10, self, 1);
@@ -880,7 +880,7 @@ u64? fire-string-sound(u16 arg_0, u64? arg_1) {
     } else {
         var_34 = 1 + arg_0;
     }
-    return send-event(string-plucked, get-symbol(menu-name, self), new-boxed-value(2, var_34));
+    return send-event(string-plucked, get-symbol(menu-name, self), boxed_i32(var_34));
 }
 
 u16 populate-string-tuner-children-darray() {
@@ -919,9 +919,9 @@ u16 populate-string-tuner-children-darray() {
         }
         u64? var_12 = darray-create(self, -1, 0);
         gui2-assign-to-category(var_9, 1048576);
-        darray-append(var_12, new-boxed-value(7, gui2-find-widget-path("tuningElipse", var_9)), 0);
-        darray-append(var_12, new-boxed-value(7, gui2-find-widget-path("pulseTuner", var_9)), 0);
-        darray-append(get-symbol(string-tuner-children-darray, self), new-boxed-value(7, var_12), 0);
+        darray-append(var_12, boxed_symbol(gui2-find-widget-path("tuningElipse", var_9)), 0);
+        darray-append(var_12, boxed_symbol(gui2-find-widget-path("pulseTuner", var_9)), 0);
+        darray-append(get-symbol(string-tuner-children-darray, self), boxed_symbol(var_12), 0);
         i = i + 1;
     }
     return i;
@@ -934,12 +934,12 @@ u16 play-guitar-part(u64? arg_0, i32 arg_1) {
             stop-animating(tag-symbol(guitar, self), 1, 0.00, arg_0, 0);
         }
         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-        *(i32*)*(*var_7 + (0 * 8)) = 40;
-        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-        *(i32*)(*(*var_7 + (0 * 8)) + 8) = 1;
-        *(i32*)*(*var_7 + (1 * 8)) = 28;
-        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.20;
+        *(i32*)*var_7[0] = 40;
+        *(u64*)(*var_7[0] + 8) = 0;
+        *(i32*)(*var_7[0] + 8) = 1;
+        *(i32*)*var_7[1] = 28;
+        *(u64*)(*var_7[1] + 8) = 0;
+        *(f32*)(*var_7[1] + 8) = 0.20;
         var_2 = animate_(tag-symbol(guitar, self), arg_0, var_7);
     } else {
         var_2 = 0;
@@ -1014,12 +1014,12 @@ u64? guitar-play-string-partial(u64? arg_0) {
         stop-animating(tag-symbol(guitar, self), 1, 0.00, arg_0, 0);
     }
     u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_4 + (0 * 8)) = 40;
-    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-    *(i32*)(*(*var_4 + (0 * 8)) + 8) = 1;
-    *(i32*)*(*var_4 + (1 * 8)) = 28;
-    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.20;
+    *(i32*)*var_4[0] = 40;
+    *(u64*)(*var_4[0] + 8) = 0;
+    *(i32*)(*var_4[0] + 8) = 1;
+    *(i32*)*var_4[1] = 28;
+    *(u64*)(*var_4[1] + 8) = 0;
+    *(f32*)(*var_4[1] + 8) = 0.20;
     return animate_(tag-symbol(guitar, self), arg_0, var_4);
 }
 
@@ -1236,8 +1236,8 @@ statescript {
                     send-event(
                         setup-menu-vars,
                         get-symbol(menu-name, self),
-                        new-boxed-value(7, get-self-id()),
-                        new-boxed-value(7, guitar-wheel-strings)
+                        boxed_symbol(get-self-id()),
+                        boxed_symbol(guitar-wheel-strings)
                     );
                 }
                 lambda {
@@ -1247,8 +1247,8 @@ statescript {
                     send-event(
                         next-chord-changed,
                         get-symbol(menu-name, self),
-                        new-boxed-value(2, -1),
-                        new-boxed-value(6, 1.00)
+                        boxed_i32(-1),
+                        boxed_f32(1.00)
                     );
                 }
                 lambda {
@@ -1311,7 +1311,7 @@ statescript {
                     set-vector2(mouse-radial-pos, alloc-vector2(0.00, 0.00, 0), self);
                 }
                 lambda {
-                    broadcast-event(entering-guitar, new-boxed-value(7, get-self-id()));
+                    broadcast-event(entering-guitar, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     interactable-disable(tag-symbol(int, self));
@@ -1352,47 +1352,47 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = tag-float(anim-enter-fade-in, self);
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = tag-float(anim-enter-fade-in, self);
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
                     animate_(tag-symbol(guitar, self), tag-symbol(enter-anim-guitar, self), var_2);
                 }
                 lambda {
                     if (!(null == tag-symbol(light-skel-obj, self))) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
                         animate_(tag-symbol(light-skel-obj, self), tag-symbol(enter-anim-ellie-lgt-skel, self), var_3);
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = tag-float(anim-enter-fade-in, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = tag-float(anim-idle-fade-in, self);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = tag-float(anim-enter-fade-in, self);
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = tag-float(anim-idle-fade-in, self);
                     wait-animate_(player, tag-symbol(enter-anim-ellie, self), var_1);
                 }
                 lambda {
-                    broadcast-event(guitar-entered, new-boxed-value(7, get-self-id()));
+                    broadcast-event(guitar-entered, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(guitar-idle, 1);
@@ -1449,58 +1449,58 @@ statescript {
  else if (get-boolean(needs-tuning?, self)) {
                         if (!(null == tag-symbol(light-skel-obj, self))) {
                             u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_5 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                            *(i32*)*(*var_5 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_5 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.00;
+                            *(i32*)*var_5[0] = 10;
+                            *(u64*)(*var_5[0] + 8) = 0;
+                            *(u64*)(*var_5[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                            *(i32*)*var_5[1] = 28;
+                            *(u64*)(*var_5[1] + 8) = 0;
+                            *(f32*)(*var_5[1] + 8) = 0.00;
+                            *(i32*)*var_5[2] = 30;
+                            *(u64*)(*var_5[2] + 8) = 0;
+                            *(f32*)(*var_5[2] + 8) = 0.00;
                             animate_(tag-symbol(light-skel-obj, self), tag-symbol(tune-idle-anim-ellie-lgt-skel, self), var_5);
                         }
                         u64? var_9 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_9 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (2 * 8)) + 8) = tag-float(anim-idle-fade-out, self);
-                        *(i32*)*(*var_9 + (3 * 8)) = 19;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.10;
+                        *(i32*)*var_9[2] = 30;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(f32*)(*var_9[2] + 8) = tag-float(anim-idle-fade-out, self);
+                        *(i32*)*var_9[3] = 19;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(u8*)(*var_9[3] + 8) = 1;
                         animate_(player, tag-symbol(tune-idle-anim-ellie, self), var_9);
                     } else {
                         if (!(null == tag-symbol(light-skel-obj, self))) {
                             u64? var_16 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_16 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                            *(i32*)*(*var_16 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_16 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_16 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_16 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_16 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_16 + (2 * 8)) + 8) = 0.00;
+                            *(i32*)*var_16[0] = 10;
+                            *(u64*)(*var_16[0] + 8) = 0;
+                            *(u64*)(*var_16[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                            *(i32*)*var_16[1] = 28;
+                            *(u64*)(*var_16[1] + 8) = 0;
+                            *(f32*)(*var_16[1] + 8) = 0.00;
+                            *(i32*)*var_16[2] = 30;
+                            *(u64*)(*var_16[2] + 8) = 0;
+                            *(f32*)(*var_16[2] + 8) = 0.00;
                             animate_(tag-symbol(light-skel-obj, self), tag-symbol(idle-anim-ellie-lgt-skel, self), var_16);
                         }
                         u64? var_20 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_20 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_20 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                        *(i32*)*(*var_20 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (1 * 8)) + 8) = tag-float(anim-idle-fade-in, self);
-                        *(i32*)*(*var_20 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_20 + (2 * 8)) + 8) = tag-float(anim-idle-fade-out, self);
-                        *(i32*)*(*var_20 + (3 * 8)) = 19;
-                        *(u64*)(*(*var_20 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_20 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_20[0] = 10;
+                        *(u64*)(*var_20[0] + 8) = 0;
+                        *(u64*)(*var_20[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                        *(i32*)*var_20[1] = 28;
+                        *(u64*)(*var_20[1] + 8) = 0;
+                        *(f32*)(*var_20[1] + 8) = tag-float(anim-idle-fade-in, self);
+                        *(i32*)*var_20[2] = 30;
+                        *(u64*)(*var_20[2] + 8) = 0;
+                        *(f32*)(*var_20[2] + 8) = tag-float(anim-idle-fade-out, self);
+                        *(i32*)*var_20[3] = 19;
+                        *(u64*)(*var_20[3] + 8) = 0;
+                        *(u8*)(*var_20[3] + 8) = 1;
                         animate_(player, get-symbol(idle-anim-ellie, self), var_20);
                     }
                 }
@@ -1556,8 +1556,8 @@ statescript {
                     send-event(
                         setup-menu-vars,
                         get-symbol(menu-name, self),
-                        new-boxed-value(7, get-self-id()),
-                        new-boxed-value(7, guitar-wheel-strings)
+                        boxed_symbol(get-self-id()),
+                        boxed_symbol(guitar-wheel-strings)
                     );
                 }
                 lambda {
@@ -1567,8 +1567,8 @@ statescript {
                     send-event(
                         next-chord-changed,
                         get-symbol(menu-name, self),
-                        new-boxed-value(2, get-int32(start-wheel, self)),
-                        new-boxed-value(6, 1.00)
+                        boxed_i32(get-int32(start-wheel, self)),
+                        boxed_f32(1.00)
                     );
                 }
                 lambda {
@@ -1959,8 +1959,8 @@ statescript {
                                 send-event(
                                     update-analog-direction-widget,
                                     canvas.hudRoot.hudMenuStack.hud-minigames/hud-guitar/guitar-root,
-                                    new-boxed-value(1, vector2-magnitude(get-vector2(mouse-radial-pos, self)) > 1.00),
-                                    new-boxed-value(6, 360.00 - var_4)
+                                    boxed_bool(vector2-magnitude(get-vector2(mouse-radial-pos, self)) > 1.00),
+                                    boxed_f32(360.00 - var_4)
                                 );
                             }
                             if (!(get-boolean(freeplay-ui-shown?, ss-guitar-freeplay-1)) && !(get-boolean(guitar-exit-shown?, ss-guitar-freeplay-1))) {
@@ -1988,17 +1988,7 @@ statescript {
                                         send-event(freeplay-chord-hand-moved, ss-guitar-freeplay-1);
                                     }
                                     stop-timer(chord-hand-timer, self);
-                                    foreach (u64? var_46 : guitar-chord-partials) {
-                                        u16 var_47;
-                                        if (var_46 && *(u16*)(var_46 + 12) == 7) {
-                                            var_47 = *(u64*)var_46;
-                                        } else if (var_46 && *(u16*)(var_46 + 12) == 5) {
-                                            var_47 = *(u64*)var_46;
-                                        } else if (var_46 && *(u16*)(var_46 + 12) == 4) {
-                                            var_47 = *(u64*)var_46;
-                                        } else {
-                                            var_47 = 0;
-                                        }
+                                    foreach (u64? var_47 : guitar-chord-partials) {
                                         if (object-anim-playing?(player, var_47, 1)) {
                                             clear-gesture(player, 2, -1.00, 0);
                                         }
@@ -3145,17 +3135,7 @@ statescript {
         block event change-chord {
             track main {
                 lambda {
-                    foreach (u64? var_1 : guitar-chord-partials) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : guitar-chord-partials) {
                         if (object-anim-playing?(player, var_2, 1)) {
                             clear-gesture(player, 2, -1.00, 0);
                         }
@@ -3179,7 +3159,7 @@ statescript {
                     set-symbol(hold-gesture, group-get-member-at-same-index(guitar-hold-chord-gest, guitar-start-chord-gest, event-arg-symbol(1)), self);
                 }
                 lambda {
-                    send-event(chord-changed, get-symbol(menu-name, self), new-boxed-value(2, (i32)get-float(chord-choice, self)));
+                    send-event(chord-changed, get-symbol(menu-name, self), boxed_i32((i32)get-float(chord-choice, self)));
                 }
             }
         }
@@ -3443,8 +3423,8 @@ statescript {
                             send-event(
                                 update-analog-direction-widget,
                                 canvas.hudRoot.hudMenuStack.hud-minigames/hud-guitar/guitar-root,
-                                new-boxed-value(1, vector2-magnitude(get-vector2(mouse-radial-pos, self)) > 1.00),
-                                new-boxed-value(6, 360.00 - var_4)
+                                boxed_bool(vector2-magnitude(get-vector2(mouse-radial-pos, self)) > 1.00),
+                                boxed_f32(360.00 - var_4)
                             );
                         }
                         if (!(get-boolean(freeplay-ui-shown?, ss-guitar-freeplay-1)) && !(get-boolean(guitar-exit-shown?, ss-guitar-freeplay-1))) {
@@ -3453,7 +3433,7 @@ statescript {
                             } else if (get-joypad-stick-intensity(camera, 0.20, 1.00) > 0.10) {
                                 get-joypad-stick-intensity(move, 0.20, 1.00) > 0.10;
                             } else if (get-boolean(symbol-concat-int32(allow-wedge, (i32)var_11 + 1), self)) {
-                                var_21 = send-event(chord-changed, get-symbol(menu-name, self), new-boxed-value(2, (i32)var_11));
+                                var_21 = send-event(chord-changed, get-symbol(menu-name, self), boxed_i32((i32)var_11));
                             }
                         }
                     }
@@ -3608,33 +3588,33 @@ statescript {
                                         start-timer(jamming-timer, 3.00, self, 1);
                                         if (!object-anim-playing?(player, tag-symbol(face-part-anim, self), 1)) {
                                             u64? var_104 = #%alloc-array(single-frame, 16, 4, 1);
-                                            *(i32*)*(*var_104 + (0 * 8)) = 40;
-                                            *(u64*)(*(*var_104 + (0 * 8)) + 8) = 0;
-                                            *(i32*)(*(*var_104 + (0 * 8)) + 8) = 1;
-                                            *(i32*)*(*var_104 + (1 * 8)) = 41;
-                                            *(u64*)(*(*var_104 + (1 * 8)) + 8) = 0;
-                                            *(u64*)(*(*var_104 + (1 * 8)) + 8) = s_script-gesture-2;
-                                            *(i32*)*(*var_104 + (2 * 8)) = 31;
-                                            *(u64*)(*(*var_104 + (2 * 8)) + 8) = 0;
-                                            *(u8*)(*(*var_104 + (2 * 8)) + 8) = 1;
-                                            *(i32*)*(*var_104 + (3 * 8)) = 28;
-                                            *(u64*)(*(*var_104 + (3 * 8)) + 8) = 0;
-                                            *(f32*)(*(*var_104 + (3 * 8)) + 8) = 1.50;
+                                            *(i32*)*var_104[0] = 40;
+                                            *(u64*)(*var_104[0] + 8) = 0;
+                                            *(i32*)(*var_104[0] + 8) = 1;
+                                            *(i32*)*var_104[1] = 41;
+                                            *(u64*)(*var_104[1] + 8) = 0;
+                                            *(u64*)(*var_104[1] + 8) = s_script-gesture-2;
+                                            *(i32*)*var_104[2] = 31;
+                                            *(u64*)(*var_104[2] + 8) = 0;
+                                            *(u8*)(*var_104[2] + 8) = 1;
+                                            *(i32*)*var_104[3] = 28;
+                                            *(u64*)(*var_104[3] + 8) = 0;
+                                            *(f32*)(*var_104[3] + 8) = 1.50;
                                             animate_(player, tag-symbol(face-part-anim, self), var_104);
                                             if (!(tag-symbol(body-part-anim, self) == null-anim)) {
                                                 u64? var_107 = #%alloc-array(single-frame, 16, 4, 1);
-                                                *(i32*)*(*var_107 + (0 * 8)) = 40;
-                                                *(u64*)(*(*var_107 + (0 * 8)) + 8) = 0;
-                                                *(i32*)(*(*var_107 + (0 * 8)) + 8) = 1;
-                                                *(i32*)*(*var_107 + (1 * 8)) = 41;
-                                                *(u64*)(*(*var_107 + (1 * 8)) + 8) = 0;
-                                                *(u64*)(*(*var_107 + (1 * 8)) + 8) = s_script-gesture-add-1;
-                                                *(i32*)*(*var_107 + (2 * 8)) = 31;
-                                                *(u64*)(*(*var_107 + (2 * 8)) + 8) = 0;
-                                                *(u8*)(*(*var_107 + (2 * 8)) + 8) = 1;
-                                                *(i32*)*(*var_107 + (3 * 8)) = 28;
-                                                *(u64*)(*(*var_107 + (3 * 8)) + 8) = 0;
-                                                *(f32*)(*(*var_107 + (3 * 8)) + 8) = 1.50;
+                                                *(i32*)*var_107[0] = 40;
+                                                *(u64*)(*var_107[0] + 8) = 0;
+                                                *(i32*)(*var_107[0] + 8) = 1;
+                                                *(i32*)*var_107[1] = 41;
+                                                *(u64*)(*var_107[1] + 8) = 0;
+                                                *(u64*)(*var_107[1] + 8) = s_script-gesture-add-1;
+                                                *(i32*)*var_107[2] = 31;
+                                                *(u64*)(*var_107[2] + 8) = 0;
+                                                *(u8*)(*var_107[2] + 8) = 1;
+                                                *(i32*)*var_107[3] = 28;
+                                                *(u64*)(*var_107[3] + 8) = 0;
+                                                *(f32*)(*var_107[3] + 8) = 1.50;
                                                 animate_(player, tag-symbol(body-part-anim, self), var_107);
                                             }
                                         }
@@ -3651,17 +3631,7 @@ statescript {
                                     if (get-int32(chord-press, self) == get-int32(last-chord, self)) {
                                         if (!(get-int32(chord-wheel, self) == get-int32(last-wheel, self))) {
                                             set-boolean(played-note, 0, self);
-                                            foreach (u64? var_132 : guitar-all-string-sounds) {
-                                                u16 var_133;
-                                                if (var_132 && *(u16*)(var_132 + 12) == 7) {
-                                                    var_133 = *(u64*)var_132;
-                                                } else if (var_132 && *(u16*)(var_132 + 12) == 5) {
-                                                    var_133 = *(u64*)var_132;
-                                                } else if (var_132 && *(u16*)(var_132 + 12) == 4) {
-                                                    var_133 = *(u64*)var_132;
-                                                } else {
-                                                    var_133 = 0;
-                                                }
+                                            foreach (u64? var_133 : guitar-all-string-sounds) {
                                                 stop-sound(get-int32(var_133, self));
                                             }
                                         }
@@ -4052,18 +4022,18 @@ statescript {
                                                         var_266 = guitar-motions-fail--joel--add;
                                                     }
                                                     u64? var_267 = #%alloc-array(single-frame, 16, 4, 1);
-                                                    *(i32*)*(*var_267 + (0 * 8)) = 40;
-                                                    *(u64*)(*(*var_267 + (0 * 8)) + 8) = 0;
-                                                    *(i32*)(*(*var_267 + (0 * 8)) + 8) = 1;
-                                                    *(i32*)*(*var_267 + (1 * 8)) = 28;
-                                                    *(u64*)(*(*var_267 + (1 * 8)) + 8) = 0;
-                                                    *(f32*)(*(*var_267 + (1 * 8)) + 8) = 0.20;
-                                                    *(i32*)*(*var_267 + (2 * 8)) = 30;
-                                                    *(u64*)(*(*var_267 + (2 * 8)) + 8) = 0;
-                                                    *(f32*)(*(*var_267 + (2 * 8)) + 8) = 0.20;
-                                                    *(i32*)*(*var_267 + (3 * 8)) = 32;
-                                                    *(u64*)(*(*var_267 + (3 * 8)) + 8) = 0;
-                                                    *(u8*)(*(*var_267 + (3 * 8)) + 8) = 1;
+                                                    *(i32*)*var_267[0] = 40;
+                                                    *(u64*)(*var_267[0] + 8) = 0;
+                                                    *(i32*)(*var_267[0] + 8) = 1;
+                                                    *(i32*)*var_267[1] = 28;
+                                                    *(u64*)(*var_267[1] + 8) = 0;
+                                                    *(f32*)(*var_267[1] + 8) = 0.20;
+                                                    *(i32*)*var_267[2] = 30;
+                                                    *(u64*)(*var_267[2] + 8) = 0;
+                                                    *(f32*)(*var_267[2] + 8) = 0.20;
+                                                    *(i32*)*var_267[3] = 32;
+                                                    *(u64*)(*var_267[3] + 8) = 0;
+                                                    *(u8*)(*var_267[3] + 8) = 1;
                                                     animate_(player, var_266, var_267);
                                                     sid var_269;
                                                     if (task-complete?(ellie-flashback-guitar, efg-guitar-flashback-b)) {
@@ -4072,18 +4042,18 @@ statescript {
                                                         var_269 = guitar-motions-fail--joel--part;
                                                     }
                                                     u64? var_270 = #%alloc-array(single-frame, 16, 4, 1);
-                                                    *(i32*)*(*var_270 + (0 * 8)) = 40;
-                                                    *(u64*)(*(*var_270 + (0 * 8)) + 8) = 0;
-                                                    *(i32*)(*(*var_270 + (0 * 8)) + 8) = 1;
-                                                    *(i32*)*(*var_270 + (1 * 8)) = 28;
-                                                    *(u64*)(*(*var_270 + (1 * 8)) + 8) = 0;
-                                                    *(f32*)(*(*var_270 + (1 * 8)) + 8) = 0.20;
-                                                    *(i32*)*(*var_270 + (2 * 8)) = 30;
-                                                    *(u64*)(*(*var_270 + (2 * 8)) + 8) = 0;
-                                                    *(f32*)(*(*var_270 + (2 * 8)) + 8) = 0.20;
-                                                    *(i32*)*(*var_270 + (3 * 8)) = 32;
-                                                    *(u64*)(*(*var_270 + (3 * 8)) + 8) = 0;
-                                                    *(u8*)(*(*var_270 + (3 * 8)) + 8) = 1;
+                                                    *(i32*)*var_270[0] = 40;
+                                                    *(u64*)(*var_270[0] + 8) = 0;
+                                                    *(i32*)(*var_270[0] + 8) = 1;
+                                                    *(i32*)*var_270[1] = 28;
+                                                    *(u64*)(*var_270[1] + 8) = 0;
+                                                    *(f32*)(*var_270[1] + 8) = 0.20;
+                                                    *(i32*)*var_270[2] = 30;
+                                                    *(u64*)(*var_270[2] + 8) = 0;
+                                                    *(f32*)(*var_270[2] + 8) = 0.20;
+                                                    *(i32*)*var_270[3] = 32;
+                                                    *(u64*)(*var_270[3] + 8) = 0;
+                                                    *(u8*)(*var_270[3] + 8) = 1;
                                                     animate_(player, var_269, var_270);
                                                 }
                                                 if (get-int32(correct-count, self) > 3) {
@@ -4134,8 +4104,8 @@ statescript {
                                             send-event(
                                                 strummed,
                                                 get-symbol(menu-name, self),
-                                                new-boxed-value(2, var_286),
-                                                new-boxed-value(1, get-boolean(progress, self))
+                                                boxed_i32(var_286),
+                                                boxed_bool(get-boolean(progress, self))
                                             );
                                             start-timer(note-timer, 0.20, self, 1);
                                             set-int32(small-chord, 0, self);
@@ -4481,7 +4451,7 @@ statescript {
         block start {
             track anim {
                 lambda {
-                    broadcast-event(exiting-guitar, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-guitar, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     clear-gesture(player, 1, -1.00, 0);
@@ -4490,17 +4460,7 @@ statescript {
                     clear-gesture(player, 2, -1.00, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : guitar-chord-partials) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : guitar-chord-partials) {
                         if (object-anim-playing?(player, var_2, 1)) {
                             stop-animating(player, 1, 0.20, var_2, 0);
                         }
@@ -4508,43 +4468,43 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = tag-float(anim-exit-fade-out, self);
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = tag-float(anim-exit-fade-out, self);
                     animate_(tag-symbol(guitar, self), tag-symbol(exit-anim-guitar, self), var_2);
                 }
                 lambda {
                     if (!(null == tag-symbol(light-skel-obj, self))) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
                         animate_(tag-symbol(light-skel-obj, self), tag-symbol(exit-anim-ellie-lgt-skel, self), var_3);
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(ap, self), 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = tag-float(anim-exit-fade-out, self);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-symbol(ap, self), 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = tag-float(anim-exit-fade-out, self);
                     wait-animate_(player, tag-symbol(exit-anim-ellie, self), var_1);
                 }
                 lambda {
@@ -4557,7 +4517,7 @@ statescript {
                     interactable-enable(tag-symbol(int, self));
                 }
                 lambda {
-                    broadcast-event(guitar-exited, new-boxed-value(7, get-self-id()));
+                    broadcast-event(guitar-exited, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(wait-interact, 1);

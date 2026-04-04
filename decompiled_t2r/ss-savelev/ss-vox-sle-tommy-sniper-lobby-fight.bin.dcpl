@@ -20,12 +20,12 @@ u16 sle-vox-lobby--tommy-visible/f() {
     if (task-complete?(save-lev, sle-tommy-sniper-lobby-down-escalators)) {
         if (is-centered-on-screen?(get-joint-position(npc-tommy-fight-1, spined), 200.00) && npc-on-screen-and-visible?(npc-tommy-fight-1, -1, 0)) {
             if (fact-get-bool-safe(player, sle-vox-saw-tommy-last-frame)) {
-                fact-increment-by(player, sle-vox-time-seeing-tommy, new-boxed-value(6, fact-get-time-since-safe(player, sle-vox-time-last-seen-tommy)));
+                fact-increment-by(player, sle-vox-time-seeing-tommy, boxed_f32(fact-get-time-since-safe(player, sle-vox-time-last-seen-tommy)));
             }
             fact-set-time-safe(player, sle-vox-time-last-seen-tommy);
             fact-set-bool-safe(player, sle-vox-saw-tommy-last-frame, 1);
         } else {
-            fact-set(player, sle-vox-time-seeing-tommy, new-boxed-value(6, 0.00));
+            fact-set(player, sle-vox-time-seeing-tommy, boxed_f32(0.00));
             fact-set-bool-safe(player, sle-vox-saw-tommy-last-frame, 0);
         }
         if (npc-can-see?(manny, npc-tommy-fight-1)) {
@@ -174,7 +174,7 @@ statescript {
                     fact-set-time-safe(manny, sle-vox-time-last-shot-callout);
                 }
                 lambda {
-                    fact-set(player, sle-vox-time-seeing-tommy, new-boxed-value(6, 0.00));
+                    fact-set(player, sle-vox-time-seeing-tommy, boxed_f32(0.00));
                 }
                 lambda {
                     fact-set-bool-safe(player, sle-vox-saw-tommy-last-frame, 0);

@@ -44,8 +44,8 @@ u16 reset-character(i64 arg_0) {
         npc-set-deaf(get-symbol(var_21, self), 1);
         suppress-spot-player-stinger();
         suppress-spot-player-dialog();
-        fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 1));
-        fact-set(global, suppress-position-tell-vox?, new-boxed-value(1, 1));
+        fact-set(global, suppress-stealth-vox?, boxed_bool(1));
+        fact-set(global, suppress-position-tell-vox?, boxed_bool(1));
         npc-unholster-melee-weapon(get-symbol(var_21, self), 4);
         var_3 = var_21;
     } else {
@@ -63,7 +63,7 @@ u16 reset-character(i64 arg_0) {
         set-symbol(ratking-attached-stalker, spawn-entity-at(npc-superstalker-melee-tester-1, get-spawner-locator(get-symbol(attacker-spawner, self), 1), 0), self);
         wait-one-frame();
         wait-for-entity-spawned(get-symbol(ratking-attached-stalker, self));
-        send-event(begin-carried, get-symbol(ratking-attached-stalker, self), new-boxed-value(7, get-symbol(var_3, self)));
+        send-event(begin-carried, get-symbol(ratking-attached-stalker, self), boxed_symbol(get-symbol(var_3, self)));
     }
     get-origin-locator();
     u64? var_49;
@@ -128,18 +128,18 @@ u16 reset-character(i64 arg_0) {
             player-swap-look-id(get-symbol(defender-look, self), 0, 1);
         }
         u64? var_87 = #%alloc-array(single-frame, 16, 4, 1);
-        *(i32*)*(*var_87 + (0 * 8)) = 10;
-        *(u64*)(*(*var_87 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_87 + (0 * 8)) + 8) = var_49;
-        *(i32*)*(*var_87 + (1 * 8)) = 70;
-        *(u64*)(*(*var_87 + (1 * 8)) + 8) = 0;
-        *(i32*)(*(*var_87 + (1 * 8)) + 8) = 1;
-        *(i32*)*(*var_87 + (2 * 8)) = 32;
-        *(u64*)(*(*var_87 + (2 * 8)) + 8) = 0;
-        *(u8*)(*(*var_87 + (2 * 8)) + 8) = 1;
-        *(i32*)*(*var_87 + (3 * 8)) = 30;
-        *(u64*)(*(*var_87 + (3 * 8)) + 8) = 0;
-        *(f32*)(*(*var_87 + (3 * 8)) + 8) = 0.40;
+        *(i32*)*var_87[0] = 10;
+        *(u64*)(*var_87[0] + 8) = 0;
+        *(u64*)(*var_87[0] + 8) = var_49;
+        *(i32*)*var_87[1] = 70;
+        *(u64*)(*var_87[1] + 8) = 0;
+        *(i32*)(*var_87[1] + 8) = 1;
+        *(i32*)*var_87[2] = 32;
+        *(u64*)(*var_87[2] + 8) = 0;
+        *(u8*)(*var_87[2] + 8) = 1;
+        *(i32*)*var_87[3] = 30;
+        *(u64*)(*var_87[3] + 8) = 0;
+        *(f32*)(*var_87[3] + 8) = 0.40;
         animate_(get-symbol(var_3, self), ellie-mm-melee-idle, var_87);
         wait-one-frame();
         send-event(notify-teleport, get-symbol(var_3, self));
@@ -231,15 +231,15 @@ u16 rotate-to-face-move-start(i64 arg_0, u64? arg_1, u64? arg_2) {
     u16 var_1;
     if (arg_0 == get-symbol(defender, self)) {
         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_3 + (0 * 8)) = 10;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-object-locator(arg_0);
-        *(i32*)*(*var_3 + (1 * 8)) = 28;
-        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-        *(i32*)*(*var_3 + (2 * 8)) = 56;
-        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+        *(i32*)*var_3[0] = 10;
+        *(u64*)(*var_3[0] + 8) = 0;
+        *(u64*)(*var_3[0] + 8) = get-object-locator(arg_0);
+        *(i32*)*var_3[1] = 28;
+        *(u64*)(*var_3[1] + 8) = 0;
+        *(f32*)(*var_3[1] + 8) = 0.00;
+        *(i32*)*var_3[2] = 56;
+        *(u64*)(*var_3[2] + 8) = 0;
+        *(f32*)(*var_3[2] + 8) = 0.00;
         animate_(arg_0, *(u64*)(*(lookup-symbol(arg_1, melee-attack) + 112) + 32), var_3);
         stop-animating(get-symbol(defender, self), 2, 0.00, 0, 0);
         var_1 = 1;
@@ -265,7 +265,7 @@ u16 update-lists() {
             0
         ) && melee-npc-look-check(get-symbol(defender, self), *(*(var_1 + 296) + 152))) {
             if (!ddict-contains-key?(get-symbol(move-group-ddict, self), *(u64*)(*(var_1 + 296) + 96))) {
-                ddict-set(get-symbol(move-group-ddict, self), *(u64*)(*(var_1 + 296) + 96), new-boxed-value(7, ddict-create(self, -1, 0)));
+                ddict-set(get-symbol(move-group-ddict, self), *(u64*)(*(var_1 + 296) + 96), boxed_symbol(ddict-create(self, -1, 0)));
             }
             u64? var_27 = ddict-get(get-symbol(move-group-ddict, self), *(u64*)(*(var_1 + 296) + 96));
             u16 var_28;
@@ -290,7 +290,7 @@ u16 update-lists() {
                 } else {
                     var_34 = 0;
                 }
-                ddict-set(var_34, *(u64*)(*(var_1 + 296) + 104), new-boxed-value(7, darray-create(self, -1, 0)));
+                ddict-set(var_34, *(u64*)(*(var_1 + 296) + 104), boxed_symbol(darray-create(self, -1, 0)));
             }
             u64? var_40 = ddict-get(get-symbol(move-group-ddict, self), *(u64*)(*(var_1 + 296) + 96));
             u16 var_41;
@@ -314,7 +314,7 @@ u16 update-lists() {
             } else {
                 var_44 = 0;
             }
-            var_17 = darray-append(var_44, new-boxed-value(7, *(u64*)var_1), 0);
+            var_17 = darray-append(var_44, boxed_symbol(*(u64*)var_1), 0);
         }
         i = i + 1;
     }
@@ -325,48 +325,28 @@ u16 build-character-weapon-list(sid arg_0, u64? arg_1) {
     darray-clear(arg_1);
     u16 var_0;
     if (manny == arg_0) {
-        darray-append(arg_1, new-boxed-value(7, hatchet), 1);
+        darray-append(arg_1, boxed_symbol(hatchet), 1);
         var_0 = 1;
     } else if (dina == arg_0) {
-        darray-append(arg_1, new-boxed-value(7, switchblade-dina), 1);
+        darray-append(arg_1, boxed_symbol(switchblade-dina), 1);
         var_0 = 1;
     } else if (jesse == arg_0) {
-        darray-append(arg_1, new-boxed-value(7, machete), 1);
+        darray-append(arg_1, boxed_symbol(machete), 1);
         var_0 = 1;
     } else if (manny == arg_0) {
-        darray-append(arg_1, new-boxed-value(7, hatchet), 1);
+        darray-append(arg_1, boxed_symbol(hatchet), 1);
         var_0 = 1;
     } else if (is-player?(arg_0)) {
         if (is-player-abby?(player)) {
-            darray-insert(arg_1, new-boxed-value(7, abby-unarmed), 0);
-            foreach (u64? var_9 : base-weapon-list) {
-                u16 var_10;
-                if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                    var_10 = *(u64*)var_9;
-                } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                    var_10 = *(u64*)var_9;
-                } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                    var_10 = *(u64*)var_9;
-                } else {
-                    var_10 = 0;
-                }
-                darray-append(arg_1, new-boxed-value(7, var_10), 1);
+            darray-insert(arg_1, boxed_symbol(abby-unarmed), 0);
+            foreach (u64? var_10 : base-weapon-list) {
+                darray-append(arg_1, boxed_symbol(var_10), 1);
             }
             var_0 = 1;
         } else if (is-player-ellie?(player)) {
-            darray-insert(arg_1, new-boxed-value(7, switchblade), 0);
-            foreach (u64? var_16 : base-weapon-list) {
-                u16 var_17;
-                if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                    var_17 = *(u64*)var_16;
-                } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                    var_17 = *(u64*)var_16;
-                } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                    var_17 = *(u64*)var_16;
-                } else {
-                    var_17 = 0;
-                }
-                darray-append(arg_1, new-boxed-value(7, var_17), 1);
+            darray-insert(arg_1, boxed_symbol(switchblade), 0);
+            foreach (u64? var_17 : base-weapon-list) {
+                darray-append(arg_1, boxed_symbol(var_17), 1);
             }
             var_0 = 1;
         } else {
@@ -374,51 +354,41 @@ u16 build-character-weapon-list(sid arg_0, u64? arg_1) {
         }
     } else if (is-npc?(arg_0)) {
         if (npc-ratking?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-rat-king-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-rat-king-unarmed), 1);
             var_0 = 1;
         } else if (npc-brute?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, sledgehammer), 1);
-            darray-append(arg_1, new-boxed-value(7, pickaxe-scar), 1);
+            darray-append(arg_1, boxed_symbol(sledgehammer), 1);
+            darray-append(arg_1, boxed_symbol(pickaxe-scar), 1);
             var_0 = 1;
         } else if (npc-runner?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-runner-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-runner-unarmed), 1);
             var_0 = 1;
         } else if (npc-stalker?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-stalker-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-stalker-unarmed), 1);
             var_0 = 1;
         } else if (npc-shambler?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-shambler-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-shambler-unarmed), 1);
             var_0 = 1;
         } else if (npc-clicker?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-clicker-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-clicker-unarmed), 1);
             var_0 = 1;
         } else if (npc-bloater?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, infected-bloater-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(infected-bloater-unarmed), 1);
             var_0 = 1;
         } else if (npc-is-dog?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, dog-unarmed), 1);
+            darray-append(arg_1, boxed_symbol(dog-unarmed), 1);
             var_0 = 1;
         } else if (npc-enemy-ellie?(arg_0)) {
-            darray-append(arg_1, new-boxed-value(7, switchblade-npc-ellie), 1);
+            darray-append(arg_1, boxed_symbol(switchblade-npc-ellie), 1);
             var_0 = 1;
         } else {
-            foreach (u64? var_41 : base-weapon-list) {
-                u16 var_42;
-                if (var_41 && *(u16*)(var_41 + 12) == 7) {
-                    var_42 = *(u64*)var_41;
-                } else if (var_41 && *(u16*)(var_41 + 12) == 5) {
-                    var_42 = *(u64*)var_41;
-                } else if (var_41 && *(u16*)(var_41 + 12) == 4) {
-                    var_42 = *(u64*)var_41;
-                } else {
-                    var_42 = 0;
-                }
-                darray-append(arg_1, new-boxed-value(7, var_42), 1);
+            foreach (u64? var_42 : base-weapon-list) {
+                darray-append(arg_1, boxed_symbol(var_42), 1);
             }
-            darray-append(arg_1, new-boxed-value(7, pistol-militia), 1);
-            darray-find-remove(arg_1, new-boxed-value(7, bottle), 0);
-            darray-find-remove(arg_1, new-boxed-value(7, brick), 0);
-            darray-find-remove(arg_1, new-boxed-value(7, pickaxe-player), 0);
+            darray-append(arg_1, boxed_symbol(pistol-militia), 1);
+            darray-find-remove(arg_1, boxed_symbol(bottle), 0);
+            darray-find-remove(arg_1, boxed_symbol(brick), 0);
+            darray-find-remove(arg_1, boxed_symbol(pickaxe-player), 0);
             var_0 = 1;
         }
     } else {
@@ -442,37 +412,37 @@ u16 build-character-look-list(u64? arg_0, u64? arg_1, u64? arg_2) {
     u16 var_1;
     if (is-player?(arg_0)) {
         if (is-player-abby?(player)) {
-            darray-append(arg_2, new-boxed-value(7, abby), 1);
-            darray-append(arg_2, new-boxed-value(7, abby-young), 1);
-            darray-append(arg_2, new-boxed-value(7, abby-seattle-cafe), 1);
-            darray-append(arg_2, new-boxed-value(7, abby-no-backpack), 1);
-            darray-append(arg_2, new-boxed-value(7, abby-flashback-dad), 1);
+            darray-append(arg_2, boxed_symbol(abby), 1);
+            darray-append(arg_2, boxed_symbol(abby-young), 1);
+            darray-append(arg_2, boxed_symbol(abby-seattle-cafe), 1);
+            darray-append(arg_2, boxed_symbol(abby-no-backpack), 1);
+            darray-append(arg_2, boxed_symbol(abby-flashback-dad), 1);
             var_1 = 1;
         } else if (is-player-ellie?(player)) {
-            darray-append(arg_2, new-boxed-value(7, ellie), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-seattle), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-festival), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-growhouse), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-santabarbara), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-jackson-winter), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-santabarbara-no-backpack), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-seattle-suture), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-no-backpack), 1);
-            darray-append(arg_2, new-boxed-value(7, ellie-festival), 1);
+            darray-append(arg_2, boxed_symbol(ellie), 1);
+            darray-append(arg_2, boxed_symbol(ellie-seattle), 1);
+            darray-append(arg_2, boxed_symbol(ellie-festival), 1);
+            darray-append(arg_2, boxed_symbol(ellie-growhouse), 1);
+            darray-append(arg_2, boxed_symbol(ellie-santabarbara), 1);
+            darray-append(arg_2, boxed_symbol(ellie-jackson-winter), 1);
+            darray-append(arg_2, boxed_symbol(ellie-santabarbara-no-backpack), 1);
+            darray-append(arg_2, boxed_symbol(ellie-seattle-suture), 1);
+            darray-append(arg_2, boxed_symbol(ellie-no-backpack), 1);
+            darray-append(arg_2, boxed_symbol(ellie-festival), 1);
             var_1 = 1;
         } else {
             var_1 = 0;
         }
     } else if (is-npc?(arg_0)) {
         if (npc-ratking?(arg_0)) {
-            var_1 = darray-insert(arg_2, new-boxed-value(7, ratking-bloater-01), 0);
+            var_1 = darray-insert(arg_2, boxed_symbol(ratking-bloater-01), 0);
         } else if (npc-enemy-ellie?(arg_0)) {
-            darray-insert(arg_2, new-boxed-value(7, ellie), 0);
+            darray-insert(arg_2, boxed_symbol(ellie), 0);
             var_1 = 1;
         } else {
             u64? var_25 = npc-spawner-get-look(arg_1);
             for (u64 i = 0; i < get-num-looks-in-collection(var_25); i++) {
-                darray-append(arg_2, new-boxed-value(7, get-look-id-from-collection-index(var_25, i)), 1);
+                darray-append(arg_2, boxed_symbol(get-look-id-from-collection-index(var_25, i)), 1);
             }
             var_1 = 1;
         }
@@ -599,17 +569,7 @@ statescript {
                     npc-disable-all-corpse-to-ragdoll/f();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-suppress-threat-indicator(var_2);
                     }
                 }
@@ -1444,10 +1404,10 @@ statescript {
                     set-int32(menu-index, 3, self);
                 }
                 lambda {
-                    set-int32(attacker-weapon-index, darray-find(attacker-weapon-list, new-boxed-value(7, get-symbol(attacker-weapon, self)), 0), self);
+                    set-int32(attacker-weapon-index, darray-find(attacker-weapon-list, boxed_symbol(get-symbol(attacker-weapon, self)), 0), self);
                 }
                 lambda {
-                    set-int32(defender-weapon-index, darray-find(defender-weapon-list, new-boxed-value(7, get-symbol(defender-weapon, self)), 0), self);
+                    set-int32(defender-weapon-index, darray-find(defender-weapon-list, boxed_symbol(get-symbol(defender-weapon, self)), 0), self);
                 }
                 lambda {
                     u64? var_1 = darray-at(attacker-weapon-list, get-int32(attacker-weapon-index, self));

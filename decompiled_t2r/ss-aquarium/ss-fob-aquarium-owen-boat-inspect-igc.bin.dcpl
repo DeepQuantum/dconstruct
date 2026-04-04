@@ -247,9 +247,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-ap-ref-from-align(
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-ap-ref-from-align(
                         owen,
                         fob-aquarium-owen-boat-inspect-start--owen,
                         rotate-locator-lookat(get-object-locator(owen), get-bound-frame(ap-ref, self), 1.00, 0),
@@ -257,15 +257,15 @@ statescript {
                         apReference,
                         0
                     );
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 60.00;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 20;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 60.00;
                     animate_(owen, fob-aquarium-owen-boat-inspect-start--owen, var_0);
                 }
                 lambda {
@@ -273,18 +273,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-animation-frame(owen, 0, fob-aquarium-owen-boat-inspect-start--owen);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-ref, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-animation-frame(owen, 0, fob-aquarium-owen-boat-inspect-start--owen);
                     wait-animate_(owen, fob-aquarium-owen-boat-inspect-start--owen, var_0);
                 }
                 lambda {
@@ -298,9 +298,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-ap-ref-from-align(
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-ap-ref-from-align(
                         owen,
                         fob-aquarium-owen-boat-inspect-start--owen,
                         rotate-locator-lookat(get-object-locator(owen), get-bound-frame(ap-ref, self), 1.00, 0),
@@ -308,18 +308,18 @@ statescript {
                         apReference,
                         0
                     );
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 22.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 60.00;
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 22.00;
+                    *(i32*)*var_0[4] = 20;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 60.00;
                     animate_(owen, fob-aquarium-owen-boat-inspect-start--owen, var_0);
                 }
                 lambda {
@@ -327,18 +327,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-animation-frame(owen, 0, fob-aquarium-owen-boat-inspect-start--owen);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-ref, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-animation-frame(owen, 0, fob-aquarium-owen-boat-inspect-start--owen);
                     wait-animate_(owen, fob-aquarium-owen-boat-inspect-start--owen, var_0);
                 }
                 lambda {
@@ -368,15 +368,15 @@ statescript {
                             stop-animating(obj-fob-aquarium-flashback-boat-parented-geo-1, 1, 0.80, get-symbol(boat-idle-anim, self), 0);
                         }
                         u64? var_8 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_8 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_8 + (2 * 8)) = 40;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_8 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_8[0] = 28;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(f32*)(*var_8[0] + 8) = 0.80;
+                        *(i32*)*var_8[1] = 30;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 0.80;
+                        *(i32*)*var_8[2] = 40;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(i32*)(*var_8[2] + 8) = 1;
                         animate_(obj-fob-aquarium-flashback-boat-parented-geo-1, get-symbol(boat-idle-anim, self), var_8);
                     } else {
                         set-symbol(boat-idle-anim, 0, self);
@@ -395,21 +395,21 @@ statescript {
                         var_2 = 0;
                     }
                     u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(ap-ref, self);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_3 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_3 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_3 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_3 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-bound-frame(ap-ref, self);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.80;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.80;
+                    *(i32*)*var_3[3] = 27;
+                    *(u64*)(*var_3[3] + 8) = 0;
+                    *(u8*)(*var_3[3] + 8) = 2;
+                    *(i32*)*var_3[4] = 29;
+                    *(u64*)(*var_3[4] + 8) = 0;
+                    *(u8*)(*var_3[4] + 8) = 2;
                     animate_(owen, var_2, var_3);
                 }
                 lambda {
@@ -479,7 +479,7 @@ statescript {
                 lambda {
                     if (get-int32(anim-index, self) == 1) {
                         wait-frames(60);
-                        send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, new-boxed-value(7, idle-b));
+                        send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, boxed_symbol(idle-b));
                     }
                 }
             }
@@ -513,15 +513,15 @@ statescript {
                             stop-animating(obj-fob-aquarium-flashback-boat-parented-geo-1, 1, 0.80, get-symbol(boat-idle-anim, self), 0);
                         }
                         u64? var_8 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_8 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_8 + (2 * 8)) = 40;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_8 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_8[0] = 28;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(f32*)(*var_8[0] + 8) = 0.80;
+                        *(i32*)*var_8[1] = 30;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 0.80;
+                        *(i32*)*var_8[2] = 40;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(i32*)(*var_8[2] + 8) = 1;
                         animate_(obj-fob-aquarium-flashback-boat-parented-geo-1, get-symbol(boat-idle-anim, self), var_8);
                     } else {
                         set-symbol(boat-idle-anim, 0, self);
@@ -540,21 +540,21 @@ statescript {
                         var_2 = 0;
                     }
                     u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(ap-ref, self);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_3 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_3 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_3 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_3 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-bound-frame(ap-ref, self);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.80;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.80;
+                    *(i32*)*var_3[3] = 27;
+                    *(u64*)(*var_3[3] + 8) = 0;
+                    *(u8*)(*var_3[3] + 8) = 2;
+                    *(i32*)*var_3[4] = 29;
+                    *(u64*)(*var_3[4] + 8) = 0;
+                    *(u8*)(*var_3[4] + 8) = 2;
                     wait-animate_(owen, var_2, var_3);
                 }
                 lambda {
@@ -585,10 +585,10 @@ statescript {
                     i32 var_0 = get-int32(anim-index, self);
                     if (var_0 == 1) {
                         wait-frames(191);
-                        var_1 = send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, new-boxed-value(7, move-b-c));
+                        var_1 = send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, boxed_symbol(move-b-c));
                     } else if (var_0 == 3) {
                         wait-frames(981);
-                        var_1 = send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, new-boxed-value(7, move-d-e));
+                        var_1 = send-event(owen-boat-inspect, ss-vox-fob-aquarium-flashback-stadium-1, boxed_symbol(move-d-e));
                     }
                 }
             }
@@ -602,12 +602,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-ref, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(owen, fob-aquarium-boat-find-clothes-exit--owen, var_0);
                 }
                 lambda {
@@ -615,21 +615,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-aquarium-jacky-special-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-animation-frame(owen, 0, fob-aquarium-boat-find-clothes-exit--owen);
-                    *(i32*)*(*var_0 + (2 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = apReference-owen;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-aquarium-jacky-special-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-animation-frame(owen, 0, fob-aquarium-boat-find-clothes-exit--owen);
+                    *(i32*)*var_0[2] = 14;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = apReference-owen;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 30;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
                     wait-animate_(owen, fob-aquarium-boat-find-clothes-exit--owen, var_0);
                 }
                 lambda {

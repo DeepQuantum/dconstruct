@@ -35,7 +35,7 @@ u64? update-ingredients-needed--crafting-menu(bool arg_0) {
                 } else {
                     var_11 = var_7;
                 }
-                darray-append(ingredients-in-recipe, new-boxed-value(7, var_11), 0);
+                darray-append(ingredients-in-recipe, boxed_symbol(var_11), 0);
                 if (!arg_0) {
                     gui2-set-widget-state(get-ingredient-widget--crafting-menu(var_7), focused, 0, 0, 0);
                     sid var_18;
@@ -76,17 +76,7 @@ u64? update-ingredients-needed--crafting-menu(bool arg_0) {
             0
         ), "hud/resources/melee-upgrade.png");
     }
-    foreach (u64? var_25 : ingredients) {
-        u16 var_26;
-        if (var_25 && *(u16*)(var_25 + 12) == 7) {
-            var_26 = *(u64*)var_25;
-        } else if (var_25 && *(u16*)(var_25 + 12) == 5) {
-            var_26 = *(u64*)var_25;
-        } else if (var_25 && *(u16*)(var_25 + 12) == 4) {
-            var_26 = *(u64*)var_25;
-        } else {
-            var_26 = 0;
-        }
+    foreach (u64? var_26 : ingredients) {
         update-ingredient-text--crafting-menu(var_26);
         if (!arg_0) {
             f32 var_28;
@@ -120,7 +110,7 @@ u64? update-ingredients-needed--crafting-menu(bool arg_0) {
                 0
             ), 1.00 - var_28, 0.00, 12);
         }
-        if (!darray-contains?(ingredients-in-recipe, new-boxed-value(7, var_26))) {
+        if (!darray-contains?(ingredients-in-recipe, boxed_symbol(var_26))) {
             gui2-set-widget-state(get-ingredient-widget--crafting-menu(var_26), normal, 0, 0, 0);
         }
     }
@@ -191,17 +181,7 @@ u16 try-update-highlight--crafting-menu(u64? arg_0) {
 }
 
 u64? setup-ingredients-icons--crafting-menu() {
-    foreach (u64? var_1 : ingredients) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : ingredients) {
         gui2-set-widget-state(gui2-build-widget-path(
             get-ingredient-widget--crafting-menu(var_2),
             "counts",
@@ -253,7 +233,7 @@ u64? setup-ingredients-icons--crafting-menu() {
 }
 
 u64? is-base-ingredient?--crafting-menu(u64? arg_0) {
-    return darray-contains?(ingredients, new-boxed-value(7, arg_0));
+    return darray-contains?(ingredients, boxed_symbol(arg_0));
 }
 
 bool is-melee-ingredient?--crafting-menu(i64 arg_0) {
@@ -295,17 +275,7 @@ u16 respond-to-inventory-craft-press--crafting-navigation(u64? arg_0) {
             play-sound(sfx-menu-backpack-error, 0);
             play-hfx-id(hfx-ui-error, 0, 2);
             u16 var_10;
-            foreach (u64? var_11 : ingredients-in-recipe) {
-                u16 var_12;
-                if (var_11 && *(u16*)(var_11 + 12) == 7) {
-                    var_12 = *(u64*)var_11;
-                } else if (var_11 && *(u16*)(var_11 + 12) == 5) {
-                    var_12 = *(u64*)var_11;
-                } else if (var_11 && *(u16*)(var_11 + 12) == 4) {
-                    var_12 = *(u64*)var_11;
-                } else {
-                    var_12 = 0;
-                }
+            foreach (u64? var_12 : ingredients-in-recipe) {
                 if (gui2-widget-is-animating?(get-ingredient-widget--crafting-menu(var_12)) || gui2-widget-in-state?(get-ingredient-widget--crafting-menu(var_12), cantAfford^focused, 1) || get-full-ingredient-quantity--crafting-menu(var_12) > 0) {
                     if (is-infinite-crafting-enabled?()) {
                         if (!!(var_12 == melee)) {
@@ -501,7 +471,7 @@ u64? update-highlight--crafting-menu(u64? arg_0) {
                 0,
                 0,
                 0
-            ), cipher-box-lang-agnostic-string(dc:format("x%i", var_20), new-boxed-value(2, var_20), 0));
+            ), cipher-box-lang-agnostic-string(dc:format("x%i", var_20), boxed_i32(var_20), 0));
         }
         u64? var_57 = lookup-hud-color(t2-red);
         u64? var_58 = lookup-hud-color(t2-white);
@@ -512,17 +482,7 @@ u64? update-highlight--crafting-menu(u64? arg_0) {
         u64? var_66;
         u64? var_67;
         u64? var_68;
-        foreach (u64? var_69 : ingredients-in-recipe) {
-            u16 var_70;
-            if (var_69 && *(u16*)(var_69 + 12) == 7) {
-                var_70 = *(u64*)var_69;
-            } else if (var_69 && *(u16*)(var_69 + 12) == 5) {
-                var_70 = *(u64*)var_69;
-            } else if (var_69 && *(u16*)(var_69 + 12) == 4) {
-                var_70 = *(u64*)var_69;
-            } else {
-                var_70 = 0;
-            }
+        foreach (u64? var_70 : ingredients-in-recipe) {
             bool var_73 = get-full-ingredient-quantity--crafting-menu(var_70) == 0 && is-infinite-crafting-enabled?() && !(var_70 == melee) && !!(var_70 == melee);
             sid var_74;
             if (var_70 == melee) {
@@ -840,17 +800,7 @@ u64? cancel-crafting-ui() {
     if (get-boolean(button-exists?, self)) {
         hud2-set-button-hold-percent(menu2-legend-get-button-path(get-self-id(), HUD_PLAYER_MENU_PROMPT_CRAFT, holdIcon), 0.00, 1);
     }
-    foreach (u64? var_6 : ingredients-in-recipe) {
-        u16 var_7;
-        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-            var_7 = *(u64*)var_6;
-        } else {
-            var_7 = 0;
-        }
+    foreach (u64? var_7 : ingredients-in-recipe) {
         gui2-set-progress-bar-percent(gui2-build-widget-path(
             get-ingredient-widget--crafting-menu(var_7),
             "badge",
@@ -933,7 +883,7 @@ u64? populate--crafting-menu(u64? arg_0) {
     u64? var_0 = get-recipe-def-map();
     u64? var_1 = darray-create(single-frame, -1, 0);
     for (u64 i = 0; i < 8; i++) {
-        darray-append(var_1, new-boxed-value(7, 0), 0);
+        darray-append(var_1, boxed_symbol(0), 0);
     }
     u64 i = 0;
     u64? var_3;
@@ -954,7 +904,7 @@ u64? populate--crafting-menu(u64? arg_0) {
             var_10 = 0;
             var_11 = 0;
         }
-        darray-set(var_1, (var_10 * 4) + var_11, new-boxed-value(7, *(u64*)*(*(var_0 + 16) + (i * 8))));
+        darray-set(var_1, (var_10 * 4) + var_11, boxed_symbol(*(u64*)*(*(var_0 + 16) + (i * 8))));
         u16 var_24;
         if (*(u64*)(*(*(var_0 + 16) + (i * 8)) + 24) == 0 || is-rogue-mode?() && ellie == *(u64*)(*(*(var_0 + 16) + (i * 8)) + 24) || is-player-ellie?(player) && abby == *(u64*)(*(*(var_0 + 16) + (i * 8)) + 24) && is-player-abby?(player) && player-knows-recipe?(recipe-id-to-item-id(*(u64*)*(*(var_0 + 16) + (i * 8)))) && *(u64*)*(*(var_0 + 16) + (i * 8)) == recipe-silencer && !!player-has-weapon?(lookup-recipe-get-weapon-to-upgrade(*(u64*)*(*(var_0 + 16) + (i * 8)), 0)) && var_10 == 2) {
             var_24 = 0 + 1;
@@ -1460,7 +1410,7 @@ statescript {
                         if (!(menu2-recipe-component-get-recipe-id(var_0) == 0)) {
                             if (!player-can-craft?(menu2-recipe-component-get-recipe-id(var_0), menu2-recipe-component-get-recipe-id(get-symbol(focused-slot, self)))) {
                                 if (player-can-craft?(menu2-recipe-component-get-recipe-id(var_0), 0)) {
-                                    darray-append(disabled-recipe-slots, new-boxed-value(7, var_0), 0);
+                                    darray-append(disabled-recipe-slots, boxed_symbol(var_0), 0);
                                     if (var_0 == get-symbol(focused-slot, self)) {}
  else {
                                         var_2 = gui2-set-widget-state(gui2-build-widget-path(
@@ -1592,17 +1542,7 @@ statescript {
                                 var_88 = 1.50;
                             }
                             gui2-set-progress-bar-percent-at-speed(var_1, 0.00, var_88, 1, 0.00);
-                            foreach (u64? var_91 : ingredients-in-recipe) {
-                                u16 var_92;
-                                if (var_91 && *(u16*)(var_91 + 12) == 7) {
-                                    var_92 = *(u64*)var_91;
-                                } else if (var_91 && *(u16*)(var_91 + 12) == 5) {
-                                    var_92 = *(u64*)var_91;
-                                } else if (var_91 && *(u16*)(var_91 + 12) == 4) {
-                                    var_92 = *(u64*)var_91;
-                                } else {
-                                    var_92 = 0;
-                                }
+                            foreach (u64? var_92 : ingredients-in-recipe) {
                                 gui2-set-progress-bar-percent-at-speed(gui2-build-widget-path(
                                     get-ingredient-widget--crafting-menu(var_92),
                                     "badge",
@@ -1626,17 +1566,7 @@ statescript {
                             hud2-set-button-hold-percent(var_11, var_85, 1);
                         }
                         gui2-set-progress-bar-percent(var_1, var_85, 0.00, 12);
-                        foreach (u64? var_98 : ingredients-in-recipe) {
-                            u16 var_99;
-                            if (var_98 && *(u16*)(var_98 + 12) == 7) {
-                                var_99 = *(u64*)var_98;
-                            } else if (var_98 && *(u16*)(var_98 + 12) == 5) {
-                                var_99 = *(u64*)var_98;
-                            } else if (var_98 && *(u16*)(var_98 + 12) == 4) {
-                                var_99 = *(u64*)var_98;
-                            } else {
-                                var_99 = 0;
-                            }
+                        foreach (u64? var_99 : ingredients-in-recipe) {
                             gui2-set-progress-bar-percent(
                                 gui2-build-widget-path(
                                     get-ingredient-widget--crafting-menu(var_99),
@@ -1666,17 +1596,7 @@ statescript {
                             var_106 = 1.50;
                         }
                         gui2-set-progress-bar-percent-at-speed(var_1, 0.00, var_106, 1, 0.00);
-                        foreach (u64? var_109 : ingredients-in-recipe) {
-                            u16 var_110;
-                            if (var_109 && *(u16*)(var_109 + 12) == 7) {
-                                var_110 = *(u64*)var_109;
-                            } else if (var_109 && *(u16*)(var_109 + 12) == 5) {
-                                var_110 = *(u64*)var_109;
-                            } else if (var_109 && *(u16*)(var_109 + 12) == 4) {
-                                var_110 = *(u64*)var_109;
-                            } else {
-                                var_110 = 0;
-                            }
+                        foreach (u64? var_110 : ingredients-in-recipe) {
                             gui2-set-progress-bar-percent-at-speed(gui2-build-widget-path(
                                 get-ingredient-widget--crafting-menu(var_110),
                                 "badge",
@@ -1700,17 +1620,7 @@ statescript {
                         hud2-set-button-hold-percent(var_11, 1.00, 1);
                     }
                     gui2-set-progress-bar-percent(var_1, 1.00, 0.00, 12);
-                    foreach (u64? var_116 : ingredients-in-recipe) {
-                        u16 var_117;
-                        if (var_116 && *(u16*)(var_116 + 12) == 7) {
-                            var_117 = *(u64*)var_116;
-                        } else if (var_116 && *(u16*)(var_116 + 12) == 5) {
-                            var_117 = *(u64*)var_116;
-                        } else if (var_116 && *(u16*)(var_116 + 12) == 4) {
-                            var_117 = *(u64*)var_116;
-                        } else {
-                            var_117 = 0;
-                        }
+                    foreach (u64? var_117 : ingredients-in-recipe) {
                         gui2-set-progress-bar-percent(
                             gui2-build-widget-path(
                                 get-ingredient-widget--crafting-menu(var_117),
@@ -1729,17 +1639,7 @@ statescript {
                         );
                     }
                     gui2-set-progress-bar-percent(var_1, 0.00, 0.00, 12);
-                    foreach (u64? var_123 : ingredients-in-recipe) {
-                        u16 var_124;
-                        if (var_123 && *(u16*)(var_123 + 12) == 7) {
-                            var_124 = *(u64*)var_123;
-                        } else if (var_123 && *(u16*)(var_123 + 12) == 5) {
-                            var_124 = *(u64*)var_123;
-                        } else if (var_123 && *(u16*)(var_123 + 12) == 4) {
-                            var_124 = *(u64*)var_123;
-                        } else {
-                            var_124 = 0;
-                        }
+                    foreach (u64? var_124 : ingredients-in-recipe) {
                         gui2-set-progress-bar-percent(gui2-build-widget-path(
                             get-ingredient-widget--crafting-menu(var_124),
                             "badge",
@@ -1776,17 +1676,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : ingredients-in-recipe) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ingredients-in-recipe) {
                         update-ingredient-text--crafting-menu(var_2);
                     }
                 }
@@ -1806,17 +1696,7 @@ statescript {
                     player-craft-item(menu2-recipe-component-get-recipe-id(get-symbol(focused-slot, self)), !!(player-get-weapon-by-ammo-name(menu2-recipe-component-get-recipe-id(get-symbol(focused-slot, self))) == 0));
                 }
                 lambda {
-                    foreach (u64? var_1 : ingredients-in-recipe) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ingredients-in-recipe) {
                         update-ingredient-text--crafting-menu(var_2);
                         if (!(var_2 == melee)) {
                             gui2-set-widget-state-immediate(gui2-build-widget-path(
@@ -1967,17 +1847,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : disabled-recipe-slots) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : disabled-recipe-slots) {
                         if (var_2 == get-symbol(focused-slot, self)) {
                             set-recipe-component-collapsed--crafting-menu(var_2, 0);
                         } else {
@@ -2103,17 +1973,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : ingredients) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ingredients) {
                         if (var_2 == rag && var_2 == alcohol) {
                             gui2-set-progress-bar-percent(gui2-build-widget-path(
                                 get-ingredient-widget--crafting-menu(var_2),
@@ -2581,17 +2441,7 @@ statescript {
         block event infinite-crafting-toggled {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ingredients) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ingredients) {
                         update-ingredient-text--crafting-menu(var_2);
                         update-ingredients-needed--crafting-menu(0);
                         try-update-highlight--crafting-menu(0);

@@ -21,17 +21,7 @@ statescript {
                 lambda {
                     if (*run-tweaks* != nullptr && *(u8*)(*run-tweaks* + 4)) {
                         wait-one-frame();
-                        foreach (u64? var_1 : all-enemy-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-enemy-npcs) {
                             npc-die-if-alive(var_2);
                         }
                         *(u8*)(*run-tweaks* + 4) = 0;
@@ -55,17 +45,7 @@ statescript {
                         }
                     } else if (task-active?(t2r-bosses, t2r-resort-farm-fight)) {
                         u16 var_21;
-                        foreach (u64? var_22 : grp-all-farm-human-npcs) {
-                            u16 var_23;
-                            if (var_22 && *(u16*)(var_22 + 12) == 7) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-                                var_23 = *(u64*)var_22;
-                            } else {
-                                var_23 = 0;
-                            }
+                        foreach (u64? var_23 : grp-all-farm-human-npcs) {
                             u16 var_25;
                             if (npc-alive?(var_23)) {
                                 var_25 = 1;
@@ -172,10 +152,10 @@ statescript {
                     wait(1.25);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(title-cipher, self)), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(get-symbol(title-cipher, self)), 1, 0, 1);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(subtitle-cipher, self)), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(get-symbol(subtitle-cipher, self)), 1, 0, 1);
                 }
             }
         }

@@ -51,17 +51,7 @@ statescript {
             track main {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : all-infected-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-infected-npcs) {
                             if (npc-alive?(var_2)) {
                                 if (npc-stalker?(var_2)) {
                                     u64? var_5 = npc-can-path-to-object?(var_2, player);
@@ -72,7 +62,7 @@ statescript {
                                         send-event(disable-overwhelm, var_2);
                                     }
                                     if (!(var_5) && !(var_6) && npc-using-skill?(var_2, 3) && var_7 > 16.00) {
-                                        darray-append(med-stalkers-to-remove, new-boxed-value(7, var_2), 1);
+                                        darray-append(med-stalkers-to-remove, boxed_symbol(var_2), 1);
                                     }
                                     if (var_5) {
                                         var_15 = npc-set-excluded-from-tension-calculation(var_2, 0);
@@ -82,17 +72,7 @@ statescript {
                                 }
                             }
                         }
-                        foreach (u64? var_20 : med-stalkers-to-remove) {
-                            u16 var_21;
-                            if (var_20 && *(u16*)(var_20 + 12) == 7) {
-                                var_21 = *(u64*)var_20;
-                            } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-                                var_21 = *(u64*)var_20;
-                            } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-                                var_21 = *(u64*)var_20;
-                            } else {
-                                var_21 = 0;
-                            }
+                        foreach (u64? var_21 : med-stalkers-to-remove) {
                             send-event(stalker-removed, ss-med-infected-building-descent-stalkers-1);
                             kill-entity(var_21);
                         }

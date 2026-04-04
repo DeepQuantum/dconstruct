@@ -168,8 +168,8 @@ u64? rain--get-next-rain-point(u64? arg_0, u64? arg_1, u64? arg_2) {
     }
     u64? var_43;
     if (!var_3) {
-        darray-append(arg_1, new-boxed-value(6, radians->degrees(var_2)), 0);
-        darray-append(arg_0, new-boxed-value(14, var_1), 0);
+        darray-append(arg_1, boxed_f32(radians->degrees(var_2)), 0);
+        darray-append(arg_0, boxed_point(var_1), 0);
         var_43 = var_1;
     } else {
         var_43 = alloc-point(0.00, 0.00, 0.00, 0);
@@ -264,13 +264,13 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-symbol(3) == infected-pustule-bloater-bullet-rain) {
-                        darray-append(get-symbol(darray-active-pustules, self), new-boxed-value(6, get-current-time(0)), 0);
+                        darray-append(get-symbol(darray-active-pustules, self), boxed_f32(get-current-time(0)), 0);
                         ++(active-pustules, self);
                     }
                 }
                 lambda {
                     if (event-arg-symbol(3) == thrown-molotov-bullet-skull) {
-                        darray-append(get-symbol(darray-active-pustules, self), new-boxed-value(6, get-current-time(0)), 0);
+                        darray-append(get-symbol(darray-active-pustules, self), boxed_f32(get-current-time(0)), 0);
                         ++(active-pustules, self);
                     }
                 }
@@ -298,7 +298,7 @@ statescript {
                                 var_6 = 0.00;
                             }
                             if (time-elapsed(var_6) > 8.00) {
-                                darray-find-remove(get-symbol(darray-active-pustules, self), new-boxed-value(6, var_6), 0);
+                                darray-find-remove(get-symbol(darray-active-pustules, self), boxed_f32(var_6), 0);
                                 --(active-pustules, self);
                             }
                         }
@@ -324,7 +324,7 @@ statescript {
                                 var_6 = 0.00;
                             }
                             if (time-elapsed(var_6) > 6.00) {
-                                darray-find-remove(get-symbol(darray-active-pustules, self), new-boxed-value(6, var_6), 0);
+                                darray-find-remove(get-symbol(darray-active-pustules, self), boxed_f32(var_6), 0);
                                 --(active-pustules, self);
                             }
                         }
@@ -370,18 +370,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = ddict-create(single-frame, -1, 0);
-                    ddict-set(var_0, pustule-rain, new-boxed-value(2, 1));
-                    foreach (u64? var_5 : get-regions-by-criteria(var_0)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
+                    ddict-set(var_0, pustule-rain, boxed_i32(1));
+                    foreach (u64? var_6 : get-regions-by-criteria(var_0)) {
                         set-symbol(pustule-rain-region, var_6, self);
                     }
                 }
@@ -410,18 +400,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = ddict-create(single-frame, -1, 0);
-                    ddict-set(var_0, pustule-rain, new-boxed-value(2, 1));
-                    foreach (u64? var_5 : get-regions-by-criteria(var_0)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
+                    ddict-set(var_0, pustule-rain, boxed_i32(1));
+                    foreach (u64? var_6 : get-regions-by-criteria(var_0)) {
                         set-symbol(pustule-rain-region, var_6, self);
                     }
                 }

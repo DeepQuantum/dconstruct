@@ -236,22 +236,12 @@ statescript {
                         } else {
                             var_8 = 0;
                         }
-                        darray-append(var_6, new-boxed-value(7, var_8), 1);
-                        foreach (u64? var_11 : var_6) {
-                            u16 var_12;
-                            if (var_11 && *(u16*)(var_11 + 12) == 7) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 5) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 4) {
-                                var_12 = *(u64*)var_11;
-                            } else {
-                                var_12 = 0;
-                            }
+                        darray-append(var_6, boxed_symbol(var_8), 1);
+                        foreach (u64? var_12 : var_6) {
                             if (npc-alive?(var_12) && is-centered-on-screen?(get-joint-position(var_12, spined), 125.00) || npc-get-recognition(var_12, player) >= 0.10 && npc-on-screen-and-visible?(var_12, -1, 0)) {
-                                darray-append(var_0, new-boxed-value(7, var_12), 1);
+                                darray-append(var_0, boxed_symbol(var_12), 1);
                             } else {
-                                darray-find-remove(var_0, new-boxed-value(7, var_12), 0);
+                                darray-find-remove(var_0, boxed_symbol(var_12), 0);
                             }
                         }
                         if (darray-count(var_0) == 0) {

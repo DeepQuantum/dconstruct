@@ -98,7 +98,7 @@ statescript {
                     fact-set-bool-in-dict(fact-get-dictionary(dina), blinded?, 1);
                 }
                 lambda {
-                    broadcast-event(buddy-flashlight-react-start, new-boxed-value(7, dina));
+                    broadcast-event(buddy-flashlight-react-start, boxed_symbol(dina));
                 }
                 lambda {
                     u64? var_0 = alloc-gesture-play-params();
@@ -167,7 +167,7 @@ statescript {
                     gesture_(dina, dina-ambi-flashlight-react-outro-gesture, var_0);
                 }
                 lambda {
-                    broadcast-event(buddy-flashlight-react-end, new-boxed-value(7, dina));
+                    broadcast-event(buddy-flashlight-react-end, boxed_symbol(dina));
                 }
                 lambda {
                     go(idle, 1);

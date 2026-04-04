@@ -43,22 +43,12 @@ statescript {
                             npc-set-incoming-damage-multiplier(get-symbol(aimed-at-npc, self), 1.00);
                             set-symbol(aimed-at-npc, 0, self);
                         }
-                        foreach (u64? var_7 : all-enemy-npcs) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : all-enemy-npcs) {
                             if (player-is-aiming-firearm-at-npc?(var_8)) {
                                 if (distance-between-objects(player, var_8) >= get-float(distance-min, self)) {
                                     if (get-symbol(aimed-at-npc, self) != var_8 && !timer-running?(min-activation-timer, self)) {
                                         start-timer(min-activation-timer, get-float(min-activation-time-seconds, self), self, 1);
-                                        broadcast-event(skull-activate, new-boxed-value(7, long-shot-damage-increase));
+                                        broadcast-event(skull-activate, boxed_symbol(long-shot-damage-increase));
                                         set-boolean(loop-active?, 1, self);
                                         set-symbol(aimed-at-npc, var_8, self);
                                     } else if (get-symbol(aimed-at-npc, self) == var_8) {
@@ -92,7 +82,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(loop-active?, self) && !!(get-symbol(aimed-at-npc, self) == 0)) {
-                        broadcast-event(skull-deactivate, new-boxed-value(7, long-shot-damage-increase));
+                        broadcast-event(skull-deactivate, boxed_symbol(long-shot-damage-increase));
                         set-boolean(loop-active?, 1, self);
                     }
                 }
@@ -105,7 +95,7 @@ statescript {
                     event-arg-symbol(1);
                     event-arg-symbol(2);
                     event-arg-symbol(3);
-                    broadcast-event(alternate-audio-cue, new-boxed-value(7, long-shot-damage-increase));
+                    broadcast-event(alternate-audio-cue, boxed_symbol(long-shot-damage-increase));
                 }
             }
         }
@@ -115,7 +105,7 @@ statescript {
                     if (event-arg-symbol(0) == get-symbol(aimed-at-npc, self)) {
                         stop-timer-if-running(min-activation-timer, self);
                         set-symbol(aimed-at-npc, 0, self);
-                        broadcast-event(skull-deactivate, new-boxed-value(7, long-shot-damage-increase));
+                        broadcast-event(skull-deactivate, boxed_symbol(long-shot-damage-increase));
                     }
                 }
             }
@@ -126,17 +116,7 @@ statescript {
                     set-symbol(aimed-at-npc, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-incoming-damage-multiplier(var_2, 1.00);
                     }
                 }

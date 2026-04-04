@@ -246,43 +246,43 @@ statescript {
                         npc-set-script-high-priority(npc-res-ruins-human-2);
                         npc-set-script-high-priority(npc-res-ruins-human-3);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.00;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.00;
                         animate_(obj-res-neighborhood-ruin-truck-3, res-ruins-militia-enter--humvee-base, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.70;
-                        *(i32*)*(*var_3 + (3 * 8)) = 1;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.70;
+                        *(i32*)*var_3[3] = 1;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(u8*)(*var_3[3] + 8) = 1;
                         animate_(npc-res-ruins-human-2, res-ruins-militia-enter--male, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_5 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.45;
-                        *(i32*)*(*var_5 + (3 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(pos-res-ruins-introduction-1, 1);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.00;
+                        *(i32*)*var_5[2] = 30;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.45;
+                        *(i32*)*var_5[3] = 1;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(u8*)(*var_5[3] + 8) = 1;
                         wait-animate_(npc-res-ruins-human-3, res-ruins-militia-enter--female, var_5);
                     }
                 }
@@ -641,17 +641,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(combat-forever, self)) {
-                        foreach (u64? var_2 : res-ruins-first-house) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : res-ruins-first-house) {
                             if (npc-alive?(var_3)) {
                                 npc-move-to-spawner(
                                     var_3,
@@ -669,17 +659,7 @@ statescript {
                             }
                         }
                     } else {
-                        foreach (u64? var_8 : res-ruins-first-house) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : res-ruins-first-house) {
                             if (npc-alive?(var_9)) {
                                 npc-kill(var_9);
                             }
@@ -711,15 +691,15 @@ statescript {
                     if (!tension-mode-is?(3)) {
                         npc-disable-skill(npc-res-ruins-human-1, 13);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-roofclimb-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-res-ruins-roofclimb-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         wait-animate_(npc-res-ruins-human-1, res-ruins-militia-climb--female, var_1);
                         signal(move-complete, 0);
                         wait(0.50);
@@ -818,17 +798,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(combat-forever, self)) {
-                        foreach (u64? var_2 : res-ruins-second-house) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : res-ruins-second-house) {
                             if (npc-alive?(var_3)) {
                                 npc-move-to-spawner(
                                     var_3,
@@ -845,33 +815,13 @@ statescript {
                                 npc-set-accuracy-multiplier(var_3, 0.20);
                             }
                         }
-                        foreach (u64? var_8 : res-ruins-first-house) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : res-ruins-first-house) {
                             if (npc-alive?(var_9)) {
                                 npc-kill(var_9);
                             }
                         }
                     } else {
-                        foreach (u64? var_13 : res-ruins-second-house) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        foreach (u64? var_14 : res-ruins-second-house) {
                             if (npc-alive?(var_14)) {
                                 npc-kill(var_14);
                             }
@@ -940,34 +890,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-4484, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 5.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-4484, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 5.50;
                     animate_(res-fence-metal-a-3m-rattle-bd6-tc037-1, res-ruins-dog-surprise-intro--res-fence-metal-a-3m-rattle, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-4484, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 5.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-4484, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 5.50;
                     animate_(npc-res-ruins-dog-3, res-ruins-dog-surprise-intro--dog, var_0);
                 }
                 lambda {
@@ -1018,26 +968,26 @@ statescript {
                             npc-m-ambi-entry-table
                         );
                         u64? var_10 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_10 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-spawner-locator(pos-4897, 1);
-                        *(i32*)*(*var_10 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_10 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (2 * 8)) + 8) = 0.40;
+                        *(i32*)*var_10[0] = 10;
+                        *(u64*)(*var_10[0] + 8) = 0;
+                        *(u64*)(*var_10[0] + 8) = get-spawner-locator(pos-4897, 1);
+                        *(i32*)*var_10[1] = 28;
+                        *(u64*)(*var_10[1] + 8) = 0;
+                        *(f32*)(*var_10[1] + 8) = 0.20;
+                        *(i32*)*var_10[2] = 30;
+                        *(u64*)(*var_10[2] + 8) = 0;
+                        *(f32*)(*var_10[2] + 8) = 0.40;
                         wait-animate_(npc-res-ruins-dog-3, dog-stand-look-through-fence-enter, var_10);
                         u64? var_12 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_12 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_12 + (0 * 8)) + 8) = get-spawner-locator(pos-4897, 1);
-                        *(i32*)*(*var_12 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_12 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_12 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_12 + (2 * 8)) + 8) = 0.40;
+                        *(i32*)*var_12[0] = 10;
+                        *(u64*)(*var_12[0] + 8) = 0;
+                        *(u64*)(*var_12[0] + 8) = get-spawner-locator(pos-4897, 1);
+                        *(i32*)*var_12[1] = 28;
+                        *(u64*)(*var_12[1] + 8) = 0;
+                        *(f32*)(*var_12[1] + 8) = 0.20;
+                        *(i32*)*var_12[2] = 30;
+                        *(u64*)(*var_12[2] + 8) = 0;
+                        *(f32*)(*var_12[2] + 8) = 0.40;
                         animate_(npc-res-ruins-dog-3, dog-stand-look-through-fence-loop, var_12);
                         set-boolean(dog-attacked, 0, self);
                         wait-random(6.00, 8.00);
@@ -1145,17 +1095,7 @@ statescript {
         block event spawn-fourth-group {
             track main {
                 lambda {
-                    foreach (u64? var_1 : res-ruins-second-house) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-ruins-second-house) {
                         if (npc-alive?(var_2)) {
                             npc-kill(var_2);
                         }
@@ -1263,28 +1203,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(npc-res-ruins-human-7, res-ruins-smoke-bomb-toss--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(obj-res-ruins-smoke-bomb-1, res-ruins-smoke-bomb-toss--smoke-grenade, var_0);
                 }
                 lambda {
@@ -1345,15 +1285,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(obj-res-ruins-smoke-bomb-2, res-ruins-smoke-bomb-toss--smoke-grenade-a, var_0);
                 }
                 lambda {
@@ -1375,15 +1315,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(obj-res-ruins-smoke-bomb-3, res-ruins-smoke-bomb-toss--smoke-grenade-b, var_0);
                 }
                 lambda {
@@ -1455,8 +1395,8 @@ statescript {
                             }
                         }
                         u64? var_24 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_24 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_24 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_24[0] = 40;
+                        *(u64*)(*var_24[0] + 8) = 0;
                         u16 var_26;
                         if (get-boolean(hit-already, self)) {
                             if (get-boolean(near-stairs?, self) || !(player-facing-position?(get-spawner-position(pos-4579, 1), 90.00))) {
@@ -1471,18 +1411,18 @@ statescript {
                                 }
                             }
                         }
-                        *(i32*)(*(*var_24 + (0 * 8)) + 8) = var_26;
-                        *(i32*)*(*var_24 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_24 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_24 + (1 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_24 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_24 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_24 + (2 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_24 + (3 * 8)) = 13;
-                        *(u64*)(*(*var_24 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_24 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_24 + (4 * 8)) = 70;
-                        *(u64*)(*(*var_24 + (4 * 8)) + 8) = 0;
+                        *(i32*)(*var_24[0] + 8) = var_26;
+                        *(i32*)*var_24[1] = 28;
+                        *(u64*)(*var_24[1] + 8) = 0;
+                        *(f32*)(*var_24[1] + 8) = 0.40;
+                        *(i32*)*var_24[2] = 30;
+                        *(u64*)(*var_24[2] + 8) = 0;
+                        *(f32*)(*var_24[2] + 8) = 0.40;
+                        *(i32*)*var_24[3] = 13;
+                        *(u64*)(*var_24[3] + 8) = 0;
+                        *(i32*)(*var_24[3] + 8) = 2;
+                        *(i32*)*var_24[4] = 70;
+                        *(u64*)(*var_24[4] + 8) = 0;
                         u16 var_44;
                         if (get-current-weapon-type() == 2) {
                             var_44 = 1;
@@ -1491,7 +1431,7 @@ statescript {
                         } else {
                             var_44 = 2;
                         }
-                        *(i32*)(*(*var_24 + (4 * 8)) + 8) = var_44;
+                        *(i32*)(*var_24[4] + 8) = var_44;
                         animate_(player, var_7, var_24);
                         if (joypad-has-haptics?(2)) {
                             wait-frames(6);
@@ -1511,15 +1451,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-smoke-throw-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-res-ruins-smoke-bomb-4, res-ruins-smoke-bomb-toss--smoke-grenade-c, var_0);
                 }
                 lambda {
@@ -1602,17 +1542,7 @@ statescript {
         block event spawn-fifth-group {
             track main {
                 lambda {
-                    foreach (u64? var_1 : res-ruins-third-house) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-ruins-third-house) {
                         if (npc-alive?(var_2)) {
                             npc-kill(var_2);
                         }
@@ -1738,27 +1668,27 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-final-runin-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (6 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-final-runin-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 13;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 2;
+                    *(i32*)*var_0[6] = 3;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     animate_(npc-res-ruins-human-5, res-ruins-melee-ambush--female, var_0);
                 }
                 lambda {
@@ -2017,37 +1947,37 @@ statescript {
                         animate-done(obj-res-neighborhood-ruin-truck-1, res-ruins-backup--humvee-base, pos-res-ruins-backup-1, 0, 0, 2);
                     } else {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.00;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.00;
                         animate_(obj-res-neighborhood-ruin-truck-1, res-ruins-backup--humvee-base, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.50;
                         animate_(npc-res-ruins-human-8, res-ruins-backup--female, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_5 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(pos-res-ruins-backup-1, 1);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.00;
+                        *(i32*)*var_5[2] = 30;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.50;
                         wait-animate_(npc-res-ruins-human-17, res-ruins-backup--male, var_5);
                         wait(0.50);
                         npc-kill(npc-res-ruins-human-8);
@@ -2104,34 +2034,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-end-left-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-end-left-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     animate_(npc-res-ruins-human-11, res-ruins-militia-funnel-exit--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-res-ruins-end-left-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-res-ruins-end-left-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(npc-res-ruins-human-12, res-ruins-militia-funnel-exit--female-a, var_0);
                 }
                 lambda {

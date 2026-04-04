@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? warehouse-spawn(u64? arg_0) {
-    darray-append(warehouse-spawns, new-boxed-value(7, spawn-npc(arg_0, 0, 0)), 1);
+    darray-append(warehouse-spawns, boxed_symbol(spawn-npc(arg_0, 0, 0)), 1);
     u64? var_3 = darray-at(warehouse-spawns, darray-count(warehouse-spawns) - 1);
     u16 var_4;
     if (var_3 && *(u16*)(var_3 + 12) == 7) {
@@ -227,15 +227,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 18;
                     animate_(player, fob-car-ride-pistol-aim-back-gesture--abby--base, var_0);
                 }
                 lambda {
@@ -251,17 +251,7 @@ statescript {
                     wait-script-caption(npc-car-ride-1, "Jenn, let's get outta here! *THUMP*", -1.00, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         npc-clear-zone(var_2);
                         npc-set-demeanor(var_2, 2, 1);
                         npc-make-aware-of(var_2, player, 2, 0);
@@ -291,17 +281,7 @@ statescript {
                     wait(7.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         npc-move-to-spawner(
                             var_2,
                             pos-2196,
@@ -396,19 +376,19 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
                     wait-animate_(npc-car-ride-2, fob-car-ride-abby-move-to-canopy-gesture--male-1, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-fob-car-ride-1, 1);
+                    *(i32*)*var_0[1] = 31;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(npc-car-ride-2, fob-car-ride-idle--npc-b, var_0);
                 }
                 lambda {
@@ -488,17 +468,7 @@ statescript {
                         set-boolean(attack-once, 0, self);
                         u64 j = 0;
                         while (j < 30) {
-                            foreach (u64? var_2 : warehouse-spawns) {
-                                u16 var_3;
-                                if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                    var_3 = *(u64*)var_2;
-                                } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                    var_3 = *(u64*)var_2;
-                                } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                    var_3 = *(u64*)var_2;
-                                } else {
-                                    var_3 = 0;
-                                }
+                            foreach (u64? var_3 : warehouse-spawns) {
                                 if (get-boolean(shoot-once, self) && !(get-boolean(attack-once, self)) && get-object-distance-xz(player, var_3) < 3.50) {
                                     set-boolean(attack-once, 1, self);
                                     start-melee-action(var_3, player, npc-infected-runner-lt-foot-3m-horiz-swing-a-idle-enter, 0, 0, 1, 0, 0);
@@ -528,7 +498,7 @@ statescript {
                     ++(warehouse-kills, self);
                 }
                 lambda {
-                    darray-find-remove(warehouse-spawns, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(warehouse-spawns, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -567,17 +537,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-set-demeanor(var_2, 2, 1);
                         npc-move-to-spawner(
@@ -609,17 +569,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         if (get-locator-distance(get-object-locator(var_2), get-spawner-locator(pos-2194, 1)) < 40.00) {
                             npc-kill(var_2);
                         }
@@ -662,17 +612,7 @@ statescript {
                     wait(5.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         if (npc-alive?(var_2)) {
                             npc-move-to-spawner(
                                 var_2,
@@ -703,17 +643,7 @@ statescript {
                     );
                 }
                 lambda {
-                    foreach (u64? var_1 : warehouse-spawns) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : warehouse-spawns) {
                         if (!npc-on-screen-and-visible?(var_2, -1, 0)) {
                             npc-kill(var_2);
                         }
@@ -728,17 +658,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        foreach (u64? var_1 : group-fob-store-bus) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : group-fob-store-bus) {
                             npc-make-aware-of(var_2, player, 2, 0);
                             npc-set-zone-region(var_2, rgn-bus-depot-1);
                         }

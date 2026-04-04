@@ -173,21 +173,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-animation-frame(player, 2, wat-infected-tunnels-begin-squeeze-thru-enter--ellie);
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-animation-frame(player, 2, wat-infected-tunnels-begin-squeeze-thru-enter--ellie);
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 30;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.70;
                     animate_(dina, wat-infected-tunnels-begin-squeeze-thru-enter--dina, var_0);
                 }
             }
@@ -208,9 +208,9 @@ statescript {
             track backpack {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
                     wait-animate_(player-get-anim-backpack(), wat-infected-tunnels-begin-squeeze-thru-enter--backpack, var_1);
                 }
                 lambda {
@@ -226,15 +226,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
                     wait-animate_(player, wat-infected-tunnels-begin-squeeze-thru-enter--ellie, var_0);
                 }
                 lambda {
@@ -302,28 +302,28 @@ statescript {
             track dina-ellie {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
                     animate_(dina, wat-infected-tunnels-begin-squeeze-thru-idle--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
                     animate_(player, wat-infected-tunnels-begin-squeeze-thru-idle--ellie, var_0);
                 }
             }
@@ -390,15 +390,15 @@ statescript {
             track dina {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(dina, wat-infected-tunnels-begin-squeeze-thru--dina, var_0);
                 }
                 lambda {
@@ -408,15 +408,15 @@ statescript {
             track player {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, wat-infected-tunnels-begin-squeeze-thru--ellie, var_0);
                 }
                 lambda {
@@ -614,28 +614,28 @@ statescript {
                     if (get-float(target-speed, self) == 0.00) {
                         if (!object-anim-playing?(player, wat-tunnels-ellie-crouch--add, 1)) {
                             u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 40;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_2 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_2 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_2 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_2[0] = 40;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(i32*)(*var_2[0] + 8) = 1;
+                            *(i32*)*var_2[1] = 28;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = 0.50;
+                            *(i32*)*var_2[2] = 30;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(f32*)(*var_2[2] + 8) = 0.50;
                             animate_(player, wat-tunnels-ellie-crouch--add, var_2);
                         }
                         if (!object-anim-playing?(dina, wat-tunnels-dina-crouch--add, 1)) {
                             u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 40;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_4 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_4 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_4 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                            *(i32*)*var_4[0] = 40;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(i32*)(*var_4[0] + 8) = 1;
+                            *(i32*)*var_4[1] = 28;
+                            *(u64*)(*var_4[1] + 8) = 0;
+                            *(f32*)(*var_4[1] + 8) = 0.50;
+                            *(i32*)*var_4[2] = 30;
+                            *(u64*)(*var_4[2] + 8) = 0;
+                            *(f32*)(*var_4[2] + 8) = 0.50;
                             animate_(dina, wat-tunnels-dina-crouch--add, var_4);
                         }
                     } else {
@@ -673,24 +673,24 @@ statescript {
                             if (get-boolean(npc-ik-on?, self)) {
                                 clear-gesture(dina, -1, -1.00, 0);
                                 u64? var_4 = #%alloc-array(single-frame, 16, 6, 1);
-                                *(i32*)*(*var_4 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                                *(i32*)*(*var_4 + (1 * 8)) = 56;
-                                *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_4 + (1 * 8)) + 8) = get-float(dina-anim-speed, self);
-                                *(i32*)*(*var_4 + (2 * 8)) = 59;
-                                *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_4 + (2 * 8)) + 8) = 1;
-                                *(i32*)*(*var_4 + (3 * 8)) = 37;
-                                *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (3 * 8)) + 8) = apReference-hand-l-dina;
-                                *(i32*)*(*var_4 + (4 * 8)) = 38;
-                                *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (4 * 8)) + 8) = apReference-hand-r-dina;
-                                *(i32*)*(*var_4 + (5 * 8)) = 28;
-                                *(u64*)(*(*var_4 + (5 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_4 + (5 * 8)) + 8) = 1.00;
+                                *(i32*)*var_4[0] = 10;
+                                *(u64*)(*var_4[0] + 8) = 0;
+                                *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                                *(i32*)*var_4[1] = 56;
+                                *(u64*)(*var_4[1] + 8) = 0;
+                                *(f32*)(*var_4[1] + 8) = get-float(dina-anim-speed, self);
+                                *(i32*)*var_4[2] = 59;
+                                *(u64*)(*var_4[2] + 8) = 0;
+                                *(i32*)(*var_4[2] + 8) = 1;
+                                *(i32*)*var_4[3] = 37;
+                                *(u64*)(*var_4[3] + 8) = 0;
+                                *(u64*)(*var_4[3] + 8) = apReference-hand-l-dina;
+                                *(i32*)*var_4[4] = 38;
+                                *(u64*)(*var_4[4] + 8) = 0;
+                                *(u64*)(*var_4[4] + 8) = apReference-hand-r-dina;
+                                *(i32*)*var_4[5] = 28;
+                                *(u64*)(*var_4[5] + 8) = 0;
+                                *(f32*)(*var_4[5] + 8) = 1.00;
                                 animate_(dina, wat-infected-tunnels-begin-squeeze-thru--dina, var_4);
                                 set-boolean(npc-ik-on?, 0, self);
                             }
@@ -699,33 +699,33 @@ statescript {
                             set-character-ik-mode-override(player, 2, 1.00);
                             if (!get-boolean(npc-ik-on?, self)) {
                                 u64? var_8 = #%alloc-array(single-frame, 16, 9, 1);
-                                *(i32*)*(*var_8 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                                *(i32*)*(*var_8 + (1 * 8)) = 56;
-                                *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (1 * 8)) + 8) = get-float(dina-anim-speed, self);
-                                *(i32*)*(*var_8 + (2 * 8)) = 59;
-                                *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_8 + (2 * 8)) + 8) = 1;
-                                *(i32*)*(*var_8 + (3 * 8)) = 35;
-                                *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_8 + (3 * 8)) + 8) = 2;
-                                *(i32*)*(*var_8 + (4 * 8)) = 37;
-                                *(u64*)(*(*var_8 + (4 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (4 * 8)) + 8) = apReference-hand-l-dina;
-                                *(i32*)*(*var_8 + (5 * 8)) = 38;
-                                *(u64*)(*(*var_8 + (5 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (5 * 8)) + 8) = apReference-hand-r-dina;
-                                *(i32*)*(*var_8 + (6 * 8)) = 81;
-                                *(u64*)(*(*var_8 + (6 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_8 + (6 * 8)) + 8) = 1;
-                                *(i32*)*(*var_8 + (7 * 8)) = 48;
-                                *(u64*)(*(*var_8 + (7 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_8 + (7 * 8)) + 8) = 1;
-                                *(i32*)*(*var_8 + (8 * 8)) = 28;
-                                *(u64*)(*(*var_8 + (8 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (8 * 8)) + 8) = 1.00;
+                                *(i32*)*var_8[0] = 10;
+                                *(u64*)(*var_8[0] + 8) = 0;
+                                *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                                *(i32*)*var_8[1] = 56;
+                                *(u64*)(*var_8[1] + 8) = 0;
+                                *(f32*)(*var_8[1] + 8) = get-float(dina-anim-speed, self);
+                                *(i32*)*var_8[2] = 59;
+                                *(u64*)(*var_8[2] + 8) = 0;
+                                *(i32*)(*var_8[2] + 8) = 1;
+                                *(i32*)*var_8[3] = 35;
+                                *(u64*)(*var_8[3] + 8) = 0;
+                                *(i32*)(*var_8[3] + 8) = 2;
+                                *(i32*)*var_8[4] = 37;
+                                *(u64*)(*var_8[4] + 8) = 0;
+                                *(u64*)(*var_8[4] + 8) = apReference-hand-l-dina;
+                                *(i32*)*var_8[5] = 38;
+                                *(u64*)(*var_8[5] + 8) = 0;
+                                *(u64*)(*var_8[5] + 8) = apReference-hand-r-dina;
+                                *(i32*)*var_8[6] = 81;
+                                *(u64*)(*var_8[6] + 8) = 0;
+                                *(u8*)(*var_8[6] + 8) = 1;
+                                *(i32*)*var_8[7] = 48;
+                                *(u64*)(*var_8[7] + 8) = 0;
+                                *(u8*)(*var_8[7] + 8) = 1;
+                                *(i32*)*var_8[8] = 28;
+                                *(u64*)(*var_8[8] + 8) = 0;
+                                *(f32*)(*var_8[8] + 8) = 1.00;
                                 animate_(dina, wat-infected-tunnels-begin-squeeze-thru--dina, var_8);
                                 set-boolean(npc-ik-on?, 1, self);
                             }
@@ -766,40 +766,40 @@ statescript {
             track ellie-dina {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 18;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 18;
                     animate_(dina, wat-infected-tunnels-begin-squeeze-thru-end--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 18;
-                    *(i32*)*(*var_0 + (4 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 80;
-                    *(i32*)*(*var_0 + (5 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-squeeze-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 18;
+                    *(i32*)*var_0[4] = 61;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 80;
+                    *(i32*)*var_0[5] = 60;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 1.00;
                     wait-animate_(player, wat-infected-tunnels-begin-squeeze-thru-end--ellie, var_0);
                 }
                 lambda {

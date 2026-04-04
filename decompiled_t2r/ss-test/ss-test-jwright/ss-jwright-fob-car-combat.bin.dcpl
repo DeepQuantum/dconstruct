@@ -54,17 +54,7 @@ statescript {
                     wait-spawn-npc-group-async(fob-car-ambush-npcs-wave-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-car-ambush-npcs-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ambush-npcs-wave-1) {
                         npc-set-script-only-no-perception(var_2);
                         npc-set-demeanor(var_2, 2, 1);
                         npc-set-movement-speed-scale(var_2, 1.20);
@@ -155,17 +145,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-car-ambush-npcs-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ambush-npcs-wave-1) {
                         npc-look-aim-at-object(var_2, player, targHead, -1.00, 0);
                         npc-fire-at-object(var_2, player, 2, 0, 0, 0);
                     }

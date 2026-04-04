@@ -530,7 +530,7 @@ statescript {
                         }
                         stop-speaking(player);
                         signal(interruption-1, 0);
-                        send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 2), new-boxed-value(6, 1.00));
+                        send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(2), boxed_f32(1.00));
                         wait-say(player, vox-igc-ell-gam-sea-hub-explore-cache-clear-sp-001, 2, 0);
                         wait(0.30);
                         wait-say(dina, vox-igc-din-gam-sea-hub-explore-cache-clear-sp-001, 2, 0);
@@ -544,7 +544,7 @@ statescript {
                         stop-speaking(player);
                         signal(interruption-2, 0);
                         if (get-svar(sea-horse-finding-gas) == 6) {
-                            send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 2), new-boxed-value(6, 0.20));
+                            send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(2), boxed_f32(0.20));
                         }
                         wait(1.00);
                         wait-say(player, vox-igc-ell-gam-sea-hub-explore-return-to-gate-sp-004, 2, 0);

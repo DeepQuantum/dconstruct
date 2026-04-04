@@ -13,17 +13,7 @@
 
 u16 count-npcs-in-range(f32 arg_0) {
     u16 var_2;
-    foreach (u64? var_3 : all-enemy-npcs) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : all-enemy-npcs) {
         u16 var_7;
         if (distance-between-points(get-object-position(var_4), get-group-entity-position(3, player)) < arg_0) {
             var_7 = 0 + 1;
@@ -42,7 +32,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(group-rush-npcs, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(group-rush-npcs, boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
                     if (darray-count(group-rush-npcs) == 0) {
@@ -94,17 +84,7 @@ statescript {
                     npc-set-global-combat-params(*group-rush-global-combat-params*);
                 }
                 lambda {
-                    foreach (u64? var_1 : group-rush-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-rush-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-combat-params(var_2, *proto-group-rush-combat-params*);
                             npc-make-aware-of-at(var_2, player, get-group-entity-position(3, player), 2, 0, 0);
@@ -130,17 +110,7 @@ statescript {
                     npc-set-global-combat-params(*default-global-combat-params*);
                 }
                 lambda {
-                    foreach (u64? var_1 : group-rush-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : group-rush-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-combat-params(var_2, *default-combat-params*);
                         }

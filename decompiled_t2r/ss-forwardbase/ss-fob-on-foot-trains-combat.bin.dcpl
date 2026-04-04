@@ -179,17 +179,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : trains-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -197,17 +187,7 @@ statescript {
                     wait-spawn-npc-group-async(trains-front-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : trains-front-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-front-npcs) {
                         if (npc-alive?(var_2)) {
                             if (task-get-active-continue() == checkpoint) {
                                 send-event(init-paired-patrol-from-checkpoint, var_2);
@@ -226,17 +206,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : trains-front-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-front-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-train-middle-1);
                         }
@@ -297,17 +267,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : trains-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-train-front-1);
                         }
@@ -359,7 +319,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (task-active?(forward-base, fob-on-foot-trains-combat) && darray-contains?(trains-npcs, new-boxed-value(7, event-arg-symbol(0))) && npc-group-alive-count(trains-npcs) == 0 && get-svar-as-boolean(fob-trains-reinf-2-spawned)) {
+                    if (task-active?(forward-base, fob-on-foot-trains-combat) && darray-contains?(trains-npcs, boxed_symbol(event-arg-symbol(0))) && npc-group-alive-count(trains-npcs) == 0 && get-svar-as-boolean(fob-trains-reinf-2-spawned)) {
                         go(combat-done, 1);
                     }
                 }
@@ -551,17 +511,7 @@ statescript {
         block start {
             track traversal-disable {
                 lambda {
-                    foreach (u64? var_1 : trains-end-flatcar-taps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-end-flatcar-taps) {
                         disable-action-pack(var_2);
                     }
                 }
@@ -1062,17 +1012,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : trains-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : trains-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

@@ -85,7 +85,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(is-full, event-arg-symbol(0))) {
-                        darray-append(tag-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(tag-symbol(my-group, self), boxed_symbol(event-arg-symbol(0)), 1);
                         ++(groupcount, self);
                     }
                 }
@@ -95,11 +95,11 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(is-full, event-arg-symbol(0))) {
-                        darray-find-remove(tag-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                        darray-find-remove(tag-symbol(my-group, self), boxed_symbol(event-arg-symbol(0)), 0);
                         --(groupcount, self);
                         if (tag-boolean(is-metal?, self) && get-boolean(is-floating, self) && darray-count(tag-symbol(my-group, self)) == 0) {
                             set-boolean(is-floating, 0, self);
-                            send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-sinking-barrel));
+                            send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-sinking-barrel));
                             go(sink, 1);
                         }
                     }
@@ -122,7 +122,7 @@ statescript {
                                 if (darray-count(tag-symbol(my-group, self)) > 1 && player-swimming-underwater?()) {
                                     draw-interactable-hud(interact-attack, get-object-locator(self), 0);
                                     if (joypad-command-active?(interact-wall, 6)) {
-                                        broadcast-event(connect-barrel, new-boxed-value(7, get-self-id()));
+                                        broadcast-event(connect-barrel, boxed_symbol(get-self-id()));
                                         if (get-boolean(is-floating, self)) {
                                             set-boolean(is-supported, 1, self);
                                             go(supported, 1);
@@ -131,7 +131,7 @@ statescript {
                                             start-timer(press-delay, 1.00, self, 1);
                                             set-boolean(is-floating, 1, self);
                                             if (tag-boolean(is-metal?, self)) {
-                                                send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-floating-barrel));
+                                                send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-floating-barrel));
                                                 go(raise, 1);
                                             }
                                         }
@@ -220,7 +220,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(is-full, event-arg-symbol(0))) {
-                        darray-append(tag-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(tag-symbol(my-group, self), boxed_symbol(event-arg-symbol(0)), 1);
                         set-boolean(is-supported, 1, self);
                         ++(groupcount, self);
                         go(supported, 1);
@@ -231,8 +231,8 @@ statescript {
         block event barrel-out {
             track main {
                 lambda {
-                    if (darray-contains?(tag-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(tag-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(tag-symbol(my-group, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(tag-symbol(my-group, self), boxed_symbol(event-arg-symbol(0)), 0);
                         --(groupcount, self);
                         set-boolean(is-supported, 0, self);
                         go(unsupported, 1);
@@ -258,7 +258,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, self));
+                    fact-set(player, player-interactable, boxed_symbol(self));
                 }
                 lambda {
                     enable-collision-gamedriven(self, 0, 0.00);
@@ -354,7 +354,7 @@ statescript {
                     interactable-enable(tag-symbol(interact, self));
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     if (get-boolean(is-supported, self)) {

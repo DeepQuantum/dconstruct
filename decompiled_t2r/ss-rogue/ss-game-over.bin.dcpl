@@ -183,11 +183,11 @@ statescript {
                 lambda {
                     if (get-boolean(rogue-run-abandoned?, self)) {
                         wait(1.00);
-                        speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(encounter-failed-cipher, self)), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(get-symbol(encounter-failed-cipher, self)), 1, 0, 1);
                         wait(3.00);
                     } else {
                         wait(2.00);
-                        speak-text-to-speech-formatted(new-boxed-value(7, get-symbol(encounter-failed-cipher, self)), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(get-symbol(encounter-failed-cipher, self)), 1, 0, 1);
                         wait(2.00);
                     }
                 }

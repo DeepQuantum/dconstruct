@@ -227,34 +227,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.20;
-                    *(i32*)*(*var_0 + (1 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 3270;
-                    *(i32*)*(*var_0 + (2 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.20;
+                    *(i32*)*var_0[1] = 61;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 3270;
+                    *(i32*)*var_0[2] = 60;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(player, abby=cin-fob-arrive-at-base, var_0);
                     bool var_5 = !(get-animation-playing?(player, abby=cin-fob-arrive-at-base, 2)) && get-animation-frame(player, 2, abby=cin-fob-arrive-at-base) >= ((get-animation-duration(player, abby=cin-fob-arrive-at-base) - 1.20) * 30.00);
                     if (!var_5) {
                         u64? var_6 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_6 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.70;
-                        *(i32*)*(*var_6 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (3 * 8)) + 8) = get-animation-frame(player, 2, abby=cin-fob-arrive-at-base);
-                        *(i32*)*(*var_6 + (4 * 8)) = 75;
-                        *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (4 * 8)) + 8) = *upperbody--left-hard--right-hard--fb*;
+                        *(i32*)*var_6[0] = 40;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(i32*)(*var_6[0] + 8) = 1;
+                        *(i32*)*var_6[1] = 28;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(f32*)(*var_6[1] + 8) = 0.10;
+                        *(i32*)*var_6[2] = 30;
+                        *(u64*)(*var_6[2] + 8) = 0;
+                        *(f32*)(*var_6[2] + 8) = 0.70;
+                        *(i32*)*var_6[3] = 57;
+                        *(u64*)(*var_6[3] + 8) = 0;
+                        *(f32*)(*var_6[3] + 8) = get-animation-frame(player, 2, abby=cin-fob-arrive-at-base);
+                        *(i32*)*var_6[4] = 75;
+                        *(u64*)(*var_6[4] + 8) = 0;
+                        *(u64*)(*var_6[4] + 8) = *upperbody--left-hard--right-hard--fb*;
                         animate_(player, abby=cin-fob-arrive-at-base, var_6);
                         wait-one-frame();
                     }
@@ -303,22 +303,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 2.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 3260.00;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 2.50;
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 3260.00;
                     animate_(alice, alice=cin-fob-arrive-at-base, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 2.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 3260.00;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 2.50;
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 3260.00;
                     wait-animate_(npc-fob-dog-trainer-1, male-d=cin-fob-arrive-at-base, var_0);
                 }
                 lambda {
@@ -331,15 +331,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 3240.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 46;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 20;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 3240.00;
+                    *(i32*)*var_0[2] = 46;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(manny, manny=cin-fob-arrive-at-base, var_0);
                 }
                 lambda {

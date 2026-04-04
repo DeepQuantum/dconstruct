@@ -70,17 +70,7 @@ u16 spring-towards-target-rotation--threat-ind(f32 arg_0) {
 }
 
 u64? kill-all--threat-ind() {
-    foreach (u64? var_1 : active-structs--threat-ind) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : active-structs--threat-ind) {
         kill--threat-ind(0, var_2);
     }
 }
@@ -137,9 +127,9 @@ u16 attempt-spawn--threat-ind(i64 arg_0) {
             u16 var_9;
             if (var_7) {
                 u64? var_10 = gui2-spawn-widget(self, "threat-indicators/threat-root", 0, 1);
-                ddict-set(map-to-structs--threat-ind, arg_0, new-boxed-value(7, var_5));
-                ddict-set(map-to-structs--threat-ind, var_10, new-boxed-value(7, var_5));
-                darray-append(active-structs--threat-ind, new-boxed-value(7, var_5), 1);
+                ddict-set(map-to-structs--threat-ind, arg_0, boxed_symbol(var_5));
+                ddict-set(map-to-structs--threat-ind, var_10, boxed_symbol(var_5));
+                darray-append(active-structs--threat-ind, boxed_symbol(var_5), 1);
                 darray-remove(available-structs--threat-ind, darray-count(available-structs--threat-ind) - 1);
                 initialize-threat-indicator-data(var_7, arg_0, var_10);
                 gui2-set-widget-rotation(var_10, *(f32*)(var_7 + 44));
@@ -303,9 +293,9 @@ u16 debug-display--threat-ind() {
     u64 i = 0;
     while (i < *(i32*)*threat-indicator-structs*) {
         u16 var_7;
-        if (darray-contains?(available-structs--threat-ind, new-boxed-value(7, *(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))))) {
+        if (darray-contains?(available-structs--threat-ind, boxed_symbol(*(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))))) {
             var_7 = 4;
-        } else if (darray-contains?(active-structs--threat-ind, new-boxed-value(7, *(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))))) {
+        } else if (darray-contains?(active-structs--threat-ind, boxed_symbol(*(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))))) {
             var_7 = 3;
         } else {
             var_7 = 2;
@@ -327,17 +317,7 @@ u16 debug-display--threat-ind() {
 }
 
 u64? animate-off-all--threat-ind(u16 arg_0) {
-    foreach (u64? var_1 : active-structs--threat-ind) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : active-structs--threat-ind) {
         if (!(var_2 == arg_0)) {
             u16 var_4;
             if (valid-lookup-symbol?(var_2)) {
@@ -494,10 +474,10 @@ u16 kill--threat-ind(u64? arg_0, u16 arg_1) {
     }
     u64 var_6;
     if (var_4) {
-        ddict-set(map-to-structs--threat-ind, *(u64*)(var_4 + 24), new-boxed-value(0, 0));
-        ddict-set(map-to-structs--threat-ind, *(u64*)var_4, new-boxed-value(0, 0));
-        darray-find-remove(active-structs--threat-ind, new-boxed-value(7, var_0), 0);
-        darray-append(available-structs--threat-ind, new-boxed-value(7, var_0), 0);
+        ddict-set(map-to-structs--threat-ind, *(u64*)(var_4 + 24), boxed_invalid(0));
+        ddict-set(map-to-structs--threat-ind, *(u64*)var_4, boxed_invalid(0));
+        darray-find-remove(active-structs--threat-ind, boxed_symbol(var_0), 0);
+        darray-append(available-structs--threat-ind, boxed_symbol(var_0), 0);
         gui2-kill-widget(*(u64*)var_4);
         var_6 = *(u64*)var_4;
     }
@@ -529,7 +509,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < *(i32*)*threat-indicator-structs*) {
-                        darray-append(available-structs--threat-ind, new-boxed-value(7, *(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))), 0);
+                        darray-append(available-structs--threat-ind, boxed_symbol(*(u64*)(*(*threat-indicator-structs* + 8) + (i * 8))), 0);
                         i = i + 1;
                     }
                 }
@@ -842,17 +822,7 @@ statescript {
             track main {
                 lambda {
                     if (dev-menu--persistent-indicators--threat-ind?()) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 if (npc-can-see?(var_3, player) && npc-get-awareness(var_3, player) == 2) {
                                     attempt-spawn--threat-ind(var_3);
@@ -918,17 +888,7 @@ statescript {
                     if (get-state-time(self) >= 0.10 || get-boolean(check-dialogue?, self)) {
                         if (darray-count(all-enemy-npcs) == 0) {
                             u16 var_4;
-                            foreach (u64? var_5 : all-enemy-npcs) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : all-enemy-npcs) {
                                 u16 var_8;
                                 if (!npc-can-play-pursue-dialog(var_6)) {
                                     var_8 = 0;

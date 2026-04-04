@@ -155,16 +155,16 @@ statescript {
                     gui2-set-widget-visible(get-symbol(min-reward-amount-text, self), event-arg-int32(3) > 0);
                 }
                 lambda {
-                    gui2-set-widget-text-formatted(get-symbol(reward-amount-text, self), new-boxed-value(19, int-to-string(event-arg-int32(3))));
+                    gui2-set-widget-text-formatted(get-symbol(reward-amount-text, self), boxed_stringcopy(int-to-string(event-arg-int32(3))));
                 }
                 lambda {
-                    gui2-set-widget-text-formatted(get-symbol(min-reward-amount-text, self), new-boxed-value(19, int-to-string(event-arg-int32(3))));
+                    gui2-set-widget-text-formatted(get-symbol(min-reward-amount-text, self), boxed_stringcopy(int-to-string(event-arg-int32(3))));
                 }
                 lambda {
-                    gui2-set-widget-text-formatted(get-symbol(coin-text, self), new-boxed-value(19, int-to-string(event-arg-int32(4))));
+                    gui2-set-widget-text-formatted(get-symbol(coin-text, self), boxed_stringcopy(int-to-string(event-arg-int32(4))));
                 }
                 lambda {
-                    gui2-set-widget-text-formatted(get-symbol(min-coin-text, self), new-boxed-value(19, int-to-string(event-arg-int32(4))));
+                    gui2-set-widget-text-formatted(get-symbol(min-coin-text, self), boxed_stringcopy(int-to-string(event-arg-int32(4))));
                 }
                 lambda {
                     gui2-set-widget-palette-tint(get-symbol(coin-text, self), t2-white);
@@ -222,8 +222,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = get-time-string(event-arg-float(0));
-                    gui2-set-widget-text-formatted(get-symbol(time-text, self), new-boxed-value(19, var_1));
-                    gui2-set-widget-text-formatted(get-symbol(min-time-text, self), new-boxed-value(19, var_1));
+                    gui2-set-widget-text-formatted(get-symbol(time-text, self), boxed_stringcopy(var_1));
+                    gui2-set-widget-text-formatted(get-symbol(min-time-text, self), boxed_stringcopy(var_1));
                 }
             }
         }
@@ -369,8 +369,8 @@ statescript {
                             if (var_5 < var_6 && get-boolean(enable-long-complete, self) == 1) {
                                 gui2-set-widget-visible(get-symbol(min-desc-progress-text, self), 1);
                                 gui2-set-widget-visible(get-symbol(desc-progress-text, self), 1);
-                                gui2-set-widget-text-formatted(get-symbol(min-desc-progress-text, self), new-boxed-value(19, dc:format("%d/%d", var_5, var_6)));
-                                gui2-set-widget-text-formatted(get-symbol(desc-progress-text, self), new-boxed-value(19, dc:format("%d/%d", var_5, var_6)));
+                                gui2-set-widget-text-formatted(get-symbol(min-desc-progress-text, self), boxed_stringcopy(dc:format("%d/%d", var_5, var_6)));
+                                gui2-set-widget-text-formatted(get-symbol(desc-progress-text, self), boxed_stringcopy(dc:format("%d/%d", var_5, var_6)));
                                 if (!is-final-build?()) {
                                     display(dc:format("[MA] Prog: %d Req: %d", var_5, var_6), 19);
                                 }

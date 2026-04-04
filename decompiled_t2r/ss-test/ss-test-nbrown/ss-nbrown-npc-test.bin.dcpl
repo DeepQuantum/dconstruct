@@ -42,29 +42,9 @@ statescript {
                     set-int32(alive-count, npc-group-alive-count(grp-all-npcs), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-all-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-all-npcs) {
                         if (npc-alive?(var_2)) {
-                            foreach (u64? var_5 : grp-clickers) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : grp-clickers) {
                                 if (npc-alive?(var_6)) {
                                     if (distance-between-objects(var_2, var_6) < 45.00 && npc-can-see?(var_2, var_6) && npc-can-see?(var_2, player)) {
                                         set-int32(find-something-now, 1, self);
@@ -77,17 +57,7 @@ statescript {
                                 }
                             }
                             if (get-int32(npc-state, self) < 4) {
-                                foreach (u64? var_14 : grp-clickers) {
-                                    u16 var_15;
-                                    if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                        var_15 = *(u64*)var_14;
-                                    } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                        var_15 = *(u64*)var_14;
-                                    } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                        var_15 = *(u64*)var_14;
-                                    } else {
-                                        var_15 = 0;
-                                    }
+                                foreach (u64? var_15 : grp-clickers) {
                                     if (npc-alive?(var_15)) {
                                         if (distance-between-objects(var_2, var_15) < 55.00 && npc-can-see?(var_2, var_15)) {
                                             set-int32(find-something-now, 1, self);
@@ -110,17 +80,7 @@ statescript {
                                 }
                             }
                             if (get-int32(npc-state, self) < 2) {
-                                foreach (u64? var_25 : all-big-animals) {
-                                    u16 var_26;
-                                    if (var_25 && *(u16*)(var_25 + 12) == 7) {
-                                        var_26 = *(u64*)var_25;
-                                    } else if (var_25 && *(u16*)(var_25 + 12) == 5) {
-                                        var_26 = *(u64*)var_25;
-                                    } else if (var_25 && *(u16*)(var_25 + 12) == 4) {
-                                        var_26 = *(u64*)var_25;
-                                    } else {
-                                        var_26 = 0;
-                                    }
+                                foreach (u64? var_26 : all-big-animals) {
                                     if (distance-between-objects(var_2, var_26) < 30.00) {
                                         set-int32(find-something-now, 1, self);
                                         set-int32(npc-state, 1, self);

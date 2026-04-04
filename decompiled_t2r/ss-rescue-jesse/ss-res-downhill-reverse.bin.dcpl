@@ -74,17 +74,7 @@ statescript {
                     wait-spawn-npc-group-async(res-reverse-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-reverse-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-reverse-npcs) {
                         npc-set-script-only-with-perception(var_2);
                         npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         npc-look-aim-at-object(var_2, player, 0, -1.00, 0);
@@ -116,16 +106,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
                     animate_(npc-res-downhill-reverse-1, res-downhill-reverse-intro--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
                     animate_(npc-res-downhill-reverse-2, res-downhill-reverse-intro--male-a, var_0);
                 }
             }
@@ -179,19 +169,19 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
                     animate_(obj-res-downhill-reverse-car-1, res-downhill-reverse--station-wagon, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(fade-in, self);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(fade-in, self);
                     wait-animate_(obj-jeep-res-downhill-escape-1, res-downhill-reverse--pickup, var_0);
                 }
                 lambda {
@@ -230,18 +220,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = car;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-joint-locator(obj-jeep-res-downhill-escape-1, body_up);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = car;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(player, res-downhill-reverse--ellie, var_0);
                 }
                 lambda {
@@ -291,18 +281,18 @@ statescript {
                 lambda {
                     if (npc-alive?(npc-res-downhill-reverse-1)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = get-float(fade-in, self);
-                        *(i32*)*(*var_1 + (2 * 8)) = 1;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = get-float(fade-in, self);
+                        *(i32*)*var_1[2] = 1;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u8*)(*var_1[2] + 8) = 1;
+                        *(i32*)*var_1[3] = 4;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(u8*)(*var_1[3] + 8) = 1;
                         animate_(npc-res-downhill-reverse-1, res-downhill-reverse--female, var_1);
                     }
                 }
@@ -335,15 +325,15 @@ statescript {
                 lambda {
                     if (npc-alive?(npc-res-downhill-reverse-2)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = get-float(fade-in, self);
-                        *(i32*)*(*var_1 + (2 * 8)) = 1;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-res-downhill-reverse-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = get-float(fade-in, self);
+                        *(i32*)*var_1[2] = 1;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u8*)(*var_1[2] + 8) = 1;
                         animate_(npc-res-downhill-reverse-2, res-downhill-reverse--male-a, var_1);
                     }
                 }
@@ -666,17 +656,7 @@ statescript {
         block event corpse-collision-off {
             track main {
                 lambda {
-                    foreach (u64? var_1 : res-reverse-all-prior-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-reverse-all-prior-npcs) {
                         if (entity-exists?(var_2) && !(npc-alive?(var_2))) {
                             set-ragdoll-body-max-velocity(var_2, 5.00, 5.00, 0);
                         }
@@ -694,17 +674,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }

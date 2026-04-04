@@ -54,9 +54,9 @@ statescript {
                         if (entity-exists?(var_4)) {
                             if (!(tag-symbol(prop-anim, self) == 0)) {
                                 u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_8 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                                *(i32*)*var_8[0] = 58;
+                                *(u64*)(*var_8[0] + 8) = 0;
+                                *(f32*)(*var_8[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
                                 animate_(var_4, tag-symbol(prop-anim, self), var_8);
                             } else {
                                 disable-collision(var_4, 0);
@@ -71,9 +71,9 @@ statescript {
                         if (entity-exists?(var_4)) {
                             if (!(tag-symbol(prop-anim-2, self) == 0)) {
                                 u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_8 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (0 * 8)) + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
+                                *(i32*)*var_8[0] = 58;
+                                *(u64*)(*var_8[0] + 8) = 0;
+                                *(f32*)(*var_8[0] + 8) = get-animation-phase(get-self-id(), 2, get-object-anim(get-self-id(), 1));
                                 animate_(var_4, tag-symbol(prop-anim-2, self), var_8);
                             } else {
                                 disable-collision(var_4, 0);

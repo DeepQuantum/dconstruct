@@ -369,7 +369,7 @@ statescript {
             }
             track flicker {
                 lambda {
-                    broadcast-event(flashlight-flicker-started, new-boxed-value(7, get-self-id()));
+                    broadcast-event(flashlight-flicker-started, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     log-event("flashlight-flicker-triggered", 1, string-debug(get-self-id()), get-object-locator(player), 0);
@@ -640,7 +640,7 @@ statescript {
                     flashlight-flicker(1.00);
                 }
                 lambda {
-                    broadcast-event(flashlight-flicker-complete, new-boxed-value(7, get-self-id()));
+                    broadcast-event(flashlight-flicker-complete, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (tag-boolean(repeat?, self)) {

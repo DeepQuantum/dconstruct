@@ -13,23 +13,13 @@
 
 u64? tts-wave-incoming-update() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, ROGUE_WAVE_INCOMING_TIMER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(assault-time-countdown, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(ROGUE_WAVE_INCOMING_TIMER);
+    *(u64*)var_0[1] = boxed_i32(get-int32(assault-time-countdown, self));
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 u64? assault-stalker-enable-overwhelm() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (npc-stalker?(var_4)) {
             send-event(enable-overwhelm, var_4);
         }
@@ -37,17 +27,7 @@ u64? assault-stalker-enable-overwhelm() {
 }
 
 u64? assault-stalker-disable-overwhelm() {
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
         if (npc-stalker?(var_4)) {
             send-event(disable-overwhelm, var_4);
         }
@@ -56,28 +36,28 @@ u64? assault-stalker-disable-overwhelm() {
 
 u64? tts-assault-status-update() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_WAVE_COUNT);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(current-wave-num, self));
-    speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(HUD_ROGUE_WAVE_COUNT);
+    *(u64*)var_0[1] = boxed_i32(get-int32(current-wave-num, self));
+    speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
     u64? var_5 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_5 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_ENEMIES_ALIVE);
-    *(u64*)(*var_5 + (1 * 8)) = new-boxed-value(2, wave-manager-get-npc-alive-count(ss-wave-manager-1));
-    speak-text-to-speech-formatted(new-boxed-value(21, var_5), 1, 0, 1);
+    *(u64*)var_5[0] = boxed_symbol(HUD_ROGUE_ENEMIES_ALIVE);
+    *(u64*)var_5[1] = boxed_i32(wave-manager-get-npc-alive-count(ss-wave-manager-1));
+    speak-text-to-speech-formatted(boxed_array(var_5), 1, 0, 1);
     return broadcast-event(read-rogue-time-limit-mod-tts);
 }
 
 u64? tts-wave-recovery-update() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, ROGUE_WAVE_INCOMING_TIMER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(assault-recovery-time-countdown, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(ROGUE_WAVE_INCOMING_TIMER);
+    *(u64*)var_0[1] = boxed_i32(get-int32(assault-recovery-time-countdown, self));
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 u64? tts-wrapup-update-assault() {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, ROGUE_EXIT_TIMER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, get-int32(assault-wrapup-time, self));
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(ROGUE_EXIT_TIMER);
+    *(u64*)var_0[1] = boxed_i32(get-int32(assault-wrapup-time, self));
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 statescript {
@@ -179,7 +159,7 @@ statescript {
                 lambda {
                     if (get-boolean(assault-countdown-active, self) && get-int32(assault-pause-time, self) > 0) {
                         set-boolean(assault-countdown-pause, 1, self);
-                        send-event(pause-countdown, rogue-ui--get-t2r-timer-path(), new-boxed-value(6, (f32)get-int32(assault-pause-time, self)));
+                        send-event(pause-countdown, rogue-ui--get-t2r-timer-path(), boxed_f32((f32)get-int32(assault-pause-time, self)));
                     }
                 }
             }
@@ -347,18 +327,8 @@ statescript {
                     broadcast-event(load-skulls);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(player-assault-spawn-points, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
+                        darray-append(player-assault-spawn-points, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -422,10 +392,10 @@ statescript {
                     wait(1.25);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_TITLE_ASSAULT), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_TITLE_ASSAULT), 1, 0, 1);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_TITLE_ASSAULT_DESCR), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_TITLE_ASSAULT_DESCR), 1, 0, 1);
                 }
             }
         }
@@ -447,18 +417,18 @@ statescript {
                     send-event(reset, rogue-ui--get-t2r-timer-path());
                 }
                 lambda {
-                    send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
+                    send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
                 }
                 lambda {
-                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, ENCOUNTER_CRAFTING_PERIOD_ALT));
+                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(ENCOUNTER_CRAFTING_PERIOD_ALT));
                 }
                 lambda {
                     send-event(
                         countdown,
                         rogue-ui--get-t2r-timer-path(),
-                        new-boxed-value(6, (f32)get-int32(assault-prep-time, self)),
-                        new-boxed-value(1, 1),
-                        new-boxed-value(1, 0)
+                        boxed_f32((f32)get-int32(assault-prep-time, self)),
+                        boxed_bool(1),
+                        boxed_bool(0)
                     );
                 }
                 lambda {
@@ -489,7 +459,7 @@ statescript {
                     }
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_WAVE_INCOMING), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_WAVE_INCOMING), 1, 0, 1);
                 }
                 lambda {
                     set-boolean(assault-countdown-active, 0, self);
@@ -609,21 +579,11 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                         if (!is-final-build?()) {
                             display(dc:format("Alive: %s", string-debug(var_4)), 19);
                         }
-                        send-event(buddy-mark-npc, player, new-boxed-value(7, var_4));
+                        send-event(buddy-mark-npc, player, boxed_symbol(var_4));
                     }
                 }
             }
@@ -678,24 +638,24 @@ statescript {
                     send-event(vox-wave-reset, ss-vox-rl-encounter-controller-1);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_WAVE_COMPLETED), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_WAVE_COMPLETED), 1, 0, 1);
                 }
                 lambda {
                     send-event(reset, rogue-ui--get-t2r-timer-path());
                 }
                 lambda {
-                    send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_NEXT_WAVE_INCOMING), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
+                    send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_NEXT_WAVE_INCOMING), boxed_symbol(HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
                 }
                 lambda {
-                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, ENCOUNTER_CRAFTING_PERIOD_ALT));
+                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(ENCOUNTER_CRAFTING_PERIOD_ALT));
                 }
                 lambda {
                     send-event(
                         countdown,
                         rogue-ui--get-t2r-timer-path(),
-                        new-boxed-value(6, (f32)get-int32(assault-recovery-time, self)),
-                        new-boxed-value(1, 1),
-                        new-boxed-value(1, 0)
+                        boxed_f32((f32)get-int32(assault-recovery-time, self)),
+                        boxed_bool(1),
+                        boxed_bool(0)
                     );
                 }
                 lambda {
@@ -705,7 +665,7 @@ statescript {
                     set-boolean(assault-countdown-active, 1, self);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_REWARD_CRATE), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_REWARD_CRATE), 1, 0, 1);
                 }
                 lambda {
                     while (get-int32(assault-recovery-time-countdown, self) > 0) {
@@ -759,22 +719,12 @@ statescript {
                 lambda {
                     if (darray-count(get-symbol(group-available-workbenches, self)) <= 0) {
                         u64? var_2 = ddict-create(single-frame, -1, 0);
-                        ddict-set(var_2, interactable-def, new-boxed-value(7, interact-workbench-rogue-mode));
+                        ddict-set(var_2, interactable-def, boxed_symbol(interact-workbench-rogue-mode));
                         group-copy(get-spawners-by-criteria(var_2, 0, 0, 0, 0, 0), get-symbol(group-available-workbenches, self));
                         if (!is-final-build?()) {
                             display(dc:format("DEB-AM: Num workbench found = %d", darray-count(get-symbol(group-available-workbenches, self))), 19);
                         }
-                        foreach (u64? var_13 : get-symbol(group-available-workbenches, self)) {
-                            u16 var_14;
-                            if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                var_14 = *(u64*)var_13;
-                            } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                var_14 = *(u64*)var_13;
-                            } else {
-                                var_14 = 0;
-                            }
+                        foreach (u64? var_14 : get-symbol(group-available-workbenches, self)) {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-AM:      -> %s", string-debug(var_14)), 19);
                             }
@@ -910,17 +860,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(assault-wrapup-time, self) < 3) {
-                        foreach (u64? var_4 : get-symbol(group-available-workbenches, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(group-available-workbenches, self)) {
                             interactable-disable(var_5);
                         }
                     }

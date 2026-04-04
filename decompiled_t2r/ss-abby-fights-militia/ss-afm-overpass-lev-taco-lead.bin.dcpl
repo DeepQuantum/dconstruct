@@ -13,17 +13,7 @@
 
 u16 afm-taco-npcs-certain-of-player?() {
     u16 var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u16 var_10;
         if (npc-alive?(var_3) || object-in-region?(var_3, rgn-afm-inside-taco-exit-1) || distance-between-objects-less-than?(player, var_3, 5.00) || npc-can-see?(var_3, player) || npc-can-see?(var_3, lev) || character-in-melee-attack?(player)) {
             if (character-in-melee-attack?(lev)) {

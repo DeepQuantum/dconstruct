@@ -318,12 +318,12 @@ statescript {
                     disable-action-pack(tag-symbol(disable-tap-1, self));
                 }
                 lambda {
-                    fact-set(self, is-chained, new-boxed-value(1, 1));
+                    fact-set(self, is-chained, boxed_bool(1));
                 }
                 lambda {
                     if (is-rogue-mode?()) {
                         disable-cover-aps-in-sphere(get-object-position(tag-symbol(chain-center, self)), tag-float(chain-length, self) + 0.75);
-                        fact-set(self, override-max-expansion-radius, new-boxed-value(6, 3.00 * tag-float(chain-length, self)));
+                        fact-set(self, override-max-expansion-radius, boxed_f32(3.00 * tag-float(chain-length, self)));
                     }
                 }
             }
@@ -341,14 +341,14 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(self, override-max-travel-dist, new-boxed-value(6, 2.00 * tag-float(chain-length, self)));
+                    fact-set(self, override-max-travel-dist, boxed_f32(2.00 * tag-float(chain-length, self)));
                 }
                 lambda {
                     npc-set-chain-for-melee(self, get-spawner-locator(tag-symbol(chain-center, self), 1), tag-float(chain-length, self));
                 }
                 lambda {
                     if (npc-in-meatshield?(self)) {
-                        broadcast-event(unchain-infected, new-boxed-value(7, get-self-id()));
+                        broadcast-event(unchain-infected, boxed_symbol(get-self-id()));
                     }
                 }
                 lambda {
@@ -436,39 +436,39 @@ statescript {
                         npc-get-target-entity-object(self);
                         set-boolean(strugglin, 1, self);
                         u64? var_2 = #%alloc-array(single-frame, 16, 9, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
                         u64? var_4;
                         if (npc-chained-infected-17 == get-self-id()) {
                             var_4 = offset-locator(get-chain-center-rotated-loc(get-object-locator(self)), alloc-vector(0.00, 0.00, 0.00, 1.00, 0));
                         } else {
                             var_4 = get-chain-center-rotated-loc(get-object-locator(self));
                         }
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = var_4;
-                        *(i32*)*(*var_2 + (1 * 8)) = 13;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (1 * 8)) + 8) = 2;
-                        *(i32*)*(*var_2 + (2 * 8)) = 54;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_2 + (3 * 8)) = 32;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_2 + (5 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (5 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_2 + (6 * 8)) = 81;
-                        *(u64*)(*(*var_2 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (6 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (7 * 8)) = 3;
-                        *(u64*)(*(*var_2 + (7 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (7 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (8 * 8)) = 4;
-                        *(u64*)(*(*var_2 + (8 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (8 * 8)) + 8) = 1;
+                        *(u64*)(*var_2[0] + 8) = var_4;
+                        *(i32*)*var_2[1] = 13;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(i32*)(*var_2[1] + 8) = 2;
+                        *(i32*)*var_2[2] = 54;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.10;
+                        *(i32*)*var_2[3] = 32;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(u8*)(*var_2[3] + 8) = 1;
+                        *(i32*)*var_2[4] = 28;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(f32*)(*var_2[4] + 8) = 0.30;
+                        *(i32*)*var_2[5] = 30;
+                        *(u64*)(*var_2[5] + 8) = 0;
+                        *(f32*)(*var_2[5] + 8) = 0.30;
+                        *(i32*)*var_2[6] = 81;
+                        *(u64*)(*var_2[6] + 8) = 0;
+                        *(u8*)(*var_2[6] + 8) = 1;
+                        *(i32*)*var_2[7] = 3;
+                        *(u64*)(*var_2[7] + 8) = 0;
+                        *(u8*)(*var_2[7] + 8) = 1;
+                        *(i32*)*var_2[8] = 4;
+                        *(u64*)(*var_2[8] + 8) = 0;
+                        *(u8*)(*var_2[8] + 8) = 1;
                         wait-animate_(self, group-random(chained-infected-struggle-anims), var_2);
                         set-boolean(strugglin, 0, self);
                         wait-one-frame();
@@ -486,7 +486,7 @@ statescript {
                 }
                 lambda {
                     if (npc-in-meatshield?(self)) {
-                        broadcast-event(unchain-infected, new-boxed-value(7, get-self-id()));
+                        broadcast-event(unchain-infected, boxed_symbol(get-self-id()));
                         go(unchained, 1);
                     }
                 }
@@ -613,38 +613,38 @@ statescript {
                         }
                         u64? var_2 = group-random(chained-infected-yank-anims);
                         u64? var_3 = #%alloc-array(single-frame, 16, 8, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
                         u64? var_5;
                         if (npc-chained-infected-17 == get-self-id()) {
                             var_5 = offset-locator(get-chain-center-rotated-loc(get-object-locator(self)), alloc-vector(0.00, 0.00, 0.00, 1.00, 0));
                         } else {
                             var_5 = get-chain-center-rotated-loc(get-object-locator(self));
                         }
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_3 + (1 * 8)) = 13;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (1 * 8)) + 8) = 2;
-                        *(i32*)*(*var_3 + (2 * 8)) = 54;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.25;
-                        *(i32*)*(*var_3 + (3 * 8)) = 32;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (4 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_3 + (5 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (5 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_3 + (6 * 8)) = 3;
-                        *(u64*)(*(*var_3 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (6 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (7 * 8)) = 4;
-                        *(u64*)(*(*var_3 + (7 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (7 * 8)) + 8) = 1;
+                        *(u64*)(*var_3[0] + 8) = var_5;
+                        *(i32*)*var_3[1] = 13;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(i32*)(*var_3[1] + 8) = 2;
+                        *(i32*)*var_3[2] = 54;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.25;
+                        *(i32*)*var_3[3] = 32;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(u8*)(*var_3[3] + 8) = 1;
+                        *(i32*)*var_3[4] = 28;
+                        *(u64*)(*var_3[4] + 8) = 0;
+                        *(f32*)(*var_3[4] + 8) = 0.30;
+                        *(i32*)*var_3[5] = 30;
+                        *(u64*)(*var_3[5] + 8) = 0;
+                        *(f32*)(*var_3[5] + 8) = 0.30;
+                        *(i32*)*var_3[6] = 3;
+                        *(u64*)(*var_3[6] + 8) = 0;
+                        *(u8*)(*var_3[6] + 8) = 1;
+                        *(i32*)*var_3[7] = 4;
+                        *(u64*)(*var_3[7] + 8) = 0;
+                        *(u8*)(*var_3[7] + 8) = 1;
                         wait-animate_(self, var_2, var_3);
-                        darray-find-remove(chained-infected-yank-anims, new-boxed-value(7, var_2), 0);
+                        darray-find-remove(chained-infected-yank-anims, boxed_symbol(var_2), 0);
                         wait-one-frame();
                     }
                 }
@@ -660,7 +660,7 @@ statescript {
                 }
                 lambda {
                     if (npc-in-meatshield?(self)) {
-                        broadcast-event(unchain-infected, new-boxed-value(7, get-self-id()));
+                        broadcast-event(unchain-infected, boxed_symbol(get-self-id()));
                         go(unchained, 1);
                     }
                 }
@@ -717,7 +717,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(self, override-max-travel-dist, new-boxed-value(6, 25.00));
+                    fact-set(self, override-max-travel-dist, boxed_f32(25.00));
                 }
                 lambda {
                     if (is-rogue-mode?()) {
@@ -740,7 +740,7 @@ statescript {
                     npc-set-can-cause-combat-tension(self, 1);
                 }
                 lambda {
-                    fact-set(self, is-chained, new-boxed-value(1, 0));
+                    fact-set(self, is-chained, boxed_bool(0));
                 }
                 lambda {
                     if (npc-alive?(self)) {
@@ -790,17 +790,7 @@ statescript {
                 lambda {
                     if (is-focusable-ignore?(self)) {
                         set-float(chain-distance, get-locator-distance-xz(get-object-locator(self), get-spawner-locator(tag-symbol(chain-center, self), 1)), self);
-                        foreach (u64? var_6 : all-human-enemy-npcs) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : all-human-enemy-npcs) {
                             if (npc-alive?(var_7)) {
                                 if (distance-between-objects-less-than?(var_7, self, 15.00) && get-float(chain-distance, self) > tag-float(chain-length, self)) {
                                     set-focusable-ignore(self, 0);
@@ -808,17 +798,7 @@ statescript {
                             }
                         }
                     } else if (!get-boolean(humans-aware-of-loose-infected, self)) {
-                        foreach (u64? var_15 : all-human-enemy-npcs) {
-                            u16 var_16;
-                            if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                var_16 = *(u64*)var_15;
-                            } else {
-                                var_16 = 0;
-                            }
+                        foreach (u64? var_16 : all-human-enemy-npcs) {
                             if (npc-alive?(var_16)) {
                                 if (npc-is-aware-of?(var_16, self)) {
                                     set-boolean(humans-aware-of-loose-infected, 1, self);

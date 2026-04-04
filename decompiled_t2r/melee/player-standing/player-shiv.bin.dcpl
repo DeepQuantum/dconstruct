@@ -252,7 +252,7 @@ abby-shiv-clicker-back-finisher-sync
 abby-shiv-clicker-front-finisher-sync
 meatshield-shiv-inf-stealth-finisher
 embedded@187f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
 
 u16 abby-shiv-brute-back-finisher-sync
@@ -369,17 +369,7 @@ abby-shiv-clicker-front-finisher-sync
 abby-shiv-brute-back-finisher
 abby-shiv-inf-ice-pick-finisher-fail-UNUSED-INTRO
 embedded@18e68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -652,9 +642,9 @@ meatshield-shiv-inf-stealth-finisher
 embedded@1ae90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000)
     );
 }
 
@@ -704,9 +694,9 @@ embedded@19598(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -1714,7 +1704,7 @@ embedded@175a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     player-instant-draw-weapon(1, 0.00, 1);
     u16 var_2;
     if (is-rogue-mode?() && npc-get-awareness(arg_2, arg_1) != 2) {
-        var_2 = broadcast-event(player-stealth-kill-initiated, new-boxed-value(7, arg_2));
+        var_2 = broadcast-event(player-stealth-kill-initiated, boxed_symbol(arg_2));
     } else {
         var_2 = 0;
     }
@@ -2013,7 +2003,7 @@ embedded@17ec0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? meatshield-shiv-stealth-finisher
 meatshield-shiv-inf-stealth-finisher
 embedded@19ba8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    broadcast-event(player-stealth-kill-initiated, new-boxed-value(7, arg_2));
+    broadcast-event(player-stealth-kill-initiated, boxed_symbol(arg_2));
     return player-save-action-time(melee-stealth-kill);
 }
 
@@ -2026,17 +2016,7 @@ u64? meatshield-shiv-stealth-finisher
 meatshield-shiv-inf-stealth-finisher
 embedded@172e0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     npc-drop-weapon(arg_2, 0);
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -2124,17 +2104,7 @@ embedded@29b0(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
 
 u64? abby-shiv-inf-ice-pick-finisher-fail
 embedded@18f90(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
         npc-set-melee-behavior-condition(var_2, 8);
     }
@@ -2173,7 +2143,7 @@ embedded@17540(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? abby-shiv-inf-ice-pick-finisher-fail
 embedded@19fb8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(strike-fail, ss-promote-death-hints, new-boxed-value(7, arg_2));
+    return send-event(strike-fail, ss-promote-death-hints, boxed_symbol(arg_2));
 }
 
 u16 abby-shiv-inf-ice-pick-finisher-fail
@@ -2190,7 +2160,7 @@ embedded@1ab60(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? abby-shiv-inf-ice-pick-finisher-fail
 embedded@17a58(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-damage, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2), new-boxed-value(6, 0.00));
+    return broadcast-event(melee-damage, boxed_symbol(arg_1), boxed_symbol(arg_2), boxed_f32(0.00));
 }
 
 f32 abby-shiv-inf-ice-pick-finisher-fail__melee-event-advanced@199d0
@@ -2683,7 +2653,7 @@ embedded@18558(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     melee-fact-set-bool(arg_1, intro-shiv-spawn, 1);
     u16 var_2;
     if (is-rogue-mode?() && npc-get-awareness(arg_2, arg_1) != 2) {
-        var_2 = broadcast-event(player-stealth-kill-initiated, new-boxed-value(7, arg_2));
+        var_2 = broadcast-event(player-stealth-kill-initiated, boxed_symbol(arg_2));
     } else {
         var_2 = 0;
     }

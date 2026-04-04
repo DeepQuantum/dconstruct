@@ -57,21 +57,21 @@ statescript {
                 lambda {
                     if (!(tag-symbol(start-anim, self) == 0)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
+                        *(i32*)*var_2[1] = 57;
+                        *(u64*)(*var_2[1] + 8) = 0;
                         f32 var_5;
                         if (get-boolean(tasked-in?, self)) {
                             var_5 = 50.00;
                         } else {
                             var_5 = 0.00;
                         }
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 1.50;
+                        *(f32*)(*var_2[1] + 8) = var_5;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 1.50;
                         animate_(self, tag-symbol(start-anim, self), var_2);
                     }
                 }
@@ -108,15 +108,15 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 1.50;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
+                    *(i32*)*var_1[1] = 30;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 1.50;
                     wait-animate_(self, tag-symbol(action-anim, self), var_1);
                 }
                 lambda {
@@ -177,18 +177,18 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-fob-finding-isaac-water-group-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
                     f32 var_4;
                     if (get-boolean(tasked-in?, self)) {
                         var_4 = 0.50;
                     } else {
                         var_4 = 0.00;
                     }
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
+                    *(f32*)(*var_1[1] + 8) = var_4;
                     animate_(self, tag-symbol(end-anim, self), var_1);
                 }
             }

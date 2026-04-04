@@ -33,7 +33,7 @@ u16 post-encounter-flow-set-page-heading(u64? arg_0, u64? arg_1) {
     if (arg_1) {
         if (!get-boolean(spoke-header-tts, self)) {
             set-boolean(spoke-header-tts, 1, self);
-            speak-text-to-speech-formatted(new-boxed-value(7, var_4), 0, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(var_4), 0, 0, 1);
         }
     }
     u16 var_11;
@@ -52,17 +52,7 @@ u64? show-meta--change-widget-focus-state(u64? arg_0, u64? arg_1) {
     } else {
         var_0 = normal;
     }
-    foreach (u64? var_4 : get-symbol(trial-widgets-darray, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-symbol(trial-widgets-darray, self)) {
         if (arg_1) {
             gui2-go-widget-state-immediate(gui2-build-widget-path(
                 var_5,
@@ -107,7 +97,7 @@ u16 post-encounter-flow-speaker-header-tts(u64? arg_0) {
     u16 var_8;
     if (!get-boolean(spoke-header-tts, ss-post-encounter-flow-1)) {
         set-boolean(spoke-header-tts, 1, ss-post-encounter-flow-1);
-        var_8 = speak-text-to-speech-formatted(new-boxed-value(7, var_2), 0, 0, 1);
+        var_8 = speak-text-to-speech-formatted(boxed_symbol(var_2), 0, 0, 1);
     } else {
         var_8 = 0;
     }
@@ -129,7 +119,7 @@ sid post-encounter-flow-push-leaderboard-page() {
     if (!gui2-widget-exists?(canvas.hudRoot.hudMenuStack.t2r-menu-post/page-leaderboard-post)) {
         menu2-push-page(hudMenuStack, "t2r-menu-post/page-leaderboard-post", 0);
     }
-    send-event(load-leaderboard, var_0, new-boxed-value(7, daily-account-rank));
+    send-event(load-leaderboard, var_0, boxed_symbol(daily-account-rank));
     menu2-set-focus-to-component(var_0, 1);
     return canvas.hudRoot.hudMenuStack.t2r-menu-post/page-leaderboard-post;
 }
@@ -164,7 +154,7 @@ u16 update-trials-widget-darray() {
     u64? var_5 = gui2-get-first-child-widget(get-symbol(w-trials-update-list, self));
     u64 i = 0;
     while (i < gui2-get-widget-child-count(get-symbol(w-trials-update-list, self))) {
-        darray-append(get-symbol(trial-widgets-darray, self), new-boxed-value(7, var_5), 0);
+        darray-append(get-symbol(trial-widgets-darray, self), boxed_symbol(var_5), 0);
         gui2-get-next-sibling-widget(var_5);
         i = i + 1;
     }
@@ -355,7 +345,7 @@ statescript {
                                     post-encounter-flow-set-page-heading(var_9, 1);
                                     set-symbol(w-reward-page, var_9, self);
                                     play-sound(sfx-hud-rl-challenge-new-unlock, 0);
-                                    send-event(populate-rewards-page, var_9, new-boxed-value(7, *(u64*)((**(***meta-set* + (*(i32*)(*encounter-tweaks* + 168) * 72)) + (*(i32*)(*encounter-tweaks* + 172) * 184)) + 8)));
+                                    send-event(populate-rewards-page, var_9, boxed_symbol(*(u64*)((**(***meta-set* + (*(i32*)(*encounter-tweaks* + 168) * 72)) + (*(i32*)(*encounter-tweaks* + 172) * 184)) + 8)));
                                     var_6 = send-event(started-animating-reward-unlocks, get-symbol(w-reward-page, self));
                                 }
                             }
@@ -445,18 +435,8 @@ statescript {
                     darray-clear(end-flow-camera);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-cam-location, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(end-flow-camera, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-cam-location, 1, 0, 0)) {
+                        darray-append(end-flow-camera, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -481,9 +461,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -1431,17 +1411,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(waiting-for-challenge-update-anim, self)) {
-                        foreach (u64? var_4 : get-symbol(trial-widgets-darray, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(trial-widgets-darray, self)) {
                             t2r-meta-trial-updates-set-finished-anim-state(var_5);
                             gui2-set-widget-visible(var_5, 1);
                         }
@@ -1685,7 +1655,7 @@ statescript {
                         );
                         post-encounter-flow-set-page-heading(var_6, 1);
                         play-sound(sfx-hud-rl-challenge-new-unlock, 0);
-                        send-event(populate-rewards-page, var_6, new-boxed-value(7, var_0));
+                        send-event(populate-rewards-page, var_6, boxed_symbol(var_0));
                         var_3 = send-event(started-animating-reward-unlocks, get-symbol(w-reward-page, self));
                     }
                 }

@@ -44,28 +44,28 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(ratking-finisher-fallback-aps, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(ratking-finisher-fallback-aps, boxed_symbol(get-self-id()), 1);
                 }
             }
         }
         block end {
             track main {
                 lambda {
-                    darray-find-remove(ratking-finisher-fallback-aps, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(ratking-finisher-fallback-aps, boxed_symbol(get-self-id()), 0);
                 }
             }
         }
         block event unregister-ap {
             track main {
                 lambda {
-                    darray-find-remove(ratking-finisher-fallback-aps, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(ratking-finisher-fallback-aps, boxed_symbol(get-self-id()), 0);
                 }
             }
         }
         block event register-ap {
             track main {
                 lambda {
-                    darray-append(ratking-finisher-fallback-aps, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(ratking-finisher-fallback-aps, boxed_symbol(get-self-id()), 1);
                 }
             }
         }

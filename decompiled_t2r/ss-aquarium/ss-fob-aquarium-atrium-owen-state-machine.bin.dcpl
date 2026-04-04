@@ -18,19 +18,19 @@ u64? fob-aquarium-atrium--signal-exited-owen-igc(bool arg_0) {
     } else {
         var_0 = get-self-id();
     }
-    return send-event(igc-exited, ss-fob-aquarium-atrium-owen-state-machine-1, new-boxed-value(7, var_0));
+    return send-event(igc-exited, ss-fob-aquarium-atrium-owen-state-machine-1, boxed_symbol(var_0));
 }
 
 u64? fob-aquarium-atrium--queue-owen-igc(sid arg_0, u64? arg_1) {
-    if (darray-contains?(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, arg_0))) {
+    if (darray-contains?(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(arg_0))) {
         if (arg_0 == follow) {
-            if (!(darray-find(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, arg_0), 0) == group-get-last-valid-index(fob-aquarium--owen-atrium-igc-queue))) {
-                darray-find-remove(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, arg_0), 0);
+            if (!(darray-find(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(arg_0), 0) == group-get-last-valid-index(fob-aquarium--owen-atrium-igc-queue))) {
+                darray-find-remove(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(arg_0), 0);
             }
         }
     }
-    darray-insert(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, arg_0), 0);
-    return send-event(new-igc-queued, ss-fob-aquarium-atrium-owen-state-machine-1, new-boxed-value(1, arg_1));
+    darray-insert(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(arg_0), 0);
+    return send-event(new-igc-queued, ss-fob-aquarium-atrium-owen-state-machine-1, boxed_bool(arg_1));
 }
 
 u64? fob-aquarium-atrium--wait-to-play-owen-igc() {
@@ -44,13 +44,13 @@ u64? fob-aquarium-atrium--wait-to-play-owen-igc() {
 u16 fob-aquarium-atrium--unqueue-owen-igc(sid arg_0, u64? arg_1) {
     u16 var_1;
     if (arg_1 && arg_0 != get-symbol(active-igc, ss-fob-aquarium-atrium-owen-state-machine-1) && arg_0 == follow) {
-        u64? var_3 = darray-find(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, follow), 0);
+        u64? var_3 = darray-find(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(follow), 0);
         if (var_3 != group-get-last-valid-index(fob-aquarium--owen-atrium-igc-queue)) {
             var_5 = darray-remove(fob-aquarium--owen-atrium-igc-queue, var_3);
         }
         var_1 = 1;
     } else {
-        darray-find-remove(fob-aquarium--owen-atrium-igc-queue, new-boxed-value(7, arg_0), 0);
+        darray-find-remove(fob-aquarium--owen-atrium-igc-queue, boxed_symbol(arg_0), 0);
         var_1 = 1;
     }
     return var_1;
@@ -146,7 +146,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(exit-igc, get-symbol(active-igc, self), new-boxed-value(1, event-arg-boolean(0)));
+                    send-event(exit-igc, get-symbol(active-igc, self), boxed_bool(event-arg-boolean(0)));
                 }
             }
         }
@@ -172,7 +172,7 @@ statescript {
                         if (follow == get-symbol(active-igc, self)) {
                             go(done, 1);
                         } else {
-                            send-event(exit-igc, get-symbol(active-igc, self), new-boxed-value(1, 1));
+                            send-event(exit-igc, get-symbol(active-igc, self), boxed_bool(1));
                         }
                     }
                 }

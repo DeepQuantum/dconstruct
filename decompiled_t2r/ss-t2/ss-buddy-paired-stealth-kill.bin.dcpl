@@ -39,17 +39,7 @@ statescript {
             track main {
                 lambda {
                     if (tension-mode-is?(2) && object-spawned?(tag-symbol(npc-1, self)) && object-spawned?(tag-symbol(npc-2, self)) && get-boolean(npc-1-in-region, self) && get-boolean(npc-2-in-region, self)) {
-                        foreach (u64? var_8 : all-buddy-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : all-buddy-npcs) {
                             if (npc-alive?(var_9)) {
                                 npc-buddy-unleash-stealth-kill/f(var_9, tag-symbol(npc-1, self), tag-symbol(npc-2, self));
                                 npc-buddy-unleash-stealth-kill/f(var_9, tag-symbol(npc-2, self), tag-symbol(npc-1, self));

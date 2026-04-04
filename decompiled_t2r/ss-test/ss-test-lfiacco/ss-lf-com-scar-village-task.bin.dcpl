@@ -88,17 +88,7 @@ statescript {
                     script-caption(get-closest-living-npc-in-group(scar-village-npcs, player, 0), "I've got a bad feeling about this.", -1.00, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : scar-village-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : scar-village-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-hard-point(var_2);
                         }

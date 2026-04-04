@@ -65,17 +65,7 @@ u64? ratking-death-not-in-region?() {
         display(dc:format("checking death in region?"), 19);
     }
     u64? var_4;
-    foreach (u64? var_5 : no-death-regions) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : no-death-regions) {
         print-boolean(!(locator-in-region?(var_0, var_6, npc)), self);
         var_4 = 1 && !(locator-in-region?(var_0, var_6, npc));
     }
@@ -145,7 +135,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(npc-ratking-bloater-1, disable-hit-ticks?, new-boxed-value(1, 1));
+                    fact-set(npc-ratking-bloater-1, disable-hit-ticks?, boxed_bool(1));
                 }
                 lambda {
                     set-boolean(hit-ticks-disabled?, 1, self);
@@ -229,7 +219,7 @@ statescript {
                     u64? var_0 = get-best-safe-pos();
                     if (!(var_0 == 0)) {
                         set-bound-frame(bloater-ap, get-spawner-locator(var_0, 1), self);
-                        u64? var_5 = darray-at(split-pos-index-list, darray-find(split-safe-pos-list, new-boxed-value(7, var_0), 0));
+                        u64? var_5 = darray-at(split-pos-index-list, darray-find(split-safe-pos-list, boxed_symbol(var_0), 0));
                         u16 var_6;
                         if (var_5 && *(u16*)(var_5 + 12) == 1) {
                             var_6 = *(u8*)var_5;
@@ -289,18 +279,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(npc-ratking-bloater-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(npc-ratking-bloater-1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 86;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(npc-ratking-bloater-1, ratking-death--ratking, var_0);
                 }
                 lambda {
@@ -317,21 +307,21 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(bloater-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 59;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(bloater-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 59;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 86;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     wait-animate_(npc-ratking-bloater-1, ratking-death--ratking, var_0);
                 }
                 lambda {
@@ -384,59 +374,59 @@ statescript {
                         debug-draw-circle(get-locator-position(var_0), get-float(player-igc-radius, self), 6, 9.00, 1, 0, 0);
                     }
                     u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_4 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_4[0] = 10;
+                    *(u64*)(*var_4[0] + 8) = 0;
                     u64? var_10;
                     if (get-locator-distance(get-bound-frame(bloater-ap, self), var_0) > (get-float(igc-radius, self) + 1.00) && get-locator-distance-y(get-object-locator(player), var_0) < 0.30) {
                         var_10 = var_0;
                     } else {
                         var_10 = get-object-locator(player);
                     }
-                    *(u64*)(*(*var_4 + (0 * 8)) + 8) = var_10;
-                    *(i32*)*(*var_4 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_4 + (1 * 8)) + 8) = 1;
+                    *(u64*)(*var_4[0] + 8) = var_10;
+                    *(i32*)*var_4[1] = 31;
+                    *(u64*)(*var_4[1] + 8) = 0;
+                    *(u8*)(*var_4[1] + 8) = 1;
                     animate_(player, ellie-mm-uneasy-idle, var_4);
                 }
                 lambda {
-                    send-event(flashlight-set-target-object, player, new-boxed-value(7, obj-flashlight-target-1));
+                    send-event(flashlight-set-target-object, player, boxed_symbol(obj-flashlight-target-1));
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(bloater-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-animation-frame(npc-ratking-bloater-1, 2, 0);
-                    *(i32*)*(*var_0 + (4 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(bloater-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-animation-frame(npc-ratking-bloater-1, 2, 0);
+                    *(i32*)*var_0[4] = 82;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(dummy-camera-ratking-die-igc-1, ratking-death--camera, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(bloater-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-animation-frame(npc-ratking-bloater-1, 2, 0);
-                    *(i32*)*(*var_0 + (4 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(bloater-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-animation-frame(npc-ratking-bloater-1, 2, 0);
+                    *(i32*)*var_0[4] = 82;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(ic-split-light-parent-1, ratking-death--cube, var_0);
                 }
                 lambda {
@@ -644,21 +634,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(bloater-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 86;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(bloater-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 58;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
+                    *(i32*)*var_0[3] = 56;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.00;
+                    *(i32*)*var_0[4] = 86;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-ratking-bloater-1, ratking-death--ratking, var_0);
                 }
                 lambda {

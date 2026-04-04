@@ -58,7 +58,7 @@ statescript {
             }
             track zoom-cam-set {
                 lambda {
-                    fact-set(player, is-joel-efg, new-boxed-value(1, 1));
+                    fact-set(player, is-joel-efg, boxed_bool(1));
                 }
             }
             track horse {
@@ -117,7 +117,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(player, is-joel-efg, new-boxed-value(1, 0));
+                    fact-set(player, is-joel-efg, boxed_bool(0));
                 }
             }
         }

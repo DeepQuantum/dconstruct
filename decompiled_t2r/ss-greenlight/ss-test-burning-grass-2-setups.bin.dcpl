@@ -44,17 +44,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : burning-grass-2-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : burning-grass-2-infected) {
                         spawn-npc(var_2, 0, 0);
                     }
                 }
@@ -120,17 +110,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : burning-grass-2-humans) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : burning-grass-2-humans) {
                         spawn-npc(var_2, 0, 0);
                     }
                 }

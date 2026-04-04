@@ -23,14 +23,14 @@ u16 set-lightning-settings-from-task() {
         set-boolean(lightning-active, 1, self);
         set-boolean(thunder-sfx-only, 0, self);
         darray-clear(afm-active-lightning-fx-spawners);
-        var_1 = darray-append(afm-active-lightning-fx-spawners, new-boxed-value(7, fx-multispawn-sle-lightning-start-1), 1);
+        var_1 = darray-append(afm-active-lightning-fx-spawners, boxed_symbol(fx-multispawn-sle-lightning-start-1), 1);
     } else if (task-continue-active?(save-lev, sle-farmland-passing-troops, farmland) || task-continue-active?(save-lev, sle-farmland-passing-troops, checkpoint) || task-continue-active?(save-lev, sle-farmland-passing-troops, gate-attempted) || task-continue-active?(save-lev, sle-farmland-passing-troops, combat-done) || task-active?(save-lev, sle-scar-village-levs-house) && task-active?(save-lev, sle-farmland-passing-troops)) {
         afm-set-lightning-medium();
         set-boolean(do-full-screen-effect, 0, self);
         set-boolean(lightning-active, 1, self);
         set-boolean(thunder-sfx-only, 0, self);
         darray-clear(afm-active-lightning-fx-spawners);
-        var_1 = darray-append(afm-active-lightning-fx-spawners, new-boxed-value(7, fx-multispawn-sle-lightning-end-1), 1);
+        var_1 = darray-append(afm-active-lightning-fx-spawners, boxed_symbol(fx-multispawn-sle-lightning-end-1), 1);
     } else if (task-range-active?(abby-fights-militia, afm-escape-exit-home, abby-fights-militia, afm-radio-tower-ladder)) {
         if (task-active?(abby-fights-militia, afm-escape-move-vines) || task-active?(abby-fights-militia, afm-escape-militia-evaded) || task-active?(abby-fights-militia, afm-escape-militia-alley) || task-active?(abby-fights-militia, afm-escape-shipping-container) && !task-active?(abby-fights-militia, afm-escape-yara-boost)) {
             set-boolean(lightning-active, 1, self);
@@ -44,14 +44,14 @@ u16 set-lightning-settings-from-task() {
         set-boolean(lightning-active, 1, self);
         set-boolean(thunder-sfx-only, 0, self);
         darray-clear(afm-active-lightning-fx-spawners);
-        var_1 = darray-append(afm-active-lightning-fx-spawners, new-boxed-value(7, fx-multispawn-afm-lightning-mid-1), 1);
+        var_1 = darray-append(afm-active-lightning-fx-spawners, boxed_symbol(fx-multispawn-afm-lightning-mid-1), 1);
     } else if (task-range-active?(abby-fights-militia, afm-horse-chase-capitol-arrive, abby-fights-militia, afm-burning-village-escape)) {
         afm-set-lightning-far();
         set-boolean(lightning-active, 0, self);
         set-boolean(thunder-sfx-only, 0, self);
         set-boolean(do-full-screen-effect, 0, self);
         darray-clear(afm-active-lightning-fx-spawners);
-        var_1 = darray-append(afm-active-lightning-fx-spawners, new-boxed-value(7, fx-multispawn-afm-lightning-end-1), 1);
+        var_1 = darray-append(afm-active-lightning-fx-spawners, boxed_symbol(fx-multispawn-afm-lightning-end-1), 1);
     } else if (task-active?(abby-fights-militia, afm-aquarium-dock)) {
         afm-set-lightning-far();
         set-boolean(lightning-active, 1, self);
@@ -221,17 +221,7 @@ statescript {
                     set-boolean(force-full-screen-flash-active, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-active-lightning-fx-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-active-lightning-fx-spawners) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }

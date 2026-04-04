@@ -102,7 +102,7 @@ statescript {
                 lambda {
                     if (task-range-active?(flooded-city, flo-stormy-seas-boat-sink, find-aquarium, faq-arrival)) {
                         darray-clear(faq--active-lightning-flash-fx);
-                        darray-append(faq--active-lightning-flash-fx, new-boxed-value(7, fx-multispawn-flo-lightning-stormy-seas-swim-1), 1);
+                        darray-append(faq--active-lightning-flash-fx, boxed_symbol(fx-multispawn-flo-lightning-stormy-seas-swim-1), 1);
                         set-symbol(active-lightning-controller, ren-faq-lightning-controller-1, self);
                     }
                 }
@@ -265,17 +265,7 @@ statescript {
         block start {
             track flash {
                 lambda {
-                    foreach (u64? var_1 : faq--active-lightning-flash-fx) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : faq--active-lightning-flash-fx) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
@@ -319,17 +309,7 @@ statescript {
         block start {
             track flash {
                 lambda {
-                    foreach (u64? var_1 : faq--active-lightning-flash-fx) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : faq--active-lightning-flash-fx) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }

@@ -87,19 +87,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : initial-enemies) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : initial-enemies) {
                         u64? var_3 = wait-spawn-npc(var_2, 0, 0);
-                        darray-append(active-infected, new-boxed-value(7, var_3), 1);
+                        darray-append(active-infected, boxed_symbol(var_3), 1);
                         wait-one-frame();
                         npc-make-aware-of(var_3, player, 2, 0);
                         wait-one-frame();
@@ -131,19 +121,9 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(active-infected) <= 1) {
-                        foreach (u64? var_2 : runners-wave-1) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : runners-wave-1) {
                             u64? var_4 = wait-spawn-npc(var_3, 0, 0);
-                            darray-append(active-infected, new-boxed-value(7, var_4), 1);
+                            darray-append(active-infected, boxed_symbol(var_4), 1);
                             wait-one-frame();
                             npc-make-aware-of(var_4, player, 2, 0);
                             wait-one-frame();
@@ -173,19 +153,9 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(active-infected) <= 1) {
-                        foreach (u64? var_2 : runners-wave-2) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : runners-wave-2) {
                             u64? var_4 = wait-spawn-npc(var_3, 0, 0);
-                            darray-append(active-infected, new-boxed-value(7, var_4), 1);
+                            darray-append(active-infected, boxed_symbol(var_4), 1);
                             wait-one-frame();
                             npc-make-aware-of(var_4, player, 2, 0);
                             wait-one-frame();
@@ -215,19 +185,9 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(active-infected) <= 1) {
-                        foreach (u64? var_2 : runners-wave-3) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : runners-wave-3) {
                             u64? var_4 = wait-spawn-npc(var_3, 0, 0);
-                            darray-append(active-infected, new-boxed-value(7, var_4), 1);
+                            darray-append(active-infected, boxed_symbol(var_4), 1);
                             wait-one-frame();
                             npc-make-aware-of(var_4, player, 2, 0);
                             wait-one-frame();

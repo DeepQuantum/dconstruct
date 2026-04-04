@@ -88,34 +88,14 @@ statescript {
                     while (1) {
                         darray-clear(get-symbol(remaining-infected, self));
                         darray-clear(get-symbol(infected-engagers, self));
-                        foreach (u64? var_3 : all-infected-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-infected-npcs) {
                             if (npc-runner?(var_4)) {
-                                darray-append(get-symbol(remaining-infected, self), new-boxed-value(7, var_4), 1);
+                                darray-append(get-symbol(remaining-infected, self), boxed_symbol(var_4), 1);
                             }
                         }
                         while (darray-count(all-infected-npcs) > 0 && darray-count(get-symbol(infected-engagers, self)) < get-int32(max-infected-engagers, self) && darray-count(get-symbol(infected-engagers, self)) < darray-count(all-infected-npcs)) {
                             u16 var_18;
-                            foreach (u64? var_20 : get-symbol(remaining-infected, self)) {
-                                u16 var_21;
-                                if (var_20 && *(u16*)(var_20 + 12) == 7) {
-                                    var_21 = *(u64*)var_20;
-                                } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-                                    var_21 = *(u64*)var_20;
-                                } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-                                    var_21 = *(u64*)var_20;
-                                } else {
-                                    var_21 = 0;
-                                }
+                            foreach (u64? var_21 : get-symbol(remaining-infected, self)) {
                                 u16 var_23;
                                 if (npc-alive?(var_21)) {
                                     if (!character-is-dead?(var_21)) {
@@ -134,23 +114,13 @@ statescript {
                                 var_18 = var_23;
                             }
                             if (!(var_18 == 0)) {
-                                darray-append(get-symbol(infected-engagers, self), new-boxed-value(7, var_18), 1);
-                                darray-find-remove(get-symbol(remaining-infected, self), new-boxed-value(7, var_18), 0);
+                                darray-append(get-symbol(infected-engagers, self), boxed_symbol(var_18), 1);
+                                darray-find-remove(get-symbol(remaining-infected, self), boxed_symbol(var_18), 0);
                                 var_32 = npc-set-movement-speed-scale(var_18, 1.00);
                             }
                             wait-one-frame();
                         }
-                        foreach (u64? var_41 : get-symbol(remaining-infected, self)) {
-                            u16 var_42;
-                            if (var_41 && *(u16*)(var_41 + 12) == 7) {
-                                var_42 = *(u64*)var_41;
-                            } else if (var_41 && *(u16*)(var_41 + 12) == 5) {
-                                var_42 = *(u64*)var_41;
-                            } else if (var_41 && *(u16*)(var_41 + 12) == 4) {
-                                var_42 = *(u64*)var_41;
-                            } else {
-                                var_42 = 0;
-                            }
+                        foreach (u64? var_42 : get-symbol(remaining-infected, self)) {
                             if (!npc-on-screen-and-visible?(var_42, -1, 0) && !npc-in-tap?(var_42) && approx-path-dist-to(var_42, get-object-locator(player)) > 7.00) {
                                 npc-set-movement-speed-scale(var_42, 0.40);
                             } else if (!npc-in-tap?(var_42) && approx-path-dist-to(var_42, get-object-locator(player)) > 10.00) {

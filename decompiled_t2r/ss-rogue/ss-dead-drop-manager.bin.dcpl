@@ -15,17 +15,7 @@ u16 wait-deposit-items() {
     u16 var_1;
     if (player-has-deposit-items?()) {
         u16 var_3;
-        foreach (u64? var_4 : grp-picked-deposit-item-index) {
-            u16 var_5;
-            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                var_5 = *(u64*)var_4;
-            } else {
-                var_5 = 0;
-            }
+        foreach (u64? var_5 : grp-picked-deposit-item-index) {
             u16 var_9;
             if (get-inventory-item-quantity(*(u64*)(**t2r-dead-drop-item-info-array* + (var_5 * 32))) == *(i32*)((**t2r-dead-drop-item-info-array* + (var_5 * 32)) + 16) && get-player-weapon-id() == *(u64*)(**t2r-dead-drop-item-info-array* + (var_5 * 32))) {
                 var_9 = 1;
@@ -38,17 +28,7 @@ u16 wait-deposit-items() {
         set-svar-as-boolean(dead-drop-deposited, 1);
         increment-svar(num-dead-drops-deposited-this-run, 1);
         set-int32(num-dead-drops-deposited-this-run, get-svar(num-dead-drops-deposited-this-run), self);
-        foreach (u64? var_16 : grp-picked-deposit-item-index) {
-            u16 var_17;
-            if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                var_17 = *(u64*)var_16;
-            } else {
-                var_17 = 0;
-            }
+        foreach (u64? var_17 : grp-picked-deposit-item-index) {
             player-inventory-consume-item(*(u64*)(**t2r-dead-drop-item-info-array* + (var_17 * 32)), *(i32*)((**t2r-dead-drop-item-info-array* + (var_17 * 32)) + 16));
         }
         broadcast-event(dead-drop-deposited);
@@ -241,7 +221,7 @@ bool is-dead-drop-recipe?(i64 arg_0) {
 
 u64? check-probability(u64? arg_0) {
     f32 var_3;
-    if (darray-contains?(grp-picked-deposit-item-index, new-boxed-value(7, arg_0))) {
+    if (darray-contains?(grp-picked-deposit-item-index, boxed_symbol(arg_0))) {
         var_3 = get-float(picked-item-probability, self);
     } else {
         var_3 = 1.10;
@@ -353,11 +333,11 @@ u64? offset-rotate-dead-drop-theatre(bool arg_0, u64? arg_1) {
 
 u16 check-and-swap-stun-smoke-bomb() {
     u16 var_4;
-    if (player-upgrade-active?(stun-bomb-smoke) && player-knows-recipe?(smoke-bomb) && darray-contains?(grp-picked-deposit-item-index, new-boxed-value(7, 2))) {
+    if (player-upgrade-active?(stun-bomb-smoke) && player-knows-recipe?(smoke-bomb) && darray-contains?(grp-picked-deposit-item-index, boxed_symbol(2))) {
         u16 var_5;
         if (*(i32*)((**t2r-dead-drop-item-info-array* + (2 * 32)) + 16) > 0) {
-            darray-find-remove(grp-picked-deposit-item-index, new-boxed-value(7, 2), 0);
-            darray-append(grp-picked-deposit-item-index, new-boxed-value(7, 4), 1);
+            darray-find-remove(grp-picked-deposit-item-index, boxed_symbol(2), 0);
+            darray-append(grp-picked-deposit-item-index, boxed_symbol(4), 1);
             *(i32*)((**t2r-dead-drop-item-info-array* + (4 * 32)) + 16) = *(i32*)((**t2r-dead-drop-item-info-array* + (2 * 32)) + 16) + *(i32*)((**t2r-dead-drop-item-info-array* + (4 * 32)) + 16);
             var_5 = broadcast-event(update-dead-drop-item-display);
         } else {
@@ -372,17 +352,7 @@ u16 check-and-swap-stun-smoke-bomb() {
 
 u16 deaddrop-reward-is-longgun?() {
     u16 var_1;
-    foreach (u64? var_2 : dead-drop-all-rogue-guns) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : dead-drop-all-rogue-guns) {
         u16 var_5;
         if (is-dead-drop-weapon?(var_3)) {
             var_5 = 1;
@@ -395,22 +365,12 @@ u16 deaddrop-reward-is-longgun?() {
 u16 player-has-deposit-items?() {
     darray-clear(grp-missing-deposit-item-index);
     u16 var_1;
-    foreach (u64? var_2 : grp-picked-deposit-item-index) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : grp-picked-deposit-item-index) {
         u64? var_5 = get-inventory-item-quantity(*(u64*)(**t2r-dead-drop-item-info-array* + (var_3 * 32)));
         u16 var_6;
         if (var_5 < *(i32*)((**t2r-dead-drop-item-info-array* + (var_3 * 32)) + 16) && var_5 == 0) {
             var_6 = 0;
-            var_7 = darray-append(grp-missing-deposit-item-index, new-boxed-value(7, var_3), 1);
+            var_7 = darray-append(grp-missing-deposit-item-index, boxed_symbol(var_3), 1);
         }
         var_1 = var_6;
     }
@@ -496,17 +456,7 @@ u16 find-available-dead-drop-reward-weapon() {
     if (!is-final-build?()) {
         display(dc:format("DEB-DD:   In %s ..", string-debug(var_3)), 19);
     }
-    foreach (u64? var_9 : var_3) {
-        u16 var_10;
-        if (var_9 && *(u16*)(var_9 + 12) == 7) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-            var_10 = *(u64*)var_9;
-        } else {
-            var_10 = 0;
-        }
+    foreach (u64? var_10 : var_3) {
         if (!player-has-weapon?(var_10)) {
             u64? var_12 = ddict-get(dead-drop-reward-weapon-ammo, var_10);
             u16 var_13;
@@ -525,7 +475,7 @@ u16 find-available-dead-drop-reward-weapon() {
             } else {
                 var_13 = 0;
             }
-            darray-append(unowned-weapons-temp, new-boxed-value(7, var_10), 0);
+            darray-append(unowned-weapons-temp, boxed_symbol(var_10), 0);
             if (!is-final-build?()) {
                 var_16 = display(dc:format("DEB-DD:     %-30s (ammo: %d)", string-debug(var_10), var_13), 19);
             }
@@ -535,26 +485,16 @@ u16 find-available-dead-drop-reward-weapon() {
         display(dc:format("DEB-DD:   Remove weapons we can't give"), 19);
     }
     if (!player-can-get-another-longgun?()) {
-        foreach (u64? var_25 : dead-drop-all-rogue-guns) {
-            u16 var_26;
-            if (var_25 && *(u16*)(var_25 + 12) == 7) {
-                var_26 = *(u64*)var_25;
-            } else if (var_25 && *(u16*)(var_25 + 12) == 5) {
-                var_26 = *(u64*)var_25;
-            } else if (var_25 && *(u16*)(var_25 + 12) == 4) {
-                var_26 = *(u64*)var_25;
-            } else {
-                var_26 = 0;
-            }
-            while (darray-contains?(unowned-weapons-temp, new-boxed-value(7, var_26))) {
-                darray-find-remove(unowned-weapons-temp, new-boxed-value(7, var_26), 0);
+        foreach (u64? var_26 : dead-drop-all-rogue-guns) {
+            while (darray-contains?(unowned-weapons-temp, boxed_symbol(var_26))) {
+                darray-find-remove(unowned-weapons-temp, boxed_symbol(var_26), 0);
                 if (!is-final-build?()) {
                     display(dc:format("DEB-DD:     %s (REMOVED)", string-debug(var_26)), 19);
                 }
             }
         }
     }
-    if (var_3 == dead-drop-reward-weapons-bill && darray-contains?(unowned-weapons-temp, new-boxed-value(7, shotgun-remington-pump-bill))) {
+    if (var_3 == dead-drop-reward-weapons-bill && darray-contains?(unowned-weapons-temp, boxed_symbol(shotgun-remington-pump-bill))) {
         if (!is-final-build?()) {
             display(dc:format("DEB-DD:   Bill needs to have custom shotgun?"), 19);
         }
@@ -678,7 +618,7 @@ u16 spawn-random-dead-drop-reward-weapon(u64? arg_0, u64? arg_1) {
         spawn-picked-weapon(var_19, arg_0);
         dead-drop-save-reward(get-symbol(current-reward-weapon, ss-dead-drop-manager-1), arg_1);
         set-int32(ammo-amount, var_6, var_19);
-        ddict-set(weapons-owned, var_17, new-boxed-value(2, 1));
+        ddict-set(weapons-owned, var_17, boxed_i32(1));
         var_4 = 1;
     }
     u16 var_32;
@@ -702,14 +642,14 @@ u16 remove-character-specific-weapons-from-dead-drop-reward-ddict(u64? arg_0) {
             display(dc:format("DEB-DD:   Removing Joel specific weapons"), 19);
         }
         if (player-has-weapon?(pistol-glock) && player-has-weapon?(pistol-xcaliber)) {
-            if (darray-contains?(arg_0, new-boxed-value(7, pistol-glock))) {
-                darray-find-remove(arg_0, new-boxed-value(7, pistol-glock), 0);
+            if (darray-contains?(arg_0, boxed_symbol(pistol-glock))) {
+                darray-find-remove(arg_0, boxed_symbol(pistol-glock), 0);
                 if (!is-final-build?()) {
                     display(dc:format("DEB-DD:   - pistol-glock removed"), 19);
                 }
             }
-            if (darray-contains?(arg_0, new-boxed-value(7, pistol-xcaliber))) {
-                darray-find-remove(arg_0, new-boxed-value(7, pistol-xcaliber), 0);
+            if (darray-contains?(arg_0, boxed_symbol(pistol-xcaliber))) {
+                darray-find-remove(arg_0, boxed_symbol(pistol-xcaliber), 0);
                 if (!is-final-build?()) {
                     var_1 = display(dc:format("DEB-DD:   - pistol-xcaliber removed"), 19);
                 } else {
@@ -725,8 +665,8 @@ u16 remove-character-specific-weapons-from-dead-drop-reward-ddict(u64? arg_0) {
         if (!is-final-build?()) {
             display(dc:format("DEB-DD:   Removing Marlene specific weapons"), 19);
         }
-        if (darray-contains?(arg_0, new-boxed-value(7, rifle-mpx5))) {
-            darray-find-remove(arg_0, new-boxed-value(7, rifle-mpx5), 0);
+        if (darray-contains?(arg_0, boxed_symbol(rifle-mpx5))) {
+            darray-find-remove(arg_0, boxed_symbol(rifle-mpx5), 0);
             if (!is-final-build?()) {
                 var_1 = display(dc:format("DEB-DD:   - rifle-mpx5 removed"), 19);
             } else {
@@ -815,19 +755,9 @@ u16 debug-give-player-dead-drop-reward() {
     }
     remove-character-specific-weapons-from-dead-drop-reward-ddict(var_1);
     darray-clear(unowned-weapons-temp);
-    foreach (u64? var_4 : var_1) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : var_1) {
         if (!player-has-weapon?(var_5)) {
-            darray-append(unowned-weapons-temp, new-boxed-value(7, var_5), 0);
+            darray-append(unowned-weapons-temp, boxed_symbol(var_5), 0);
         }
     }
     u16 var_10;
@@ -885,7 +815,7 @@ u16 debug-give-player-dead-drop-reward() {
         } else {
             var_20 = 0;
         }
-        var_10 = ddict-set(weapons-owned, var_20, new-boxed-value(2, 1));
+        var_10 = ddict-set(weapons-owned, var_20, boxed_i32(1));
     } else {
         var_10 = 0;
     }
@@ -950,17 +880,7 @@ u16 dead-drop-save-reward(u64? arg_0, bool arg_1) {
 
 u16 rogue-player-longgun-count() {
     u16 var_1;
-    foreach (u64? var_2 : dead-drop-all-rogue-guns) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : dead-drop-all-rogue-guns) {
         u16 var_5;
         if (player-has-weapon?(var_3)) {
             var_5 = 0 + 1;
@@ -1131,17 +1051,7 @@ u16 dead-drop-retrieve-reward(string arg_0, u64? arg_1) {
 
 sid get-dead-drop-reward-recipes-for-bill(u16 arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : dead-drop-reward-recipes-bill-first) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : dead-drop-reward-recipes-bill-first) {
         u16 var_5;
         if (player-knows-recipe?(var_3)) {
             var_5 = 1;
@@ -1186,17 +1096,7 @@ u16 find-available-dead-drop-reward-recipe() {
     if (!is-final-build?()) {
         display(dc:format("DEB-DD:   In %s ..", string-debug(var_4)), 19);
     }
-    foreach (u64? var_11 : var_4) {
-        u16 var_12;
-        if (var_11 && *(u16*)(var_11 + 12) == 7) {
-            var_12 = *(u64*)var_11;
-        } else if (var_11 && *(u16*)(var_11 + 12) == 5) {
-            var_12 = *(u64*)var_11;
-        } else if (var_11 && *(u16*)(var_11 + 12) == 4) {
-            var_12 = *(u64*)var_11;
-        } else {
-            var_12 = 0;
-        }
+    foreach (u64? var_12 : var_4) {
         u64? var_13 = match (var_12) {
             stun-bomb     -> !player-knows-recipe?(stun-bomb) && !player-upgrade-active?(stun-bomb-smoke) && !player-knows-recipe?(smoke-bomb) && get-inventory-item-quantity(smoke-bomb) == 0,
             pipe-bomb     -> !player-knows-recipe?(pipe-bomb) && !player-upgrade-active?(recipe-pipe-bomb),
@@ -1204,7 +1104,7 @@ u16 find-available-dead-drop-reward-recipe() {
             else          -> !player-knows-recipe?(var_12)
         };
         if (var_13) {
-            darray-append(unowned-recipes-temp, new-boxed-value(7, var_12), 1);
+            darray-append(unowned-recipes-temp, boxed_symbol(var_12), 1);
         }
         if (!is-final-build?()) {
             string var_31;
@@ -1272,8 +1172,8 @@ u16 pick-deposit-item() {
             } else {
                 var_22 = i;
             }
-            if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), new-boxed-value(7, var_22))) {
-                darray-append(grp-valid-deposit-item-index, new-boxed-value(7, i), 1);
+            if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), boxed_symbol(var_22))) {
+                darray-append(grp-valid-deposit-item-index, boxed_symbol(i), 1);
                 var_20 = 1;
             }
         }
@@ -1307,8 +1207,8 @@ u16 pick-deposit-item() {
                 } else {
                     var_40 = i;
                 }
-                if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), new-boxed-value(7, var_40))) {
-                    darray-append(grp-valid-deposit-item-index, new-boxed-value(7, i), 1);
+                if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), boxed_symbol(var_40))) {
+                    darray-append(grp-valid-deposit-item-index, boxed_symbol(i), 1);
                     var_38 = 1;
                 }
             }
@@ -1349,15 +1249,15 @@ u16 pick-deposit-item() {
         u64 i = 0;
         while (i < *(i32*)(*t2r-dead-drop-item-info-array* + 8)) {
             u16 var_66;
-            if (darray-contains?(var_56, new-boxed-value(7, *(u64*)(**t2r-dead-drop-item-info-array* + (i * 32))))) {
+            if (darray-contains?(var_56, boxed_symbol(*(u64*)(**t2r-dead-drop-item-info-array* + (i * 32))))) {
                 u16 var_68;
                 if (*(u64*)(**t2r-dead-drop-item-info-array* + (i * 32)) == smoke-bomb) {
                     var_68 = 2;
                 } else {
                     var_68 = i;
                 }
-                if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), new-boxed-value(7, var_68))) {
-                    darray-append(grp-valid-deposit-item-index, new-boxed-value(7, i), 1);
+                if (!darray-contains?(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), boxed_symbol(var_68))) {
+                    darray-append(grp-valid-deposit-item-index, boxed_symbol(i), 1);
                     var_66 = 0;
                 }
             }
@@ -1411,7 +1311,7 @@ u16 pick-deposit-item() {
     } else {
         var_90 = var_88;
     }
-    darray-append(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), new-boxed-value(7, var_90), 1);
+    darray-append(get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1), boxed_symbol(var_90), 1);
     if (var_88 == 0) {
         set-svar-as-boolean(dead-drop-deposit-health-kit-used, 1);
     }
@@ -1446,28 +1346,18 @@ u16 pick-deposit-item() {
     if (!is-final-build?()) {
         display(dc:format("DEB-DD:     Index:         %d", var_88), 19);
     }
-    if (!darray-contains?(grp-picked-deposit-item-index, new-boxed-value(7, var_88))) {
-        var_108 = darray-append(grp-picked-deposit-item-index, new-boxed-value(7, var_88), 1);
+    if (!darray-contains?(grp-picked-deposit-item-index, boxed_symbol(var_88))) {
+        var_108 = darray-append(grp-picked-deposit-item-index, boxed_symbol(var_88), 1);
     }
     u16 var_112;
     if (get-int32(deposit-item-count, self) == 2) {
         darray-clear(grp-dead-drop-second-item-index);
-        foreach (u64? var_116 : get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1)) {
-            u16 var_117;
-            if (var_116 && *(u16*)(var_116 + 12) == 7) {
-                var_117 = *(u64*)var_116;
-            } else if (var_116 && *(u16*)(var_116 + 12) == 5) {
-                var_117 = *(u64*)var_116;
-            } else if (var_116 && *(u16*)(var_116 + 12) == 4) {
-                var_117 = *(u64*)var_116;
-            } else {
-                var_117 = 0;
-            }
+        foreach (u64? var_117 : get-symbol(grp-dead-drop-recipes-appeared, ss-rogue-run-1)) {
             if (player-knows-recipe?(*(u64*)(**t2r-dead-drop-item-info-array* + (var_117 * 32)))) {
-                darray-append(grp-dead-drop-second-item-index, new-boxed-value(7, var_117), 1);
+                darray-append(grp-dead-drop-second-item-index, boxed_symbol(var_117), 1);
             }
             if (darray-count(grp-dead-drop-second-item-index) == 0) {
-                var_122 = darray-append(grp-dead-drop-second-item-index, new-boxed-value(7, 0), 1);
+                var_122 = darray-append(grp-dead-drop-second-item-index, boxed_symbol(0), 1);
             }
         }
         sid var_127;
@@ -1504,8 +1394,8 @@ u16 pick-deposit-item() {
             display(dc:format("DEB-DD:     Index:         %d", var_132), 19);
         }
         u16 var_149;
-        if (!darray-contains?(grp-picked-deposit-item-index, new-boxed-value(7, var_132))) {
-            var_149 = darray-append(grp-picked-deposit-item-index, new-boxed-value(7, var_132), 1);
+        if (!darray-contains?(grp-picked-deposit-item-index, boxed_symbol(var_132))) {
+            var_149 = darray-append(grp-picked-deposit-item-index, boxed_symbol(var_132), 1);
         } else {
             var_149 = 0;
         }
@@ -1695,18 +1585,8 @@ statescript {
                     darray-clear(grp-valid-dead-drop-deposit-spawners);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-dead-drop-deposit-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(grp-dead-drop-deposit-spawners, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-dead-drop-deposit-spawner, 1, 0, 0)) {
+                        darray-append(grp-dead-drop-deposit-spawners, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -1729,17 +1609,7 @@ statescript {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-DD Debug Spawn All Dead Drop"), 19);
                             }
-                            foreach (u64? var_3 : grp-dead-drop-deposit-spawners) {
-                                u16 var_4;
-                                if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                    var_4 = *(u64*)var_3;
-                                } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                    var_4 = *(u64*)var_3;
-                                } else {
-                                    var_4 = 0;
-                                }
+                            foreach (u64? var_4 : grp-dead-drop-deposit-spawners) {
                                 spawn-dead-drop-deposit(var_4);
                                 pick-deposit-item();
                             }
@@ -1750,19 +1620,9 @@ statescript {
                                     display(dc:format("DEB-DD: Dead drop eligible for spawn"), 19);
                                 }
                                 group-random(grp-dead-drop-deposit-spawners);
-                                foreach (u64? var_14 : grp-dead-drop-deposit-spawners) {
-                                    u16 var_15;
-                                    if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                        var_15 = *(u64*)var_14;
-                                    } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                        var_15 = *(u64*)var_14;
-                                    } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                        var_15 = *(u64*)var_14;
-                                    } else {
-                                        var_15 = 0;
-                                    }
+                                foreach (u64? var_15 : grp-dead-drop-deposit-spawners) {
                                     if (get-locator-distance(get-spawner-locator(var_15, 1), get-object-locator(player)) > 15.00) {
-                                        darray-append(var_15, new-boxed-value(7, grp-valid-dead-drop-deposit-spawners), 1);
+                                        darray-append(var_15, boxed_symbol(grp-valid-dead-drop-deposit-spawners), 1);
                                     }
                                 }
                                 u64? var_23;

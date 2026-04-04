@@ -76,7 +76,7 @@ statescript {
                         set-float(time-between-flashes-min, 10.00, self);
                         set-float(time-between-flashes-max, 22.00, self);
                         darray-clear(t2r-flo--active-lightning-flash-fx);
-                        darray-append(t2r-flo--active-lightning-flash-fx, new-boxed-value(7, fx-multispawn-flo-lightning-approach-bay-1), 1);
+                        darray-append(t2r-flo--active-lightning-flash-fx, boxed_symbol(fx-multispawn-flo-lightning-approach-bay-1), 1);
                         set-symbol(thunder-sfx, sfx-emt-flo-arcade-near-thunder, self);
                     } else {
                         set-boolean(block-normal-lightning-flash?, 1, self);
@@ -150,17 +150,7 @@ statescript {
         block start {
             track flash {
                 lambda {
-                    foreach (u64? var_1 : t2r-flo--active-lightning-flash-fx) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : t2r-flo--active-lightning-flash-fx) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }

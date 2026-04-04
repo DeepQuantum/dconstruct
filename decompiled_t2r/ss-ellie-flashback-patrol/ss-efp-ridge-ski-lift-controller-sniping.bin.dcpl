@@ -51,17 +51,7 @@ statescript {
                     set-high-contrast-mode-type(obj-efp-ridge-sniping-gondola-1, 2);
                 }
                 lambda {
-                    foreach (u64? var_1 : efp-ski-lift-ridge-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : efp-ski-lift-ridge-infected) {
                         spawn-entity(var_2, 0, 0);
                         player-allow-lock-on-to-object(var_2, 0);
                         wait-one-frame();
@@ -107,17 +97,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : efp-ski-lift-ridge-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : efp-ski-lift-ridge-infected) {
                         player-allow-lock-on-to-object(var_2, 1);
                     }
                 }
@@ -161,17 +141,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : efp-ski-lift-ridge-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : efp-ski-lift-ridge-infected) {
                         player-allow-lock-on-to-object(var_2, 1);
                     }
                 }
@@ -195,17 +165,7 @@ statescript {
                     wait-spawn-entity-group-async(efp-ski-lift-ridge-infected, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : efp-ski-lift-ridge-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : efp-ski-lift-ridge-infected) {
                         npc-kill(var_2);
                     }
                 }

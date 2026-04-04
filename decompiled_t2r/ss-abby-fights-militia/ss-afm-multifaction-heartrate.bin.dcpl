@@ -46,17 +46,7 @@ statescript {
                 lambda {
                     if (is-combat-or-search?() && !cinematic-playing?(0)) {
                         set-boolean(enemies-aware-of-player, 0, self);
-                        foreach (u64? var_3 : all-human-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-human-enemy-npcs) {
                             if (npc-alive?(var_4)) {
                                 if (npc-get-awareness(var_4, player) == 2 && !is-focusable-ignore?(var_4)) {
                                     var_8 = set-boolean(enemies-aware-of-player, 1, self);

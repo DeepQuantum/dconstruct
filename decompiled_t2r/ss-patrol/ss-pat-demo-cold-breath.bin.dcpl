@@ -65,10 +65,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(1));
                 }
             }
         }
@@ -76,15 +76,15 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(patrol, pat-supermarket-clicker-collapse)) {
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(0));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(0));
                         go(wait-for-cold, 1);
                     }
                 }
                 lambda {
                     if (task-complete?(patrol, pat-library-exterior)) {
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(0));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(0));
                         go(complete, 1);
                     }
                 }

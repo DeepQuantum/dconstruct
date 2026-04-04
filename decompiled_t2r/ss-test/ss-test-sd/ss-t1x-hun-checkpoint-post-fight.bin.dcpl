@@ -73,7 +73,7 @@ statescript {
             track ellie {
                 lambda {
                     if (object-in-region?(ellie, hcapf-rgn-ellie-in-explore-1)) {
-                        darray-find-remove(hcapf-explore-walk-1, new-boxed-value(7, hcapf-explore-walk-1), 0);
+                        darray-find-remove(hcapf-explore-walk-1, boxed_symbol(hcapf-explore-walk-1), 0);
                     }
                 }
                 lambda {

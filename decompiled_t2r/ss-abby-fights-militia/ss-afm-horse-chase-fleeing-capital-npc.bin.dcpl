@@ -80,7 +80,7 @@ statescript {
         block event task-complete {
             track main {
                 lambda {
-                    if (darray-contains?(afm-horse-chase-fleeing-capital-gate-npcs, new-boxed-value(7, get-self-id()))) {
+                    if (darray-contains?(afm-horse-chase-fleeing-capital-gate-npcs, boxed_symbol(get-self-id()))) {
                         if (task-active?(abby-fights-militia, afm-horse-chase-capitol-arrive)) {
                             wait(0.40);
                             go(cleanup, 1);

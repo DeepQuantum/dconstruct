@@ -30,7 +30,7 @@ u64? get-challenge-ammo-reward-icon-path-for-weapon(u64 arg_0) {
 }
 
 u64? next-wave-has-runner?() {
-    return darray-contains?(wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1), new-boxed-value(7, npc-infected-runner));
+    return darray-contains?(wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1), boxed_symbol(npc-infected-runner));
 }
 
 bool is-infected-faction-encounter?() {
@@ -39,17 +39,7 @@ bool is-infected-faction-encounter?() {
 
 bool player-has-num-different-guns?(u16 arg_0) {
     u16 var_2;
-    foreach (u64? var_3 : get-player-all-weapons()) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-player-all-weapons()) {
         u16 var_6;
         if (!(weapon-get-default-ammo-id(var_4) == 0)) {
             var_6 = 1 + 0;
@@ -62,17 +52,7 @@ bool player-has-num-different-guns?(u16 arg_0) {
 bool next-wave-has-minimum-melee-only-enemies?(u16 arg_0) {
     u64? var_0 = wave-manager-get-next-wave-faction(ss-wave-manager-1);
     u16 var_3;
-    foreach (u64? var_4 : wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1)) {
         u16 var_6;
         if (var_0 == 3) {
             var_6 = 1 + 0;
@@ -93,17 +73,7 @@ bool is-not-encounter-faction?(i64 arg_0) {
 bool next-wave-has-max-brute-enemies?(u16 arg_0) {
     u16 var_2;
     if (wave-manager-get-next-wave-faction(ss-wave-manager-1) == 1) {
-        foreach (u64? var_4 : wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1)) {
-            u16 var_5;
-            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                var_5 = *(u64*)var_4;
-            } else {
-                var_5 = 0;
-            }
+        foreach (u64? var_5 : wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1)) {
             if (var_5 == npc-scar-brute-pickaxe) {
                 1 + 0;
             }
@@ -115,17 +85,7 @@ bool next-wave-has-max-brute-enemies?(u16 arg_0) {
 
 bool player-has-num-shortgun-bullets?(u16 arg_0) {
     u64? var_1 = darray-create(single-frame, -1, 0);
-    foreach (u64? var_3 : get-player-all-weapons()) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-player-all-weapons()) {
         if (!(weapon-get-default-ammo-id(var_4) == 0)) {
             u64? var_6 = lookup-weapon-gameplay-def(var_4, 1);
             u16 var_7;
@@ -135,22 +95,12 @@ bool player-has-num-shortgun-bullets?(u16 arg_0) {
                 var_7 = 0;
             }
             if (var_7 == 1) {
-                darray-append(var_1, new-boxed-value(7, var_4), 1);
+                darray-append(var_1, boxed_symbol(var_4), 1);
             }
         }
     }
     u16 var_11;
-    foreach (u64? var_12 : var_1) {
-        u16 var_13;
-        if (var_12 && *(u16*)(var_12 + 12) == 7) {
-            var_13 = *(u64*)var_12;
-        } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-            var_13 = *(u64*)var_12;
-        } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-            var_13 = *(u64*)var_12;
-        } else {
-            var_13 = 0;
-        }
+    foreach (u64? var_13 : var_1) {
         var_11 = 0 + get-ammo-count-from-inventory-and-weapon-clip(weapon-get-default-ammo-id(var_13), var_13);
     }
     return var_11 > arg_0;
@@ -169,7 +119,7 @@ u16 next-wave-has-scar-brute?() {
     u16 var_1;
     if (wave-manager-get-next-wave-faction(ss-wave-manager-1) == 1) {
         u64? var_2 = wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1);
-        var_1 = darray-contains?(var_2, new-boxed-value(7, npc-scar-brute-pickaxe)) || darray-contains?(var_2, new-boxed-value(7, npc-scar-brute-rifle)) || darray-contains?(var_2, new-boxed-value(7, npc-scar-brute-shotgun)) && darray-contains?(var_2, new-boxed-value(7, npc-scar-brute-sledgehammer));
+        var_1 = darray-contains?(var_2, boxed_symbol(npc-scar-brute-pickaxe)) || darray-contains?(var_2, boxed_symbol(npc-scar-brute-rifle)) || darray-contains?(var_2, boxed_symbol(npc-scar-brute-shotgun)) && darray-contains?(var_2, boxed_symbol(npc-scar-brute-sledgehammer));
     } else {
         var_1 = 0;
     }
@@ -182,7 +132,7 @@ bool next-wave-has-minimum-enemies?(i64 arg_0) {
 
 u64? next-wave-has-clicker?() {
     u64? var_0 = wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1);
-    return darray-contains?(var_0, new-boxed-value(7, npc-infected-clicker)) && darray-contains?(var_0, new-boxed-value(7, npc-infected-clicker-armored));
+    return darray-contains?(var_0, boxed_symbol(npc-infected-clicker)) && darray-contains?(var_0, boxed_symbol(npc-infected-clicker-armored));
 }
 
 u64? get-index-of-challenge-from-cipher-id(u64 arg_0, u64 arg_1, u64?* arg_2) {
@@ -214,17 +164,7 @@ u64? get-index-of-challenge-from-cipher-id(u64 arg_0, u64 arg_1, u64?* arg_2) {
 bool next-wave-has-minimum-grab-kill-compatible-enemies?(i64 arg_0) {
     u64? var_0 = wave-manager-get-next-spawning-wave-npc-schemas-group(ss-wave-manager-1);
     u16 var_3;
-    foreach (u64? var_4 : var_0) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : var_0) {
         u16 var_6;
         if (var_5 == npc-enemy-dog || var_5 == npc-enemy-dog-armored || var_5 == npc-infected-bloater && var_5 == npc-infected-shambler) {
             var_6 = darray-count(var_0) - 1;

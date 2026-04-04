@@ -205,7 +205,7 @@ statescript {
                     stop-timer-if-running(kill-projectile-timer, self);
                 }
                 lambda {
-                    darray-append(active-spore-clouds, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(active-spore-clouds, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-int64(cloud, spawn-particles-at-bound-frame(bloater-cloud-1, get-object-locator(self), none), self);
@@ -217,13 +217,13 @@ statescript {
                     set-effect-float(get-int64(cloud, self), lifespan, get-float(lifespan, self));
                 }
                 lambda {
-                    broadcast-event(spore-cloud-kill-grass, new-boxed-value(18, get-object-locator(self)), new-boxed-value(6, get-float(radius, self)));
+                    broadcast-event(spore-cloud-kill-grass, boxed_boundframe(get-object-locator(self)), boxed_f32(get-float(radius, self)));
                 }
                 lambda {
                     wait(get-float(lifespan, self));
                 }
                 lambda {
-                    darray-find-remove(active-spore-clouds, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(active-spore-clouds, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     go(done, 1);
@@ -248,21 +248,21 @@ statescript {
                                     var_27 = stumble-bw-1m;
                                 }
                                 u64? var_32 = #%alloc-array(single-frame, 16, 5, 1);
-                                *(i32*)*(*var_32 + (0 * 8)) = 28;
-                                *(u64*)(*(*var_32 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_32 + (0 * 8)) + 8) = 0.20;
-                                *(i32*)*(*var_32 + (1 * 8)) = 30;
-                                *(u64*)(*(*var_32 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_32 + (1 * 8)) + 8) = 0.35;
-                                *(i32*)*(*var_32 + (2 * 8)) = 13;
-                                *(u64*)(*(*var_32 + (2 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_32 + (2 * 8)) + 8) = 2;
-                                *(i32*)*(*var_32 + (3 * 8)) = 70;
-                                *(u64*)(*(*var_32 + (3 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_32 + (3 * 8)) + 8) = 1;
-                                *(i32*)*(*var_32 + (4 * 8)) = 10;
-                                *(u64*)(*(*var_32 + (4 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_32 + (4 * 8)) + 8) = get-object-locator(player);
+                                *(i32*)*var_32[0] = 28;
+                                *(u64*)(*var_32[0] + 8) = 0;
+                                *(f32*)(*var_32[0] + 8) = 0.20;
+                                *(i32*)*var_32[1] = 30;
+                                *(u64*)(*var_32[1] + 8) = 0;
+                                *(f32*)(*var_32[1] + 8) = 0.35;
+                                *(i32*)*var_32[2] = 13;
+                                *(u64*)(*var_32[2] + 8) = 0;
+                                *(i32*)(*var_32[2] + 8) = 2;
+                                *(i32*)*var_32[3] = 70;
+                                *(u64*)(*var_32[3] + 8) = 0;
+                                *(i32*)(*var_32[3] + 8) = 1;
+                                *(i32*)*var_32[4] = 10;
+                                *(u64*)(*var_32[4] + 8) = 0;
+                                *(u64*)(*var_32[4] + 8) = get-object-locator(player);
                                 animate_(player, var_27, var_32);
                             } else {
                                 player-stumble-locator(rotate-locator-lookat(get-object-locator(self), get-object-locator(player), 1.00, 0), 0, 0);

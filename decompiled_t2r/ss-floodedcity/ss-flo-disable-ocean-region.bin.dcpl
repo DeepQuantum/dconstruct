@@ -12,11 +12,11 @@
 // ####################################################################################################
 
 u64? flo--add-water-to-deformer-disable-list(u64? arg_0) {
-    return darray-append(flo--wave-deformers-to-disable, new-boxed-value(7, arg_0), 1);
+    return darray-append(flo--wave-deformers-to-disable, boxed_symbol(arg_0), 1);
 }
 
 u64? flo--remove-water-from-deformer-disable-list(u64? arg_0) {
-    return darray-find-remove(flo--wave-deformers-to-disable, new-boxed-value(7, arg_0), 0);
+    return darray-find-remove(flo--wave-deformers-to-disable, boxed_symbol(arg_0), 0);
 }
 
 statescript {
@@ -51,17 +51,7 @@ statescript {
             track main {
                 lambda {
                     if (!(darray-count(flo--wave-deformers-to-disable) == 0)) {
-                        foreach (u64? var_2 : flo--wave-deformers-to-disable) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : flo--wave-deformers-to-disable) {
                             disable-wave-deformers-ocean-region(var_3);
                         }
                     }

@@ -283,7 +283,7 @@ statescript {
                     ), var_2);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, event-arg-symbol(0)), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(event-arg-symbol(0)), 1, 0, 1);
                 }
             }
         }

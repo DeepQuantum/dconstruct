@@ -38,7 +38,7 @@ statescript {
             track main {
                 lambda {
                     if (tag-exists?(script-receiver, self)) {
-                        send-event(detonate-via-attack, tag-symbol(script-receiver, self), new-boxed-value(7, get-self-id()));
+                        send-event(detonate-via-attack, tag-symbol(script-receiver, self), boxed_symbol(get-self-id()));
                     }
                 }
                 lambda {

@@ -14,17 +14,7 @@
 u64? recalculate-post-score(u64? arg_0) {
     set-float(score, 1.00, arg_0);
     set-float(player-score, 1.00, arg_0);
-    foreach (u64? var_3 : get-symbol(seen-infected, ss-ae-vs-infected-post-manager)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-symbol(seen-infected, ss-ae-vs-infected-post-manager)) {
         if (npc-alive?(var_4)) {
             set-float(score, lerp-scale(6.00, 10.00, 0.00, 1.00, distance-between-points(get-spawner-position(arg_0, 1), get-object-position(var_4))) * get-float(score, arg_0), arg_0);
             set-float(score, lerp-scale(
@@ -37,17 +27,7 @@ u64? recalculate-post-score(u64? arg_0) {
         }
     }
     u16 var_20;
-    foreach (u64? var_21 : all-enemy-npcs) {
-        u16 var_22;
-        if (var_21 && *(u16*)(var_21 + 12) == 7) {
-            var_22 = *(u64*)var_21;
-        } else if (var_21 && *(u16*)(var_21 + 12) == 5) {
-            var_22 = *(u64*)var_21;
-        } else if (var_21 && *(u16*)(var_21 + 12) == 4) {
-            var_22 = *(u64*)var_21;
-        } else {
-            var_22 = 0;
-        }
+    foreach (u64? var_22 : all-enemy-npcs) {
         u16 var_24;
         if (npc-alive?(var_22)) {
             if (!npc-target-missing?(var_22, player)) {
@@ -61,7 +41,7 @@ u64? recalculate-post-score(u64? arg_0) {
         var_27 = set-float(player-score, lerp-scale(15.00, 40.00, 1.00, 0.00, distance-between-points(get-spawner-position(arg_0, 1), get-object-position(player))) * get-float(player-score, arg_0), arg_0);
     }
     u64? var_44;
-    if (darray-contains?(get-symbol(occupied-posts, ss-ae-vs-infected-post-manager), new-boxed-value(7, get-self-id()))) {
+    if (darray-contains?(get-symbol(occupied-posts, ss-ae-vs-infected-post-manager), boxed_symbol(get-self-id()))) {
         var_44 = set-float(score, get-float(sticky-rating-boost, ss-ae-vs-infected-post-manager) * get-float(score, arg_0), arg_0);
     } else {
         begin-foreach();
@@ -125,7 +105,7 @@ statescript {
                     while (i < 200) {
                         u64? var_0 = symbol-concat-int32(perch-, i);
                         if (spawner-exists?(var_0)) {
-                            var_2 = darray-append(get-symbol(all-posts, self), new-boxed-value(7, var_0), 1);
+                            var_2 = darray-append(get-symbol(all-posts, self), boxed_symbol(var_0), 1);
                         }
                         i = i + 1;
                     }
@@ -135,51 +115,21 @@ statescript {
                         darray-clear(get-symbol(all-infected, self));
                         darray-clear(get-symbol(all-militia, self));
                         darray-clear(get-symbol(seen-infected, self));
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-is-infected?(var_5)) {
-                                    darray-append(get-symbol(all-infected, self), new-boxed-value(7, var_5), 1);
+                                    darray-append(get-symbol(all-infected, self), boxed_symbol(var_5), 1);
                                 } else {
-                                    darray-append(get-symbol(all-militia, self), new-boxed-value(7, var_5), 1);
+                                    darray-append(get-symbol(all-militia, self), boxed_symbol(var_5), 1);
                                 }
                             }
                         }
-                        foreach (u64? var_16 : get-symbol(all-militia, self)) {
-                            u16 var_17;
-                            if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                                var_17 = *(u64*)var_16;
-                            } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                                var_17 = *(u64*)var_16;
-                            } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                                var_17 = *(u64*)var_16;
-                            } else {
-                                var_17 = 0;
-                            }
+                        foreach (u64? var_17 : get-symbol(all-militia, self)) {
                             if (npc-alive?(var_17)) {
-                                foreach (u64? var_22 : get-symbol(all-infected, self)) {
-                                    u16 var_23;
-                                    if (var_22 && *(u16*)(var_22 + 12) == 7) {
-                                        var_23 = *(u64*)var_22;
-                                    } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-                                        var_23 = *(u64*)var_22;
-                                    } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-                                        var_23 = *(u64*)var_22;
-                                    } else {
-                                        var_23 = 0;
-                                    }
+                                foreach (u64? var_23 : get-symbol(all-infected, self)) {
                                     if (npc-alive?(var_23)) {
                                         if (npc-is-aware-of?(var_17, var_23)) {
-                                            darray-append(get-symbol(seen-infected, self), new-boxed-value(7, var_23), 1);
+                                            darray-append(get-symbol(seen-infected, self), boxed_symbol(var_23), 1);
                                         }
                                     }
                                 }

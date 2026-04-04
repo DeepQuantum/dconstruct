@@ -216,167 +216,167 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
                     animate_(obj-the-dina-couch-1, the_sofa_chesterfield_a_couch_def=cin-the-theater-arrival, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
                     animate_(obj-the-arrival-chair-1, chair=cin-the-theater-arrival, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
                     animate_(obj-the-theater-arrival-front-door-1, theater-doors=cin-the-theater-arrival, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-the-arrival-backpack-dina-1, backpack-dina=cin-the-theater-arrival, var_0);
                 }
                 lambda {
                     if (player-get-weapon-name(1) == bow-ellie) {
                         if (player-get-weapon-name(0) != bow-ellie) {
                             u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                            *(i32*)*(*var_3 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
+                            *(i32*)*var_3[0] = 10;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(u64*)(*var_3[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                            *(i32*)*var_3[1] = 28;
+                            *(u64*)(*var_3[1] + 8) = 0;
                             f32 var_6;
                             if (get-boolean(task-in?, self)) {
                                 var_6 = 0.00;
                             } else {
                                 var_6 = 1.00;
                             }
-                            *(f32*)(*(*var_3 + (1 * 8)) + 8) = var_6;
-                            *(i32*)*(*var_3 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                            *(f32*)(*var_3[1] + 8) = var_6;
+                            *(i32*)*var_3[2] = 30;
+                            *(u64*)(*var_3[2] + 8) = 0;
+                            *(f32*)(*var_3[2] + 8) = 0.50;
                             animate_(player-get-weapon-instance(0), rifle-base-a=cin-the-theater-arrival, var_3);
                             if (!(player-get-weapon-strap-by-slot(0) == 0)) {
                                 u64? var_9 = #%alloc-array(single-frame, 16, 4, 1);
-                                *(i32*)*(*var_9 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-parented-bound-frame(player-get-weapon-instance(0));
-                                *(i32*)*(*var_9 + (1 * 8)) = 28;
-                                *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
+                                *(i32*)*var_9[0] = 10;
+                                *(u64*)(*var_9[0] + 8) = 0;
+                                *(u64*)(*var_9[0] + 8) = get-object-parented-bound-frame(player-get-weapon-instance(0));
+                                *(i32*)*var_9[1] = 28;
+                                *(u64*)(*var_9[1] + 8) = 0;
                                 f32 var_13;
                                 if (get-boolean(from-replay, self)) {
                                     var_13 = 0.00;
                                 } else {
                                     var_13 = 0.00;
                                 }
-                                *(f32*)(*(*var_9 + (1 * 8)) + 8) = var_13;
-                                *(i32*)*(*var_9 + (2 * 8)) = 30;
-                                *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_9 + (2 * 8)) + 8) = 0.50;
-                                *(i32*)*(*var_9 + (3 * 8)) = 14;
-                                *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_9 + (3 * 8)) + 8) = rifle_slot_02;
+                                *(f32*)(*var_9[1] + 8) = var_13;
+                                *(i32*)*var_9[2] = 30;
+                                *(u64*)(*var_9[2] + 8) = 0;
+                                *(f32*)(*var_9[2] + 8) = 0.50;
+                                *(i32*)*var_9[3] = 14;
+                                *(u64*)(*var_9[3] + 8) = 0;
+                                *(u64*)(*var_9[3] + 8) = rifle_slot_02;
                                 animate_(player-get-weapon-strap-by-slot(0), rifle-strap-a=cin-the-theater-arrival, var_9);
                             }
                         }
                     } else {
                         if (!(player-get-weapon-instance(1) == 0)) {
                             u64? var_16 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_16 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                            *(i32*)*(*var_16 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_16 + (1 * 8)) + 8) = 0;
+                            *(i32*)*var_16[0] = 10;
+                            *(u64*)(*var_16[0] + 8) = 0;
+                            *(u64*)(*var_16[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                            *(i32*)*var_16[1] = 28;
+                            *(u64*)(*var_16[1] + 8) = 0;
                             f32 var_19;
                             if (get-boolean(task-in?, self)) {
                                 var_19 = 0.00;
                             } else {
                                 var_19 = 1.00;
                             }
-                            *(f32*)(*(*var_16 + (1 * 8)) + 8) = var_19;
-                            *(i32*)*(*var_16 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_16 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_16 + (2 * 8)) + 8) = 0.50;
+                            *(f32*)(*var_16[1] + 8) = var_19;
+                            *(i32*)*var_16[2] = 30;
+                            *(u64*)(*var_16[2] + 8) = 0;
+                            *(f32*)(*var_16[2] + 8) = 0.50;
                             animate_(player-get-weapon-instance(1), rifle-base-a=cin-the-theater-arrival, var_16);
                             if (!(player-get-weapon-strap-by-slot(1) == 0)) {
                                 u64? var_22 = #%alloc-array(single-frame, 16, 4, 1);
-                                *(i32*)*(*var_22 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_22 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_22 + (0 * 8)) + 8) = get-object-parented-bound-frame(player-get-weapon-instance(1));
-                                *(i32*)*(*var_22 + (1 * 8)) = 28;
-                                *(u64*)(*(*var_22 + (1 * 8)) + 8) = 0;
+                                *(i32*)*var_22[0] = 10;
+                                *(u64*)(*var_22[0] + 8) = 0;
+                                *(u64*)(*var_22[0] + 8) = get-object-parented-bound-frame(player-get-weapon-instance(1));
+                                *(i32*)*var_22[1] = 28;
+                                *(u64*)(*var_22[1] + 8) = 0;
                                 f32 var_26;
                                 if (get-boolean(from-replay, self)) {
                                     var_26 = 0.00;
                                 } else {
                                     var_26 = 0.00;
                                 }
-                                *(f32*)(*(*var_22 + (1 * 8)) + 8) = var_26;
-                                *(i32*)*(*var_22 + (2 * 8)) = 30;
-                                *(u64*)(*(*var_22 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_22 + (2 * 8)) + 8) = 0.50;
-                                *(i32*)*(*var_22 + (3 * 8)) = 14;
-                                *(u64*)(*(*var_22 + (3 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_22 + (3 * 8)) + 8) = rifle_slot_02;
+                                *(f32*)(*var_22[1] + 8) = var_26;
+                                *(i32*)*var_22[2] = 30;
+                                *(u64*)(*var_22[2] + 8) = 0;
+                                *(f32*)(*var_22[2] + 8) = 0.50;
+                                *(i32*)*var_22[3] = 14;
+                                *(u64*)(*var_22[3] + 8) = 0;
+                                *(u64*)(*var_22[3] + 8) = rifle_slot_02;
                                 animate_(player-get-weapon-strap-by-slot(1), rifle-strap-a=cin-the-theater-arrival, var_22);
                             }
                         }
                         if (player-get-weapon-name(0) != bow-ellie) {
                             u64? var_29 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_29 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_29 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_29 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                            *(i32*)*(*var_29 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_29 + (1 * 8)) + 8) = 0;
+                            *(i32*)*var_29[0] = 10;
+                            *(u64*)(*var_29[0] + 8) = 0;
+                            *(u64*)(*var_29[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                            *(i32*)*var_29[1] = 28;
+                            *(u64*)(*var_29[1] + 8) = 0;
                             f32 var_32;
                             if (get-boolean(task-in?, self)) {
                                 var_32 = 0.00;
                             } else {
                                 var_32 = 1.00;
                             }
-                            *(f32*)(*(*var_29 + (1 * 8)) + 8) = var_32;
-                            *(i32*)*(*var_29 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_29 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_29 + (2 * 8)) + 8) = 0.50;
+                            *(f32*)(*var_29[1] + 8) = var_32;
+                            *(i32*)*var_29[2] = 30;
+                            *(u64*)(*var_29[2] + 8) = 0;
+                            *(f32*)(*var_29[2] + 8) = 0.50;
                             animate_(player-get-weapon-instance(0), rifle-base=cin-the-theater-arrival, var_29);
                             if (!(player-get-weapon-strap-by-slot(0) == 0)) {
                                 u64? var_35 = #%alloc-array(single-frame, 16, 4, 1);
-                                *(i32*)*(*var_35 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_35 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_35 + (0 * 8)) + 8) = get-object-parented-bound-frame(player-get-weapon-instance(0));
-                                *(i32*)*(*var_35 + (1 * 8)) = 28;
-                                *(u64*)(*(*var_35 + (1 * 8)) + 8) = 0;
+                                *(i32*)*var_35[0] = 10;
+                                *(u64*)(*var_35[0] + 8) = 0;
+                                *(u64*)(*var_35[0] + 8) = get-object-parented-bound-frame(player-get-weapon-instance(0));
+                                *(i32*)*var_35[1] = 28;
+                                *(u64*)(*var_35[1] + 8) = 0;
                                 f32 var_39;
                                 if (get-boolean(from-replay, self)) {
                                     var_39 = 0.00;
                                 } else {
                                     var_39 = 0.00;
                                 }
-                                *(f32*)(*(*var_35 + (1 * 8)) + 8) = var_39;
-                                *(i32*)*(*var_35 + (2 * 8)) = 30;
-                                *(u64*)(*(*var_35 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_35 + (2 * 8)) + 8) = 0.50;
-                                *(i32*)*(*var_35 + (3 * 8)) = 14;
-                                *(u64*)(*(*var_35 + (3 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_35 + (3 * 8)) + 8) = rifle_slot_01;
+                                *(f32*)(*var_35[1] + 8) = var_39;
+                                *(i32*)*var_35[2] = 30;
+                                *(u64*)(*var_35[2] + 8) = 0;
+                                *(f32*)(*var_35[2] + 8) = 0.50;
+                                *(i32*)*var_35[3] = 14;
+                                *(u64*)(*var_35[3] + 8) = 0;
+                                *(u64*)(*var_35[3] + 8) = rifle_slot_01;
                                 animate_(player-get-weapon-strap-by-slot(0), rifle-strap=cin-the-theater-arrival, var_35);
                             }
                         }
@@ -384,40 +384,40 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[2] + 8) = var_3;
                     animate_(dina, dina=cin-the-theater-arrival, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-the-theater-arrival-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[2] + 8) = var_3;
                     wait-animate_(player, ellie=cin-the-theater-arrival, var_0);
                 }
                 lambda {

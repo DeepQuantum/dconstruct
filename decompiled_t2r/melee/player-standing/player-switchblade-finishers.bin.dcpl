@@ -903,7 +903,7 @@ switchblade-gut-slice-chest-stab-sync
 switchblade-shambler-gut-neck-stab-sync
 switchblade-left-neck-slice-finisher-sync
 embedded@b4890(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
 
 u16 switchblade-face-slash-back-stab-sync
@@ -1466,17 +1466,7 @@ switchblade-gut-slice-chest-stab-sync
 switchblade-shambler-gut-neck-stab-sync
 switchblade-left-neck-slice-finisher-sync
 embedded@b13a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -2462,9 +2452,9 @@ switchblade-left-neck-slice-finisher-sync
 embedded@b0500(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000)
     );
 }
 
@@ -2603,9 +2593,9 @@ embedded@aed78(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -4788,9 +4778,9 @@ embedded@af788(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -4849,17 +4839,7 @@ ellie-switchblade-brute-stab-finisher-fail-sync
 ellie-switchblade-inf-back-knee-finisher-fail-sync
 ellie-switchblade-inf-ice-pick-finisher-fail-sync
 embedded@afaf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
         npc-set-melee-behavior-condition(var_2, 8);
     }
@@ -4907,7 +4887,7 @@ ellie-switchblade-brute-stab-finisher-fail-sync
 ellie-switchblade-inf-back-knee-finisher-fail-sync
 ellie-switchblade-inf-ice-pick-finisher-fail-sync
 embedded@b28f8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(strike-fail, ss-promote-death-hints, new-boxed-value(7, arg_2));
+    return send-event(strike-fail, ss-promote-death-hints, boxed_symbol(arg_2));
 }
 
 u16 ellie-switchblade-inf-shambler-back-knee-finisher-fail-sync
@@ -4945,15 +4925,15 @@ embedded@b1558(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 5.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 5.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(5.00),
         var_5
     );
     u16 var_8;
@@ -4991,7 +4971,7 @@ ellie-switchblade-brute-stab-finisher-fail-sync
 ellie-switchblade-inf-back-knee-finisher-fail-sync
 ellie-switchblade-inf-ice-pick-finisher-fail-sync
 embedded@aebf0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-damage, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2), new-boxed-value(6, 0.00));
+    return broadcast-event(melee-damage, boxed_symbol(arg_1), boxed_symbol(arg_2), boxed_f32(0.00));
 }
 
 f32 ellie-switchblade-inf-shambler-back-knee-finisher-fail-sync__melee-event-advanced@ac520
@@ -7109,17 +7089,7 @@ embedded@aecb0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? switchblade-dog-multi-stab-kill-sync
 switchblade-dog-multi-stab-back-kill-sync
 embedded@b0960(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-is-dog?(var_2) && !(arg_2 == var_2)) {
             melee-fact-set-time(var_2, dog-strafe-start-timer);
             melee-fact-set-bool(arg_1, dog-valid-to-strafe-outer-wait, 1);

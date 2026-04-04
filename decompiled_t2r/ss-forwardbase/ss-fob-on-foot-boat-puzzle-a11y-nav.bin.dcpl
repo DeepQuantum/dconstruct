@@ -28,17 +28,7 @@ sid fob-a11y-get-ladder-joint-closest-to-point(u64? arg_0) {
 
 u16 fob-a11y-get-spline-close-to-object(u64? arg_0, f32 arg_1) {
     u16 var_1;
-    foreach (u64? var_2 : fob-a11y-detection-splines) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : fob-a11y-detection-splines) {
         u64? var_6 = distance-between-locators(get-object-locator(arg_0), spline-locator-closest-to-object-careful(var_3, arg_0));
         u16 var_7;
         if (var_6 <= arg_1) {

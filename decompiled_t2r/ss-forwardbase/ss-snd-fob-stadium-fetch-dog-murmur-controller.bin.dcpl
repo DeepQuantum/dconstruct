@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? fob-dog-murmur-controller--go-to-state(u64? arg_0) {
-    return send-event(go-to-state, ss-snd-fob-stadium-fetch-dog-murmur-controller-1, new-boxed-value(7, arg_0));
+    return send-event(go-to-state, ss-snd-fob-stadium-fetch-dog-murmur-controller-1, boxed_symbol(arg_0));
 }
 
 statescript {

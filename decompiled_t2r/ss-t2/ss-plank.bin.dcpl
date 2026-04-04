@@ -156,7 +156,7 @@ statescript {
                                 1.00,
                                 0
                             ));
-                            darray-append(ss-plank-raycasts-close, new-boxed-value(2, kick-spherecast(var_6, offset-locator(var_6, alloc-vector(0.00, -4.00, 0.00, 1.00, 0)), 0.10, get-self-id(), 7171)), 0);
+                            darray-append(ss-plank-raycasts-close, boxed_i32(kick-spherecast(var_6, offset-locator(var_6, alloc-vector(0.00, -4.00, 0.00, 1.00, 0)), 0.10, get-self-id(), 7171)), 0);
                             i = i + 1;
                         }
                         darray-clear(ss-plank-raycasts-far);

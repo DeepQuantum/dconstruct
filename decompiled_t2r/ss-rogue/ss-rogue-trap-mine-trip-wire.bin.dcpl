@@ -66,7 +66,7 @@ u16 debug-draw-linked-taps-to-disable/f(u16 arg_0) {
 u16 add-tag-symbol-to-group-taps-to-disable(u64? arg_0) {
     u16 var_1;
     if (!(tag-symbol(arg_0, self) == 0)) {
-        var_1 = darray-append(get-symbol(group-taps-to-disable, self), new-boxed-value(7, tag-symbol(arg_0, self)), 1);
+        var_1 = darray-append(get-symbol(group-taps-to-disable, self), boxed_symbol(tag-symbol(arg_0, self)), 1);
     } else {
         var_1 = 0;
     }
@@ -115,17 +115,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-taps-to-disable, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-taps-to-disable, self)) {
                         disable-action-pack(var_4);
                     }
                 }
@@ -134,17 +124,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-taps-to-disable, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-taps-to-disable, self)) {
                         enable-action-pack(var_4, 1);
                     }
                 }

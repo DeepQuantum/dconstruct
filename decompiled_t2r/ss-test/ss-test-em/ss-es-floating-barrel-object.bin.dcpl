@@ -53,7 +53,7 @@ statescript {
                     set-boolean(is-full, 0, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-floating-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-floating-barrel));
                 }
             }
         }
@@ -66,7 +66,7 @@ statescript {
                     set-boolean(is-full, 1, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-sinking-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-sinking-barrel));
                 }
                 lambda {
                     if (get-boolean(parented, self)) {
@@ -114,7 +114,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, self));
+                    fact-set(player, player-interactable, boxed_symbol(self));
                 }
                 lambda {
                     enable-collision-gamedriven(self, 0, 0.00);
@@ -150,7 +150,7 @@ statescript {
                     set-boolean(is-full, 0, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-floating-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-floating-barrel));
                 }
             }
         }
@@ -163,7 +163,7 @@ statescript {
                     set-boolean(is-full, 1, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-sinking-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-sinking-barrel));
                 }
             }
         }
@@ -247,15 +247,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 16;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.40;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 16;
                     animate_(player, swim-attach-idle, var_0);
                 }
                 lambda {
@@ -265,7 +265,7 @@ statescript {
                     stop-animating(player, 2, 0.40, 0, 0);
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     interactable-enable(tag-symbol(interact, self));
@@ -281,7 +281,7 @@ statescript {
                     set-boolean(is-full, 1, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-sinking-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-sinking-barrel));
                 }
                 lambda {
                     if (get-boolean(parented, self)) {
@@ -343,7 +343,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     go(ready, 1);
@@ -359,7 +359,7 @@ statescript {
                     set-boolean(is-full, 0, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-floating-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-floating-barrel));
                 }
             }
         }
@@ -372,7 +372,7 @@ statescript {
                     set-boolean(is-full, 1, self);
                 }
                 lambda {
-                    send-event(set-buoyancy-settings, get-self-id(), new-boxed-value(7, shi-buoyancy-object-sinking-barrel));
+                    send-event(set-buoyancy-settings, get-self-id(), boxed_symbol(shi-buoyancy-object-sinking-barrel));
                 }
             }
         }

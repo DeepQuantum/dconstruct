@@ -71,17 +71,7 @@ statescript {
         block start {
             track setup {
                 lambda {
-                    foreach (u64? var_1 : afm-brewery-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-brewery-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -270,17 +260,7 @@ statescript {
                             wait-one-frame();
                         }
                         if (player-in-region?(rgn-afm-brewery-intro-1, 2)) {
-                            foreach (u64? var_14 : afm-brewery-intro) {
-                                u16 var_15;
-                                if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                    var_15 = *(u64*)var_14;
-                                } else {
-                                    var_15 = 0;
-                                }
+                            foreach (u64? var_15 : afm-brewery-intro) {
                                 if (npc-alive?(var_15)) {
                                     if (!npc-in-meatshield?(var_15)) {
                                         set-symbol(intro-lev-target, var_15, self);
@@ -377,17 +357,7 @@ statescript {
                     set-hardpoint-min-npcs(hard-point-afm-wade-5, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-brewery-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-brewery-npcs) {
                         if (npc-alive?(var_2)) {
                             if (var_2 != npc-afm-brewery-combat-2 && var_2 != npc-afm-brewery-combat-3) {
                                 npc-clear-zone(var_2);
@@ -400,41 +370,21 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-brewery-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-brewery-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                            fact-set(global, search-start-played?, new-boxed-value(1, 1));
-                            fact-set(global, ambush-played?, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                            fact-set(global, search-start-played?, boxed_bool(1));
+                            fact-set(global, ambush-played?, boxed_bool(1));
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-brewery-intro) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-brewery-intro) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                            fact-set(global, search-start-played?, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                            fact-set(global, search-start-played?, boxed_bool(1));
                         }
                     }
                 }
@@ -561,17 +511,7 @@ statescript {
                     group-kill-entity(afm-brewery-reinf, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-brewery-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-brewery-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

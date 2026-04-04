@@ -193,8 +193,8 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-7, self);
             set-symbol(goal-2, pos-8, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-7), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-8), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-7), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-8), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(plant-move?, 1, self);
             debug-draw-text-box-2D(
@@ -273,9 +273,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-17, self);
             set-symbol(goal-2, pos-17, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-17), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-18), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-19), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-17), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-18), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-19), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(plant-move?, 1, self);
             debug-draw-text-box-2D(
@@ -309,9 +309,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-22, self);
             set-symbol(goal-2, pos-22, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-22), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-23), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-24), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-22), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-23), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-24), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(plant-move?, 1, self);
             debug-draw-text-box-2D(
@@ -398,9 +398,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-33, self);
             set-symbol(goal-2, pos-34, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-33), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-35), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-34), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-33), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-35), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-34), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(change-speed?, 1, self);
             debug-draw-text-box-2D(
@@ -419,9 +419,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-36, self);
             set-symbol(goal-2, pos-38, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-36), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-37), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-38), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-36), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-37), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-38), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(change-facing?, 1, self);
             debug-draw-text-box-2D(
@@ -440,9 +440,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-41, self);
             set-symbol(goal-2, pos-39, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-41), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-40), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-39), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-41), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-40), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-39), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(plant-move?, 1, self);
             debug-draw-text-box-2D(
@@ -461,9 +461,9 @@ u16 select-activity(u64? arg_0, u64? arg_1) {
             set-symbol(goal-1, pos-44, self);
             set-symbol(goal-2, pos-42, self);
             set-symbol(goals-array, darray-create(self, -1, 0), self);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-44), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-43), 0);
-            darray-append(get-symbol(goals-array, self), new-boxed-value(7, pos-42), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-44), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-43), 0);
+            darray-append(get-symbol(goals-array, self), boxed_symbol(pos-42), 0);
             set-symbol(goals-array-reversed, reverse-darray(goals-array), self);
             set-boolean(change-speed?, 1, self);
             debug-draw-text-box-2D(
@@ -1163,7 +1163,7 @@ u16 issue-mm-move(u64? arg_0, sid arg_1, u64? arg_2) {
 u64? issue-mm-teleport(u64? arg_0) {
     u64? var_1;
     if (get-boolean(player?, self)) {
-        var_1 = send-event(teleport-player, player, new-boxed-value(18, arg_0));
+        var_1 = send-event(teleport-player, player, boxed_boundframe(arg_0));
     } else {
         var_1 = npc-teleport-to(get-symbol(active-npc, self), arg_0);
     }
@@ -1510,9 +1510,9 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(jump, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(aim, 0)) {
-                            send-event(move, self, new-boxed-value(1, 1));
+                            send-event(move, self, boxed_bool(1));
                         } else {
-                            send-event(move, self, new-boxed-value(1, 0));
+                            send-event(move, self, boxed_bool(0));
                         }
                     }
                 }
@@ -1627,20 +1627,20 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 1));
+                            send-event(change-speed, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 0));
+                            send-event(change-speed, self, boxed_i32(0));
                         }
                     }
                 }
@@ -1768,7 +1768,7 @@ statescript {
                                         } else {
                                             var_41 = 0;
                                         }
-                                        send-event(teleport-player, player, new-boxed-value(18, get-object-locator(var_41)));
+                                        send-event(teleport-player, player, boxed_boundframe(get-object-locator(var_41)));
                                     } else {
                                         u64? var_46 = darray-at(get-symbol(goals-array-reversed, self), i);
                                         u16 var_47;
@@ -2161,18 +2161,18 @@ statescript {
                             npc-m-ambi-entry-table
                         );
                         u64? var_212 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_212 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_212 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_212 + (0 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_212 + (1 * 8)) = 45;
-                        *(u64*)(*(*var_212 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_212 + (1 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_212 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_212 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_212 + (2 * 8)) + 8) = 4;
-                        *(i32*)*(*var_212 + (3 * 8)) = 10;
-                        *(u64*)(*(*var_212 + (3 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_212 + (3 * 8)) + 8) = get-object-locator(get-symbol(goal-2, self));
+                        *(i32*)*var_212[0] = 28;
+                        *(u64*)(*var_212[0] + 8) = 0;
+                        *(f32*)(*var_212[0] + 8) = 0.30;
+                        *(i32*)*var_212[1] = 45;
+                        *(u64*)(*var_212[1] + 8) = 0;
+                        *(f32*)(*var_212[1] + 8) = 0.10;
+                        *(i32*)*var_212[2] = 59;
+                        *(u64*)(*var_212[2] + 8) = 0;
+                        *(i32*)(*var_212[2] + 8) = 4;
+                        *(i32*)*var_212[3] = 10;
+                        *(u64*)(*var_212[3] + 8) = 0;
+                        *(u64*)(*var_212[3] + 8) = get-object-locator(get-symbol(goal-2, self));
                         wait-animate_(get-symbol(active-npc, self), get-symbol(entry-anim, self), var_212);
                     } else if (get-boolean(cover-move?, self)) {
                         npc-teleport-to(get-symbol(active-npc, self), get-object-locator-remove-binding(get-symbol(goal-1, self)));

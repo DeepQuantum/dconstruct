@@ -13,35 +13,15 @@
 
 u64? zone-in-search-enemies-around-player/f(u64? arg_0, u64? arg_1) {
     wave-manager-get-npc-alive-group(ss-wave-manager-1);
-    foreach (u64? var_4 : get-symbol(group-zoned-infected, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
-        if (!npc-alive?(var_5) && darray-contains?(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_5))) {
-            darray-find-remove(get-symbol(group-zoned-infected, self), new-boxed-value(7, var_5), 0);
+    foreach (u64? var_5 : get-symbol(group-zoned-infected, self)) {
+        if (!npc-alive?(var_5) && darray-contains?(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_5))) {
+            darray-find-remove(get-symbol(group-zoned-infected, self), boxed_symbol(var_5), 0);
         }
     }
-    foreach (u64? var_14 : wave-manager-get-lost-player-npc-group(ss-wave-manager-1)) {
-        u16 var_15;
-        if (var_14 && *(u16*)(var_14 + 12) == 7) {
-            var_15 = *(u64*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-            var_15 = *(u64*)var_14;
-        } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-            var_15 = *(u64*)var_14;
-        } else {
-            var_15 = 0;
-        }
-        if (!darray-contains?(get-symbol(group-zoned-infected, self), new-boxed-value(7, var_15)) && !darray-contains?(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_15))) {
+    foreach (u64? var_15 : wave-manager-get-lost-player-npc-group(ss-wave-manager-1)) {
+        if (!darray-contains?(get-symbol(group-zoned-infected, self), boxed_symbol(var_15)) && !darray-contains?(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_15))) {
             npc-set-zone-center-object-and-radius-and-height(var_15, player, arg_0, arg_1);
-            darray-append(get-symbol(group-zoned-infected, self), new-boxed-value(7, var_15), 1);
+            darray-append(get-symbol(group-zoned-infected, self), boxed_symbol(var_15), 1);
         }
     }
     return set-int32(num-zoned-infected, darray-count(get-symbol(group-zoned-infected, self)), self);
@@ -77,19 +57,9 @@ statescript {
                 lambda {
                     u64? var_1 = event-arg-symbol(1);
                     set-symbol(cheat-zone-region, var_1, self);
-                    foreach (u64? var_3 : event-arg-symbol(0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : event-arg-symbol(0)) {
                         npc-set-zone-region(var_4, var_1);
-                        darray-append(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_4), 1);
+                        darray-append(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_4), 1);
                     }
                     set-int32(num-cheat-zoned-infected, darray-count(get-symbol(group-cheat-zoned-infected, self)), self);
                 }
@@ -98,19 +68,9 @@ statescript {
         block event clear-zone-cheat-search {
             track main {
                 lambda {
-                    foreach (u64? var_2 : event-arg-symbol(0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : event-arg-symbol(0)) {
                         npc-clear-zone(var_3);
-                        darray-find-remove(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_3), 0);
+                        darray-find-remove(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_3), 0);
                     }
                     set-int32(num-cheat-zoned-infected, darray-count(get-symbol(group-cheat-zoned-infected, self)), self);
                 }
@@ -169,12 +129,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(group-zoned-infected, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(group-zoned-infected, self), new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(group-zoned-infected, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(group-zoned-infected, self), boxed_symbol(var_0), 0);
                         set-int32(num-zoned-infected, darray-count(get-symbol(group-zoned-infected, self)), self);
                     }
-                    if (darray-contains?(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(group-cheat-zoned-infected, self), new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(group-cheat-zoned-infected, self), boxed_symbol(var_0), 0);
                         var_11 = set-int32(num-cheat-zoned-infected, darray-count(get-symbol(group-cheat-zoned-infected, self)), self);
                     }
                 }
@@ -183,17 +143,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-zoned-infected, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-zoned-infected, self)) {
                         if (npc-alive?(var_4)) {
                             npc-clear-zone(var_4);
                         }

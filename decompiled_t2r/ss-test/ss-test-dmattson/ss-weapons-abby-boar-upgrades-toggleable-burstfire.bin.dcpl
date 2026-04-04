@@ -13,19 +13,19 @@
 
 u64? player-has-vepr-burst-fire?() {
     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
-    return !(var_0 == 0) && darray-contains?(var_0, new-boxed-value(7, burst-fire-kit));
+    return !(var_0 == 0) && darray-contains?(var_0, boxed_symbol(burst-fire-kit));
 }
 
 u64? player-aiming-with-vepr?() {
-    return get-player-weapon-id() == rifle-vepr || player-in-state?(GunMove) && player-in-state?(Prone) || player-is-aiming?() && darray-contains?(player-weapon-upgrade-get-active-bundles(rifle-vepr), new-boxed-value(7, bipod-active));
+    return get-player-weapon-id() == rifle-vepr || player-in-state?(GunMove) && player-in-state?(Prone) || player-is-aiming?() && darray-contains?(player-weapon-upgrade-get-active-bundles(rifle-vepr), boxed_symbol(bipod-active));
 }
 
 u16 player-vepr-get-burst-fire-state() {
     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
     u16 var_1;
     if (!(var_0 == 0)) {
-        if (darray-contains?(var_0, new-boxed-value(7, burst-fire-kit))) {
-            if (darray-contains?(var_0, new-boxed-value(7, burst-fire-active))) {
+        if (darray-contains?(var_0, boxed_symbol(burst-fire-kit))) {
+            if (darray-contains?(var_0, boxed_symbol(burst-fire-active))) {
                 var_1 = 1;
             }
         }
@@ -119,7 +119,7 @@ statescript {
                     if (joypad-command-active?(toggle-burst-fire, 6)) {
                         set-float(time-last-burst-fire-toggled, get-current-time(0), self);
                         u64? var_2 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
-                        if (!(var_2 == 0) && darray-contains?(var_2, new-boxed-value(7, burst-fire-active))) {
+                        if (!(var_2 == 0) && darray-contains?(var_2, boxed_symbol(burst-fire-active))) {
                             var_5 = go(disable-burst-fire, 1);
                         } else {
                             var_5 = go(enable-burst-fire, 1);

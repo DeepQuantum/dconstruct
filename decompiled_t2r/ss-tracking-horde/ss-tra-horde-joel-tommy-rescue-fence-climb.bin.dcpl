@@ -16,7 +16,7 @@ u16 tra-horde-go-to-fence(u16 arg_0, u64? arg_1) {
     if (arg_0 == 1) {
         wait(arg_1);
         u64? var_1 = wait-spawn-npc(npc-fence-climber-5, 0, 0);
-        darray-append(tra-horde-fence-climbers, new-boxed-value(7, var_1), 1);
+        darray-append(tra-horde-fence-climbers, boxed_symbol(var_1), 1);
         npc-set-demeanor(var_1, 2, 0);
         wait-npc-move-to-entry-frame(
             var_1,
@@ -31,30 +31,30 @@ u16 tra-horde-go-to-fence(u16 arg_0, u64? arg_1) {
             npc-m-search-entry-table
         );
         u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_4 + (0 * 8)) = 10;
-        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-        *(i32*)*(*var_4 + (1 * 8)) = 28;
-        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_4 + (2 * 8)) = 30;
-        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+        *(i32*)*var_4[0] = 10;
+        *(u64*)(*var_4[0] + 8) = 0;
+        *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+        *(i32*)*var_4[1] = 28;
+        *(u64*)(*var_4[1] + 8) = 0;
+        *(f32*)(*var_4[1] + 8) = 0.50;
+        *(i32*)*var_4[2] = 30;
+        *(u64*)(*var_4[2] + 8) = 0;
+        *(f32*)(*var_4[2] + 8) = 0.50;
         wait-animate_(var_1, tra-horde-fence-climb-intro--female-a, var_4);
         u64? var_6 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_6 + (0 * 8)) = 10;
-        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-        *(i32*)*(*var_6 + (1 * 8)) = 28;
-        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_6 + (2 * 8)) = 30;
-        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.50;
+        *(i32*)*var_6[0] = 10;
+        *(u64*)(*var_6[0] + 8) = 0;
+        *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+        *(i32*)*var_6[1] = 28;
+        *(u64*)(*var_6[1] + 8) = 0;
+        *(f32*)(*var_6[1] + 8) = 0.50;
+        *(i32*)*var_6[2] = 30;
+        *(u64*)(*var_6[2] + 8) = 0;
+        *(f32*)(*var_6[2] + 8) = 0.50;
         animate_(var_1, tra-horde-fence-climb--female-a, var_6);
         u16 var_9;
         if (npc-alive?(var_1)) {
-            var_9 = darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_1), 1);
+            var_9 = darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_1), 1);
         } else {
             var_9 = 0;
         }
@@ -62,7 +62,7 @@ u16 tra-horde-go-to-fence(u16 arg_0, u64? arg_1) {
     } else {
         wait(arg_1);
         u64? var_12 = wait-spawn-npc(npc-fence-climber-6, 0, 0);
-        darray-append(tra-horde-fence-climbers, new-boxed-value(7, var_12), 1);
+        darray-append(tra-horde-fence-climbers, boxed_symbol(var_12), 1);
         npc-set-demeanor(var_12, 2, 0);
         wait-npc-move-to-entry-frame(
             var_12,
@@ -77,30 +77,30 @@ u16 tra-horde-go-to-fence(u16 arg_0, u64? arg_1) {
             npc-m-search-entry-table
         );
         u64? var_15 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_15 + (0 * 8)) = 10;
-        *(u64*)(*(*var_15 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_15 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-        *(i32*)*(*var_15 + (1 * 8)) = 28;
-        *(u64*)(*(*var_15 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_15 + (1 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_15 + (2 * 8)) = 30;
-        *(u64*)(*(*var_15 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_15 + (2 * 8)) + 8) = 0.50;
+        *(i32*)*var_15[0] = 10;
+        *(u64*)(*var_15[0] + 8) = 0;
+        *(u64*)(*var_15[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+        *(i32*)*var_15[1] = 28;
+        *(u64*)(*var_15[1] + 8) = 0;
+        *(f32*)(*var_15[1] + 8) = 0.50;
+        *(i32*)*var_15[2] = 30;
+        *(u64*)(*var_15[2] + 8) = 0;
+        *(f32*)(*var_15[2] + 8) = 0.50;
         wait-animate_(var_12, tra-horde-fence-climb-intro--female, var_15);
         u64? var_17 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_17 + (0 * 8)) = 10;
-        *(u64*)(*(*var_17 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_17 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-        *(i32*)*(*var_17 + (1 * 8)) = 28;
-        *(u64*)(*(*var_17 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_17 + (1 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_17 + (2 * 8)) = 30;
-        *(u64*)(*(*var_17 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_17 + (2 * 8)) + 8) = 0.50;
+        *(i32*)*var_17[0] = 10;
+        *(u64*)(*var_17[0] + 8) = 0;
+        *(u64*)(*var_17[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+        *(i32*)*var_17[1] = 28;
+        *(u64*)(*var_17[1] + 8) = 0;
+        *(f32*)(*var_17[1] + 8) = 0.50;
+        *(i32*)*var_17[2] = 30;
+        *(u64*)(*var_17[2] + 8) = 0;
+        *(f32*)(*var_17[2] + 8) = 0.50;
         animate_(var_12, tra-horde-fence-climb--female, var_17);
         u16 var_20;
         if (npc-alive?(var_12)) {
-            var_20 = darray-append(tra-horde-rescue-attacking-infected, new-boxed-value(7, var_12), 1);
+            var_20 = darray-append(tra-horde-rescue-attacking-infected, boxed_symbol(var_12), 1);
         } else {
             var_20 = 0;
         }
@@ -163,10 +163,10 @@ statescript {
                     wait-spawn-npc(npc-fence-climber-4, 0, 0);
                 }
                 lambda {
-                    darray-append(tra-horde-fence-climbers, new-boxed-value(7, npc-fence-climber-1), 1);
+                    darray-append(tra-horde-fence-climbers, boxed_symbol(npc-fence-climber-1), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-fence-climbers, new-boxed-value(7, npc-fence-climber-2), 1);
+                    darray-append(tra-horde-fence-climbers, boxed_symbol(npc-fence-climber-2), 1);
                 }
                 lambda {
                     go(idle, 1);
@@ -183,45 +183,45 @@ statescript {
                 lambda {
                     if (npc-alive?(npc-fence-climber-1) && npc-alive?(npc-fence-climber-2)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         animate_(obj-tra-horde-fence-5, tra-horde-fence-climb--fence, var_2);
                     }
                 }
                 lambda {
                     if (npc-alive?(npc-fence-climber-1)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(npc-fence-climber-1, tra-horde-fence-climb-idle--female-a, var_1);
                     }
                 }
                 lambda {
                     if (npc-alive?(npc-fence-climber-2)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
                         animate_(npc-fence-climber-2, tra-horde-fence-climb-idle--female, var_1);
                     }
                 }
@@ -247,12 +247,12 @@ statescript {
                             var_4 = "";
                         }
                         u64? var_6 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_6 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_6[1] = 30;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(f32*)(*var_6[1] + 8) = 0.50;
                         animate_(var_2, symbol-concat-string(tra-horde-fence-climb-idle, var_4), var_6);
                         i = i + 1;
                     }
@@ -279,47 +279,47 @@ statescript {
                             var_4 = "";
                         }
                         u64? var_6 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_6 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_6[1] = 30;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(f32*)(*var_6[1] + 8) = 0.50;
                         animate_(var_2, symbol-concat-string(tra-horde-fence-climb-idle, var_4), var_6);
                         i = i + 1;
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-tra-horde-fence-4, tra-horde-fence-climb--fence-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(npc-fence-climber-3, tra-horde-fence-climb-idle--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(npc-fence-climber-4, tra-horde-fence-climb-idle--male-a, var_0);
                 }
                 lambda {
@@ -352,21 +352,21 @@ statescript {
                 lambda {
                     if (!get-boolean(stop-fence?, self) && !get-boolean(dead-fence?, self) && !npc-alive?(npc-fence-climber-1) && !npc-alive?(snpc-fence-runner-2)) {
                         u64? var_4 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_4 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_4[1] = 57;
+                        *(u64*)(*var_4[1] + 8) = 0;
                         f32 var_7;
                         if (get-animation-frame(obj-tra-horde-fence-5, 2, 0) <= 201.00) {
                             var_7 = get-animation-frame(obj-tra-horde-fence-5, 2, 0) + 1.00;
                         } else {
                             var_7 = (get-animation-frame(obj-tra-horde-fence-5, 2, 0) + 1.00) - 202.00;
                         }
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = var_7;
-                        *(i32*)*(*var_4 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
+                        *(f32*)(*var_4[1] + 8) = var_7;
+                        *(i32*)*var_4[2] = 30;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(f32*)(*var_4[2] + 8) = 0.50;
                         animate_(obj-tra-horde-fence-5, tra-horde-fence-climb-dead--fence, var_4);
                         set-boolean(dead-fence?, 1, self);
                     }
@@ -380,35 +380,35 @@ statescript {
                 lambda {
                     if (!get-boolean(stop-fence?, self) && !get-boolean(dead-fence?, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                        *(i32*)*var_2[1] = 57;
+                        *(u64*)(*var_2[1] + 8) = 0;
                         f32 var_5;
                         if (get-animation-frame(obj-tra-horde-fence-5, 2, 0) <= 201.00) {
                             var_5 = get-animation-frame(obj-tra-horde-fence-5, 2, 0) + 1.00;
                         } else {
                             var_5 = (get-animation-frame(obj-tra-horde-fence-5, 2, 0) + 1.00) - 202.00;
                         }
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = var_5;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
+                        *(f32*)(*var_2[1] + 8) = var_5;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
                         animate_(obj-tra-horde-fence-5, tra-horde-fence-climb-dead--fence, var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(npc-fence-climber-1, tra-horde-fence-climb--female-a, var_0);
                 }
                 lambda {
@@ -435,15 +435,15 @@ statescript {
             track second-one {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-fence-climb-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(npc-fence-climber-2, tra-horde-fence-climb--female, var_0);
                 }
             }
@@ -490,17 +490,7 @@ statescript {
                     wait-boolean(player-safe?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-fence-climbers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-fence-climbers) {
                         kill-entity(var_2);
                     }
                 }
@@ -518,24 +508,14 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(tra-horde-fence-climbers, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(tra-horde-fence-climbers, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-fence-climbers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-fence-climbers) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, joel, 2, *npc-awareness-options-no-surprise*);
@@ -624,17 +604,7 @@ statescript {
                     wait-boolean(player-safe?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-fence-climbers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-fence-climbers) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
@@ -648,7 +618,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(tra-horde-fence-climbers, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(tra-horde-fence-climbers, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -656,17 +626,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(player-safe?, self)) {
-                        foreach (u64? var_2 : tra-horde-fence-climbers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : tra-horde-fence-climbers) {
                             if (npc-alive?(var_3)) {
                                 npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);
                                 npc-make-aware-of(var_3, joel, 2, *npc-awareness-options-no-surprise*);

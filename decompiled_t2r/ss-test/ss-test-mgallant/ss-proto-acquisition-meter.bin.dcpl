@@ -31,17 +31,7 @@ statescript {
                     u64? var_3;
                     u64? var_4;
                     u64? var_5;
-                    foreach (u64? var_6 : stealth-acquisition-meter-npcs) {
-                        u16 var_7;
-                        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                            var_7 = *(u64*)var_6;
-                        } else {
-                            var_7 = 0;
-                        }
+                    foreach (u64? var_7 : stealth-acquisition-meter-npcs) {
                         f32 var_9;
                         f32 var_10;
                         u64? var_11;
@@ -147,7 +137,7 @@ statescript {
                 }
                 lambda {
                     if (tag-boolean(stealth-acquisition-meter, event-arg-symbol(0))) {
-                        darray-append(stealth-acquisition-meter-npcs, new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(stealth-acquisition-meter-npcs, boxed_symbol(event-arg-symbol(0)), 1);
                     }
                 }
             }
@@ -155,8 +145,8 @@ statescript {
         block event npc-killed {
             track main {
                 lambda {
-                    if (darray-contains?(stealth-acquisition-meter-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(stealth-acquisition-meter-npcs, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(stealth-acquisition-meter-npcs, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(stealth-acquisition-meter-npcs, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }
@@ -164,8 +154,8 @@ statescript {
         block event npc-destroyed {
             track main {
                 lambda {
-                    if (darray-contains?(stealth-acquisition-meter-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(stealth-acquisition-meter-npcs, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(stealth-acquisition-meter-npcs, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(stealth-acquisition-meter-npcs, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }

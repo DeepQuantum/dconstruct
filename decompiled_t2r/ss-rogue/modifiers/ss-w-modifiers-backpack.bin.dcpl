@@ -17,17 +17,7 @@ u64? create-backpack-skull-widgets() {
     while (!is-script-running?(ss-modifiers-manager-1)) {
         wait-one-frame();
     }
-    foreach (u64? var_4 : grp-added-skull-indices) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : grp-added-skull-indices) {
         u64? var_6 = gui2-spawn-widget(var_0, "t2r-hud-rogue/t2r-hud-modifier", 0, 1);
         gui2-set-widget-text-cipher(gui2-find-widget-path("titleText", var_6), *(u64*)((**t2r-skulls-array* + (var_5 * 152)) + 16));
         gui2-set-widget-text-cipher(gui2-find-widget-path("descrText", var_6), *(u64*)((**t2r-skulls-array* + (var_5 * 152)) + 24));

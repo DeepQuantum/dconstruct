@@ -27,9 +27,9 @@ u16 motor-minigame-increase-cumulative-power() {
         var_1 = set-float(cumulative-power, var_4, self);
     } else if (get-float(current-power, self) > 0.18) {
         if (darray-count(motor-minigame-previous-power-peaks) <= get-int32(successful-pull-count, self)) {
-            darray-append(motor-minigame-previous-power-peaks, new-boxed-value(6, get-float(cumulative-power, self)), 0);
+            darray-append(motor-minigame-previous-power-peaks, boxed_f32(get-float(cumulative-power, self)), 0);
         } else {
-            darray-set(motor-minigame-previous-power-peaks, get-int32(successful-pull-count, self), new-boxed-value(6, get-float(cumulative-power, self)));
+            darray-set(motor-minigame-previous-power-peaks, get-int32(successful-pull-count, self), boxed_f32(get-float(cumulative-power, self)));
         }
         set-boolean(increase-cumulative-power?, 0, self);
         if (!task-active?(flooded-city, flo-approach-bay-wreck)) {
@@ -161,7 +161,7 @@ u16 motor-minigame-ui-update-widget() {
             if (!get-boolean(exit-requested?, self)) {
                 if (!var_7) {
                     set-symbol(w-power, gui2-spawn-widget(canvas.hudRoot, "hud-minigames/hud-motor/motor-root", 0, 1), self);
-                    send-event(pass-boat-object, get-symbol(w-power, self), new-boxed-value(7, get-self-id()));
+                    send-event(pass-boat-object, get-symbol(w-power, self), boxed_symbol(get-self-id()));
                     set-symbol(w-miss-pos, gui2-find-widget-path("missPos", get-symbol(w-power, self)), self);
                     set-symbol(w-progress, gui2-find-widget-path("progress", get-symbol(w-power, self)), self);
                     set-symbol(w-prompt, gui2-find-widget-path("prompt", get-symbol(w-power, self)), self);
@@ -370,12 +370,12 @@ statescript {
                 lambda {
                     if (tag-boolean(has-running-performance, self)) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_3 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.30;
+                        *(i32*)*var_3[0] = 28;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(f32*)(*var_3[0] + 8) = 0.30;
+                        *(i32*)*var_3[1] = 30;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.30;
                         animate_(motor-minigame-get-target-object(), tag-symbol(running-idle-anim, self), var_3);
                         if (tag-boolean(running-idle-has-light, self)) {
                             u64? var_5 = get-current-time(0);
@@ -801,7 +801,7 @@ statescript {
                     } else {
                         var_1 = 0;
                     }
-                    broadcast-event(pull-attempt-result, new-boxed-value(2, var_1));
+                    broadcast-event(pull-attempt-result, boxed_i32(var_1));
                 }
                 lambda {
                     if (!get-boolean(ignore-input?, self)) {
@@ -872,8 +872,8 @@ statescript {
                     send-event(
                         success,
                         get-symbol(w-power, self),
-                        new-boxed-value(2, get-int32(successful-pull-count, self)),
-                        new-boxed-value(2, darray-count(get-symbol(pull-impulse-darray, self)) - 1)
+                        boxed_i32(get-int32(successful-pull-count, self)),
+                        boxed_i32(darray-count(get-symbol(pull-impulse-darray, self)) - 1)
                     );
                 }
                 lambda {
@@ -996,7 +996,7 @@ statescript {
             }
             track logic {
                 lambda {
-                    broadcast-event(motor-minigame-success, new-boxed-value(7, motor-minigame-get-target-object()));
+                    broadcast-event(motor-minigame-success, boxed_symbol(motor-minigame-get-target-object()));
                 }
                 lambda {
                     set-boolean(power-on?, 1, self);

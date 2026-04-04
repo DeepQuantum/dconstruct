@@ -495,7 +495,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(faction-player, restrict-callout-kills, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-player, restrict-callout-kills, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     wait(4.00);

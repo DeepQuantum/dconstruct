@@ -23,8 +23,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(proto-horde-chase, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(proto-horde-chase, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(proto-horde-chase, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(proto-horde-chase, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }
@@ -40,33 +40,13 @@ statescript {
                     wait-spawn-npc-group-async(proto-horde-chase-simple, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : proto-horde-chase) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : proto-horde-chase) {
                         set-int32(index, 0, var_2);
                         set-int32(my-group-count, darray-count(proto-horde-chase), var_2);
                         set-symbol(chase-track, spl-horde-chase-3, var_2);
                         set-symbol(catchup-spawners, proto-horde-catchup, var_2);
                     }
-                    foreach (u64? var_6 : proto-horde-chase-simple) {
-                        u16 var_7;
-                        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                            var_7 = *(u64*)var_6;
-                        } else {
-                            var_7 = 0;
-                        }
+                    foreach (u64? var_7 : proto-horde-chase-simple) {
                         set-int32(index, 0, var_7);
                         set-int32(my-group-count, darray-count(proto-horde-chase-simple), var_7);
                         set-symbol(chase-track, spl-horde-chase-3, var_7);

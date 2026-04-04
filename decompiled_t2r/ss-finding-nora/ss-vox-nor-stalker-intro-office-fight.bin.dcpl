@@ -125,17 +125,7 @@ statescript {
                 lambda {
                     if (task-active?(find-nora, nor-stalker-intro-office-fight)) {
                         set-boolean(being-chased?, 0, self);
-                        foreach (u64? var_2 : vox-nor-intro-stalkers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : vox-nor-intro-stalkers) {
                             if (npc-alive?(var_3) && !(npc-using-skill?(var_3, 3))) {
                                 set-boolean(being-chased?, 1, self);
                             }

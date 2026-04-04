@@ -97,17 +97,7 @@ statescript {
                     kill-particles(get-uint64(ellie-making-snowball-particle, self), 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-pickups) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-pickups) {
                         interactable-enable(var_2);
                     }
                 }
@@ -146,17 +136,7 @@ statescript {
                     player-pickup(event-arg-symbol(0), 1, -1, 1, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-pickups) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-pickups) {
                         interactable-disable(var_2);
                     }
                 }
@@ -536,17 +516,7 @@ statescript {
                     stop-animating(player, 2, 0.00, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-pickups) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-pickups) {
                         interactable-disable(var_2);
                     }
                 }

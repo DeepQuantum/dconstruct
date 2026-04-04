@@ -325,7 +325,7 @@ statescript {
         block event pap-entered {
             track main {
                 lambda {
-                    if (darray-contains?(pap-names, new-boxed-value(7, event-arg-symbol(1))) && darray-contains?(other-pap-names, new-boxed-value(7, event-arg-symbol(1)))) {
+                    if (darray-contains?(pap-names, boxed_symbol(event-arg-symbol(1))) && darray-contains?(other-pap-names, boxed_symbol(event-arg-symbol(1)))) {
                         set-symbol(pap-name, event-arg-symbol(1), self);
                         go(reading-in-cap, 1);
                     }
@@ -369,8 +369,8 @@ statescript {
                 lambda {
                     u64? var_1 = random-integer(darray-count(look-at-voxs), 0, 0);
                     u16 var_8;
-                    if (darray-contains?(pap-names, new-boxed-value(7, get-symbol(pap-name, self))) && !darray-contains?(done-vox-paps, new-boxed-value(7, get-symbol(pap-name, self)))) {
-                        u64? var_12 = darray-at(dino-voxs, darray-find(pap-names, new-boxed-value(7, get-symbol(pap-name, self)), 0));
+                    if (darray-contains?(pap-names, boxed_symbol(get-symbol(pap-name, self))) && !darray-contains?(done-vox-paps, boxed_symbol(get-symbol(pap-name, self)))) {
+                        u64? var_12 = darray-at(dino-voxs, darray-find(pap-names, boxed_symbol(get-symbol(pap-name, self)), 0));
                         u16 var_13;
                         if (var_12 && *(u16*)(var_12 + 12) == 7) {
                             var_13 = *(u64*)var_12;
@@ -381,7 +381,7 @@ statescript {
                         } else {
                             var_13 = 0;
                         }
-                        darray-append(done-vox-paps, new-boxed-value(7, get-symbol(pap-name, self)), 1);
+                        darray-append(done-vox-paps, boxed_symbol(get-symbol(pap-name, self)), 1);
                         var_8 = var_13;
                     } else {
                         u64? var_16 = darray-at(look-at-voxs, var_1);
@@ -578,7 +578,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait(1.00);
@@ -590,7 +590,7 @@ statescript {
                     wait(1.50);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -599,13 +599,13 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(5.00));
                 }
                 lambda {
                     wait(1.50);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-2);
@@ -614,19 +614,19 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 10.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(10.00));
                 }
                 lambda {
                     wait(3.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-for(book-2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(5.00));
                 }
             }
             track joel-look-at {
@@ -751,7 +751,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -763,7 +763,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -772,7 +772,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(5.00));
                 }
             }
         }
@@ -859,7 +859,7 @@ statescript {
             }
             track anims {
                 lambda {
-                    send-event(look-at, ss-efm-player-look-at-manager-1, new-boxed-value(7, joel), new-boxed-value(6, 20.00));
+                    send-event(look-at, ss-efm-player-look-at-manager-1, boxed_symbol(joel), boxed_f32(20.00));
                 }
             }
             track gestures {
@@ -974,7 +974,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -986,7 +986,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -995,7 +995,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(5.00));
                 }
             }
             track joel-look-ats {
@@ -1128,7 +1128,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -1140,7 +1140,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -1149,7 +1149,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(5.00));
                 }
             }
             track gestures {
@@ -1394,7 +1394,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -1406,7 +1406,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -1415,7 +1415,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 20.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(20.00));
                 }
             }
             track gestures {
@@ -1558,7 +1558,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -1570,7 +1570,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -1579,7 +1579,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 20.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(20.00));
                 }
             }
             track gestures {
@@ -1740,7 +1740,7 @@ statescript {
                     wait-frames(2);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, dino), new-boxed-value(6, 5.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(dino), boxed_f32(5.00));
                 }
                 lambda {
                     wait-frames(2);
@@ -1752,7 +1752,7 @@ statescript {
                     wait-for(book-1);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, book));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(book));
                 }
                 lambda {
                     wait-for(joel-1);
@@ -1761,7 +1761,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(look-at, ss-efm-dinosaur-book-controller-1, new-boxed-value(7, joel), new-boxed-value(6, 20.00));
+                    send-event(look-at, ss-efm-dinosaur-book-controller-1, boxed_symbol(joel), boxed_f32(20.00));
                 }
             }
             track gestures {

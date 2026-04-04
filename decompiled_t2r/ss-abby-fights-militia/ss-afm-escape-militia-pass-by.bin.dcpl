@@ -83,33 +83,13 @@ statescript {
                     wait-spawn-entity-group-async(grp-afm-escape-militia-pass-by-militia, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-escape-militia-pass-by-weapons) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-escape-militia-pass-by-weapons) {
                         set-instance-flag-enemy(var_2, 1);
                         set-high-contrast-mode-type(var_2, 7);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-escape-militia-pass-by-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-escape-militia-pass-by-militia) {
                         if (is-npc?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                             set-focusable-ignore(var_2, 1);
@@ -218,17 +198,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-escape-militia-pass-by-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-escape-militia-pass-by-militia) {
                         listen-mode-add-reveal(
                             var_2,
                             var_2,
@@ -252,9 +222,9 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                     animate_(npc-get-weapon-process-id(npc-afm-escape-militia-pass-by-1), afm-escape-militia-pass-by--rifle-a, var_1);
                 }
                 lambda {
@@ -265,9 +235,9 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                     animate_(npc-get-weapon-process-id(npc-afm-escape-militia-pass-by-5), afm-escape-militia-pass-by--rifle-d, var_1);
                 }
                 lambda {
@@ -278,9 +248,9 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                     animate_(npc-get-weapon-process-id(npc-afm-escape-militia-pass-by-6), afm-escape-militia-pass-by--rifle-e, var_1);
                 }
                 lambda {
@@ -312,9 +282,9 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -348,9 +318,9 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
@@ -377,9 +347,9 @@ statescript {
                         var_20 = 0;
                     }
                     u64? var_21 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_21 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
+                    *(i32*)*var_21[0] = 10;
+                    *(u64*)(*var_21[0] + 8) = 0;
+                    *(u64*)(*var_21[0] + 8) = get-spawner-locator(ap-afm-escape-militia-pass-by-1, 1);
                     wait-animate_(var_17, var_20, var_21);
                 }
                 lambda {

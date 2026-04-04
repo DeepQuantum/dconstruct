@@ -43,17 +43,7 @@ u64? get-avp-control-text() {
 
 u64? get-selected-actor-anims-with-selection(u64? arg_0) {
     u64? var_3;
-    foreach (u64? var_6 : get-symbol(anim-darray, symbol-concat-string(arg_0, "-script"))) {
-        u16 var_7;
-        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-            var_7 = *(u64*)var_6;
-        } else {
-            var_7 = 0;
-        }
+    foreach (u64? var_7 : get-symbol(anim-darray, symbol-concat-string(arg_0, "-script"))) {
         u64? var_8 = ddict-get(var_7, anim);
         u16 var_9;
         if (var_8 && *(u16*)(var_8 + 12) == 7) {
@@ -115,17 +105,7 @@ u64? get-selected-actor-anims-with-selection(u64? arg_0) {
 
 u64? get-actors-with-selection(u64? arg_0, u16 arg_1) {
     u64? var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         u64? var_4;
         if (var_3 == arg_1) {
             var_4 = dc:format("%s<font color="#00FF00">%s</font>  ", "", string-debug(var_3));
@@ -582,7 +562,7 @@ statescript {
         block event actor-initialized {
             track main {
                 lambda {
-                    darray-append(avp-actors, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-append(avp-actors, boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
                     set-boolean(use-animated-cam?, event-arg-boolean(1), self);
@@ -602,7 +582,7 @@ statescript {
         block event setup-prop-actor {
             track main {
                 lambda {
-                    darray-append(avp-actors, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-append(avp-actors, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
@@ -790,7 +770,7 @@ statescript {
                             } else {
                                 var_45 = 0;
                             }
-                            broadcast-event(camera-start, new-boxed-value(7, var_45));
+                            broadcast-event(camera-start, boxed_symbol(var_45));
                         }
                     }
                 }
@@ -934,7 +914,7 @@ statescript {
                         if (i == 0) {
                             u64? var_2 = event-arg-string(0);
                             if (ddict-find-key(get-symbol(anim-actor-ddict, self), string-to-symbol(var_2)) == -1) {
-                                ddict-set(get-symbol(anim-actor-ddict, self), string-to-symbol(var_2), new-boxed-value(7, darray-create(self, -1, 0)));
+                                ddict-set(get-symbol(anim-actor-ddict, self), string-to-symbol(var_2), boxed_symbol(darray-create(self, -1, 0)));
                             }
                             var_1 = var_2;
                         } else {
@@ -949,7 +929,7 @@ statescript {
                             } else {
                                 var_13 = 0;
                             }
-                            darray-append(var_13, new-boxed-value(19, event-arg-string(i)), 0);
+                            darray-append(var_13, boxed_stringcopy(event-arg-string(i)), 0);
                         }
                         i = i + 1;
                     }
@@ -1143,34 +1123,14 @@ statescript {
                     } else {
                         if (get-boolean(spawn-mode?, self) && shared-joypad-active?(debug-script-press-r2) && !is-locator-blank?(get-bound-frame(spawn-bound-frame, self), 0)) {
                             set-object-locator(fpark-actor-viewer-ap-1, get-bound-frame(spawn-bound-frame, self));
-                            foreach (u64? var_26 : avp-actors) {
-                                u16 var_27;
-                                if (var_26 && *(u16*)(var_26 + 12) == 7) {
-                                    var_27 = *(u64*)var_26;
-                                } else if (var_26 && *(u16*)(var_26 + 12) == 5) {
-                                    var_27 = *(u64*)var_26;
-                                } else if (var_26 && *(u16*)(var_26 + 12) == 4) {
-                                    var_27 = *(u64*)var_26;
-                                } else {
-                                    var_27 = 0;
-                                }
+                            foreach (u64? var_27 : avp-actors) {
                                 update-ap-ref(var_27, get-object-locator(fpark-actor-viewer-ap-1), 0);
                             }
                         }
                         if (shared-joypad-active?(debug-script-press-square)) {
                             if (get-boolean(spawn-mode?, self)) {
                                 set-object-locator(fpark-actor-viewer-ap-1, get-bound-frame(starting-ap-ref, self));
-                                foreach (u64? var_34 : avp-actors) {
-                                    u16 var_35;
-                                    if (var_34 && *(u16*)(var_34 + 12) == 7) {
-                                        var_35 = *(u64*)var_34;
-                                    } else if (var_34 && *(u16*)(var_34 + 12) == 5) {
-                                        var_35 = *(u64*)var_34;
-                                    } else if (var_34 && *(u16*)(var_34 + 12) == 4) {
-                                        var_35 = *(u64*)var_34;
-                                    } else {
-                                        var_35 = 0;
-                                    }
+                                foreach (u64? var_35 : avp-actors) {
                                     update-ap-ref(var_35, get-object-locator(fpark-actor-viewer-ap-1), 0);
                                 }
                             } else if (get-int32(cam-mode, self) == 0) {
@@ -1217,7 +1177,7 @@ statescript {
                                     } else {
                                         var_44 = 0;
                                     }
-                                    broadcast-event(camera-start, new-boxed-value(7, var_44));
+                                    broadcast-event(camera-start, boxed_symbol(var_44));
                                     emit-redis-message("turn-off-manual-cam");
                                     set-int32(cam-mode, 2, self);
                                 } else {
@@ -1452,7 +1412,7 @@ statescript {
                     } else {
                         var_7 = "";
                     }
-                    broadcast-event(start-anim-actor-mode, new-boxed-value(7, var_2), new-boxed-value(7, string-to-symbol(var_7)));
+                    broadcast-event(start-anim-actor-mode, boxed_symbol(var_2), boxed_symbol(string-to-symbol(var_7)));
                 }
             }
             track spawn-mode {
@@ -1639,7 +1599,7 @@ statescript {
                             } else {
                                 var_47 = "";
                             }
-                            broadcast-event(anim-actor-anim-changed, new-boxed-value(7, string-to-symbol(var_47)));
+                            broadcast-event(anim-actor-anim-changed, boxed_symbol(string-to-symbol(var_47)));
                         } else if (shared-joypad-active?(debug-script-press-up) && shared-joypad-active?(debug-script-press-down)) {
                             u64? var_54 = darray-count(get-anim-actor-bundle-anims());
                             if (shared-joypad-active?(debug-script-press-up)) {
@@ -1678,40 +1638,20 @@ statescript {
                             } else {
                                 var_78 = "";
                             }
-                            broadcast-event(anim-actor-anim-changed, new-boxed-value(7, string-to-symbol(var_78)));
+                            broadcast-event(anim-actor-anim-changed, boxed_symbol(string-to-symbol(var_78)));
                         }
                     } else if (shared-joypad-active?(debug-script-hold-up)) {}
  else {
                         if (get-boolean(spawn-mode?, self) && shared-joypad-active?(debug-script-press-r2) && !is-locator-blank?(get-bound-frame(spawn-bound-frame, self), 0)) {
                             set-object-locator(fpark-actor-viewer-ap-1, get-bound-frame(spawn-bound-frame, self));
-                            foreach (u64? var_89 : avp-actors) {
-                                u16 var_90;
-                                if (var_89 && *(u16*)(var_89 + 12) == 7) {
-                                    var_90 = *(u64*)var_89;
-                                } else if (var_89 && *(u16*)(var_89 + 12) == 5) {
-                                    var_90 = *(u64*)var_89;
-                                } else if (var_89 && *(u16*)(var_89 + 12) == 4) {
-                                    var_90 = *(u64*)var_89;
-                                } else {
-                                    var_90 = 0;
-                                }
+                            foreach (u64? var_90 : avp-actors) {
                                 update-ap-ref(var_90, get-object-locator(fpark-actor-viewer-ap-1), 0);
                             }
                         }
                         if (shared-joypad-active?(debug-script-press-square)) {
                             if (get-boolean(spawn-mode?, self)) {
                                 set-object-locator(fpark-actor-viewer-ap-1, get-bound-frame(starting-ap-ref, self));
-                                foreach (u64? var_97 : avp-actors) {
-                                    u16 var_98;
-                                    if (var_97 && *(u16*)(var_97 + 12) == 7) {
-                                        var_98 = *(u64*)var_97;
-                                    } else if (var_97 && *(u16*)(var_97 + 12) == 5) {
-                                        var_98 = *(u64*)var_97;
-                                    } else if (var_97 && *(u16*)(var_97 + 12) == 4) {
-                                        var_98 = *(u64*)var_97;
-                                    } else {
-                                        var_98 = 0;
-                                    }
+                                foreach (u64? var_98 : avp-actors) {
                                     update-ap-ref(var_98, get-object-locator(fpark-actor-viewer-ap-1), 0);
                                 }
                             } else if (get-int32(cam-mode, self) == 0) {
@@ -1758,7 +1698,7 @@ statescript {
                                     } else {
                                         var_107 = 0;
                                     }
-                                    broadcast-event(camera-start, new-boxed-value(7, var_107));
+                                    broadcast-event(camera-start, boxed_symbol(var_107));
                                     emit-redis-message("turn-off-manual-cam");
                                     set-int32(cam-mode, 2, self);
                                 } else {

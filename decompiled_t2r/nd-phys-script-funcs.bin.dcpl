@@ -14,20 +14,20 @@
 u64? attach-rope-to-npc(u64? arg_0, u64? arg_1, u16 arg_2) {
     u64? var_0;
     if (arg_2 == 0) {
-        var_0 = send-event(attach-rope-to-npc, arg_0, new-boxed-value(7, arg_1), new-boxed-value(18, get-object-locator(arg_1)));
+        var_0 = send-event(attach-rope-to-npc, arg_0, boxed_symbol(arg_1), boxed_boundframe(get-object-locator(arg_1)));
     } else {
         var_0 = send-event(
             attach-rope-to-npc,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-joint-locator(arg_1, arg_2))
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-joint-locator(arg_1, arg_2))
         );
     }
     return var_0;
 }
 
 u64? enable-collision-fixed(u64? arg_0, u64? arg_1) {
-    return send-event(physicalize-fixed, arg_0, new-boxed-value(7, arg_1));
+    return send-event(physicalize-fixed, arg_0, boxed_symbol(arg_1));
 }
 
 u64? wait-enable-physics-phase(u64? arg_0, f32 arg_1) {
@@ -38,19 +38,19 @@ u64? wait-enable-physics-phase(u64? arg_0, f32 arg_1) {
 }
 
 u64? enable-breakable(u64? arg_0, u64? arg_1) {
-    return send-event(enable-breakable, arg_0, new-boxed-value(7, arg_1));
+    return send-event(enable-breakable, arg_0, boxed_symbol(arg_1));
 }
 
 u64? give-player-throwable-rope(u64? arg_0) {
-    return send-event(start-with-rope, player, new-boxed-value(7, arg_0));
+    return send-event(start-with-rope, player, boxed_symbol(arg_0));
 }
 
 u64? disable-breakable(u64? arg_0, u64? arg_1) {
-    return send-event(disable-breakable, arg_0, new-boxed-value(7, arg_1));
+    return send-event(disable-breakable, arg_0, boxed_symbol(arg_1));
 }
 
 u64? disable-breakable-for-contacts(u64? arg_0, u64? arg_1) {
-    return send-event(disable-breakable-for-contacts, arg_0, new-boxed-value(7, arg_1));
+    return send-event(disable-breakable-for-contacts, arg_0, boxed_symbol(arg_1));
 }
 
 u64? detach-rope-from-object(u64? arg_0, u64? arg_1, u16 arg_2) {
@@ -59,15 +59,15 @@ u64? detach-rope-from-object(u64? arg_0, u64? arg_1, u16 arg_2) {
         var_0 = send-event(
             rope-detach,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-spawner-locator(arg_1, 1))
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-spawner-locator(arg_1, 1))
         );
     } else {
         var_0 = send-event(
             rope-detach,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-joint-locator(arg_1, arg_2))
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-joint-locator(arg_1, arg_2))
         );
     }
     return var_0;
@@ -76,32 +76,32 @@ u64? detach-rope-from-object(u64? arg_0, u64? arg_1, u16 arg_2) {
 u64? wait-enable-collision-after-reposition(sid arg_0, u64? arg_1) {
     set-body-teleport(arg_0, arg_1);
     wait-one-frame();
-    return send-event(physicalize, arg_0, new-boxed-value(7, arg_1));
+    return send-event(physicalize, arg_0, boxed_symbol(arg_1));
 }
 
 u64? disintegrate-breakable(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
     return send-event(
         disintegrate-breakable,
         arg_0,
-        new-boxed-value(15, arg_1),
-        new-boxed-value(6, arg_2),
-        new-boxed-value(1, arg_3),
-        new-boxed-value(7, arg_4)
+        boxed_vector(arg_1),
+        boxed_f32(arg_2),
+        boxed_bool(arg_3),
+        boxed_symbol(arg_4)
     );
 }
 
 u64? set-breakable-disintegrated(u64? arg_0, u64? arg_1) {
-    return send-event(set-breakable-disintegrated, arg_0, new-boxed-value(7, arg_1));
+    return send-event(set-breakable-disintegrated, arg_0, boxed_symbol(arg_1));
 }
 
 u64? enable-physics(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(physicalize-live, arg_0, new-boxed-value(7, arg_1), new-boxed-value(6, arg_2));
+    return send-event(physicalize-live, arg_0, boxed_symbol(arg_1), boxed_f32(arg_2));
 }
 
 u64? wait-enable-physics-after-reposition(sid arg_0, u64? arg_1) {
     set-body-teleport(arg_0, arg_1);
     wait-one-frame();
-    return send-event(physicalize-live, arg_0, new-boxed-value(7, arg_1));
+    return send-event(physicalize-live, arg_0, boxed_symbol(arg_1));
 }
 
 u64? attach-rope-to-spawner(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
@@ -110,17 +110,17 @@ u64? attach-rope-to-spawner(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
         var_0 = send-event(
             attach-rope-to-spawner,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-spawner-locator(arg_1, 1)),
-            new-boxed-value(1, arg_3)
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-spawner-locator(arg_1, 1)),
+            boxed_bool(arg_3)
         );
     } else {
         var_0 = send-event(
             attach-rope-to-spawner,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-joint-locator(arg_1, arg_2)),
-            new-boxed-value(1, arg_3)
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-joint-locator(arg_1, arg_2)),
+            boxed_bool(arg_3)
         );
     }
     return var_0;
@@ -131,7 +131,7 @@ u64? disable-collision(u64? arg_0, u64? arg_1) {
 }
 
 u64? enable-breakable-for-contacts(u64? arg_0, u64? arg_1) {
-    return send-event(enable-breakable-for-contacts, arg_0, new-boxed-value(7, arg_1));
+    return send-event(enable-breakable-for-contacts, arg_0, boxed_symbol(arg_1));
 }
 
 u64? set-rope-attached-to-spawner(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3, u64? arg_4) {
@@ -140,21 +140,21 @@ u64? set-rope-attached-to-spawner(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3,
         var_0 = send-event(
             attach-rope-to-spawner,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-spawner-locator(arg_1, 1)),
-            new-boxed-value(1, 1),
-            new-boxed-value(7, arg_3),
-            new-boxed-value(1, arg_4)
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-spawner-locator(arg_1, 1)),
+            boxed_bool(1),
+            boxed_symbol(arg_3),
+            boxed_bool(arg_4)
         );
     } else {
         var_0 = send-event(
             attach-rope-to-spawner,
             arg_0,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(18, get-joint-locator(arg_1, arg_2)),
-            new-boxed-value(1, 1),
-            new-boxed-value(7, arg_3),
-            new-boxed-value(1, arg_4)
+            boxed_symbol(arg_1),
+            boxed_boundframe(get-joint-locator(arg_1, arg_2)),
+            boxed_bool(1),
+            boxed_symbol(arg_3),
+            boxed_bool(arg_4)
         );
     }
     return var_0;
@@ -163,30 +163,30 @@ u64? set-rope-attached-to-spawner(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3,
 u64? enable-collision(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     u64? var_0;
     if (arg_1) {
-        var_0 = send-event(physicalize, arg_0, new-boxed-value(7, arg_2), new-boxed-value(6, arg_3));
+        var_0 = send-event(physicalize, arg_0, boxed_symbol(arg_2), boxed_f32(arg_3));
     } else {
-        var_0 = send-event(unphysicalize, arg_0, new-boxed-value(7, arg_2));
+        var_0 = send-event(unphysicalize, arg_0, boxed_symbol(arg_2));
     }
     return var_0;
 }
 
 u64? kill-rigid-body(u64? arg_0, u64? arg_1) {
-    return send-event(kill-rigid-body, arg_0, new-boxed-value(7, arg_1));
+    return send-event(kill-rigid-body, arg_0, boxed_symbol(arg_1));
 }
 
 u64? enable-collision-gamedriven(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(physicalize-gamedriven, arg_0, new-boxed-value(7, arg_1), new-boxed-value(6, arg_2));
+    return send-event(physicalize-gamedriven, arg_0, boxed_symbol(arg_1), boxed_f32(arg_2));
 }
 
 u64? break-body-constraint(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(break-constraint, arg_0, new-boxed-value(7, arg_1), new-boxed-value(1, arg_2));
+    return send-event(break-constraint, arg_0, boxed_symbol(arg_1), boxed_bool(arg_2));
 }
 
 u64? blend-out-physics(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(blend-out-physics, arg_0, new-boxed-value(6, arg_1), new-boxed-value(7, arg_2));
+    return send-event(blend-out-physics, arg_0, boxed_f32(arg_1), boxed_symbol(arg_2));
 }
 
 u64? set-breakable-collapsed(u64? arg_0, u64? arg_1) {
-    return send-event(set-breakable-collapsed, arg_0, new-boxed-value(7, arg_1));
+    return send-event(set-breakable-collapsed, arg_0, boxed_symbol(arg_1));
 }
 

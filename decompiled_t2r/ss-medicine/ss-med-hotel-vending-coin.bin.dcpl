@@ -49,7 +49,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(add-fake-pickup, ss-player-blind-listen-mode, new-boxed-value(7, ic-fake-coin-pickup-1));
+                    send-event(add-fake-pickup, ss-player-blind-listen-mode, boxed_symbol(ic-fake-coin-pickup-1));
                 }
             }
         }
@@ -75,7 +75,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    send-event(remove-fake-pickup, ss-player-blind-listen-mode, new-boxed-value(7, ic-fake-coin-pickup-1));
+                    send-event(remove-fake-pickup, ss-player-blind-listen-mode, boxed_symbol(ic-fake-coin-pickup-1));
                 }
             }
         }

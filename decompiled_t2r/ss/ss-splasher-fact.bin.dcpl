@@ -30,7 +30,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    fact-set(event-arg-symbol(0), tag-symbol(fact-name, self), new-boxed-value(1, 1));
+                    fact-set(event-arg-symbol(0), tag-symbol(fact-name, self), boxed_bool(1));
                 }
                 lambda {
                     if (!is-final-build?()) {
@@ -42,7 +42,7 @@ statescript {
         block event exit {
             track main {
                 lambda {
-                    fact-set(event-arg-symbol(0), tag-symbol(fact-name, self), new-boxed-value(1, 0));
+                    fact-set(event-arg-symbol(0), tag-symbol(fact-name, self), boxed_bool(0));
                 }
                 lambda {
                     if (!is-final-build?()) {

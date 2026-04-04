@@ -95,7 +95,7 @@ statescript {
                             if (npc-alive?(var_0)) {
                                 wait(0.50);
                             }
-                            var_15 = darray-append(get-symbol(group-npcs-hit-by-molotov, self), new-boxed-value(7, var_0), 1);
+                            var_15 = darray-append(get-symbol(group-npcs-hit-by-molotov, self), boxed_symbol(var_0), 1);
                         } else {
                             var_15 = 0;
                         }
@@ -119,7 +119,7 @@ statescript {
                     }
                     if (player == var_1 && player-in-state?(Prone) || event-arg-symbol(2) != trap-bomb) {
                         if (player == var_1 && var_4 || get-boolean(prone-when-projectile-thrown?, self)) {
-                            if (player-in-state?(Prone) && get-boolean(prone-when-projectile-thrown?, self) && darray-contains?(get-symbol(group-npcs-hit-by-molotov, self), new-boxed-value(7, var_0))) {
+                            if (player-in-state?(Prone) && get-boolean(prone-when-projectile-thrown?, self) && darray-contains?(get-symbol(group-npcs-hit-by-molotov, self), boxed_symbol(var_0))) {
                                 u16 var_16;
                                 if ((1 + get-int32(current-num-kills, self)) > 0) {
                                     var_16 = 1 + get-int32(current-num-kills, self);
@@ -146,9 +146,9 @@ statescript {
                                     wait(0.50);
                                 }
                                 update-challenge-progress-str-for-prone-kills();
-                                if (darray-contains?(get-symbol(group-npcs-hit-by-molotov, self), new-boxed-value(7, var_0))) {
+                                if (darray-contains?(get-symbol(group-npcs-hit-by-molotov, self), boxed_symbol(var_0))) {
                                     wait(6.00);
-                                    var_10 = darray-find-remove(get-symbol(group-npcs-hit-by-molotov, self), new-boxed-value(7, var_0), 0);
+                                    var_10 = darray-find-remove(get-symbol(group-npcs-hit-by-molotov, self), boxed_symbol(var_0), 0);
                                 }
                             }
                         }
@@ -162,22 +162,12 @@ statescript {
                     get-int32(currently-hit-num-npcs, self);
                     u64? var_0 = darray-create(single-frame, -1, 0);
                     group-copy(get-symbol(group-npcs-hit-by-molotov, self), var_0);
-                    foreach (u64? var_3 : var_0) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : var_0) {
                         if (npc-alive?(var_4) && !npc-is-on-fire?(var_4)) {
                             if (!is-final-build?()) {
                                 display(dc:format("DEB-EC: %s alive and not burning. Removed them from hit!", string-debug(var_4)), 19);
                             }
-                            darray-find-remove(get-symbol(group-npcs-hit-by-molotov, self), new-boxed-value(7, var_4), 0);
+                            darray-find-remove(get-symbol(group-npcs-hit-by-molotov, self), boxed_symbol(var_4), 0);
                         }
                     }
                 }

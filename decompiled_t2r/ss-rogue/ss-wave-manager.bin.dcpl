@@ -17,8 +17,8 @@ u64? wait-kick-raycasts-for-enemy-spawn-position(u64? arg_0) {
     for (u64 i = 0; i < var_0; i++) {
         u64? var_2 = ddict-key-at(arg_0, i);
         u64? var_6 = alloc-bound-frame(offset-position(get-spawner-position(var_2, 1), alloc-vector(0.00, 1.40, 0.00, 1.00, 0)), 0, 0, 0, 0);
-        ddict-set(arg_0, var_2, new-boxed-value(2, kick-raycast(var_6, camera-locator(0), player, 6147)));
-        darray-append(var_1, new-boxed-value(14, get-locator-position(var_6)), 0);
+        ddict-set(arg_0, var_2, boxed_i32(kick-raycast(var_6, camera-locator(0), player, 6147)));
+        darray-append(var_1, boxed_point(get-locator-position(var_6)), 0);
     }
     wait-one-frame();
     for (u64 i = 0; i < var_0; i++) {
@@ -74,9 +74,9 @@ u64? wait-kick-raycasts-for-enemy-spawn-position(u64? arg_0) {
             debug-draw-raycast(var_15, 2.00);
         }
         if (var_19) {
-            var_27 = ddict-set(arg_0, var_13, new-boxed-value(1, 0));
+            var_27 = ddict-set(arg_0, var_13, boxed_bool(0));
         } else {
-            var_27 = ddict-set(arg_0, var_13, new-boxed-value(1, 1));
+            var_27 = ddict-set(arg_0, var_13, boxed_bool(1));
         }
     }
     return darray-destroy(var_1);
@@ -339,17 +339,7 @@ u64? get-spawn-config() {
 
 u16 any-enemy-friends-have-different-awareness?(u16 arg_0, i64 arg_1) {
     u16 var_1;
-    foreach (u64? var_2 : group-npcs-spawned-by-wave-manager) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : group-npcs-spawned-by-wave-manager) {
         u16 var_5;
         if (npc-alive?(var_3)) {
             u64? var_6 = npc-get-awareness(var_3, player);
@@ -389,8 +379,8 @@ u64? set-on-encounter-start-rogue-vox-facts!() {
     if (!is-final-build?()) {
         display(dc:format("DEB-WM: %2s VOX encounter start facts are set", ""), 19);
     }
-    fact-set(global, search-start-played?, new-boxed-value(1, 1));
-    return fact-set(global, ambush-played?, new-boxed-value(1, 1));
+    fact-set(global, search-start-played?, boxed_bool(1));
+    return fact-set(global, ambush-played?, boxed_bool(1));
 }
 
 string wave-manager-get-point-curve-values-as-string(i32 arg_0) {
@@ -417,20 +407,10 @@ u64? closest-region-from-player-rating(u64? arg_0) {
 }
 
 u64? set-on-update-rogue-encounter-vox-facts!() {
-    foreach (u64? var_1 : group-npcs-spawned-by-wave-manager) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : group-npcs-spawned-by-wave-manager) {
         if (npc-alive?(var_2)) {
             npc-disable-has-ever-seen-updates/f(var_2);
-            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
+            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
         }
     }
 }
@@ -573,18 +553,8 @@ statescript {
                     set-on-update-rogue-encounter-vox-facts!();
                 }
                 lambda {
-                    foreach (u64? var_1 : group-npcs-spawned-by-wave-manager) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!npc-alive?(var_2) && !darray-contains?(group-npcs-spawned-this-wave-by-wave-manager, new-boxed-value(7, var_2))) {
+                    foreach (u64? var_2 : group-npcs-spawned-by-wave-manager) {
+                        if (!npc-alive?(var_2) && !darray-contains?(group-npcs-spawned-this-wave-by-wave-manager, boxed_symbol(var_2))) {
                             set-focusable-ignore/f(var_2);
                         }
                     }
@@ -619,17 +589,7 @@ statescript {
                                 u16 var_12;
                                 u64? var_13;
                                 u64? var_14;
-                                foreach (u64? var_15 : group-npcs-spawned-by-wave-manager) {
-                                    u16 var_16;
-                                    if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                        var_16 = *(u64*)var_15;
-                                    } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                        var_16 = *(u64*)var_15;
-                                    } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                        var_16 = *(u64*)var_15;
-                                    } else {
-                                        var_16 = 0;
-                                    }
+                                foreach (u64? var_16 : group-npcs-spawned-by-wave-manager) {
                                     u16 var_18;
                                     u64? var_19;
                                     u64? var_20;
@@ -659,20 +619,10 @@ statescript {
                                 var_9 = var_13;
                                 var_10 = var_14;
                             }
-                            foreach (u64? var_31 : group-npcs-spawned-by-wave-manager) {
-                                u16 var_32;
-                                if (var_31 && *(u16*)(var_31 + 12) == 7) {
-                                    var_32 = *(u64*)var_31;
-                                } else if (var_31 && *(u16*)(var_31 + 12) == 5) {
-                                    var_32 = *(u64*)var_31;
-                                } else if (var_31 && *(u16*)(var_31 + 12) == 4) {
-                                    var_32 = *(u64*)var_31;
-                                } else {
-                                    var_32 = 0;
-                                }
+                            foreach (u64? var_32 : group-npcs-spawned-by-wave-manager) {
                                 if (npc-alive?(var_32)) {
                                     if (get-boolean(currently-inheriting-awareness, self) && var_8 != *invalid-symbol*) {
-                                        if (var_8 != var_32 && darray-contains?(group-npcs-spawned-this-wave-by-wave-manager, new-boxed-value(7, var_32))) {
+                                        if (var_8 != var_32 && darray-contains?(group-npcs-spawned-this-wave-by-wave-manager, boxed_symbol(var_32))) {
                                             if (var_9 == 3) {
                                                 npc-make-aware-of-at(var_32, player, var_10, var_9, "", 0);
                                             } else {
@@ -701,17 +651,7 @@ statescript {
                 lambda {
                     if (*encounter-tweaks* != nullptr && *(u8*)(*encounter-tweaks* + 38) && get-boolean(is-setup-finished, self) || script-in-state?(self, ready-waiting) && script-in-state?(self, done)) {
                         if (*(u8*)(*encounter-tweaks* + 37)) {
-                            foreach (u64? var_4 : group-npcs-spawned-by-wave-manager) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : group-npcs-spawned-by-wave-manager) {
                                 if (npc-alive?(var_5)) {
                                     kill-entity(var_5);
                                 }
@@ -993,7 +933,7 @@ statescript {
                             u64 i = 0;
                             while (i < *(i32*)(*(*(var_0 + 8) + 40) + 8)) {
                                 if (var_6 == *(i32*)((**(*(var_0 + 8) + 40) + (i * 40)) + 8)) {
-                                    darray-append(var_7, new-boxed-value(2, i), 0);
+                                    darray-append(var_7, boxed_i32(i), 0);
                                 }
                                 if (!is-final-build?()) {
                                     var_19 = display(dc:format(
@@ -1205,8 +1145,8 @@ statescript {
                                 var_128 = 0;
                             }
                             if (var_128) {
-                                darray-append(get-symbol(darray-waves-indices-available, self), new-boxed-value(2, i), 0);
-                                var_129 = darray-append(get-symbol(darray-waves-indices-unused, self), new-boxed-value(2, i), 0);
+                                darray-append(get-symbol(darray-waves-indices-available, self), boxed_i32(i), 0);
+                                var_129 = darray-append(get-symbol(darray-waves-indices-unused, self), boxed_i32(i), 0);
                             }
                             i = i + 1;
                         }
@@ -1214,8 +1154,8 @@ statescript {
                         if (*((**(var_3 + 32) + (var_121 * 24)) + 16)) {
                             u64 i = 0;
                             while (i < *(i32*)(*((**(var_3 + 32) + (var_121 * 24)) + 16) + 8)) {
-                                darray-append(get-symbol(darray-special-waves-indices-available, self), new-boxed-value(2, i), 0);
-                                darray-append(get-symbol(darray-special-waves-indices-unused, self), new-boxed-value(2, i), 0);
+                                darray-append(get-symbol(darray-special-waves-indices-available, self), boxed_i32(i), 0);
+                                darray-append(get-symbol(darray-special-waves-indices-unused, self), boxed_i32(i), 0);
                                 i = i + 1;
                             }
                             var_135 = i;
@@ -1465,7 +1405,7 @@ statescript {
                         display(dc:format("DEB-WM: %2s Looking for tag %s..", "", string-debug(var_1)), 19);
                     }
                     if (!(var_1 == 0)) {
-                        ddict-set(var_0, var_1, new-boxed-value(2, 1));
+                        ddict-set(var_0, var_1, boxed_i32(1));
                         var_5 = group-copy(get-regions-by-criteria(var_0), get-symbol(group-all-spawn-regions, self));
                     }
                 }
@@ -1498,17 +1438,17 @@ statescript {
                         display(dc:format("DEB-WM: %2s Looking for tag %s..", "", string-debug(var_1)), 19);
                     }
                     if (!(var_1 == 0)) {
-                        ddict-set(var_0, var_1, new-boxed-value(2, 1));
+                        ddict-set(var_0, var_1, boxed_i32(1));
                         var_5 = group-copy(get-spawners-by-criteria(var_0, 0, 0, 0, 0, 0), get-symbol(group-all-spawn-positions, self));
                     }
                 }
                 lambda {
-                    if (skull--is-skull-active?(tripwire-map) && darray-contains?(encounter--get-skulls(encounter--get-current-encounter-ddict()), new-boxed-value(7, tripwire-map))) {
+                    if (skull--is-skull-active?(tripwire-map) && darray-contains?(encounter--get-skulls(encounter--get-current-encounter-ddict()), boxed_symbol(tripwire-map))) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %2s Tripwire skull is active! Looking for spawn pos too close..", ""), 19);
                         }
                         u64? var_7 = ddict-create(single-frame, -1, 0);
-                        ddict-set(var_7, exclude-on-trip-wire-modifier, new-boxed-value(2, 1));
+                        ddict-set(var_7, exclude-on-trip-wire-modifier, boxed_i32(1));
                         group-copy(get-spawners-by-criteria(var_7, 0, 0, 0, 0, 0), get-symbol(group-tripwire-exclude-spawn-positions, self));
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %4s %-22s = %d", "", "Total Spawn Pos", darray-count(get-symbol(group-all-spawn-positions, self))), 19);
@@ -1516,18 +1456,8 @@ statescript {
                         if (!is-final-build?()) {
                             var_16 = display(dc:format("DEB-WM: %4s %-22s = %d", "", "Pos to Exclude", darray-count(get-symbol(group-tripwire-exclude-spawn-positions, self))), 19);
                         }
-                        foreach (u64? var_24 : get-symbol(group-tripwire-exclude-spawn-positions, self)) {
-                            u16 var_25;
-                            if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                var_25 = *(u64*)var_24;
-                            } else {
-                                var_25 = 0;
-                            }
-                            darray-find-remove(get-symbol(group-all-spawn-positions, self), new-boxed-value(7, var_25), 0);
+                        foreach (u64? var_25 : get-symbol(group-tripwire-exclude-spawn-positions, self)) {
+                            darray-find-remove(get-symbol(group-all-spawn-positions, self), boxed_symbol(var_25), 0);
                         }
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %4s %-22s = %d", "", "Remaining Spawn Pos", darray-count(get-symbol(group-all-spawn-positions, self))), 19);
@@ -1799,7 +1729,7 @@ statescript {
                                     *(i32*)(*(*var_4 + (var_24 * 8)) + 8)
                                 ), 19);
                             }
-                            darray-append(var_5, new-boxed-value(2, var_24), 0);
+                            darray-append(var_5, boxed_i32(var_24), 0);
                             if (get-boolean(endlessly-repeat-waves, self) && !get-boolean(randomize-waves, self)) {
                                 darray-remove(var_8, 0);
                                 darray-append(var_8, darray-at(var_8, 0), 0);
@@ -1898,11 +1828,11 @@ statescript {
                         }
                         string var_52;
                         if (player-in-region?(var_45, 2)) {
-                            darray-append(get-symbol(group-spawn-regions-player-inside, self), new-boxed-value(7, var_45), 1);
+                            darray-append(get-symbol(group-spawn-regions-player-inside, self), boxed_symbol(var_45), 1);
                             var_52 = "<< player in this region >>";
-                        } else if (darray-contains?(get-symbol(group-no-positions-spawn-regions, self), new-boxed-value(7, var_45))) {
+                        } else if (darray-contains?(get-symbol(group-no-positions-spawn-regions, self), boxed_symbol(var_45))) {
                             var_52 = "<< no spawn positions >>";
-                        } else if (var_0 == 1 && get-boolean(do-not-repeat-spawn-region, self) == 1 && darray-contains?(get-symbol(group-used-spawn-regions, self), new-boxed-value(7, var_45))) {
+                        } else if (var_0 == 1 && get-boolean(do-not-repeat-spawn-region, self) == 1 && darray-contains?(get-symbol(group-used-spawn-regions, self), boxed_symbol(var_45))) {
                             var_52 = "<< already used >>";
                         } else if (var_26 > 0 && i >= (var_26 + darray-count(get-symbol(group-spawn-regions-player-inside, self)))) {
                             if (var_1 > 0) {
@@ -1911,7 +1841,7 @@ statescript {
                                 var_52 = dc:format("<< not closest %d >>", var_2);
                             }
                         } else {
-                            darray-append(get-symbol(group-available-spawn-regions, self), new-boxed-value(7, var_45), 1);
+                            darray-append(get-symbol(group-available-spawn-regions, self), boxed_symbol(var_45), 1);
                         }
                         if (!is-final-build?()) {
                             var_69 = display(dc:format(
@@ -1972,7 +1902,7 @@ statescript {
                                 display(dc:format("DEB-WM: %4s |- %s", "", string-debug(var_91)), 19);
                             }
                             set-symbol(selected-spawn-together-region, var_91, self);
-                            var_95 = darray-append(get-symbol(group-used-spawn-regions, self), new-boxed-value(7, var_91), 1);
+                            var_95 = darray-append(get-symbol(group-used-spawn-regions, self), boxed_symbol(var_91), 1);
                         } else {
                             var_95 = 0;
                         }
@@ -2005,30 +1935,10 @@ statescript {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
                     group-copy(get-symbol(group-available-spawn-positions, self), var_0);
-                    foreach (u64? var_5 : get-symbol(group-spawn-regions-player-inside, self)) {
-                        u16 var_6;
-                        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                            var_6 = *(u64*)var_5;
-                        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                            var_6 = *(u64*)var_5;
-                        } else {
-                            var_6 = 0;
-                        }
-                        foreach (u64? var_8 : var_0) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                    foreach (u64? var_6 : get-symbol(group-spawn-regions-player-inside, self)) {
+                        foreach (u64? var_9 : var_0) {
                             if (locator-in-region?(get-spawner-locator(var_9, 1), var_6, player)) {
-                                darray-find-remove(get-symbol(group-available-spawn-positions, self), new-boxed-value(7, var_9), 0);
+                                darray-find-remove(get-symbol(group-available-spawn-positions, self), boxed_symbol(var_9), 0);
                             }
                         }
                     }
@@ -2042,19 +1952,9 @@ statescript {
                         if (!(get-symbol(selected-spawn-together-region, self) == 0)) {
                             u64? var_2 = darray-create(self, -1, 0);
                             group-copy(get-symbol(group-available-spawn-positions, self), var_2);
-                            foreach (u64? var_5 : var_2) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : var_2) {
                                 if (!locator-in-region?(get-spawner-locator(var_6, 1), get-symbol(selected-spawn-together-region, self), player)) {
-                                    darray-find-remove(get-symbol(group-available-spawn-positions, self), new-boxed-value(7, var_6), 0);
+                                    darray-find-remove(get-symbol(group-available-spawn-positions, self), boxed_symbol(var_6), 0);
                                 }
                             }
                             if (!is-final-build?()) {
@@ -2071,29 +1971,9 @@ statescript {
                     } else {
                         u64? var_21 = darray-create(self, -1, 0);
                         group-copy(get-symbol(group-available-spawn-positions, self), var_21);
-                        foreach (u64? var_24 : var_21) {
-                            u16 var_25;
-                            if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                var_25 = *(u64*)var_24;
-                            } else {
-                                var_25 = 0;
-                            }
+                        foreach (u64? var_25 : var_21) {
                             u16 var_29;
-                            foreach (u64? var_31 : get-symbol(group-available-spawn-regions, self)) {
-                                u16 var_32;
-                                if (var_31 && *(u16*)(var_31 + 12) == 7) {
-                                    var_32 = *(u64*)var_31;
-                                } else if (var_31 && *(u16*)(var_31 + 12) == 5) {
-                                    var_32 = *(u64*)var_31;
-                                } else if (var_31 && *(u16*)(var_31 + 12) == 4) {
-                                    var_32 = *(u64*)var_31;
-                                } else {
-                                    var_32 = 0;
-                                }
+                            foreach (u64? var_32 : get-symbol(group-available-spawn-regions, self)) {
                                 u16 var_34;
                                 if (0 == 0 && locator-in-region?(get-spawner-locator(var_25, 1), var_32, player)) {
                                     var_34 = 1;
@@ -2101,7 +1981,7 @@ statescript {
                                 var_29 = var_34;
                             }
                             if (!var_29) {
-                                var_36 = darray-find-remove(get-symbol(group-available-spawn-positions, self), new-boxed-value(7, var_25), 0);
+                                var_36 = darray-find-remove(get-symbol(group-available-spawn-positions, self), boxed_symbol(var_25), 0);
                             }
                         }
                         if (!is-final-build?()) {
@@ -2128,7 +2008,7 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %2s Finding next best region..", ""), 19);
                         }
-                        darray-append(get-symbol(group-no-positions-spawn-regions, self), new-boxed-value(7, get-symbol(selected-spawn-together-region, self)), 1);
+                        darray-append(get-symbol(group-no-positions-spawn-regions, self), boxed_symbol(get-symbol(selected-spawn-together-region, self)), 1);
                         wait-one-frame();
                         go(select-spawn-regions, 1);
                     }
@@ -2160,18 +2040,8 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = ddict-create(self, -1, 0);
-                    foreach (u64? var_4 : get-symbol(group-available-spawn-positions, self)) {
-                        u16 var_5;
-                        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                            var_5 = *(u64*)var_4;
-                        } else {
-                            var_5 = 0;
-                        }
-                        ddict-set(var_0, var_5, new-boxed-value(1, 1));
+                    foreach (u64? var_5 : get-symbol(group-available-spawn-positions, self)) {
+                        ddict-set(var_0, var_5, boxed_bool(1));
                     }
                     wait-kick-raycasts-for-enemy-spawn-position(var_0);
                     u64 i = 0;
@@ -2194,24 +2064,14 @@ statescript {
                             var_11 = !!0;
                         }
                         if (!var_11) {
-                            var_12 = darray-append(get-symbol(group-raycast-failed-spawn-positions, self), new-boxed-value(7, ddict-key-at(var_0, i)), 1);
+                            var_12 = darray-append(get-symbol(group-raycast-failed-spawn-positions, self), boxed_symbol(ddict-key-at(var_0, i)), 1);
                         }
                         i = i + 1;
                     }
                     ddict-destroy(var_0);
                     if (darray-count(get-symbol(group-available-spawn-positions, self)) > darray-count(get-symbol(group-raycast-failed-spawn-positions, self))) {
-                        foreach (u64? var_24 : get-symbol(group-raycast-failed-spawn-positions, self)) {
-                            u16 var_25;
-                            if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                var_25 = *(u64*)var_24;
-                            } else {
-                                var_25 = 0;
-                            }
-                            darray-find-remove(get-symbol(group-available-spawn-positions, self), new-boxed-value(7, var_25), 0);
+                        foreach (u64? var_25 : get-symbol(group-raycast-failed-spawn-positions, self)) {
+                            darray-find-remove(get-symbol(group-available-spawn-positions, self), boxed_symbol(var_25), 0);
                         }
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %4s %d positions had line-of-sight. Marked unsafe!", "", darray-count(get-symbol(group-raycast-failed-spawn-positions, self))), 19);
@@ -2229,7 +2089,7 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-WM: %4s Try finding another region..", ""), 19);
                         }
-                        darray-append(get-symbol(group-no-positions-spawn-regions, self), new-boxed-value(7, get-symbol(selected-spawn-together-region, self)), 1);
+                        darray-append(get-symbol(group-no-positions-spawn-regions, self), boxed_symbol(get-symbol(selected-spawn-together-region, self)), 1);
                         wait-one-frame();
                         var_20 = go(select-spawn-regions, 1);
                     } else {
@@ -2247,12 +2107,12 @@ statescript {
                 }
                 lambda {
                     if (!(rogue-get-current-task-game-mode() == 1)) {
-                        fact-set(faction-enemy, restrict-match-start, new-boxed-value(8, get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-match-start, boxed_timeframePOD(get-current-timeframe(0)));
                     }
                 }
                 lambda {
                     if (rogue-get-current-task-game-mode() == 1 || get-int32(current-wave-num, ss-survival-manager) == 0 && get-int32(current-wave-num, ss-survival-manager) == 1) {
-                        fact-set(faction-enemy, restrict-match-start, new-boxed-value(8, get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-match-start, boxed_timeframePOD(get-current-timeframe(0)));
                     }
                 }
                 lambda {
@@ -2330,8 +2190,8 @@ statescript {
                         u64? var_9 = string-length(string-debug(var_7));
                         u64? var_12;
                         if (wave-manager-npc-safe-to-spawn?(**var_0 + (i * 16))) {
-                            darray-append(var_1, new-boxed-value(7, *(u64*)(**var_0 + (i * 16))), 0);
-                            darray-append(var_2, new-boxed-value(7, var_7), 0);
+                            darray-append(var_1, boxed_symbol(*(u64*)(**var_0 + (i * 16))), 0);
+                            darray-append(var_2, boxed_symbol(var_7), 0);
                             if (var_9 > 0) {
                                 var_12 = var_9;
                                 var_13 = var_9;
@@ -2383,8 +2243,8 @@ statescript {
                             if (0 <= 0) {
                                 darray-clear(group-npcs-spawned-this-wave-by-wave-manager);
                             }
-                            darray-append(group-npcs-spawned-by-wave-manager, new-boxed-value(7, var_28), 1);
-                            darray-append(group-npcs-spawned-this-wave-by-wave-manager, new-boxed-value(7, var_28), 1);
+                            darray-append(group-npcs-spawned-by-wave-manager, boxed_symbol(var_28), 1);
+                            darray-append(group-npcs-spawned-this-wave-by-wave-manager, boxed_symbol(var_28), 1);
                             melee-fact-set-bool(var_28, death-begs-for-life, 0);
                             if (npc-stalker?(var_28) && rogue-get-current-task-game-mode() == 1) {
                                 send-event(disable-last-stalker-charge, var_28);
@@ -2462,8 +2322,8 @@ statescript {
                             var_4 = send-event(
                                 start-scripted-awareness,
                                 self,
-                                new-boxed-value(2, *(i32*)(*encounter-tweaks* + 28)),
-                                new-boxed-value(6, (f32)*(i32*)(*encounter-tweaks* + 32))
+                                boxed_i32(*(i32*)(*encounter-tweaks* + 28)),
+                                boxed_f32((f32)*(i32*)(*encounter-tweaks* + 32))
                             );
                         } else if (!is-final-build?()) {
                             var_4 = display(dc:format("DEB-WM: %4s -> Scripted awareness type = none", ""), 19);
@@ -2506,8 +2366,8 @@ statescript {
                         var_4 = send-event(
                             start-scripted-awareness,
                             self,
-                            new-boxed-value(2, *(i32*)(var_1 + 24)),
-                            new-boxed-value(6, var_30)
+                            boxed_i32(*(i32*)(var_1 + 24)),
+                            boxed_f32(var_30)
                         );
                     } else {
                         if (!(var_2 == 0)) {
@@ -2538,8 +2398,8 @@ statescript {
                         var_4 = send-event(
                             start-scripted-awareness,
                             self,
-                            new-boxed-value(2, *(i32*)(var_49 + 28)),
-                            new-boxed-value(6, var_52)
+                            boxed_i32(*(i32*)(var_49 + 28)),
+                            boxed_f32(var_52)
                         );
                     }
                 }

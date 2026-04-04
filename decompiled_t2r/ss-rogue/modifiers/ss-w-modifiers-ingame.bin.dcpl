@@ -53,8 +53,8 @@ u64? skull-move-arrow-status-to-hud() {
     if (gui2-widget-exists?(var_0)) {
         gui2-kill-widget(var_0);
     }
-    darray-append(get-symbol(darray-widget, self), new-boxed-value(7, var_4), 0);
-    darray-append(get-symbol(darray-widget, self), new-boxed-value(7, var_2), 0);
+    darray-append(get-symbol(darray-widget, self), boxed_symbol(var_4), 0);
+    darray-append(get-symbol(darray-widget, self), boxed_symbol(var_2), 0);
     gui2-change-widget-z(var_4, -998);
     gui2-change-widget-z(var_2, -999);
     return set-symbol(w-arrow-status, var_2, self);
@@ -72,24 +72,14 @@ u64? clear-ingame-skull-group() {
 }
 
 u64? skull-reverse-z() {
-    foreach (u64? var_5 : get-symbol(darray-widget, self)) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : get-symbol(darray-widget, self)) {
         gui2-change-widget-z(var_6, darray-count(get-symbol(darray-widget, self)) - 0);
     }
 }
 
 u64? create-ingame-positive-negetive-skull-widgets() {
     create-ingame-skull-widgets(1);
-    darray-append(get-symbol(darray-widget, self), new-boxed-value(7, gui2-spawn-widget(gui2-find-widget-path("group", self), "t2r-hud-rogue/t2r-hud-modifier-spacer", 0, 1)), 0);
+    darray-append(get-symbol(darray-widget, self), boxed_symbol(gui2-spawn-widget(gui2-find-widget-path("group", self), "t2r-hud-rogue/t2r-hud-modifier-spacer", 0, 1)), 0);
     create-ingame-skull-widgets(0);
     skull-move-arrow-status-to-hud();
     return gui2-update-widget-layout(get-symbol(w-group, self));
@@ -99,17 +89,7 @@ u64? create-ingame-skull-widgets(u8 arg_0) {
     while (!is-script-running?(ss-modifiers-manager-1)) {
         wait-one-frame();
     }
-    foreach (u64? var_3 : grp-added-skull-indices) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : grp-added-skull-indices) {
         if (*(u8*)((**t2r-skulls-array* + (var_4 * 152)) + 81) == arg_0) {
             u64? var_7 = gui2-build-widget-path(
                 gui2-spawn-widget(gui2-find-widget-path("group", self), "t2r-hud-rogue/t2r-hud-modifier-icon-in-game", 0, 1),
@@ -122,8 +102,8 @@ u64? create-ingame-skull-widgets(u8 arg_0) {
                 0,
                 0
             );
-            send-event(set-skull, var_7, new-boxed-value(7, **t2r-skulls-array* + (var_4 * 152)));
-            var_5 = darray-append(get-symbol(darray-widget, self), new-boxed-value(7, var_7), 0);
+            send-event(set-skull, var_7, boxed_symbol(**t2r-skulls-array* + (var_4 * 152)));
+            var_5 = darray-append(get-symbol(darray-widget, self), boxed_symbol(var_7), 0);
         }
     }
 }
@@ -326,7 +306,7 @@ statescript {
                         if (event-arg-symbol(0) == drop-bomb-on-death) {
                             u64? var_5 = gui2-show-attachable-widget/f(canvas.hudRoot.rootFullscreen.attachableWidgets, "t2r-hud-rogue/t2r-hud-modifier-bomb", var_2, 0, alloc-vector(0.00, 0.50, 0.00, 1.00, 0), 5, 0.00, 0);
                             gui2-assign-to-category(var_5, 512);
-                            var_3 = send-event(setup-bomb-widget, var_5, new-boxed-value(7, var_2));
+                            var_3 = send-event(setup-bomb-widget, var_5, boxed_symbol(var_2));
                         }
                     }
                 }

@@ -60,17 +60,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -195,17 +185,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-2, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-2) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }

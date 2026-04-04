@@ -68,7 +68,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (darray-contains?(vox-brewery-intro-npcs, new-boxed-value(7, event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-brewery-intro-npcs) && player-in-region?(rgn-afm-brewery-intro-1, 2)) {
+                    if (darray-contains?(vox-brewery-intro-npcs, boxed_symbol(event-arg-symbol(0))) && no-npcs-in-group-alive?(vox-brewery-intro-npcs) && player-in-region?(rgn-afm-brewery-intro-1, 2)) {
                         if (tension-mode-is?(3)) {
                             go(killed-wlf-combat, 1);
                         } else {

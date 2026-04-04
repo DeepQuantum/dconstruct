@@ -208,11 +208,11 @@ u64? activated-chronological-mode-callback() {
 
 u64? update-player-facts(u64? arg_0) {
     u64? var_0 = get-object-anim-state(arg_0);
-    fact-set(arg_0, speed, new-boxed-value(6, get-object-speed(arg_0)));
-    fact-set(arg_0, joypad-move-stick-intensity, new-boxed-value(6, get-joypad-stick-intensity(move, 0.20, 1.00)));
-    fact-set(arg_0, anim-state, new-boxed-value(7, var_0));
-    fact-set(arg_0, idle^move?, new-boxed-value(1, var_0 == idle-run-l || var_0 == idle-run-fl || var_0 == idle-run-f || var_0 == idle-run-fr || var_0 == idle-run-r || var_0 == idle-run-bl || var_0 == idle-run-b && var_0 == idle-run-br));
-    return fact-set(arg_0, move^idle?, new-boxed-value(1, var_0 == run-idle || var_0 == run-idle-m || var_0 == run-idle-short-l && var_0 == run-idle-short-r));
+    fact-set(arg_0, speed, boxed_f32(get-object-speed(arg_0)));
+    fact-set(arg_0, joypad-move-stick-intensity, boxed_f32(get-joypad-stick-intensity(move, 0.20, 1.00)));
+    fact-set(arg_0, anim-state, boxed_symbol(var_0));
+    fact-set(arg_0, idle^move?, boxed_bool(var_0 == idle-run-l || var_0 == idle-run-fl || var_0 == idle-run-f || var_0 == idle-run-fr || var_0 == idle-run-r || var_0 == idle-run-bl || var_0 == idle-run-b && var_0 == idle-run-br));
+    return fact-set(arg_0, move^idle?, boxed_bool(var_0 == run-idle || var_0 == run-idle-m || var_0 == run-idle-short-l && var_0 == run-idle-short-r));
 }
 
 u64? deactivated-chronological-mode-callback() {

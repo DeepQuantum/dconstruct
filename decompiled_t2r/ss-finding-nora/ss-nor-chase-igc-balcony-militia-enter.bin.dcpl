@@ -56,17 +56,7 @@ statescript {
                     wait-spawn-npc-group-async(balcony-militia, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : balcony-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : balcony-militia) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                             npc-set-accuracy-multiplier(var_2, 0.60);
@@ -76,17 +66,7 @@ statescript {
                 lambda {
                     while (1) {
                         wait(random-float-min-max(0.50, 2.00, 0));
-                        foreach (u64? var_2 : balcony-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : balcony-militia) {
                             if (npc-alive?(var_3)) {
                                 npc-enable-skill(var_3, 30);
                                 npc-make-aware-of(var_3, player, 2, *npc-awareness-options-no-surprise*);

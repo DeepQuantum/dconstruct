@@ -47,15 +47,15 @@ statescript {
         block event npc-entered-area {
             track main {
                 lambda {
-                    darray-append(inside-perimiter-infected, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(inside-perimiter-infected, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(inside-perimiter-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(inside-perimiter-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(inside-perimiter-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(inside-perimiter-infected, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }

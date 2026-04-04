@@ -87,21 +87,21 @@ u64? play-multiple-idles() {
         var_4 = var_19;
     }
     u64? var_20 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_20 + (0 * 8)) = 10;
-    *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
+    *(i32*)*var_20[0] = 10;
+    *(u64*)(*var_20[0] + 8) = 0;
     u64? var_22;
     if (tag-specified?(custom-ap-ref-spawner-idle, self)) {
         var_22 = get-object-or-spawner-locator(tag-symbol(custom-ap-ref-spawner-idle, self));
     } else {
         var_22 = get-object-locator(get-self-id());
     }
-    *(u64*)(*(*var_20 + (0 * 8)) + 8) = var_22;
-    *(i32*)*(*var_20 + (1 * 8)) = 28;
-    *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_20 + (1 * 8)) + 8) = 0.20;
-    *(i32*)*(*var_20 + (2 * 8)) = 30;
-    *(u64*)(*(*var_20 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_20 + (2 * 8)) + 8) = 0.20;
+    *(u64*)(*var_20[0] + 8) = var_22;
+    *(i32*)*var_20[1] = 28;
+    *(u64*)(*var_20[1] + 8) = 0;
+    *(f32*)(*var_20[1] + 8) = 0.20;
+    *(i32*)*var_20[2] = 30;
+    *(u64*)(*var_20[2] + 8) = 0;
+    *(f32*)(*var_20[2] + 8) = 0.20;
     return wait-animate_(get-self-id(), var_4, var_20);
 }
 
@@ -156,19 +156,19 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 31;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
                     animate_(get-self-id(), flap, var_1);
                 }
                 lambda {
-                    send-event(request-location, get-symbol(perch-manager, self), new-boxed-value(7, get-self-id()));
+                    send-event(request-location, get-symbol(perch-manager, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     wait-one-frame();
@@ -323,15 +323,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_1[0] = 31;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
                     animate_(get-self-id(), flap, var_1);
                 }
                 lambda {

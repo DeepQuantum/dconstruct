@@ -12,34 +12,14 @@
 // ####################################################################################################
 
 u64? toggle-wander-regions(u64? arg_0, u64? arg_1) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         npc-flock-region-set-enabled(var_2, arg_1);
     }
 }
 
 u16 find-outermost-wander-region(u64? arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         u64? var_4 = get-object-position(player);
         u64? var_5 = get-region-centroid(var_3, 0);
         u16 var_8;
@@ -95,17 +75,7 @@ statescript {
         block start {
             track sheep-count {
                 lambda {
-                    foreach (u64? var_1 : outer-wander-regions) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : outer-wander-regions) {
                         npc-flock-region-set-enabled(var_2, 1);
                     }
                 }
@@ -154,7 +124,7 @@ statescript {
                     set-symbol(region-to-force, find-outermost-wander-region(wander-regions-stage-3), self);
                 }
                 lambda {
-                    broadcast-event(reassign-wander, new-boxed-value(7, region-to-force));
+                    broadcast-event(reassign-wander, boxed_symbol(region-to-force));
                 }
                 lambda {
                     while (!(darray-count(sheep-in-pen) >= get-int32(num-sheep-stage-4, self))) {
@@ -187,14 +157,14 @@ statescript {
                     set-symbol(region-to-force, find-outermost-wander-region(wander-regions-stage-4), self);
                 }
                 lambda {
-                    broadcast-event(reassign-wander, new-boxed-value(7, region-to-force));
+                    broadcast-event(reassign-wander, boxed_symbol(region-to-force));
                 }
             }
         }
         block event sheep-request-spot {
             track main {
                 lambda {
-                    if (!darray-contains?(sheep-in-pen, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (!darray-contains?(sheep-in-pen, boxed_symbol(event-arg-symbol(0)))) {
                         if (event-arg-symbol(0) != far-herding-lamb-1) {
                             event-return-symbol(group-get-first-member(barn-spots));
                             darray-remove(barn-spots, 0);
@@ -202,7 +172,7 @@ statescript {
                         } else {
                             event-return-symbol(pos-barn-sheep-spot-10);
                         }
-                        darray-append(sheep-in-pen, new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(sheep-in-pen, boxed_symbol(event-arg-symbol(0)), 1);
                     }
                 }
             }
@@ -233,17 +203,7 @@ statescript {
                 }
                 lambda {
                     if (darray-count(sheep-in-pen) == 6) {
-                        foreach (u64? var_2 : outer-wander-regions) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : outer-wander-regions) {
                             npc-flock-region-set-enabled(var_3, 0);
                             set-boolean(vox-cold-outside?, 1, ss-vox-far-herding-1);
                         }

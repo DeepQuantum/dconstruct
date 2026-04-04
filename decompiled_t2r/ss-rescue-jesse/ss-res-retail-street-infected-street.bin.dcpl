@@ -227,17 +227,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-stores-infected-trapped) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-stores-infected-trapped) {
                         if (npc-alive?(var_2)) {
                             npc-set-excluded-from-tension-calculation(var_2, event-arg-boolean(0));
                         }
@@ -272,17 +262,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-stores-infected-trapped) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-stores-infected-trapped) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                             npc-set-excluded-from-tension-calculation(var_2, 0);
@@ -391,17 +371,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-stores-infected-trapped) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-stores-infected-trapped) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                             npc-move-to-spawner(

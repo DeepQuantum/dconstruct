@@ -66,17 +66,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-forest-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-forest-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -92,18 +82,8 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-forest-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!darray-contains?(glt-garage-hardpoints, new-boxed-value(7, var_2))) {
+                    foreach (u64? var_2 : glt-forest-hardpoints) {
+                        if (!darray-contains?(glt-garage-hardpoints, boxed_symbol(var_2))) {
                             set-hardpoint-disabled(var_2);
                         }
                     }
@@ -130,17 +110,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-garage-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-garage-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -164,18 +134,8 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-garage-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!darray-contains?(glt-bridge-hardpoints, new-boxed-value(7, var_2))) {
+                    foreach (u64? var_2 : glt-garage-hardpoints) {
+                        if (!darray-contains?(glt-bridge-hardpoints, boxed_symbol(var_2))) {
                             set-hardpoint-disabled(var_2);
                         }
                     }
@@ -202,17 +162,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-bridge-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-bridge-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -229,17 +179,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_1 : glt-bridge-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-bridge-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

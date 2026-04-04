@@ -81,8 +81,8 @@ statescript {
                         change-object-material(player, get-current-ellie-head-material(), objects/characters/ellie/head-blood-grave:promo, 1);
                         set-visible(get-player-weapon-process-id-from-weapon-id(switchblade), 0);
                         set-region-enabled(rr-pat-interior-1, 0, 0);
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(1));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(1));
                         go(debug-test-igc, 1);
                     }
                 }
@@ -94,8 +94,8 @@ statescript {
                         set-visible(get-player-weapon-process-id-from-weapon-id(switchblade), 0);
                         set-region-enabled(rr-pat-interior-1, 0, 0);
                         set-boolean(open-door, 1, self);
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(1));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(1));
                         npc-set-player-evade(dina, 0);
                         go(open-door, 1);
                     }
@@ -105,8 +105,8 @@ statescript {
                         change-object-material(player, get-current-ellie-head-material(), objects/characters/ellie/head-blood-grave:promo, 1);
                         set-visible(get-player-weapon-process-id-from-weapon-id(switchblade), 0);
                         set-region-enabled(rr-pat-interior-1, 0, 0);
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(1));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(1));
                         go(walk-beside-player, 1);
                     }
                 }
@@ -116,8 +116,8 @@ statescript {
                         change-object-material(player, get-current-ellie-head-material(), objects/characters/ellie/head-blood-grave:promo, 1);
                         set-visible(get-player-weapon-process-id-from-weapon-id(switchblade), 0);
                         set-region-enabled(rr-pat-interior-1, 0, 0);
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(1));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(1));
                         go(side-by-side, 1);
                     }
                 }
@@ -131,8 +131,8 @@ statescript {
                         set-visible(get-player-weapon-process-id-from-weapon-id(switchblade), 0);
                         set-boolean(talk-about-joel, 0, self);
                         set-region-enabled(rr-pat-interior-1, 0, 0);
-                        fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                        fact-set(global, cold-breath-heavy?, boxed_bool(1));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(1));
                         go(walk-beside-player, 1);
                     }
                 }
@@ -725,61 +725,61 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-spline-projected-player, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = get-boolean(mirror-anim, self);
-                    *(i32*)*(*var_0 + (4 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = get-animation-frame(player, 2, pat-town-walkthrough-dina-holds-ellie--ellie);
-                    *(i32*)*(*var_0 + (5 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 49;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (7 * 8)) + 8) = 505.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-spline-projected-player, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 45;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
+                    *(i32*)*var_0[3] = 44;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = get-boolean(mirror-anim, self);
+                    *(i32*)*var_0[4] = 57;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = get-animation-frame(player, 2, pat-town-walkthrough-dina-holds-ellie--ellie);
+                    *(i32*)*var_0[5] = 82;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 49;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 20;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(f32*)(*var_0[7] + 8) = 505.00;
                     wait-animate_(dina, pat-town-walkthrough-dina-holds-ellie--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 9, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-spline-projected-player, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = get-boolean(mirror-anim, self);
-                    *(i32*)*(*var_0 + (3 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = get-animation-frame(player, 2, pat-town-walkthrough-dina-holds-ellie--ellie);
-                    *(i32*)*(*var_0 + (4 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (5 * 8)) + 8) = 560.00;
-                    *(i32*)*(*var_0 + (6 * 8)) = 49;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (7 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (8 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (8 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (8 * 8)) + 8) = 5;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-spline-projected-player, self);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 44;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = get-boolean(mirror-anim, self);
+                    *(i32*)*var_0[3] = 57;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = get-animation-frame(player, 2, pat-town-walkthrough-dina-holds-ellie--ellie);
+                    *(i32*)*var_0[4] = 82;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 20;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(f32*)(*var_0[5] + 8) = 560.00;
+                    *(i32*)*var_0[6] = 49;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 24;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(i32*)(*var_0[7] + 8) = 2;
+                    *(i32*)*var_0[8] = 13;
+                    *(u64*)(*var_0[8] + 8) = 0;
+                    *(i32*)(*var_0[8] + 8) = 5;
                     wait-animate_(dina, pat-town-walkthrough-dina-holds-ellie--dina, var_0);
                 }
                 lambda {
@@ -823,30 +823,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-spline-projected-player, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = get-boolean(mirror-anim, self);
-                    *(i32*)*(*var_0 + (5 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (6 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (6 * 8)) + 8) = 560;
-                    *(i32*)*(*var_0 + (7 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (7 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-spline-projected-player, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 45;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 1.00;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.50;
+                    *(i32*)*var_0[4] = 44;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = get-boolean(mirror-anim, self);
+                    *(i32*)*var_0[5] = 27;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 2;
+                    *(i32*)*var_0[6] = 61;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(i32*)(*var_0[6] + 8) = 560;
+                    *(i32*)*var_0[7] = 60;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(f32*)(*var_0[7] + 8) = 0.80;
                     wait-animate_(player, pat-town-walkthrough-dina-holds-ellie--ellie, var_0);
                 }
                 lambda {
@@ -1104,10 +1104,10 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(0));
                 }
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(0));
                 }
                 lambda {
                     signal(vox, 0);
@@ -1120,66 +1120,66 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
                     animate_(dina, igc-stream-pat-town-walkthrough-open-door--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
                     animate_(door-exterior-c-front-1, igc-stream-pat-town-walkthrough-open-door--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.95;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 775;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.95;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.95;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 775;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.95;
                     animate_(pat-town-walkthrough-open-door-light-object-1, igc-stream-pat-town-walkthrough-open-door--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.85;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.95;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 775;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.95;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-town-walkthrough-open-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.85;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.95;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 775;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.95;
                     wait-animate_(player, igc-stream-pat-town-walkthrough-open-door--ellie, var_0);
                 }
                 lambda {

@@ -16,7 +16,7 @@ u16 build-random-npc-group() {
     while (i < 101) {
         u64? var_0 = symbol-concat-int32(npc-, i);
         if (tag-specified?(var_0, self)) {
-            var_2 = darray-append(get-symbol(original-spawners-group, self), new-boxed-value(7, tag-symbol(var_0, self)), 1);
+            var_2 = darray-append(get-symbol(original-spawners-group, self), boxed_symbol(tag-symbol(var_0, self)), 1);
         }
         i = i + 1;
     }

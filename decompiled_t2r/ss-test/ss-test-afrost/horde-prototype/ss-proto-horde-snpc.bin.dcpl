@@ -51,7 +51,7 @@ statescript {
                 }
                 lambda {
                     if (entity-exists?(get-self-id()) && !(get-self-id() == 0) && simple-npc-is-dead?(get-self-id()) && !(is-on-screen?(get-object-position(get-self-id()), 1.00))) {
-                        send-event(horde-snpc-died, get-symbol(manager-script, self), new-boxed-value(7, get-self-id()));
+                        send-event(horde-snpc-died, get-symbol(manager-script, self), boxed_symbol(get-self-id()));
                         go(despawning, 1);
                     }
                 }
@@ -61,7 +61,7 @@ statescript {
             track main {
                 lambda {
                     if (entity-exists?(get-self-id()) && !(get-self-id() == 0)) {
-                        send-event(horde-snpc-died, get-symbol(manager-script, self), new-boxed-value(7, get-self-id()));
+                        send-event(horde-snpc-died, get-symbol(manager-script, self), boxed_symbol(get-self-id()));
                         go(despawning, 1);
                     }
                 }
@@ -108,9 +108,9 @@ statescript {
                         if (deterministic-nth-frame?(3)) {
                             set-float(dist-to-player, distance-between-objects(player, self), self);
                             if (get-float(dist-to-player, self) < 15.00) {
-                                darray-append(horde-snpc-swap-candidates, new-boxed-value(7, get-self-id()), 1);
+                                darray-append(horde-snpc-swap-candidates, boxed_symbol(get-self-id()), 1);
                             } else {
-                                darray-find-remove(horde-snpc-swap-candidates, new-boxed-value(7, get-self-id()), 0);
+                                darray-find-remove(horde-snpc-swap-candidates, boxed_symbol(get-self-id()), 0);
                             }
                             if (entity-distance-ahead-on-spline(player, self, get-symbol(chase-track, self)) < get-float(crowd-distance, self)) {
                                 go(crowd, 1);
@@ -144,9 +144,9 @@ statescript {
                                 u16 var_29;
                                 if (var_21 != 0 && (get-float(dist-to-player, self) - distance-between-points(get-object-position(player), get-spawner-position(var_21, 1))) > 1.00) {
                                     u64? var_30 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_30 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_30 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_30 + (0 * 8)) + 8) = get-spawner-locator(var_21, 1);
+                                    *(i32*)*var_30[0] = 10;
+                                    *(u64*)(*var_30[0] + 8) = 0;
+                                    *(u64*)(*var_30[0] + 8) = get-spawner-locator(var_21, 1);
                                     animate_(self, bindpose, var_30);
                                     wait-one-frame();
                                     stop-animating(self, 2, 0.00, 0, 0);
@@ -177,16 +177,16 @@ statescript {
                         if (deterministic-nth-frame?(25)) {
                             set-float(dist-to-player, distance-between-objects(player, self), self);
                             if (get-float(dist-to-player, self) < 15.00) {
-                                darray-append(horde-snpc-swap-candidates, new-boxed-value(7, get-self-id()), 1);
+                                darray-append(horde-snpc-swap-candidates, boxed_symbol(get-self-id()), 1);
                             } else {
-                                darray-find-remove(horde-snpc-swap-candidates, new-boxed-value(7, get-self-id()), 0);
+                                darray-find-remove(horde-snpc-swap-candidates, boxed_symbol(get-self-id()), 0);
                             }
                             u64? var_12 = entity-distance-ahead-on-spline(player, self, get-symbol(chase-track, self));
                             if (var_12 > (get-float(crowd-distance, self) + 0.50)) {
                                 go(chase, 1);
                             }
                             if (var_12 < -2.00 && !(simple-npc-on-screen-and-visible?(self))) {
-                                var_16 = send-event(horde-snpc-died, get-symbol(manager-script, self), new-boxed-value(7, get-self-id()));
+                                var_16 = send-event(horde-snpc-died, get-symbol(manager-script, self), boxed_symbol(get-self-id()));
                             }
                             horde-snpc-set-movement-speed(
                                 self,
@@ -216,9 +216,9 @@ statescript {
                                 u16 var_39;
                                 if (var_31 != 0 && (get-float(dist-to-player, self) - distance-between-points(get-object-position(player), get-spawner-position(var_31, 1))) > 1.00) {
                                     u64? var_40 = #%alloc-array(single-frame, 16, 1, 1);
-                                    *(i32*)*(*var_40 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_40 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_40 + (0 * 8)) + 8) = get-spawner-locator(var_31, 1);
+                                    *(i32*)*var_40[0] = 10;
+                                    *(u64*)(*var_40[0] + 8) = 0;
+                                    *(u64*)(*var_40[0] + 8) = get-spawner-locator(var_31, 1);
                                     animate_(self, bindpose, var_40);
                                     wait-one-frame();
                                     stop-animating(self, 2, 0.00, 0, 0);

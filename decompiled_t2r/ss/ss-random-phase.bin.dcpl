@@ -31,9 +31,9 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 58;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = random-float(0);
+                    *(i32*)*var_1[0] = 58;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = random-float(0);
                     animate_(self, tag-symbol(anim-name, self), var_1);
                 }
                 lambda {

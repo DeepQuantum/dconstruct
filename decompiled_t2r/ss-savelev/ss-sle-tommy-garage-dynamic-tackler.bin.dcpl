@@ -120,17 +120,7 @@ statescript {
                             var_3 = *(f32*)(var_2 + 8);
                         }
                         set-bound-frame(target-pos, offset-locator-world-space(get-object-locator(player), transform-vector-local-to-world(alloc-vector(*(f32*)var_2, 0.00, var_3, 1.00, 0), get-spawner-locator(pos-sle-garage-compass-1, 1))), self);
-                        foreach (u64? var_10 : all-infected-npcs) {
-                            u16 var_11;
-                            if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                                var_11 = *(u64*)var_10;
-                            } else {
-                                var_11 = 0;
-                            }
+                        foreach (u64? var_11 : all-infected-npcs) {
                             if (npc-alive?(var_11)) {
                                 npc-set-script-low-priority(var_11);
                                 if (npc-runner?(var_11) && npc-get-limb-state(var_11) == 0) {
@@ -199,17 +189,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-runner?(var_2) && character-in-melee-attack-of-other-character?(player, var_2)) {
                                 npc-stop(var_2);

@@ -242,7 +242,7 @@ statescript {
                     wait(1.50);
                 }
                 lambda {
-                    send-event(start-explore, ss-fob-on-foot-alice-explore-1, new-boxed-value(7, boat-alley));
+                    send-event(start-explore, ss-fob-on-foot-alice-explore-1, boxed_symbol(boat-alley));
                 }
             }
         }
@@ -521,7 +521,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(start-explore, ss-fob-on-foot-alice-explore-1, new-boxed-value(7, boat-workshop));
+                    send-event(start-explore, ss-fob-on-foot-alice-explore-1, boxed_symbol(boat-workshop));
                 }
             }
         }
@@ -1222,18 +1222,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap-bridge-to-boat, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(dynamic-ap-bridge-to-boat, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(mel, fob-on-foot-boat-mel-walks-on-ladder--mel, var_0);
                 }
                 lambda {
@@ -1325,18 +1325,18 @@ statescript {
                     wait-npc-move-to(mel, var_1, 0, 1, 0, 0, 1, 0);
                     npc-request-buddy-look(mel, 0);
                     u64? var_8 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_8 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_8 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_8 + (2 * 8)) = 58;
-                    *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (2 * 8)) + 8) = get-best-entry-phase(mel, tag-symbol(animation-name, pap-320), get-object-locator(mel), 7.00, apReference, 0);
-                    *(i32*)*(*var_8 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_8 + (3 * 8)) + 8) = 0;
+                    *(i32*)*var_8[0] = 28;
+                    *(u64*)(*var_8[0] + 8) = 0;
+                    *(f32*)(*var_8[0] + 8) = 0.50;
+                    *(i32*)*var_8[1] = 30;
+                    *(u64*)(*var_8[1] + 8) = 0;
+                    *(f32*)(*var_8[1] + 8) = 0.50;
+                    *(i32*)*var_8[2] = 58;
+                    *(u64*)(*var_8[2] + 8) = 0;
+                    *(f32*)(*var_8[2] + 8) = get-best-entry-phase(mel, tag-symbol(animation-name, pap-320), get-object-locator(mel), 7.00, apReference, 0);
+                    *(i32*)*var_8[3] = 31;
+                    *(u64*)(*var_8[3] + 8) = 0;
+                    *(u8*)(*var_8[3] + 8) = 0;
                     animate_(mel, tag-symbol(animation-name, pap-320), var_8);
                     wait(2.00);
                     send-event(mel-thinking-aloud, ss-vox-fob-on-foot-boat-puzzle-1);
@@ -1425,15 +1425,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-on-foot-mel-ladder-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = ladder;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-on-foot-mel-ladder-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 14;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = ladder;
                     wait-animate_(mel, fob-on-foot-boat-mel-ladder-rope-lt--mel, var_0);
                 }
                 lambda {
@@ -1460,15 +1460,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-on-foot-mel-ladder-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = ladder;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-on-foot-mel-ladder-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 14;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = ladder;
                     animate_(mel, fob-on-foot-boat-mel-walks-beam-idle--mel, var_0);
                 }
                 lambda {

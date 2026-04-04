@@ -39,7 +39,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(allow-despawning?, self) && npc-not-visible?(self) && get-float(dist-to-player, self) > 4.00) {
-                        broadcast-event(npc-removed, new-boxed-value(7, get-self-id()));
+                        broadcast-event(npc-removed, boxed_symbol(get-self-id()));
                         kill-entity(self);
                         go(done, 1);
                     }

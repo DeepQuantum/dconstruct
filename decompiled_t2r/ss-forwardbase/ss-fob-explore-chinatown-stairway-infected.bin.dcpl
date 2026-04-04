@@ -55,17 +55,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-stairway-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-stairway-infected) {
                         wait-spawn-entity(var_2, 0);
                     }
                 }
@@ -86,17 +76,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-stairway-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-stairway-infected) {
                         npc-teleport(var_2, var_2);
                         npc-set-script-only-no-perception(var_2);
                         npc-set-excluded-from-tension-calculation(var_2, 1);
@@ -172,17 +152,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-stairway-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-stairway-infected) {
                         shut-up(var_2, 0.10);
                         shut-up-murmuration(var_2, 0.10);
                     }
@@ -194,17 +164,7 @@ statescript {
         block start {
             track clickers {
                 lambda {
-                    foreach (u64? var_1 : fob-stairway-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-stairway-infected) {
                         npc-set-script-high-priority(var_2);
                         npc-set-excluded-from-tension-calculation(var_2, 0);
                         listen-mode-visible(var_2, 1, 1, -1.00);
@@ -230,7 +190,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(fob-stairway-infected, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(fob-stairway-infected, boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
                     if (npc-group-alive-count(fob-stairway-infected) <= 0) {

@@ -33,8 +33,8 @@ statescript {
                         send-event(
                             vase-broken,
                             ss-fob-explore-chinatown-coin-in-broken-vase-1,
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(18, get-bound-frame(my-location, self))
+                            boxed_symbol(get-self-id()),
+                            boxed_boundframe(get-bound-frame(my-location, self))
                         );
                     }
                 }

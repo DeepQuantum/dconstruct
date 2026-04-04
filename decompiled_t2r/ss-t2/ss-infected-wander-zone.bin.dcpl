@@ -29,7 +29,7 @@ statescript {
                     u64 i = 0;
                     while (i < 10) {
                         if (tag-specified?(symbol-concat-int32(infect-to-wander-, i), self)) {
-                            darray-append(get-symbol(my-group, self), new-boxed-value(7, tag-symbol(symbol-concat-int32(infect-to-wander-, i), self)), 1);
+                            darray-append(get-symbol(my-group, self), boxed_symbol(tag-symbol(symbol-concat-int32(infect-to-wander-, i), self)), 1);
                         }
                         i = i + 1;
                     }
@@ -47,7 +47,7 @@ statescript {
         block event npc-attacked {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(my-group, self), new-boxed-value(7, event-arg-symbol(1)))) {
+                    if (darray-contains?(get-symbol(my-group, self), boxed_symbol(event-arg-symbol(1)))) {
                         go(clear-zone, 1);
                     }
                 }
@@ -74,17 +74,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(my-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(my-group, self)) {
                         if (npc-alive?(var_4)) {
                             npc-clear-zone(var_4);
                         }

@@ -80,17 +80,7 @@ statescript {
                         while (!npc-in-idle-gesture?(yara)) {
                             wait-one-frame();
                         }
-                        foreach (u64? var_2 : sle-marina-abby-pain-gestures) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : sle-marina-abby-pain-gestures) {
                             if (is-gesture-playing?(yara, var_3, 1)) {
                                 set-symbol(current-pain-gesture, var_3, self);
                                 go(pain, 1);

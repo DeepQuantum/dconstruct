@@ -13,7 +13,7 @@
 
 u16 set-buddy-unleash-target(f32 arg_0) {
     u64? var_3;
-    if (!darray-contains?(fob-marked-runners, new-boxed-value(7, get-closest-enemy-to-player(9999.00, 0, 15)))) {
+    if (!darray-contains?(fob-marked-runners, boxed_symbol(get-closest-enemy-to-player(9999.00, 0, 15)))) {
         var_3 = get-closest-enemy-to-player(9999.00, 0, 15);
     } else if (!(npc-get-target(arg_0) == 0)) {
         var_3 = npc-get-target(arg_0);
@@ -22,7 +22,7 @@ u16 set-buddy-unleash-target(f32 arg_0) {
     }
     u16 var_9;
     if (!(var_3 == 0)) {
-        darray-append(fob-marked-runners, new-boxed-value(7, var_3), 1);
+        darray-append(fob-marked-runners, boxed_symbol(var_3), 1);
         var_9 = unleash-buddy-against-npc(arg_0, var_3);
     } else {
         var_9 = 0;
@@ -140,17 +140,7 @@ statescript {
             track main {
                 lambda {
                     if (deterministic-nth-frame?(3)) {
-                        foreach (u64? var_2 : fob-store-patio-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : fob-store-patio-infected) {
                             if (npc-alive?(var_3)) {
                                 if (fob-patio-runner-aware-of-manny?(var_3)) {
                                     fob-patio-manny-caught(var_3);
@@ -202,7 +192,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    if (darray-contains?(fob-store-patio-infected, new-boxed-value(7, event-arg-symbol(0))) && npc-alive?(event-arg-symbol(0))) {
+                    if (darray-contains?(fob-store-patio-infected, boxed_symbol(event-arg-symbol(0))) && npc-alive?(event-arg-symbol(0))) {
                         set-symbol(invader, event-arg-symbol(0), self);
                         go(runner-entered-paint, 1);
                     }
@@ -230,17 +220,7 @@ statescript {
             track main {
                 lambda {
                     if (deterministic-nth-frame?(3)) {
-                        foreach (u64? var_2 : fob-store-patio-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : fob-store-patio-infected) {
                             if (npc-alive?(var_3)) {
                                 if (fob-patio-runner-aware-of-manny?(var_3)) {
                                     fob-patio-manny-caught(var_3);
@@ -285,7 +265,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    if (darray-contains?(fob-store-patio-infected, new-boxed-value(7, event-arg-symbol(0))) && npc-alive?(event-arg-symbol(0))) {
+                    if (darray-contains?(fob-store-patio-infected, boxed_symbol(event-arg-symbol(0))) && npc-alive?(event-arg-symbol(0))) {
                         set-symbol(invader, event-arg-symbol(0), self);
                         go(runner-entered-paint, 1);
                     }
@@ -372,17 +352,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-store-patio-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-store-patio-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             unleash-buddy/f(manny);

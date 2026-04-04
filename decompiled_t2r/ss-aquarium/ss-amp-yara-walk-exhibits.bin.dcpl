@@ -156,7 +156,7 @@ statescript {
                             set-symbol(active-yara-performance, var_8, self);
                             var_9 = set-boolean(is-cap?, 0, self);
                         }
-                        if (!(get-symbol(active-yara-performance, self) == 0) && !darray-contains?(amp-yara-walk--done-caps, new-boxed-value(7, get-symbol(active-yara-performance, self)))) {
+                        if (!(get-symbol(active-yara-performance, self) == 0) && !darray-contains?(amp-yara-walk--done-caps, boxed_symbol(get-symbol(active-yara-performance, self)))) {
                             var_3 = go(yara-use-cap, 1);
                         }
                     }
@@ -265,7 +265,7 @@ statescript {
         block event lap-exited {
             track main {
                 lambda {
-                    darray-append(amp-yara-walk--done-caps, new-boxed-value(7, event-arg-symbol(1)), 1);
+                    darray-append(amp-yara-walk--done-caps, boxed_symbol(event-arg-symbol(1)), 1);
                 }
                 lambda {
                     go(yara-lead-lev-search, 1);
@@ -275,7 +275,7 @@ statescript {
         block event cap-exited {
             track main {
                 lambda {
-                    darray-append(amp-yara-walk--done-caps, new-boxed-value(7, event-arg-symbol(1)), 1);
+                    darray-append(amp-yara-walk--done-caps, boxed_symbol(event-arg-symbol(1)), 1);
                 }
                 lambda {
                     go(yara-lead-lev-search, 1);

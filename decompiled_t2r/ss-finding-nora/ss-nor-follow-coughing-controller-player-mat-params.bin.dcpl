@@ -45,10 +45,10 @@ statescript {
         block end {
             track main {
                 lambda {
-                    send-event(end-force-exert, ss-player-flushness-1, new-boxed-value(2, 1));
+                    send-event(end-force-exert, ss-player-flushness-1, boxed_i32(1));
                 }
                 lambda {
-                    send-event(set-blood-splatter, ss-player-blood-splatter-1, new-boxed-value(6, 0.00));
+                    send-event(set-blood-splatter, ss-player-blood-splatter-1, boxed_f32(0.00));
                 }
             }
         }
@@ -57,7 +57,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(force-exert, ss-player-flushness-1, new-boxed-value(6, -1.00));
+                    send-event(force-exert, ss-player-flushness-1, boxed_f32(-1.00));
                 }
                 lambda {
                     if (task-active?(find-nora, nor-torture-nora-igc)) {
@@ -69,8 +69,8 @@ statescript {
                         while (!is-script-running?(ss-player-blood-splatter-1)) {
                             wait-one-frame();
                         }
-                        send-event(set-blood-splatter, ss-player-blood-splatter-1, new-boxed-value(6, 1.00), new-boxed-value(6, 50.00));
-                        send-event(hold-exert, ss-player-flushness-1, new-boxed-value(6, 1.00), new-boxed-value(6, -1.00));
+                        send-event(set-blood-splatter, ss-player-blood-splatter-1, boxed_f32(1.00), boxed_f32(50.00));
+                        send-event(hold-exert, ss-player-flushness-1, boxed_f32(1.00), boxed_f32(-1.00));
                     }
                 }
             }
@@ -78,10 +78,10 @@ statescript {
         block event task-complete {
             track main {
                 lambda {
-                    send-event(set-blood-splatter, ss-player-blood-splatter-1, new-boxed-value(6, 1.00), new-boxed-value(6, 100.00));
+                    send-event(set-blood-splatter, ss-player-blood-splatter-1, boxed_f32(1.00), boxed_f32(100.00));
                 }
                 lambda {
-                    send-event(hold-exert, ss-player-flushness-1, new-boxed-value(6, 1.00), new-boxed-value(6, -1.00));
+                    send-event(hold-exert, ss-player-flushness-1, boxed_f32(1.00), boxed_f32(-1.00));
                 }
             }
         }
@@ -97,7 +97,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(end-force-exert, ss-player-flushness-1, new-boxed-value(2, 3));
+                    send-event(end-force-exert, ss-player-flushness-1, boxed_i32(3));
                 }
                 lambda {
                     go(complete, 1);

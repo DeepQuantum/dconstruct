@@ -240,7 +240,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(bloater-broke-wall, new-boxed-value(7, get-self-id()));
+                    broadcast-event(bloater-broke-wall, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     while (1) {

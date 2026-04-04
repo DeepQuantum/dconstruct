@@ -43,9 +43,9 @@ f32 fire-length() {
 }
 
 u64? activate-flame-at-locator(u64? arg_0, sid arg_1) {
-    broadcast-event(napalm-spawn, new-boxed-value(18, arg_1), new-boxed-value(6, 0.50 + get-float(flame-radius, self)));
+    broadcast-event(napalm-spawn, boxed_boundframe(arg_1), boxed_f32(0.50 + get-float(flame-radius, self)));
     add-flame-by-radius(arg_1, get-float(flame-radius, self), get-float(flame-time, self), 0, 0);
-    return darray-append(vision-blockers, new-boxed-value(7, spawn-entity-at(obj-test-grass-smoke-col-napalm-1, finalize-vision-blockers(arg_1), 0)), 1);
+    return darray-append(vision-blockers, boxed_symbol(spawn-entity-at(obj-test-grass-smoke-col-napalm-1, finalize-vision-blockers(arg_1), 0)), 1);
 }
 
 statescript {
@@ -176,17 +176,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (!(npc-is-infected?(var_2))) {
                             npc-override-post-selector-set-id(var_2, *no-fire-selector-set*);
                         }
@@ -194,17 +184,7 @@ statescript {
                 }
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : all-enemy-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-enemy-npcs) {
                             if (!(npc-is-infected?(var_2)) && npc-path-goes-through-fire?(var_2)) {
                                 npc-use-closest-post(
                                     var_2,
@@ -239,17 +219,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : vision-blockers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : vision-blockers) {
                         if (!is-final-build?()) {
                             display(dc:format("Napalm - destroying vision blocker : %s", string-debug(var_2)), 19);
                         }

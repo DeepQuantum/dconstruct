@@ -276,8 +276,8 @@ statescript {
                 }
                 lambda {
                     u64? var_5;
-                    if (darray-contains?(get-symbol(group-available-goals, self), new-boxed-value(7, get-symbol(selected-goal, self))) && get-int32(num-available-goals, self) >= 2) {
-                        var_5 = darray-find(get-symbol(group-available-goals, self), new-boxed-value(7, get-symbol(selected-goal, self)), 0);
+                    if (darray-contains?(get-symbol(group-available-goals, self), boxed_symbol(get-symbol(selected-goal, self))) && get-int32(num-available-goals, self) >= 2) {
+                        var_5 = darray-find(get-symbol(group-available-goals, self), boxed_symbol(get-symbol(selected-goal, self)), 0);
                     }
                     u64? var_13 = darray-at(get-symbol(group-available-goals, self), (1 + var_5) % get-int32(num-available-goals, self));
                     u16 var_14;

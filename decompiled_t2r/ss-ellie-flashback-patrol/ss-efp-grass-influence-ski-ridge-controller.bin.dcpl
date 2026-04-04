@@ -50,34 +50,14 @@ statescript {
                     if (fact-bool(player, is-zoomed-in, 0, 0)) {
                         override-world-influence-buffer-location(-0.99, -34.55, 490.80, 80, 30.00);
                         if (!(get-boolean(scoped-cycle?, self))) {
-                            foreach (u64? var_4 : target-infected-ski-lift) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
-                                fact-set(var_5, sniper-scope-splashers, new-boxed-value(1, 1));
+                            foreach (u64? var_5 : target-infected-ski-lift) {
+                                fact-set(var_5, sniper-scope-splashers, boxed_bool(1));
                             }
                             set-boolean(scoped-cycle?, 1, self);
                         }
                     } else if (!(fact-bool(player, is-zoomed-in, 0, 0))) {
                         if (get-boolean(scoped-cycle?, self)) {
-                            foreach (u64? var_12 : target-infected-ski-lift) {
-                                u16 var_13;
-                                if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                    var_13 = *(u64*)var_12;
-                                } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                    var_13 = *(u64*)var_12;
-                                } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                    var_13 = *(u64*)var_12;
-                                } else {
-                                    var_13 = 0;
-                                }
+                            foreach (u64? var_13 : target-infected-ski-lift) {
                                 if (fact-exists?(var_13, sniper-scope-splashers)) {
                                     fact-remove(var_13, sniper-scope-splashers);
                                 }

@@ -295,7 +295,7 @@ statescript {
                         gesture_(player, ellie-water-react-arms-wipe-face-01-gesture, var_4);
                     } else {
                         u64? var_5 = group-random(waterfall-reaction-shake-anims-temp);
-                        darray-find-remove(waterfall-reaction-shake-anims-temp, new-boxed-value(7, var_5), 0);
+                        darray-find-remove(waterfall-reaction-shake-anims-temp, boxed_symbol(var_5), 0);
                         print-symbol(var_5, self);
                         if (player-in-state?(Move) && get-player-weapon-process-id() == 0 && !(player-is-crouched?())) {
                             u64? var_12 = alloc-gesture-play-params();

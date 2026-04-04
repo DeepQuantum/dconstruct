@@ -13,17 +13,7 @@
 
 u16 find-best-spawner() {
     u16 var_1;
-    foreach (u64? var_2 : bottlespawners) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : bottlespawners) {
         u16 var_13;
         if (0 == 0 && get-locator-distance-xz(get-object-locator(player), get-spawner-locator(var_3, 1)) > get-locator-distance-xz(get-object-locator(player), get-spawner-locator(0, 1)) && !is-on-screen?(get-locator-position(get-spawner-locator(var_3, 1)), 0.10)) {
             var_13 = var_3;
@@ -84,17 +74,7 @@ statescript {
                     set-int32(num_bottles, get-int32(num_bottles, self) + 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : bottlespawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : bottlespawners) {
                         set-int32(num_bottles, get-int32(num_bottles, self) + 1, self);
                         spawn-entity(var_2, 0, 0);
                     }

@@ -66,33 +66,13 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_7 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-npc"), 0, 0, 0)) {
-                        u16 var_8;
-                        if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                            var_8 = *(u64*)var_7;
-                        } else {
-                            var_8 = 0;
-                        }
-                        darray-append(get-symbol(npc-spawners-group, self), new-boxed-value(7, var_8), 1);
+                    foreach (u64? var_8 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-npc"), 0, 0, 0)) {
+                        darray-append(get-symbol(npc-spawners-group, self), boxed_symbol(var_8), 1);
                     }
                 }
                 lambda {
-                    foreach (u64? var_7 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-snpc"), 0, 0, 0)) {
-                        u16 var_8;
-                        if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                            var_8 = *(u64*)var_7;
-                        } else {
-                            var_8 = 0;
-                        }
-                        darray-append(get-symbol(snpc-spawners-group, self), new-boxed-value(7, var_8), 1);
+                    foreach (u64? var_8 : get-spawners-by-tag(symbol-concat-string(tag-symbol(spawners-tag, self), "-snpc"), 0, 0, 0)) {
+                        darray-append(get-symbol(snpc-spawners-group, self), boxed_symbol(var_8), 1);
                     }
                 }
                 lambda {

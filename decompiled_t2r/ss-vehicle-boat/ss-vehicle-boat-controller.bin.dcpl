@@ -167,17 +167,7 @@ statescript {
                     boat-clear-anchor();
                 }
                 lambda {
-                    foreach (u64? var_1 : boat-script-objects) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : boat-script-objects) {
                         kill-entity-if-spawned(var_2);
                     }
                 }
@@ -330,7 +320,7 @@ statescript {
                 lambda {
                     if (player-in-state?(BoatDriving) || player-in-state?(DebugFly) || 0 && !get-boolean(ignore-input?, self) && get-boolean(lock-player-in-driving?, self)) {
                         set-player-forced-off-boat(0, 0);
-                        send-event(enter-boat-instant, player, new-boxed-value(7, boat));
+                        send-event(enter-boat-instant, player, boxed_symbol(boat));
                     }
                 }
                 lambda {
@@ -505,7 +495,7 @@ statescript {
                     set-player-forced-off-boat(0, 0);
                 }
                 lambda {
-                    send-event(enter-boat-instant, player, new-boxed-value(7, boat));
+                    send-event(enter-boat-instant, player, boxed_symbol(boat));
                 }
                 lambda {
                     wait-for(reset-vars-done);
@@ -576,7 +566,7 @@ statescript {
                     set-player-forced-off-boat(1, 0);
                 }
                 lambda {
-                    if (darray-contains?(boat--motor-off-on-exit-tasks, new-boxed-value(7, task-get-current-subnode-id()))) {
+                    if (darray-contains?(boat--motor-off-on-exit-tasks, boxed_symbol(task-get-current-subnode-id()))) {
                         boat-force-engine-on(boat, 0);
                         set-boolean(motor-running?, 0, self);
                     } else {

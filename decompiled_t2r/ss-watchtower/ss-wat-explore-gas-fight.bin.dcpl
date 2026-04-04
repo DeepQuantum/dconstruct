@@ -168,17 +168,7 @@ statescript {
                 }
                 lambda {
                     if (player-in-region?(rgn-toggle-wat-gas-station-1, 2)) {
-                        foreach (u64? var_2 : wat-gas-hardpoints) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-gas-hardpoints) {
                             set-hardpoint-enabled(var_3);
                         }
                     }
@@ -192,17 +182,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-svar-as-boolean(wat-explore-gas-station-combat-started)) {
-                        foreach (u64? var_2 : wat-gas-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-gas-npcs) {
                             u64? var_5 = npc-get-awareness(var_3, player);
                             if (npc-alive?(var_3) || var_5 == 2 || var_5 == 3) {
                                 if (var_5 == 4) {
@@ -211,17 +191,7 @@ statescript {
                             }
                         }
                     } else {
-                        foreach (u64? var_8 : wat-gas-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : wat-gas-npcs) {
                             if (npc-alive?(var_9)) {
                                 if (locator-in-region?(alloc-bound-frame(npc-get-entity-position(var_9, player), 0, 0, 0, 0), rgn-gas-zone-1, player)) {
                                     var_14 = npc-set-zone-region(var_9, rgn-gas-zone-1);
@@ -241,8 +211,8 @@ statescript {
                         send-event(
                             vox-gas-station-combat-done,
                             ss-vox-wat-explore-capitol-hill-1,
-                            new-boxed-value(7, event-arg-symbol(1)),
-                            new-boxed-value(7, event-arg-symbol(2))
+                            boxed_symbol(event-arg-symbol(1)),
+                            boxed_symbol(event-arg-symbol(2))
                         );
                         go(combat-done, 1);
                     }
@@ -252,18 +222,8 @@ statescript {
         block event entity-awareness {
             track main {
                 lambda {
-                    if (darray-contains?(wat-gas-npcs, new-boxed-value(7, event-arg-symbol(0))) && darray-contains?(wat-infected-dive-npcs, new-boxed-value(7, event-arg-symbol(1))) && event-arg-int32(2) == 2) {
-                        foreach (u64? var_8 : wat-infected-dive-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                    if (darray-contains?(wat-gas-npcs, boxed_symbol(event-arg-symbol(0))) && darray-contains?(wat-infected-dive-npcs, boxed_symbol(event-arg-symbol(1))) && event-arg-int32(2) == 2) {
+                        foreach (u64? var_9 : wat-infected-dive-npcs) {
                             if (npc-alive?(var_9)) {
                                 if (!npc-is-aware-of?(event-arg-symbol(0), var_9)) {
                                     npc-make-aware-of(event-arg-symbol(0), var_9, 2, *npc-awareness-options-silent*);
@@ -278,17 +238,7 @@ statescript {
         block event entering-area {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-gas-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-gas-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -300,17 +250,7 @@ statescript {
                     send-event(gas-combat-done, ss-vox-wat-capitol-hill-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-gas-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-gas-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -323,17 +263,7 @@ statescript {
                         alloc-point(0.00, 0.00, 0.00, 0);
                         u16 var_3;
                         u64? var_4;
-                        foreach (u64? var_5 : wat-gas-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : wat-gas-npcs) {
                             u16 var_8;
                             u64? var_9;
                             if (npc-alive?(var_6)) {
@@ -354,7 +284,7 @@ statescript {
                             var_4 = var_9;
                         }
                         if (var_3) {
-                            var_18 = send-event(spillover-knowledge, ss-wat-explore-laundry-fight-1, new-boxed-value(14, var_4));
+                            var_18 = send-event(spillover-knowledge, ss-wat-explore-laundry-fight-1, boxed_point(var_4));
                         }
                     }
                 }
@@ -363,17 +293,7 @@ statescript {
         block event spillover-knowledge {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-gas-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-gas-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-awareness(var_2, player) != 2 && locator-in-region?(get-object-locator(var_2), rgn-gas-zone-1, player)) {
                                 npc-make-aware-of-at(var_2, player, event-arg-point(0), 2, "", 0);
@@ -388,17 +308,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-gas-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-gas-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

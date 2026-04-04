@@ -52,7 +52,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    if (darray-contains?(guitar-ad-ints, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(guitar-ad-ints, boxed_symbol(event-arg-symbol(0)))) {
                         go(mark-guitar, 1);
                     } else if (event-arg-symbol(0) == exa-sea-horse-bus-ad-1 && event-arg-symbol(0) == exa-sea-horse-bus-ad-2) {
                         go(mark-coffee, 1);
@@ -82,7 +82,7 @@ statescript {
                     wait(0.60);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 11));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(11));
                 }
                 lambda {
                     go(wait-interact, 1);
@@ -111,7 +111,7 @@ statescript {
                     wait(0.60);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(7));
                 }
                 lambda {
                     go(wait-interact, 1);

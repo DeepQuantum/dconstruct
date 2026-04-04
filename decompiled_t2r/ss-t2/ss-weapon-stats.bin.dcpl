@@ -183,7 +183,7 @@ statescript {
                             var_18 = string-debug(var_11);
                         }
                         if (!(*(i64*)(var_5 + 384) == 0)) {
-                            if (darray-contains?(weapon-stats-throwables, new-boxed-value(7, *(u64*)(var_3 + 72)))) {
+                            if (darray-contains?(weapon-stats-throwables, boxed_symbol(*(u64*)(var_3 + 72)))) {
                                 string var_27;
                                 if (is-player-abby?(player)) {
                                     var_27 = "abby";

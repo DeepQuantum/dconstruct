@@ -74,17 +74,7 @@ statescript {
                     set-boolean(left-path?, get-boolean(last-branch-left-chosen?, ss-afm-horse-chase-spline-manager-1), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-diversion-duck-collision) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-diversion-duck-collision) {
                         spawn-entity(var_2, 0, 0);
                         set-visible(var_2, 0);
                     }
@@ -463,17 +453,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-npcs--militia-right) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-npcs--militia-right) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -481,17 +461,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-riders-right) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-riders-right) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -499,17 +469,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-horses-right) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-horses-right) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -517,17 +477,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-simple-right) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-simple-right) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -547,17 +497,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-npcs--militia-left) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-npcs--militia-left) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -565,17 +505,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-riders-left) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-riders-left) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -583,17 +513,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-horses-left) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-horses-left) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }
@@ -601,17 +521,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-diversion-simple-left) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-diversion-simple-left) {
                         while (!!(object-on-screen-and-visible?(var_2, -1, 0))) {
                             wait-one-frame();
                         }

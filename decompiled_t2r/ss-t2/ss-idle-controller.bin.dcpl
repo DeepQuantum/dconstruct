@@ -147,9 +147,9 @@ u64? get-valid-gestures() {
         }
         u64? var_25 = filter-gesture-arrays(get-self-id(), new-fact-dictionary(
             my-horse,
-            new-boxed-value(7, var_14),
+            boxed_symbol(var_14),
             explore-request?,
-            new-boxed-value(1, get-boolean(request-explore, self))
+            boxed_bool(get-boolean(request-explore, self))
         ), var_23);
         set-boolean(request-explore, 0, self);
         u64? var_26 = darray-sorted-indices(var_25, rate-gesture-array-by-priority, 1, 1);
@@ -405,8 +405,8 @@ u16 perform-idle-gesture() {
     } else {
         u64? var_9 = group-random(var_0);
         u64? var_14;
-        while (darray-contains?(played-group(), new-boxed-value(7, var_9)) && darray-count(var_0) > 0) {
-            darray-find-remove(var_0, new-boxed-value(7, var_9), 0);
+        while (darray-contains?(played-group(), boxed_symbol(var_9)) && darray-count(var_0) > 0) {
+            darray-find-remove(var_0, boxed_symbol(var_9), 0);
             u16 var_17;
             if (darray-count(var_0) == 0) {
                 if (darray-count(var_1) > 0) {
@@ -432,13 +432,13 @@ u16 perform-idle-gesture() {
                 var_21 = 1;
             }
             set-symbol(last-idle-gesture-played, var_14, self);
-            darray-append(get-symbol(DEBUG-ALL-played-gestrue-group-symbol, self), new-boxed-value(7, var_14), 1);
+            darray-append(get-symbol(DEBUG-ALL-played-gestrue-group-symbol, self), boxed_symbol(var_14), 1);
             if (*(u8*)(*idle-controllers* + 9)) {
                 print-group(get-symbol(DEBUG-ALL-played-gestrue-group-symbol, self));
             }
-            darray-append(played-group(), new-boxed-value(7, var_14), 1);
+            darray-append(played-group(), boxed_symbol(var_14), 1);
             if (!(is-cinematic-action-pack-def?(var_14)) && !(gesture-id?(var_14)) && get-self-id() != player) {
-                send-event(started-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(started-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 1, self);
                 fact-set-symbol-in-dict(fact-get-dictionary(get-self-id()), current-idle, var_14);
                 npc-request-idle-performance(get-self-id(), var_14);
@@ -448,7 +448,7 @@ u16 perform-idle-gesture() {
                     wait-one-frame();
                 }
                 fact-set-time-frame-in-dict(fact-get-dictionary(get-self-id()), last-time-played-stationary-idle, get-current-timeframe(0));
-                send-event(ended-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(ended-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 0, self);
                 fact-remove(get-self-id(), current-idle);
                 wait-one-frame();
@@ -456,7 +456,7 @@ u16 perform-idle-gesture() {
                     var_32 = holster-npc-weapon-physically(lev, npc-get-weapon-instance(lev, 4), 0.00);
                 }
             } else if (*(u8*)(*idle-controllers* + 8)) {
-                send-event(started-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(started-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 1, self);
                 fact-set-symbol-in-dict(fact-get-dictionary(get-self-id()), current-idle, var_14);
                 set-symbol(real-last-idle-gesture-played, var_14, self);
@@ -470,11 +470,11 @@ u16 perform-idle-gesture() {
                 *(u8*)(var_55 + 112) = 1;
                 *(u8*)(var_55 + 128) = 1;
                 gesture_(get-self-id(), var_14, var_55);
-                send-event(ended-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(ended-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 0, self);
                 var_32 = fact-remove(get-self-id(), current-idle);
             } else if (gesture-id?(var_14)) {
-                send-event(started-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(started-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 1, self);
                 fact-set-symbol-in-dict(fact-get-dictionary(get-self-id()), current-idle, var_14);
                 set-symbol(real-last-idle-gesture-played, var_14, self);
@@ -488,7 +488,7 @@ u16 perform-idle-gesture() {
                 *(u8*)(var_66 + 112) = 1;
                 *(u8*)(var_66 + 128) = 1;
                 gesture_(get-self-id(), var_14, var_66);
-                send-event(ended-gesture, get-self-id(), new-boxed-value(7, var_14));
+                send-event(ended-gesture, get-self-id(), boxed_symbol(var_14));
                 set-boolean(playing-idle-gesture, 0, self);
                 var_32 = fact-remove(get-self-id(), current-idle);
             }
@@ -578,7 +578,7 @@ u16 add-gestures-to(bool arg_0, u64? arg_1) {
         u64? var_1 = hash-lookup-named(*gesture-array-table*, arg_0);
         u64 i = 0;
         while (i < *(i32*)*(var_1 + 16)) {
-            darray-append(arg_1, new-boxed-value(7, *(u64*)(*(*(var_1 + 16) + 8) + (i * 8))), 1);
+            darray-append(arg_1, boxed_symbol(*(u64*)(*(*(var_1 + 16) + 8) + (i * 8))), 1);
             i = i + 1;
         }
         var_0 = i;
@@ -702,7 +702,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(get-self-id(), idle-controller, new-boxed-value(7, symbol-concat-string(ss-idle-controller--, get-self-name())));
+                    fact-set(get-self-id(), idle-controller, boxed_symbol(symbol-concat-string(ss-idle-controller--, get-self-name())));
                 }
                 lambda {
                     stop-timer(idle-timer, self);
@@ -882,7 +882,7 @@ statescript {
         block event lead-stopping-at-node {
             track main {
                 lambda {
-                    send-event(gesture-idles-override-times, get-self-id(), new-boxed-value(6, 0.00), new-boxed-value(6, 0.00));
+                    send-event(gesture-idles-override-times, get-self-id(), boxed_f32(0.00), boxed_f32(0.00));
                 }
                 lambda {
                     set-symbol(active-buddy-lead-spline, event-arg-symbol(1), self);
@@ -902,9 +902,9 @@ statescript {
                 }
                 lambda {
                     if (get-self-id() != player && npc-using-skill?(get-self-id(), 53) && !(get-symbol(active-buddy-lead-spline, self) == 0)) {
-                        fact-set/f(get-self-id(), lead-idle-performance-requested?, new-boxed-value(1, 1));
+                        fact-set/f(get-self-id(), lead-idle-performance-requested?, boxed_bool(1));
                         if (spline-tag-specified?(lead-space-size, get-symbol(active-buddy-lead-spline, self), -1)) {
-                            fact-set/f(get-self-id(), lead-space-size, new-boxed-value(7, spline-tag-symbol(lead-space-size, get-symbol(active-buddy-lead-spline, self), -1)));
+                            fact-set/f(get-self-id(), lead-space-size, boxed_symbol(spline-tag-symbol(lead-space-size, get-symbol(active-buddy-lead-spline, self), -1)));
                         }
                     } else {
                         fact-remove(get-self-id(), lead-idle-performance-requested?);
@@ -914,7 +914,7 @@ statescript {
                 }
                 lambda {
                     if (!(get-symbol(active-buddy-lead-spline, self) == 0) && get-int32(active-buddy-lead-wait-point-index, self) > -1 && spline-tag-int32(facing-edge, get-symbol(active-buddy-lead-spline, self), get-int32(active-buddy-lead-wait-point-index, self)) > 0 && npc-lead-get-seconds-spent-waiting-at-current-node(get-self-id()) > 0.00 && angle-in-between-locators(get-object-locator(get-self-id()), get-spline-point-locator(get-symbol(active-buddy-lead-spline, self), get-int32(active-buddy-lead-wait-point-index, self)), 2) <= 50.00) {
-                        fact-set/f(get-self-id(), lead-waiting-near-edge, new-boxed-value(1, 1));
+                        fact-set/f(get-self-id(), lead-waiting-near-edge, boxed_bool(1));
                     }
                 }
                 lambda {

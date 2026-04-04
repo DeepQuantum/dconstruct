@@ -17,17 +17,7 @@ u64? npc-res-neighborhood-houses-alive-count() {
 
 u16 interrupt-intro-igc?() {
     u16 var_1;
-    foreach (u64? var_2 : res-house-igc-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : res-house-igc-npcs) {
         u16 var_5;
         if (!npc-alive?(var_3)) {
             var_5 = 1;
@@ -170,17 +160,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -245,35 +225,35 @@ statescript {
                         igc-prop-clean-up(2.00);
                         signal(rumble-time, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-res-houses-yard-wall-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 23.00;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-res-houses-yard-wall-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.00;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
+                        *(i32*)*var_2[3] = 57;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 23.00;
                         animate_(obj-res-houses-yard-wall-1, res-neighborhood-vault-wall--fence, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(pos-res-houses-vault-wall-1, 1);
-                        *(i32*)*(*var_4 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_4 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (3 * 8)) + 8) = 23.00;
-                        *(i32*)*(*var_4 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (4 * 8)) + 8) = 18;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(pos-res-houses-vault-wall-1, 1);
+                        *(i32*)*var_4[1] = 28;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.30;
+                        *(i32*)*var_4[2] = 30;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(f32*)(*var_4[2] + 8) = 0.50;
+                        *(i32*)*var_4[3] = 57;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(f32*)(*var_4[3] + 8) = 23.00;
+                        *(i32*)*var_4[4] = 24;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(i32*)(*var_4[4] + 8) = 18;
                         wait-animate_(player, res-neighborhood-vault-wall--ellie, var_4);
                         npc-set-script-low-priority(npc-res-human-with-dog-1);
                         npc-set-script-low-priority(npc-res-human-4);
@@ -357,27 +337,27 @@ statescript {
                             var_5 = res-neighborhood-meet-up--male-a;
                         }
                         u64? var_6 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
-                        *(i32*)*(*var_6 + (1 * 8)) = 4;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_6 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_6 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (3 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_6 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (4 * 8)) + 8) = 2;
-                        *(i32*)*(*var_6 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_6 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_6 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (6 * 8)) = 13;
-                        *(u64*)(*(*var_6 + (6 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (6 * 8)) + 8) = 2;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
+                        *(i32*)*var_6[1] = 4;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(u8*)(*var_6[1] + 8) = 1;
+                        *(i32*)*var_6[2] = 28;
+                        *(u64*)(*var_6[2] + 8) = 0;
+                        *(f32*)(*var_6[2] + 8) = 0.00;
+                        *(i32*)*var_6[3] = 30;
+                        *(u64*)(*var_6[3] + 8) = 0;
+                        *(f32*)(*var_6[3] + 8) = 0.75;
+                        *(i32*)*var_6[4] = 24;
+                        *(u64*)(*var_6[4] + 8) = 0;
+                        *(i32*)(*var_6[4] + 8) = 2;
+                        *(i32*)*var_6[5] = 3;
+                        *(u64*)(*var_6[5] + 8) = 0;
+                        *(u8*)(*var_6[5] + 8) = 1;
+                        *(i32*)*var_6[6] = 13;
+                        *(u64*)(*var_6[6] + 8) = 0;
+                        *(i32*)(*var_6[6] + 8) = 2;
                         animate_(npc-res-human-with-dog-1, var_5, var_6);
                         sid var_9;
                         if (get-svar-as-boolean(res-neighborhood-stealthed-dog-st)) {
@@ -386,27 +366,27 @@ statescript {
                             var_9 = res-neighborhood-meet-up--dog;
                         }
                         u64? var_10 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_10 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
-                        *(i32*)*(*var_10 + (1 * 8)) = 4;
-                        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_10 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_10 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_10 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_10 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (3 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_10 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_10 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_10 + (4 * 8)) + 8) = 2;
-                        *(i32*)*(*var_10 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_10 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_10 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_10 + (6 * 8)) = 13;
-                        *(u64*)(*(*var_10 + (6 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_10 + (6 * 8)) + 8) = 2;
+                        *(i32*)*var_10[0] = 10;
+                        *(u64*)(*var_10[0] + 8) = 0;
+                        *(u64*)(*var_10[0] + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
+                        *(i32*)*var_10[1] = 4;
+                        *(u64*)(*var_10[1] + 8) = 0;
+                        *(u8*)(*var_10[1] + 8) = 1;
+                        *(i32*)*var_10[2] = 28;
+                        *(u64*)(*var_10[2] + 8) = 0;
+                        *(f32*)(*var_10[2] + 8) = 0.00;
+                        *(i32*)*var_10[3] = 30;
+                        *(u64*)(*var_10[3] + 8) = 0;
+                        *(f32*)(*var_10[3] + 8) = 0.75;
+                        *(i32*)*var_10[4] = 24;
+                        *(u64*)(*var_10[4] + 8) = 0;
+                        *(i32*)(*var_10[4] + 8) = 2;
+                        *(i32*)*var_10[5] = 3;
+                        *(u64*)(*var_10[5] + 8) = 0;
+                        *(u8*)(*var_10[5] + 8) = 1;
+                        *(i32*)*var_10[6] = 13;
+                        *(u64*)(*var_10[6] + 8) = 0;
+                        *(i32*)(*var_10[6] + 8) = 2;
                         animate_(npc-res-dog-on-leash-1, var_9, var_10);
                         sid var_13;
                         if (get-svar-as-boolean(res-neighborhood-stealthed-dog-st)) {
@@ -415,24 +395,24 @@ statescript {
                             var_13 = res-neighborhood-meet-up--male;
                         }
                         u64? var_14 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_14 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_14 + (0 * 8)) + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
-                        *(i32*)*(*var_14 + (1 * 8)) = 4;
-                        *(u64*)(*(*var_14 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_14 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_14 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_14 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_14 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_14 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_14 + (3 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_14 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_14 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_14 + (4 * 8)) + 8) = 2;
-                        *(i32*)*(*var_14 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_14 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_14 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_14[0] = 10;
+                        *(u64*)(*var_14[0] + 8) = 0;
+                        *(u64*)(*var_14[0] + 8) = get-spawner-locator(pos-res-houses-meetup-1, 1);
+                        *(i32*)*var_14[1] = 4;
+                        *(u64*)(*var_14[1] + 8) = 0;
+                        *(u8*)(*var_14[1] + 8) = 1;
+                        *(i32*)*var_14[2] = 28;
+                        *(u64*)(*var_14[2] + 8) = 0;
+                        *(f32*)(*var_14[2] + 8) = 0.00;
+                        *(i32*)*var_14[3] = 30;
+                        *(u64*)(*var_14[3] + 8) = 0;
+                        *(f32*)(*var_14[3] + 8) = 0.50;
+                        *(i32*)*var_14[4] = 24;
+                        *(u64*)(*var_14[4] + 8) = 0;
+                        *(i32*)(*var_14[4] + 8) = 2;
+                        *(i32*)*var_14[5] = 3;
+                        *(u64*)(*var_14[5] + 8) = 0;
+                        *(u8*)(*var_14[5] + 8) = 1;
                         wait-animate_(npc-res-human-4, var_13, var_14);
                     }
                 }
@@ -537,7 +517,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(spawn-in-search, self, new-boxed-value(7, res-house-reinf-npcs));
+                    send-event(spawn-in-search, self, boxed_symbol(res-house-reinf-npcs));
                 }
             }
             track reinforcements-2 {
@@ -553,7 +533,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(spawn-in-search, self, new-boxed-value(7, res-house-reinf-2-npcs));
+                    send-event(spawn-in-search, self, boxed_symbol(res-house-reinf-2-npcs));
                 }
             }
             track backyard-1 {
@@ -587,22 +567,12 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-backyard-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-backyard-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
                 lambda {
-                    send-event(spawn-in-search, self, new-boxed-value(7, res-house-backyard-npcs));
+                    send-event(spawn-in-search, self, boxed_symbol(res-house-backyard-npcs));
                 }
                 lambda {
                     if (npc-alive?(npc-res-human-3)) {
@@ -629,7 +599,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(spawn-in-search, self, new-boxed-value(7, res-house-backyard-reinf-npcs));
+                    send-event(spawn-in-search, self, boxed_symbol(res-house-backyard-reinf-npcs));
                 }
                 lambda {
                     while (!(npc-group-alive-count(res-house-backyard-npcs) < 4)) {
@@ -637,17 +607,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-backyard-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-backyard-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -673,7 +633,7 @@ statescript {
                     npc-set-hard-point-if-alive(npc-res-human-13, hard-point-res-end-gazebo-1);
                 }
                 lambda {
-                    send-event(spawn-in-search, self, new-boxed-value(7, res-house-backyard-2-npcs));
+                    send-event(spawn-in-search, self, boxed_symbol(res-house-backyard-2-npcs));
                 }
                 lambda {
                     while (!get-svar-as-boolean(res-neighborhood-backyard-2-unzoned)) {
@@ -681,34 +641,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-backyard-2-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-backyard-2-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-hard-point(var_2);
                             if (!npc-is-dog?(var_2)) {
@@ -764,22 +704,12 @@ statescript {
                 }
                 lambda {
                     if (get-svar-as-boolean(res-neighborhood-player-spotted)) {
-                        foreach (u64? var_2 : res-neighborhood-all-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : res-neighborhood-all-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-disable-has-ever-seen-updates/f(var_3);
-                                fact-set(var_3, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                                fact-set(global, search-start-played?, new-boxed-value(1, 1));
-                                fact-set(global, ambush-played?, new-boxed-value(1, 1));
+                                fact-set(var_3, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                                fact-set(global, search-start-played?, boxed_bool(1));
+                                fact-set(global, ambush-played?, boxed_bool(1));
                             }
                         }
                     }
@@ -876,17 +806,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(res-neighborhood-player-spotted)) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 if (npc-get-awareness(var_3, player) == 2) {
                                     set-svar-as-boolean(res-neighborhood-player-spotted, 1);
@@ -904,23 +824,13 @@ statescript {
                 }
                 lambda {
                     if (get-svar-as-boolean(res-neighborhood-stealth-broken)) {
-                        foreach (u64? var_4 : event-arg-symbol(0)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : event-arg-symbol(0)) {
                             if (npc-alive?(var_5)) {
                                 if (npc-get-awareness(var_5, player) == 0) {
                                     npc-make-aware-of(var_5, player, 4, *npc-awareness-options-silent*);
                                 }
                                 if (get-svar-as-boolean(res-neighborhood-player-spotted)) {
-                                    fact-set(var_5, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
+                                    fact-set(var_5, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
                                 }
                             }
                         }
@@ -1055,32 +965,12 @@ statescript {
                     group-kill-entity(res-house-backyard-reinf-npcs, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : res-house-backyard-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-house-backyard-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

@@ -55,23 +55,13 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-symbol(0) == get-symbol(instance, self)) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (npc-alive?(var_4)) {
                                 if (distance-between-points(get-point(final-position, self), get-object-position(var_4)) < get-float(blind-radius, self)) {
                                     cancel-melee-action(var_4);
                                     if (get-boolean(blinding-bomb?, self)) {
                                         npc-set-blind(var_4, 1);
-                                        darray-append(blind-npcs, new-boxed-value(7, var_4), 1);
+                                        darray-append(blind-npcs, boxed_symbol(var_4), 1);
                                     }
                                 }
                                 if (distance-between-points(get-point(final-position, self), get-object-position(var_4)) < get-float(stun-radius, self)) {
@@ -83,7 +73,7 @@ statescript {
                                         }
                                         melee-fact-set-bool(var_4, being-held-up, 1);
                                         melee-fact-set-bool(var_4, smoke-or-stun, 1);
-                                        darray-append(stunned-npcs, new-boxed-value(7, var_4), 1);
+                                        darray-append(stunned-npcs, boxed_symbol(var_4), 1);
                                     }
                                 }
                             }
@@ -108,17 +98,7 @@ statescript {
         block event stun-timer {
             track main {
                 lambda {
-                    foreach (u64? var_1 : stunned-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : stunned-npcs) {
                         melee-fact-set-bool(var_2, being-held-up, 0);
                         melee-fact-set-bool(var_2, smoke-or-stun, 0);
                     }
@@ -128,17 +108,7 @@ statescript {
         block event blind-timer {
             track main {
                 lambda {
-                    foreach (u64? var_1 : blind-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : blind-npcs) {
                         npc-set-blind(var_2, 0);
                     }
                 }

@@ -80,17 +80,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-rooftop-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-rooftop-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -101,17 +91,7 @@ statescript {
                     npc-set-hard-point-if-alive(npc-med-rooftop-scar-2, hard-point-roof-exit-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-med-rooftop-scars-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-med-rooftop-scars-1) {
                         if (npc-alive?(var_2)) {
                             npc-override-post-selector-set-id(var_2, *med-rooftops-selector-set*);
                         }
@@ -136,17 +116,7 @@ statescript {
                     wait-spawn-npc-group-async(grp-med-rooftop-scars-2, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-med-rooftop-scars-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-med-rooftop-scars-2) {
                         if (npc-alive?(var_2)) {
                             npc-override-post-selector-set-id(var_2, *med-rooftops-selector-set*);
                         }
@@ -302,17 +272,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-rooftop-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-rooftop-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -356,17 +316,7 @@ statescript {
                     kill-entity-if-spawned(obj-med-reinforcements-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-rooftop-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-rooftop-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

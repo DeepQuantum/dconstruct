@@ -82,17 +82,7 @@ statescript {
                             set-boolean(play-sweetener, 0, self);
                         }
                     } else {
-                        foreach (u64? var_7 : wat-dumpster-taps) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : wat-dumpster-taps) {
                             disable-action-pack(var_8);
                         }
                         if (is-traversal-audio-cues?()) {
@@ -155,17 +145,7 @@ statescript {
                         interactable-set-exclude-from-pickup-scan(obj-wat-explore-dumpster-1, 1);
                         interactable-disable-accessibility-cues(obj-wat-explore-dumpster-1);
                     } else {
-                        foreach (u64? var_2 : wat-dumpster-taps) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-dumpster-taps) {
                             disable-action-pack(var_3);
                         }
                         interactable-set-exclude-from-pickup-scan(obj-wat-explore-dumpster-1, 0);

@@ -130,17 +130,7 @@ statescript {
                 }
                 lambda {
                     if (task-continue-active?(patrol, pat-suburbs-explore, runner-house-first-runner)) {
-                        foreach (u64? var_2 : runner-house-runners) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : runner-house-runners) {
                             npc-set-deaf(var_3, 1);
                         }
                     }
@@ -172,17 +162,7 @@ statescript {
                 lambda {
                     if (task-continue-active?(patrol, pat-suburbs-explore, runner-house-backyard)) {
                         npc-set-patrol-route(npc-runner-grass-6, spl-runner-grass-4, -1);
-                        foreach (u64? var_2 : runner-house-runners) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : runner-house-runners) {
                             npc-set-deaf(var_3, 0);
                         }
                         go(cleanup, 1);

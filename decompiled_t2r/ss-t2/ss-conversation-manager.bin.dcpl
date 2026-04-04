@@ -207,15 +207,15 @@ u16 wait-create-convo(u16 arg_0, u16 arg_1, bool arg_2, u64? arg_3) {
         convo-error(arg_0, " does not have fact room to be created!  End other convos first");
         var_2 = 1;
     } else {
-        darray-append(available-convo-list, new-boxed-value(7, arg_0), 1);
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-convo"), new-boxed-value(1, 0));
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-pause"), new-boxed-value(1, 0));
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-resume"), new-boxed-value(1, 0));
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-paused"), new-boxed-value(1, 0));
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-priority"), new-boxed-value(2, arg_3));
-        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-cur-speaker"), new-boxed-value(7, 0));
+        darray-append(available-convo-list, boxed_symbol(arg_0), 1);
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-convo"), boxed_bool(0));
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-pause"), boxed_bool(0));
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-resume"), boxed_bool(0));
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-paused"), boxed_bool(0));
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-priority"), boxed_i32(arg_3));
+        fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-cur-speaker"), boxed_symbol(0));
         if (!(arg_2 == 0)) {
-            fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-next"), new-boxed-value(7, arg_2));
+            fact-set(ss-conversation-manager-1, symbol-concat-string(arg_0, "-next"), boxed_symbol(arg_2));
         }
         if (arg_1 == 0) {
             while (!fact-lookup-bool(fact-get-dictionary(ss-conversation-manager-1), symbol-concat-string(arg_0, "-convo"), 1)) {
@@ -228,7 +228,7 @@ u16 wait-create-convo(u16 arg_0, u16 arg_1, bool arg_2, u64? arg_3) {
         }
         fact-set-bool-in-dict(fact-get-dictionary(ss-conversation-manager-1), symbol-concat-string(arg_0, "-convo"), 1);
         set-symbol(cur-convo, arg_0, ss-conversation-manager-1);
-        darray-append(active-convo-list, new-boxed-value(7, arg_0), 1);
+        darray-append(active-convo-list, boxed_symbol(arg_0), 1);
         set-boolean(skip-lines, 0, ss-conversation-manager-1);
         set-boolean(stop-convo, 0, ss-conversation-manager-1);
         set-boolean(convo-full-stop, 0, ss-conversation-manager-1);

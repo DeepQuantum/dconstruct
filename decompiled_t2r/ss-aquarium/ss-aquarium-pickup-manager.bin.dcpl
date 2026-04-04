@@ -21,8 +21,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(aquarium-tracked-pickups, new-boxed-value(7, var_0))) {
-                        var_3 = set-svar-bit(aquarium-collected-pickups, darray-find(aquarium-tracked-pickups, new-boxed-value(7, var_0), 0), 1);
+                    if (darray-contains?(aquarium-tracked-pickups, boxed_symbol(var_0))) {
+                        var_3 = set-svar-bit(aquarium-collected-pickups, darray-find(aquarium-tracked-pickups, boxed_symbol(var_0), 0), 1);
                     }
                 }
             }
@@ -161,18 +161,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = alloc-bound-frame(get-object-position(obj-aqu-breakable-1), 0, 0, 0, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 30.00 * (get-animation-duration(obj-aqu-breakable-1, faq-knock-off-mason-jar--jar) - 0.33);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = alloc-bound-frame(get-object-position(obj-aqu-breakable-1), 0, 0, 0, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 58;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 30.00 * (get-animation-duration(obj-aqu-breakable-1, faq-knock-off-mason-jar--jar) - 0.33);
                     wait-animate_(obj-aqu-breakable-1, faq-knock-off-mason-jar--jar, var_0);
                 }
                 lambda {
@@ -199,8 +199,8 @@ statescript {
         block event player-pickup {
             track main {
                 lambda {
-                    if (darray-contains?(aquarium-tracked-pickups, new-boxed-value(7, event-arg-symbol(0)))) {
-                        u64? var_5 = darray-find(aquarium-tracked-pickups, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(aquarium-tracked-pickups, boxed_symbol(event-arg-symbol(0)))) {
+                        u64? var_5 = darray-find(aquarium-tracked-pickups, boxed_symbol(event-arg-symbol(0)), 0);
                         set-svar-bit(aquarium-collected-pickups, var_5, 1);
                         if (var_5 == 0) {
                             var_6 = go(knock-jar-off-table, 1);
@@ -231,15 +231,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = alloc-bound-frame(get-object-position(obj-aqu-breakable-1), 0, 0, 0, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = alloc-bound-frame(get-object-position(obj-aqu-breakable-1), 0, 0, 0, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
                     wait-animate_(obj-aqu-breakable-1, faq-knock-off-mason-jar--jar, var_0);
                 }
                 lambda {

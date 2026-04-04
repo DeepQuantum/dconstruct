@@ -175,17 +175,7 @@ statescript {
                         set-boolean(player-bailed, 1, self);
                         if (get-boolean(combat-started, self)) {
                             u16 var_3;
-                            foreach (u64? var_4 : group-checkpoint-ellie-tele) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : group-checkpoint-ellie-tele) {
                                 u16 var_9;
                                 if (!(is-on-screen?(get-spawner-position(var_5, 1), 0.00))) {
                                     var_9 = var_5;
@@ -239,17 +229,7 @@ statescript {
                             disable-action-pack(traversal-action-pack-jump-up-down-602);
                             disable-action-pack(traversal-action-pack-jump-up-down-603);
                         } else {
-                            foreach (u64? var_42 : npc-checkpoint-approach-fight-all) {
-                                u16 var_43;
-                                if (var_42 && *(u16*)(var_42 + 12) == 7) {
-                                    var_43 = *(u64*)var_42;
-                                } else if (var_42 && *(u16*)(var_42 + 12) == 5) {
-                                    var_43 = *(u64*)var_42;
-                                } else if (var_42 && *(u16*)(var_42 + 12) == 4) {
-                                    var_43 = *(u64*)var_42;
-                                } else {
-                                    var_43 = 0;
-                                }
+                            foreach (u64? var_43 : npc-checkpoint-approach-fight-all) {
                                 kill-entity-if-spawned(var_43);
                             }
                             task-complete!(t1x, t1x-hun-checkpoint-fight-post-intro);
@@ -363,15 +343,15 @@ statescript {
                         wait-for(npcs-enter);
                         npc-set-script-low-priority(npc-checkpoint-approach-1);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-1, t1x-hun2-checkp-appr-enemies-enter--npc-a, var_1);
                     }
                 }
@@ -502,12 +482,12 @@ statescript {
                     if (!npc-killed?(npc-checkpoint-approach-1)) {
                         npc-set-script-only-with-perception(npc-checkpoint-approach-1);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
                         wait-animate_(npc-checkpoint-approach-1, t1x-hun2-checkp-app-enemies-leave--npc-a, var_1);
                         kill-entity(npc-checkpoint-approach-1);
                     }
@@ -520,15 +500,15 @@ statescript {
                         npc-set-script-low-priority(npc-checkpoint-approach-2);
                         npc-request-hold(npc-checkpoint-approach-2, 2.00);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-2, t1x-hun2-checkp-appr-enemies-enter--npc-b, var_1);
                     }
                 }
@@ -662,12 +642,12 @@ statescript {
                     if (!npc-killed?(npc-checkpoint-approach-2)) {
                         npc-set-script-only-with-perception(npc-checkpoint-approach-2);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
                         wait-animate_(npc-checkpoint-approach-2, t1x-hun2-checkp-app-enemies-leave--npc-b, var_1);
                         kill-entity(npc-checkpoint-approach-2);
                     }
@@ -680,15 +660,15 @@ statescript {
                         npc-set-script-low-priority(npc-checkpoint-approach-3);
                         npc-request-hold(npc-checkpoint-approach-3, 2.00);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-3, t1x-hun2-checkp-appr-enemies-enter--npc-c, var_1);
                     }
                 }
@@ -818,12 +798,12 @@ statescript {
                     if (!npc-killed?(npc-checkpoint-approach-3)) {
                         npc-set-script-only-with-perception(npc-checkpoint-approach-3);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-checkpoint-approach-npcs-exit-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
                         wait-animate_(npc-checkpoint-approach-3, t1x-hun2-checkp-app-enemies-leave--npc-c, var_1);
                         kill-entity(npc-checkpoint-approach-3);
                     }
@@ -952,17 +932,7 @@ statescript {
                             wait(0.50);
                         }
                         set-boolean(doing-stealth-completion, 1, self);
-                        foreach (u64? var_8 : npc-checkpoint-approach-fight-starters) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : npc-checkpoint-approach-fight-starters) {
                             if (!npc-killed?(var_9)) {
                                 kill-entity(var_9);
                             }
@@ -1029,15 +999,15 @@ statescript {
                     if (!get-boolean(dude-1-up, self)) {
                         npc-set-script-high-priority(npc-checkpoint-approach-1);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-1, t1x-hun2-checkp-appr-enemies-enter--npc-a, var_1);
                         set-boolean(dude-1-up, 1, self);
                     }
@@ -1072,15 +1042,15 @@ statescript {
                     if (!get-boolean(dude-2-up, self)) {
                         npc-set-script-high-priority(npc-checkpoint-approach-2);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-2, t1x-hun2-checkp-appr-enemies-enter--npc-b, var_1);
                         set-boolean(dude-2-up, 1, self);
                     }
@@ -1115,15 +1085,15 @@ statescript {
                     if (!get-boolean(dude-3-up, self)) {
                         npc-set-script-high-priority(npc-checkpoint-approach-3);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-3, t1x-hun2-checkp-appr-enemies-enter--npc-c, var_1);
                         set-boolean(dude-3-up, 1, self);
                     }
@@ -1159,15 +1129,15 @@ statescript {
                         spawn-npc(npc-checkpoint-approach-4, 0, 0);
                         wait-one-frame();
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-4, t1x-hun2-checkp-appr-enemies-enter--npc-a, var_1);
                         if (!player-in-region?(checkpoing-no-spawn-1, 2)) {
                             wait-npc-move-to-spawner(
@@ -1195,15 +1165,15 @@ statescript {
                         spawn-npc(npc-checkpoint-approach-5, 0, 0);
                         wait-one-frame();
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_1 + (2 * 8)) = 24;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(hcf-ap-enemies-enter-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
+                        *(i32*)*var_1[2] = 24;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 2;
                         wait-animate_(npc-checkpoint-approach-5, t1x-hun2-checkp-appr-enemies-enter--npc-b, var_1);
                         npc-set-script-low-priority(npc-checkpoint-approach-5);
                         npc-set-zone-region(npc-checkpoint-approach-5, zone-checkpoint-top-of-bus-1);

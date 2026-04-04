@@ -57,17 +57,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback--inspectable-targets) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback--inspectable-targets) {
                         interactable-enable(var_2);
                     }
                 }
@@ -76,17 +66,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback--inspectable-targets) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback--inspectable-targets) {
                         if (event-arg-symbol(0) == var_2) {
                             set-symbol(selected-interact, event-arg-symbol(0), self);
                             go(send-interact-events, 1);
@@ -121,17 +101,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback--inspectable-targets) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback--inspectable-targets) {
                         interactable-disable(var_2);
                     }
                 }

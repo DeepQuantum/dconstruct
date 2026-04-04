@@ -33,10 +33,10 @@ u64? snowball-funisher-front-intro
 snowball-funisher-back-intro
 embedded@41a0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11, u64? arg_12, u64? arg_13, u64? arg_14, u64? arg_15) {
     u64? var_1 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_1);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_1);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return target-is-stunned?(arg_2) && var_1 && var_1 && var_1 && var_1 && var_1 && var_1;
 }
 
@@ -96,17 +96,7 @@ embedded@3b80(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? snowball-funisher-front-intro
 embedded@50d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -333,17 +323,7 @@ embedded@44a0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? snowball-funisher-back-sync
 snowball-funisher-front-sync
 embedded@4ed8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
         npc-set-melee-behavior-condition(var_2, 8);
     }
@@ -449,7 +429,7 @@ embedded@4b50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? snowball-funisher-back-sync
 snowball-funisher-front-sync
 embedded@4548(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(strike-fail, ss-promote-death-hints, new-boxed-value(7, arg_2));
+    return send-event(strike-fail, ss-promote-death-hints, boxed_symbol(arg_2));
 }
 
 u16 snowball-funisher-back-sync
@@ -472,15 +452,15 @@ embedded@4ae8(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 5.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 5.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(5.00),
         var_5
     );
     u16 var_8;
@@ -543,7 +523,7 @@ embedded@40c8(u64? arg_0, u64? arg_1, sid arg_2, u64? arg_3, u64? arg_4, u64? ar
 u64? snowball-funisher-back-sync
 snowball-funisher-front-sync
 embedded@3d68(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-damage, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2), new-boxed-value(6, 0.00));
+    return broadcast-event(melee-damage, boxed_symbol(arg_1), boxed_symbol(arg_2), boxed_f32(0.00));
 }
 
 f32 snowball-funisher-back-sync__melee-event-advanced@3f78

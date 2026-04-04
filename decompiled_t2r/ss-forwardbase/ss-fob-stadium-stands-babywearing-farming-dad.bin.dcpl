@@ -48,12 +48,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-spawner-locator(ap-fob-stadium-stands-babywearing-farming-dad-1, 1);
+                    *(i32*)*var_1[0] = 31;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-spawner-locator(ap-fob-stadium-stands-babywearing-farming-dad-1, 1);
                     wait-animate_(self, tag-symbol(idle-anim, self), var_1);
                 }
             }

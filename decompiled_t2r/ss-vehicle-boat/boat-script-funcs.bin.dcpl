@@ -51,81 +51,81 @@ u64? boat-animate-enter(u64? arg_0, u64? arg_1, bool arg_2, sid arg_3, u64? arg_
     u64? var_5;
     if (arg_4) {
         u64? var_7 = #%alloc-array(single-frame, 16, 10, 1);
-        *(i32*)*(*var_7 + (0 * 8)) = 10;
-        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_7 + (0 * 8)) + 8) = boat-get-ap-ref(arg_3);
-        *(i32*)*(*var_7 + (1 * 8)) = 14;
-        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-        *(u64*)(*(*var_7 + (1 * 8)) + 8) = var_0;
-        *(i32*)*(*var_7 + (2 * 8)) = 27;
-        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-        *(u8*)(*(*var_7 + (2 * 8)) + 8) = arg_5;
-        *(i32*)*(*var_7 + (3 * 8)) = 29;
-        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-        *(u8*)(*(*var_7 + (3 * 8)) + 8) = 2;
-        *(i32*)*(*var_7 + (4 * 8)) = 28;
-        *(u64*)(*(*var_7 + (4 * 8)) + 8) = 0;
-        *(f32*)(*(*var_7 + (4 * 8)) + 8) = arg_0;
-        *(i32*)*(*var_7 + (5 * 8)) = 30;
-        *(u64*)(*(*var_7 + (5 * 8)) + 8) = 0;
-        *(f32*)(*(*var_7 + (5 * 8)) + 8) = arg_1;
-        *(i32*)*(*var_7 + (6 * 8)) = 58;
-        *(u64*)(*(*var_7 + (6 * 8)) + 8) = 0;
-        *(f32*)(*(*var_7 + (6 * 8)) + 8) = var_1;
-        *(i32*)*(*var_7 + (7 * 8)) = 13;
-        *(u64*)(*(*var_7 + (7 * 8)) + 8) = 0;
+        *(i32*)*var_7[0] = 10;
+        *(u64*)(*var_7[0] + 8) = 0;
+        *(u64*)(*var_7[0] + 8) = boat-get-ap-ref(arg_3);
+        *(i32*)*var_7[1] = 14;
+        *(u64*)(*var_7[1] + 8) = 0;
+        *(u64*)(*var_7[1] + 8) = var_0;
+        *(i32*)*var_7[2] = 27;
+        *(u64*)(*var_7[2] + 8) = 0;
+        *(u8*)(*var_7[2] + 8) = arg_5;
+        *(i32*)*var_7[3] = 29;
+        *(u64*)(*var_7[3] + 8) = 0;
+        *(u8*)(*var_7[3] + 8) = 2;
+        *(i32*)*var_7[4] = 28;
+        *(u64*)(*var_7[4] + 8) = 0;
+        *(f32*)(*var_7[4] + 8) = arg_0;
+        *(i32*)*var_7[5] = 30;
+        *(u64*)(*var_7[5] + 8) = 0;
+        *(f32*)(*var_7[5] + 8) = arg_1;
+        *(i32*)*var_7[6] = 58;
+        *(u64*)(*var_7[6] + 8) = 0;
+        *(f32*)(*var_7[6] + 8) = var_1;
+        *(i32*)*var_7[7] = 13;
+        *(u64*)(*var_7[7] + 8) = 0;
         u16 var_9;
         if (arg_6) {
             var_9 = 2;
         } else {
             var_9 = 0;
         }
-        *(i32*)(*(*var_7 + (7 * 8)) + 8) = var_9;
-        *(i32*)*(*var_7 + (8 * 8)) = 12;
-        *(u64*)(*(*var_7 + (8 * 8)) + 8) = 0;
-        *(i32*)(*(*var_7 + (8 * 8)) + 8) = 9;
-        *(i32*)*(*var_7 + (9 * 8)) = 82;
-        *(u64*)(*(*var_7 + (9 * 8)) + 8) = 0;
-        *(u8*)(*(*var_7 + (9 * 8)) + 8) = 1;
+        *(i32*)(*var_7[7] + 8) = var_9;
+        *(i32*)*var_7[8] = 12;
+        *(u64*)(*var_7[8] + 8) = 0;
+        *(i32*)(*var_7[8] + 8) = 9;
+        *(i32*)*var_7[9] = 82;
+        *(u64*)(*var_7[9] + 8) = 0;
+        *(u8*)(*var_7[9] + 8) = 1;
         var_5 = wait-animate_(player, get-symbol(enter-anim, boat), var_7);
     } else {
         u64? var_12 = #%alloc-array(single-frame, 16, 10, 1);
-        *(i32*)*(*var_12 + (0 * 8)) = 10;
-        *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_12 + (0 * 8)) + 8) = boat-get-ap-ref(arg_3);
-        *(i32*)*(*var_12 + (1 * 8)) = 14;
-        *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-        *(u64*)(*(*var_12 + (1 * 8)) + 8) = var_0;
-        *(i32*)*(*var_12 + (2 * 8)) = 27;
-        *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-        *(u8*)(*(*var_12 + (2 * 8)) + 8) = 2;
-        *(i32*)*(*var_12 + (3 * 8)) = 29;
-        *(u64*)(*(*var_12 + (3 * 8)) + 8) = 0;
-        *(u8*)(*(*var_12 + (3 * 8)) + 8) = 2;
-        *(i32*)*(*var_12 + (4 * 8)) = 28;
-        *(u64*)(*(*var_12 + (4 * 8)) + 8) = 0;
-        *(f32*)(*(*var_12 + (4 * 8)) + 8) = arg_0;
-        *(i32*)*(*var_12 + (5 * 8)) = 30;
-        *(u64*)(*(*var_12 + (5 * 8)) + 8) = 0;
-        *(f32*)(*(*var_12 + (5 * 8)) + 8) = arg_1;
-        *(i32*)*(*var_12 + (6 * 8)) = 58;
-        *(u64*)(*(*var_12 + (6 * 8)) + 8) = 0;
-        *(f32*)(*(*var_12 + (6 * 8)) + 8) = var_1;
-        *(i32*)*(*var_12 + (7 * 8)) = 13;
-        *(u64*)(*(*var_12 + (7 * 8)) + 8) = 0;
+        *(i32*)*var_12[0] = 10;
+        *(u64*)(*var_12[0] + 8) = 0;
+        *(u64*)(*var_12[0] + 8) = boat-get-ap-ref(arg_3);
+        *(i32*)*var_12[1] = 14;
+        *(u64*)(*var_12[1] + 8) = 0;
+        *(u64*)(*var_12[1] + 8) = var_0;
+        *(i32*)*var_12[2] = 27;
+        *(u64*)(*var_12[2] + 8) = 0;
+        *(u8*)(*var_12[2] + 8) = 2;
+        *(i32*)*var_12[3] = 29;
+        *(u64*)(*var_12[3] + 8) = 0;
+        *(u8*)(*var_12[3] + 8) = 2;
+        *(i32*)*var_12[4] = 28;
+        *(u64*)(*var_12[4] + 8) = 0;
+        *(f32*)(*var_12[4] + 8) = arg_0;
+        *(i32*)*var_12[5] = 30;
+        *(u64*)(*var_12[5] + 8) = 0;
+        *(f32*)(*var_12[5] + 8) = arg_1;
+        *(i32*)*var_12[6] = 58;
+        *(u64*)(*var_12[6] + 8) = 0;
+        *(f32*)(*var_12[6] + 8) = var_1;
+        *(i32*)*var_12[7] = 13;
+        *(u64*)(*var_12[7] + 8) = 0;
         u16 var_14;
         if (arg_6) {
             var_14 = 2;
         } else {
             var_14 = 0;
         }
-        *(i32*)(*(*var_12 + (7 * 8)) + 8) = var_14;
-        *(i32*)*(*var_12 + (8 * 8)) = 12;
-        *(u64*)(*(*var_12 + (8 * 8)) + 8) = 0;
-        *(i32*)(*(*var_12 + (8 * 8)) + 8) = 9;
-        *(i32*)*(*var_12 + (9 * 8)) = 82;
-        *(u64*)(*(*var_12 + (9 * 8)) + 8) = 0;
-        *(u8*)(*(*var_12 + (9 * 8)) + 8) = 1;
+        *(i32*)(*var_12[7] + 8) = var_14;
+        *(i32*)*var_12[8] = 12;
+        *(u64*)(*var_12[8] + 8) = 0;
+        *(i32*)(*var_12[8] + 8) = 9;
+        *(i32*)*var_12[9] = 82;
+        *(u64*)(*var_12[9] + 8) = 0;
+        *(u8*)(*var_12[9] + 8) = 1;
         var_5 = animate_(player, get-symbol(enter-anim, boat), var_12);
     }
     return var_5;
@@ -439,41 +439,41 @@ u16 boat-apply-enter-impulse(u64? arg_0) {
         darray-clear(boat-enter-impulse-joints);
         u64? var_2 = get-symbol(enter-mode, boat);
         if (var_2 == swim) {
-            darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-            var_3 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_palm), 1);
+            darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+            var_3 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_palm), 1);
         } else {
             u16 var_7;
             if (var_2 == jump) {
-                darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_heel), 1);
-                var_7 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_heel), 1);
+                darray-append(boat-enter-impulse-joints, boxed_symbol(l_heel), 1);
+                var_7 = darray-append(boat-enter-impulse-joints, boxed_symbol(r_heel), 1);
             } else if (var_2 == wade) {
                 u64? var_11 = get-symbol(enter-anim, boat);
                 u16 var_12;
                 if (var_11 == ellie-boat-enter-wade-front-right) {
-                    darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-                    var_12 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_heel), 1);
+                    darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+                    var_12 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_heel), 1);
                 } else {
                     u16 var_16;
                     if (var_11 == ellie-boat-enter-wade-right) {
-                        var_16 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
+                        var_16 = darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
                     } else {
                         u16 var_19;
                         if (var_11 == ellie-boat-enter-wade-back-right) {
-                            darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-                            var_19 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_palm), 1);
+                            darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+                            var_19 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_palm), 1);
                         } else {
                             u16 var_23;
                             if (var_11 == ellie-boat-enter-wade-front-left) {
-                                darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-                                var_23 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_heel), 1);
+                                darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+                                var_23 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_heel), 1);
                             } else {
                                 u16 var_27;
                                 if (var_11 == ellie-boat-enter-wade-left) {
-                                    darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-                                    var_27 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_heel), 1);
+                                    darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+                                    var_27 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_heel), 1);
                                 } else if (var_11 == ellie-boat-enter-wade-back-left) {
-                                    darray-append(boat-enter-impulse-joints, new-boxed-value(7, r_palm), 1);
-                                    var_27 = darray-append(boat-enter-impulse-joints, new-boxed-value(7, l_palm), 1);
+                                    darray-append(boat-enter-impulse-joints, boxed_symbol(r_palm), 1);
+                                    var_27 = darray-append(boat-enter-impulse-joints, boxed_symbol(l_palm), 1);
                                 } else {
                                     var_27 = 0;
                                 }

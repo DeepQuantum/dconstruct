@@ -23,17 +23,7 @@ u64? can-change-wall-post?(bool arg_0) {
 u16 get-turret-post(u16 arg_0) {
     u16 var_1;
     u16 var_2;
-    foreach (u64? var_3 : infected-turret-posts) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : infected-turret-posts) {
         u64? var_7 = get-locator-distance-xz(get-spawner-locator(var_4, 1), get-object-locator(self));
         u16 var_12;
         if (get-float(score, var_4) > 0.00 && get-float(player-dist-xz, var_4) > var_7 && get-symbol(assigned-npc, var_4) == 0 && distance-to-post-in-range?(var_4, 1.00, 10.00) && var_4 != arg_0 || 0 == 0) {
@@ -123,7 +113,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(assign-npc, get-symbol(chosen-wall-post, self), new-boxed-value(7, get-self-id()));
+                    send-event(assign-npc, get-symbol(chosen-wall-post, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     npc-set-script-only-with-perception(self);
@@ -170,15 +160,15 @@ statescript {
                         var_2 = atk-inf-climb-mid;
                     }
                     u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(chosen-wall-post, self), 1);
-                    *(i32*)*(*var_5 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_5 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = get-spawner-locator(get-symbol(chosen-wall-post, self), 1);
+                    *(i32*)*var_5[1] = 28;
+                    *(u64*)(*var_5[1] + 8) = 0;
+                    *(f32*)(*var_5[1] + 8) = 0.30;
+                    *(i32*)*var_5[2] = 30;
+                    *(u64*)(*var_5[2] + 8) = 0;
+                    *(f32*)(*var_5[2] + 8) = 0.00;
                     wait-animate_(self, var_2, var_5);
                 }
                 lambda {
@@ -190,12 +180,12 @@ statescript {
                         var_3 = rotate-locator-angle(var_3, 2, 90.00);
                     }
                     u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_8 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_8 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (1 * 8)) + 8) = 1.00;
+                    *(i32*)*var_8[0] = 10;
+                    *(u64*)(*var_8[0] + 8) = 0;
+                    *(u64*)(*var_8[0] + 8) = var_3;
+                    *(i32*)*var_8[1] = 28;
+                    *(u64*)(*var_8[1] + 8) = 0;
+                    *(f32*)(*var_8[1] + 8) = 1.00;
                     animate_(self, atk-inf-climb-shoot, var_8);
                     wait-frames(48);
                     set-animation-speed(self, 0.00, 2, 0);
@@ -287,15 +277,15 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = rotate-object-lookat-object(self, player, 1.00, 0);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = rotate-object-lookat-object(self, player, 1.00, 0);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 31;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = 1;
                     animate_(self, runner-dog-mm-tense-idle, var_1);
                     wait(0.50);
                 }
@@ -367,7 +357,7 @@ statescript {
                     u64? var_1 = get-turret-post(get-symbol(chosen-wall-post, self));
                     if (can-change-wall-post?(var_1)) {
                         set-symbol(chosen-wall-post, var_1, self);
-                        send-event(assign-npc, var_1, new-boxed-value(7, get-self-id()));
+                        send-event(assign-npc, var_1, boxed_symbol(get-self-id()));
                         go(use-wall-post, 1);
                     } else {
                         var_3 = set-symbol(chosen-wall-post, 0, self);
@@ -375,15 +365,15 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = find-closest-point-on-nav-mesh(get-object-locator(self), 2.00, 10.00, 0.00, 0, 0);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_2 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = find-closest-point-on-nav-mesh(get-object-locator(self), 2.00, 10.00, 0.00, 0, 0);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 1.00;
+                    *(i32*)*var_2[2] = 31;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(u8*)(*var_2[2] + 8) = 1;
                     animate_(self, runner-dog-mm-tense-idle, var_2);
                 }
                 lambda {

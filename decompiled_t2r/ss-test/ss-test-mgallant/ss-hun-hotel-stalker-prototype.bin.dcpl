@@ -41,7 +41,7 @@ statescript {
                     if (darray-count(stalker-reinf-spawners) < 7) {
                         darray-reset(stalker-reinf-spawners);
                     }
-                    darray-find-remove(stalker-reinf-spawners, new-boxed-value(7, var_0), 0);
+                    darray-find-remove(stalker-reinf-spawners, boxed_symbol(var_0), 0);
                     ++(reinf-count, self);
                     if (get-int32(reinf-count, self) > 5) {
                         var_5 = go(wait-for-end, 1);

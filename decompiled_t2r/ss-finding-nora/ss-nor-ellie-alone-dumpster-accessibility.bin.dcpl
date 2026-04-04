@@ -118,13 +118,13 @@ statescript {
                         set-region-enabled(rgn-nor-ellie-alone-streets-dumpster-puzzle-done-accessibility-pathfind-override-1, 1, 0);
                         interactable-set-exclude-from-pickup-scan(obj-nor-dumpster-1, 1);
                         interactable-disable-accessibility-cues(obj-nor-dumpster-1);
-                        fact-set(player, no-clamber-cue, new-boxed-value(1, 0));
+                        fact-set(player, no-clamber-cue, boxed_bool(0));
                     } else {
                         enable-action-pack(tap-accessibility-jump-958, 0);
                         set-region-enabled(rgn-nor-ellie-alone-streets-dumpster-puzzle-done-accessibility-pathfind-override-1, 0, 0);
                         interactable-set-exclude-from-pickup-scan(obj-nor-dumpster-1, 0);
                         interactable-restore-accessibility-cues(obj-nor-dumpster-1);
-                        fact-set(player, no-clamber-cue, new-boxed-value(1, 1));
+                        fact-set(player, no-clamber-cue, boxed_bool(1));
                     }
                 }
             }
@@ -144,7 +144,7 @@ statescript {
                     clear-accessibility-pathfind-goal(obj-nor-dumpster-1);
                 }
                 lambda {
-                    fact-set(player, no-clamber-cue, new-boxed-value(1, 0));
+                    fact-set(player, no-clamber-cue, boxed_bool(0));
                 }
                 lambda {
                     enable-action-pack(tap-accessibility-jump-958, 1);
@@ -174,7 +174,7 @@ statescript {
                     enable-action-pack(tap-accessibility-jump-958, 0);
                 }
                 lambda {
-                    fact-set(player, no-clamber-cue, new-boxed-value(1, 0));
+                    fact-set(player, no-clamber-cue, boxed_bool(0));
                 }
                 lambda {
                     set-region-enabled(rgn-nor-ellie-alone-streets-dumpster-puzzle-done-accessibility-pathfind-override-1, 1, 0);

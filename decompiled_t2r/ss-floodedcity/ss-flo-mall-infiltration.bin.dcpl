@@ -127,17 +127,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-mall-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-mall-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -292,51 +282,21 @@ statescript {
                     set-svar-as-boolean(flo-get-boat-back-reinf-spawned, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-mall-left-zoned-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-mall-left-zoned-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-mall-right-zoned-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-mall-right-zoned-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-mall-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-mall-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-hard-point(var_2);
                         }
@@ -492,33 +452,13 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-boolean(0)) {
-                        foreach (u64? var_2 : all-enemy-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-enemy-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-set-accuracy-multiplier(var_3, 0.50);
                             }
                         }
                     } else {
-                        foreach (u64? var_7 : all-enemy-npcs) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : all-enemy-npcs) {
                             if (npc-alive?(var_8)) {
                                 npc-set-accuracy-multiplier(var_8, 1.00);
                             }
@@ -560,17 +500,7 @@ statescript {
                     send-event(turn-on, hint-waypoint-flo-mall-infiltration-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-mall-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-mall-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

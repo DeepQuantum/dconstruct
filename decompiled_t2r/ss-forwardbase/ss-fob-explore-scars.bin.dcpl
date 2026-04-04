@@ -43,17 +43,7 @@ u16 update-fob-scar-hardpoints() {
 }
 
 u64? force-awareness-every-frame(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (npc-alive?(var_2)) {
             if (!(npc-get-awareness(var_2, player) == 2)) {
                 npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
@@ -125,17 +115,7 @@ statescript {
                     set-accessibility-pathfind-goal(pos-goal-fob-scars-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : taps-to-final-landing) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : taps-to-final-landing) {
                         traversal-action-pack-remove-faction(var_2, 3);
                         traversal-action-pack-remove-faction(var_2, 4);
                     }
@@ -146,67 +126,27 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-upstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-upstairs) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
                 lambda {
                     if (get-svar-as-boolean(fob-scars-downstairs-spawned)) {
-                        foreach (u64? var_2 : fob-explore-hardpoints-downstairs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : fob-explore-hardpoints-downstairs) {
                             set-hardpoint-enabled(var_3);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-final-landing-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-final-landing-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : fob-explore-scar-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
-                        if (!darray-contains?(fob-explore-downstairs, new-boxed-value(7, var_3)) && get-svar-as-boolean(fob-scars-downstairs-spawned)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                    foreach (u64? var_3 : fob-explore-scar-npcs) {
+                        if (!darray-contains?(fob-explore-downstairs, boxed_symbol(var_3)) && get-svar-as-boolean(fob-scars-downstairs-spawned)) {
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
                     wait-spawn-npc-group-async(var_0, 0, 0);
@@ -219,17 +159,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(fob-scars-upstairs-zone-cleared)) {
-                        foreach (u64? var_2 : fob-explore-upstairs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : fob-explore-upstairs) {
                             if (npc-alive?(var_3) || var_3 == npc-fob-explore-1) {
                                 if (var_3 == npc-fob-explore-2) {
                                     npc-set-zone-region(var_3, rgn-zone-fob-upper-floor-1);
@@ -242,17 +172,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(fob-scars-downstairs-zone-cleared)) {
-                        foreach (u64? var_2 : fob-explore-downstairs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : fob-explore-downstairs) {
                             if (npc-alive?(var_3)) {
                                 npc-set-zone-region(var_3, rgn-zone-fob-lower-floor-1);
                             }
@@ -388,17 +308,7 @@ statescript {
                     }
                     if (get-svar-as-boolean(fob-scars-player-has-been-downstairs) && !get-svar-as-boolean(fob-scars-upstairs-zone-cleared) || (var_0 + var_1) < 6) {
                         if (npc-group-alive-count(fob-explore-downstairs) < 4) {
-                            foreach (u64? var_12 : fob-explore-upstairs) {
-                                u16 var_13;
-                                if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                    var_13 = *(u64*)var_12;
-                                } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                    var_13 = *(u64*)var_12;
-                                } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                    var_13 = *(u64*)var_12;
-                                } else {
-                                    var_13 = 0;
-                                }
+                            foreach (u64? var_13 : fob-explore-upstairs) {
                                 if (npc-alive?(var_13)) {
                                     npc-clear-zone(var_13);
                                 }
@@ -465,32 +375,12 @@ statescript {
                     set-accessibility-pathfind-goal(pos-goal-fob-scars-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-upstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-upstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-downstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-downstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -557,17 +447,7 @@ statescript {
                     set-accessibility-pathfind-goal(pos-goal-fob-scars-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-final-landing-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-final-landing-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -592,17 +472,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : taps-to-final-landing) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : taps-to-final-landing) {
                         traversal-action-pack-add-faction(var_2, 3);
                         traversal-action-pack-add-faction(var_2, 4);
                     }
@@ -614,34 +484,14 @@ statescript {
                     traversal-action-pack-remove-faction(tap-final-slide-1, 4);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-scar-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-scar-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-upstairs-reinf) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-upstairs-reinf) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -653,32 +503,12 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-upstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-upstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-downstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-downstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -692,17 +522,7 @@ statescript {
                     npc-set-hard-point(npc-fob-explore-reinf-5, hard-point-zone-end-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-landing-two) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-landing-two) {
                         npc-disable-skill(var_2, 29);
                     }
                 }
@@ -749,47 +569,17 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-upstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-upstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-explore-hardpoints-downstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-explore-hardpoints-downstairs) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-final-landing-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-final-landing-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

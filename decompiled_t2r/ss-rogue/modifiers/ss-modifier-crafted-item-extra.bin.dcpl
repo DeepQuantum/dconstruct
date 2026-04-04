@@ -35,7 +35,7 @@ statescript {
                     if (!is-final-build?()) {
                         display(dc:format("DEB-SK: giving player extra parts..."), 19);
                     }
-                    broadcast-event(skull-activate, new-boxed-value(7, crafted-item-extra), new-boxed-value(7, var_0));
+                    broadcast-event(skull-activate, boxed_symbol(crafted-item-extra), boxed_symbol(var_0));
                     player-inventory-add-item-quantity(parts, 15);
                 }
             }

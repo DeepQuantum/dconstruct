@@ -48,17 +48,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : basement-only-stalkers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : basement-only-stalkers) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-limb-state(var_2) != 1) {
                                 npc-set-zone-region(var_2, rgn-basement-initial-zone-1);
@@ -71,17 +61,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : basement-only-stalkers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : basement-only-stalkers) {
                         if (npc-alive?(var_2)) {
                             if (npc-using-skill?(var_2, 5) && npc-get-limb-state(var_2) != 1) {
                                 if (player-in-region?(rgn-nor-stalker-basement-entry-1, 2)) {
@@ -140,17 +120,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : basement-only-stalkers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : basement-only-stalkers) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone-if-alive(var_2);
                         }
@@ -204,21 +174,11 @@ statescript {
                 lambda {
                     while (1) {
                         u16 var_1;
-                        foreach (u64? var_2 : basement-only-stalkers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : basement-only-stalkers) {
                             u16 var_5;
                             if (npc-alive?(var_3)) {
                                 if (npc-get-limb-state(var_3) == 1) {
-                                    ddict-set(basement-stalker-has-disengaged, var_3, new-boxed-value(1, 1));
+                                    ddict-set(basement-stalker-has-disengaged, var_3, boxed_bool(1));
                                     npc-clear-zone(var_3);
                                     var_5 = 1;
                                 } else if (!(npc-using-skill?(var_3, 5))) {
@@ -240,7 +200,7 @@ statescript {
                                         var_11 = !!0;
                                     }
                                     if (!(var_11)) {
-                                        ddict-set(basement-stalker-has-disengaged, var_3, new-boxed-value(1, 1));
+                                        ddict-set(basement-stalker-has-disengaged, var_3, boxed_bool(1));
                                         npc-set-zone-region(var_3, rgn-basement-initial-zone-1);
                                     } else if (npc-using-skill?(var_3, 5)) {
                                         u64? var_15 = ddict-get(basement-stalker-has-disengaged, var_3);

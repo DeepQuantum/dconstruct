@@ -70,7 +70,7 @@ statescript {
                     set-symbol(keg-name, get-self-id(), self);
                 }
                 lambda {
-                    darray-append(powder-kegs, new-boxed-value(7, get-symbol(keg-name, self)), 1);
+                    darray-append(powder-kegs, boxed_symbol(get-symbol(keg-name, self)), 1);
                 }
                 lambda {
                     set-int32(index-count, get-spline-index-count(get-symbol(spline-name, self)), self);
@@ -149,10 +149,10 @@ statescript {
                     set-symbol(spline-name, var_1, self);
                 }
                 lambda {
-                    darray-find-remove(powder-splines-inactive, new-boxed-value(7, get-symbol(spline-name, self)), 0);
+                    darray-find-remove(powder-splines-inactive, boxed_symbol(get-symbol(spline-name, self)), 0);
                 }
                 lambda {
-                    darray-append(powder-splines-active, new-boxed-value(7, get-symbol(spline-name, self)), 1);
+                    darray-append(powder-splines-active, boxed_symbol(get-symbol(spline-name, self)), 1);
                 }
                 lambda {
                     set-symbol(powder-line, spawn-script-multiple("ss-gas-can-line", unparented, 0), self);
@@ -161,7 +161,7 @@ statescript {
                     set-symbol(spline-name, get-symbol(spline-name, self), get-symbol(powder-line, self));
                 }
                 lambda {
-                    darray-append(powder-lines, new-boxed-value(7, get-symbol(powder-line, self)), 1);
+                    darray-append(powder-lines, boxed_symbol(get-symbol(powder-line, self)), 1);
                 }
                 lambda {
                     set-spline-point(get-symbol(spline-name, self), get-int32(index, self), get-locator-position(get-bound-frame(last-powder-point, self)));
@@ -216,7 +216,7 @@ statescript {
                     );
                 }
                 lambda {
-                    darray-find-remove(powder-kegs, new-boxed-value(7, get-symbol(keg-name, self)), 0);
+                    darray-find-remove(powder-kegs, boxed_symbol(get-symbol(keg-name, self)), 0);
                 }
                 lambda {
                     kill-entity(self);

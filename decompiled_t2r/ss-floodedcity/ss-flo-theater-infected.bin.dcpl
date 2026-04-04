@@ -101,7 +101,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(set-new-lead-spline, ss-flo-jesse-lead-1, new-boxed-value(7, spl-jesse-lead-theater-1), new-boxed-value(7, *flo-jesse-close-lead-settings*));
+                    send-event(set-new-lead-spline, ss-flo-jesse-lead-1, boxed_symbol(spl-jesse-lead-theater-1), boxed_symbol(*flo-jesse-close-lead-settings*));
                 }
                 lambda {
                     npc-set-demeanor(jesse, 3, 1);
@@ -236,16 +236,16 @@ statescript {
                             var_6 = send-event(
                                 update-jesse-target,
                                 self,
-                                new-boxed-value(7, npc-flo-theater-runner-1),
-                                new-boxed-value(6, get-object-distance-xz(player, npc-flo-theater-runner-2))
+                                boxed_symbol(npc-flo-theater-runner-1),
+                                boxed_f32(get-object-distance-xz(player, npc-flo-theater-runner-2))
                             );
                         }
                     } else if (!(npc-flo-theater-runner-2 == get-symbol(jesse-takedown-target, self))) {
                         var_12 = send-event(
                             update-jesse-target,
                             self,
-                            new-boxed-value(7, npc-flo-theater-runner-2),
-                            new-boxed-value(6, get-object-distance-xz(player, npc-flo-theater-runner-1))
+                            boxed_symbol(npc-flo-theater-runner-2),
+                            boxed_f32(get-object-distance-xz(player, npc-flo-theater-runner-1))
                         );
                     }
                 }
@@ -308,17 +308,7 @@ statescript {
                     wait(2.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : theater-infected-to-wake) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : theater-infected-to-wake) {
                         npc-ping-distraction(var_2, player, 0);
                     }
                 }

@@ -53,7 +53,7 @@ statescript {
         block start {
             track setup {
                 lambda {
-                    darray-append(all-stalkers, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(all-stalkers, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-float(last-chase-end, current-time(1), self);
@@ -144,7 +144,7 @@ statescript {
                 lambda {
                     u64? var_0 = npc-using-skill?(self, 5);
                     if (get-boolean(last-frame-chase?, self) && !(var_0) && !(get-boolean(recently-exited-chase?, self))) {
-                        broadcast-event(stalker-started-flee, new-boxed-value(7, get-self-id()));
+                        broadcast-event(stalker-started-flee, boxed_symbol(get-self-id()));
                         set-float(last-flee-start, current-time(1), self);
                         set-float(last-chase-end, current-time(1), self);
                     }
@@ -221,7 +221,7 @@ statescript {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
                     if (var_0 == get-self-id()) {
-                        var_2 = darray-find-remove(all-stalkers, new-boxed-value(7, get-self-id()), 0);
+                        var_2 = darray-find-remove(all-stalkers, boxed_symbol(get-self-id()), 0);
                     } else if (npc-is-infected?(var_0) && distance-between-objects-less-than?(get-self-id(), var_0, 5.00) || npc-using-skill?(self, 4) && npc-using-skill?(self, 20)) {
                         var_2 = start-timer-if-not-running(nearby-death-timer, 4.00, self);
                     }

@@ -45,7 +45,7 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-symbol(1) == brick) {
-                        darray-find-remove(wat-traps-bricks, new-boxed-value(7, event-arg-symbol(3)), 0);
+                        darray-find-remove(wat-traps-bricks, boxed_symbol(event-arg-symbol(3)), 0);
                         if (darray-count(wat-traps-bricks) < 1) {
                             go(respawn, 1);
                         }
@@ -68,9 +68,9 @@ statescript {
             track main {
                 lambda {
                     if (player-in-region?(rgn-wat-traps-safety-brick-1, 2)) {
-                        darray-append(wat-traps-brick, new-boxed-value(7, wait-spawn-entity(item-pickup-brick-safety-2, 1)), 1);
+                        darray-append(wat-traps-brick, boxed_symbol(wait-spawn-entity(item-pickup-brick-safety-2, 1)), 1);
                     } else {
-                        darray-append(wat-traps-brick, new-boxed-value(7, wait-spawn-entity(item-pickup-brick-safety-1, 1)), 1);
+                        darray-append(wat-traps-brick, boxed_symbol(wait-spawn-entity(item-pickup-brick-safety-1, 1)), 1);
                     }
                 }
                 lambda {

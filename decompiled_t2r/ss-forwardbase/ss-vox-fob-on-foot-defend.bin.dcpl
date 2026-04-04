@@ -806,11 +806,11 @@ statescript {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
                     group-copy(fob-defend-humvee-militia, var_0);
-                    darray-find-remove(var_0, new-boxed-value(7, npc-wlf-humvee-2-driver-fb-1), 0);
+                    darray-find-remove(var_0, boxed_symbol(npc-wlf-humvee-2-driver-fb-1), 0);
                     while (darray-count(var_0) > 0) {
                         wait-random(0.20, 0.50);
                         u64? var_4 = group-random(var_0);
-                        darray-find-remove(var_0, new-boxed-value(7, var_4), 0);
+                        darray-find-remove(var_0, boxed_symbol(var_4), 0);
                         var_3 = send-event(fob-defend-victory, var_4);
                     }
                 }

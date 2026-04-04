@@ -67,17 +67,7 @@ statescript {
                     wait-spawn-npc-group-async(wat-infected-tunnels-inf-against-gate-group-npc, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-infected-tunnels-inf-against-gate-group-npc) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-infected-tunnels-inf-against-gate-group-npc) {
                         npc-set-script-high-priority(var_2);
                         npc-set-demeanor(var_2, 2, 0);
                         npc-force-target(var_2, player);
@@ -92,17 +82,7 @@ statescript {
                     if (!(is-japan-region?())) {
                         wait-spawn-entity-group-async(wat-infected-tunnels-inf-against-gate-group-snpc, 0);
                     } else {
-                        foreach (u64? var_3 : wat-infected-tunnels-inf-against-gate-group-snpc) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : wat-infected-tunnels-inf-against-gate-group-snpc) {
                             if (var_4 != snpc-wat-inf-against-gate-clicker-4 && var_4 != snpc-wat-inf-against-gate-clicker-5) {
                                 spawn-entity-async(var_4, 0);
                                 wait-one-frame();
@@ -113,17 +93,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-infected-tunnels-inf-against-gate-group-snpc) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-infected-tunnels-inf-against-gate-group-snpc) {
                         set-high-contrast-mode-type(var_2, 7);
                     }
                 }
@@ -149,49 +119,49 @@ statescript {
             track gate {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-dina-jumps-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 82;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-dina-jumps-gate-1, 1);
+                    *(i32*)*var_0[1] = 82;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
+                    *(i32*)*var_0[2] = 57;
+                    *(u64*)(*var_0[2] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[2] + 8) = var_3;
                     wait-animate_(obj-wat-infected-tunnels-escape-gate-1, wat-infected-tunnels-gates-open--gate, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-dina-jumps-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-dina-jumps-gate-1, 1);
                     animate_(obj-wat-infected-tunnels-escape-gate-1, wat-infected-tunnels-gates-idle--gate, var_0);
                 }
             }
             track npc-clicker-1 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
                     wait-animate_(npc-wat-gate-clicker-1, wat-infected-tunnels-inf-against-gate--clicker1, var_0);
                 }
                 lambda {
@@ -213,42 +183,42 @@ statescript {
             track npc-clicker-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 24;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
                     wait-animate_(npc-wat-gate-clicker-2, wat-infected-tunnels-inf-against-gate--clicker2, var_0);
                 }
             }
             track npc-clicker-3 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
                     wait-animate_(npc-wat-gate-clicker-3, wat-infected-tunnels-inf-against-gate--clicker3, var_0);
                 }
                 lambda {
@@ -270,200 +240,200 @@ statescript {
             track snpc-clicker-4 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-clicker-4, wat-infected-tunnels-inf-against-gate--clicker4, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-clicker-4, wat-infected-tunnels-inf-against-gate-idle--clicker4, var_0);
                 }
             }
             track snpc-clicker-5 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-clicker-5, wat-infected-tunnels-inf-against-gate--clicker5, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-clicker-5, wat-infected-tunnels-inf-against-gate-idle--clicker5, var_0);
                 }
             }
             track snpc-runner-1 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-runner-1, wat-infected-tunnels-inf-against-gate--runner1, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-runner-1, wat-infected-tunnels-inf-against-gate-idle--runner1, var_0);
                 }
             }
             track snpc-runner-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     animate_(snpc-wat-inf-against-gate-runner-2, wat-infected-tunnels-inf-against-gate--runner2, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-runner-2, wat-infected-tunnels-inf-against-gate-idle--runner2, var_0);
                 }
             }
             track snpc-runner-3 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-runner-3, wat-infected-tunnels-inf-against-gate--runner3, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-runner-3, wat-infected-tunnels-inf-against-gate-idle--runner3, var_0);
                 }
             }
             track snpc-runner-4 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-runner-4, wat-infected-tunnels-inf-against-gate--runner4, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-runner-4, wat-infected-tunnels-inf-against-gate-idle--runner4, var_0);
                 }
             }
             track snpc-shambler-2 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-shambler-2, wat-infected-tunnels-inf-against-gate--shambler2, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-shambler-2, wat-infected-tunnels-inf-against-gate-idle--shambler2, var_0);
                 }
             }
             track snpc-shambler-3 {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 57;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[1] = 57;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     u64? var_3;
                     if (get-boolean(tasked-in?, self)) {
                         var_3 = get-float(tasked-in-start-frame, self);
                     } else {
                         var_3 = get-float(start-frame, self);
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[1] + 8) = var_3;
                     wait-animate_(snpc-wat-inf-against-gate-shambler-3, wat-infected-tunnels-inf-against-gate--shambler3, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-inf-against-gate-1, 1);
                     animate_(snpc-wat-inf-against-gate-shambler-3, wat-infected-tunnels-inf-against-gate-idle--shambler3, var_0);
                 }
             }

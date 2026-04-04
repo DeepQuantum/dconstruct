@@ -234,7 +234,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(npc-enemy-ellie-1, fight-state, new-boxed-value(7, vulnerable));
+                    fact-set(npc-enemy-ellie-1, fight-state, boxed_symbol(vulnerable));
                 }
                 lambda {
                     npc-set-melee-skill-settings(npc-enemy-ellie-1, melee-skill-settings-enemy-ellie-vulnerable);
@@ -255,7 +255,7 @@ statescript {
                     character-set-invincibility(npc-enemy-ellie-1, 4, 0);
                 }
                 lambda {
-                    fact-set(npc-enemy-ellie-1, fight-state, new-boxed-value(7, evade));
+                    fact-set(npc-enemy-ellie-1, fight-state, boxed_symbol(evade));
                 }
                 lambda {
                     npc-set-melee-skill-settings(npc-enemy-ellie-1, melee-skill-settings-enemy-ellie-phase-3);
@@ -280,7 +280,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(npc-enemy-ellie-1, fight-state, new-boxed-value(7, attack));
+                    fact-set(npc-enemy-ellie-1, fight-state, boxed_symbol(attack));
                 }
                 lambda {
                     npc-set-melee-skill-settings(npc-enemy-ellie-1, melee-skill-settings-enemy-ellie-phase-2);

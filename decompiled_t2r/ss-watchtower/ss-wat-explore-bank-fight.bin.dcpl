@@ -12,68 +12,28 @@
 // ####################################################################################################
 
 u16 max-awareness-of-player(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         if (npc-alive?(var_2)) {
             if (npc-get-awareness(var_2, player) == 0) {
                 set-symbol(closest-enemy, var_2, self);
             }
         }
     }
-    foreach (u64? var_8 : arg_0) {
-        u16 var_9;
-        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-            var_9 = *(u64*)var_8;
-        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-            var_9 = *(u64*)var_8;
-        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-            var_9 = *(u64*)var_8;
-        } else {
-            var_9 = 0;
-        }
+    foreach (u64? var_9 : arg_0) {
         if (npc-alive?(var_9)) {
             if (npc-get-awareness(var_9, player) == 1) {
                 set-symbol(closest-enemy, var_9, self);
             }
         }
     }
-    foreach (u64? var_15 : arg_0) {
-        u16 var_16;
-        if (var_15 && *(u16*)(var_15 + 12) == 7) {
-            var_16 = *(u64*)var_15;
-        } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-            var_16 = *(u64*)var_15;
-        } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-            var_16 = *(u64*)var_15;
-        } else {
-            var_16 = 0;
-        }
+    foreach (u64? var_16 : arg_0) {
         if (npc-alive?(var_16)) {
             if (npc-get-awareness(var_16, player) == 4) {
                 set-symbol(closest-enemy, var_16, self);
             }
         }
     }
-    foreach (u64? var_22 : arg_0) {
-        u16 var_23;
-        if (var_22 && *(u16*)(var_22 + 12) == 7) {
-            var_23 = *(u64*)var_22;
-        } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-            var_23 = *(u64*)var_22;
-        } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-            var_23 = *(u64*)var_22;
-        } else {
-            var_23 = 0;
-        }
+    foreach (u64? var_23 : arg_0) {
         if (npc-alive?(var_23)) {
             if (npc-get-awareness(var_23, player) == 3) {
                 set-symbol(closest-enemy, var_23, self);
@@ -81,17 +41,7 @@ u16 max-awareness-of-player(u64? arg_0) {
         }
     }
     u16 var_29;
-    foreach (u64? var_30 : arg_0) {
-        u16 var_31;
-        if (var_30 && *(u16*)(var_30 + 12) == 7) {
-            var_31 = *(u64*)var_30;
-        } else if (var_30 && *(u16*)(var_30 + 12) == 5) {
-            var_31 = *(u64*)var_30;
-        } else if (var_30 && *(u16*)(var_30 + 12) == 4) {
-            var_31 = *(u64*)var_30;
-        } else {
-            var_31 = 0;
-        }
+    foreach (u64? var_31 : arg_0) {
         u16 var_33;
         if (npc-alive?(var_31)) {
             if (npc-get-awareness(var_31, player) == 2) {
@@ -206,7 +156,7 @@ statescript {
                     set-svar-as-boolean(wat-explore-bank-spawned, 1);
                 }
                 lambda {
-                    send-event(vox-olive-st-npcs-spawned, ss-vox-wat-explore-capitol-hill-olive-st-npcs-1, new-boxed-value(6, 0.00));
+                    send-event(vox-olive-st-npcs-spawned, ss-vox-wat-explore-capitol-hill-olive-st-npcs-1, boxed_f32(0.00));
                 }
                 lambda {
                     if (task-continue-active?(watchtower, wat-explore-capitol-hill, checkpoint)) {
@@ -255,7 +205,7 @@ statescript {
                     set-svar-as-boolean(wat-explore-bank-spawned, 1);
                 }
                 lambda {
-                    send-event(vox-olive-st-npcs-spawned, ss-vox-wat-explore-capitol-hill-olive-st-npcs-1, new-boxed-value(6, 17.00));
+                    send-event(vox-olive-st-npcs-spawned, ss-vox-wat-explore-capitol-hill-olive-st-npcs-1, boxed_f32(17.00));
                 }
                 lambda {
                     go(fight, 1);
@@ -304,34 +254,14 @@ statescript {
                     wait-boolean(wave3-spawned?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-bank-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-bank-npcs-wave2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-npcs-wave2) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -372,17 +302,7 @@ statescript {
             }
             track hardpoints {
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -448,17 +368,7 @@ statescript {
             track main {
                 lambda {
                     if (!(get-boolean(wave3-spawned?, self))) {
-                        foreach (u64? var_3 : wat-bank-npcs-all) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : wat-bank-npcs-all) {
                             npc-clear-zone(var_4);
                         }
                     }
@@ -597,17 +507,7 @@ statescript {
                     set-svar-as-boolean(wat-explore-bank-combat-done, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -628,18 +528,8 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!darray-contains?(wat-bank-npcs-all, new-boxed-value(7, var_2))) {
+                    foreach (u64? var_2 : all-enemy-npcs) {
+                        if (!darray-contains?(wat-bank-npcs-all, boxed_symbol(var_2))) {
                             kill-entity-if-spawned(var_2);
                         }
                         npc-clear-hard-point(var_2);
@@ -669,17 +559,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -739,17 +619,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -809,17 +679,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -887,17 +747,7 @@ statescript {
                         npc-make-aware-of(var_3, player, 2, 0);
                         npc-set-zone-region(var_2, rgn-wat-hp-bank-follow-1);
                         npc-set-zone-region(var_3, rgn-wat-hp-bank-follow-1);
-                        foreach (u64? var_21 : all-enemy-npcs) {
-                            u16 var_22;
-                            if (var_21 && *(u16*)(var_21 + 12) == 7) {
-                                var_22 = *(u64*)var_21;
-                            } else if (var_21 && *(u16*)(var_21 + 12) == 5) {
-                                var_22 = *(u64*)var_21;
-                            } else if (var_21 && *(u16*)(var_21 + 12) == 4) {
-                                var_22 = *(u64*)var_21;
-                            } else {
-                                var_22 = 0;
-                            }
+                        foreach (u64? var_22 : all-enemy-npcs) {
                             if (npc-alive?(var_22)) {
                                 if (var_2 != var_22 && var_3 != var_22) {
                                     kill-entity-if-spawned(var_22);
@@ -940,68 +790,28 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-bank-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-npcs) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-bank-npcs-wave2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-npcs-wave2) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-bank-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-bank-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

@@ -221,7 +221,7 @@ statescript {
                     }
                     gui2-set-progress-bar-percent(var_1, 1.00, 0.00, 12);
                     if (spawner-exists?(ss-t2r-efj-igc-workbench-drink-1)) {
-                        send-event(drink-selected, ss-t2r-efj-igc-workbench-drink-1, new-boxed-value(7, get-symbol(current-drink, self)));
+                        send-event(drink-selected, ss-t2r-efj-igc-workbench-drink-1, boxed_symbol(get-symbol(current-drink, self)));
                     }
                     menu2-pop-page(hudMenuStack, 0);
                     menu2-hide-page-stack(hudMenuStack, 0);
@@ -260,7 +260,7 @@ statescript {
                 }
                 lambda {
                     if (spawner-exists?(ss-t2r-efj-igc-workbench-drink-1)) {
-                        send-event(drink-changed, ss-t2r-efj-igc-workbench-drink-1, new-boxed-value(7, event-arg-symbol(3)));
+                        send-event(drink-changed, ss-t2r-efj-igc-workbench-drink-1, boxed_symbol(event-arg-symbol(3)));
                     }
                 }
             }

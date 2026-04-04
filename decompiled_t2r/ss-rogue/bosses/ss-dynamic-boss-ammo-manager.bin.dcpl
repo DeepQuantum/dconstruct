@@ -72,7 +72,7 @@ statescript {
         block event player-pickup {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(darray-tagged-spawners, self), new-boxed-value(7, event-arg-symbol(3)))) {
+                    if (darray-contains?(get-symbol(darray-tagged-spawners, self), boxed_symbol(event-arg-symbol(3)))) {
                         begin-foreach();
                         for (u64 i = 0; i < darray-count(get-symbol(darray-tagged-spawners, self)); i++) {
                             u64? var_9 = darray-at(get-symbol(darray-tagged-spawners, self), i);
@@ -99,7 +99,7 @@ statescript {
                             }
                             if (var_13 == event-arg-symbol(0)) {
                                 --(num-spawners-with-active-ammo, self);
-                                ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_10, new-boxed-value(7, 0));
+                                ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_10, boxed_symbol(0));
                             }
                         }
                         var_5 = end-foreach();
@@ -178,18 +178,8 @@ statescript {
                     set-symbol(ddict-spawners-to-spawned, ddict-create(self, -1, 0), self);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(darray-tagged-spawners, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_4, new-boxed-value(7, 0));
+                    foreach (u64? var_4 : get-symbol(darray-tagged-spawners, self)) {
+                        ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_4, boxed_symbol(0));
                     }
                 }
                 lambda {
@@ -215,17 +205,7 @@ statescript {
                 lambda {
                     while (get-int32(num-spawners-with-active-ammo, self) < get-int32(total-spawners-with-active-ammo, self) && boss--player-has-low-ammo(4) && 0.00 < 10.00) {
                         debug-draw-sphere(get-object-position(player), 5.00, 7, 0.00, 0, 0);
-                        foreach (u64? var_8 : get-symbol(darray-tagged-spawners, self)) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : get-symbol(darray-tagged-spawners, self)) {
                             if (!is-spawner-on-screen?(var_9)) {
                                 u64? var_12 = ddict-get(get-symbol(ddict-spawners-to-spawned, self), var_9);
                                 u16 var_13;
@@ -239,7 +219,7 @@ statescript {
                                     var_13 = 0;
                                 }
                                 if (var_13 == 0 && get-int32(num-spawners-with-active-ammo, self) < get-int32(total-spawners-with-active-ammo, self) && get-player-to-spawner-distance(var_9) <= 5.00) {
-                                    ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_9, new-boxed-value(7, spawn-entity(var_9, 0, 0)));
+                                    ddict-set(get-symbol(ddict-spawners-to-spawned, self), var_9, boxed_symbol(spawn-entity(var_9, 0, 0)));
                                     debug-draw-string(
                                         offset-point(get-spawner-position(var_9, 1), alloc-vector(0.00, 1.00, 0.00, 1.00, 0)),
                                         dc:format("Spawning %s...", string-debug(var_9)),

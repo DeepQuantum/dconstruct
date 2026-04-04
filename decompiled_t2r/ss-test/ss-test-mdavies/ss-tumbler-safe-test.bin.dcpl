@@ -56,15 +56,15 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 58;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = get-float(current-number, self) / 10.00;
-                    *(i32*)*(*var_1 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 58;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = get-float(current-number, self) / 10.00;
+                    *(i32*)*var_1[1] = 56;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
+                    *(i32*)*var_1[2] = 31;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = 1;
                     animate_(get-self-id(), dial-anim, var_1);
                 }
                 lambda {
@@ -380,18 +380,18 @@ statescript {
                     } else {
                         script-caption(player, "Shit", -1.00, 0, 0);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 31;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (0 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 31;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u8*)(*var_5[0] + 8) = 1;
                         animate_(get-self-id(), dial-anim, var_5);
                         wait(2.00);
                         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 58;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (0 * 8)) + 8) = 1.00 - (get-float(current-number, self) / 10.00);
-                        *(i32*)*(*var_7 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.00;
+                        *(i32*)*var_7[0] = 58;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(f32*)(*var_7[0] + 8) = 1.00 - (get-float(current-number, self) / 10.00);
+                        *(i32*)*var_7[1] = 56;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.00;
                         animate_(get-self-id(), dial-anim, var_7);
                         set-int32(correct-count, 0, self);
                         set-int32(punch-count, 0, self);

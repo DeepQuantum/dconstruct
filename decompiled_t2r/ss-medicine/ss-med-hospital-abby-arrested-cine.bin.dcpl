@@ -166,29 +166,29 @@ statescript {
                 lambda {
                     if (entity-exists?(obj-med-hos-entry-organizing-supplies-worker-1)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
                         f32 var_3;
                         if (get-boolean(from-task-in?, self)) {
                             var_3 = 0.00;
                         } else {
                             var_3 = 0.70;
                         }
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = var_3;
+                        *(f32*)(*var_1[0] + 8) = var_3;
                         animate_(obj-med-hos-entry-organizing-supplies-worker-1, female=cin-med-hospital-abby-arrested, var_1);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
                     f32 var_2;
                     if (get-boolean(from-task-in?, self)) {
                         var_2 = 0.00;
                     } else {
                         var_2 = 0.70;
                     }
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = var_2;
+                    *(f32*)(*var_0[0] + 8) = var_2;
                     wait-animate_(player, abby=cin-med-hospital-abby-arrested, var_0);
                 }
                 lambda {

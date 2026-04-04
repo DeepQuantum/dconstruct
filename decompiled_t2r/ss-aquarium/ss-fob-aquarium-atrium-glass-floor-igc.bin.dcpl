@@ -287,24 +287,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 13;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 2;
                     wait-animate_(owen, fob-aquarium-atrium-glass-floor-enter--owen, var_0);
                 }
                 lambda {
@@ -313,27 +313,27 @@ statescript {
                 lambda {
                     if (!get-boolean(exit-requested?, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.40;
-                        *(i32*)*(*var_1 + (3 * 8)) = 27;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_1 + (4 * 8)) = 29;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (4 * 8)) + 8) = 2;
-                        *(i32*)*(*var_1 + (5 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (6 * 8)) = 13;
-                        *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (6 * 8)) + 8) = 2;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.40;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.40;
+                        *(i32*)*var_1[3] = 27;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(u8*)(*var_1[3] + 8) = 2;
+                        *(i32*)*var_1[4] = 29;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(u8*)(*var_1[4] + 8) = 2;
+                        *(i32*)*var_1[5] = 31;
+                        *(u64*)(*var_1[5] + 8) = 0;
+                        *(u8*)(*var_1[5] + 8) = 1;
+                        *(i32*)*var_1[6] = 13;
+                        *(u64*)(*var_1[6] + 8) = 0;
+                        *(i32*)(*var_1[6] + 8) = 2;
                         animate_(owen, fob-aquarium-atrium-glass-floor-idle--owen, var_1);
                         wait-until-anim-fully-faded-in(owen, fob-aquarium-atrium-glass-floor-idle--owen);
                         while (get-boolean(exit-requested?, self) || get-boolean(player-interacted?, self) || get-animation-phase(owen, 0, fob-aquarium-atrium-glass-floor-idle--owen) > 0.90 && !((get-current-time(0) - get-current-time(0)) > 40.00)) {
@@ -346,51 +346,51 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 9, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-fob-aquarium-atrium-glass-floor-owen-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.40;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
                     u16 var_3;
                     if (get-boolean(exit-requested?, self)) {
                         var_3 = 2;
                     } else {
                         var_3 = 1;
                     }
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (6 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = var_3;
+                    *(i32*)*var_0[6] = 58;
+                    *(u64*)(*var_0[6] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(exit-requested?, self)) {
                         var_5 = 0.20;
                     } else {
                         var_5 = 0.00;
                     }
-                    *(f32*)(*(*var_0 + (6 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_0 + (7 * 8)) = 22;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
+                    *(f32*)(*var_0[6] + 8) = var_5;
+                    *(i32*)*var_0[7] = 22;
+                    *(u64*)(*var_0[7] + 8) = 0;
                     f32 var_7;
                     if (get-boolean(exit-requested?, self)) {
                         var_7 = 0.80;
                     } else {
                         var_7 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (7 * 8)) + 8) = var_7;
-                    *(i32*)*(*var_0 + (8 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (8 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (8 * 8)) + 8) = 2;
+                    *(f32*)(*var_0[7] + 8) = var_7;
+                    *(i32*)*var_0[8] = 13;
+                    *(u64*)(*var_0[8] + 8) = 0;
+                    *(i32*)(*var_0[8] + 8) = 2;
                     wait-animate_(owen, fob-aquarium-atrium-glass-floor-exit--owen, var_0);
                 }
                 lambda {
@@ -415,7 +415,7 @@ statescript {
                         var_2 = 0.00 + get-delta-time();
                     }
                     if (var_2 >= 0.50) {
-                        var_4 = send-event(spawn-glass-floor-fish, ss-fob-aquarium-flashback-animal-controller-1, new-boxed-value(14, get-point(interact-point, ss-fob-aquarium-atrium-igc-glass-floor-player-1)));
+                        var_4 = send-event(spawn-glass-floor-fish, ss-fob-aquarium-flashback-animal-controller-1, boxed_point(get-point(interact-point, ss-fob-aquarium-atrium-igc-glass-floor-player-1)));
                     }
                 }
             }

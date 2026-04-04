@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? dangerous-fog--disable-part-spawners-for-group(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : arg_0) {
         kill-part-spawner(var_2, 0);
     }
 }
@@ -122,24 +112,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (!npc-is-infected?(var_2)) {
                             npc-change-vision-settings(var_2, fog-npc);
                         }
                     }
                 }
                 lambda {
-                    broadcast-event(skull-activate, new-boxed-value(7, dangerous-fog));
+                    broadcast-event(skull-activate, boxed_symbol(dangerous-fog));
                 }
             }
         }

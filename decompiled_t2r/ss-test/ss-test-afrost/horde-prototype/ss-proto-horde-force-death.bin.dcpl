@@ -98,7 +98,7 @@ statescript {
                     npc-teleport-to(npc-runner-force-kill-1, offset-locator(set-locator-z-direction(get-object-locator(player), get-z-vec-from-bound-frame(flatten-locator(camera-locator(0))), 0), alloc-vector(-0.50, 0.00, -1.00, 1.00, 0)));
                 }
                 lambda {
-                    darray-append(get-symbol(forced-death-group, self), new-boxed-value(7, npc-runner-force-kill-1), 1);
+                    darray-append(get-symbol(forced-death-group, self), boxed_symbol(npc-runner-force-kill-1), 1);
                 }
                 lambda {
                     wait-one-frame();
@@ -170,32 +170,32 @@ statescript {
                     }
                     camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                     u64? var_12 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_12 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = get-object-locator(player);
+                    *(i32*)*var_12[0] = 10;
+                    *(u64*)(*var_12[0] + 8) = 0;
+                    *(u64*)(*var_12[0] + 8) = get-object-locator(player);
                     animate_(var_2, tra-horde-death--male, var_12);
                     u64? var_14 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_14 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_14 + (0 * 8)) + 8) = get-object-locator(player);
+                    *(i32*)*var_14[0] = 10;
+                    *(u64*)(*var_14[0] + 8) = 0;
+                    *(u64*)(*var_14[0] + 8) = get-object-locator(player);
                     animate_(var_5, tra-horde-death--male-a, var_14);
                     u64? var_16 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_16 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-object-locator(player);
+                    *(i32*)*var_16[0] = 10;
+                    *(u64*)(*var_16[0] + 8) = 0;
+                    *(u64*)(*var_16[0] + 8) = get-object-locator(player);
                     animate_(var_8, tra-horde-death--male-b, var_16);
                     u64? var_18 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_18 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_18 + (0 * 8)) + 8) = get-object-locator(player);
+                    *(i32*)*var_18[0] = 10;
+                    *(u64*)(*var_18[0] + 8) = 0;
+                    *(u64*)(*var_18[0] + 8) = get-object-locator(player);
                     animate_(var_11, tra-horde-death--male-c, var_18);
                     u64? var_20 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_20 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_20 + (0 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_20 + (1 * 8)) = 3;
-                    *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_20 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_20[0] = 10;
+                    *(u64*)(*var_20[0] + 8) = 0;
+                    *(u64*)(*var_20[0] + 8) = get-object-locator(player);
+                    *(i32*)*var_20[1] = 3;
+                    *(u64*)(*var_20[1] + 8) = 0;
+                    *(u8*)(*var_20[1] + 8) = 0;
                     wait-animate_(player, tra-horde-death--abby, var_20);
                     camera-fade-out-animated(0.00, 0);
                     if (get-player-health() > 0) {

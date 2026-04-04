@@ -19,7 +19,7 @@ statescript {
         block event inside {
             track main {
                 lambda {
-                    send-event(ambush-player, ss-aqu-owen-dog-ambush-1, new-boxed-value(7, get-self-id()));
+                    send-event(ambush-player, ss-aqu-owen-dog-ambush-1, boxed_symbol(get-self-id()));
                 }
             }
         }

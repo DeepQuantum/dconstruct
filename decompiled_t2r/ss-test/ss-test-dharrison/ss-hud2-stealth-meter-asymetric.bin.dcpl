@@ -40,7 +40,7 @@ u16 draw-stealth-shape() {
         } else {
             var_19 = 0.00;
         }
-        darray-set(get-symbol(draw-points-darray, self), 0, new-boxed-value(14, offset-point(get-point(meter-center, self), rotate-vector(alloc-vector(0.00, -1.00 * (get-float(meter-radius, self) * var_19), 0.00, 1.00, 0), quat-from-axis-angle(alloc-vector(0.00, 0.00, 1.00, 1.00, 0), 180.00 + (var_15 + (-1.00 * (get-float(angle-between-casts, self) * 0.00))))))));
+        darray-set(get-symbol(draw-points-darray, self), 0, boxed_point(offset-point(get-point(meter-center, self), rotate-vector(alloc-vector(0.00, -1.00 * (get-float(meter-radius, self) * var_19), 0.00, 1.00, 0), quat-from-axis-angle(alloc-vector(0.00, 0.00, 1.00, 1.00, 0), 180.00 + (var_15 + (-1.00 * (get-float(angle-between-casts, self) * 0.00))))))));
     }
     u64 i = 0;
     while (i < get-int32(num-casts, self)) {
@@ -157,7 +157,7 @@ u64? handle-raycast-results(u64? arg_0) {
         var_5 = 0.00;
     }
     set-distance-to-cast(wait-raycast(var_2));
-    return darray-set(get-symbol(percent-close-darray, self), arg_0, new-boxed-value(6, lerp-scale(0.00, 1.00, var_5, calculate-percent-to-cast(), 0.20)));
+    return darray-set(get-symbol(percent-close-darray, self), arg_0, boxed_f32(lerp-scale(0.00, 1.00, var_5, calculate-percent-to-cast(), 0.20)));
 }
 
 u64? rotate-cast-offset() {

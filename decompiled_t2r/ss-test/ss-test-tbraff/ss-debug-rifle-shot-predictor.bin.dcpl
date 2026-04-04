@@ -14,17 +14,7 @@
 u64? get-closest-enemy-to-reticle() {
     set-float(closest-distance, 9999.99, self);
     set-symbol(closest-enemy, 0, self);
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-alive?(var_2)) {
             u64? var_5 = world-space-to-screen-space(0, get-object-position(var_2));
             u64? var_12 = world-space-to-screen-space(0, get-locator-position(offset-locator(camera-through-reticle-locator(), alloc-vector(0.00, evaluate-point-curve(*enem-dist-curve*, distance-between-objects(var_2, player)), 2.00, 1.00, 0))));

@@ -52,9 +52,9 @@ statescript {
                 }
                 lambda {
                     if (task-range-active?(tracking-horde, tra-infected-horde-start, tracking-horde, tra-infected-horde-trucks)) {
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 1));
+                        fact-set(global, player-chased-mode, boxed_bool(1));
                     } else {
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 0));
+                        fact-set(global, player-chased-mode, boxed_bool(0));
                     }
                 }
             }

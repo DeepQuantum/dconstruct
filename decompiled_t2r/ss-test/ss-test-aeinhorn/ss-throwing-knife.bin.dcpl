@@ -126,7 +126,7 @@ statescript {
             track main {
                 lambda {
                     if (!fact-exists?(get-symbol(target, self), stumble-script)) {
-                        fact-set(get-symbol(target, self), stumble-script, new-boxed-value(7, spawn-script-multiple("ss-proto-npc-stumble", get-symbol(target, self), 0)));
+                        fact-set(get-symbol(target, self), stumble-script, boxed_symbol(spawn-script-multiple("ss-proto-npc-stumble", get-symbol(target, self), 0)));
                     } else {
                         set-boolean(restart-stumble, 1, fact-symbol(get-symbol(target, self), stumble-script, 1, 0));
                     }

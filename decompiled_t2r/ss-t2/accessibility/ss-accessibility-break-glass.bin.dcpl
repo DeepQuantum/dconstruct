@@ -26,7 +26,7 @@ statescript {
                 }
                 lambda {
                     if (player-in-region?(self, 2)) {
-                        fact-set(player, force-glass-cue, new-boxed-value(1, 1));
+                        fact-set(player, force-glass-cue, boxed_bool(1));
                     }
                 }
             }
@@ -39,14 +39,14 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(player, force-glass-cue, new-boxed-value(1, 1));
+                    fact-set(player, force-glass-cue, boxed_bool(1));
                 }
             }
         }
         block event exit {
             track main {
                 lambda {
-                    fact-set(player, force-glass-cue, new-boxed-value(1, 0));
+                    fact-set(player, force-glass-cue, boxed_bool(0));
                 }
             }
         }

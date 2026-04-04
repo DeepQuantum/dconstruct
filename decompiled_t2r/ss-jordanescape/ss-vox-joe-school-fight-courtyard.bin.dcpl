@@ -135,8 +135,8 @@ statescript {
                 }
                 lambda {
                     if (!(get-boolean(vox-stealth?, self))) {
-                        fact-set(npc-joe-roof-backup-1, has-faction-ever-seen-player, new-boxed-value(1, 1));
-                        fact-set(npc-joe-roof-backup-2, has-faction-ever-seen-player, new-boxed-value(1, 1));
+                        fact-set(npc-joe-roof-backup-1, has-faction-ever-seen-player, boxed_bool(1));
+                        fact-set(npc-joe-roof-backup-2, has-faction-ever-seen-player, boxed_bool(1));
                     }
                 }
                 lambda {

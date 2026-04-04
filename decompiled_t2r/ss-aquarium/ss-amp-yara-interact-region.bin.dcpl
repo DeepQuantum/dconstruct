@@ -226,7 +226,7 @@ statescript {
             track vox {
                 lambda {
                     if (!(tag-symbol(vox, self) == 0)) {
-                        send-event(go-vox, get-symbol(vox-script-target, self), new-boxed-value(7, tag-symbol(vox, self)));
+                        send-event(go-vox, get-symbol(vox-script-target, self), boxed_symbol(tag-symbol(vox, self)));
                         while (!!(script-in-state?(get-symbol(vox-script-target, self), tag-symbol(vox, self)))) {
                             wait(0.10);
                         }
@@ -256,7 +256,7 @@ statescript {
                 }
                 lambda {
                     if (!(tag-symbol(special-action, self) == 0)) {
-                        send-event(go-action, get-symbol(special-action-script-target, self), new-boxed-value(7, tag-symbol(special-action, self)));
+                        send-event(go-action, get-symbol(special-action-script-target, self), boxed_symbol(tag-symbol(special-action, self)));
                         while (!!(script-in-state?(get-symbol(special-action-script-target, self), tag-symbol(special-action, self)))) {
                             wait(0.10);
                         }

@@ -591,7 +591,7 @@ embedded@2f6d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? #16BAB2E655B23D48
 embedded@32368(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(#16BAB2E655B23D48), 0, 0);
 }
@@ -819,9 +819,9 @@ dog-facebite-kill
 embedded@2f9b8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000.00)
     );
 }
 
@@ -977,15 +977,15 @@ embedded@32190(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < (99.00 + 1.00) && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 99.00 + 1.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(99.00 + 1.00),
             var_7
         );
         var_1 = var_3;
@@ -994,15 +994,15 @@ embedded@32190(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_11 = !(arg_1 == 0) && !(arg_2 == 0) && var_10 < 99.00 && var_10 > 0.00;
         u64? var_15;
         if (var_11) {
-            var_15 = new-boxed-value(7, true);
+            var_15 = boxed_symbol(true);
         } else {
-            var_15 = new-boxed-value(7, false);
+            var_15 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_10),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 99.00),
+            boxed_f32(var_10),
+            boxed_f32(0.00),
+            boxed_f32(99.00),
             var_15
         );
         var_1 = var_11;
@@ -1088,15 +1088,15 @@ embedded@30b40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_12 = !(arg_1 == 0) && !(arg_2 == 0) && var_11 < 7.00 && var_11 > 0.00;
         u64? var_16;
         if (var_12) {
-            var_16 = new-boxed-value(7, true);
+            var_16 = boxed_symbol(true);
         } else {
-            var_16 = new-boxed-value(7, false);
+            var_16 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_11),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 7.00),
+            boxed_f32(var_11),
+            boxed_f32(0.00),
+            boxed_f32(7.00),
             var_16
         );
         if (var_12) {
@@ -1110,15 +1110,15 @@ embedded@30b40(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_21 = !(arg_1 == 0) && !(arg_2 == 0) && var_20 < 5.00 && var_20 > 0.00;
         u64? var_25;
         if (var_21) {
-            var_25 = new-boxed-value(7, true);
+            var_25 = boxed_symbol(true);
         } else {
-            var_25 = new-boxed-value(7, false);
+            var_25 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_20),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 5.00),
+            boxed_f32(var_20),
+            boxed_f32(0.00),
+            boxed_f32(5.00),
             var_25
         );
         if (var_21 && !npc-enemy-abby?(arg_1)) {
@@ -1477,17 +1477,7 @@ embedded@2dac8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? #23BFEA11E7B99A8B
 npc-dog-prone-struggle-success
 embedded@331d0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-buddy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-buddy-npcs) {
         if (npc-buddy-should-play-aborted-save-jumpback?(var_2) && !get-current-melee-attack(var_2)) {
             sid var_5;
             if (var_2 == dina || var_2 == mel && var_2 == lev) {
@@ -1519,15 +1509,15 @@ embedded@2e660(u64?* arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64?
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 99.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 99.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(99.00),
         var_5
     );
     npc-stunner?(arg_1);
@@ -1583,15 +1573,15 @@ embedded@30768(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
         bool var_3 = !(arg_1 == 0) && !(arg_2 == 0) && var_2 < 5.00 && var_2 > 0.00;
         u64? var_7;
         if (var_3) {
-            var_7 = new-boxed-value(7, true);
+            var_7 = boxed_symbol(true);
         } else {
-            var_7 = new-boxed-value(7, false);
+            var_7 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_2),
-            new-boxed-value(6, 0.00),
-            new-boxed-value(6, 5.00),
+            boxed_f32(var_2),
+            boxed_f32(0.00),
+            boxed_f32(5.00),
             var_7
         );
         if (var_3) {
@@ -1602,15 +1592,15 @@ embedded@30768(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_13 = !(arg_1 == 0) && !(arg_2 == 0) && var_12 < 5.00 && var_12 > 0.00;
     u64? var_17;
     if (var_13) {
-        var_17 = new-boxed-value(7, true);
+        var_17 = boxed_symbol(true);
     } else {
-        var_17 = new-boxed-value(7, false);
+        var_17 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_12),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 5.00),
+        boxed_f32(var_12),
+        boxed_f32(0.00),
+        boxed_f32(5.00),
         var_17
     );
     u16 var_21;
@@ -2128,7 +2118,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_6 = -1.00;
             } else {
                 f32 var_10;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_10 = 1.00;
                 } else {
                     var_10 = 2.00;
@@ -2156,9 +2146,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && !(is-player?(arg_1)) || npc-clicker?(arg_2) || npc-runner?(arg_2) && npc-stalker?(arg_2)) {
@@ -2181,7 +2171,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_38 = 1.00;
                 }
                 f32 var_41;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_41 = 1.00;
                 } else {
                     var_41 = 2.00;
@@ -2260,7 +2250,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_59 = get-melee-weapon-damage(arg_1, arg_2);
                 }
                 f32 var_63;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_63 = 1.00;
                 } else {
                     var_63 = 2.00;
@@ -2309,9 +2299,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             }
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-clicker?(arg_1) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) || characters-are-enemies?(arg_1, arg_2) && player-get-meatshield() == arg_2) {
@@ -2374,7 +2364,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                         var_113 = -1.00;
                     } else {
                         f32 var_117;
-                        if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                        if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                             var_117 = 1.00;
                         } else if (is-player?(arg_2)) {
                             var_117 = 2.00;
@@ -2425,9 +2415,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
                 broadcast-event(
                     melee-attack-hit,
-                    new-boxed-value(7, arg_2),
-                    new-boxed-value(7, arg_1),
-                    new-boxed-value(7, arg_5)
+                    boxed_symbol(arg_2),
+                    boxed_symbol(arg_1),
+                    boxed_symbol(arg_5)
                 );
                 var_1 = 1;
             } else {
@@ -2478,7 +2468,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_148 = -1.00;
                 } else {
                     f32 var_152;
-                    if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                    if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                         var_152 = 1.00;
                     } else {
                         var_152 = 2.00;
@@ -2514,9 +2504,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-enemy-ellie?(arg_1) && !character-in-i-frame?(arg_2)) {
@@ -2565,7 +2555,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_174 = -1.00;
             } else {
                 f32 var_178;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_178 = 1.00;
                 } else {
                     var_178 = 2.00;
@@ -2606,9 +2596,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             melee-fact-set-time(arg_1, ellie-landed-hit);
             if (npc-enemy-ellie?(arg_1)) {
@@ -2663,7 +2653,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_215 = -1.00;
             } else {
                 f32 var_219;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_219 = 1.00;
                 } else {
                     var_219 = 2.00;
@@ -2704,9 +2694,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (!character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && characters-are-enemies?(arg_1, arg_2) && !(*(u64*)(get-current-melee-attack(arg_1) + 16) == melee-npc-meatshield-kick)) {
@@ -2755,7 +2745,7 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_250 = -1.00;
             } else {
                 f32 var_254;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_254 = 1.00;
                 } else {
                     var_254 = 2.00;
@@ -2796,9 +2786,9 @@ embedded@57b0(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else {
@@ -3039,15 +3029,15 @@ embedded@32518(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_2 = !(arg_1 == 0) && !(arg_2 == 0) && var_1 < 4.00 && var_1 > 0.00;
     u64? var_6;
     if (var_2) {
-        var_6 = new-boxed-value(7, true);
+        var_6 = boxed_symbol(true);
     } else {
-        var_6 = new-boxed-value(7, false);
+        var_6 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_1),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 4.00),
+        boxed_f32(var_1),
+        boxed_f32(0.00),
+        boxed_f32(4.00),
         var_6
     );
     if (var_2) {
@@ -3088,10 +3078,10 @@ u64? dog-pulldown-attack-intro
 dog-down-intro
 embedded@32b50(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_3 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_3);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_3);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return !(arg_1 == 0) && !(arg_2 == 0) && get-character-health(arg_2) > 0 && !character-in-uninterruptible-melee-move?(arg_2) && !character-in-i-frame?(arg_2) && var_3 && var_3 && var_3 && var_3 && var_3 && var_3;
 }
 
@@ -3100,9 +3090,9 @@ dog-down-intro
 embedded@30960(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 0.01)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(0.01)
     );
 }
 
@@ -3110,10 +3100,10 @@ u64? dog-pulldown-attack-intro
 dog-down-intro
 embedded@2e1e0(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u64? var_2 = get-object-distance(arg_1, arg_2);
-    new-boxed-value(6, var_2);
-    new-boxed-value(6, 0.00);
-    new-boxed-value(6, 3.00);
-    new-boxed-value(7, true);
+    boxed_f32(var_2);
+    boxed_f32(0.00);
+    boxed_f32(3.00);
+    boxed_symbol(true);
     return !(character-melee-event-active?(arg_2, 32, 0)) && var_2 && var_2 && var_2 && var_2 && var_2 && var_2;
 }
 
@@ -3148,9 +3138,9 @@ dog-down-attack
 embedded@312c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 0.40)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(0.40)
     );
 }
 
@@ -3234,7 +3224,7 @@ embedded@330c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? #5B523D43EA961815
 embedded@2db20(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(#5B523D43EA961815), 0, 0);
 }
@@ -3271,15 +3261,15 @@ embedded@2d240(u64?* arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64?
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 2.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 2.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(2.00),
         var_5
     );
     npc-stunner?(arg_1);
@@ -3328,7 +3318,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_6 = -1.00;
             } else {
                 f32 var_10;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_10 = 0.50;
                 } else {
                     var_10 = 1.00;
@@ -3356,9 +3346,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && !(is-player?(arg_1)) || npc-clicker?(arg_2) || npc-runner?(arg_2) && npc-stalker?(arg_2)) {
@@ -3381,7 +3371,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_38 = 1.00;
                 }
                 f32 var_41;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_41 = 0.50;
                 } else {
                     var_41 = 1.00;
@@ -3460,7 +3450,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_59 = get-melee-weapon-damage(arg_1, arg_2);
                 }
                 f32 var_63;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_63 = 0.50;
                 } else {
                     var_63 = 1.00;
@@ -3509,9 +3499,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             }
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-clicker?(arg_1) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) || characters-are-enemies?(arg_1, arg_2) && player-get-meatshield() == arg_2) {
@@ -3574,7 +3564,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                         var_113 = -1.00;
                     } else {
                         f32 var_117;
-                        if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                        if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                             var_117 = 0.50;
                         } else if (is-player?(arg_2)) {
                             var_117 = 1.00;
@@ -3625,9 +3615,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
                 broadcast-event(
                     melee-attack-hit,
-                    new-boxed-value(7, arg_2),
-                    new-boxed-value(7, arg_1),
-                    new-boxed-value(7, arg_5)
+                    boxed_symbol(arg_2),
+                    boxed_symbol(arg_1),
+                    boxed_symbol(arg_5)
                 );
                 var_1 = 1;
             } else {
@@ -3678,7 +3668,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_148 = -1.00;
                 } else {
                     f32 var_152;
-                    if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                    if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                         var_152 = 0.50;
                     } else {
                         var_152 = 1.00;
@@ -3714,9 +3704,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-enemy-ellie?(arg_1) && !character-in-i-frame?(arg_2)) {
@@ -3765,7 +3755,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_174 = -1.00;
             } else {
                 f32 var_178;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_178 = 0.50;
                 } else {
                     var_178 = 1.00;
@@ -3806,9 +3796,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             melee-fact-set-time(arg_1, ellie-landed-hit);
             if (npc-enemy-ellie?(arg_1)) {
@@ -3863,7 +3853,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_215 = -1.00;
             } else {
                 f32 var_219;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_219 = 0.50;
                 } else {
                     var_219 = 1.00;
@@ -3904,9 +3894,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (!character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && characters-are-enemies?(arg_1, arg_2) && !(*(u64*)(get-current-melee-attack(arg_1) + 16) == melee-npc-meatshield-kick)) {
@@ -3955,7 +3945,7 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_250 = -1.00;
             } else {
                 f32 var_254;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_254 = 0.50;
                 } else {
                     var_254 = 1.00;
@@ -3996,9 +3986,9 @@ embedded@6550(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else {
@@ -4027,7 +4017,7 @@ embedded@2e420(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
 u64? dog-facebite-kill-back
 embedded@30200(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(dog-facebite-kill-back), 0, 0);
 }
@@ -4067,15 +4057,15 @@ embedded@31b48(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? 
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 3.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
         var_5
     );
     if (!var_1) {
@@ -4185,17 +4175,7 @@ embedded@2de18(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? a
     if (0 && 0) {
         camera-override-near-clip/f(0.01);
     }
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-get-target(var_2) == arg_2) {
             npc-set-melee-behavior-condition(var_2, 10);
         }
@@ -4383,9 +4363,9 @@ npc-dog-prone-struggle
 embedded@2d408(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 200.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(200.00)
     );
 }
 
@@ -4455,7 +4435,7 @@ embedded@2e5b0(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
 u64? dog-prone-kill
 embedded@32da0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(dog-prone-kill), 0, 0);
 }
@@ -4605,17 +4585,7 @@ embedded@2f250(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
     if (!(npc-has-approx-line-of-motion-to-target?(arg_1, 0.20)) || !(melee-corner-line-of-motion?(arg_1, arg_2, 1.30)) || !(door-clear?(arg_9))) {
         if (get-current-melee-attack(arg_2) || *(u64*)(get-current-melee-attack(arg_2) + 16) == melee-npc-grab-struggle-one-shot || *(u64*)(get-current-melee-attack(arg_2) + 16) == melee-npc-prone-supine-pullout-with-intro) {
             if (!character-in-melee-attack-of-other-character?(arg_1, player) || npc-is-melee-behavior-condition-active?(arg_1, 7, 0.00)) {
-                foreach (u64? var_13 : all-enemy-npcs) {
-                    u16 var_14;
-                    if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                        var_14 = *(u64*)var_13;
-                    } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                        var_14 = *(u64*)var_13;
-                    } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                        var_14 = *(u64*)var_13;
-                    } else {
-                        var_14 = 0;
-                    }
+                foreach (u64? var_14 : all-enemy-npcs) {
                     if (character-in-melee-attack-of-other-character?(player, var_14)) {
                         set-boolean(0, 1, self);
                     }
@@ -4689,7 +4659,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_6 = -1.00;
             } else {
                 f32 var_10;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_10 = 0.15;
                 } else {
                     var_10 = 0.30;
@@ -4717,9 +4687,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
         }
         broadcast-event(
             melee-attack-hit,
-            new-boxed-value(7, arg_2),
-            new-boxed-value(7, arg_1),
-            new-boxed-value(7, arg_5)
+            boxed_symbol(arg_2),
+            boxed_symbol(arg_1),
+            boxed_symbol(arg_5)
         );
         var_1 = 1;
     } else if (is-npc?(arg_2) && npc-get-limb-state(arg_2) == 1 && !(is-player?(arg_1)) || npc-clicker?(arg_2) || npc-runner?(arg_2) && npc-stalker?(arg_2)) {
@@ -4742,7 +4712,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_38 = 1.00;
                 }
                 f32 var_41;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_41 = 0.15;
                 } else {
                     var_41 = 0.30;
@@ -4821,7 +4791,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_59 = get-melee-weapon-damage(arg_1, arg_2);
                 }
                 f32 var_63;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_63 = 0.15;
                 } else {
                     var_63 = 0.30;
@@ -4870,9 +4840,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             }
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-clicker?(arg_1) && !character-in-i-frame?(arg_2) && !is-blocking?(arg_2) || characters-are-enemies?(arg_1, arg_2) && player-get-meatshield() == arg_2) {
@@ -4935,7 +4905,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                         var_113 = -1.00;
                     } else {
                         f32 var_117;
-                        if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                        if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                             var_117 = 0.15;
                         } else if (is-player?(arg_2)) {
                             var_117 = 0.30;
@@ -4986,9 +4956,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
                 broadcast-event(
                     melee-attack-hit,
-                    new-boxed-value(7, arg_2),
-                    new-boxed-value(7, arg_1),
-                    new-boxed-value(7, arg_5)
+                    boxed_symbol(arg_2),
+                    boxed_symbol(arg_1),
+                    boxed_symbol(arg_5)
                 );
                 var_1 = 1;
             } else {
@@ -5039,7 +5009,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                     var_148 = -1.00;
                 } else {
                     f32 var_152;
-                    if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                    if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                         var_152 = 0.15;
                     } else {
                         var_152 = 0.30;
@@ -5075,9 +5045,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (npc-enemy-ellie?(arg_1) && !character-in-i-frame?(arg_2)) {
@@ -5126,7 +5096,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_174 = -1.00;
             } else {
                 f32 var_178;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_178 = 0.15;
                 } else {
                     var_178 = 0.30;
@@ -5167,9 +5137,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             melee-fact-set-time(arg_1, ellie-landed-hit);
             if (npc-enemy-ellie?(arg_1)) {
@@ -5224,7 +5194,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_215 = -1.00;
             } else {
                 f32 var_219;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_219 = 0.15;
                 } else {
                     var_219 = 0.30;
@@ -5265,9 +5235,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else if (!character-in-i-frame?(arg_2) && !is-blocking?(arg_2) && characters-are-enemies?(arg_1, arg_2) && !(*(u64*)(get-current-melee-attack(arg_1) + 16) == melee-npc-meatshield-kick)) {
@@ -5316,7 +5286,7 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
                 var_250 = -1.00;
             } else {
                 f32 var_254;
-                if (darray-contains?(all-buddy-npcs, new-boxed-value(7, arg_2))) {
+                if (darray-contains?(all-buddy-npcs, boxed_symbol(arg_2))) {
                     var_254 = 0.15;
                 } else {
                     var_254 = 0.30;
@@ -5357,9 +5327,9 @@ embedded@6e18(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
             melee-fact-increment-int(arg_1, melee-weapon-hits, 1);
             broadcast-event(
                 melee-attack-hit,
-                new-boxed-value(7, arg_2),
-                new-boxed-value(7, arg_1),
-                new-boxed-value(7, arg_5)
+                boxed_symbol(arg_2),
+                boxed_symbol(arg_1),
+                boxed_symbol(arg_5)
             );
             var_1 = 1;
         } else {
@@ -5382,7 +5352,7 @@ embedded@33058(u64? arg_0, u64? arg_1, string arg_2, u64? arg_3, u64? arg_4, u64
 u64? dog-facebite-kill
 embedded@2da50(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(dog-facebite-kill), 0, 0);
 }

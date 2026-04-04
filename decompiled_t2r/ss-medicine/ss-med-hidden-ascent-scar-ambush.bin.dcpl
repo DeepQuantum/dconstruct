@@ -76,17 +76,7 @@ statescript {
                         set-hardpoint-enabled(hard-point-med-hidden-ascent-2);
                         set-hardpoint-enabled(hard-point-med-hidden-ascent-3);
                         wait-spawn-npc-group-async(med-ascent-scar-ambushers, 0, 0);
-                        foreach (u64? var_3 : med-ascent-scar-ambushers) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : med-ascent-scar-ambushers) {
                             npc-make-aware-of(var_4, player, 2, 0);
                         }
                         go(combat, 1);
@@ -130,22 +120,22 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-med-hidden-ascent-scar-ambush-hatch-1, med-hidden-ascent-ambush-enter--hatch, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(lev, med-hidden-ascent-ambush-enter--lev, var_0);
                 }
                 lambda {
@@ -170,17 +160,7 @@ statescript {
                     wait-spawn-entity-group-async(med-ascent-scar-ambushers, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         set-focusable-ignore(var_2, 1);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -193,26 +173,26 @@ statescript {
                 lambda {
                     if (!task-continue-active?(medicine, med-hidden-ascent-mid, at-igc--DEBUG)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 31;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u8*)(*var_1[2] + 8) = 1;
                         animate_(lev, med-hidden-ascent-ambush-loop--lev, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 31;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(u8*)(*var_3[2] + 8) = 1;
                         animate_(obj-med-hidden-ascent-scar-ambush-hatch-1, med-hidden-ascent-ambush-loop--hatch, var_3);
                     }
                 }
@@ -241,69 +221,69 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-med-hidden-ascent-scar-ambush-hatch-1, med-hidden-ascent-ambush--hatch, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 19;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 19;
                     animate_(lev, med-hidden-ascent-ambush--lev, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(npc-med-hidden-ascent-scar-1, med-hidden-ascent-ambush--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.90;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 20;
-                    *(i32*)*(*var_0 + (5 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 305;
-                    *(i32*)*(*var_0 + (6 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (6 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hidden-ascent-scar-ambush-1, 1);
+                    *(i32*)*var_0[1] = 45;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.90;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 20;
+                    *(i32*)*var_0[5] = 61;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 305;
+                    *(i32*)*var_0[6] = 60;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(f32*)(*var_0[6] + 8) = 0.70;
                     animate_(player, med-hidden-ascent-ambush--abby, var_0);
                 }
                 lambda {
@@ -345,17 +325,7 @@ statescript {
                     npc-set-script-high-priority(lev);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, 0);
                         set-focusable-ignore(var_2, 0);
@@ -442,20 +412,10 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
                         }
                     }
                 }
@@ -494,17 +454,7 @@ statescript {
         block event unzone-npcs {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -540,22 +490,12 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                            fact-set(global, search-start-played?, new-boxed-value(1, 1));
-                            fact-set(global, ambush-played?, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                            fact-set(global, search-start-played?, boxed_bool(1));
+                            fact-set(global, ambush-played?, boxed_bool(1));
                         }
                     }
                 }
@@ -572,34 +512,14 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_3) && !npc-on-screen-and-visible?(var_3, -1, 0)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
                     u64? var_8 = get-furthest-in-group-offscreen(var_0, player);
                     if (!(var_8 == 0)) {
-                        foreach (u64? var_11 : var_0) {
-                            u16 var_12;
-                            if (var_11 && *(u16*)(var_11 + 12) == 7) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 5) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 4) {
-                                var_12 = *(u64*)var_11;
-                            } else {
-                                var_12 = 0;
-                            }
+                        foreach (u64? var_12 : var_0) {
                             if (!(var_8 == var_12)) {
                                 kill-entity(var_12);
                             }
@@ -636,19 +556,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_3) && !npc-on-screen-and-visible?(var_3, -1, 0)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
                     u64? var_8 = get-furthest-in-group-offscreen(var_0, player);
@@ -707,20 +617,10 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : med-ascent-scar-ambushers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-ascent-scar-ambushers) {
                         if (npc-alive?(var_2)) {
                             npc-disable-has-ever-seen-updates/f(var_2);
-                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
+                            fact-set(var_2, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
                         }
                     }
                 }

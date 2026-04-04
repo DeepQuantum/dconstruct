@@ -17,17 +17,7 @@ u64? ss-debug-thirds-grid-should-redraw?() {
 
 u16 ss-debug-thirds-grid-redraw() {
     if (!(get-symbol(widget-array, self) == 0)) {
-        foreach (u64? var_4 : get-symbol(widget-array, self)) {
-            u16 var_5;
-            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                var_5 = *(u64*)var_4;
-            } else {
-                var_5 = 0;
-            }
+        foreach (u64? var_5 : get-symbol(widget-array, self)) {
             if (gui2-widget-exists?(var_5)) {
                 gui2-kill-widget(var_5);
             }
@@ -58,7 +48,7 @@ u16 ss-debug-thirds-grid-redraw() {
             )), alloc-gui2-size(4.00, 2160.00, 0));
             gui2-set-widget-pivot-screenspace(var_17, alloc-vector2((3840.00 / (f32)*(i32*)(*thirds-grid* + 4)) * (f32)(i + 1), 2160.00 / 2.00, 0));
             gui2-set-widget-color(var_17, alloc-color(1.00, 1.00, 1.00, *(f32*)(*thirds-grid* + 12), 0));
-            darray-append(get-symbol(widget-array, self), new-boxed-value(7, var_17), 0);
+            darray-append(get-symbol(widget-array, self), boxed_symbol(var_17), 0);
             i = i + 1;
         }
         u64 i = 0;
@@ -77,7 +67,7 @@ u16 ss-debug-thirds-grid-redraw() {
             )), alloc-gui2-size(3840.00, 4.00, 0));
             gui2-set-widget-pivot-screenspace(var_28, alloc-vector2(3840.00 / 2.00, (2160.00 / (f32)*(i32*)(*thirds-grid* + 8)) * (f32)(i + 1), 0));
             gui2-set-widget-color(var_28, alloc-color(1.00, 1.00, 1.00, *(f32*)(*thirds-grid* + 12), 0));
-            darray-append(get-symbol(widget-array, self), new-boxed-value(7, var_28), 0);
+            darray-append(get-symbol(widget-array, self), boxed_symbol(var_28), 0);
             i = i + 1;
         }
         var_16 = i;
@@ -156,17 +146,7 @@ statescript {
             track main {
                 lambda {
                     if (!(get-symbol(widget-array, self) == 0)) {
-                        foreach (u64? var_4 : get-symbol(widget-array, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : get-symbol(widget-array, self)) {
                             if (gui2-widget-exists?(var_5)) {
                                 gui2-kill-widget(var_5);
                             }

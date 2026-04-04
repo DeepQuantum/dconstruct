@@ -13,17 +13,7 @@
 
 u16 investigating-close-to-player?() {
     u16 var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u16 var_5;
         if (npc-alive?(var_3)) {
             u64? var_6 = npc-get-investigate-entity-position(var_3);
@@ -114,17 +104,7 @@ statescript {
                 lambda {
                     if (task-continue-active?(rescue-jesse, res-stores-dog-tut-street-patrol, default) && !tension-mode-is?(3)) {
                         u16 var_3;
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             u16 var_7;
                             if (npc-too-close-to-player?(var_5)) {
                                 var_7 = 1;
@@ -135,17 +115,7 @@ statescript {
                             if (darray-count(all-enemy-npcs) == 0) {}
 
                             u16 var_12;
-                            foreach (u64? var_13 : all-enemy-npcs) {
-                                u16 var_14;
-                                if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                    var_14 = *(u64*)var_13;
-                                } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                    var_14 = *(u64*)var_13;
-                                } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                    var_14 = *(u64*)var_13;
-                                } else {
-                                    var_14 = 0;
-                                }
+                            foreach (u64? var_14 : all-enemy-npcs) {
                                 u16 var_16;
                                 if (!npc-awareness-safe-to-combat-checkpoint?(var_14)) {
                                     var_16 = 0;
@@ -170,17 +140,7 @@ statescript {
                 lambda {
                     if (task-continue-active?(rescue-jesse, res-stores-dog-tut-street-patrol, default) && !tension-mode-is?(3)) {
                         u16 var_3;
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             u16 var_7;
                             if (npc-too-close-to-player?(var_5)) {
                                 var_7 = 1;
@@ -191,17 +151,7 @@ statescript {
                             if (darray-count(all-enemy-npcs) == 0) {}
 
                             u16 var_12;
-                            foreach (u64? var_13 : all-enemy-npcs) {
-                                u16 var_14;
-                                if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                                    var_14 = *(u64*)var_13;
-                                } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                                    var_14 = *(u64*)var_13;
-                                } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                                    var_14 = *(u64*)var_13;
-                                } else {
-                                    var_14 = 0;
-                                }
+                            foreach (u64? var_14 : all-enemy-npcs) {
                                 u16 var_16;
                                 if (!npc-awareness-safe-to-combat-checkpoint?(var_14)) {
                                     var_16 = 0;

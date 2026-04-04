@@ -80,7 +80,7 @@ u64? initialize-root-menu() {
 }
 
 u64? add-to-container(u64? arg_0, u64? arg_1) {
-    return darray-append(arg_0, new-boxed-value(7, arg_1), 1);
+    return darray-append(arg_0, boxed_symbol(arg_1), 1);
 }
 
 u16 spawn-selected-npcs() {
@@ -106,7 +106,7 @@ u16 spawn-selected-npcs() {
                 wait-one-frame();
                 print-symbol(var_7, self);
                 set-npc-spawn-state(var_7);
-                ddict-set(get-symbol(root-to-submenu-ddict, self), var_7, new-boxed-value(7, get-symbol(current-submenu, self)));
+                ddict-set(get-symbol(root-to-submenu-ddict, self), var_7, boxed_symbol(get-symbol(current-submenu, self)));
             }
         }
         var_2 = end-foreach();
@@ -117,18 +117,8 @@ u16 spawn-selected-npcs() {
 }
 
 u64? make-sub-menu-from-container(u64? arg_0) {
-    foreach (u64? var_1 : arg_0) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
-        darray-append(get-symbol(sub-menu, self), new-boxed-value(7, var_2), 1);
+    foreach (u64? var_2 : arg_0) {
+        darray-append(get-symbol(sub-menu, self), boxed_symbol(var_2), 1);
     }
 }
 
@@ -329,17 +319,7 @@ u64? get-container-count(u64? arg_0) {
 u64? clear-level() {
     ddict-clear(get-symbol(root-to-submenu-ddict, self));
     if (!(get-symbol(current-look-group-symbol, self) == no-active-group)) {
-        foreach (u64? var_5 : get-symbol(current-look-group-symbol, self)) {
-            u16 var_6;
-            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                var_6 = *(u64*)var_5;
-            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                var_6 = *(u64*)var_5;
-            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                var_6 = *(u64*)var_5;
-            } else {
-                var_6 = 0;
-            }
+        foreach (u64? var_6 : get-symbol(current-look-group-symbol, self)) {
             if (entity-exists?(var_6)) {
                 kill-entity(var_6);
             }
@@ -475,8 +455,8 @@ u16 group-bubble-sort-asc(u64? arg_0) {
                     } else {
                         var_16 = 0;
                     }
-                    darray-set(arg_0, i, new-boxed-value(7, var_16));
-                    darray-set(arg_0, (i + j) + 1, new-boxed-value(7, var_13));
+                    darray-set(arg_0, i, boxed_symbol(var_16));
+                    darray-set(arg_0, (i + j) + 1, boxed_symbol(var_13));
                 }
                 j = j + 1;
             }
@@ -490,11 +470,11 @@ u16 group-bubble-sort-asc(u64? arg_0) {
 }
 
 u64? make-root-menu-item(u64? arg_0) {
-    return darray-append(get-symbol(root-menu, self), new-boxed-value(7, arg_0), 1);
+    return darray-append(get-symbol(root-menu, self), boxed_symbol(arg_0), 1);
 }
 
 u64? add-gore-for-all-npcs(u64? arg_0) {
-    if (!darray-contains?(get-symbol(active-gore-pieces, self), new-boxed-value(7, arg_0))) {
+    if (!darray-contains?(get-symbol(active-gore-pieces, self), boxed_symbol(arg_0))) {
         u64 i = 0;
         while (i < ddict-key-count(get-symbol(root-to-submenu-ddict, self))) {
             spawn-gore-piece(arg_0, ddict-key-at(get-symbol(root-to-submenu-ddict, self), i), 0, 0, 1, 1);
@@ -652,7 +632,7 @@ statescript {
                             var_9 = "  ";
                         }
                         u16 var_21;
-                        if (darray-contains?(get-symbol(active-gore-pieces, self), new-boxed-value(7, get-container-at(get-symbol(current-menu, self), i + get-int32(move-list-min, self))))) {
+                        if (darray-contains?(get-symbol(active-gore-pieces, self), boxed_symbol(get-container-at(get-symbol(current-menu, self), i + get-int32(move-list-min, self))))) {
                             var_21 = 5;
                         } else {
                             var_21 = 1;

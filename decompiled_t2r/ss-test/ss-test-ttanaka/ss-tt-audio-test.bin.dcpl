@@ -204,7 +204,7 @@ u16 ss-tt-audio-test-set-position(u64? arg_0) {
     darray-clear(pos-array);
     u64 i = 0;
     while (i < tag-array-size?(move-pos, get-symbol(current-center-pos, self))) {
-        darray-append(pos-array, new-boxed-value(7, tag-symbol-at(move-pos, i, get-symbol(current-center-pos, self))), 0);
+        darray-append(pos-array, boxed_symbol(tag-symbol-at(move-pos, i, get-symbol(current-center-pos, self))), 0);
         i = i + 1;
     }
     u64? var_10 = get-locator-position(get-spawner-locator(get-symbol(current-center-pos, self), 1));
@@ -256,7 +256,7 @@ u64? ss-tt-audio-test-send-position(u64? arg_0) {
     if (get-int32(index-center-pos, self) < 0) {
         set-int32(index-center-pos, darray-count(center-pos-array) - 1, self);
     }
-    return net-send-event-all(set-position, get-self-id(), new-boxed-value(2, get-int32(index-center-pos, self)));
+    return net-send-event-all(set-position, get-self-id(), boxed_i32(get-int32(index-center-pos, self)));
 }
 
 u16 ss-tt-audio-test-get-next-position() {
@@ -288,7 +288,7 @@ u64? ss-tt-audio-test-send-move-type(u64? arg_0) {
     if (get-int32(index-move-type, self) < 0) {
         set-int32(index-move-type, darray-count(move-to-types-array) - 1, self);
     }
-    return net-send-event-all(change-move-type, get-self-id(), new-boxed-value(2, get-int32(index-move-type, self)));
+    return net-send-event-all(change-move-type, get-self-id(), boxed_i32(get-int32(index-move-type, self)));
 }
 
 u16 ss-tt-audio-test-UI() {
@@ -503,7 +503,7 @@ statescript {
             track main {
                 lambda {
                     for (u64 i = 0; i < darray-count(get-spawners-by-tag(test-center, 0, 0, 0)); i++) {
-                        darray-append(center-pos-array, new-boxed-value(7, symbol-concat-string(pos-initial-, dc:format("%d", i))), 0);
+                        darray-append(center-pos-array, boxed_symbol(symbol-concat-string(pos-initial-, dc:format("%d", i))), 0);
                     }
                 }
                 lambda {

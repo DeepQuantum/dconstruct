@@ -17,17 +17,7 @@ u64? alice-sit-at-cap() {
 
 u16 alice-find-nearest-sit-cap() {
     u16 var_2;
-    foreach (u64? var_4 : get-symbol(cap-group, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-symbol(cap-group, self)) {
         u64? var_9 = distance-between-locators-xz(get-spawner-locator(var_5, 1), alloc-bound-frame(npc-get-nav-destination(mel), 0, 0, 0, 0));
         u16 var_10;
         if (var_9 < 9999.90) {

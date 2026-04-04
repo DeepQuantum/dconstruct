@@ -14,7 +14,7 @@
 u64?* get-freeplay-guitar-ap-from-current-level() {
     u64? var_0 = darray-create(self, -1, 0);
     u64? var_1 = ddict-create(self, -1, 0);
-    ddict-set(var_1, guitar-freeplay-ap, new-boxed-value(2, 1));
+    ddict-set(var_1, guitar-freeplay-ap, boxed_i32(1));
     group-copy(get-spawners-by-criteria(var_1, 0, 0, 0, 0, 0), var_0);
     u64?* var_5;
     if (darray-count(var_0) > 0) {
@@ -389,9 +389,9 @@ statescript {
                             var_4 = invalid-guitar-freeplay-location;
                         }
                         u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.00;
+                        *(i32*)*var_8[0] = 28;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(f32*)(*var_8[0] + 8) = 0.00;
                         animate_(get-symbol(guitar-amp-spawner, self), var_4, var_8);
                     }
                 }
@@ -434,7 +434,7 @@ statescript {
                         set-int32(chord-press, get-int32(prev-guitar-chord, self), freeplay-guitar-spawner());
                         set-int32(chord-wheel, get-int32(prev-guitar-chord-wheel, self), freeplay-guitar-spawner());
                         set-int32(curr-tab-index, get-int32(prev-guitar-chord-wheel, self), get-symbol(menu-name, freeplay-guitar-spawner()));
-                        send-event(force-skip-entry, freeplay-guitar-spawner(), new-boxed-value(1, 1));
+                        send-event(force-skip-entry, freeplay-guitar-spawner(), boxed_bool(1));
                         menu2-push-page(hudMenuStack, "pc/menu/page-guitar-freeplay-pc", 2);
                     }
                 }

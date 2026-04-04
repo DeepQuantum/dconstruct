@@ -28,36 +28,36 @@ statescript {
                 lambda {
                     if (task-continue-active?(patrol-jackson, pat-jackson-mainstreet, butcher-street-trailer-shot--DEBUG) && task-continue-active?(patrol-jackson, pat-jackson-mainstreet, birdseye-trailer-shot--DEBUG)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 200.00;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                        *(i32*)*var_2[1] = 57;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 200.00;
                         animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-1, pat-crowd-arriving-on-horse-with-hunt--male, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
-                        *(i32*)*(*var_4 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 200.00;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                        *(i32*)*var_4[1] = 57;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 200.00;
                         animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-2, pat-crowd-arriving-on-horse-with-hunt--male-a, var_4);
                         u64? var_6 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
-                        *(i32*)*(*var_6 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (1 * 8)) + 8) = 200.00;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                        *(i32*)*var_6[1] = 57;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(f32*)(*var_6[1] + 8) = 200.00;
                         animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-h-2, pat-crowd-arriving-on-horse-with-hunt--horse-a, var_6);
                         u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
-                        *(i32*)*(*var_8 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 200.00;
+                        *(i32*)*var_8[0] = 10;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                        *(i32*)*var_8[1] = 57;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 200.00;
                         wait-animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-b-1, pat-crowd-arriving-on-horse-with-hunt--buck, var_8);
                     }
                 }
@@ -141,30 +141,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-1, pat-crowd-arriving-on-horse-with-hunt--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-2, pat-crowd-arriving-on-horse-with-hunt--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-h-2, pat-crowd-arriving-on-horse-with-hunt--horse-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     wait-animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-b-1, pat-crowd-arriving-on-horse-with-hunt--buck, var_0);
                 }
                 lambda {
@@ -302,30 +302,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-1, pat-crowd-arriving-on-horse-with-hunt-idle-end--male, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-m-2, pat-crowd-arriving-on-horse-with-hunt-idle-end--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-h-2, pat-crowd-arriving-on-horse-with-hunt-idle-end--horse-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-1, 1);
                     animate_(snpc-pat-jackson-crowd-igc-arriving-on-horse-with-hunt-b-1, pat-crowd-arriving-on-horse-with-hunt-idle-end--buck, var_0);
                 }
             }

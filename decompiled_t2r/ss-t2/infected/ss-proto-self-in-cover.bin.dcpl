@@ -13,17 +13,7 @@
 
 u64? HACK-FROST-stalker-in-cover?(u64? arg_0) {
     u64? var_1;
-    foreach (u64? var_2 : stalker-frost-cover-animations) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : stalker-frost-cover-animations) {
         u64? var_4;
         if (!0) {
             var_4 = object-anim-playing?(arg_0, var_3, 0);

@@ -54,21 +54,11 @@ statescript {
                     wait-spawn-npc-group-async(res-downhill-hood-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-downhill-hood-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-downhill-hood-npcs) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(var_2, 1);
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(var_2, 1);
                         animate_(var_2, bindpose-anim, var_3);
                     }
                 }
@@ -119,12 +109,12 @@ statescript {
                             var_4 = 0;
                         }
                         u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (1 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-res-downhill-hood-jump-1, 1);
+                        *(i32*)*var_5[1] = 1;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(u8*)(*var_5[1] + 8) = 1;
                         animate_(var_2, var_4, var_5);
                         i = i + 1;
                     }
@@ -133,17 +123,7 @@ statescript {
                     wait-frames(411);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-downhill-hood-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-downhill-hood-npcs) {
                         kill-entity(var_2);
                     }
                 }

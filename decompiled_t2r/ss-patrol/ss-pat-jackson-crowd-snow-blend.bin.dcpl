@@ -54,17 +54,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : gardeners-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : gardeners-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }
@@ -91,17 +81,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : mainstreet-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : mainstreet-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }
@@ -112,17 +92,7 @@ statescript {
         block event spawned-cleanup-crew {
             track main {
                 lambda {
-                    foreach (u64? var_1 : mainstreet-cleanup-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : mainstreet-cleanup-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }
@@ -144,17 +114,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : stables-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : stables-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }
@@ -165,17 +125,7 @@ statescript {
         block event spawned-horse-trainers {
             track main {
                 lambda {
-                    foreach (u64? var_1 : stables-trainers-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : stables-trainers-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }
@@ -186,17 +136,7 @@ statescript {
         block event spawned-horse-says-hello {
             track main {
                 lambda {
-                    foreach (u64? var_1 : stables-hello-snow-blend-actors) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : stables-hello-snow-blend-actors) {
                         if (entity-exists?(var_2)) {
                             set-single-shader-instance-param(var_2, blendOffset3, 1.00);
                         }

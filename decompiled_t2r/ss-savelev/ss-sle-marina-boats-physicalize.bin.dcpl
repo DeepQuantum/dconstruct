@@ -57,17 +57,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-boats) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-boats) {
                         enable-physics(var_2, 0, random-float-range(0.00, 5.00, 0));
                     }
                 }

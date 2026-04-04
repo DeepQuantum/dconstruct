@@ -15,19 +15,9 @@ u64? wait-get-random-offscreen-spawner(u64? arg_0, u64? arg_1, u64? arg_2) {
     u64? var_0 = darray-create(self, -1, 0);
     u64? var_1;
     while (!!(0 == 0)) {
-        foreach (u64? var_3 : arg_0) {
-            u16 var_4;
-            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                var_4 = *(u64*)var_3;
-            } else {
-                var_4 = 0;
-            }
+        foreach (u64? var_4 : arg_0) {
             if (!is-on-screen?(get-spawner-position(var_4, 1), arg_2) || arg_1 == 0 && !(arg_1 == var_4)) {
-                darray-append(var_0, new-boxed-value(7, var_4), 1);
+                darray-append(var_0, boxed_symbol(var_4), 1);
             }
         }
         u64? var_10;
@@ -126,18 +116,8 @@ statescript {
                     melee-buddy-prevent-infected-grapples(lev, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-append(ski-stalker-ambush-one, new-boxed-value(7, var_2), 1);
+                    foreach (u64? var_2 : all-infected-npcs) {
+                        darray-append(ski-stalker-ambush-one, boxed_symbol(var_2), 1);
                     }
                 }
                 lambda {
@@ -203,7 +183,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -260,9 +240,9 @@ statescript {
                         if (get-int32(player-killed-count, self) >= *(i32*)(get-difficulty-detail-enemies() + 348) && get-int32(total-killed-count, self) >= (*(i32*)(get-difficulty-detail-enemies() + 348) + 3)) {
                             go(clean-up, 1);
                         } else {
-                            darray-append(ski-stalker-ambush-one, new-boxed-value(7, spawn-npc(wait-get-random-offscreen-spawner(ski-stalker-ambush-one-spawners, 0, 1.00), 0, 0)), 1);
+                            darray-append(ski-stalker-ambush-one, boxed_symbol(spawn-npc(wait-get-random-offscreen-spawner(ski-stalker-ambush-one-spawners, 0, 1.00), 0, 0)), 1);
                             if (npc-group-alive-count(ski-stalker-ambush-one) < 1) {
-                                darray-append(ski-stalker-ambush-one, new-boxed-value(7, spawn-npc(wait-get-random-offscreen-spawner(ski-stalker-ambush-one-spawners, 0, 1.00), 0, 0)), 1);
+                                darray-append(ski-stalker-ambush-one, boxed_symbol(spawn-npc(wait-get-random-offscreen-spawner(ski-stalker-ambush-one-spawners, 0, 1.00), 0, 0)), 1);
                             }
                         }
                         set-boolean(refresh-aggressors?, 0, self);
@@ -282,10 +262,10 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(event-arg-symbol(0)), 1);
                 }
                 lambda {
-                    darray-find-remove(ski-stalker-ambush-one, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(ski-stalker-ambush-one, boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
                     ++(total-killed-count, self);
@@ -303,17 +283,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-stalker-ambush-one) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-stalker-ambush-one) {
                         if (npc-alive?(var_2)) {
                             debug-draw-sphere(offset-position(get-joint-position(var_2, headb), alloc-vector(0.00, 0.40, 0.00, 1.00, 0)), 0.05, 2, 0.00, 0, 0);
                             send-event(enable-overwhelm, var_2);
@@ -336,17 +306,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, 0);
                     }

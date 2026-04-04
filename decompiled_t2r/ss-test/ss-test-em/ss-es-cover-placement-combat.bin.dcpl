@@ -83,17 +83,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : cover-intimate-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-intimate-npcs) {
                         spawn-entity(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -114,17 +104,7 @@ statescript {
                     set-boolean(pause, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : cover-intimate-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-intimate-npcs) {
                         npc-set-script-high-priority(var_2);
                     }
                 }
@@ -157,17 +137,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : cover-chunky-npcs-melee) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-chunky-npcs-melee) {
                         spawn-entity(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -185,17 +155,7 @@ statescript {
                     set-boolean(pause, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : cover-chunky-npcs-melee) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-chunky-npcs-melee) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-set-combat-params(var_2, *proto-forest-no-cover*);
@@ -230,32 +190,12 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : cover-chunky-stealth-grass) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-chunky-stealth-grass) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : cover-chunky-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-chunky-npcs) {
                         spawn-entity(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -273,17 +213,7 @@ statescript {
                     set-boolean(pause, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : cover-chunky-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-chunky-npcs) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, 0);
                     }
@@ -317,17 +247,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : cover-large-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-large-npcs) {
                         spawn-entity(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                     }
@@ -345,17 +265,7 @@ statescript {
                     set-boolean(pause, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : cover-large-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : cover-large-npcs) {
                         npc-set-script-high-priority(var_2);
                         npc-make-aware-of(var_2, player, 2, 0);
                     }

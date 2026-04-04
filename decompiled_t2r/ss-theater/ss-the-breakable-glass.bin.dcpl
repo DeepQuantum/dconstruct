@@ -21,7 +21,7 @@ statescript {
         block event breakable-collapsed {
             track main {
                 lambda {
-                    send-event(glass-broken, ss-the-broken-glass-1, new-boxed-value(2, tag-int32(which-glass, self)));
+                    send-event(glass-broken, ss-the-broken-glass-1, boxed_i32(tag-int32(which-glass, self)));
                 }
             }
         }

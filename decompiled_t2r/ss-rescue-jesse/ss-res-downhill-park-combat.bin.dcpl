@@ -96,29 +96,9 @@ statescript {
                     wait-spawn-npc(npc-res-infected-park-3, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-park-start-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-park-start-npcs) {
                         if (npc-alive?(var_2)) {
-                            foreach (u64? var_5 : res-park-infecteds) {
-                                u16 var_6;
-                                if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                    var_6 = *(u64*)var_5;
-                                } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                    var_6 = *(u64*)var_5;
-                                } else {
-                                    var_6 = 0;
-                                }
+                            foreach (u64? var_6 : res-park-infecteds) {
                                 npc-make-aware-of(var_6, var_2, 2, 0);
                             }
                         }

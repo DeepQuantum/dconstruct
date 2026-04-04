@@ -73,7 +73,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-1, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-1, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -104,7 +104,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-2, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-2, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -135,7 +135,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-3, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-3, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -166,7 +166,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-4, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-4, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -197,7 +197,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-7, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-7, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -228,7 +228,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-8, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-8, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -259,7 +259,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-5, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-5, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {
@@ -290,7 +290,7 @@ statescript {
                 }
                 lambda {
                     if (joypad-command-active?(interact, 6)) {
-                        send-event(splasher-test-tracking-6, rb-splasher-ball-1, new-boxed-value(18, get-object-locator(player)));
+                        send-event(splasher-test-tracking-6, rb-splasher-ball-1, boxed_boundframe(get-object-locator(player)));
                     }
                 }
                 lambda {

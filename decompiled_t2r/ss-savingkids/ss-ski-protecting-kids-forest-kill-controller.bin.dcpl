@@ -43,19 +43,9 @@ u16 ski-kill-debug-halt-and-print(u64? arg_0, u64? arg_1, u64? arg_2, bool arg_3
 
 u16 get-closest-ski-killer-to-player(u64? arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u16 var_7;
-        if (!character-is-dead?(var_3) && !darray-contains?(arg_0, new-boxed-value(7, var_3))) {
+        if (!character-is-dead?(var_3) && !darray-contains?(arg_0, boxed_symbol(var_3))) {
             u64? var_11 = get-locator-distance(get-object-locator(player), get-object-locator(var_3));
             u16 var_12;
             u64? var_13;
@@ -183,24 +173,14 @@ statescript {
                 }
                 lambda {
                     while (get-symbol(kill-spawner, self) == 0) {
-                        foreach (u64? var_2 : protecting-kids-all-forest-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : protecting-kids-all-forest-infected) {
                             u64? var_10 = evaluate-point-curve(lookup-symbol(*ski-forest-kill-stalker-angle-rating*, point-curve), angle-in-between-vectors(get-object-velocity(player), vector-between-locators(get-object-locator(player), get-spawner-locator(var_3, 1))));
                             u64? var_15 = evaluate-point-curve(lookup-symbol(*ski-forest-kill-stalker-dist-rating*, point-curve), distance-between-locators(get-spawner-locator(var_3, 1), get-object-locator(player)));
                             if (*aeinhorn-saving-kids-test* != nullptr && *(u8*)(*aeinhorn-saving-kids-test* + 4)) {
                                 forest-stalker-draw-rating(var_15 * var_10, var_3);
                             }
                             if ((var_15 * var_10) > 0.00) {
-                                var_16 = ddict-set(ski-forest-kill-spawners-to-ray-handles, var_3, new-boxed-value(2, -1));
+                                var_16 = ddict-set(ski-forest-kill-spawners-to-ray-handles, var_3, boxed_i32(-1));
                             }
                         }
                         if (*aeinhorn-saving-kids-test* != nullptr && *(u8*)(*aeinhorn-saving-kids-test* + 4)) {
@@ -265,7 +245,7 @@ statescript {
                                     var_38 = 0;
                                 }
                                 if (!wait-raycast-hit-nothing?(var_38)) {
-                                    darray-append(ski-forest-final-stalker-spawners, new-boxed-value(7, element), 1);
+                                    darray-append(ski-forest-final-stalker-spawners, boxed_symbol(element), 1);
                                 }
                             }
                             ddict-clear(ski-forest-kill-spawners-to-ray-handles);
@@ -285,17 +265,7 @@ statescript {
                             }
                             if (darray-count(ski-forest-final-stalker-spawners) > 0) {
                                 u16 var_47;
-                                foreach (u64? var_48 : ski-forest-final-stalker-spawners) {
-                                    u16 var_49;
-                                    if (var_48 && *(u16*)(var_48 + 12) == 7) {
-                                        var_49 = *(u64*)var_48;
-                                    } else if (var_48 && *(u16*)(var_48 + 12) == 5) {
-                                        var_49 = *(u64*)var_48;
-                                    } else if (var_48 && *(u16*)(var_48 + 12) == 4) {
-                                        var_49 = *(u64*)var_48;
-                                    } else {
-                                        var_49 = 0;
-                                    }
+                                foreach (u64? var_49 : ski-forest-final-stalker-spawners) {
                                     u64? var_55 = lerp-scale(
                                         0.00,
                                         180.00,
@@ -595,17 +565,7 @@ statescript {
                 lambda {
                     while (1) {
                         u16 var_1;
-                        foreach (u64? var_2 : all-infected-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : all-infected-npcs) {
                             u16 var_5;
                             if (npc-alive?(var_3)) {
                                 if (distance-between-objects(player, var_3) < 5.00) {
@@ -798,17 +758,7 @@ statescript {
                 }
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : extra-killers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : extra-killers) {
                             set-visible(var_2, 1);
                         }
                         wait-one-frame();
@@ -834,7 +784,7 @@ statescript {
                     wait-for(group-made);
                 }
                 lambda {
-                    darray-append(get-symbol(extra-killers, self), new-boxed-value(7, wait-spawn-npc(get-closest-offscreen-spawner(protecting-kids-all-forest-infected-spawn, player, 0.00, 0.00, 0.00), 0, 0)), 1);
+                    darray-append(get-symbol(extra-killers, self), boxed_symbol(wait-spawn-npc(get-closest-offscreen-spawner(protecting-kids-all-forest-infected-spawn, player, 0.00, 0.00, 0.00), 0, 0)), 1);
                 }
                 lambda {
                     signal(lyncher-1-spawned, 0);
@@ -845,7 +795,7 @@ statescript {
                     wait-for(group-made);
                 }
                 lambda {
-                    darray-append(get-symbol(extra-killers, self), new-boxed-value(7, wait-spawn-npc(get-closest-offscreen-spawner(protecting-kids-all-forest-infected-spawn, player, 0.00, 0.00, 0.00), 0, 0)), 1);
+                    darray-append(get-symbol(extra-killers, self), boxed_symbol(wait-spawn-npc(get-closest-offscreen-spawner(protecting-kids-all-forest-infected-spawn, player, 0.00, 0.00, 0.00), 0, 0)), 1);
                 }
                 lambda {
                     signal(lyncher-2-spawned, 0);

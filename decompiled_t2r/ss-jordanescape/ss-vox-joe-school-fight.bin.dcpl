@@ -203,7 +203,7 @@ statescript {
                     wait-say(dina, vox-igc-din-gam-joe-school-fight-sp-007, 2, 0);
                 }
                 lambda {
-                    fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 1));
+                    fact-set(global, suppress-stealth-vox?, boxed_bool(1));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -222,7 +222,7 @@ statescript {
         block start {
             track enemies {
                 lambda {
-                    fact-set(faction-enemy, restrict-pursue-target, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-pursue-target, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     while (!entity-exists?(npc-joe-militia-corridor-1)) {
@@ -239,10 +239,10 @@ statescript {
                     request-dialog(joe-school-fight-001, npc-joe-militia-corridor-1, 0, 0, 0, 0, 0);
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
             }
             track friendlies {
@@ -256,7 +256,7 @@ statescript {
                     wait-say(player, vox-igc-ell-gam-joe-school-fight-corridor-slf-001, 2, 0);
                 }
                 lambda {
-                    fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 0));
+                    fact-set(global, suppress-stealth-vox?, boxed_bool(0));
                 }
             }
         }
@@ -276,7 +276,7 @@ statescript {
         block event vox-fight-2-wave-2 {
             track main {
                 lambda {
-                    fact-set(faction-enemy, restrict-pursue-target, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-pursue-target, boxed_timeframePOD(get-current-timeframe(0)));
                 }
             }
         }

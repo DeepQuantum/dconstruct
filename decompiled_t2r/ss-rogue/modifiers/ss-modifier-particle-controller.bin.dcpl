@@ -147,7 +147,7 @@ statescript {
                                     kill-particles(var_12, 1);
                                     kill-particles(var_14, 1);
                                 } else {
-                                    ddict-set(get-symbol(ddict-all-handles, self), var_2, new-boxed-value(7, darray-create(self, -1, 0)));
+                                    ddict-set(get-symbol(ddict-all-handles, self), var_2, boxed_symbol(darray-create(self, -1, 0)));
                                 }
                                 u64? var_19 = ddict-get(get-symbol(ddict-all-handles, self), var_2);
                                 u16 var_20;
@@ -160,12 +160,12 @@ statescript {
                                 } else {
                                     var_20 = 0;
                                 }
-                                darray-set(var_20, 0, new-boxed-value(5, skull--spawn-particles-on-player(*(u64*)(var_4 + 40), get-player-ap-ref(), 1)));
+                                darray-set(var_20, 0, boxed_u64(skull--spawn-particles-on-player(*(u64*)(var_4 + 40), get-player-ap-ref(), 1)));
                                 u64? var_25;
                                 if (!(*(u64*)(var_4 + 48) == 0)) {
-                                    var_25 = darray-set(var_20, 1, new-boxed-value(5, skull--spawn-particles-on-player(*(u64*)(var_4 + 48), get-player-ap-ref(), 1)));
+                                    var_25 = darray-set(var_20, 1, boxed_u64(skull--spawn-particles-on-player(*(u64*)(var_4 + 48), get-player-ap-ref(), 1)));
                                 } else {
-                                    var_25 = darray-set(var_20, 1, new-boxed-value(5, 0));
+                                    var_25 = darray-set(var_20, 1, boxed_u64(0));
                                 }
                                 var_5 = var_25;
                             } else {

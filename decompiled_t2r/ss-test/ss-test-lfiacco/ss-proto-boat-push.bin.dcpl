@@ -67,7 +67,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, self));
+                    fact-set(player, player-interactable, boxed_symbol(self));
                 }
                 lambda {
                     enable-collision-gamedriven(self, 0, 0.00);
@@ -173,7 +173,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    fact-set(player, player-interactable, new-boxed-value(7, 0));
+                    fact-set(player, player-interactable, boxed_symbol(0));
                 }
                 lambda {
                     go(ready, 1);

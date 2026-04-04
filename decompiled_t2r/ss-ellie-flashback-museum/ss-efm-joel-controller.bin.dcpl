@@ -13,17 +13,7 @@
 
 u16 efm-joel-choose-best-performance-point(u64? arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         distance-between-locators(get-object-locator(joel), get-spawner-locator(var_3, 1));
         f32 var_10;
         if (distance-between-locators(get-spawner-locator(var_3, 1), get-object-locator(player)) < 0.50) {
@@ -179,11 +169,11 @@ statescript {
                 lambda {
                     if (1 < get-int32(hat-interacted-times, ss-efm-igc-joel-hat-manager-1) && get-svar(efm-joel-hat) == 0) {
                         set-symbol(target-ap, pos-joel-tri-3, self);
-                        darray-append(possible-points, new-boxed-value(7, pos-joel-tri-3), 1);
-                        darray-append(possible-points, new-boxed-value(7, pos-joel-steg-3), 1);
-                        darray-append(possible-points, new-boxed-value(7, pos-joel-dim-3), 1);
-                        darray-append(possible-points, new-boxed-value(7, pos-joel-pair-2), 1);
-                        darray-append(possible-points, new-boxed-value(7, pos-joel-stair-hats-1), 1);
+                        darray-append(possible-points, boxed_symbol(pos-joel-tri-3), 1);
+                        darray-append(possible-points, boxed_symbol(pos-joel-steg-3), 1);
+                        darray-append(possible-points, boxed_symbol(pos-joel-dim-3), 1);
+                        darray-append(possible-points, boxed_symbol(pos-joel-pair-2), 1);
+                        darray-append(possible-points, boxed_symbol(pos-joel-stair-hats-1), 1);
                         set-symbol(target-performance, armcross-pap--joel, self);
                         set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                         go(player-taking-hat, 1);
@@ -240,8 +230,8 @@ statescript {
                     }
                 }
                 lambda {
-                    if (!(darray-contains?(efm-done-interacts, new-boxed-value(7, event-arg-symbol(0))))) {
-                        darray-append(efm-done-interacts, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    if (!(darray-contains?(efm-done-interacts, boxed_symbol(event-arg-symbol(0))))) {
+                        darray-append(efm-done-interacts, boxed_symbol(event-arg-symbol(0)), 1);
                         if (event-arg-symbol(0) == int-pickup-hat-1) {
                             set-symbol(target-ap, pos-lobby-joel-1, self);
                             set-symbol(target-performance, armcross-pap--joel, self);
@@ -258,8 +248,8 @@ statescript {
                             set-symbol(target-performance, book-reaction-cap-3, self);
                             go(museum-interact-cap, 1);
                         } else if (event-arg-symbol(0) == int-triceratops-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-tri-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-tri-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-tri-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-tri-2), 1);
                             set-symbol(target-performance, npc-pap-nw-ambi-idle-look-around-fw-mid-d, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
@@ -267,53 +257,53 @@ statescript {
                             set-symbol(target-performance, book-reaction-cap-4, self);
                             go(museum-interact-cap, 1);
                         } else if (event-arg-symbol(0) == int-stegosarus-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-steg-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-steg-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-steg-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-steg-2), 1);
                             set-symbol(target-performance, armcross-pap--joel, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-dimetrodon-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-dim-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-dim-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-dim-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-dim-2), 1);
                             set-symbol(target-performance, npc-pap-nw-ambi-idle-look-around-fw-mid-d, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-dime-hat-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-dim-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-dim-1), 1);
                             set-symbol(target-performance, armcross-pap--joel, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-gallimimus-placard-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-skull-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-skull-1), 1);
                             set-symbol(target-performance, npc-pap-nw-ambi-idle-look-around-fw-mid-d, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-oviraptor-placard-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-ova-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-ova-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-ova-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-ova-2), 1);
                             set-symbol(target-performance, cap-npc-m-explore-eye-level-think-a-loop, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-brachiosaurus-placard-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-brac-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-brac-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-brac-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-brac-2), 1);
                             set-symbol(target-performance, armcross-pap--joel, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-velociraptor-placard-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-back-skull-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-back-skull-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-back-skull-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-back-skull-2), 1);
                             set-symbol(target-performance, npc-pap-nw-ambi-idle-look-around-fw-mid-c, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-pachycephalosaurus-placard-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-back-skull-tommy-1), 1);
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-back-skull-tommy-2), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-back-skull-tommy-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-back-skull-tommy-2), 1);
                             set-symbol(target-performance, npc-pap-nw-ambi-idle-look-around-fw-mid-c, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
                         } else if (event-arg-symbol(0) == int-anky-hat-1) {
-                            darray-append(possible-points, new-boxed-value(7, pos-joel-pair-1), 1);
+                            darray-append(possible-points, boxed_symbol(pos-joel-pair-1), 1);
                             set-symbol(target-performance, armcross-pap--joel, self);
                             set-symbol(target-ap, efm-joel-choose-best-performance-point(possible-points), self);
                             go(museum-idle-performance, 1);
@@ -621,24 +611,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-joel-swims-to-shore-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-joel-swims-to-shore-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 2;
                     wait-animate_(joel, efm-joel-swims-to-shore--joel, var_0);
                 }
                 lambda {
@@ -813,27 +803,27 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-joel-swims-to-shore-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 29;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 14;
-                    *(i32*)*(*var_0 + (6 * 8)) = 0;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-joel-swims-to-shore-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 29;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 2;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 14;
+                    *(i32*)*var_0[6] = 0;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     wait-animate_(joel, efm-joel-shore-to-swim--joel, var_0);
                 }
                 lambda {
@@ -1220,28 +1210,28 @@ statescript {
                         );
                         wait(0.50);
                         u64? var_4 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (0 * 8)) + 8) = 0.50;
+                        *(i32*)*var_4[0] = 28;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(f32*)(*var_4[0] + 8) = 0.50;
                         wait-animate_(joel, armcross-cap-enter--joel, var_4);
                         interactable-enable(int-give-joel-hat-1);
                         start-timer(wait-ellie-put-hat-on-joel, 15.00, self, 1);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 0.30;
+                        *(i32*)*var_5[0] = 30;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 0.30;
                         animate_(joel, armcross-cap-idle--joel, var_5);
                         while (!timer-running?(wait-ellie-put-hat-on-joel, self) && !distance-between-objects-greater-than?(joel, player, 7.50, 1)) {
                             wait-one-frame();
                         }
                         interactable-disable(int-give-joel-hat-1);
                         u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_8 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 1.00;
+                        *(i32*)*var_8[0] = 28;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(f32*)(*var_8[0] + 8) = 0.30;
+                        *(i32*)*var_8[1] = 30;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 1.00;
                         wait-animate_(joel, armcross-cap-exit--joel, var_8);
                     }
                 }
@@ -1273,12 +1263,12 @@ statescript {
                     if (interactable-enabled?(int-give-joel-hat-1) || get-animation-playing?(joel, armcross-cap-enter--joel, 2)) {
                         if (get-animation-playing?(joel, armcross-cap-idle--joel, 2)) {
                             u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 28;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.30;
-                            *(i32*)*(*var_3 + (1 * 8)) = 30;
-                            *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (1 * 8)) + 8) = 1.00;
+                            *(i32*)*var_3[0] = 28;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(f32*)(*var_3[0] + 8) = 0.30;
+                            *(i32*)*var_3[1] = 30;
+                            *(u64*)(*var_3[1] + 8) = 0;
+                            *(f32*)(*var_3[1] + 8) = 1.00;
                             animate_(joel, armcross-cap-exit--joel, var_3);
                         }
                     }

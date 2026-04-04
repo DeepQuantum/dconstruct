@@ -20,18 +20,18 @@ u16 fob-dog-handler--wait-safe-move(u64? arg_0, f32 arg_1) {
             wait(0.10);
         }
         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-        *(i32*)*(*var_3 + (0 * 8)) = 10;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(npc-fob-isaac-dog-handler-1, 1);
-        *(i32*)*(*var_3 + (1 * 8)) = 28;
-        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 1.00;
-        *(i32*)*(*var_3 + (2 * 8)) = 30;
-        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.90;
-        *(i32*)*(*var_3 + (3 * 8)) = 57;
-        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (3 * 8)) + 8) = arg_1;
+        *(i32*)*var_3[0] = 10;
+        *(u64*)(*var_3[0] + 8) = 0;
+        *(u64*)(*var_3[0] + 8) = get-spawner-locator(npc-fob-isaac-dog-handler-1, 1);
+        *(i32*)*var_3[1] = 28;
+        *(u64*)(*var_3[1] + 8) = 0;
+        *(f32*)(*var_3[1] + 8) = 1.00;
+        *(i32*)*var_3[2] = 30;
+        *(u64*)(*var_3[2] + 8) = 0;
+        *(f32*)(*var_3[2] + 8) = 0.90;
+        *(i32*)*var_3[3] = 57;
+        *(u64*)(*var_3[3] + 8) = 0;
+        *(f32*)(*var_3[3] + 8) = arg_1;
         var_1 = animate_(npc-fob-isaac-dog-handler-1, fob-finding-isaac-crowds-check-kennels-1--male, var_3);
     } else {
         var_1 = 0;
@@ -96,12 +96,12 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(npc-fob-isaac-dog-handler-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(npc-fob-isaac-dog-handler-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
                     animate_(npc-fob-isaac-dog-handler-1, fob-finding-isaac-crowds-check-kennels-1--male, var_0);
                 }
                 lambda {

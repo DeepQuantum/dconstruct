@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? tra-horde-play-fence-anim(u64? arg_0) {
-    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0)), 1);
+    darray-append(tra-horde-before-fence-infected, boxed_symbol(symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0)), 1);
     npc-set-demeanor(symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0), 2, 0);
     wait-npc-move-to-entry-frame(
         symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0),
@@ -27,32 +27,32 @@ u64? tra-horde-play-fence-anim(u64? arg_0) {
         npc-m-search-entry-table
     );
     u64? var_11 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_11 + (0 * 8)) = 10;
-    *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-infected-fence-idle-, arg_0), 1);
-    *(i32*)*(*var_11 + (1 * 8)) = 28;
-    *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_11 + (2 * 8)) = 30;
-    *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_11 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_11 + (3 * 8)) = 2;
-    *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_11 + (3 * 8)) + 8) = 1;
+    *(i32*)*var_11[0] = 10;
+    *(u64*)(*var_11[0] + 8) = 0;
+    *(u64*)(*var_11[0] + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-infected-fence-idle-, arg_0), 1);
+    *(i32*)*var_11[1] = 28;
+    *(u64*)(*var_11[1] + 8) = 0;
+    *(f32*)(*var_11[1] + 8) = 0.30;
+    *(i32*)*var_11[2] = 30;
+    *(u64*)(*var_11[2] + 8) = 0;
+    *(f32*)(*var_11[2] + 8) = 0.30;
+    *(i32*)*var_11[3] = 2;
+    *(u64*)(*var_11[3] + 8) = 0;
+    *(u8*)(*var_11[3] + 8) = 1;
     wait-animate_(symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0), symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-enter-idle-0, arg_0), "--male"), var_11);
     u64? var_17 = #%alloc-array(single-frame, 16, 4, 1);
-    *(i32*)*(*var_17 + (0 * 8)) = 10;
-    *(u64*)(*(*var_17 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_17 + (0 * 8)) + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-infected-fence-idle-, arg_0), 1);
-    *(i32*)*(*var_17 + (1 * 8)) = 28;
-    *(u64*)(*(*var_17 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_17 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_17 + (2 * 8)) = 30;
-    *(u64*)(*(*var_17 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_17 + (2 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_17 + (3 * 8)) = 2;
-    *(u64*)(*(*var_17 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_17 + (3 * 8)) + 8) = 1;
+    *(i32*)*var_17[0] = 10;
+    *(u64*)(*var_17[0] + 8) = 0;
+    *(u64*)(*var_17[0] + 8) = get-spawner-locator(symbol-concat-int32(ap-tra-horde-infected-fence-idle-, arg_0), 1);
+    *(i32*)*var_17[1] = 28;
+    *(u64*)(*var_17[1] + 8) = 0;
+    *(f32*)(*var_17[1] + 8) = 0.30;
+    *(i32*)*var_17[2] = 30;
+    *(u64*)(*var_17[2] + 8) = 0;
+    *(f32*)(*var_17[2] + 8) = 0.30;
+    *(i32*)*var_17[3] = 2;
+    *(u64*)(*var_17[3] + 8) = 0;
+    *(u8*)(*var_17[3] + 8) = 1;
     return animate_(symbol-concat-int32(cnpc-tra-horde-before-fence-, arg_0), symbol-concat-string(symbol-concat-int32(tra-horde-infected-fence-idle-0, arg_0), "--male"), var_17);
 }
 
@@ -207,30 +207,20 @@ statescript {
                     wait-spawn-npc-group-async(tra-horde-fence-attackers, 0, 0);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, npc-tra-horde-before-fence-attacker-1), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(npc-tra-horde-before-fence-attacker-1), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, npc-tra-horde-before-fence-attacker-2), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(npc-tra-horde-before-fence-attacker-2), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, npc-tra-horde-before-fence-attacker-3), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(npc-tra-horde-before-fence-attacker-3), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, npc-tra-horde-before-fence-attacker-4), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(npc-tra-horde-before-fence-attacker-4), 1);
                 }
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : tra-horde-fence-attackers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : tra-horde-fence-attackers) {
                             if (npc-alive?(var_2)) {
                                 npc-make-aware-of(npc-tra-horde-before-fence-attacker-1, player, 2, *npc-awareness-options-no-surprise*);
                             }
@@ -285,30 +275,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
                     animate_(obj-tra-horde-squeeze-block-pallet-1, tra-horde-squeeze-blockage--pallet, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
                     animate_(obj-tra-horde-squeeze-block-tire-1, tra-horde-squeeze-blockage--tire, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
                     animate_(obj-tra-horde-squeeze-block-tire-2, tra-horde-squeeze-blockage--tire-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
                     animate_(obj-tra-horde-squeeze-block-tire-3, tra-horde-squeeze-blockage--tire-b, var_0);
                 }
                 lambda {
@@ -316,15 +306,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-squeeze-blockage-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, tra-horde-squeeze-blockage--abby, var_0);
                 }
                 lambda {
@@ -383,7 +373,7 @@ statescript {
             track bodyslam-1 {
                 lambda {
                     wait-spawn-npc(cnpc-tra-horde-before-fence-10, 0, 0);
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-10), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-10), 1);
                     npc-set-demeanor(cnpc-tra-horde-before-fence-10, 2, 0);
                     if (!get-boolean(faster-infected?, self)) {
                         npc-move-to-entry-frame(
@@ -401,42 +391,42 @@ statescript {
                     }
                     wait-for(play-bodyslams);
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
                     f32 var_6;
                     if (get-boolean(faster-infected?, self)) {
                         var_6 = 0.00;
                     } else {
                         var_6 = 0.50;
                     }
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = var_6;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_3[1] + 8) = var_6;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.50;
                     wait-animate_(cnpc-tra-horde-before-fence-10, tra-horde-infected-body-slam-intro--female-horde, var_3);
                     u64? var_7 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_7 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_7 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_7 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_7 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_7 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_7[0] = 10;
+                    *(u64*)(*var_7[0] + 8) = 0;
+                    *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_7[1] = 28;
+                    *(u64*)(*var_7[1] + 8) = 0;
+                    *(f32*)(*var_7[1] + 8) = 0.50;
+                    *(i32*)*var_7[2] = 30;
+                    *(u64*)(*var_7[2] + 8) = 0;
+                    *(f32*)(*var_7[2] + 8) = 0.50;
+                    *(i32*)*var_7[3] = 2;
+                    *(u64*)(*var_7[3] + 8) = 0;
+                    *(u8*)(*var_7[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-10, tra-horde-infected-body-slam-idle--female-horde, var_7);
                 }
             }
             track bodyslam-2 {
                 lambda {
                     wait-spawn-npc(cnpc-tra-horde-before-fence-11, 0, 0);
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-11), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-11), 1);
                     npc-set-demeanor(cnpc-tra-horde-before-fence-11, 2, 0);
                     if (!get-boolean(faster-infected?, self)) {
                         wait-npc-move-to-entry-frame(
@@ -455,73 +445,73 @@ statescript {
                     signal(two-done, 0);
                     wait-for(play-bodyslams);
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
                     f32 var_6;
                     if (get-boolean(faster-infected?, self)) {
                         var_6 = 0.00;
                     } else {
                         var_6 = 0.50;
                     }
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = var_6;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_3[1] + 8) = var_6;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.50;
                     wait-animate_(cnpc-tra-horde-before-fence-11, tra-horde-infected-body-slam-intro--female-horde-a, var_3);
                     u64? var_7 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_7 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_7 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_7 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_7 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_7 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_7[0] = 10;
+                    *(u64*)(*var_7[0] + 8) = 0;
+                    *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_7[1] = 28;
+                    *(u64*)(*var_7[1] + 8) = 0;
+                    *(f32*)(*var_7[1] + 8) = 0.50;
+                    *(i32*)*var_7[2] = 30;
+                    *(u64*)(*var_7[2] + 8) = 0;
+                    *(f32*)(*var_7[2] + 8) = 0.50;
+                    *(i32*)*var_7[3] = 2;
+                    *(u64*)(*var_7[3] + 8) = 0;
+                    *(u8*)(*var_7[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-11, tra-horde-infected-body-slam-idle--female-horde-a, var_7);
                 }
             }
             track bodyslam-3 {
                 lambda {
                     wait-spawn-npc(cnpc-tra-horde-before-fence-12, 0, 0);
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-12), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-12), 1);
                     wait-for(play-bodyslams);
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
                     f32 var_4;
                     if (get-boolean(faster-infected?, self)) {
                         var_4 = 0.00;
                     } else {
                         var_4 = 0.50;
                     }
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
+                    *(f32*)(*var_1[1] + 8) = var_4;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
                     wait-animate_(cnpc-tra-horde-before-fence-12, tra-horde-infected-body-slam-intro--male-horde, var_1);
                     u64? var_5 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_5 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_5 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_5 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_5 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_5 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_5[0] = 10;
+                    *(u64*)(*var_5[0] + 8) = 0;
+                    *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_5[1] = 28;
+                    *(u64*)(*var_5[1] + 8) = 0;
+                    *(f32*)(*var_5[1] + 8) = 0.50;
+                    *(i32*)*var_5[2] = 30;
+                    *(u64*)(*var_5[2] + 8) = 0;
+                    *(f32*)(*var_5[2] + 8) = 0.50;
+                    *(i32*)*var_5[3] = 2;
+                    *(u64*)(*var_5[3] + 8) = 0;
+                    *(u8*)(*var_5[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-12, tra-horde-infected-body-slam-idle--male-horde, var_5);
                 }
             }
@@ -534,25 +524,25 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(obj-tra-horde-infected-body-slam-fence-1, tra-horde-infected-body-slam-intro--fence, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
                     animate_(obj-tra-horde-infected-body-slam-fence-1, tra-horde-infected-body-slam-idle--fence, var_0);
                 }
                 lambda {
@@ -651,67 +641,67 @@ statescript {
                     wait-spawn-npc(cnpc-tra-horde-before-fence-12, 0, 0);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-10), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-10), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-11), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-11), 1);
                 }
                 lambda {
-                    darray-append(tra-horde-before-fence-infected, new-boxed-value(7, cnpc-tra-horde-before-fence-12), 1);
+                    darray-append(tra-horde-before-fence-infected, boxed_symbol(cnpc-tra-horde-before-fence-12), 1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-10, tra-horde-infected-body-slam-idle--female-horde, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-11, tra-horde-infected-body-slam-idle--female-horde-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 2;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(cnpc-tra-horde-before-fence-12, tra-horde-infected-body-slam-idle--male-horde, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-tra-horde-infected-body-slam-1, 1);
                     animate_(obj-tra-horde-infected-body-slam-fence-1, tra-horde-infected-body-slam-idle--fence, var_0);
                 }
                 lambda {
@@ -759,17 +749,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-before-fence-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-before-fence-infected) {
                         kill-entity(var_2);
                     }
                 }

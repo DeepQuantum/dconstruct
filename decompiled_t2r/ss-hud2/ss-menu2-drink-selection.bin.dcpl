@@ -14,9 +14,9 @@
 u16 drink-tts() {
     u16 var_2;
     if (!text-to-speech-calltick-active?(get-uint64(speak-title-tick, self))) {
-        speak-text-to-speech-formatted(new-boxed-value(7, drink-selection-get-name(drink-selection-get-index(get-symbol(current-drink, self)))), 1, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_CRF_HOLD_X_TO_CRAFT), 1, 0, 1);
-        var_2 = speak-text-to-speech-formatted(new-boxed-value(7, MENU_BACK), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(drink-selection-get-name(drink-selection-get-index(get-symbol(current-drink, self)))), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_CRF_HOLD_X_TO_CRAFT), 1, 0, 1);
+        var_2 = speak-text-to-speech-formatted(boxed_symbol(MENU_BACK), 1, 0, 1);
     } else {
         var_2 = 0;
     }
@@ -175,7 +175,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    set-uint64(speak-title-tick, speak-text-to-speech-raw(generate-text-to-speech-formatted(new-boxed-value(7, HUD_CRF_SELECT_A_DRINK), 0), 0, 0, 1), self);
+                    set-uint64(speak-title-tick, speak-text-to-speech-raw(generate-text-to-speech-formatted(boxed_symbol(HUD_CRF_SELECT_A_DRINK), 0), 0, 0, 1), self);
                 }
             }
         }
@@ -211,7 +211,7 @@ statescript {
                     menu2-get-focused-component();
                     play-sound(sfx-menu-backpack-upgrade-craft, 0);
                     if (spawner-exists?(ss-t2r-efj-igc-workbench-drink-1)) {
-                        send-event(drink-selected, ss-t2r-efj-igc-workbench-drink-1, new-boxed-value(7, get-symbol(current-drink, self)));
+                        send-event(drink-selected, ss-t2r-efj-igc-workbench-drink-1, boxed_symbol(get-symbol(current-drink, self)));
                     }
                     menu2-pop-page(hudMenuStack, 0);
                     menu2-hide-page-stack(hudMenuStack, 0);
@@ -237,7 +237,7 @@ statescript {
                 }
                 lambda {
                     if (spawner-exists?(ss-t2r-efj-igc-workbench-drink-1)) {
-                        send-event(drink-changed, ss-t2r-efj-igc-workbench-drink-1, new-boxed-value(7, event-arg-symbol(3)));
+                        send-event(drink-changed, ss-t2r-efj-igc-workbench-drink-1, boxed_symbol(event-arg-symbol(3)));
                     }
                 }
                 lambda {

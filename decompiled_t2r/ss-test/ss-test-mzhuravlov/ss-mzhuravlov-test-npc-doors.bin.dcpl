@@ -702,55 +702,55 @@ statescript {
                     set-symbol(goals-array, darray-create(self, -1, 0), self);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-left-0), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-left-0), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-left-1), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-left-1), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-left-2), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-left-2), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-left-3), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-left-3), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-right-0), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-right-0), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-right-1), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-right-1), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-right-2), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-right-2), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(goals-array, self), new-boxed-value(7, obj-picked-right-3), 0);
+                    darray-append(get-symbol(goals-array, self), boxed_symbol(obj-picked-right-3), 0);
                 }
                 lambda {
                     set-symbol(squares-array, darray-create(self, -1, 0), self);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-left-0), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-left-0), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-left-1), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-left-1), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-left-2), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-left-2), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-left-3), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-left-3), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-right-0), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-right-0), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-right-1), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-right-1), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-right-2), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-right-2), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(squares-array, self), new-boxed-value(7, obj-right-3), 0);
+                    darray-append(get-symbol(squares-array, self), boxed_symbol(obj-right-3), 0);
                 }
                 lambda {
                     update-npc-demeanor();
@@ -808,32 +808,32 @@ statescript {
                         }
                         if (debug-joypad-command-active?(aim, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
                             if (debug-joypad-command-active?(menu-up, 0)) {
-                                send-event(spawn-npc, self, new-boxed-value(2, 0));
+                                send-event(spawn-npc, self, boxed_i32(0));
                             }
                             if (debug-joypad-command-active?(menu-down, 0)) {
-                                send-event(spawn-npc, self, new-boxed-value(2, 0));
+                                send-event(spawn-npc, self, boxed_i32(0));
                             }
                             if (debug-joypad-command-active?(menu-left, 0)) {
-                                send-event(spawn-infected, self, new-boxed-value(2, 0));
+                                send-event(spawn-infected, self, boxed_i32(0));
                             }
                             if (debug-joypad-command-active?(menu-right, 0)) {
-                                send-event(spawn-infected, self, new-boxed-value(2, 0));
+                                send-event(spawn-infected, self, boxed_i32(0));
                             }
                         }
                         if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                             if (debug-joypad-command-active?(menu-left, 0)) {
-                                send-event(change-demeanor, self, new-boxed-value(2, 0));
+                                send-event(change-demeanor, self, boxed_i32(0));
                             }
                             if (debug-joypad-command-active?(menu-right, 0)) {
-                                send-event(change-demeanor, self, new-boxed-value(2, 1));
+                                send-event(change-demeanor, self, boxed_i32(1));
                             }
                         }
                         if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                             if (debug-joypad-command-active?(menu-up, 0)) {
-                                send-event(change-speed, self, new-boxed-value(2, 1));
+                                send-event(change-speed, self, boxed_i32(1));
                             }
                             if (debug-joypad-command-active?(menu-down, 0)) {
-                                send-event(change-speed, self, new-boxed-value(2, 0));
+                                send-event(change-speed, self, boxed_i32(0));
                             }
                         }
                         if (debug-joypad-command-active?(fire-hold, 0)) {
@@ -1008,21 +1008,21 @@ statescript {
                 lambda {
                     if (get-boolean(is-door-right?, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1.00;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 0.00;
+                        *(i32*)*var_1[1] = 58;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 1.00;
                         animate_(door-right-1, ellie-door-stand-right-close-push-quick-door, var_1);
                     } else {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_2 + (1 * 8)) = 58;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.00;
+                        *(i32*)*var_2[0] = 28;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(f32*)(*var_2[0] + 8) = 0.00;
+                        *(i32*)*var_2[1] = 58;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 1.00;
                         animate_(door-left-1, ellie-door-stand-left-close-push-quick-door, var_2);
                     }
                 }

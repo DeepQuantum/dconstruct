@@ -121,17 +121,7 @@ statescript {
                     if (task-continue-active?(amputation, amp-yara-walk-gift-shop, lower-floor) && task-continue-active?(amputation, amp-yara-walk-gift-shop, shark-investigate-cine-intro--DEBUG)) {
                         set-region-enabled(rgn-hint-amp-yara-walk-gift-shop-squeezethrough-1, 0, 0);
                         enable-action-pack(tap-squeeze-through-488, 1);
-                        foreach (u64? var_3 : amp--gift-shop-explore-regions) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : amp--gift-shop-explore-regions) {
                             if (player-in-region?(var_4, 2)) {
                                 npc-request-explore(yara, var_4, 0, *ps-buddy-explore-near-player-prefer-paps-and-caps*, get-float(yara-explore-player-dist, self), 0, *default-ai-explore-follow-settings*, 0);
                             }
@@ -153,7 +143,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    if (darray-contains?(amp--gift-shop-explore-regions, new-boxed-value(7, event-arg-symbol(1)))) {
+                    if (darray-contains?(amp--gift-shop-explore-regions, boxed_symbol(event-arg-symbol(1)))) {
                         set-symbol(yara-active-explore-rgn, event-arg-symbol(1), self);
                         npc-request-explore(yara, get-symbol(yara-active-explore-rgn, self), 0, *ps-buddy-explore-near-player-prefer-paps-and-caps*, get-float(yara-explore-player-dist, self), 0, *default-ai-explore-follow-settings*, 0);
                     }

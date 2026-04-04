@@ -65,7 +65,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(player, is-nora-vent-cam, new-boxed-value(1, 1));
+                    fact-set(player, is-nora-vent-cam, boxed_bool(1));
                 }
                 lambda {
                     wait-player-fade-flashlight-off(4.00, 1);

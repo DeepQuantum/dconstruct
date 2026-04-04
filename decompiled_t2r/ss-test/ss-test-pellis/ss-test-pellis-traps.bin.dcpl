@@ -37,17 +37,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-bear-trap-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-bear-trap-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-bear-trap-1) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -175,17 +165,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-bear-trap-backup, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-bear-trap-backup) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-bear-trap-backup) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -283,17 +263,7 @@ statescript {
                     disable-nav-blocker-object(nav-blocker-rect-trap-15);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-bear-trap-backup) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-bear-trap-backup) {
                         if (npc-alive?(var_2)) {
                             script-caption(var_2, "SHIT! - INFECTED!?!", 5.00, 0, 0);
                         }
@@ -304,29 +274,9 @@ statescript {
                 }
                 lambda {
                     if (npc-group-alive-count(testellis-npcs-bear-trap-backup) != 0) {
-                        foreach (u64? var_2 : testellis-npcs-bear-trap-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : testellis-npcs-bear-trap-infected) {
                             if (npc-alive?(var_3)) {
-                                foreach (u64? var_6 : testellis-npcs-bear-trap-backup) {
-                                    u16 var_7;
-                                    if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                        var_7 = *(u64*)var_6;
-                                    } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                        var_7 = *(u64*)var_6;
-                                    } else {
-                                        var_7 = 0;
-                                    }
+                                foreach (u64? var_7 : testellis-npcs-bear-trap-backup) {
                                     if (npc-alive?(var_7)) {
                                         npc-make-aware-of(var_3, var_7, 2, 0);
                                         npc-make-aware-of(var_3, player, 2, 0);
@@ -335,17 +285,7 @@ statescript {
                             }
                         }
                     } else {
-                        foreach (u64? var_12 : testellis-npcs-bear-trap-infected) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : testellis-npcs-bear-trap-infected) {
                             if (npc-alive?(var_13)) {
                                 npc-make-aware-of(var_13, player, 2, 0);
                             }

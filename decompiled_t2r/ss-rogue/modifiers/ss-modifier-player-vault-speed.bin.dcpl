@@ -62,7 +62,7 @@ statescript {
                     set-float(skull-active-time, get-current-time(0), self);
                 }
                 lambda {
-                    broadcast-event(skull-activate, new-boxed-value(7, player-vault-speed));
+                    broadcast-event(skull-activate, boxed_symbol(player-vault-speed));
                 }
             }
         }
@@ -89,7 +89,7 @@ statescript {
                             }
                             hud-skulls-set-percent(player-vault-speed, 1.00 - (time-elapsed(get-float(skull-active-time, self)) / get-float(speed-bonus-time, self)), 0);
                         } else {
-                            broadcast-event(skull-deactivate, new-boxed-value(7, player-vault-speed));
+                            broadcast-event(skull-deactivate, boxed_symbol(player-vault-speed));
                             hud-skulls-set-percent(player-vault-speed, 0.00, 0);
                             set-float(skull-active-time, -1.00, self);
                         }

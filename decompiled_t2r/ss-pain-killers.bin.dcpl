@@ -16,7 +16,7 @@ u64? disable-momentum(u64? arg_0) {
 }
 
 u64? disable-pain-killer-fact() {
-    return fact-set(player, pain-killers-on, new-boxed-value(1, 0));
+    return fact-set(player, pain-killers-on, boxed_bool(0));
 }
 
 u64? turn-off-pain-killer-ui(u64? arg_0) {
@@ -119,7 +119,7 @@ statescript {
                                 self,
                                 1
                             );
-                            fact-set(player, pain-killers-on, new-boxed-value(1, 1));
+                            fact-set(player, pain-killers-on, boxed_bool(1));
                             set-heart-rate(player, 1.00);
                             u64? var_11 = get-difficulty-detail-player();
                             if (*(f32*)(var_11 + 28) > 0.00) {

@@ -17,15 +17,15 @@ embedded@7618(u64? arg_0, bool arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? a
     bool var_1 = !(arg_1 == 0) && !(arg_2 == 0) && var_0 < 3.00 && var_0 > 0.00;
     u64? var_5;
     if (var_1) {
-        var_5 = new-boxed-value(7, true);
+        var_5 = boxed_symbol(true);
     } else {
-        var_5 = new-boxed-value(7, false);
+        var_5 = boxed_symbol(false);
     }
     do-melee-log(
         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-        new-boxed-value(6, var_0),
-        new-boxed-value(6, 0.00),
-        new-boxed-value(6, 3.00),
+        boxed_f32(var_0),
+        boxed_f32(0.00),
+        boxed_f32(3.00),
         var_5
     );
     if (!var_1) {
@@ -148,17 +148,7 @@ embedded@6900(u64? arg_0, u64? arg_1, i64 arg_2, u64? arg_3, u64? arg_4, u64? ar
     if (0 && 0) {
         camera-override-near-clip/f(0.01);
     }
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-get-target(var_2) == arg_2) {
             npc-set-melee-behavior-condition(var_2, 10);
         }
@@ -414,9 +404,9 @@ npc-lunch-lady-ear-gouge-struggle
 embedded@75c0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 200.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(200.00)
     );
 }
 
@@ -706,7 +696,7 @@ embedded@6f08(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? npc-lunch-lady-ear-gouge-struggle-fail
 embedded@6fd0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-lunch-lady-ear-gouge-struggle-fail), 0, 0);
 }
@@ -800,9 +790,9 @@ u64? npc-lunch-lady-ear-gouge-struggle-fail
 embedded@6028(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000.00)
     );
 }
 
@@ -1108,17 +1098,7 @@ embedded@6418(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 
 u64? npc-lunch-lady-ear-gouge-struggle-success
 embedded@68a8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-buddy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-buddy-npcs) {
         if (npc-buddy-should-play-aborted-save-jumpback?(var_2) && !get-current-melee-attack(var_2)) {
             sid var_5;
             if (var_2 == dina || var_2 == mel && var_2 == lev) {

@@ -97,22 +97,12 @@ embedded@19d0(u64? arg_0) {
     u64? var_3 = darray-create(single-frame, -1, 0);
     u64 i = 0;
     while (i < *(i32*)(#703BB32FFBDF36A4 + 8)) {
-        darray-append(var_3, new-boxed-value(7, *(u64*)(*#703BB32FFBDF36A4 + (i * 8))), 0);
+        darray-append(var_3, boxed_symbol(*(u64*)(*#703BB32FFBDF36A4 + (i * 8))), 0);
         i = i + 1;
     }
     if (darray-count(var_2) > 0) {
-        foreach (u64? var_8 : var_2) {
-            u16 var_9;
-            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                var_9 = *(u64*)var_8;
-            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                var_9 = *(u64*)var_8;
-            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                var_9 = *(u64*)var_8;
-            } else {
-                var_9 = 0;
-            }
-            darray-find-remove(var_3, new-boxed-value(7, var_9), 0);
+        foreach (u64? var_9 : var_2) {
+            darray-find-remove(var_3, boxed_symbol(var_9), 0);
         }
     }
     if (ddict-contains-key?(#84C40C92E0E9084B, var_1)) {
@@ -127,18 +117,8 @@ embedded@19d0(u64? arg_0) {
         } else {
             var_14 = 0;
         }
-        foreach (u64? var_16 : var_14) {
-            u16 var_17;
-            if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                var_17 = *(u64*)var_16;
-            } else {
-                var_17 = 0;
-            }
-            darray-find-remove(var_3, new-boxed-value(7, var_17), 0);
+        foreach (u64? var_17 : var_14) {
+            darray-find-remove(var_3, boxed_symbol(var_17), 0);
         }
     }
     u16 var_21;
@@ -170,18 +150,18 @@ embedded@1dd8(u64? arg_0) {
     } else {
         var_1 = 0;
     }
-    return darray-contains?(#570D9E610271B786, new-boxed-value(7, var_1));
+    return darray-contains?(#570D9E610271B786, boxed_symbol(var_1));
 }
 
 u64? #41B3BE8A1DF05B76
 #41B3BE8A1DF05B76
 embedded@1920(u64? arg_0) {
-    return darray-contains?(arg_0, new-boxed-value(7, enemy-increased-speed));
+    return darray-contains?(arg_0, boxed_symbol(enemy-increased-speed));
 }
 
 u64? #41B3BE8A1DF05B76
 embedded@1be8(u64? arg_0) {
-    return darray-contains?(arg_0, new-boxed-value(7, enemy-increased-health)) && darray-contains?(arg_0, new-boxed-value(7, enemy-decreased-health));
+    return darray-contains?(arg_0, boxed_symbol(enemy-increased-health)) && darray-contains?(arg_0, boxed_symbol(enemy-decreased-health));
 }
 
 u64? #41B3BE8A1DF05B76
@@ -280,6 +260,6 @@ embedded@1d10(u64? arg_0) {
 u64? #41B3BE8A1DF05B76
 embedded@17c8() {
     u64? var_0 = #0EB86C87ADEB07D8();
-    return !(darray-contains?(var_0, new-boxed-value(2, 0))) || !(darray-contains?(var_0, new-boxed-value(2, 1))) && !(darray-contains?(var_0, new-boxed-value(2, 2))) && get-svar-as-boolean(#CB0D0922BA03D928);
+    return !(darray-contains?(var_0, boxed_i32(0))) || !(darray-contains?(var_0, boxed_i32(1))) && !(darray-contains?(var_0, boxed_i32(2))) && get-svar-as-boolean(#CB0D0922BA03D928);
 }
 

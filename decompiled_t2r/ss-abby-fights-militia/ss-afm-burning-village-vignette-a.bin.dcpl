@@ -63,17 +63,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-vignette-a-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-vignette-a-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-vignette-a-npcs) {
                         character-set-invincibility(var_2, 3, 0);
                         npc-set-targeting-params(var_2, afm-burning-village);
                         npc-set-suppressing-fire(var_2, 1);
@@ -95,10 +85,10 @@ statescript {
                     npc-teleport-into-closest-cover(npc-village-arrive-militia-3, get-spawner-locator(npc-village-arrive-militia-3, 1));
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-scar-2), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(npc-village-arrive-scar-2), 1);
                 }
                 lambda {
-                    darray-append(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-militia-3), 1);
+                    darray-append(npcs-in-vignette, boxed_symbol(npc-village-arrive-militia-3), 1);
                 }
                 lambda {
                     npc-force-target(npc-village-arrive-militia-3, npc-village-arrive-scar-2);
@@ -116,7 +106,7 @@ statescript {
                     set-vignette-target-group(npc-village-arrive-militia-11, grp-afm-vignette-1);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-militia, new-boxed-value(7, npc-village-arrive-militia-11), 1);
+                    darray-append(grp-afm-burning-village-militia, boxed_symbol(npc-village-arrive-militia-11), 1);
                 }
                 lambda {
                     npc-override-post-selector-set-id(npc-village-arrive-militia-11, *afm-burning-village-selector-set*);
@@ -131,7 +121,7 @@ statescript {
                     set-vignette-target-group(npc-village-arrive-scar-3, grp-afm-vignette-1);
                 }
                 lambda {
-                    darray-append(grp-afm-burning-village-scars, new-boxed-value(7, npc-village-arrive-scar-3), 1);
+                    darray-append(grp-afm-burning-village-scars, boxed_symbol(npc-village-arrive-scar-3), 1);
                 }
                 lambda {
                     wait-boolean(start-vignette, 1, self);
@@ -241,13 +231,13 @@ statescript {
                 lambda {
                     if (event-arg-symbol(0) == npc-village-arrive-militia-3 && npc-alive?(npc-village-arrive-scar-3)) {
                         set-object-health(npc-village-arrive-scar-3, 1.00);
-                        darray-append(npcs-to-die, new-boxed-value(7, npc-village-arrive-scar-3), 1);
+                        darray-append(npcs-to-die, boxed_symbol(npc-village-arrive-scar-3), 1);
                     }
                 }
                 lambda {
                     if (event-arg-symbol(0) == npc-village-arrive-scar-3 && npc-alive?(npc-village-arrive-militia-11)) {
                         set-object-health(npc-village-arrive-militia-11, 1.00);
-                        darray-append(npcs-to-die, new-boxed-value(7, npc-village-arrive-militia-11), 1);
+                        darray-append(npcs-to-die, boxed_symbol(npc-village-arrive-militia-11), 1);
                     }
                 }
             }
@@ -286,7 +276,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-find-remove(npcs-in-vignette, new-boxed-value(7, npc-village-arrive-scar-2), 0);
+                    darray-find-remove(npcs-in-vignette, boxed_symbol(npc-village-arrive-scar-2), 0);
                 }
                 lambda {
                     set-boolean(vignette-done, 1, self);

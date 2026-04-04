@@ -23,7 +23,7 @@ u64? ss-melee-pickup-unlimited-use--give-player-melee-pip() {
         var_3 = player-get-weapon-health() + 1;
     }
     player-set-weapon-health(var_3);
-    broadcast-event(skull-activate, new-boxed-value(7, melee-pickup-unlimited-use));
+    broadcast-event(skull-activate, boxed_symbol(melee-pickup-unlimited-use));
     return hud2-mark-health-ammo-dirty(0);
 }
 
@@ -54,23 +54,13 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (npc-is-stunned-rogue?(var_2) && !darray-contains?(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, var_2)) && player-has-non-basic-melee-weapon?()) {
-                            darray-append(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, var_2), 1);
+                    foreach (u64? var_2 : all-enemy-npcs) {
+                        if (npc-is-stunned-rogue?(var_2) && !darray-contains?(get-symbol(grp-stunned-npcs, self), boxed_symbol(var_2)) && player-has-non-basic-melee-weapon?()) {
+                            darray-append(get-symbol(grp-stunned-npcs, self), boxed_symbol(var_2), 1);
                             ss-melee-pickup-unlimited-use--give-player-melee-pip();
                         }
-                        if (darray-contains?(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, var_2)) && !npc-is-stunned-rogue?(var_2)) {
-                            darray-find-remove(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, var_2), 0);
+                        if (darray-contains?(get-symbol(grp-stunned-npcs, self), boxed_symbol(var_2)) && !npc-is-stunned-rogue?(var_2)) {
+                            darray-find-remove(get-symbol(grp-stunned-npcs, self), boxed_symbol(var_2), 0);
                         }
                     }
                 }
@@ -79,8 +69,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(get-symbol(grp-stunned-npcs, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (darray-contains?(get-symbol(grp-stunned-npcs, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(get-symbol(grp-stunned-npcs, self), boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
             }

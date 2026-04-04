@@ -29,7 +29,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(loadout-profile, ss-loadout-manager-1, new-boxed-value(7, all-weapons));
+                    send-event(loadout-profile, ss-loadout-manager-1, boxed_symbol(all-weapons));
                 }
                 lambda {
                     go(show-change-character-debug, 1);

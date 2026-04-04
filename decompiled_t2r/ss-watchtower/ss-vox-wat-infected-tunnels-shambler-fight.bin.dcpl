@@ -128,7 +128,7 @@ statescript {
                     wait-say(dina, vox-igc-din-gam-wat-infected-tunnels-shambler-fight-wh-001, 2, 0);
                 }
                 lambda {
-                    fact-set(global, disable-shambler-callouts?, new-boxed-value(1, 1));
+                    fact-set(global, disable-shambler-callouts?, boxed_bool(1));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -248,7 +248,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-shambler-callouts?, new-boxed-value(1, 0));
+                    fact-set(global, disable-shambler-callouts?, boxed_bool(0));
                 }
             }
         }

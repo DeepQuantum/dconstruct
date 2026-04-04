@@ -101,12 +101,12 @@ statescript {
             track lockbox {
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(get-symbol(treasure-box, self));
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-object-locator(get-symbol(treasure-box, self));
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.30;
                     animate_(get-symbol(treasure-box, self), get-symbol(treasure-box-open-anim, self), var_2);
                 }
                 lambda {
@@ -164,15 +164,15 @@ statescript {
             track player {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_1 + (2 * 8)) = 40;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-object-locator(player);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.20;
+                    *(i32*)*var_1[2] = 40;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(i32*)(*var_1[2] + 8) = 1;
                     animate_(player, get-symbol(player-open-lockbox-anim, self), var_1);
                 }
             }

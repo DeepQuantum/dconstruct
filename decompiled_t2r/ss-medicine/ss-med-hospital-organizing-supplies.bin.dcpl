@@ -73,23 +73,23 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
                     animate_(obj-med-hos-entry-organizing-supplies-worker-1, med-hospital-explore-organizing-supplies--female, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
                     animate_(obj-med-hos-entry-organizing-supplies-vita-1, med-hospital-explore-organizing-supplies--psvita, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
                     animate_(obj-med-hos-entry-organizing-supplies-box-1, med-hospital-explore-organizing-supplies--box, var_0);
                 }
             }
@@ -108,55 +108,55 @@ statescript {
                 lambda {
                     if (float-between?(get-animation-frame(obj-med-hos-entry-organizing-supplies-worker-1, 0, med-hospital-explore-organizing-supplies--female), 1050.00, 1340.00)) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 1340.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                        *(i32*)*var_3[1] = 57;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 1340.00;
+                        *(i32*)*var_3[2] = 28;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.50;
                         animate_(obj-med-hos-entry-organizing-supplies-worker-1, med-hospital-explore-organizing-supplies--female, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 1340.00;
-                        *(i32*)*(*var_5 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                        *(i32*)*var_5[1] = 57;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 1340.00;
+                        *(i32*)*var_5[2] = 28;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.50;
                         animate_(obj-med-hos-entry-organizing-supplies-vita-1, med-hospital-explore-organizing-supplies--psvita, var_5);
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1340.00;
-                        *(i32*)*(*var_7 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                        *(i32*)*var_7[1] = 57;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 1340.00;
+                        *(i32*)*var_7[2] = 28;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(f32*)(*var_7[2] + 8) = 0.50;
                         var_2 = animate_(obj-med-hos-entry-organizing-supplies-box-1, med-hospital-explore-organizing-supplies--box, var_7);
                     } else {
                         kill-entity(obj-med-hos-entry-organizing-supplies-vita-1);
                         u64? var_10 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_10 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
-                        *(i32*)*(*var_10 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_10[0] = 10;
+                        *(u64*)(*var_10[0] + 8) = 0;
+                        *(u64*)(*var_10[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                        *(i32*)*var_10[1] = 28;
+                        *(u64*)(*var_10[1] + 8) = 0;
+                        *(f32*)(*var_10[1] + 8) = 0.50;
                         animate_(obj-med-hos-entry-organizing-supplies-worker-1, med-hospital-explore-organizing-supplies--female, var_10);
                         u64? var_12 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_12 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_12 + (0 * 8)) + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
-                        *(i32*)*(*var_12 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_12 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_12[0] = 10;
+                        *(u64*)(*var_12[0] + 8) = 0;
+                        *(u64*)(*var_12[0] + 8) = get-spawner-locator(ap-med-hos-entry-organizing-supplies-1, 1);
+                        *(i32*)*var_12[1] = 28;
+                        *(u64*)(*var_12[1] + 8) = 0;
+                        *(f32*)(*var_12[1] + 8) = 0.50;
                         var_2 = animate_(obj-med-hos-entry-organizing-supplies-box-1, med-hospital-explore-organizing-supplies--box, var_12);
                     }
                 }

@@ -238,17 +238,7 @@ u16 checkpoint-query-any-weapon-upgrades?(sid arg_0, u64? arg_1) {
     }
     u16 var_1;
     for (u64 i = 0; i < *(i32*)var_0; i++) {
-        foreach (u64? var_6 : get-raw-weapon-upgrade-bundles(*(u64*)(*(var_0 + 8) + (i * 8)))) {
-            u16 var_7;
-            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                var_7 = *(u64*)var_6;
-            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                var_7 = *(u64*)var_6;
-            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                var_7 = *(u64*)var_6;
-            } else {
-                var_7 = 0;
-            }
+        foreach (u64? var_7 : get-raw-weapon-upgrade-bundles(*(u64*)(*(var_0 + 8) + (i * 8)))) {
             i32 var_11;
             if (!(lookup-weapon-upgrade-bundle-resources(*(u64*)(*(var_0 + 8) + (i * 8)), var_7) == 0)) {
                 if (checkpoint-query-weapon-upgrade?(

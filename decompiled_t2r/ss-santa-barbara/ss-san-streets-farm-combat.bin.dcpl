@@ -76,17 +76,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-farm-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-farm-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -119,47 +109,47 @@ statescript {
                         set-boolean(is-animated, 1, npc-chained-infected-17);
                         signal(anim-started, 0);
                         u64? var_2 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 1;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (5 * 8)) = 2;
-                        *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (5 * 8)) + 8) = 1;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
+                        *(i32*)*var_2[1] = 30;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 1;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(u8*)(*var_2[2] + 8) = 1;
+                        *(i32*)*var_2[3] = 3;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(u8*)(*var_2[3] + 8) = 1;
+                        *(i32*)*var_2[4] = 4;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(u8*)(*var_2[4] + 8) = 1;
+                        *(i32*)*var_2[5] = 2;
+                        *(u64*)(*var_2[5] + 8) = 0;
+                        *(u8*)(*var_2[5] + 8) = 1;
                         animate_(npc-san-farm-4, san-streets-tethered-infected--slavera, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
-                        *(i32*)*(*var_4 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (2 * 8)) = 20;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 490.00;
-                        *(i32*)*(*var_4 + (3 * 8)) = 1;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_4 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (6 * 8)) = 2;
-                        *(u64*)(*(*var_4 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
+                        *(i32*)*var_4[1] = 30;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.50;
+                        *(i32*)*var_4[2] = 20;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(f32*)(*var_4[2] + 8) = 490.00;
+                        *(i32*)*var_4[3] = 1;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(u8*)(*var_4[3] + 8) = 1;
+                        *(i32*)*var_4[4] = 3;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(u8*)(*var_4[4] + 8) = 1;
+                        *(i32*)*var_4[5] = 4;
+                        *(u64*)(*var_4[5] + 8) = 0;
+                        *(u8*)(*var_4[5] + 8) = 1;
+                        *(i32*)*var_4[6] = 2;
+                        *(u64*)(*var_4[6] + 8) = 0;
+                        *(u8*)(*var_4[6] + 8) = 1;
                         animate_(npc-san-farm-5, san-streets-tethered-infected--slaverb, var_4);
                         wait-frames(490);
                         npc-unholster-longgun(npc-san-farm-5, 1, 0, -1.00, 0);
@@ -182,30 +172,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 20;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 550.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 1;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (7 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-san-streets-tethered-infected-2, 1);
+                    *(i32*)*var_0[1] = 13;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 20;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 550.00;
+                    *(i32*)*var_0[4] = 1;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 3;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 4;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 2;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(u8*)(*var_0[7] + 8) = 1;
                     wait-animate_(npc-chained-infected-17, san-streets-tethered-infected--clicker, var_0);
                 }
                 lambda {
@@ -254,17 +244,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-farm-torture-infected-slavers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-farm-torture-infected-slavers) {
                         if (npc-alive?(var_2)) {
                             if (!(npc-get-awareness(var_2, player) == 0)) {
                                 go(combat, 1);
@@ -311,17 +291,7 @@ statescript {
                         stop-animating(npc-chained-infected-17, 2, 1.00, 0, 0);
                         stop-animating(npc-san-farm-4, 2, 1.00, 0, 0);
                         stop-animating(npc-san-farm-5, 2, 1.00, 0, 0);
-                        foreach (u64? var_2 : san-farm-torture-infected-slavers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : san-farm-torture-infected-slavers) {
                             if (npc-alive?(var_3)) {
                                 npc-set-script-low-priority(var_3);
                             }
@@ -350,17 +320,7 @@ statescript {
                 }
                 lambda {
                     while (!(tension-mode-is?(4))) {
-                        foreach (u64? var_3 : san-farm-slaver-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : san-farm-slaver-npcs) {
                             if (npc-alive?(var_4)) {
                                 npc-make-aware-of-at(var_4, player, get-spawner-position(pos-san-farm-stealth-infected-1, 1), 4, 0, 0);
                             }
@@ -454,17 +414,7 @@ statescript {
                     kill-particles-after-combat();
                 }
                 lambda {
-                    foreach (u64? var_1 : san-farm-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-farm-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

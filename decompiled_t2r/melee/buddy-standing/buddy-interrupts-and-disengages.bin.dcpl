@@ -72,7 +72,7 @@ embedded@23c8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     melee-fact-remove(arg_1, already-shouted-for-help-3);
     u16 var_0;
     if (!0) {
-        broadcast-event(buddy-exited-struggle-rescue, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2));
+        broadcast-event(buddy-exited-struggle-rescue, boxed_symbol(arg_1), boxed_symbol(arg_2));
         var_0 = request-dialog(player-saves-buddy, player, arg_1, 0, 0, 0, 0);
     } else {
         var_0 = 0;
@@ -89,7 +89,7 @@ embedded@2488(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
     melee-fact-remove(arg_1, already-shouted-for-help-3);
     u16 var_0;
     if (!1) {
-        broadcast-event(buddy-exited-struggle-rescue, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2));
+        broadcast-event(buddy-exited-struggle-rescue, boxed_symbol(arg_1), boxed_symbol(arg_2));
         var_0 = request-dialog(player-saves-buddy, player, arg_1, 0, 0, 0, 0);
     } else {
         var_0 = 0;

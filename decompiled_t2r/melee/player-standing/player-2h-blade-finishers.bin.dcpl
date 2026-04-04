@@ -340,7 +340,7 @@ axe-left-gut-finisher-sync
 2h-blade-dog-back-kill-sync
 axe-brute-back-finisher-sync
 embedded@30550(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
 
 u16 axe-overhead-finisher-sync
@@ -530,17 +530,7 @@ axe-overhead-finisher
 2h-blade-dog-back-kill-sync
 axe-brute-back-finisher-sync
 embedded@2dbc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
     }
 }
@@ -940,9 +930,9 @@ axe-brute-back-finisher-sync
 embedded@2cff0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000)
     );
 }
 
@@ -1003,9 +993,9 @@ embedded@2f2f8(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 16.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(16.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -1045,17 +1035,7 @@ embedded@5208(i64 arg_0, i64 arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg
 
 u64? 2h-blade-back-brute-finisher-fail-sync
 embedded@31c00(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         npc-set-melee-behavior-condition(var_2, 7);
         npc-set-melee-behavior-condition(var_2, 8);
     }
@@ -1110,7 +1090,7 @@ embedded@2f940(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? 2h-blade-back-brute-finisher-fail-sync
 embedded@2e9f0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return send-event(strike-fail, ss-promote-death-hints, new-boxed-value(7, arg_2));
+    return send-event(strike-fail, ss-promote-death-hints, boxed_symbol(arg_2));
 }
 
 u16 2h-blade-back-brute-finisher-fail-sync
@@ -1156,7 +1136,7 @@ embedded@2f018(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 
 u64? 2h-blade-back-brute-finisher-fail-sync
 embedded@30ea0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-damage, new-boxed-value(7, arg_1), new-boxed-value(7, arg_2), new-boxed-value(6, 0.00));
+    return broadcast-event(melee-damage, boxed_symbol(arg_1), boxed_symbol(arg_2), boxed_f32(0.00));
 }
 
 f32 2h-blade-back-brute-finisher-fail-sync__melee-event-advanced@2d618
@@ -1337,9 +1317,9 @@ embedded@301e8(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 14.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(14.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -1419,17 +1399,7 @@ embedded@2ccc0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
 u64? 2h-blade-dog-front-kill-sync
 2h-blade-dog-back-kill-sync
 embedded@2d220(u64? arg_0, u64? arg_1, bool arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    foreach (u64? var_1 : all-enemy-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-enemy-npcs) {
         if (npc-is-dog?(var_2) && !(arg_2 == var_2)) {
             melee-fact-set-time(var_2, dog-strafe-start-timer);
             melee-fact-set-bool(arg_1, dog-valid-to-strafe-outer-wait, 1);
@@ -1517,9 +1487,9 @@ embedded@31aa8(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -2431,9 +2401,9 @@ embedded@2d5b0(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 18.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(18.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -2566,9 +2536,9 @@ embedded@2f6f0(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 20.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(20.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -2672,9 +2642,9 @@ embedded@2ed90(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 5.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(5.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;
@@ -2703,17 +2673,17 @@ embedded@31710(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-gun-head-frontenter-r-lower, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -2744,17 +2714,17 @@ embedded@2d770(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(0, arg_2, gore-finisher-blunt-head-right, arg_6, 1, 1);
         } else if (!(gore-finisher-blunt-head-right == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, gore-finisher-blunt-head-right, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -4117,17 +4087,17 @@ embedded@2f518(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(gore-gun-head-frontenter-l-lower, arg_2, 0, arg_6, 1, 1);
         } else if (!(0 == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, 0, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -4158,17 +4128,17 @@ embedded@2f400(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? 
             var_3 = spawn-gore-piece(0, arg_2, gore-finisher-blunt-head-left, arg_6, 1, 1);
         } else if (!(gore-finisher-blunt-head-left == 0)) {
             u64? var_8 = %alloc-array(single-frame, 16, 2, 1);
-            *(i32*)*(*var_8 + (0 * 8)) = 40;
-            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-            *(i32*)*(*var_8 + (1 * 8)) = 31;
-            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-            *(u8*)(*(*var_8 + (1 * 8)) + 8) = 1;
+            *(i32*)*var_8[0] = 40;
+            *(u64*)(*var_8[0] + 8) = 0;
+            *(i32*)(*var_8[0] + 8) = 1;
+            *(i32*)*var_8[1] = 31;
+            *(u64*)(*var_8[1] + 8) = 0;
+            *(u8*)(*var_8[1] + 8) = 1;
             animate_(arg_2, gore-finisher-blunt-head-bind, var_8);
             u64? var_9 = %alloc-array(single-frame, 16, 1, 1);
-            *(i32*)*(*var_9 + (0 * 8)) = 40;
-            *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-            *(i32*)(*(*var_9 + (0 * 8)) + 8) = 1;
+            *(i32*)*var_9[0] = 40;
+            *(u64*)(*var_9[0] + 8) = 0;
+            *(i32*)(*var_9[0] + 8) = 1;
             var_3 = animate_(arg_2, gore-finisher-blunt-head-left, var_9);
         } else if (!is-final-build?()) {
             var_3 = display(#5445173390656D6D("MELEE GORE SPAWN FAILURE"), 19);
@@ -5095,9 +5065,9 @@ embedded@2f468(u64 arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
         var_4 = send-event(
             melee-weapon-broke,
             ss-player-melee-controller,
-            new-boxed-value(7, arg_1),
-            new-boxed-value(6, 21.00),
-            new-boxed-value(7, *(u64*)arg_0)
+            boxed_symbol(arg_1),
+            boxed_f32(21.00),
+            boxed_symbol(*(u64*)arg_0)
         );
     } else {
         var_4 = 0;

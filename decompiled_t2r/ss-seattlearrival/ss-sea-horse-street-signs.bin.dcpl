@@ -68,11 +68,11 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 3) {
-                        if (tag-specified?(symbol-concat-int32(map-location-, i), event-arg-symbol(0)) && darray-contains?(sea-horse-map-Q-writings, new-boxed-value(7, tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))))) {
-                            if (get-int32(enter-int, self) == 0 && !(get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-writings, new-boxed-value(7, tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0)))) {
-                                set-int32(enter-int, darray-find(sea-horse-map-Q-writings, new-boxed-value(7, tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0), self);
+                        if (tag-specified?(symbol-concat-int32(map-location-, i), event-arg-symbol(0)) && darray-contains?(sea-horse-map-Q-writings, boxed_symbol(tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))))) {
+                            if (get-int32(enter-int, self) == 0 && !(get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-writings, boxed_symbol(tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0)))) {
+                                set-int32(enter-int, darray-find(sea-horse-map-Q-writings, boxed_symbol(tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0), self);
                             } else {
-                                set-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-writings, new-boxed-value(7, tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0), 1);
+                                set-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-writings, boxed_symbol(tag-symbol(symbol-concat-int32(map-location-, i), event-arg-symbol(0))), 0), 1);
                             }
                         }
                         i = i + 1;
@@ -118,7 +118,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, get-int32(enter-int, self)));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(get-int32(enter-int, self)));
                 }
                 lambda {
                     auto-save-game();

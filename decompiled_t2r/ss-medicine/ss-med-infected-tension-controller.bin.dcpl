@@ -13,17 +13,7 @@
 
 u16 stalkers-dead-or-asleep?() {
     u16 var_1;
-    foreach (u64? var_2 : corridor-stalkers) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : corridor-stalkers) {
         u16 var_6;
         if (get-boolean(trap-has-emerged?, var_3) && npc-alive?(var_3)) {
             var_6 = 1;

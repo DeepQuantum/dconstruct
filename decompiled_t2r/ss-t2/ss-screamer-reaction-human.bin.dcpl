@@ -47,7 +47,7 @@ statescript {
                     set-symbol(screamer, event-arg-symbol(2), self);
                 }
                 lambda {
-                    fact-set(get-self-id(), saved-patrol-route, new-boxed-value(7, npc-get-patrol-route(get-self-id())));
+                    fact-set(get-self-id(), saved-patrol-route, boxed_symbol(npc-get-patrol-route(get-self-id())));
                 }
                 lambda {
                     if (get-boolean(lead-investigation?, self)) {
@@ -107,12 +107,12 @@ statescript {
                 lambda {
                     if (!(get-self-id() == 0) && npc-alive?(get-self-id())) {
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_4[0] = 28;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(f32*)(*var_4[0] + 8) = 0.50;
+                        *(i32*)*var_4[1] = 30;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.50;
                         wait-animate_(get-self-id(), thug-p-idle-lost-target-reaction-01, var_4);
                     }
                 }

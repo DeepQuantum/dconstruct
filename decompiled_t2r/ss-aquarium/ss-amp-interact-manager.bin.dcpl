@@ -42,8 +42,8 @@ u16 amp-pick-next-interact-target(u16 arg_0) {
         var_0 = var_2;
     } else {
         u16 var_9;
-        if ((darray-find(amp-yara-walk-interacts, new-boxed-value(7, arg_0), 0) + 1) < group-get-last-valid-index(amp-yara-walk-interacts)) {
-            var_9 = darray-find(amp-yara-walk-interacts, new-boxed-value(7, arg_0), 0) + 1;
+        if ((darray-find(amp-yara-walk-interacts, boxed_symbol(arg_0), 0) + 1) < group-get-last-valid-index(amp-yara-walk-interacts)) {
+            var_9 = darray-find(amp-yara-walk-interacts, boxed_symbol(arg_0), 0) + 1;
         } else {
             var_9 = group-get-last-valid-index(amp-yara-walk-interacts);
         }
@@ -136,7 +136,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    if (darray-contains?(amp-yara-walk-interacts, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(amp-yara-walk-interacts, boxed_symbol(event-arg-symbol(0)))) {
                         set-symbol(next-interact-target, event-arg-symbol(0), self);
                     }
                 }
@@ -147,7 +147,7 @@ statescript {
                 }
                 lambda {
                     if (!(tag-symbol(vox, event-arg-symbol(0)) == 0)) {
-                        send-event(go-vox, ss-amp-yara-walk-vox-1, new-boxed-value(7, tag-symbol(vox, event-arg-symbol(0))));
+                        send-event(go-vox, ss-amp-yara-walk-vox-1, boxed_symbol(tag-symbol(vox, event-arg-symbol(0))));
                     }
                 }
             }
@@ -184,17 +184,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : amp-yara-walk-interacts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : amp-yara-walk-interacts) {
                         interactable-disable(var_2);
                     }
                 }

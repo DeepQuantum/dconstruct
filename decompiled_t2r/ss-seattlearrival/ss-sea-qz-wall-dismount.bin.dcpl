@@ -60,9 +60,9 @@ statescript {
                             }
                             npc-teleport-to(player-horse, get-spawner-locator(pos-sea-qz-horse-tele-1, 1));
                             u64? var_19 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_19 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_19 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-qz-horse-tele-1, 1);
+                            *(i32*)*var_19[0] = 10;
+                            *(u64*)(*var_19[0] + 8) = 0;
+                            *(u64*)(*var_19[0] + 8) = get-spawner-locator(pos-sea-qz-horse-tele-1, 1);
                             animate_(player-horse, horse-idle, var_19);
                             wait-frames(2);
                             stop-animating(player-horse, 2, 0.00, 0, 0);
@@ -75,7 +75,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(horse-wait-player, ss-sea-horse-horse-callback-1, new-boxed-value(7, ch-sea-wall-horse-start-1));
+                    send-event(horse-wait-player, ss-sea-horse-horse-callback-1, boxed_symbol(ch-sea-wall-horse-start-1));
                 }
                 lambda {
                     npc-request-explore(dina, rgn-sea-qz-dina-explore-gate-1, 0, *buddy-post-selector-set*, 12.00, 0, *default-ai-explore-follow-settings*, 0);

@@ -37,25 +37,15 @@ statescript {
                     if (!is-final-build?()) {
                         display(dc:format("DEB-SK: cached recipes being added to group..."), 19);
                     }
-                    foreach (u64? var_4 : skull--get-collected-recipes()) {
-                        u16 var_5;
-                        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                            var_5 = *(u64*)var_4;
-                        } else {
-                            var_5 = 0;
-                        }
+                    foreach (u64? var_5 : skull--get-collected-recipes()) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-SK: 	%s", string-debug(var_5)), 19);
                         }
-                        darray-append(get-symbol(grp-cached-unlocked-recipes, self), new-boxed-value(7, var_5), 1);
+                        darray-append(get-symbol(grp-cached-unlocked-recipes, self), boxed_symbol(var_5), 1);
                     }
                 }
                 lambda {
-                    broadcast-event(skull-activate, new-boxed-value(7, unlock-all-recipes));
+                    broadcast-event(skull-activate, boxed_symbol(unlock-all-recipes));
                 }
                 lambda {
                     skull--give-all-recipes();

@@ -19,8 +19,8 @@ statescript {
         block start {
             track main {
                 lambda {
-                    if (task-not-complete?(flooded-city, flo-boat-explore-breakdown) && task-not-complete?(flooded-city, flo-boat-explore-arcade-entrance) && darray-find(flo-boat--breakable-windows, new-boxed-value(7, get-self-id()), 0) > 1) {
-                        set-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, new-boxed-value(7, get-self-id()), 0), 0);
+                    if (task-not-complete?(flooded-city, flo-boat-explore-breakdown) && task-not-complete?(flooded-city, flo-boat-explore-arcade-entrance) && darray-find(flo-boat--breakable-windows, boxed_symbol(get-self-id()), 0) > 1) {
+                        set-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, boxed_symbol(get-self-id()), 0), 0);
                     }
                 }
                 lambda {
@@ -33,7 +33,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    if (get-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, new-boxed-value(7, get-self-id()), 0))) {
+                    if (get-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, boxed_symbol(get-self-id()), 0))) {
                         go(break-glass, 1);
                     } else {
                         go(listen-for-glass-break-event-on-self, 1);
@@ -46,7 +46,7 @@ statescript {
         block event breakable-collapsed {
             track main {
                 lambda {
-                    set-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, new-boxed-value(7, get-self-id()), 0), 1);
+                    set-svar-bit(flo-boat-explore-broken-windows, darray-find(flo-boat--breakable-windows, boxed_symbol(get-self-id()), 0), 1);
                 }
                 lambda {
                     send-event(boat-glass-break, ss-vehicle-boat-anim-overlay-manager-1);

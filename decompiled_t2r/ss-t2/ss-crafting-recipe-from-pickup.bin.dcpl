@@ -40,9 +40,9 @@ u16 upgrade-stun-to-smoke-bomb() {
 u16 on-chapter-start(u64? arg_0, u64? arg_1, u64? arg_2) {
     broadcast-event(
         on-chapter-start,
-        new-boxed-value(2, arg_0),
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2)
+        boxed_i32(arg_0),
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2)
     );
     u16 var_3;
     if (arg_0 <= 3) {
@@ -187,7 +187,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(recipes-can-unlock, new-boxed-value(7, var_0)) && !player-knows-recipe?(var_0) && valid-new-recipe-task?()) {
+                    if (darray-contains?(recipes-can-unlock, boxed_symbol(var_0)) && !player-knows-recipe?(var_0) && valid-new-recipe-task?()) {
                         player-learn-recipe-by-item-id(var_0, 0);
                         promote-post-death-tip(group-get-member-at-same-index(death-hints, recipes-can-unlock, var_0), 0);
                         log-event(
@@ -223,7 +223,7 @@ statescript {
                             hud2-play-tutorial(HUD_MIN_WEAPON_PARTS, 8.00, none, "hud/tutorial/icons/parts-tutorial.png", 1, 0, 0, 0);
                         }
                     }
-                    if (darray-contains?(partial-ingredients, new-boxed-value(7, var_0)) && !tension-mode-is?(3) && task-node-active?(patrol) && !get-svar-as-boolean(player-found-ingredients)) {
+                    if (darray-contains?(partial-ingredients, boxed_symbol(var_0)) && !tension-mode-is?(3) && task-node-active?(patrol) && !get-svar-as-boolean(player-found-ingredients)) {
                         set-svar-as-boolean(player-found-ingredients, 1);
                         var_28 = hud-play-tutorial(HUD_PARTIAL_INGREDIENTS, 8.00, 2, none, 0.50, 0, 0, 0);
                     }

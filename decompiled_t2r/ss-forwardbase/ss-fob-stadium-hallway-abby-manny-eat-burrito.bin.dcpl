@@ -17,12 +17,12 @@ u64? wait-fob-burrito-bite(u64? arg_0, u64? arg_1, u64? arg_2) {
     set-boolean(abby-eating, 1, self);
     player-clear-look-at();
     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_1 + (0 * 8)) = 28;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_1 + (1 * 8)) = 30;
-    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
+    *(i32*)*var_1[0] = 28;
+    *(u64*)(*var_1[0] + 8) = 0;
+    *(f32*)(*var_1[0] + 8) = 0.30;
+    *(i32*)*var_1[1] = 30;
+    *(u64*)(*var_1[1] + 8) = 0;
+    *(f32*)(*var_1[1] + 8) = 0.30;
     animate_(obj-fob-stadium-concessions-wait-in-line-food-1, arg_1, var_1);
     u64? var_2 = alloc-gesture-play-params();
     *(u8*)(var_2 + 33) = 1;

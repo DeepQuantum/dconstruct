@@ -16,9 +16,9 @@ u16 spawn-destroyed-boat-particles() {
     if (get-symbol(fire-particles, self) == 0) {
         set-symbol(fire-particles, darray-create(self, -1, 0), self);
         u64? var_5 = spawn-particles-at-bound-frame(flo-downtown-boat-fire, flatten-locator-keep-parent(get-spawner-locator(pos-boat-fire-1, 1)), none);
-        darray-append(get-symbol(fire-particles, self), new-boxed-value(5, var_5), 0);
+        darray-append(get-symbol(fire-particles, self), boxed_u64(var_5), 0);
         set-effect-sprite-scale(var_5, alloc-vector(2.00, 2.00, 2.00, 1.00, 0));
-        var_1 = darray-append(get-symbol(fire-particles, self), new-boxed-value(5, spawn-particles-at-bound-frame(flo-downtown-boat-smoke, flatten-locator-keep-parent(get-spawner-locator(pos-boat-smoke-1, 1)), none)), 0);
+        var_1 = darray-append(get-symbol(fire-particles, self), boxed_u64(spawn-particles-at-bound-frame(flo-downtown-boat-smoke, flatten-locator-keep-parent(get-spawner-locator(pos-boat-smoke-1, 1)), none)), 0);
     } else {
         var_1 = 0;
     }
@@ -239,17 +239,7 @@ statescript {
                     set-symbol(scar-who-throws-molotov, npc-flo-explore-scar-2, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scar-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scar-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -257,17 +247,7 @@ statescript {
                     wait-spawn-npc-group-async(flo-boat-explore-scars, 1, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scars) {
                         npc-set-script-only-no-perception(var_2);
                         npc-set-demeanor(var_2, 2, 0);
                         npc-use-closest-cover(
@@ -292,17 +272,7 @@ statescript {
                     wait-boolean(scar-ambush, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scars) {
                         if (var_2 == get-symbol(scar-who-throws-molotov, self)) {
                             character-set-invincibility(var_2, 3, 0);
                             set-focusable-ignore(var_2, 1);
@@ -321,17 +291,7 @@ statescript {
                     wait-for(militia-spawned);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-militia) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-with-perception(var_2);
                         }
@@ -366,33 +326,33 @@ statescript {
                             var_12 = 0;
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = boat-AP-ref;
-                        *(i32*)*(*var_13 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_13 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_13 + (3 * 8)) = 31;
-                        *(u64*)(*(*var_13 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_13 + (3 * 8)) + 8) = 1;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_13[1] = 14;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(u64*)(*var_13[1] + 8) = boat-AP-ref;
+                        *(i32*)*var_13[2] = 30;
+                        *(u64*)(*var_13[2] + 8) = 0;
+                        *(f32*)(*var_13[2] + 8) = 0.00;
+                        *(i32*)*var_13[3] = 31;
+                        *(u64*)(*var_13[3] + 8) = 0;
+                        *(u8*)(*var_13[3] + 8) = 1;
                         animate_(var_10, var_12, var_13);
                         i = i + 1;
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(obj-boat-militia-1, flo-boat-ambush-enter--boat, var_0);
                 }
                 lambda {
@@ -400,31 +360,31 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(obj-boat-militia-1, flo-boat-ambush-ambush--boat, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 31;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(obj-boat-militia-1, flo-boat-ambush-ambush-idle--boat, var_0);
                 }
             }
@@ -434,18 +394,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = boat-AP-ref;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = boat-AP-ref;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(npc-flo-explore-militia-1, flo-boat-ambush-shot-reactions--male, var_0);
                 }
                 lambda {
@@ -467,18 +427,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = boat-AP-ref;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = boat-AP-ref;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(npc-flo-explore-militia-2, flo-boat-ambush-shot-reactions--female, var_0);
                 }
                 lambda {
@@ -500,43 +460,43 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = boat-AP-ref;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                    *(i32*)*var_0[1] = 14;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = boat-AP-ref;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(npc-flo-explore-militia-3, flo-boat-ambush-shot-reactions--male-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                    *(i32*)*(*var_0 + (2 * 8)) = 14;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = boat-AP-ref;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (5 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 6;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                    *(i32*)*var_0[2] = 14;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = boat-AP-ref;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.30;
+                    *(i32*)*var_0[4] = 30;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.30;
+                    *(i32*)*var_0[5] = 31;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 6;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
                     animate_(npc-flo-explore-militia-3, flo-boat-ambush-combat-idle--male-a, var_0);
                 }
                 lambda {
@@ -583,17 +543,7 @@ statescript {
             track main {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : flo-boat-explore-scars) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : flo-boat-explore-scars) {
                         u16 var_5;
                         if (npc-alive-and-aware-of-player?(var_3)) {
                             var_5 = 1;
@@ -602,17 +552,7 @@ statescript {
                     }
                     if (var_1) {
                         u16 var_8;
-                        foreach (u64? var_9 : flo-boat-explore-scars) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
+                        foreach (u64? var_10 : flo-boat-explore-scars) {
                             u16 var_12;
                             if (npc-alive-and-aware-of-player?(var_10)) {
                                 var_12 = 1;
@@ -636,7 +576,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (event-attack-source?(player) || darray-contains?(flo-boat-explore-militia, new-boxed-value(7, var_0)) && darray-contains?(flo-boat-explore-scars, new-boxed-value(7, var_0))) {
+                    if (event-attack-source?(player) || darray-contains?(flo-boat-explore-militia, boxed_symbol(var_0)) && darray-contains?(flo-boat-explore-scars, boxed_symbol(var_0))) {
                         set-boolean(scar-ambush, 1, self);
                         var_6 = set-boolean(throw-molotov, 1, self);
                     }
@@ -733,17 +673,7 @@ statescript {
                     signal(all-militia-dead, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scars) {
                         if (npc-alive?(var_2)) {
                             npc-stop(var_2);
                             npc-set-script-low-priority(var_2);
@@ -783,27 +713,27 @@ statescript {
                 lambda {
                     if (get-animation-playing?(npc-flo-explore-militia-1, flo-boat-ambush-shot-reactions--male, 2)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = boat-AP-ref;
-                        *(i32*)*(*var_1 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (6 * 8)) = 4;
-                        *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_1[1] = 14;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u64*)(*var_1[1] + 8) = boat-AP-ref;
+                        *(i32*)*var_1[2] = 59;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 1;
+                        *(i32*)*var_1[3] = 28;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 0.30;
+                        *(i32*)*var_1[4] = 30;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(f32*)(*var_1[4] + 8) = 0.50;
+                        *(i32*)*var_1[5] = 3;
+                        *(u64*)(*var_1[5] + 8) = 0;
+                        *(u8*)(*var_1[5] + 8) = 1;
+                        *(i32*)*var_1[6] = 4;
+                        *(u64*)(*var_1[6] + 8) = 0;
+                        *(u8*)(*var_1[6] + 8) = 1;
                         wait-animate_(npc-flo-explore-militia-1, flo-boat-ambush-shot-reactions--male, var_1);
                         npc-set-script-high-priority(npc-flo-explore-militia-1);
                         npc-set-hard-point(npc-flo-explore-militia-1, hard-point-flo-militia-1);
@@ -824,27 +754,27 @@ statescript {
                 lambda {
                     if (get-animation-playing?(npc-flo-explore-militia-2, flo-boat-ambush-shot-reactions--female, 2)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = boat-AP-ref;
-                        *(i32*)*(*var_1 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (6 * 8)) = 4;
-                        *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_1[1] = 14;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u64*)(*var_1[1] + 8) = boat-AP-ref;
+                        *(i32*)*var_1[2] = 59;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 1;
+                        *(i32*)*var_1[3] = 28;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 0.30;
+                        *(i32*)*var_1[4] = 30;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(f32*)(*var_1[4] + 8) = 0.50;
+                        *(i32*)*var_1[5] = 3;
+                        *(u64*)(*var_1[5] + 8) = 0;
+                        *(u8*)(*var_1[5] + 8) = 1;
+                        *(i32*)*var_1[6] = 4;
+                        *(u64*)(*var_1[6] + 8) = 0;
+                        *(u8*)(*var_1[6] + 8) = 1;
                         wait-animate_(npc-flo-explore-militia-2, flo-boat-ambush-shot-reactions--female, var_1);
                         npc-set-script-high-priority(npc-flo-explore-militia-2);
                         npc-set-hard-point(npc-flo-explore-militia-2, hard-point-flo-militia-1);
@@ -869,21 +799,21 @@ statescript {
                     if (npc-alive?(npc-flo-explore-militia-3)) {
                         character-set-invincibility(npc-flo-explore-militia-3, 1, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 170.00;
-                        *(i32*)*(*var_1 + (4 * 8)) = 14;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = boat-AP-ref;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.30;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.50;
+                        *(i32*)*var_1[3] = 20;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 170.00;
+                        *(i32*)*var_1[4] = 14;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(u64*)(*var_1[4] + 8) = boat-AP-ref;
                         wait-animate_(npc-flo-explore-militia-3, flo-boat-ambush-explosion--male-a, var_1);
                         character-set-invincibility(npc-flo-explore-militia-3, 0, 0);
                         npc-die-if-alive(npc-flo-explore-militia-3);
@@ -898,54 +828,54 @@ statescript {
                 lambda {
                     if (get-animation-playing?(npc-flo-explore-militia-3, flo-boat-ambush-shot-reactions--male-a, 2)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = boat-AP-ref;
-                        *(i32*)*(*var_1 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (5 * 8)) = 3;
-                        *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (6 * 8)) = 4;
-                        *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_1[1] = 14;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u64*)(*var_1[1] + 8) = boat-AP-ref;
+                        *(i32*)*var_1[2] = 59;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(i32*)(*var_1[2] + 8) = 1;
+                        *(i32*)*var_1[3] = 28;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 0.30;
+                        *(i32*)*var_1[4] = 30;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(f32*)(*var_1[4] + 8) = 0.50;
+                        *(i32*)*var_1[5] = 3;
+                        *(u64*)(*var_1[5] + 8) = 0;
+                        *(u8*)(*var_1[5] + 8) = 1;
+                        *(i32*)*var_1[6] = 4;
+                        *(u64*)(*var_1[6] + 8) = 0;
+                        *(u8*)(*var_1[6] + 8) = 1;
                         wait-animate_(npc-flo-explore-militia-3, flo-boat-ambush-shot-reactions--male-a, var_1);
                     }
                 }
                 lambda {
                     if (!get-boolean(molotov-hit?, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
-                        *(i32*)*(*var_1 + (2 * 8)) = 14;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = boat-AP-ref;
-                        *(i32*)*(*var_1 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_1 + (5 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (6 * 8)) = 6;
-                        *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 31;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u8*)(*var_1[0] + 8) = 1;
+                        *(i32*)*var_1[1] = 10;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u64*)(*var_1[1] + 8) = get-object-parented-bound-frame(obj-boat-militia-1);
+                        *(i32*)*var_1[2] = 14;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u64*)(*var_1[2] + 8) = boat-AP-ref;
+                        *(i32*)*var_1[3] = 28;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(f32*)(*var_1[3] + 8) = 0.30;
+                        *(i32*)*var_1[4] = 30;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(f32*)(*var_1[4] + 8) = 0.30;
+                        *(i32*)*var_1[5] = 31;
+                        *(u64*)(*var_1[5] + 8) = 0;
+                        *(u8*)(*var_1[5] + 8) = 1;
+                        *(i32*)*var_1[6] = 6;
+                        *(u64*)(*var_1[6] + 8) = 0;
+                        *(u8*)(*var_1[6] + 8) = 1;
                         animate_(npc-flo-explore-militia-3, flo-boat-ambush-combat-idle--male-a, var_1);
                     }
                 }
@@ -959,15 +889,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-flo-boat-ambush-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(obj-boat-militia-1, flo-boat-ambush-ambush-exit--boat, var_0);
                 }
                 lambda {
@@ -1080,7 +1010,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (event-attack-source?(player) || darray-contains?(flo-boat-explore-militia, new-boxed-value(7, var_0)) && darray-contains?(flo-boat-explore-scars, new-boxed-value(7, var_0))) {
+                    if (event-attack-source?(player) || darray-contains?(flo-boat-explore-militia, boxed_symbol(var_0)) && darray-contains?(flo-boat-explore-scars, boxed_symbol(var_0))) {
                         if (var_0 == get-symbol(scar-who-throws-molotov, self)) {
                             if (!get-boolean(molotov-thrown?, self)) {
                                 set-symbol(molotov-id, throw-projectile(get-spawner-position(pos-flo-ambush-molotov-backup-1, 1), get-object-position(obj-boat-militia-1), molotov-npc, -1.00), self);
@@ -1105,17 +1035,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scar-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scar-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -1163,17 +1083,7 @@ statescript {
                     request-new-wave-checkpoint(flooded-city, flo-boat-explore-downtown, 0, 5.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scars) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scars) {
                         if (npc-alive?(var_2)) {
                             if (!npc-is-aware-of?(var_2, player)) {
                                 npc-set-demeanor(var_2, 0, 0);
@@ -1272,20 +1182,10 @@ statescript {
                     set-svar-as-boolean(flo-boat-explore-ambush-done, 1);
                 }
                 lambda {
-                    send-event(go-vox, ss-flo-boat-explore-vox-1, new-boxed-value(7, ambush-done-vox));
+                    send-event(go-vox, ss-flo-boat-explore-vox-1, boxed_symbol(ambush-done-vox));
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scar-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scar-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -1350,17 +1250,7 @@ statescript {
                     group-kill-entity(flo-boat-explore-scars, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : flo-boat-explore-scar-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-boat-explore-scar-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

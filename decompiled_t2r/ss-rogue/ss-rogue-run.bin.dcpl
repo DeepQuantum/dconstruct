@@ -27,38 +27,38 @@ u16 load-dead-drop-used-recipes() {
         display(dc:format("DEB-DD: used recipe group restoring"), 19);
     }
     if (get-svar-as-boolean(dead-drop-deposit-health-kit-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 0), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(0), 1);
         if (!is-final-build?()) {
             display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 0), 19);
         }
     }
     if (get-svar-as-boolean(dead-drop-deposit-molotov-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 1), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(1), 1);
         if (!is-final-build?()) {
             display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 1), 19);
         }
     }
     if (get-svar-as-boolean(dead-drop-deposit-stun-bomb-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 2), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(2), 1);
         if (!is-final-build?()) {
             display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 2), 19);
         }
     }
     if (get-svar-as-boolean(dead-drop-deposit-pipe-bomb-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 3), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(3), 1);
         if (!is-final-build?()) {
             display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 3), 19);
         }
     }
     if (get-svar-as-boolean(dead-drop-deposit-smoke-bomb-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 4), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(4), 1);
         if (!is-final-build?()) {
             display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 4), 19);
         }
     }
     u16 var_28;
     if (get-svar-as-boolean(dead-drop-deposit-trap-bomb-used)) {
-        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), new-boxed-value(7, 5), 1);
+        darray-append(get-symbol(grp-dead-drop-recipes-appeared, self), boxed_symbol(5), 1);
         if (!is-final-build?()) {
             var_28 = display(dc:format("DEB-DD: used recipe group restoring recipe index: %i", 5), 19);
         } else {
@@ -73,7 +73,7 @@ u16 load-dead-drop-used-recipes() {
 u16 task-add-current-group-rogue-task-played-group!() {
     u16 var_1;
     if (!(task-get-current-symbol() == 0)) {
-        var_1 = darray-append(get-symbol(group-rogue-tasks-played, self), new-boxed-value(7, task-get-current-symbol()), 0);
+        var_1 = darray-append(get-symbol(group-rogue-tasks-played, self), boxed_symbol(task-get-current-symbol()), 0);
     } else {
         var_1 = 0;
     }
@@ -225,17 +225,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-rogue-tasks-played, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-rogue-tasks-played, self)) {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-RR:  >> %s", string-debug(var_4)), 19);
                         }

@@ -260,9 +260,9 @@ statescript {
                 lambda {
                     if (!get-boolean(task-into-rope-puzzle?, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-shambler-teaser-1, 1);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-shambler-teaser-1, 1);
                         animate_(obj-wat-shambler-tease-victim-1, wat-infected-tunnels-shambler-teaser-dead--killed, var_1);
                     }
                 }

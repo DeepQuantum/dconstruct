@@ -51,7 +51,7 @@ statescript {
             track main {
                 lambda {
                     if (event-sender() == npc-efp-bloater-1) {
-                        broadcast-event(bloater-attacked-reinforcement, new-boxed-value(7, get-self-id()));
+                        broadcast-event(bloater-attacked-reinforcement, boxed_symbol(get-self-id()));
                     }
                 }
             }

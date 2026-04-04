@@ -148,35 +148,35 @@ u64? wait-animate-npc-in-humvee(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, 
     }
     set-boolean(allow-no-blend?, 0, self);
     u64? var_2 = #%alloc-array(single-frame, 16, 10, 1);
-    *(i32*)*(*var_2 + (0 * 8)) = 10;
-    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-joint-parented-bound-frame(obj-res-downhill-militia-car-1, body_up);
-    *(i32*)*(*var_2 + (1 * 8)) = 14;
-    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-    *(u64*)(*(*var_2 + (1 * 8)) + 8) = humvee;
-    *(i32*)*(*var_2 + (2 * 8)) = 58;
-    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_2 + (2 * 8)) + 8) = arg_2;
-    *(i32*)*(*var_2 + (3 * 8)) = 6;
-    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_2 + (3 * 8)) + 8) = arg_3;
-    *(i32*)*(*var_2 + (4 * 8)) = 2;
-    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
-    *(i32*)*(*var_2 + (5 * 8)) = 4;
-    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-    *(u8*)(*(*var_2 + (5 * 8)) + 8) = 1;
-    *(i32*)*(*var_2 + (6 * 8)) = 28;
-    *(u64*)(*(*var_2 + (6 * 8)) + 8) = 0;
-    *(f32*)(*(*var_2 + (6 * 8)) + 8) = var_1;
-    *(i32*)*(*var_2 + (7 * 8)) = 30;
-    *(u64*)(*(*var_2 + (7 * 8)) + 8) = 0;
-    *(f32*)(*(*var_2 + (7 * 8)) + 8) = arg_5;
-    *(i32*)*(*var_2 + (8 * 8)) = 82;
-    *(u64*)(*(*var_2 + (8 * 8)) + 8) = 0;
-    *(u8*)(*(*var_2 + (8 * 8)) + 8) = arg_6;
-    *(i32*)*(*var_2 + (9 * 8)) = 37;
-    *(u64*)(*(*var_2 + (9 * 8)) + 8) = 0;
+    *(i32*)*var_2[0] = 10;
+    *(u64*)(*var_2[0] + 8) = 0;
+    *(u64*)(*var_2[0] + 8) = get-joint-parented-bound-frame(obj-res-downhill-militia-car-1, body_up);
+    *(i32*)*var_2[1] = 14;
+    *(u64*)(*var_2[1] + 8) = 0;
+    *(u64*)(*var_2[1] + 8) = humvee;
+    *(i32*)*var_2[2] = 58;
+    *(u64*)(*var_2[2] + 8) = 0;
+    *(f32*)(*var_2[2] + 8) = arg_2;
+    *(i32*)*var_2[3] = 6;
+    *(u64*)(*var_2[3] + 8) = 0;
+    *(u8*)(*var_2[3] + 8) = arg_3;
+    *(i32*)*var_2[4] = 2;
+    *(u64*)(*var_2[4] + 8) = 0;
+    *(u8*)(*var_2[4] + 8) = 1;
+    *(i32*)*var_2[5] = 4;
+    *(u64*)(*var_2[5] + 8) = 0;
+    *(u8*)(*var_2[5] + 8) = 1;
+    *(i32*)*var_2[6] = 28;
+    *(u64*)(*var_2[6] + 8) = 0;
+    *(f32*)(*var_2[6] + 8) = var_1;
+    *(i32*)*var_2[7] = 30;
+    *(u64*)(*var_2[7] + 8) = 0;
+    *(f32*)(*var_2[7] + 8) = arg_5;
+    *(i32*)*var_2[8] = 82;
+    *(u64*)(*var_2[8] + 8) = 0;
+    *(u8*)(*var_2[8] + 8) = arg_6;
+    *(i32*)*var_2[9] = 37;
+    *(u64*)(*var_2[9] + 8) = 0;
     sid var_6;
     if (get-svar-as-boolean(ss-svar(this-character-dead?, self))) {
         var_6 = apReference-hand-l;
@@ -185,7 +185,7 @@ u64? wait-animate-npc-in-humvee(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, 
     } else {
         var_6 = apReference-male-hand-l;
     }
-    *(u64*)(*(*var_2 + (9 * 8)) + 8) = var_6;
+    *(u64*)(*var_2[9] + 8) = var_6;
     return wait-animate_(arg_0, arg_1, var_2);
 }
 

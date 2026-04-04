@@ -47,17 +47,7 @@ statescript {
                     wait-spawn-npc-group-async(grp-afm-horse-chase-bg-execution, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-execution) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-execution) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -129,17 +119,7 @@ statescript {
                     npc-fire-at-locator(npc-afm-horse-chase-bg-execution--militia-3, get-joint-locator(npc-afm-horse-chase-bg-execution--scar-3, headb), 1, 1, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-horse-chase-bg-execution) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-horse-chase-bg-execution) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-high-priority(var_2);
                         }

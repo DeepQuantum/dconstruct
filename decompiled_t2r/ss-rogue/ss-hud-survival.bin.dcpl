@@ -214,7 +214,7 @@ statescript {
                 lambda {
                     if (event-arg-count() > 0) {
                         u64? var_1 = event-arg-int32(0);
-                        gui2-set-widget-text-formatted(get-symbol(w-time-text, self), new-boxed-value(19, get-time-string((f32)var_1)));
+                        gui2-set-widget-text-formatted(get-symbol(w-time-text, self), boxed_stringcopy(get-time-string((f32)var_1)));
                         gui2-set-widget-visible(get-symbol(w-time-text, self), !(var_1 <= 10));
                         gui2-update-widget-layout(get-symbol(time-group, self));
                         gui2-update-widget-layout(get-symbol(w-group, self));

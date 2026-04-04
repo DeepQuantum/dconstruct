@@ -19,17 +19,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : infinite-fire-test-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : infinite-fire-test-npcs) {
                         npc-set-script-only-no-perception(var_2);
                         character-set-invincibility(var_2, 1, 0);
                         npc-set-on-fire(var_2, 0, person-on-fire);

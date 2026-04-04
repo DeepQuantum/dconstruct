@@ -28,24 +28,14 @@ statescript {
                         if (player-in-state?(Carry)) {
                             go(carrying, 1);
                         }
-                        foreach (u64? var_2 : powder-lines) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : powder-lines) {
                             u64? var_5 = spline-locator-closest-to-object(get-symbol(spline-name, var_3), player);
                             if (get-locator-distance(get-object-locator(player), var_5) < 0.25) {
                                 var_8 = send-event(
                                     test-standing-near-burnable,
                                     var_3,
-                                    new-boxed-value(2, dist-to-int(spline-distance-locator(get-symbol(spline-name, var_3), var_5, 0))),
-                                    new-boxed-value(7, get-self-id())
+                                    boxed_i32(dist-to-int(spline-distance-locator(get-symbol(spline-name, var_3), var_5, 0))),
+                                    boxed_symbol(get-self-id())
                                 );
                             }
                         }
@@ -90,7 +80,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-burn, get-symbol(line-to-light, self), new-boxed-value(2, get-int32(int-to-light, self)));
+                    send-event(start-burn, get-symbol(line-to-light, self), boxed_i32(get-int32(int-to-light, self)));
                 }
                 lambda {
                     wait(0.50);

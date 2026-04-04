@@ -59,34 +59,14 @@ statescript {
             track main {
                 lambda {
                     if (get-svar-as-boolean(sea-horse-mil-jacket-found)) {
-                        foreach (u64? var_2 : sea-hub-public-park-throwers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
-                            if (!get-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-throwers, new-boxed-value(7, var_3), 0))) {
+                        foreach (u64? var_3 : sea-hub-public-park-throwers) {
+                            if (!get-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-throwers, boxed_symbol(var_3), 0))) {
                                 wait-spawn-npc(var_3, 0, 0);
                             }
                         }
                     } else {
-                        foreach (u64? var_9 : sea-hub-public-park-runners-only) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
-                            if (!get-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-runners-only, new-boxed-value(7, var_10), 0))) {
+                        foreach (u64? var_10 : sea-hub-public-park-runners-only) {
+                            if (!get-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-runners-only, boxed_symbol(var_10), 0))) {
                                 wait-spawn-npc(var_10, 0, 0);
                             }
                         }
@@ -117,8 +97,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(sea-hub-public-park-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-infected, new-boxed-value(7, event-arg-symbol(0)), 0), 1);
+                    if (darray-contains?(sea-hub-public-park-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        set-svar-bit(sea-horse-library-infected-npcs, darray-find(sea-hub-public-park-infected, boxed_symbol(event-arg-symbol(0)), 0), 1);
                         auto-save-game();
                     }
                 }
@@ -127,17 +107,7 @@ statescript {
         block event despawn-infected {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-public-park-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-public-park-infected) {
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);
                         }

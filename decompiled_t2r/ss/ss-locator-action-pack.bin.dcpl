@@ -12,15 +12,15 @@
 // ####################################################################################################
 
 u64? npc-use-locator-action-pack(u64? arg_0, u64? arg_1) {
-    return send-event(use-lap, arg_1, new-boxed-value(7, arg_0));
+    return send-event(use-lap, arg_1, boxed_symbol(arg_0));
 }
 
 u64? npc-use-locator-action-pack-immediate(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(use-lap-immediate, arg_1, new-boxed-value(7, arg_0), new-boxed-value(6, arg_2));
+    return send-event(use-lap-immediate, arg_1, boxed_symbol(arg_0), boxed_f32(arg_2));
 }
 
 u64? wait-npc-use-locator-action-pack(u64? arg_0, u64? arg_1) {
-    send-event(use-lap, arg_1, new-boxed-value(7, arg_0));
+    send-event(use-lap, arg_1, boxed_symbol(arg_0));
     return wait-boolean(lap-in-use?, 0, arg_1);
 }
 
@@ -31,7 +31,7 @@ u64? npc-is-using-locator-action-pack?(u64? arg_0, sid arg_1) {
 u16 wait-npc-leave-locator-action-pack(i64 arg_0, u64? arg_1, u64? arg_2) {
     u16 var_2;
     if (get-boolean(lap-in-use?, arg_1) && arg_0 == get-symbol(npc, arg_1)) {
-        send-event(force-exit-lap, arg_1, new-boxed-value(6, arg_2));
+        send-event(force-exit-lap, arg_1, boxed_f32(arg_2));
         var_2 = wait-boolean(lap-in-use?, 0, arg_1);
     } else {
         var_2 = 0;
@@ -43,7 +43,7 @@ u16 npc-leave-locator-action-pack(i64 arg_0, sid arg_1, u64? arg_2) {
     u16 var_2;
     if (get-boolean(lap-in-use?, arg_1) && arg_0 == get-symbol(npc, arg_1)) {
         print-float(arg_2, self);
-        var_2 = send-event(force-exit-lap, arg_1, new-boxed-value(6, arg_2));
+        var_2 = send-event(force-exit-lap, arg_1, boxed_f32(arg_2));
     } else {
         var_2 = 0;
     }
@@ -235,24 +235,24 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
                     u64? var_5;
                     if (tag-symbol(entry-reached-type, self) == stop-and-face && tag-symbol(entry-reached-type, self) == 0) {
                         var_5 = get-object-locator(get-symbol(npc, self));
                     } else {
                         var_5 = get-bound-frame(adjusted-ap, self);
                     }
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = get-float(fade-in-time, self);
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = get-best-entry-phase(
+                    *(u64*)(*var_2[0] + 8) = var_5;
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = get-float(fade-in-time, self);
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.50;
+                    *(i32*)*var_2[3] = 58;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = get-best-entry-phase(
                         get-symbol(npc, self),
                         tag-symbol(idle-anim, self),
                         get-object-locator(get-symbol(npc, self)),
@@ -260,15 +260,15 @@ statescript {
                         apReference,
                         0
                     );
-                    *(i32*)*(*var_2 + (4 * 8)) = 59;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (4 * 8)) + 8) = 4;
-                    *(i32*)*(*var_2 + (5 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (5 * 8)) + 8) = tag-boolean(loop-idle?, self);
-                    *(i32*)*(*var_2 + (6 * 8)) = 13;
-                    *(u64*)(*(*var_2 + (6 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_2 + (6 * 8)) + 8) = 2;
+                    *(i32*)*var_2[4] = 59;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(i32*)(*var_2[4] + 8) = 4;
+                    *(i32*)*var_2[5] = 31;
+                    *(u64*)(*var_2[5] + 8) = 0;
+                    *(u8*)(*var_2[5] + 8) = tag-boolean(loop-idle?, self);
+                    *(i32*)*var_2[6] = 13;
+                    *(u64*)(*var_2[6] + 8) = 0;
+                    *(i32*)(*var_2[6] + 8) = 2;
                     wait-animate_(get-symbol(npc, self), tag-symbol(idle-anim, self), var_2);
                 }
                 lambda {
@@ -306,7 +306,7 @@ statescript {
                     set-boolean(lap-in-use?, 0, self);
                 }
                 lambda {
-                    broadcast-event(lap-exited, new-boxed-value(7, get-symbol(npc, self)), new-boxed-value(7, get-self-id()));
+                    broadcast-event(lap-exited, boxed_symbol(get-symbol(npc, self)), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-bound-frame(adjusted-ap, get-spawner-locator(get-self-id(), 1), self);

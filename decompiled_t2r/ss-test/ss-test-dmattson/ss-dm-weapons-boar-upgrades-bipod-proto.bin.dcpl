@@ -21,7 +21,7 @@ u64? player-giving-valid-bipod-input?() {
 
 u64? player-has-vepr-bipod-interact?() {
     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
-    return !(var_0 == 0) && darray-contains?(var_0, new-boxed-value(7, bipod-equipped-interact));
+    return !(var_0 == 0) && darray-contains?(var_0, boxed_symbol(bipod-equipped-interact));
 }
 
 u64? player-aiming-from-crouch?() {
@@ -41,7 +41,7 @@ u64? player-aiming-from-crouch?() {
 u16 clear-bipod-upgrade-if-active() {
     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
     u16 var_4;
-    if (!(var_0 == 0) && player-has-vepr-bipod?() && darray-contains?(var_0, new-boxed-value(7, bipod-active))) {
+    if (!(var_0 == 0) && player-has-vepr-bipod?() && darray-contains?(var_0, boxed_symbol(bipod-active))) {
         var_4 = player-weapon-upgrade-remove-bundle(player, rifle-vepr, bipod-active);
     } else {
         var_4 = 0;
@@ -51,7 +51,7 @@ u16 clear-bipod-upgrade-if-active() {
 
 u64? player-has-vepr-bipod?() {
     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
-    return !(var_0 == 0) || darray-contains?(var_0, new-boxed-value(7, bipod-equipped)) && darray-contains?(var_0, new-boxed-value(7, bipod-equipped-interact));
+    return !(var_0 == 0) || darray-contains?(var_0, boxed_symbol(bipod-equipped)) && darray-contains?(var_0, boxed_symbol(bipod-equipped-interact));
 }
 
 u64? player-can-activate-bipod?() {
@@ -111,7 +111,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
-                    if (!(var_0 == 0) && darray-contains?(var_0, new-boxed-value(7, bipod-equipped-from-cover-only))) {
+                    if (!(var_0 == 0) && darray-contains?(var_0, boxed_symbol(bipod-equipped-from-cover-only))) {
                         var_3 = go(wait-for-player-aiming-from-crouch-from-cover-only, 1);
                     }
                 }
@@ -219,9 +219,9 @@ statescript {
                         if (!wait-raycast-hit-nothing?(get-int32(potential-bipod-location-left, self)) && !wait-raycast-hit-nothing?(get-int32(potential-bipod-location-right, self))) {
                             u64? var_26 = player-weapon-upgrade-get-active-bundles(rifle-vepr);
                             u16 var_29;
-                            if (!(var_26 == 0) && darray-contains?(var_26, new-boxed-value(7, bipod-equipped-interact))) {
+                            if (!(var_26 == 0) && darray-contains?(var_26, boxed_symbol(bipod-equipped-interact))) {
                                 var_29 = go(ask-for-player-input, 1);
-                            } else if (!(var_26 == 0) && !darray-contains?(var_26, new-boxed-value(7, bipod-equipped-interact))) {
+                            } else if (!(var_26 == 0) && !darray-contains?(var_26, boxed_symbol(bipod-equipped-interact))) {
                                 var_29 = go(bipod-turrent-enter, 1);
                             } else {
                                 var_29 = 0;
@@ -415,8 +415,8 @@ statescript {
                         }
                         u64? var_4 = get-sphere-locator-from-bipod(var_2, alloc-vector(0.00, 0.50, 0.75, 1.00, 0));
                         u64? var_7 = get-sphere-locator-from-bipod(filter-negative-angles(var_2), alloc-vector(0.00, 0.50, 0.75, 1.00, 0));
-                        darray-append(left-valid-angles-hit, new-boxed-value(2, kick-spherecast(var_4, offset-locator(var_4, ""), 0.20, player, 6147)), 0);
-                        darray-append(right-valid-angles-hit, new-boxed-value(2, kick-spherecast(var_7, offset-locator(var_7, ""), 0.20, player, 6147)), 0);
+                        darray-append(left-valid-angles-hit, boxed_i32(kick-spherecast(var_4, offset-locator(var_4, ""), 0.20, player, 6147)), 0);
+                        darray-append(right-valid-angles-hit, boxed_i32(kick-spherecast(var_7, offset-locator(var_7, ""), 0.20, player, 6147)), 0);
                     }
                     wait-one-frame();
                     darray-print(left-valid-angles-hit);
@@ -530,24 +530,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 12;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (2 * 8)) = 7;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (4 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (5 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = get-bound-frame(ap-locator, self);
+                    *(i32*)*var_0[0] = 70;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(i32*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 12;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(i32*)(*var_0[1] + 8) = 2;
+                    *(i32*)*var_0[2] = 7;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.80;
+                    *(i32*)*var_0[4] = 30;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.80;
+                    *(i32*)*var_0[5] = 10;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u64*)(*var_0[5] + 8) = get-bound-frame(ap-locator, self);
                     animate_(player, rifle-vepr-grip-stand-aim-turret, var_0);
                 }
                 lambda {
@@ -654,24 +654,24 @@ statescript {
                     if (joypad-command-active?(camera, 6)) {
                         set-bound-frame(ap-locator, set-locator-z-direction(get-bound-frame(ap-locator, self), get-z-vec-from-bound-frame(flatten-locator(camera-locator(0))), 0), self);
                         u64? var_6 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 70;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (1 * 8)) = 12;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (1 * 8)) + 8) = 2;
-                        *(i32*)*(*var_6 + (2 * 8)) = 7;
-                        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_6 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (3 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_6 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (4 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_6 + (5 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (5 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (5 * 8)) + 8) = get-bound-frame(ap-locator, self);
+                        *(i32*)*var_6[0] = 70;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(i32*)(*var_6[0] + 8) = 1;
+                        *(i32*)*var_6[1] = 12;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(i32*)(*var_6[1] + 8) = 2;
+                        *(i32*)*var_6[2] = 7;
+                        *(u64*)(*var_6[2] + 8) = 0;
+                        *(u8*)(*var_6[2] + 8) = 1;
+                        *(i32*)*var_6[3] = 28;
+                        *(u64*)(*var_6[3] + 8) = 0;
+                        *(f32*)(*var_6[3] + 8) = 0.20;
+                        *(i32*)*var_6[4] = 30;
+                        *(u64*)(*var_6[4] + 8) = 0;
+                        *(f32*)(*var_6[4] + 8) = 0.80;
+                        *(i32*)*var_6[5] = 10;
+                        *(u64*)(*var_6[5] + 8) = 0;
+                        *(u64*)(*var_6[5] + 8) = get-bound-frame(ap-locator, self);
                         animate_(player, rifle-vepr-grip-stand-aim-turret, var_6);
                     }
                 }

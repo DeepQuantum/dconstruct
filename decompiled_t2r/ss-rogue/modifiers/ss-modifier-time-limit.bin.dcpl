@@ -122,8 +122,8 @@ statescript {
                 lambda {
                     u64? var_0 = get-timer-value(encounter-timer, self);
                     u64? var_2 = #%alloc-array(single-frame, 1, 1, 0);
-                    *(u64*)(*var_2 + (0 * 8)) = new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE);
-                    speak-text-to-speech-formatted(new-boxed-value(21, var_2), 1, 0, 1);
+                    *(u64*)var_2[0] = boxed_symbol(A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE);
+                    speak-text-to-speech-formatted(boxed_array(var_2), 1, 0, 1);
                     if (((i32)var_0 / 60) > 0) {
                         u64? var_5 = #%alloc-array(single-frame, 1, 2, 0);
                         sid var_6;
@@ -132,14 +132,14 @@ statescript {
                         } else {
                             var_6 = TIME_MINUTE;
                         }
-                        *(u64*)(*var_5 + (0 * 8)) = new-boxed-value(7, var_6);
-                        *(u64*)(*var_5 + (1 * 8)) = new-boxed-value(2, (i32)var_0 / 60);
-                        speak-text-to-speech-formatted(new-boxed-value(21, var_5), 1, 0, 1);
+                        *(u64*)var_5[0] = boxed_symbol(var_6);
+                        *(u64*)var_5[1] = boxed_i32((i32)var_0 / 60);
+                        speak-text-to-speech-formatted(boxed_array(var_5), 1, 0, 1);
                     }
                     u64? var_10 = #%alloc-array(single-frame, 1, 2, 0);
-                    *(u64*)(*var_10 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_SURVIVAL_TIMER_COUNT);
-                    *(u64*)(*var_10 + (1 * 8)) = new-boxed-value(2, mod-int32((i32)var_0, 60));
-                    speak-text-to-speech-formatted(new-boxed-value(21, var_10), 1, 0, 1);
+                    *(u64*)var_10[0] = boxed_symbol(HUD_ROGUE_SURVIVAL_TIMER_COUNT);
+                    *(u64*)var_10[1] = boxed_i32(mod-int32((i32)var_0, 60));
+                    speak-text-to-speech-formatted(boxed_array(var_10), 1, 0, 1);
                 }
             }
         }
@@ -147,10 +147,10 @@ statescript {
             track main {
                 lambda {
                     if (timer-paused?(encounter-timer, self)) {
-                        broadcast-event(skull-activate, new-boxed-value(7, time-limit));
+                        broadcast-event(skull-activate, boxed_symbol(time-limit));
                         set-timer-paused(encounter-timer, 0, self);
                     } else {
-                        broadcast-event(skull-activate, new-boxed-value(7, time-limit));
+                        broadcast-event(skull-activate, boxed_symbol(time-limit));
                         start-timer-if-not-running(encounter-timer, get-float(time-remaining, self), self);
                     }
                 }
@@ -162,7 +162,7 @@ statescript {
                     set-float(time-remaining, get-timer-value(encounter-timer, self), self);
                 }
                 lambda {
-                    broadcast-event(skull-deactivate, new-boxed-value(7, time-limit));
+                    broadcast-event(skull-deactivate, boxed_symbol(time-limit));
                 }
                 lambda {
                     set-timer-paused(encounter-timer, 1, self);

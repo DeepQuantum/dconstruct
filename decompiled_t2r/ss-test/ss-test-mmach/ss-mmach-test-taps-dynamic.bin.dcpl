@@ -406,7 +406,7 @@ u64? update-vault-tap-params(f32 arg_0, f32 arg_1, u64? arg_2, u64? arg_3, u64? 
 
 u16 issue-teleport(u64? arg_0) {
     if (get-boolean(player?, self)) {
-        send-event(teleport-player, player, new-boxed-value(18, arg_0));
+        send-event(teleport-player, player, boxed_boundframe(arg_0));
     }
     if (!get-boolean(player?, self)) {
         npc-clear-request-movement(get-symbol(active-npc, self));
@@ -996,9 +996,9 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(jump, 0) && !debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(aim, 0)) {
-                            send-event(move, self, new-boxed-value(1, 1));
+                            send-event(move, self, boxed_bool(1));
                         } else {
-                            send-event(move, self, new-boxed-value(1, 0));
+                            send-event(move, self, boxed_bool(0));
                         }
                     }
                 }
@@ -1149,31 +1149,31 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 1));
+                            send-event(change-speed, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 0));
+                            send-event(change-speed, self, boxed_i32(0));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(fire-hold, 0) && debug-joypad-command-active?(sprint-press, 0)) {
-                        send-event(change-mt, self, new-boxed-value(2, 0));
+                        send-event(change-mt, self, boxed_i32(0));
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(fire-hold, 0) && debug-joypad-command-active?(shoulder-switch, 0)) {
-                        send-event(change-mt, self, new-boxed-value(2, 1));
+                        send-event(change-mt, self, boxed_i32(1));
                     }
                 }
                 lambda {

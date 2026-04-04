@@ -19,7 +19,7 @@ statescript {
         block event Attack {
             track main {
                 lambda {
-                    send-event(bomb-attacked, ss-aef-fight-ellie-bombs-1, new-boxed-value(7, get-self-id()));
+                    send-event(bomb-attacked, ss-aef-fight-ellie-bombs-1, boxed_symbol(get-self-id()));
                 }
             }
         }

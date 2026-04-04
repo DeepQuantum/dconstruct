@@ -105,7 +105,7 @@ statescript {
                     player-force-facing/f(get-z-vec-from-bound-frame(get-bound-frame(player-teleport-loc, self)));
                 }
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-bound-frame(player-teleport-loc, self)));
+                    send-event(teleport-player, player, boxed_boundframe(get-bound-frame(player-teleport-loc, self)));
                 }
                 lambda {
                     player-equip-best-melee-weapon(0, 1);
@@ -131,7 +131,7 @@ statescript {
                     player-force-facing/f(get-z-vec-from-bound-frame(get-bound-frame(player-teleport-loc, self)));
                 }
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-bound-frame(player-teleport-loc, self)));
+                    send-event(teleport-player, player, boxed_boundframe(get-bound-frame(player-teleport-loc, self)));
                 }
                 lambda {
                     player-equip-best-melee-weapon(0, 1);

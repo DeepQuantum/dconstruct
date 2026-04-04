@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? switch-to-aggro-on-npc-death() {
-    foreach (u64? var_1 : all-npcs) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : all-npcs) {
         if (npc-killed?(var_2)) {
             go(aggro, 1);
         }
@@ -45,7 +35,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < tag-array-size?(linked-npc, self)) {
-                        darray-append(get-symbol(linked-npc-group, self), new-boxed-value(7, tag-symbol-at(linked-npc, i, self)), 1);
+                        darray-append(get-symbol(linked-npc-group, self), boxed_symbol(tag-symbol-at(linked-npc, i, self)), 1);
                         i = i + 1;
                     }
                 }

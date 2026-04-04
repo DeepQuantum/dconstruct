@@ -96,18 +96,18 @@ u16 wat-tunnels-door-punch-input(u64? arg_0) {
     u16 var_2;
     if (!get-boolean(symbol-concat-int32(pressed-, arg_0), self)) {
         u64? var_5 = #%alloc-array(single-frame, 16, 4, 1);
-        *(i32*)*(*var_5 + (0 * 8)) = 10;
-        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-        *(i32*)*(*var_5 + (1 * 8)) = 28;
-        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_5 + (1 * 8)) + 8) = get-float(selection-fade-in-duration, self);
-        *(i32*)*(*var_5 + (2 * 8)) = 30;
-        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_5 + (2 * 8)) + 8) = get-float(selection-fade-out-duration, self);
-        *(i32*)*(*var_5 + (3 * 8)) = 40;
-        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-        *(i32*)(*(*var_5 + (3 * 8)) + 8) = 1;
+        *(i32*)*var_5[0] = 10;
+        *(u64*)(*var_5[0] + 8) = 0;
+        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+        *(i32*)*var_5[1] = 28;
+        *(u64*)(*var_5[1] + 8) = 0;
+        *(f32*)(*var_5[1] + 8) = get-float(selection-fade-in-duration, self);
+        *(i32*)*var_5[2] = 30;
+        *(u64*)(*var_5[2] + 8) = 0;
+        *(f32*)(*var_5[2] + 8) = get-float(selection-fade-out-duration, self);
+        *(i32*)*var_5[3] = 40;
+        *(u64*)(*var_5[3] + 8) = 0;
+        *(i32*)(*var_5[3] + 8) = 1;
         animate_(obj-wat-infected-tunnels-door-input-code-door-1, symbol-concat-string(symbol-concat-int32(wat-infected-tunnels-door-input-code-, arg_0), "-press--door"), var_5);
         wait-frames(get-int32(frames-before-button-press, self));
         set-animation-speed(obj-wat-infected-tunnels-door-input-code-door-1, 0.00, 1, 0);
@@ -118,7 +118,7 @@ u16 wat-tunnels-door-punch-input(u64? arg_0) {
         }
         set-boolean(allow-reset, 1, self);
         set-boolean(symbol-concat-int32(pressed-, arg_0), 1, self);
-        darray-append(wat-door-input-code--punches, new-boxed-value(2, arg_0), 0);
+        darray-append(wat-door-input-code--punches, boxed_i32(arg_0), 0);
         wat-tunnels-send-door-code-string-to-ui();
         var_2 = update-ui-button-prompt-states();
     } else {
@@ -172,9 +172,9 @@ u64? wat-tunnels-update-highlight-part() {
 
 u64? wat-door-code--TTS(u64? arg_0) {
     u64? var_0 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_0 + (0 * 8)) = new-boxed-value(7, ACCESSIBILITY_KEYPAD_NUMBER);
-    *(u64*)(*var_0 + (1 * 8)) = new-boxed-value(2, arg_0);
-    return speak-text-to-speech-formatted(new-boxed-value(21, var_0), 1, 0, 1);
+    *(u64*)var_0[0] = boxed_symbol(ACCESSIBILITY_KEYPAD_NUMBER);
+    *(u64*)var_0[1] = boxed_i32(arg_0);
+    return speak-text-to-speech-formatted(boxed_array(var_0), 1, 0, 1);
 }
 
 statescript {
@@ -346,25 +346,25 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-wat-infected-tunnels-door-input-code-door-1, wat-infected-tunnels-door-input-code-intro--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_0 + (2 * 8)) = 45;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.40;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
+                    *(i32*)*var_0[2] = 45;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.40;
                     wait-animate_(player, wat-infected-tunnels-door-input-code-intro--ellie, var_0);
                 }
                 lambda {
@@ -439,34 +439,34 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(selection-fade-in-duration, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-float(selection-fade-out-duration, self);
-                    *(i32*)*(*var_0 + (3 * 8)) = 87;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(selection-fade-in-duration, self);
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-float(selection-fade-out-duration, self);
+                    *(i32*)*var_0[3] = 87;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(player, wat-infected-tunnels-door-input-code-5-idle--ellie, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(selection-fade-in-duration, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = get-float(selection-fade-out-duration, self);
-                    *(i32*)*(*var_0 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(selection-fade-in-duration, self);
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = get-float(selection-fade-out-duration, self);
+                    *(i32*)*var_0[3] = 31;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(obj-wat-infected-tunnels-door-input-code-door-1, wat-infected-tunnels-door-input-code-all-idle--door, var_0);
                 }
                 lambda {
@@ -614,26 +614,26 @@ statescript {
             track ellie {
                 lambda {
                     u64? var_6 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_6 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (1 * 8)) + 8) = get-float(selection-fade-in-duration, self);
-                    *(i32*)*(*var_6 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (2 * 8)) + 8) = get-float(selection-fade-in-duration, self);
+                    *(i32*)*var_6[0] = 10;
+                    *(u64*)(*var_6[0] + 8) = 0;
+                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_6[1] = 28;
+                    *(u64*)(*var_6[1] + 8) = 0;
+                    *(f32*)(*var_6[1] + 8) = get-float(selection-fade-in-duration, self);
+                    *(i32*)*var_6[2] = 30;
+                    *(u64*)(*var_6[2] + 8) = 0;
+                    *(f32*)(*var_6[2] + 8) = get-float(selection-fade-in-duration, self);
                     animate_(obj-wat-infected-tunnels-door-input-code-door-1, symbol-concat-string(symbol-concat-int32(wat-infected-tunnels-door-input-code-, get-int32(current-selection, self)), "-press--door"), var_6);
                     u64? var_10 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_10 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_10 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_10 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_10 + (1 * 8)) + 8) = get-float(selection-fade-in-duration, self);
-                    *(i32*)*(*var_10 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_10 + (2 * 8)) + 8) = get-float(selection-fade-out-duration, self);
+                    *(i32*)*var_10[0] = 10;
+                    *(u64*)(*var_10[0] + 8) = 0;
+                    *(u64*)(*var_10[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_10[1] = 28;
+                    *(u64*)(*var_10[1] + 8) = 0;
+                    *(f32*)(*var_10[1] + 8) = get-float(selection-fade-in-duration, self);
+                    *(i32*)*var_10[2] = 30;
+                    *(u64*)(*var_10[2] + 8) = 0;
+                    *(f32*)(*var_10[2] + 8) = get-float(selection-fade-out-duration, self);
                     wait-animate_(player, symbol-concat-string(symbol-concat-int32(wat-infected-tunnels-door-input-code-, get-int32(current-selection, self)), "-press--ellie"), var_10);
                 }
                 lambda {
@@ -811,28 +811,28 @@ statescript {
             track anim {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
                     animate_(obj-wat-infected-tunnels-door-input-code-door-1, wat-infected-tunnels-door-input-code-open--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 110;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 110;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.80;
                     wait-animate_(player, wat-infected-tunnels-door-input-code-open--ellie, var_0);
                 }
                 lambda {
@@ -939,25 +939,25 @@ statescript {
             track anim {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-wat-infected-tunnels-door-input-code-door-1, wat-infected-tunnels-door-input-code-fail--door, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     wait-animate_(player, wat-infected-tunnels-door-input-code-fail--ellie, var_0);
                 }
                 lambda {
@@ -1040,21 +1040,21 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 25;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-wat-infected-tunnels-door-input-code-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.30;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 25;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
                     wait-animate_(player, wat-infected-tunnels-door-input-code-exit--ellie, var_0);
                 }
                 lambda {

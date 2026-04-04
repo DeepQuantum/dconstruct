@@ -34,15 +34,15 @@ u64? wait-med-lev-finish-bandaging-arm(u64? arg_0) {
     if (arg_0) {
         clear-gesture(lev, -1, 0.30, 0);
         u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_0 + (0 * 8)) = 10;
-        *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(lev);
-        *(i32*)*(*var_0 + (1 * 8)) = 28;
-        *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.15;
-        *(i32*)*(*var_0 + (2 * 8)) = 30;
-        *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+        *(i32*)*var_0[0] = 10;
+        *(u64*)(*var_0[0] + 8) = 0;
+        *(u64*)(*var_0[0] + 8) = get-object-locator(lev);
+        *(i32*)*var_0[1] = 28;
+        *(u64*)(*var_0[1] + 8) = 0;
+        *(f32*)(*var_0[1] + 8) = 0.15;
+        *(i32*)*var_0[2] = 30;
+        *(u64*)(*var_0[2] + 8) = 0;
+        *(f32*)(*var_0[2] + 8) = 0.00;
         animate_(obj-med-hidden-ascent-lev-bandage-1, med-hidden-ascent-lev-bandage-arm-wrap-bandage-help-end--bandage, var_0);
         gesture_(lev, lev-bandage-arm-help-end-gesture, alloc-gesture-play-params());
         wait(1.50);
@@ -50,15 +50,15 @@ u64? wait-med-lev-finish-bandaging-arm(u64? arg_0) {
         clear-gesture(lev, -1, 0.30, 0);
         wait-one-frame();
         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-        *(i32*)*(*var_3 + (0 * 8)) = 10;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-object-locator(lev);
-        *(i32*)*(*var_3 + (1 * 8)) = 28;
-        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.15;
-        *(i32*)*(*var_3 + (2 * 8)) = 30;
-        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+        *(i32*)*var_3[0] = 10;
+        *(u64*)(*var_3[0] + 8) = 0;
+        *(u64*)(*var_3[0] + 8) = get-object-locator(lev);
+        *(i32*)*var_3[1] = 28;
+        *(u64*)(*var_3[1] + 8) = 0;
+        *(f32*)(*var_3[1] + 8) = 0.15;
+        *(i32*)*var_3[2] = 30;
+        *(u64*)(*var_3[2] + 8) = 0;
+        *(f32*)(*var_3[2] + 8) = 0.00;
         animate_(obj-med-hidden-ascent-lev-bandage-1, med-hidden-ascent-lev-bandage-arm-wrap-bandage-end--bandage, var_3);
         gesture_(lev, lev-bandage-arm-end-gesture, alloc-gesture-play-params());
     }
@@ -214,9 +214,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(lev);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(lev);
                     animate_(obj-med-hidden-ascent-lev-bandage-1, med-hidden-ascent-lev-bandage-arm-wrap-bandage--add, var_0);
                 }
             }

@@ -72,17 +72,7 @@ statescript {
                 }
                 lambda {
                     if (get-float(attack-input, self) > 2.00 && get-float(dodge-input, self) > 2.00) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (get-melee-target(var_4) == player) {
                                 npc-set-melee-behavior-condition(var_4, 20);
                             }

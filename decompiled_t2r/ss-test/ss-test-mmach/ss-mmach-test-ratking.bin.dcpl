@@ -21,7 +21,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(begin-carried, npc-ratking-stalker-1, new-boxed-value(7, npc-ratking-bloater-1));
+                    send-event(begin-carried, npc-ratking-stalker-1, boxed_symbol(npc-ratking-bloater-1));
                 }
             }
         }

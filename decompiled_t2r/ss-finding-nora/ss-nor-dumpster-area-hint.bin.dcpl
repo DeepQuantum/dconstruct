@@ -257,7 +257,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(vox-ellie-sees-hospital-sign, ss-vox-nor-ellie-alone-streets-1, new-boxed-value(1, 1));
+                    send-event(vox-ellie-sees-hospital-sign, ss-vox-nor-ellie-alone-streets-1, boxed_bool(1));
                 }
                 lambda {
                     set-boolean(hints-available, 0, self);

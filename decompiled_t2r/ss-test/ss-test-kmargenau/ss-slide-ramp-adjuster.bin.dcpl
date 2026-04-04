@@ -119,111 +119,31 @@ u64? bridge-gap() {
 }
 
 u64? clear-all() {
-    foreach (u64? var_1 : slide-eights) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : slide-eights) {
         kill-entity(var_2);
     }
-    foreach (u64? var_5 : slide-fours) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : slide-fours) {
         kill-entity(var_6);
     }
-    foreach (u64? var_9 : slide-twos) {
-        u16 var_10;
-        if (var_9 && *(u16*)(var_9 + 12) == 7) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-            var_10 = *(u64*)var_9;
-        } else {
-            var_10 = 0;
-        }
+    foreach (u64? var_10 : slide-twos) {
         kill-entity(var_10);
     }
-    foreach (u64? var_13 : slide-ones) {
-        u16 var_14;
-        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-            var_14 = *(u64*)var_13;
-        } else {
-            var_14 = 0;
-        }
+    foreach (u64? var_14 : slide-ones) {
         kill-entity(var_14);
     }
 }
 
 u64? wait-spawn-all() {
-    foreach (u64? var_1 : slide-eights) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : slide-eights) {
         wait-spawn-entity(var_2, 0);
     }
-    foreach (u64? var_5 : slide-fours) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : slide-fours) {
         wait-spawn-entity(var_6, 0);
     }
-    foreach (u64? var_9 : slide-twos) {
-        u16 var_10;
-        if (var_9 && *(u16*)(var_9 + 12) == 7) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-            var_10 = *(u64*)var_9;
-        } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-            var_10 = *(u64*)var_9;
-        } else {
-            var_10 = 0;
-        }
+    foreach (u64? var_10 : slide-twos) {
         wait-spawn-entity(var_10, 0);
     }
-    foreach (u64? var_13 : slide-ones) {
-        u16 var_14;
-        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-            var_14 = *(u64*)var_13;
-        } else {
-            var_14 = 0;
-        }
+    foreach (u64? var_14 : slide-ones) {
         wait-spawn-entity(var_14, 0);
     }
 }

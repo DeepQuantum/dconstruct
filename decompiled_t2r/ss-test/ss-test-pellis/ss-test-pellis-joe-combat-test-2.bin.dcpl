@@ -25,17 +25,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-school-b-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of-at(var_2, player, get-spawner-position(pos-petest-joe-opening-room-3, 1), 2, 0, 0);
                         }
@@ -71,17 +61,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-1) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -101,17 +81,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-1) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -126,17 +96,7 @@ statescript {
                     wait(5.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-1) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -151,17 +111,7 @@ statescript {
             track main {
                 lambda {
                     if (npc-group-alive-count(testellis-npcs-school-b-1) < 2) {
-                        foreach (u64? var_2 : testellis-npcs-school-b-1) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : testellis-npcs-school-b-1) {
                             if (npc-alive?(var_3)) {
                                 npc-clear-zone(var_3);
                             }
@@ -188,17 +138,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-2) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                             npc-set-zone-region(var_2, rgn-zone-corridor-stand-1);
@@ -278,17 +218,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-2) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -310,17 +240,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-2) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -333,17 +253,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-school-b-backup-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-backup-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-backup-1) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of-at(var_2, player, get-spawner-position(pos-petest-corridor-cover-4, 1), 2, 0, 0);
                         }
@@ -409,17 +319,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-school-b-3, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-b-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-b-3) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-pe-test-joe-courtyard-2);
                             npc-make-aware-of(var_2, player, 4, 0);
@@ -549,17 +449,7 @@ statescript {
                     );
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-roof) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-roof) {
                         if (npc-alive?(var_2)) {
                             if (tension-mode-is?(3)) {
                                 npc-make-aware-of(var_2, player, 2, 0);

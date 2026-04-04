@@ -36,7 +36,7 @@ u64? ss-accessbility-boss-health-tts--speak-health-percent(i32 arg_0) {
     }
     return speak-text-to-speech-raw(
         concat-boxed-arrays(
-            generate-text-to-speech-formatted(new-boxed-value(7, get-symbol(name, self)), 0),
+            generate-text-to-speech-formatted(boxed_symbol(get-symbol(name, self)), 0),
             generate-text-to-speech-formatted(cipher-box-formatted-number-string(BOSS_REMAINING_HEALTH_PERCENT, (i32)(arg_0 * 100.00), 0, 0, 0), 0),
             0,
             0,
@@ -55,11 +55,11 @@ u16 ss-accessbility-boss-health-tts--refresh-status() {
     u16 var_2;
     if (npc-alive?(get-symbol(npc, self))) {
         if (get-boolean(quarter-health-alert-triggered?, self)) {
-            var_2 = darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(0.25)), 0);
+            var_2 = darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(0.25)), 0);
         } else if (get-boolean(half-health-alert-triggered?, self)) {
-            var_2 = darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(0.50)), 0);
+            var_2 = darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(0.50)), 0);
         } else if (get-boolean(full-health-alert-triggered?, self)) {
-            var_2 = darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(1.00)), 0);
+            var_2 = darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(1.00)), 0);
         } else {
             var_2 = 0;
         }
@@ -177,16 +177,16 @@ statescript {
                             set-boolean(should-full-health-alert?, 1, self);
                         }
                         if (get-boolean(quarter-health-alert-allowed?, self) && get-boolean(should-quarter-health-alert?, self) && !get-boolean(quarter-health-alert-triggered?, self)) {
-                            darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(0.25)), 0);
+                            darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(0.25)), 0);
                             set-boolean(quarter-health-alert-triggered?, 1, self);
                             if (!get-boolean(half-health-alert-triggered?, self)) {
                                 set-boolean(half-health-alert-triggered?, 1, self);
                             }
                         } else if (get-boolean(half-health-alert-allowed?, self) && get-boolean(should-half-health-alert?, self) && !get-boolean(half-health-alert-triggered?, self)) {
-                            darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(0.50)), 0);
+                            darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(0.50)), 0);
                             set-boolean(half-health-alert-triggered?, 1, self);
                         } else if (get-boolean(full-health-alert-allowed?, self) && get-boolean(should-full-health-alert?, self) && !get-boolean(full-health-alert-triggered?, self)) {
-                            darray-append(get-symbol(tts-health-frames, self), new-boxed-value(5, ss-accessbility-boss-health-tts--speak-health-percent(1.00)), 0);
+                            darray-append(get-symbol(tts-health-frames, self), boxed_u64(ss-accessbility-boss-health-tts--speak-health-percent(1.00)), 0);
                             set-boolean(full-health-alert-triggered?, 1, self);
                         }
                     }

@@ -840,17 +840,7 @@ statescript {
                     draw-crosshair();
                 }
                 lambda {
-                    foreach (u64? var_1 : caps-group) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : caps-group) {
                         if (spawner-exists?(var_2)) {
                             debug-draw-string(
                                 offset-position(get-spawner-position(var_2, 1), alloc-vector(0.00, 2.00, 0.00, 1.00, 0)),
@@ -902,20 +892,20 @@ statescript {
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-left, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 0));
+                            send-event(change-demeanor, self, boxed_i32(0));
                         }
                         if (debug-joypad-command-active?(menu-right, 0)) {
-                            send-event(change-demeanor, self, new-boxed-value(2, 1));
+                            send-event(change-demeanor, self, boxed_i32(1));
                         }
                     }
                 }
                 lambda {
                     if (debug-joypad-command-active?(aim, 0) && debug-joypad-command-active?(fire-hold, 0)) {
                         if (debug-joypad-command-active?(menu-up, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 1));
+                            send-event(change-speed, self, boxed_i32(1));
                         }
                         if (debug-joypad-command-active?(menu-down, 0)) {
-                            send-event(change-speed, self, new-boxed-value(2, 0));
+                            send-event(change-speed, self, boxed_i32(0));
                         }
                     }
                 }
@@ -939,11 +929,11 @@ statescript {
                             npc-clear-request-movement(get-symbol(active-npc, self));
                             npc-stop(get-symbol(active-npc, self));
                             npc-teleport-to(get-symbol(active-npc, self), get-object-locator-remove-binding(get-symbol(position-start, self)));
-                            if (darray-contains?(door-caps, new-boxed-value(7, get-symbol(activity, self)))) {
+                            if (darray-contains?(door-caps, boxed_symbol(get-symbol(activity, self)))) {
                                 u64? var_17 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_17 + (0 * 8)) = 58;
-                                *(u64*)(*(*var_17 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_17 + (0 * 8)) + 8) = 1.00;
+                                *(i32*)*var_17[0] = 58;
+                                *(u64*)(*var_17[0] + 8) = 0;
+                                *(f32*)(*var_17[0] + 8) = 1.00;
                                 animate_(get-symbol(activity, self), close-r, var_17);
                             }
                             if (!(get-symbol(active-slave-npc, self) == 0)) {

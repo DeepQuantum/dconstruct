@@ -62,7 +62,7 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("DEB-AG: Player just entered %s", string-debug(get-self-id())), 19);
                         }
-                        send-event(entered-grenade-region, ss-wave-manager-aggressive-grenades-1, new-boxed-value(7, get-self-id()));
+                        send-event(entered-grenade-region, ss-wave-manager-aggressive-grenades-1, boxed_symbol(get-self-id()));
                     }
                 }
             }

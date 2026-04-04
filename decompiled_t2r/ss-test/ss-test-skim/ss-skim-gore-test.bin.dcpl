@@ -60,7 +60,7 @@ statescript {
                             var_13 = "";
                         }
                         u16 var_15;
-                        if (darray-contains?(skim-active-gore-pieces, new-boxed-value(7, var_3))) {
+                        if (darray-contains?(skim-active-gore-pieces, boxed_symbol(var_3))) {
                             var_15 = 5;
                         } else {
                             var_15 = 1;
@@ -131,12 +131,12 @@ statescript {
                         } else {
                             var_3 = 0;
                         }
-                        if (darray-contains?(skim-active-gore-pieces, new-boxed-value(7, var_3))) {
+                        if (darray-contains?(skim-active-gore-pieces, boxed_symbol(var_3))) {
                             destroy-gore-piece(var_3, player);
-                            var_6 = darray-find-remove(skim-active-gore-pieces, new-boxed-value(7, var_3), 0);
+                            var_6 = darray-find-remove(skim-active-gore-pieces, boxed_symbol(var_3), 0);
                         } else {
                             spawn-gore-piece(var_3, player, 0, 0, 1, 1);
-                            var_6 = darray-append(skim-active-gore-pieces, new-boxed-value(7, var_3), 1);
+                            var_6 = darray-append(skim-active-gore-pieces, boxed_symbol(var_3), 1);
                         }
                     }
                 }

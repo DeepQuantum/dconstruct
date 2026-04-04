@@ -55,7 +55,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(active-shambler-clouds, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(active-shambler-clouds, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-int64(cloud, spawn-particles-at-bound-frame(bloater-cloud-1, get-object-locator(self), none), self);
@@ -70,13 +70,13 @@ statescript {
                     play-sound-at-position(sfx-shmblr-aoe-spore-explosion, get-object-position(self), 0, 0);
                 }
                 lambda {
-                    broadcast-event(spore-cloud-kill-grass, new-boxed-value(18, get-object-locator(self)), new-boxed-value(6, tag-float(radius, self)));
+                    broadcast-event(spore-cloud-kill-grass, boxed_boundframe(get-object-locator(self)), boxed_f32(tag-float(radius, self)));
                 }
                 lambda {
                     wait(tag-float(lifespan, self));
                 }
                 lambda {
-                    darray-find-remove(active-shambler-clouds, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(active-shambler-clouds, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     go(done, 1);
@@ -151,17 +151,7 @@ statescript {
                         }
                     } else if (!melee-fact-get-bool(player, in-synced-grab-struggle) && melee-fact-get-time-since(player, spore-cloud-stumble) > var_24 && get-state-time(self) < get-float(cloud-grow, self)) {}
 
-                    foreach (u64? var_55 : all-npcs) {
-                        u16 var_56;
-                        if (var_55 && *(u16*)(var_55 + 12) == 7) {
-                            var_56 = *(u64*)var_55;
-                        } else if (var_55 && *(u16*)(var_55 + 12) == 5) {
-                            var_56 = *(u64*)var_55;
-                        } else if (var_55 && *(u16*)(var_55 + 12) == 4) {
-                            var_56 = *(u64*)var_55;
-                        } else {
-                            var_56 = 0;
-                        }
+                    foreach (u64? var_56 : all-npcs) {
                         u64? var_57 = npc-get-faction(var_56, 1);
                         if (var_57 == Militia || var_57 == Scar && var_57 == Buddy && melee-fact-get-time-since(var_56, spore-cloud-stumble) > var_24 && get-state-time(self) < get-float(cloud-grow, self)) {
                             npc-take-damage-from-position(var_56, var_17, 20, 1, targChest, 0);

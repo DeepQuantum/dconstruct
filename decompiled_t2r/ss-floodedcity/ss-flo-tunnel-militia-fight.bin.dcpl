@@ -64,17 +64,7 @@ statescript {
                     set-hardpoint-enabled(hard-point-flo-tunnel-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : tunnel-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tunnel-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -123,17 +113,7 @@ statescript {
                     set-hardpoint-enabled(hard-point-flo-tunnel-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : tunnel-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tunnel-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -443,17 +423,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tunnel-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tunnel-npcs) {
                         if (npc-alive?(var_2) || npc-get-target-entity-awareness(var_2) != 0) {
                             if (!(npc-get-investigate-entity-object(var_2) == 0)) {
                                 go(interrupt-igc, 1);
@@ -511,19 +481,9 @@ statescript {
             track patrol {
                 lambda {
                     if (tension-mode-is?(2)) {
-                        foreach (u64? var_2 : tunnel-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : tunnel-npcs) {
                             if (npc-alive?(var_3)) {
-                                send-event(delayed-demeanor-change, self, new-boxed-value(7, var_3));
+                                send-event(delayed-demeanor-change, self, boxed_symbol(var_3));
                             }
                         }
                     }
@@ -566,35 +526,15 @@ statescript {
             track main {
                 lambda {
                     if (get-svar-as-boolean(flo-tunnel-stealth-broken)) {
-                        foreach (u64? var_2 : tunnel-reinf-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : tunnel-reinf-npcs) {
                             if (npc-alive?(var_3)) {
                                 npc-disable-has-ever-seen-updates/f(var_3);
-                                fact-set(var_3, has-faction-ever-seen-player-or-buddy, new-boxed-value(1, 1));
-                                fact-set(var_3, has-faction-ever-seen-player, new-boxed-value(1, 1));
+                                fact-set(var_3, has-faction-ever-seen-player-or-buddy, boxed_bool(1));
+                                fact-set(var_3, has-faction-ever-seen-player, boxed_bool(1));
                             }
                         }
                     } else {
-                        foreach (u64? var_9 : tunnel-npcs) {
-                            u16 var_10;
-                            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                                var_10 = *(u64*)var_9;
-                            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                                var_10 = *(u64*)var_9;
-                            } else {
-                                var_10 = 0;
-                            }
+                        foreach (u64? var_10 : tunnel-npcs) {
                             if (npc-alive?(var_10)) {
                                 if (fact-lookup-bool(fact-get-dictionary(var_10), has-faction-ever-seen-player-or-buddy, 1)) {
                                     set-svar-as-boolean(flo-tunnel-stealth-broken, 1);
@@ -663,43 +603,23 @@ statescript {
                     set-hardpoint-disabled(hard-point-flo-tunnel-2);
                 }
                 lambda {
-                    foreach (u64? var_1 : tunnel-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tunnel-npcs) {
                         if (npc-alive?(var_2)) {
                             if (object-in-region?(var_2, rgn-flo-despawn-tunnel-1)) {
                                 kill-entity(var_2);
                             } else {
-                                send-event(goto-despawn, self, new-boxed-value(7, var_2));
+                                send-event(goto-despawn, self, boxed_symbol(var_2));
                             }
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : tunnel-reinf-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tunnel-reinf-npcs) {
                         if (npc-alive?(var_2)) {
                             if (object-in-region?(var_2, rgn-flo-despawn-tunnel-1)) {
                                 kill-entity(var_2);
                             } else {
-                                send-event(goto-despawn, self, new-boxed-value(7, var_2));
+                                send-event(goto-despawn, self, boxed_symbol(var_2));
                             }
                         }
                     }

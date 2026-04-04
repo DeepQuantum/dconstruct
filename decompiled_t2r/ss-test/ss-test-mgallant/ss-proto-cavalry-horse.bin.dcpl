@@ -31,7 +31,7 @@ u16 apply-horse-damage(u64? arg_0, u64? arg_1) {
         } else {
             var_7 = *(i32*)(var_0 + 24);
         }
-        send-event(horse-attacked, arg_0, new-boxed-value(2, var_7), new-boxed-value(1, 1));
+        send-event(horse-attacked, arg_0, boxed_i32(var_7), boxed_bool(1));
         if (var_6) {
             var_1 = draw-reticle-headshot(1);
         } else {
@@ -83,7 +83,7 @@ statescript {
                     send-event(horse-ready, tag-symbol(rider, self));
                 }
                 lambda {
-                    darray-append(cavalry-horses, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(cavalry-horses, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     go(move, 1);
@@ -170,11 +170,11 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(horse-died, new-boxed-value(7, get-self-id()));
+                    broadcast-event(horse-died, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (darray-is-valid?(cavalry-horses)) {
-                        darray-find-remove(cavalry-horses, new-boxed-value(7, get-self-id()), 0);
+                        darray-find-remove(cavalry-horses, boxed_symbol(get-self-id()), 0);
                     }
                 }
                 lambda {
@@ -190,11 +190,11 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(horse-rider-dismount, new-boxed-value(7, tag-symbol(rider, self)), new-boxed-value(7, get-self-id()));
+                    broadcast-event(horse-rider-dismount, boxed_symbol(tag-symbol(rider, self)), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (darray-is-valid?(cavalry-horses)) {
-                        darray-find-remove(cavalry-horses, new-boxed-value(7, get-self-id()), 0);
+                        darray-find-remove(cavalry-horses, boxed_symbol(get-self-id()), 0);
                     }
                 }
                 lambda {

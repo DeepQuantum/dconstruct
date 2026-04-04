@@ -89,7 +89,7 @@ statescript {
                     gesture-idles-override-times(player, 4.00, 10.00);
                 }
                 lambda {
-                    send-event(set-interactive-activation-blocks-idles, player, new-boxed-value(1, 0), new-boxed-value(1, 1));
+                    send-event(set-interactive-activation-blocks-idles, player, boxed_bool(0), boxed_bool(1));
                 }
             }
         }

@@ -44,7 +44,7 @@ statescript {
                         spawn-character-particles-at-bound-frame(rogue-on-hit-fire, alloc-bound-frame(get-point(hit-pos, self), quat-from-look-at(get-vector(hit-dir, self), ""), 0, 0, 0), none);
                         u16 var_18;
                         if (!character-in-finisher?(get-symbol(hit-npc, self)) && !npc-is-on-fire?(get-symbol(hit-npc, self))) {
-                            broadcast-event(skull-activate, new-boxed-value(7, melee-pickup-npc-fire));
+                            broadcast-event(skull-activate, boxed_symbol(melee-pickup-npc-fire));
                             wait(0.20);
                             var_18 = npc-set-on-fire(get-symbol(hit-npc, self), 0, person-on-fire);
                         } else {

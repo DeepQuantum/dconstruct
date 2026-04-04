@@ -117,30 +117,30 @@ statescript {
                     angle-in-between-vectors(get-y-vec-from-object(self), alloc-vector(0.00, 1.00, 0.00, 1.00, 0));
                     u64? var_13 = vector-neg(vector-set-magnitude(get-float(barrel-radius, self), vector-flatten(point-sub(get-object-position(player), get-object-position(self)), 1)));
                     u64? var_14 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_14 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_14 + (0 * 8)) + 8) = rotate-locator-lookat(flatten-locator(var_3), offset-locator-world-space(var_3, var_13), 1.00, 0);
-                    *(i32*)*(*var_14 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_14 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_14 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_14 + (2 * 8)) = 32;
-                    *(u64*)(*(*var_14 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_14 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_14[0] = 10;
+                    *(u64*)(*var_14[0] + 8) = 0;
+                    *(u64*)(*var_14[0] + 8) = rotate-locator-lookat(flatten-locator(var_3), offset-locator-world-space(var_3, var_13), 1.00, 0);
+                    *(i32*)*var_14[1] = 28;
+                    *(u64*)(*var_14[1] + 8) = 0;
+                    *(f32*)(*var_14[1] + 8) = 0.50;
+                    *(i32*)*var_14[2] = 32;
+                    *(u64*)(*var_14[2] + 8) = 0;
+                    *(u8*)(*var_14[2] + 8) = 1;
                     wait-animate_(player, ellie-push-drum-upright-idle, var_14);
                     u64? var_21 = offset-locator(get-object-locator(self), alloc-vector(0.00, get-float(barrel-length, self) / 2.00, 0.00, 1.00, 0));
                     u64? var_22 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_22 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_22 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_22 + (0 * 8)) + 8) = rotate-locator-lookat(flatten-locator(var_21), offset-locator-world-space(var_21, var_13), 1.00, 0);
-                    *(i32*)*(*var_22 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_22 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_22 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_22 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_22 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_22 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_22 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_22 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_22 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_22[0] = 10;
+                    *(u64*)(*var_22[0] + 8) = 0;
+                    *(u64*)(*var_22[0] + 8) = rotate-locator-lookat(flatten-locator(var_21), offset-locator-world-space(var_21, var_13), 1.00, 0);
+                    *(i32*)*var_22[1] = 31;
+                    *(u64*)(*var_22[1] + 8) = 0;
+                    *(u8*)(*var_22[1] + 8) = 1;
+                    *(i32*)*var_22[2] = 28;
+                    *(u64*)(*var_22[2] + 8) = 0;
+                    *(f32*)(*var_22[2] + 8) = 0.00;
+                    *(i32*)*var_22[3] = 24;
+                    *(u64*)(*var_22[3] + 8) = 0;
+                    *(i32*)(*var_22[3] + 8) = 1;
                     animate_(player, ellie-push-drum-upright-idle, var_22);
                 }
             }
@@ -326,17 +326,17 @@ statescript {
                     u64? var_13 = angle-in-between-vectors(var_11, get-y-vec-from-object(self));
                     vector-set-magnitude(get-float(barrel-radius, self), get-y-vec-from-bound-frame(rotate-locator-axis-angle(get-object-locator(self), alloc-vector(0.00, 1.00, 0.00, 1.00, 0), 90.00)));
                     u64? var_20 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_20 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_20 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_20 + (0 * 8)) + 8) = rotate-locator-lookat(
+                    *(i32*)*var_20[0] = 10;
+                    *(u64*)(*var_20[0] + 8) = 0;
+                    *(u64*)(*var_20[0] + 8) = rotate-locator-lookat(
                         offset-locator(rotate-locator-lookat(flatten-locator(var_3), get-object-locator(self), 1.00, 0), get-vector(local-offset, self)),
                         var_3,
                         1.00,
                         0
                     );
-                    *(i32*)*(*var_20 + (1 * 8)) = 32;
-                    *(u64*)(*(*var_20 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_20 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_20[1] = 32;
+                    *(u64*)(*var_20[1] + 8) = 0;
+                    *(u8*)(*var_20[1] + 8) = 1;
                     animate_(player, bindpose-anim, var_20);
                     u64? var_27;
                     if (*(f32*)(vector-cross(vector-normalize(var_11, 0), get-y-vec-from-object(self)) + 4) > 0.00) {

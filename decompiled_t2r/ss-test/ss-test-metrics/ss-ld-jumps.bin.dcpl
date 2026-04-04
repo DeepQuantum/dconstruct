@@ -38,7 +38,7 @@ f32 wait-ss-ld-jump-test() {
                 } else {
                     var_16 = j;
                 }
-                if (!!darray-contains?(ld-flat-ground-landings, new-boxed-value(7, get-object-anim-state(player)))) {
+                if (!!darray-contains?(ld-flat-ground-landings, boxed_symbol(get-object-anim-state(player)))) {
                     f32 var_17;
                     if (-99.90 > j) {
                         var_17 = -99.90;

@@ -83,13 +83,13 @@ statescript {
         block event vox-brewery-reinf-spawned {
             track main {
                 lambda {
-                    fact-set(faction-enemy, restrict-combat-flank, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-combat-flank, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-combat-advance, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-combat-advance, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-attack-player, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-attack-player, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     wait(5.00);

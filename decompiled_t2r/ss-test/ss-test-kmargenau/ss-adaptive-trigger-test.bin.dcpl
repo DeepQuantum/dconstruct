@@ -180,10 +180,10 @@ statescript {
                     set-trigger-vars();
                 }
                 lambda {
-                    if (darray-contains?(valid-adaptive-trigger-weapons, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    if (darray-contains?(valid-adaptive-trigger-weapons, boxed_symbol(get-symbol(current-weapon, self)))) {
                         set-adaptive-trigger-position-control-mode(0, 100, 255);
                         set-adaptive-trigger-off(1);
-                    } else if (darray-contains?(valid-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    } else if (darray-contains?(valid-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                         set-adaptive-trigger-position-control-mode(0, 0, (i32)get-float(throwable-aim-strength, self));
                         set-adaptive-trigger-position-control-mode(1, 0, (i32)get-float(throwable-fire-strength, self));
                     } else {
@@ -192,7 +192,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (player-in-state?(GunMove) && darray-contains?(valid-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                    if (player-in-state?(GunMove) && darray-contains?(valid-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                         go(aiming-throwable, 1);
                     }
                 }
@@ -217,7 +217,7 @@ statescript {
             track main {
                 lambda {
                     if (player-in-state?(GunMove)) {
-                        if (!darray-contains?(valid-throwables, new-boxed-value(7, get-symbol(current-weapon, self)))) {
+                        if (!darray-contains?(valid-throwables, boxed_symbol(get-symbol(current-weapon, self)))) {
                             go(waiting, 1);
                         }
                     }

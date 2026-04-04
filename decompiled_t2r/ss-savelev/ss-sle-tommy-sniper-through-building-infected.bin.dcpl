@@ -135,17 +135,7 @@ statescript {
                     wait-spawn-npc-group-async(sle-tommy-fight-infected, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         npc-disable-perception(var_2);
                         listen-mode-visible(var_2, 0, 1, -1.00);
                     }
@@ -194,17 +184,7 @@ statescript {
                     wait-for(wake-up);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         npc-enable-perception(var_2);
                         listen-mode-visible(var_2, 1, 1, 1.00);
                     }
@@ -219,17 +199,7 @@ statescript {
                 }
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : sle-tommy-fight-infected) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : sle-tommy-fight-infected) {
                             npc-suppress-threat-audio(var_2);
                             npc-suppress-threat-indicator(var_2);
                         }
@@ -253,17 +223,7 @@ statescript {
                     teleport-npc(npc-tommy-fight-1, pos-tommy-through-building-infected-position-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         npc-enable-perception(var_2);
                         listen-mode-visible(var_2, 1, 1, 1.00);
                     }
@@ -291,17 +251,7 @@ statescript {
                     wait-boolean(EXTERN-infected-lure-1, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -334,17 +284,7 @@ statescript {
                     suppress-spot-player-stinger();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-suppress-threat-audio(var_2);
                         }
@@ -363,17 +303,7 @@ statescript {
                     wait-boolean(EXTERN-infected-lure-1-mid, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -381,25 +311,15 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(EXTERN-tommy-lure-infected-1-mid, ss-sle-tommy-sniper-through-building-tommy-controller-1)) {
-                        darray-find-remove(sle-tommy-fight-infected-mid-wave, new-boxed-value(7, npc-sle-tommy-fight-runner-4), 0);
-                        darray-append(sle-tommy-fight-infected-mid-wave, new-boxed-value(7, npc-sle-tommy-fight-runner-9), 1);
+                        darray-find-remove(sle-tommy-fight-infected-mid-wave, boxed_symbol(npc-sle-tommy-fight-runner-4), 0);
+                        darray-append(sle-tommy-fight-infected-mid-wave, boxed_symbol(npc-sle-tommy-fight-runner-9), 1);
                     }
                 }
                 lambda {
                     wait-spawn-npc-group-async(sle-tommy-fight-infected-mid-wave, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected-mid-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected-mid-wave) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                             say(var_2, vox-eff-gen-inf-surprise-lrg, 2, 0);
@@ -433,17 +353,7 @@ statescript {
                     suppress-spot-player-stinger();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-suppress-threat-audio(var_2);
                         }
@@ -462,34 +372,14 @@ statescript {
                     wait-boolean(EXTERN-infected-lure-2, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected-mid-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected-mid-wave) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -505,17 +395,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             say(var_2, vox-eff-gen-inf-surprise-lrg, 2, 0);
                             npc-make-aware-of-at(var_2, player, get-spawner-position(pos-tommy-alert-infected-target-3, 1), 2, 0, 0);
@@ -525,17 +405,7 @@ statescript {
                 lambda {
                     if (!get-boolean(player-in-safe-area, ss-sle-tommy-sniper-through-building-tommy-controller-1)) {
                         wait-spawn-npc-group-async(sle-tommy-fight-infected-reinforcements, 0, 0);
-                        foreach (u64? var_2 : sle-tommy-fight-infected-reinforcements) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : sle-tommy-fight-infected-reinforcements) {
                             if (npc-alive?(var_3)) {
                                 say(var_3, vox-eff-gen-inf-surprise-lrg, 2, 0);
                                 npc-make-aware-of(var_3, player, 2, 0);
@@ -587,17 +457,7 @@ statescript {
                     suppress-spot-player-stinger();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-suppress-threat-audio(var_2);
                         }
@@ -618,51 +478,21 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected-mid-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected-mid-wave) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : sle-tommy-fight-infected-reinforcements) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sle-tommy-fight-infected-reinforcements) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
@@ -689,17 +519,7 @@ statescript {
                             group-copy(sle-tommy-fight-infected-reinforcements-final-normal, sle-tommy-fight-infected-reinforcements-final);
                         }
                         wait-spawn-npc-group-async(sle-tommy-fight-infected-reinforcements-final, 0, 0);
-                        foreach (u64? var_3 : sle-tommy-fight-infected-reinforcements-final) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : sle-tommy-fight-infected-reinforcements-final) {
                             if (npc-alive?(var_4)) {
                                 npc-make-aware-of(var_4, player, 2, 0);
                                 say(var_4, vox-eff-gen-inf-surprise-lrg, 2, 0);
@@ -742,17 +562,7 @@ statescript {
                     suppress-spot-player-stinger();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-suppress-threat-audio(var_2);
                         }

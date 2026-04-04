@@ -136,8 +136,8 @@ statescript {
                 lambda {
                     if (!(event-arg-symbol(0) == collectible-sea-horse-barkos-letter-1)) {
                         if (get-int32(pickup-count, self) > (darray-count(coffee-shop-pickups) - 3)) {
-                            send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 6), new-boxed-value(1, 1));
-                            send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7), new-boxed-value(6, 0.60));
+                            send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(6), boxed_bool(1));
+                            send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(7), boxed_f32(0.60));
                         }
                     }
                 }
@@ -154,8 +154,8 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(pickup-count, self) > (darray-count(coffee-shop-pickups) - 3)) {
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 6), new-boxed-value(1, 1));
-                        send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7), new-boxed-value(6, 0.60));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(6), boxed_bool(1));
+                        send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(7), boxed_f32(0.60));
                     }
                 }
             }
@@ -164,8 +164,8 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(pickup-count, self) > (darray-count(coffee-shop-pickups) - 3)) {
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 6), new-boxed-value(1, 1));
-                        send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7), new-boxed-value(6, 0.60));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(6), boxed_bool(1));
+                        send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(7), boxed_f32(0.60));
                     }
                 }
             }
@@ -182,10 +182,10 @@ statescript {
         block event leaving-coffee-shop {
             track main {
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 6), new-boxed-value(1, 1));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(6), boxed_bool(1));
                 }
                 lambda {
-                    send-event(complete-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7), new-boxed-value(6, 0.10));
+                    send-event(complete-poi, ss-sea-horse-map-writing-1, boxed_i32(7), boxed_f32(0.10));
                 }
             }
         }
@@ -232,32 +232,32 @@ statescript {
                     set-symbol(checkit, var_0, self);
                     enable-collision-gamedriven(var_0, 0, 0.00);
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.00;
                     animate_(var_0, sea-hub-unlock-barkos--key, var_1);
                     u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_3 + (3 * 8)) + 8) = 160;
-                    *(i32*)*(*var_3 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.50;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.50;
+                    *(i32*)*var_3[3] = 61;
+                    *(u64*)(*var_3[3] + 8) = 0;
+                    *(i32*)(*var_3[3] + 8) = 160;
+                    *(i32*)*var_3[4] = 60;
+                    *(u64*)(*var_3[4] + 8) = 0;
+                    *(f32*)(*var_3[4] + 8) = 0.50;
                     wait-animate_(player, sea-hub-unlock-barkos--ellie, var_3);
                     kill-entity(var_0);
                 }
@@ -289,15 +289,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-sea-horse-open-barkos-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(door-barkos-alley-1, sea-hub-unlock-barkos--door, var_0);
                 }
                 lambda {

@@ -49,17 +49,7 @@ u64? update-last-input-time() {
 }
 
 u64? update-target-grab-point() {
-    foreach (u64? var_1 : med-construction-elevator-grab-splines) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : med-construction-elevator-grab-splines) {
         set-bound-frame(test-goal, spline-locator-at-distance(var_2, spline-distance-object(var_2, player)), self);
         u64? var_7 = distance-between-locators-xz(get-bound-frame(test-goal, self), get-object-locator(player));
         if (var_7 < 9999.99) {
@@ -236,15 +226,15 @@ statescript {
                         ), self);
                         set-bound-frame(dynamic-ap, parent-bound-frame(get-bound-frame(dynamic-ap, self), obj-construction-elevator-1, 0), self);
                         u64? var_9 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 35;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (2 * 8)) + 8) = 5;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 35;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(i32*)(*var_9[2] + 8) = 5;
                         wait-animate_(player, med-downtown-abby-elevator-nervous-enter-l--abby, var_9);
                     } else {
                         set-bound-frame(dynamic-ap, alloc-bound-frame(
@@ -256,15 +246,15 @@ statescript {
                         ), self);
                         set-bound-frame(dynamic-ap, parent-bound-frame(get-bound-frame(dynamic-ap, self), obj-construction-elevator-1, 0), self);
                         u64? var_19 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_19 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_19 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_19 + (2 * 8)) = 35;
-                        *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_19 + (2 * 8)) + 8) = 5;
+                        *(i32*)*var_19[0] = 10;
+                        *(u64*)(*var_19[0] + 8) = 0;
+                        *(u64*)(*var_19[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_19[1] = 28;
+                        *(u64*)(*var_19[1] + 8) = 0;
+                        *(f32*)(*var_19[1] + 8) = 0.50;
+                        *(i32*)*var_19[2] = 35;
+                        *(u64*)(*var_19[2] + 8) = 0;
+                        *(i32*)(*var_19[2] + 8) = 5;
                         wait-animate_(player, med-downtown-abby-elevator-nervous-enter-r--abby, var_19);
                     }
                 }
@@ -290,33 +280,33 @@ statescript {
                 lambda {
                     if (get-boolean(edge-is-left, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_1 + (3 * 8)) = 35;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 31;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(u8*)(*var_1[2] + 8) = 1;
+                        *(i32*)*var_1[3] = 35;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(i32*)(*var_1[3] + 8) = 5;
                         animate_(player, med-downtown-abby-elevator-nervous-idle-l--abby, var_1);
                     } else {
                         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (3 * 8)) = 35;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 31;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(u8*)(*var_3[2] + 8) = 1;
+                        *(i32*)*var_3[3] = 35;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(i32*)(*var_3[3] + 8) = 5;
                         animate_(player, med-downtown-abby-elevator-nervous-idle-r--abby, var_3);
                     }
                 }
@@ -341,33 +331,33 @@ statescript {
                 lambda {
                     if (get-boolean(edge-is-left, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_1 + (3 * 8)) = 35;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.20;
+                        *(i32*)*var_1[3] = 35;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(i32*)(*var_1[3] + 8) = 5;
                         wait-animate_(player, med-downtown-abby-elevator-nervous-exit-l--abby, var_1);
                     } else {
                         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(dynamic-ap, self);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_3 + (3 * 8)) = 35;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (3 * 8)) + 8) = 5;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-bound-frame(dynamic-ap, self);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.20;
+                        *(i32*)*var_3[3] = 35;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(i32*)(*var_3[3] + 8) = 5;
                         wait-animate_(player, med-downtown-abby-elevator-nervous-exit-r--abby, var_3);
                     }
                 }

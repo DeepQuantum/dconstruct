@@ -84,28 +84,8 @@ statescript {
                     wait-for(scar-1-spawned);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-chase-militia-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        foreach (u64? var_4 : afm-chase-scars-1) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                    foreach (u64? var_2 : afm-chase-militia-1) {
+                        foreach (u64? var_5 : afm-chase-scars-1) {
                             npc-make-aware-of(var_2, var_5, 2, *npc-awareness-options-silent*);
                             npc-make-aware-of(var_5, var_2, 2, *npc-awareness-options-silent*);
                         }
@@ -173,28 +153,8 @@ statescript {
                     wait-for(scar-2-spawned);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-chase-militia-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        foreach (u64? var_4 : afm-chase-scars-2) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                    foreach (u64? var_2 : afm-chase-militia-2) {
+                        foreach (u64? var_5 : afm-chase-scars-2) {
                             npc-make-aware-of(var_2, var_5, 2, *npc-awareness-options-silent*);
                             npc-make-aware-of(var_5, var_2, 2, *npc-awareness-options-silent*);
                         }
@@ -234,17 +194,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-chase-cavalry-2, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-chase-cavalry-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-chase-cavalry-2) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-make-aware-of(lev, var_2, 2, 0);
                     }
@@ -258,17 +208,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-chase-cavalry-3, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-chase-cavalry-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-chase-cavalry-3) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-make-aware-of(lev, var_2, 2, 0);
                     }
@@ -282,17 +222,7 @@ statescript {
                     wait-spawn-npc-group-async(afm-chase-cavalry-4, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-chase-cavalry-4) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-chase-cavalry-4) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-make-aware-of(lev, var_2, 2, 0);
                     }

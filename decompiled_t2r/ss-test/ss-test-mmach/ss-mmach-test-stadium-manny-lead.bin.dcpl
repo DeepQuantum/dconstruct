@@ -21,17 +21,7 @@ u64? wait-poi-switch(u64? arg_0, u64? arg_1, u64? arg_2) {
 u16 switch-poi-mode(sid arg_0) {
     u16 var_0;
     if (arg_0 == conversation) {
-        foreach (u64? var_2 : env-poi-group) {
-            u16 var_3;
-            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                var_3 = *(u64*)var_2;
-            } else {
-                var_3 = 0;
-            }
+        foreach (u64? var_3 : env-poi-group) {
             if (object-spawned?(var_3)) {
                 kill-entity(var_3);
             }
@@ -42,17 +32,7 @@ u16 switch-poi-mode(sid arg_0) {
             var_0 = 0;
         }
     } else if (arg_0 == env) {
-        foreach (u64? var_9 : env-poi-group) {
-            u16 var_10;
-            if (var_9 && *(u16*)(var_9 + 12) == 7) {
-                var_10 = *(u64*)var_9;
-            } else if (var_9 && *(u16*)(var_9 + 12) == 5) {
-                var_10 = *(u64*)var_9;
-            } else if (var_9 && *(u16*)(var_9 + 12) == 4) {
-                var_10 = *(u64*)var_9;
-            } else {
-                var_10 = 0;
-            }
+        foreach (u64? var_10 : env-poi-group) {
             if (!object-spawned?(var_10)) {
                 spawn-entity(var_10, 0, 0);
             }
@@ -63,17 +43,7 @@ u16 switch-poi-mode(sid arg_0) {
             var_0 = 0;
         }
     } else if (arg_0 == disable) {
-        foreach (u64? var_16 : env-poi-group) {
-            u16 var_17;
-            if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                var_17 = *(u64*)var_16;
-            } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                var_17 = *(u64*)var_16;
-            } else {
-                var_17 = 0;
-            }
+        foreach (u64? var_17 : env-poi-group) {
             if (object-spawned?(var_17)) {
                 kill-entity(var_17);
             }

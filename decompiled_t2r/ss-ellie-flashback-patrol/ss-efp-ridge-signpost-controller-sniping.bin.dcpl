@@ -56,7 +56,7 @@ statescript {
                     player-allow-lock-on-to-object(lock-on-target-sign-1, 1);
                 }
                 lambda {
-                    darray-append(accessibility-lock-on-targetable-actors, new-boxed-value(7, lock-on-target-sign-1), 0);
+                    darray-append(accessibility-lock-on-targetable-actors, boxed_symbol(lock-on-target-sign-1), 0);
                 }
                 lambda {
                     wait-spawn-entity-group-async(efp-signpost-ridge-infected, 0);

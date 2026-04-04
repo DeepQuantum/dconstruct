@@ -96,7 +96,7 @@ statescript {
                     set-shader-instance-blend-offset(obj-nor-pyre-knife-1, 1.00, 1);
                 }
                 lambda {
-                    fact-set(snpc-nor-parking-hanging-militia-1, gutted?, new-boxed-value(7, no-damage));
+                    fact-set(snpc-nor-parking-hanging-militia-1, gutted?, boxed_symbol(no-damage));
                 }
                 lambda {
                     animate-start(obj-nor-guts-1, nor-scar-forest-gutting-a--guts, ap-nor-parking-hanging-death-1, 0);
@@ -227,104 +227,104 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-pyre-knife-1, nor-scar-forest-gutting-a--knife, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-guts-1, nor-scar-forest-gutting-a--guts, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-forest-noose-1, nor-scar-forest-gutting-a--noose, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-parking-lamppost-1, nor-scar-forest-gutting-a--lampost, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-pyre-bucket-1, nor-scar-forest-gutting-a--bucket, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 4;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 2;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-glt-combat-forest-5, nor-scar-forest-gutting-a--torch-guy, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 4;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 2;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     animate_(npc-glt-combat-forest-3, nor-scar-forest-gutting-a--observer, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(snpc-nor-parking-hanging-militia-1, nor-scar-forest-gutting-a--victim, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 4;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 2;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
                     wait-animate_(npc-glt-combat-forest-4, nor-scar-forest-gutting-a--killer, var_0);
                 }
                 lambda {
@@ -385,17 +385,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : glt-forest-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-forest-npcs) {
                         if (npc-alive?(var_2)) {
                             u64? var_4 = npc-get-target-entity-awareness(var_2);
                             if (var_4 == 2 || var_4 == 3 && npc-has-investigate-entity?(var_2)) {
@@ -427,39 +417,39 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(obj-nor-forest-noose-1, nor-scar-forest-gutting-b--noose, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                     animate_(obj-nor-parking-lamppost-1, nor-scar-forest-gutting-b--lampost, var_0);
                 }
                 lambda {
                     if (!object-anim-playing?(obj-nor-pyre-bucket-1, nor-scar-forest-gutting-b--bucket, 0)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                         animate_(obj-nor-pyre-bucket-1, nor-scar-forest-gutting-b--bucket, var_1);
                     }
                 }
                 lambda {
                     if (!get-boolean(victim-is-physicalized, self)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
                         wait-animate_(snpc-nor-parking-hanging-militia-1, nor-scar-forest-gutting-b--victim, var_1);
                     }
                 }
@@ -468,7 +458,7 @@ statescript {
                 lambda {
                     if (!get-boolean(killers-dont-animate, self) && get-boolean(part-a-completed, self)) {
                         wait-until-anim-frame(snpc-nor-parking-hanging-militia-1, nor-scar-forest-gutting-b--victim, 245.00, 2);
-                        fact-set(snpc-nor-parking-hanging-militia-1, gutted?, new-boxed-value(7, guts-out));
+                        fact-set(snpc-nor-parking-hanging-militia-1, gutted?, boxed_symbol(guts-out));
                         set-svar-as-boolean(nor-forest-hanging-interrupted-before-gutting, 1);
                     }
                 }
@@ -479,7 +469,7 @@ statescript {
                         wait-until-anim-frame(snpc-nor-parking-hanging-militia-1, nor-scar-forest-gutting-b--victim, 25.00, 2);
                         if (object-anim-playing?(npc-glt-combat-forest-4, nor-scar-forest-gutting-b--killer, 0)) {
                             set-table-shader-material-values-param(*militia-hanging-show-guts*, 0.00);
-                            fact-set(snpc-nor-parking-hanging-militia-1, gutted?, new-boxed-value(7, stab-wound));
+                            fact-set(snpc-nor-parking-hanging-militia-1, gutted?, boxed_symbol(stab-wound));
                             set-visible(obj-nor-guts-1, 1);
                         }
                     }
@@ -580,83 +570,73 @@ statescript {
                 lambda {
                     if (get-boolean(part-a-completed, self) && !get-boolean(killers-dont-animate, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                         animate_(obj-nor-pyre-knife-1, nor-scar-forest-gutting-b--knife, var_2);
                         if (!get-svar-as-boolean(nor-forest-hanging-interrupted-before-gutting)) {
                             u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_5 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                            *(i32*)*var_5[0] = 10;
+                            *(u64*)(*var_5[0] + 8) = 0;
+                            *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
                             animate_(obj-nor-guts-1, nor-scar-forest-gutting-b--guts, var_5);
                         }
                         u64? var_7 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1.75;
-                        *(i32*)*(*var_7 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_7 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_7 + (4 * 8)) = 2;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_7[1] = 30;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 1.75;
+                        *(i32*)*var_7[2] = 3;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(u8*)(*var_7[2] + 8) = 1;
+                        *(i32*)*var_7[3] = 4;
+                        *(u64*)(*var_7[3] + 8) = 0;
+                        *(u8*)(*var_7[3] + 8) = 1;
+                        *(i32*)*var_7[4] = 2;
+                        *(u64*)(*var_7[4] + 8) = 0;
+                        *(u8*)(*var_7[4] + 8) = 1;
                         animate_(npc-glt-combat-forest-5, nor-scar-forest-gutting-b--torch-guy, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_9 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (4 * 8)) = 2;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_9[1] = 30;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 1.00;
+                        *(i32*)*var_9[2] = 3;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(u8*)(*var_9[2] + 8) = 1;
+                        *(i32*)*var_9[3] = 4;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(u8*)(*var_9[3] + 8) = 1;
+                        *(i32*)*var_9[4] = 2;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(u8*)(*var_9[4] + 8) = 1;
                         animate_(npc-glt-combat-forest-3, nor-scar-forest-gutting-b--observer, var_9);
                         u64? var_11 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                        *(i32*)*(*var_11 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_11 + (2 * 8)) = 3;
-                        *(u64*)(*(*var_11 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_11 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_11 + (3 * 8)) = 4;
-                        *(u64*)(*(*var_11 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_11 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_11 + (4 * 8)) = 2;
-                        *(u64*)(*(*var_11 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_11 + (4 * 8)) + 8) = 1;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                        *(i32*)*var_11[1] = 30;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 1.00;
+                        *(i32*)*var_11[2] = 3;
+                        *(u64*)(*var_11[2] + 8) = 0;
+                        *(u8*)(*var_11[2] + 8) = 1;
+                        *(i32*)*var_11[3] = 4;
+                        *(u64*)(*var_11[3] + 8) = 0;
+                        *(u8*)(*var_11[3] + 8) = 1;
+                        *(i32*)*var_11[4] = 2;
+                        *(u64*)(*var_11[4] + 8) = 0;
+                        *(u8*)(*var_11[4] + 8) = 1;
                         wait-animate_(npc-glt-combat-forest-4, nor-scar-forest-gutting-b--killer, var_11);
                         kill-entity-if-spawned(obj-nor-pyre-knife-1);
                         wait(1.50);
                         set-boolean(gutting-igc-done, 1, self);
                         wait(2.50);
-                        foreach (u64? var_14 : glt-forest-npcs) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : glt-forest-npcs) {
                             if (npc-alive?(var_15)) {
                                 send-event(init-paired-patrol, var_15);
                             }
@@ -682,17 +662,7 @@ statescript {
                         if (!npc-alive?(npc-glt-combat-forest-4)) {
                             go(interrupt-igc, 1);
                         }
-                        foreach (u64? var_3 : glt-forest-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : glt-forest-npcs) {
                             if (npc-alive?(var_4)) {
                                 u64? var_6 = npc-get-target-entity-awareness(var_4);
                                 if (var_6 == 2 || var_6 == 3 && npc-has-investigate-entity?(var_4)) {
@@ -736,17 +706,7 @@ statescript {
                     stop-animating(npc-glt-combat-forest-5, 2, 0.50, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : glt-forest-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : glt-forest-npcs) {
                         if (npc-alive?(var_2)) {
                             send-event(init-paired-patrol, var_2);
                         }
@@ -829,52 +789,52 @@ statescript {
                     if (!get-boolean(igc-interrupted, self)) {
                         if (!object-anim-playing?(obj-nor-pyre-bucket-1, nor-scar-forest-gutting-b--bucket, 0)) {
                             u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                            *(i32*)*(*var_2 + (1 * 8)) = 58;
-                            *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_2 + (2 * 8)) = 56;
-                            *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                            *(i32*)*var_2[1] = 58;
+                            *(u64*)(*var_2[1] + 8) = 0;
+                            *(f32*)(*var_2[1] + 8) = 1.00;
+                            *(i32*)*var_2[2] = 56;
+                            *(u64*)(*var_2[2] + 8) = 0;
+                            *(f32*)(*var_2[2] + 8) = 0.00;
                             animate_(obj-nor-pyre-bucket-1, nor-scar-forest-gutting-b--bucket, var_2);
                         }
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-nor-parking-lamppost-1, nor-scar-forest-gutting-b--lampost, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-parking-hanging-death-1, 1);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 1.00;
+                    *(i32*)*var_0[2] = 56;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
+                    *(i32*)*var_0[3] = 28;
+                    *(u64*)(*var_0[3] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 0.20;
                     }
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = var_3;
+                    *(f32*)(*var_0[3] + 8) = var_3;
                     animate_(snpc-nor-parking-hanging-militia-1, nor-scar-forest-gutting-b--victim, var_0);
                 }
                 lambda {

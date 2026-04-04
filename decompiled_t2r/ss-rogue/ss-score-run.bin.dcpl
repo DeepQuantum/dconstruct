@@ -27,28 +27,28 @@ u16 ss-score-run--tts-for-item-index(u64?* arg_0) {
             if (!is-final-build?()) {
                 display(dc:format("ss-score-run-tts-for-item-index: %d", arg_0), 19);
             }
-            speak-text-to-speech-formatted(new-boxed-value(7, *(u64*)var_3), 0, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, *(u64*)(var_3 + 8)), 0, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_RANK), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(*(u64*)var_3), 0, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(*(u64*)(var_3 + 8)), 0, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_RANK), 1, 0, 1);
             speak-text-to-speech-formatted(
-                new-boxed-value(7, rogue-score-rank-tts-sid(*(i32*)(var_3 + 24))),
+                boxed_symbol(rogue-score-rank-tts-sid(*(i32*)(var_3 + 24))),
                 0,
                 0,
                 1
             );
-            speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_SCORE), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_SCORE), 1, 0, 1);
             speak-text-to-speech-formatted(
                 cipher-box-formatted-number-string(SINGLE_NUMBER, (i32)*(f32*)(var_3 + 40), 0, 0, 0),
                 0,
                 0,
                 1
             );
-            speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_RUN_TOTAL), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_RUN_TOTAL), 1, 0, 1);
             speak-text-to-speech-formatted(cipher-box-formatted-number-string(SINGLE_NUMBER, get-int32(run-total-value, self), 0, 0, 0), 1, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_SCORE_RUN_RANK), 1, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, rogue-score-rank-tts-sid(get-int32(run-total-rank, self))), 0, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(ROGUE_SCORE_RUN_RANK), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(rogue-score-rank-tts-sid(get-int32(run-total-rank, self))), 0, 0, 1);
             if (get-svar-as-boolean(rogue-cheat-mod-ever-enabled)) {
-                speak-text-to-speech-formatted(new-boxed-value(7, MENU_NO_RETURN_SCORES_MODIFIERS_ENABLED_TIP), 1, 0, 1);
+                speak-text-to-speech-formatted(boxed_symbol(MENU_NO_RETURN_SCORES_MODIFIERS_ENABLED_TIP), 1, 0, 1);
             }
             var_6 = set-int64(last-played-tts-frame, var_4, self);
         } else {

@@ -98,7 +98,7 @@ statescript {
                     u64? var_2 = encounter--get-encounter-ddict-at(encounter--get-run-structure(), var_0);
                     u16 var_5;
                     if (encounter--has-skulls?(var_2)) {
-                        var_5 = darray-contains?(encounter--get-skulls(var_2), new-boxed-value(7, map-mystery));
+                        var_5 = darray-contains?(encounter--get-skulls(var_2), boxed_symbol(map-mystery));
                     } else {
                         var_5 = 0;
                     }
@@ -125,19 +125,9 @@ statescript {
                     set-symbol(skulls, darray-create(self, -1, 0), self);
                     set-boolean(created-darray-skulls, 1, self);
                     if (encounter--has-skulls?(var_2)) {
-                        foreach (u64? var_7 : encounter--get-skulls-sorted(var_2, self)) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : encounter--get-skulls-sorted(var_2, self)) {
                             if (*(f32*)(skull--get-skull-by-id(var_8) + 140) != 0.00) {
-                                darray-append(get-symbol(skulls, self), new-boxed-value(7, var_8), 0);
+                                darray-append(get-symbol(skulls, self), boxed_symbol(var_8), 0);
                             }
                         }
                     }

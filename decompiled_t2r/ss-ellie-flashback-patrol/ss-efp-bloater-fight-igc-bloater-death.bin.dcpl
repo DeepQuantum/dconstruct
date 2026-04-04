@@ -33,17 +33,7 @@ u64? efp-player-in-force-grab-area?() {
 
 u64? efp-joel-find-offscreen-position() {
     u16 var_2;
-    foreach (u64? var_3 : bloater-death-aps) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : bloater-death-aps) {
         u16 var_13;
         if (!(is-on-screen?(get-spawner-position(var_4, 1), 0.00)) && !(is-on-screen?(offset-position(get-spawner-position(var_4, 1), alloc-vector(0.00, 1.20, 0.00, 1.00, 0)), 0.00))) {
             u64? var_16 = get-locator-distance(get-spawner-locator(var_4, 1), get-object-locator(player));
@@ -85,29 +75,29 @@ u64? efp-runner-grab-eligible-for-bloater?() {
         bool var_4 = !(player == 0) && !(npc-efp-bloater-1 == 0) && var_3 < 7.40 && var_3 > 4.40;
         u64? var_8;
         if (var_4) {
-            var_8 = new-boxed-value(7, true);
+            var_8 = boxed_symbol(true);
         } else {
-            var_8 = new-boxed-value(7, false);
+            var_8 = boxed_symbol(false);
         }
         do-melee-log(
             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-            new-boxed-value(6, var_3),
-            new-boxed-value(6, 4.40),
-            new-boxed-value(6, 7.40),
+            boxed_f32(var_3),
+            boxed_f32(4.40),
+            boxed_f32(7.40),
             var_8
         );
         u64? var_12 = get-object-distance(player, npc-efp-bloater-1);
-        new-boxed-value(6, var_12);
-        new-boxed-value(6, 6.00);
-        new-boxed-value(6, 9.00);
-        new-boxed-value(7, true);
+        boxed_f32(var_12);
+        boxed_f32(6.00);
+        boxed_f32(9.00);
+        boxed_symbol(true);
         var_2 = var_4 && efp-bloater-charging?() && var_12 && var_12 && var_12 && var_12 && var_12 && var_12;
     } else {
         u64? var_19 = get-object-distance(player, npc-efp-bloater-1);
-        new-boxed-value(6, var_19);
-        new-boxed-value(6, 6.00);
-        new-boxed-value(6, 9.00);
-        new-boxed-value(7, true);
+        boxed_f32(var_19);
+        boxed_f32(6.00);
+        boxed_f32(9.00);
+        boxed_symbol(true);
         var_2 = efp-bloater-charging?() && var_19 && var_19 && var_19 && var_19 && var_19 && var_19;
     }
     return var_2;
@@ -128,17 +118,7 @@ u16 efp-test-calculate-blocker-positions() {
     if (!is-final-build?()) {
         display(dc:format(""), 19);
     }
-    foreach (u64? var_13 : bloater-death-aps) {
-        u16 var_14;
-        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-            var_14 = *(u64*)var_13;
-        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-            var_14 = *(u64*)var_13;
-        } else {
-            var_14 = 0;
-        }
+    foreach (u64? var_14 : bloater-death-aps) {
         print-symbol(var_14, self);
         print-bound-frame(offset-locator(get-spawner-locator(var_14, 1), transform-vector-world-to-local(vector-between-locators(get-spawner-locator(get-symbol(bloater-kill-ap, self), 1), get-spawner-locator(var_2, 1)), get-spawner-locator(get-symbol(bloater-kill-ap, self), 1))), self);
     }
@@ -148,7 +128,7 @@ u16 efp-test-calculate-blocker-positions() {
 u64? efp-bloater-death-choose-ap() {
     u64? var_0 = get-closest-spawner-in-group-to-object(bloater-death-aps, player);
     set-symbol(bloater-kill-ap, var_0, self);
-    set-int32(ap-index, darray-find(bloater-death-aps, new-boxed-value(7, var_0), 0), self);
+    set-int32(ap-index, darray-find(bloater-death-aps, boxed_symbol(var_0), 0), self);
     return set-svar(efp-bloater-death-location, get-int32(ap-index, self));
 }
 
@@ -649,7 +629,7 @@ statescript {
                     efp-bloater-death-choose-ap();
                 }
                 lambda {
-                    send-event(clear-nearby-debris, ss-efp-bloater-fight-debris-1, new-boxed-value(7, get-symbol(bloater-kill-ap, self)));
+                    send-event(clear-nearby-debris, ss-efp-bloater-fight-debris-1, boxed_symbol(get-symbol(bloater-kill-ap, self)));
                 }
                 lambda {
                     npc-set-ragdoll-allowed(npc-efp-bloater-1, 0, 1);
@@ -674,28 +654,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(joel, efp-bloater-attack-exit--joel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, efp-bloater-attack-exit--ellie, var_0);
                 }
                 lambda {
@@ -741,15 +721,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     wait-animate_(npc-efp-bloater-1, efp-bloater-attack-exit--bloater, var_0);
                 }
                 lambda {
@@ -802,15 +782,15 @@ statescript {
                 lambda {
                     wait-for(anim-starting);
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-symbol(bloater-kill-ap, self), 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.00;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.00;
                     animate_(npc-get-weapon-process-id-from-weapon-id(joel, machete-joel), efp-bloater-attack-exit--machete, var_1);
                     wait-frames(508);
                     npc-holster-melee(joel, 4, 1, -1.00, 0);
@@ -1057,17 +1037,7 @@ statescript {
                     set-player-invincible();
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (var_2 != npc-efp-bloater-1 && npc-alive?(var_2)) {
                             character-set-invincibility(var_2, 0, 0);
                             npc-die(var_2, 0, 0, 0, 1);
@@ -1126,7 +1096,7 @@ statescript {
                     wait(0.25);
                 }
                 lambda {
-                    send-event(clear-nearby-debris, ss-efp-bloater-fight-debris-1, new-boxed-value(7, get-symbol(bloater-kill-ap, self)));
+                    send-event(clear-nearby-debris, ss-efp-bloater-fight-debris-1, boxed_symbol(get-symbol(bloater-kill-ap, self)));
                 }
                 lambda {
                     go(complete, 1);

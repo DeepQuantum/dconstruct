@@ -126,21 +126,21 @@ statescript {
         block event rogue-run-failed {
             track main {
                 lambda {
-                    fact-set(faction-player, restrict-hub-continue, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-player, restrict-hub-continue, boxed_timeframePOD(get-current-timeframe(0)));
                 }
             }
         }
         block event rogue-run-abandoned {
             track main {
                 lambda {
-                    fact-set(faction-player, restrict-hub-continue, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-player, restrict-hub-continue, boxed_timeframePOD(get-current-timeframe(0)));
                 }
             }
         }
         block event rogue-run-complete {
             track main {
                 lambda {
-                    fact-set(faction-player, restrict-hub-continue, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-player, restrict-hub-continue, boxed_timeframePOD(get-current-timeframe(0)));
                 }
             }
         }
@@ -335,14 +335,14 @@ statescript {
                         if (!(var_1 == 0)) {
                             var_3 = new-fact-dictionary(
                                 speaker,
-                                new-boxed-value(7, player),
+                                boxed_symbol(player),
                                 listener,
-                                new-boxed-value(7, var_1),
+                                boxed_symbol(var_1),
                                 is-buddy-kill?,
-                                new-boxed-value(1, get-boolean(buddy-last-kill?, self))
+                                boxed_bool(get-boolean(buddy-last-kill?, self))
                             );
                         } else if (!(!(var_1 == 0))) {
-                            var_3 = new-fact-dictionary(speaker, new-boxed-value(7, player));
+                            var_3 = new-fact-dictionary(speaker, boxed_symbol(player));
                         } else {
                             var_3 = 0;
                         }
@@ -367,19 +367,19 @@ statescript {
                     set-boolean(buddy-last-kill?, 0, self);
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-search-check-in, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-search-check-in, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-search-location, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-search-location, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-clear-location, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-clear-location, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-search-location-whistle, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-search-location-whistle, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     go(wait-for-events, 1);
@@ -412,7 +412,7 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-match-start, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-match-start, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     go(done, 1);
@@ -465,7 +465,7 @@ statescript {
                     request-dialog(ai-enemy-rl-infected-match-start, get-closest-enemy-to-player(9999.00, 0, 15), get-player-id(), get-symbol(current-buddy, ss-buddy-manager-1), 0, 0, 0);
                 }
                 lambda {
-                    fact-set(faction-buddy, restrict-zone-warning, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-buddy, restrict-zone-warning, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     go(wait-for-events, 1);
@@ -507,20 +507,20 @@ statescript {
                     if (!(var_0 == 0)) {
                         var_2 = new-fact-dictionary(
                             speaker,
-                            new-boxed-value(7, player),
+                            boxed_symbol(player),
                             listener,
-                            new-boxed-value(7, var_0),
+                            boxed_symbol(var_0),
                             is-brutal?,
-                            new-boxed-value(1, get-boolean(brutal-kill?, self)),
+                            boxed_bool(get-boolean(brutal-kill?, self)),
                             is-buddy-kill?,
-                            new-boxed-value(1, get-boolean(buddy-last-kill?, self))
+                            boxed_bool(get-boolean(buddy-last-kill?, self))
                         );
                     } else if (!(!(var_0 == 0))) {
                         var_2 = new-fact-dictionary(
                             speaker,
-                            new-boxed-value(7, player),
+                            boxed_symbol(player),
                             is-brutal?,
-                            new-boxed-value(1, get-boolean(brutal-kill?, self))
+                            boxed_bool(get-boolean(brutal-kill?, self))
                         );
                     } else {
                         var_2 = 0;
@@ -561,36 +561,36 @@ statescript {
                         if (get-symbol(vox-last-npc-killer, self) == var_0) {
                             var_1 = new-fact-dictionary(
                                 speaker,
-                                new-boxed-value(7, var_0),
+                                boxed_symbol(var_0),
                                 listener,
-                                new-boxed-value(7, player),
+                                boxed_symbol(player),
                                 boss-last-killed?,
-                                new-boxed-value(1, get-boolean(vox-boss-killed?, self)),
+                                boxed_bool(get-boolean(vox-boss-killed?, self)),
                                 death-reason,
-                                new-boxed-value(7, get-symbol(last-npc-death-reason, self)),
+                                boxed_symbol(get-symbol(last-npc-death-reason, self)),
                                 npc-infected?,
-                                new-boxed-value(1, get-boolean(vox-last-npc-infected?, self)),
+                                boxed_bool(get-boolean(vox-last-npc-infected?, self)),
                                 dog-last-killed?,
-                                new-boxed-value(1, get-boolean(vox-last-npc-dog-kill?, self)),
+                                boxed_bool(get-boolean(vox-last-npc-dog-kill?, self)),
                                 is-brutal?,
-                                new-boxed-value(1, get-boolean(brutal-kill?, self))
+                                boxed_bool(get-boolean(brutal-kill?, self))
                             );
                         } else if (get-symbol(vox-last-npc-killer, self) == player) {
                             var_1 = new-fact-dictionary(
                                 speaker,
-                                new-boxed-value(7, player),
+                                boxed_symbol(player),
                                 listener,
-                                new-boxed-value(7, var_0),
+                                boxed_symbol(var_0),
                                 boss-last-killed?,
-                                new-boxed-value(1, get-boolean(vox-boss-killed?, self)),
+                                boxed_bool(get-boolean(vox-boss-killed?, self)),
                                 death-reason,
-                                new-boxed-value(7, get-symbol(last-npc-death-reason, self)),
+                                boxed_symbol(get-symbol(last-npc-death-reason, self)),
                                 npc-infected?,
-                                new-boxed-value(1, get-boolean(vox-last-npc-infected?, self)),
+                                boxed_bool(get-boolean(vox-last-npc-infected?, self)),
                                 dog-last-killed?,
-                                new-boxed-value(1, get-boolean(vox-last-npc-dog-kill?, self)),
+                                boxed_bool(get-boolean(vox-last-npc-dog-kill?, self)),
                                 is-brutal?,
-                                new-boxed-value(1, get-boolean(brutal-kill?, self))
+                                boxed_bool(get-boolean(brutal-kill?, self))
                             );
                         } else {
                             var_1 = 0;
@@ -598,17 +598,17 @@ statescript {
                     } else if (!(!(var_0 == 0))) {
                         var_1 = new-fact-dictionary(
                             speaker,
-                            new-boxed-value(7, player),
+                            boxed_symbol(player),
                             boss-last-killed?,
-                            new-boxed-value(1, get-boolean(vox-boss-killed?, self)),
+                            boxed_bool(get-boolean(vox-boss-killed?, self)),
                             death-reason,
-                            new-boxed-value(7, get-symbol(last-npc-death-reason, self)),
+                            boxed_symbol(get-symbol(last-npc-death-reason, self)),
                             npc-infected?,
-                            new-boxed-value(1, get-boolean(vox-last-npc-infected?, self)),
+                            boxed_bool(get-boolean(vox-last-npc-infected?, self)),
                             dog-last-killed?,
-                            new-boxed-value(1, get-boolean(vox-last-npc-dog-kill?, self)),
+                            boxed_bool(get-boolean(vox-last-npc-dog-kill?, self)),
                             is-brutal?,
-                            new-boxed-value(1, get-boolean(brutal-kill?, self))
+                            boxed_bool(get-boolean(brutal-kill?, self))
                         );
                     } else {
                         var_1 = 0;
@@ -616,7 +616,7 @@ statescript {
                     request-dialog-with-facts(player-rl-boss-match-end, var_1, 0);
                 }
                 lambda {
-                    fact-set(faction-player, restrict-hub-continue, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-player, restrict-hub-continue, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     go(done, 1);

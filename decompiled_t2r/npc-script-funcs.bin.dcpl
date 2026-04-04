@@ -74,14 +74,14 @@ u16 print-attack-info(u64? arg_0) {
     if (!(var_0 == 0)) {
         if (!is-final-build?()) {
             u16 var_13;
-            if (new-boxed-value(1, *(u8*)(var_0 + 96))) {
-                var_13 = *(u16*)(new-boxed-value(1, *(u8*)(var_0 + 96)) + 12);
+            if (boxed_bool(*(u8*)(var_0 + 96))) {
+                var_13 = *(u16*)(boxed_bool(*(u8*)(var_0 + 96)) + 12);
             } else {
                 var_13 = 0;
             }
             string var_16;
             if (var_13 == 1) {
-                u64? var_18 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_18 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_19;
                 if (var_18 && *(u16*)(var_18 + 12) == 1) {
                     var_19 = *(u8*)var_18;
@@ -106,7 +106,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%s", var_20);
             } else if (var_13 == 2) {
-                u64? var_23 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_23 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_24;
                 if (var_23 && *(u16*)(var_23 + 12) == 1) {
                     var_24 = *(u8*)var_23;
@@ -125,7 +125,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%d", var_24);
             } else if (var_13 == 3) {
-                u64? var_27 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_27 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_28;
                 if (var_27 && *(u16*)(var_27 + 12) == 1) {
                     var_28 = *(u8*)var_27;
@@ -144,7 +144,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%uU", var_28);
             } else if (var_13 == 4) {
-                u64? var_31 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_31 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_32;
                 if (var_31 && *(u16*)(var_31 + 12) == 1) {
                     var_32 = *(u8*)var_31;
@@ -163,7 +163,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%lldLL", var_32);
             } else if (var_13 == 5) {
-                u64? var_35 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_35 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_36;
                 if (var_35 && *(u16*)(var_35 + 12) == 1) {
                     var_36 = *(u8*)var_35;
@@ -182,7 +182,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%lluULL", var_36);
             } else if (var_13 == 6) {
-                u64? var_39 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_39 = boxed_bool(*(u8*)(var_0 + 96));
                 f32 var_40;
                 if (var_39 && *(u16*)(var_39 + 12) == 1) {
                     var_40 = *(u8*)var_39;
@@ -201,7 +201,7 @@ u16 print-attack-info(u64? arg_0) {
                 }
                 var_16 = dc:format("%f", var_40);
             } else if (var_13 == 7) {
-                u64? var_43 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_43 = boxed_bool(*(u8*)(var_0 + 96));
                 u16 var_44;
                 if (var_43 && *(u16*)(var_43 + 12) == 7) {
                     var_44 = *(u64*)var_43;
@@ -218,9 +218,9 @@ u16 print-attack-info(u64? arg_0) {
             } else if (var_13 == 12) {
                 var_16 = "<process-handle>";
             } else if (var_13 == 13) {
-                var_16 = dc:format("<pointer #x%p>", *(i64*)new-boxed-value(1, *(u8*)(var_0 + 96)));
+                var_16 = dc:format("<pointer #x%p>", *(i64*)boxed_bool(*(u8*)(var_0 + 96)));
             } else if (var_13 == 14) {
-                u64? var_51 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_51 = boxed_bool(*(u8*)(var_0 + 96));
                 string var_52;
                 if (var_51 && *(u16*)(var_51 + 12) == 14) {
                     var_52 = *var_51;
@@ -234,7 +234,7 @@ u16 print-attack-info(u64? arg_0) {
                     *(f32*)(var_52 + 8)
                 );
             } else if (var_13 == 15) {
-                u64? var_57 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_57 = boxed_bool(*(u8*)(var_0 + 96));
                 string var_58;
                 if (var_57 && *(u16*)(var_57 + 12) == 15) {
                     var_58 = *var_57;
@@ -254,7 +254,7 @@ u16 print-attack-info(u64? arg_0) {
             } else if (var_13 == 18) {
                 var_16 = "<bound-frame>";
             } else if (var_13 == 19) {
-                u64? var_63 = new-boxed-value(1, *(u8*)(var_0 + 96));
+                u64? var_63 = boxed_bool(*(u8*)(var_0 + 96));
                 string var_64;
                 if (var_63 && *(u16*)(var_63 + 12) == 19) {
                     var_64 = *(i64*)var_63;
@@ -601,23 +601,23 @@ u64? npc-use-closest-cover(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? 
 u64? wait-npc-play-feather-blend-with-turn-to(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, f32 arg_4, f32 arg_5, u64? arg_6, u64? arg_7) {
     npc-request-hold(arg_0, 10.00);
     u64? var_0 = #%alloc-array(single-frame, 16, 10, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 28;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (0 * 8)) + 8) = arg_6;
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = arg_7;
-    *(i32*)*(*var_0 + (2 * 8)) = 27;
-    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 2;
-    *(i32*)*(*var_0 + (3 * 8)) = 29;
-    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 2;
-    *(i32*)*(*var_0 + (4 * 8)) = 57;
-    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (4 * 8)) + 8) = get-animation-frame(arg_0, 0, arg_1);
-    *(i32*)*(*var_0 + (5 * 8)) = 22;
-    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
+    *(i32*)*var_0[0] = 28;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(f32*)(*var_0[0] + 8) = arg_6;
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = arg_7;
+    *(i32*)*var_0[2] = 27;
+    *(u64*)(*var_0[2] + 8) = 0;
+    *(u8*)(*var_0[2] + 8) = 2;
+    *(i32*)*var_0[3] = 29;
+    *(u64*)(*var_0[3] + 8) = 0;
+    *(u8*)(*var_0[3] + 8) = 2;
+    *(i32*)*var_0[4] = 57;
+    *(u64*)(*var_0[4] + 8) = 0;
+    *(f32*)(*var_0[4] + 8) = get-animation-frame(arg_0, 0, arg_1);
+    *(i32*)*var_0[5] = 22;
+    *(u64*)(*var_0[5] + 8) = 0;
     f32 var_2;
     if (arg_5 > 0.00) {
         if (1.00 < (arg_5 / (get-animation-duration(arg_0, arg_1) * 30.00))) {
@@ -628,19 +628,19 @@ u64? wait-npc-play-feather-blend-with-turn-to(u64? arg_0, u64? arg_1, u64? arg_2
     } else {
         var_2 = 1.00;
     }
-    *(f32*)(*(*var_0 + (5 * 8)) + 8) = var_2;
-    *(i32*)*(*var_0 + (6 * 8)) = 40;
-    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-    *(i32*)(*(*var_0 + (6 * 8)) + 8) = 1;
-    *(i32*)*(*var_0 + (7 * 8)) = 75;
-    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-    *(u64*)(*(*var_0 + (7 * 8)) + 8) = arg_3;
-    *(i32*)*(*var_0 + (8 * 8)) = 52;
-    *(u64*)(*(*var_0 + (8 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (8 * 8)) + 8) = 0;
-    *(i32*)*(*var_0 + (9 * 8)) = 32;
-    *(u64*)(*(*var_0 + (9 * 8)) + 8) = 0;
-    *(u8*)(*(*var_0 + (9 * 8)) + 8) = 1;
+    *(f32*)(*var_0[5] + 8) = var_2;
+    *(i32*)*var_0[6] = 40;
+    *(u64*)(*var_0[6] + 8) = 0;
+    *(i32*)(*var_0[6] + 8) = 1;
+    *(i32*)*var_0[7] = 75;
+    *(u64*)(*var_0[7] + 8) = 0;
+    *(u64*)(*var_0[7] + 8) = arg_3;
+    *(i32*)*var_0[8] = 52;
+    *(u64*)(*var_0[8] + 8) = 0;
+    *(u8*)(*var_0[8] + 8) = 0;
+    *(i32*)*var_0[9] = 32;
+    *(u64*)(*var_0[9] + 8) = 0;
+    *(u8*)(*var_0[9] + 8) = 1;
     animate_(arg_0, arg_1, var_0);
     stop-animating(arg_0, 0, arg_6, arg_1, 0);
     wait-one-frame();
@@ -673,18 +673,18 @@ u64? wait-npc-use-positional-action-pack(u64? arg_0, u64? arg_1, u64? arg_2, u64
         wait-npc-move-to(arg_0, var_2, arg_2, arg_3, arg_9, 0, 0, 0);
         npc-request-buddy-look(arg_0, 0);
         u64? var_10 = #%alloc-array(single-frame, 16, 4, 1);
-        *(i32*)*(*var_10 + (0 * 8)) = 28;
-        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-        *(f32*)(*(*var_10 + (0 * 8)) + 8) = arg_5;
-        *(i32*)*(*var_10 + (1 * 8)) = 30;
-        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_10 + (1 * 8)) + 8) = arg_6;
-        *(i32*)*(*var_10 + (2 * 8)) = 58;
-        *(u64*)(*(*var_10 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_10 + (2 * 8)) + 8) = get-best-entry-phase(arg_0, tag-symbol(animation-name, arg_1), get-object-locator(arg_0), 7.00, apReference, 0);
-        *(i32*)*(*var_10 + (3 * 8)) = 31;
-        *(u64*)(*(*var_10 + (3 * 8)) + 8) = 0;
-        *(u8*)(*(*var_10 + (3 * 8)) + 8) = arg_4;
+        *(i32*)*var_10[0] = 28;
+        *(u64*)(*var_10[0] + 8) = 0;
+        *(f32*)(*var_10[0] + 8) = arg_5;
+        *(i32*)*var_10[1] = 30;
+        *(u64*)(*var_10[1] + 8) = 0;
+        *(f32*)(*var_10[1] + 8) = arg_6;
+        *(i32*)*var_10[2] = 58;
+        *(u64*)(*var_10[2] + 8) = 0;
+        *(f32*)(*var_10[2] + 8) = get-best-entry-phase(arg_0, tag-symbol(animation-name, arg_1), get-object-locator(arg_0), 7.00, apReference, 0);
+        *(i32*)*var_10[3] = 31;
+        *(u64*)(*var_10[3] + 8) = 0;
+        *(u8*)(*var_10[3] + 8) = arg_4;
         wait-animate_(arg_0, tag-symbol(animation-name, arg_1), var_10);
         var_1 = npc-set-look-aim-mode(arg_0, 0);
     } else {
@@ -727,15 +727,15 @@ u64? wait-npc-move-to-and-play-anim(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg
     set-bound-frame(arg_0, arg_3, self);
     wait-npc-move-to(arg_1, get-animation-entry(arg_1, arg_2, arg_3, 0, 0.00, apReference), arg_4, arg_5, 0, 0, 0, 0);
     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_1 + (0 * 8)) = 10;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(arg_0, self);
-    *(i32*)*(*var_1 + (1 * 8)) = 28;
-    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.30;
-    *(i32*)*(*var_1 + (2 * 8)) = 30;
-    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
+    *(i32*)*var_1[0] = 10;
+    *(u64*)(*var_1[0] + 8) = 0;
+    *(u64*)(*var_1[0] + 8) = get-bound-frame(arg_0, self);
+    *(i32*)*var_1[1] = 28;
+    *(u64*)(*var_1[1] + 8) = 0;
+    *(f32*)(*var_1[1] + 8) = 0.30;
+    *(i32*)*var_1[2] = 30;
+    *(u64*)(*var_1[2] + 8) = 0;
+    *(f32*)(*var_1[2] + 8) = 0.30;
     return wait-animate_(arg_1, arg_2, var_1);
 }
 
@@ -750,7 +750,7 @@ u64? wait-npc-corner-check-spawner(u64? arg_0, u64? arg_1, bool arg_2) {
 }
 
 u64? turret-force-aim-at(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(force-aim-at, arg_0, new-boxed-value(7, arg_1), new-boxed-value(6, arg_2));
+    return send-event(force-aim-at, arg_0, boxed_symbol(arg_1), boxed_f32(arg_2));
 }
 
 u64? ai-post-is-valid?(i32 arg_0) {

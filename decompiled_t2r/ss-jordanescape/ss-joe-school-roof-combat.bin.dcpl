@@ -16,19 +16,9 @@ u16 wait-say-to-partner(bool arg_0, u64? arg_1) {
     if (npc-alive?(arg_0) || !player-in-meatshield?() && player-in-meatshield?() && get-player-to-object-distance(arg_0) > 2.00) {
         wait(0.50);
         u64? var_5 = darray-create(self, -1, 0);
-        foreach (u64? var_7 : rooftop-patrol) {
-            u16 var_8;
-            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                var_8 = *(u64*)var_7;
-            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                var_8 = *(u64*)var_7;
-            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                var_8 = *(u64*)var_7;
-            } else {
-                var_8 = 0;
-            }
+        foreach (u64? var_8 : rooftop-patrol) {
             if (!(arg_0 == var_8)) {
-                darray-append(var_5, new-boxed-value(7, var_8), 1);
+                darray-append(var_5, boxed_symbol(var_8), 1);
             }
         }
         u16 var_12;
@@ -156,7 +146,7 @@ statescript {
                 lambda {
                     if (npc-alive?(npc-joe-school-roof-militia-3)) {
                         start-timer(unmark-roof-npc-timer, 7.00, self, 1);
-                        send-event(buddy-mark-npc, player, new-boxed-value(7, npc-joe-school-roof-militia-3));
+                        send-event(buddy-mark-npc, player, boxed_symbol(npc-joe-school-roof-militia-3));
                     }
                 }
             }
@@ -164,7 +154,7 @@ statescript {
         block event unmark-roof-npc-timer {
             track main {
                 lambda {
-                    send-event(buddy-unmark-npc, player, new-boxed-value(7, npc-joe-school-roof-militia-3));
+                    send-event(buddy-unmark-npc, player, boxed_symbol(npc-joe-school-roof-militia-3));
                 }
             }
         }
@@ -234,17 +224,7 @@ statescript {
                     wait-spawn-npc-group-async(rooftop-patrol, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : rooftop-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : rooftop-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                         }
@@ -283,17 +263,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : rooftop-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : rooftop-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -425,30 +395,30 @@ statescript {
                 lambda {
                     if (character-in-meatshield-grab-against-defender?(player, npc-joe-school-roof-militia-1) && character-in-meatshield-grab?(player) || character-in-melee-attack-of-other-character?(npc-joe-school-roof-militia-1, player) && player-in-meatshield?() && !(player-get-meatshield() == npc-joe-school-roof-militia-1)) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 8, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_5 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_5 + (2 * 8)) = 20;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 165.00;
-                        *(i32*)*(*var_5 + (3 * 8)) = 24;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_5 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_5 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (6 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (6 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (7 * 8)) = 2;
-                        *(u64*)(*(*var_5 + (7 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (7 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 28;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 0.75;
+                        *(i32*)*var_5[1] = 30;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.75;
+                        *(i32*)*var_5[2] = 20;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 165.00;
+                        *(i32*)*var_5[3] = 24;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(i32*)(*var_5[3] + 8) = 2;
+                        *(i32*)*var_5[4] = 3;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(u8*)(*var_5[4] + 8) = 1;
+                        *(i32*)*var_5[5] = 4;
+                        *(u64*)(*var_5[5] + 8) = 0;
+                        *(u8*)(*var_5[5] + 8) = 1;
+                        *(i32*)*var_5[6] = 1;
+                        *(u64*)(*var_5[6] + 8) = 0;
+                        *(u8*)(*var_5[6] + 8) = 1;
+                        *(i32*)*var_5[7] = 2;
+                        *(u64*)(*var_5[7] + 8) = 0;
+                        *(u8*)(*var_5[7] + 8) = 1;
                         wait-animate_(npc-joe-school-roof-militia-1, npc-m-nw-pursue-meetup-vignette--npc-b, var_5);
                     }
                 }
@@ -495,27 +465,27 @@ statescript {
                 lambda {
                     if (character-in-meatshield-grab-against-defender?(player, npc-joe-school-roof-militia-2) && character-in-meatshield-grab?(player) || character-in-melee-attack-of-other-character?(npc-joe-school-roof-militia-2, player) && player-in-meatshield?() && !(player-get-meatshield() == npc-joe-school-roof-militia-2)) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 7, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 57;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 10.00;
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.60;
-                        *(i32*)*(*var_5 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.65;
-                        *(i32*)*(*var_5 + (3 * 8)) = 3;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (4 * 8)) = 4;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (5 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (6 * 8)) = 2;
-                        *(u64*)(*(*var_5 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (6 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 57;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 10.00;
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.60;
+                        *(i32*)*var_5[2] = 30;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.65;
+                        *(i32*)*var_5[3] = 3;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(u8*)(*var_5[3] + 8) = 1;
+                        *(i32*)*var_5[4] = 4;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(u8*)(*var_5[4] + 8) = 1;
+                        *(i32*)*var_5[5] = 1;
+                        *(u64*)(*var_5[5] + 8) = 0;
+                        *(u8*)(*var_5[5] + 8) = 1;
+                        *(i32*)*var_5[6] = 2;
+                        *(u64*)(*var_5[6] + 8) = 0;
+                        *(u8*)(*var_5[6] + 8) = 1;
                         wait-animate_(npc-joe-school-roof-militia-2, npc-pap-nw-uneasy-idle-look-around-e, var_5);
                     }
                 }
@@ -584,36 +554,36 @@ statescript {
                 lambda {
                     if (character-in-meatshield-grab-against-defender?(player, npc-joe-school-roof-militia-3) && character-in-meatshield-grab?(player) || character-in-melee-attack-of-other-character?(npc-joe-school-roof-militia-3, player) && player-in-meatshield?() && !(player-get-meatshield() == npc-joe-school-roof-militia-3)) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 10, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 59;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_5 + (0 * 8)) + 8) = 3;
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_5 + (2 * 8)) = 27;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (2 * 8)) + 8) = 3;
-                        *(i32*)*(*var_5 + (3 * 8)) = 45;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (3 * 8)) + 8) = 1.00;
-                        *(i32*)*(*var_5 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (4 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_5 + (5 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = get-spawner-locator(pos-joe-school-roof-patrol-start-3, 1);
-                        *(i32*)*(*var_5 + (6 * 8)) = 3;
-                        *(u64*)(*(*var_5 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (6 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (7 * 8)) = 4;
-                        *(u64*)(*(*var_5 + (7 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (7 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (8 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (8 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (8 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (9 * 8)) = 2;
-                        *(u64*)(*(*var_5 + (9 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (9 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 59;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(i32*)(*var_5[0] + 8) = 3;
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.50;
+                        *(i32*)*var_5[2] = 27;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(u8*)(*var_5[2] + 8) = 3;
+                        *(i32*)*var_5[3] = 45;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(f32*)(*var_5[3] + 8) = 1.00;
+                        *(i32*)*var_5[4] = 30;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(f32*)(*var_5[4] + 8) = 0.30;
+                        *(i32*)*var_5[5] = 10;
+                        *(u64*)(*var_5[5] + 8) = 0;
+                        *(u64*)(*var_5[5] + 8) = get-spawner-locator(pos-joe-school-roof-patrol-start-3, 1);
+                        *(i32*)*var_5[6] = 3;
+                        *(u64*)(*var_5[6] + 8) = 0;
+                        *(u8*)(*var_5[6] + 8) = 1;
+                        *(i32*)*var_5[7] = 4;
+                        *(u64*)(*var_5[7] + 8) = 0;
+                        *(u8*)(*var_5[7] + 8) = 1;
+                        *(i32*)*var_5[8] = 1;
+                        *(u64*)(*var_5[8] + 8) = 0;
+                        *(u8*)(*var_5[8] + 8) = 1;
+                        *(i32*)*var_5[9] = 2;
+                        *(u64*)(*var_5[9] + 8) = 0;
+                        *(u8*)(*var_5[9] + 8) = 1;
                         wait-animate_(npc-joe-school-roof-militia-3, npc-m-nw-pursue-meetup-vignette-enter--npc-a, var_5);
                     }
                 }
@@ -623,30 +593,30 @@ statescript {
                 lambda {
                     if (character-in-meatshield-grab-against-defender?(player, npc-joe-school-roof-militia-3) && character-in-meatshield-grab?(player) || character-in-melee-attack-of-other-character?(npc-joe-school-roof-militia-3, player) && player-in-meatshield?() && !(player-get-meatshield() == npc-joe-school-roof-militia-3)) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 8, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_5 + (1 * 8)) = 45;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.30;
-                        *(i32*)*(*var_5 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.75;
-                        *(i32*)*(*var_5 + (3 * 8)) = 24;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_5 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_5 + (4 * 8)) = 3;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (4 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (5 * 8)) = 4;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (5 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (6 * 8)) = 1;
-                        *(u64*)(*(*var_5 + (6 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (6 * 8)) + 8) = 1;
-                        *(i32*)*(*var_5 + (7 * 8)) = 2;
-                        *(u64*)(*(*var_5 + (7 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_5 + (7 * 8)) + 8) = 1;
+                        *(i32*)*var_5[0] = 28;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 0.30;
+                        *(i32*)*var_5[1] = 45;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.30;
+                        *(i32*)*var_5[2] = 30;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.75;
+                        *(i32*)*var_5[3] = 24;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(i32*)(*var_5[3] + 8) = 2;
+                        *(i32*)*var_5[4] = 3;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(u8*)(*var_5[4] + 8) = 1;
+                        *(i32*)*var_5[5] = 4;
+                        *(u64*)(*var_5[5] + 8) = 0;
+                        *(u8*)(*var_5[5] + 8) = 1;
+                        *(i32*)*var_5[6] = 1;
+                        *(u64*)(*var_5[6] + 8) = 0;
+                        *(u8*)(*var_5[6] + 8) = 1;
+                        *(i32*)*var_5[7] = 2;
+                        *(u64*)(*var_5[7] + 8) = 0;
+                        *(u8*)(*var_5[7] + 8) = 1;
                         wait-animate_(npc-joe-school-roof-militia-3, npc-m-nw-pursue-meetup-vignette--npc-a, var_5);
                     }
                 }
@@ -693,17 +663,7 @@ statescript {
             track player-seen {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : rooftop-patrol) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : rooftop-patrol) {
                             if (npc-alive?(var_2)) {
                                 if (npc-using-skill?(var_2, 20)) {
                                     set-boolean(first-meet-up-interrupted, 1, self);
@@ -875,24 +835,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.65;
-                    *(i32*)*(*var_0 + (2 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (3 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (4 * 8)) = 1;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.65;
+                    *(i32*)*var_0[2] = 3;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 1;
+                    *(i32*)*var_0[3] = 4;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
+                    *(i32*)*var_0[4] = 1;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 2;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(npc-joe-school-roof-militia-2, npc-pap-nw-uneasy-idle-look-around-a, var_0);
                 }
                 lambda {
@@ -966,17 +926,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : rooftop-patrol) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : rooftop-patrol) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -1026,20 +976,10 @@ statescript {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
                     u16 var_2;
-                    foreach (u64? var_3 : rooftop-patrol) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : rooftop-patrol) {
                         u16 var_6;
                         if (npc-alive?(var_4)) {
-                            darray-append(var_0, new-boxed-value(7, var_4), 1);
+                            darray-append(var_0, boxed_symbol(var_4), 1);
                             var_6 = 0;
                         } else {
                             var_6 = var_4;
@@ -1050,17 +990,7 @@ statescript {
  else if (var_2 == npc-joe-school-roof-militia-2) {}
  else if (var_2 == npc-joe-school-roof-militia-3) {}
 
-                    foreach (u64? var_10 : var_0) {
-                        u16 var_11;
-                        if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                            var_11 = *(u64*)var_10;
-                        } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                            var_11 = *(u64*)var_10;
-                        } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                            var_11 = *(u64*)var_10;
-                        } else {
-                            var_11 = 0;
-                        }
+                    foreach (u64? var_11 : var_0) {
                         npc-clear-request-movement(var_11);
                     }
                     u64? var_13 = darray-at(var_0, 0);
@@ -1080,17 +1010,7 @@ statescript {
                     if (locator-in-region?(get-bound-frame(closest-point-to-body, self), rgn-joe-check-npc-died-on-roof-roof-1, player)) {
                         set-bound-frame(closest-point-to-body, find-closest-point-on-nav-mesh(get-object-locator(var_2), 2.00, 5.00, 0.00, 0, nav-47597), self);
                     }
-                    foreach (u64? var_23 : var_0) {
-                        u16 var_24;
-                        if (var_23 && *(u16*)(var_23 + 12) == 7) {
-                            var_24 = *(u64*)var_23;
-                        } else if (var_23 && *(u16*)(var_23 + 12) == 5) {
-                            var_24 = *(u64*)var_23;
-                        } else if (var_23 && *(u16*)(var_23 + 12) == 4) {
-                            var_24 = *(u64*)var_23;
-                        } else {
-                            var_24 = 0;
-                        }
+                    foreach (u64? var_24 : var_0) {
                         npc-search-move-to(var_24, get-bound-frame(closest-point-to-body, self), 0, 0, 0, 0, 0);
                     }
                     npc-make-aware-of(
@@ -1109,17 +1029,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(check-npc-in-idle, self)) {
-                        foreach (u64? var_2 : rooftop-patrol) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : rooftop-patrol) {
                             if (npc-alive?(var_3)) {
                                 if (npc-using-skill?(var_3, 59)) {
                                     npc-make-aware-of(var_3, player, 4, 0);
@@ -1163,67 +1073,27 @@ statescript {
                         set-hardpoint-enabled(hard-point-joe-roof-2);
                         if (get-state-time(self) < 3.00) {
                             if (player-in-region?(rgn-joe-roof-player-ran-to-vent-1, 2)) {
-                                foreach (u64? var_4 : rooftop-patrol) {
-                                    u16 var_5;
-                                    if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                        var_5 = *(u64*)var_4;
-                                    } else {
-                                        var_5 = 0;
-                                    }
+                                foreach (u64? var_5 : rooftop-patrol) {
                                     if (npc-alive?(var_5)) {
                                         npc-make-aware-of(var_5, player, 2, *npc-awareness-options-pretend-seen*);
                                     }
                                 }
                             }
                         } else if (player-in-region?(rgn-joe-roof-player-ran-to-vent-1, 2)) {
-                            foreach (u64? var_10 : rooftop-patrol) {
-                                u16 var_11;
-                                if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                                    var_11 = *(u64*)var_10;
-                                } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                                    var_11 = *(u64*)var_10;
-                                } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                                    var_11 = *(u64*)var_10;
-                                } else {
-                                    var_11 = 0;
-                                }
+                            foreach (u64? var_11 : rooftop-patrol) {
                                 if (npc-alive?(var_11)) {
                                     npc-make-aware-of(var_11, player, 2, 0);
                                 }
                             }
                         }
                         if (get-boolean(player-near-vent-region-enemies, self)) {
-                            foreach (u64? var_16 : rooftop-patrol) {
-                                u16 var_17;
-                                if (var_16 && *(u16*)(var_16 + 12) == 7) {
-                                    var_17 = *(u64*)var_16;
-                                } else if (var_16 && *(u16*)(var_16 + 12) == 5) {
-                                    var_17 = *(u64*)var_16;
-                                } else if (var_16 && *(u16*)(var_16 + 12) == 4) {
-                                    var_17 = *(u64*)var_16;
-                                } else {
-                                    var_17 = 0;
-                                }
+                            foreach (u64? var_17 : rooftop-patrol) {
                                 if (npc-alive?(var_17)) {
                                     npc-set-zone-region-if-alive(var_17, rgn-joe-school-exit-enemies-by-vent-1);
                                 }
                             }
                         } else {
-                            foreach (u64? var_21 : rooftop-patrol) {
-                                u16 var_22;
-                                if (var_21 && *(u16*)(var_21 + 12) == 7) {
-                                    var_22 = *(u64*)var_21;
-                                } else if (var_21 && *(u16*)(var_21 + 12) == 5) {
-                                    var_22 = *(u64*)var_21;
-                                } else if (var_21 && *(u16*)(var_21 + 12) == 4) {
-                                    var_22 = *(u64*)var_21;
-                                } else {
-                                    var_22 = 0;
-                                }
+                            foreach (u64? var_22 : rooftop-patrol) {
                                 if (npc-alive?(var_22)) {
                                     npc-set-zone-region-if-alive(var_22, rgn-joe-school-roof-combat-space-1);
                                 }
@@ -1237,17 +1107,7 @@ statescript {
                 lambda {
                     if (get-boolean(ran-into-space, self)) {
                         wait(5.00);
-                        foreach (u64? var_2 : rooftop-patrol) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : rooftop-patrol) {
                             if (npc-alive?(var_3)) {
                                 npc-set-script-low-priority(var_3);
                             }

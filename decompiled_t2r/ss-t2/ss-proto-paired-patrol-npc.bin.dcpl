@@ -157,7 +157,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-append(paired-patrol-npcs, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(paired-patrol-npcs, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     npc-set-script-low-priority(self);
@@ -205,7 +205,7 @@ statescript {
                     wait-frames(darray-count(paired-patrol-npcs));
                 }
                 lambda {
-                    while (!nth-frame?(darray-count(paired-patrol-npcs), darray-find(paired-patrol-npcs, new-boxed-value(7, get-self-id()), 0))) {
+                    while (!nth-frame?(darray-count(paired-patrol-npcs), darray-find(paired-patrol-npcs, boxed_symbol(get-self-id()), 0))) {
                         wait-one-frame();
                     }
                 }
@@ -301,7 +301,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(request-use, get-symbol(assigned-group, self), new-boxed-value(7, get-self-id()));
+                    send-event(request-use, get-symbol(assigned-group, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-symbol(closest-poi, get-closest-spawner-in-group-to-locator(get-symbol(poi-group, get-symbol(assigned-group, self)), get-object-locator(self)), self);
@@ -310,16 +310,16 @@ statescript {
                     send-event(
                         assign-group,
                         get-symbol(partner-npc, self),
-                        new-boxed-value(7, get-symbol(assigned-group, self)),
-                        new-boxed-value(7, get-symbol(closest-poi, self))
+                        boxed_symbol(get-symbol(assigned-group, self)),
+                        boxed_symbol(get-symbol(closest-poi, self))
                     );
                 }
                 lambda {
                     broadcast-event(
                         paired-patrol-start-poi-group,
-                        new-boxed-value(7, get-self-id()),
-                        new-boxed-value(7, get-symbol(partner-npc, self)),
-                        new-boxed-value(7, get-symbol(assigned-group, self))
+                        boxed_symbol(get-self-id()),
+                        boxed_symbol(get-symbol(partner-npc, self)),
+                        boxed_symbol(get-symbol(assigned-group, self))
                     );
                 }
                 lambda {
@@ -408,7 +408,7 @@ statescript {
                     wait-frames(3);
                 }
                 lambda {
-                    send-event(request-poi, get-symbol(assigned-group, self), new-boxed-value(7, get-self-id()));
+                    send-event(request-poi, get-symbol(assigned-group, self), boxed_symbol(get-self-id()));
                 }
             }
         }
@@ -452,10 +452,10 @@ statescript {
                         }
                         var_8 = broadcast-event(
                             paired-patrol-arrive-poi-group,
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(7, get-symbol(partner-npc, self)),
-                            new-boxed-value(7, get-symbol(assigned-group, self)),
-                            new-boxed-value(7, get-symbol(assigned-poi, self))
+                            boxed_symbol(get-self-id()),
+                            boxed_symbol(get-symbol(partner-npc, self)),
+                            boxed_symbol(get-symbol(assigned-group, self)),
+                            boxed_symbol(get-symbol(assigned-poi, self))
                         );
                     } else if (spawner-exists?(get-symbol(assigned-poi, self))) {
                         wait-npc-move-to-spawner(
@@ -481,7 +481,7 @@ statescript {
                     wait-random(tag-float(min-time, get-symbol(assigned-poi, self)), tag-float(max-time, get-symbol(assigned-poi, self)));
                 }
                 lambda {
-                    send-event(request-poi, get-symbol(assigned-group, self), new-boxed-value(7, get-self-id()));
+                    send-event(request-poi, get-symbol(assigned-group, self), boxed_symbol(get-self-id()));
                 }
             }
         }
@@ -509,9 +509,9 @@ statescript {
                         }
                         broadcast-event(
                             paired-patrol-finish-poi-group,
-                            new-boxed-value(7, get-self-id()),
-                            new-boxed-value(7, get-symbol(partner-npc, self)),
-                            new-boxed-value(7, get-symbol(assigned-group, self))
+                            boxed_symbol(get-self-id()),
+                            boxed_symbol(get-symbol(partner-npc, self)),
+                            boxed_symbol(get-symbol(assigned-group, self))
                         );
                         npc-request-hold(self, 10.00);
                         set-boolean(finished, 1, self);

@@ -25,7 +25,7 @@ statescript {
                     send-event(use-smoke-screen, ss-test-burning-grass-manager-1);
                 }
                 lambda {
-                    send-event(adjust-burn-time, ss-test-burning-grass-manager-1, new-boxed-value(6, 50.00));
+                    send-event(adjust-burn-time, ss-test-burning-grass-manager-1, boxed_f32(50.00));
                 }
             }
         }

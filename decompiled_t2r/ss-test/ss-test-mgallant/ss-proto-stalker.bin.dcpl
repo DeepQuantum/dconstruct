@@ -24,17 +24,7 @@ u64? stalker-distance-to-player-entity() {
 
 u64? HACK-stalker-in-cover?(u64? arg_0) {
     u64? var_1;
-    foreach (u64? var_2 : stalker-cover-animations) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : stalker-cover-animations) {
         u64? var_4;
         if (!0) {
             var_4 = object-anim-playing?(arg_0, var_3, 0);
@@ -63,17 +53,7 @@ u16 get-ai-post-selector() {
 
 u64? player-in-overwhelm-region?() {
     u64? var_1;
-    foreach (u64? var_2 : overwhelm-player-regions) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : overwhelm-player-regions) {
         u64? var_4;
         if (!0) {
             var_4 = player-in-region?(var_3, 2);
@@ -217,21 +197,11 @@ u64? stalker-allowed-charger-role?() {
 }
 
 u64? stalker-assign-group(u64? arg_0, u16 arg_1) {
-    foreach (u64? var_1 : stalker-roles) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : stalker-roles) {
         if (arg_1 == var_2) {
-            darray-append(var_2, new-boxed-value(7, arg_0), 1);
+            darray-append(var_2, boxed_symbol(arg_0), 1);
         } else {
-            darray-find-remove(var_2, new-boxed-value(7, arg_0), 0);
+            darray-find-remove(var_2, boxed_symbol(arg_0), 0);
         }
     }
 }
@@ -340,7 +310,7 @@ statescript {
                     npc-override-post-selector-set-id(self, *stalker-proto-selector-set*);
                 }
                 lambda {
-                    darray-append(all-proto-stalkers, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(all-proto-stalkers, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     go(setup-combat, 1);
@@ -768,7 +738,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-find-remove(stalkers-charging, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-charging, boxed_symbol(get-self-id()), 0);
                 }
             }
         }
@@ -856,7 +826,7 @@ statescript {
                 lambda {
                     if (npc-alive?(self)) {
                         npc-set-targeting-params(self, always-target-player);
-                        darray-find-remove(stalkers-vs-buddy, new-boxed-value(7, get-self-id()), 0);
+                        darray-find-remove(stalkers-vs-buddy, boxed_symbol(get-self-id()), 0);
                     }
                 }
             }
@@ -869,7 +839,7 @@ statescript {
                     stalker-assign-group(get-self-id(), 0);
                 }
                 lambda {
-                    darray-find-remove(all-proto-stalkers, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(all-proto-stalkers, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     npc-set-script-low-priority(self);
@@ -933,9 +903,9 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-bound-frame(fire-ap-ref, self);
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-bound-frame(fire-ap-ref, self);
                     wait-animate_(get-self-id(), get-symbol(fire-anim, self), var_2);
                 }
                 lambda {
@@ -951,16 +921,16 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(stalkers-moving, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-moving, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(stalkers-charging, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-charging, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(stalkers-vs-buddy, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalkers-vs-buddy, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(all-proto-stalkers, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(all-proto-stalkers, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

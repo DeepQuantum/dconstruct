@@ -187,12 +187,12 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 30;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.00;
                     animate_(obj-res-neighborhood-exit-1, get-res-store-anim(0, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
@@ -203,11 +203,11 @@ statescript {
                         var_1 = get-res-store-anim(1, get-symbol(tension-list, self));
                     }
                     u64? var_6 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_6 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_6[0] = 10;
+                    *(u64*)(*var_6[0] + 8) = 0;
+                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_6[1] = 28;
+                    *(u64*)(*var_6[1] + 8) = 0;
                     u16 var_11;
                     if (get-boolean(already-entered, self) && get-res-store-anim(2, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-enter--ellie) {
                         var_11 = 0.50;
@@ -224,10 +224,10 @@ statescript {
                     } else {
                         var_11 = 0;
                     }
-                    *(u64*)(*(*var_6 + (1 * 8)) + 8) = var_11;
-                    *(i32*)*(*var_6 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.00;
+                    *(u64*)(*var_6[1] + 8) = var_11;
+                    *(i32*)*var_6[2] = 30;
+                    *(u64*)(*var_6[2] + 8) = 0;
+                    *(f32*)(*var_6[2] + 8) = 0.00;
                     wait-animate_(player, var_1, var_6);
                 }
                 lambda {
@@ -351,74 +351,74 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(from-enter, self)) {
                         var_5 = 0.00;
                     } else {
                         var_5 = 0.50;
                     }
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 56;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (4 * 8)) = 9;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
+                    *(f32*)(*var_2[1] + 8) = var_5;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 56;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = 0.00;
+                    *(i32*)*var_2[4] = 9;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
                     animate_(obj-res-neighborhood-vending-1, get-res-store-anim(7, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(from-enter, self)) {
                         var_5 = 0.00;
                     } else {
                         var_5 = 0.50;
                     }
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
+                    *(f32*)(*var_2[1] + 8) = var_5;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
                     animate_(obj-res-neighborhood-exit-1, get-res-store-anim(3, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
                     f32 var_5;
                     if (get-boolean(from-enter, self)) {
                         var_5 = 0.00;
                     } else {
                         var_5 = 0.50;
                     }
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = var_5;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_2 + (3 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
+                    *(f32*)(*var_2[1] + 8) = var_5;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.20;
+                    *(i32*)*var_2[3] = 31;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
                     animate_(player, get-res-store-anim(4, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
@@ -471,20 +471,20 @@ statescript {
                         var_1 = get-res-store-anim(11, get-symbol(tension-list, self));
                     }
                     u64? var_6 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_6 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_6[0] = 10;
+                    *(u64*)(*var_6[0] + 8) = 0;
+                    *(u64*)(*var_6[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_6[1] = 28;
+                    *(u64*)(*var_6[1] + 8) = 0;
                     f32 var_9;
                     if (get-boolean(quick-exit, self)) {
                         var_9 = 0.20;
                     } else {
                         var_9 = 0.50;
                     }
-                    *(f32*)(*(*var_6 + (1 * 8)) + 8) = var_9;
-                    *(i32*)*(*var_6 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
+                    *(f32*)(*var_6[1] + 8) = var_9;
+                    *(i32*)*var_6[2] = 30;
+                    *(u64*)(*var_6[2] + 8) = 0;
                     u16 var_13;
                     if (get-boolean(quick-exit, self) && get-res-store-anim(11, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-exit--ellie) {
                         var_13 = 0.50;
@@ -501,9 +501,9 @@ statescript {
                     } else {
                         var_13 = 0;
                     }
-                    *(u64*)(*(*var_6 + (2 * 8)) + 8) = var_13;
-                    *(i32*)*(*var_6 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
+                    *(u64*)(*var_6[2] + 8) = var_13;
+                    *(i32*)*var_6[3] = 61;
+                    *(u64*)(*var_6[3] + 8) = 0;
                     u16 var_29;
                     if (get-boolean(quick-exit, self) && get-res-store-anim(11, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-exit--ellie) {
                         var_29 = 28;
@@ -520,9 +520,9 @@ statescript {
                     } else {
                         var_29 = 0;
                     }
-                    *(u64*)(*(*var_6 + (3 * 8)) + 8) = var_29;
-                    *(i32*)*(*var_6 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
+                    *(u64*)(*var_6[3] + 8) = var_29;
+                    *(i32*)*var_6[4] = 60;
+                    *(u64*)(*var_6[4] + 8) = 0;
                     u16 var_45;
                     if (get-boolean(quick-exit, self) && get-res-store-anim(11, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-exit--ellie) {
                         var_45 = 0.50;
@@ -539,7 +539,7 @@ statescript {
                     } else {
                         var_45 = 0;
                     }
-                    *(u64*)(*(*var_6 + (4 * 8)) + 8) = var_45;
+                    *(u64*)(*var_6[4] + 8) = var_45;
                     wait-animate_(player, var_1, var_6);
                 }
                 lambda {
@@ -588,31 +588,31 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 9;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 56;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
+                    *(i32*)*var_2[3] = 9;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
                     animate_(obj-res-neighborhood-vending-1, get-res-store-anim(7, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 31;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(u8*)(*var_2[2] + 8) = 1;
                     animate_(obj-res-neighborhood-exit-1, get-res-store-anim(3, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
@@ -633,56 +633,56 @@ statescript {
             track main {
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 9;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
+                    *(i32*)*var_2[3] = 32;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 9;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
                     animate_(obj-res-neighborhood-vending-1, get-res-store-anim(7, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
+                    *(i32*)*var_2[3] = 32;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
                     animate_(obj-res-neighborhood-exit-1, get-res-store-anim(5, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 32;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_2 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_2 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
+                    *(i32*)*var_2[3] = 32;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(u8*)(*var_2[3] + 8) = 1;
+                    *(i32*)*var_2[4] = 3;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(u8*)(*var_2[4] + 8) = 1;
                     animate_(player, get-res-store-anim(6, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
@@ -919,34 +919,34 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.00;
                     animate_(obj-res-neighborhood-vending-1, get-res-store-anim(10, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.00;
                     animate_(obj-res-neighborhood-exit-1, get-res-store-anim(8, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
                     u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.00;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
                     u16 var_6;
                     if (get-res-store-anim(9, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-end--ellie) {
                         var_6 = 0.50;
@@ -957,9 +957,9 @@ statescript {
                     } else {
                         var_6 = 0;
                     }
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = var_6;
-                    *(i32*)*(*var_2 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
+                    *(u64*)(*var_2[2] + 8) = var_6;
+                    *(i32*)*var_2[3] = 61;
+                    *(u64*)(*var_2[3] + 8) = 0;
                     u16 var_13;
                     if (get-res-store-anim(9, get-symbol(tension-list, self)) == res-neighborhood-backdoor-quiet-end--ellie) {
                         var_13 = 312;
@@ -970,10 +970,10 @@ statescript {
                     } else {
                         var_13 = 0;
                     }
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = var_13;
-                    *(i32*)*(*var_2 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.50;
+                    *(u64*)(*var_2[3] + 8) = var_13;
+                    *(i32*)*var_2[4] = 60;
+                    *(u64*)(*var_2[4] + 8) = 0;
+                    *(f32*)(*var_2[4] + 8) = 0.50;
                     wait-animate_(player, get-res-store-anim(9, get-symbol(tension-list, self)), var_2);
                 }
                 lambda {
@@ -985,7 +985,7 @@ statescript {
                     }
                 }
                 lambda {
-                    broadcast-event(door-lift-complete, new-boxed-value(7, get-self-id()));
+                    broadcast-event(door-lift-complete, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (get-symbol(tension-list, self) == attack-anim-list) {
@@ -1019,26 +1019,26 @@ statescript {
                         if (get-symbol(tension-list, self) == attack-anim-list) {
                             wait(1.50);
                             u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                            *(i32*)*(*var_3 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_3 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                            *(i32*)*var_3[0] = 10;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                            *(i32*)*var_3[1] = 28;
+                            *(u64*)(*var_3[1] + 8) = 0;
+                            *(f32*)(*var_3[1] + 8) = 0.00;
+                            *(i32*)*var_3[2] = 30;
+                            *(u64*)(*var_3[2] + 8) = 0;
+                            *(f32*)(*var_3[2] + 8) = 0.00;
                             animate_(obj-res-neighborhood-vending-1, res-neighborhood-backdoor-attack-rattle--desk, var_3);
                             u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                            *(i32*)*(*var_5 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
-                            *(i32*)*(*var_5 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_5 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.00;
+                            *(i32*)*var_5[0] = 10;
+                            *(u64*)(*var_5[0] + 8) = 0;
+                            *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-res-neighborhood-exit-1, 1);
+                            *(i32*)*var_5[1] = 28;
+                            *(u64*)(*var_5[1] + 8) = 0;
+                            *(f32*)(*var_5[1] + 8) = 0.00;
+                            *(i32*)*var_5[2] = 30;
+                            *(u64*)(*var_5[2] + 8) = 0;
+                            *(f32*)(*var_5[2] + 8) = 0.00;
                             wait-animate_(obj-res-neighborhood-exit-1, res-neighborhood-backdoor-attack-rattle--door, var_5);
                             signal(door-anim-done, 0);
                         }

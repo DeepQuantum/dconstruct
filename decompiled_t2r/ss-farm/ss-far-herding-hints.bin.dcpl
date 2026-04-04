@@ -53,22 +53,12 @@ statescript {
                 lambda {
                     while (1) {
                         darray-reset(sheep-out-of-pen);
-                        foreach (u64? var_1 : herd-of-sheep) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
-                            if (!darray-contains?(sheep-in-pen, new-boxed-value(7, var_2))) {
-                                darray-append(sheep-out-of-pen, new-boxed-value(7, var_2), 1);
+                        foreach (u64? var_2 : herd-of-sheep) {
+                            if (!darray-contains?(sheep-in-pen, boxed_symbol(var_2))) {
+                                darray-append(sheep-out-of-pen, boxed_symbol(var_2), 1);
                             }
                             if (!object-in-region?(far-herding-lamb-1, rgn-far-sheep-pen-1)) {
-                                darray-append(sheep-out-of-pen, new-boxed-value(7, far-herding-lamb-1), 1);
+                                darray-append(sheep-out-of-pen, boxed_symbol(far-herding-lamb-1), 1);
                             }
                         }
                         set-symbol(closest-sheep, get-closest-in-group(sheep-out-of-pen, player, 0, 0, 1, 0), self);

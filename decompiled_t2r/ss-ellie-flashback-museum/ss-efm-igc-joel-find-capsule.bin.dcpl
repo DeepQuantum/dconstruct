@@ -16,7 +16,7 @@ u16 efm-joel-play-capsule-investigate-anim() {
         group-copy(efm-joel-closed-hatch-anims, efm-joel-capsule-investigate-deck);
     }
     u64? var_1 = group-random(efm-joel-capsule-investigate-deck);
-    darray-find-remove(efm-joel-capsule-investigate-deck, new-boxed-value(7, var_1), 0);
+    darray-find-remove(efm-joel-capsule-investigate-deck, boxed_symbol(var_1), 0);
     u16 var_4;
     if (player-in-region?(rgn-capsule-animation-stopper-1, 2) == 0) {
         wait-npc-move-to-entry-frame(
@@ -49,21 +49,21 @@ u16 efm-joel-play-capsule-investigate-anim() {
             );
         }
         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-        *(i32*)*(*var_9 + (0 * 8)) = 10;
-        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-1, 1);
-        *(i32*)*(*var_9 + (1 * 8)) = 28;
-        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_9 + (2 * 8)) = 30;
-        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-        *(f32*)(*(*var_9 + (2 * 8)) + 8) = 0.50;
-        *(i32*)*(*var_9 + (3 * 8)) = 27;
-        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-        *(u8*)(*(*var_9 + (3 * 8)) + 8) = 2;
-        *(i32*)*(*var_9 + (4 * 8)) = 29;
-        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-        *(u8*)(*(*var_9 + (4 * 8)) + 8) = 2;
+        *(i32*)*var_9[0] = 10;
+        *(u64*)(*var_9[0] + 8) = 0;
+        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-capsule-investigate-1, 1);
+        *(i32*)*var_9[1] = 28;
+        *(u64*)(*var_9[1] + 8) = 0;
+        *(f32*)(*var_9[1] + 8) = 0.50;
+        *(i32*)*var_9[2] = 30;
+        *(u64*)(*var_9[2] + 8) = 0;
+        *(f32*)(*var_9[2] + 8) = 0.50;
+        *(i32*)*var_9[3] = 27;
+        *(u64*)(*var_9[3] + 8) = 0;
+        *(u8*)(*var_9[3] + 8) = 2;
+        *(i32*)*var_9[4] = 29;
+        *(u64*)(*var_9[4] + 8) = 0;
+        *(u8*)(*var_9[4] + 8) = 2;
         var_4 = wait-animate_(joel, var_1, var_9);
     } else {
         var_4 = 0;
@@ -185,15 +185,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     animate_(joel, efm-joel-capsule--idle, var_0);
                 }
                 lambda {
@@ -222,15 +222,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     wait-animate_(joel, efm-joel-capsule--exit, var_0);
                 }
                 lambda {
@@ -244,28 +244,28 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     wait-animate_(joel, efm-joel-capsule-inspect--enter, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     wait-animate_(joel, efm-joel-capsule-inspect--idle, var_0);
                 }
                 lambda {
@@ -288,15 +288,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.20;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-capsule-investigate-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.20;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.20;
                     wait-animate_(joel, efm-joel-capsule-inspect--exit, var_0);
                 }
                 lambda {

@@ -77,19 +77,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         if (vector-magnitude(vector-flatten(vector-between-objects(var_3, player), 1)) < 15.00 && distance-y-between-objects(var_3, player) < 3.00) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
                     set-point(conversation-centroid, get-group-centroid(var_0), self);

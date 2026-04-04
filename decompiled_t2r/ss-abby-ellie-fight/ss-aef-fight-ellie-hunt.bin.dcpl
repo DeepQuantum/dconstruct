@@ -85,9 +85,9 @@ u64? aef-get-custom-death-ap(u64? arg_0, bool arg_1) {
 u64? aef-debug-draw-custom-death-ap() {
     string var_3;
     if (aef-hunt-get-fight-phase(1) == 1 && !(get-symbol(custom-death-ap, self) == 0)) {
-        var_3 = dc:format("[%d/%d]", darray-find(aef-custom-death-safe-aps-backstage, new-boxed-value(7, get-symbol(custom-death-ap, self)), 0) + 1, darray-count(aef-custom-death-safe-aps-backstage));
+        var_3 = dc:format("[%d/%d]", darray-find(aef-custom-death-safe-aps-backstage, boxed_symbol(get-symbol(custom-death-ap, self)), 0) + 1, darray-count(aef-custom-death-safe-aps-backstage));
     } else if (aef-hunt-get-fight-phase(1) != 1 && !(get-symbol(custom-death-ap, self) == 0)) {
-        var_3 = dc:format("[%d/%d]", darray-find(aef-custom-death-safe-aps-basement, new-boxed-value(7, get-symbol(custom-death-ap, self)), 0) + 1, darray-count(aef-custom-death-safe-aps-basement));
+        var_3 = dc:format("[%d/%d]", darray-find(aef-custom-death-safe-aps-basement, boxed_symbol(get-symbol(custom-death-ap, self)), 0) + 1, darray-count(aef-custom-death-safe-aps-basement));
     } else {
         var_3 = "";
     }
@@ -112,7 +112,7 @@ u64? aef-debug-draw-custom-death-ap() {
 
 u16 aef-setup() {
     if (aef-hunt-task-range-active?()) {
-        send-event(set-death-listener, player, new-boxed-value(7, get-self-id()));
+        send-event(set-death-listener, player, boxed_symbol(get-self-id()));
         if (!entity-exists?(npc-enemy-ellie-pistol-1)) {
             u64? var_5;
             if (task-active?(abby-ellie-fight, aef-fight-ellie-hunt)) {
@@ -566,12 +566,12 @@ statescript {
                     if (task-complete?(abby-ellie-fight, aef-fight-ellie-hunt-3)) {
                         enable-collision-gamedriven(hanging-florescent-light-1, 0, 0.00);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_1 + (1 * 8)) = 31;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_1 + (1 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 28;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(f32*)(*var_1[0] + 8) = 0.00;
+                        *(i32*)*var_1[1] = 31;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(u8*)(*var_1[1] + 8) = 1;
                         animate_(hanging-florescent-light-1, idle-cinematic, var_1);
                         send-event(aef-turn-off-upstairs-lights, get-self-id());
                         send-event(aef-turn-on-downstairs-lights, get-self-id());
@@ -599,30 +599,30 @@ statescript {
                                 var_4 = 0;
                             }
                             u64? var_6 = #%alloc-array(single-frame, 16, 8, 1);
-                            *(i32*)*(*var_6 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(var_4, 1);
-                            *(i32*)*(*var_6 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_6 + (2 * 8)) = 45;
-                            *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_6 + (3 * 8)) = 30;
-                            *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_6 + (3 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_6 + (4 * 8)) = 57;
-                            *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_6 + (4 * 8)) + 8) = 650.00;
-                            *(i32*)*(*var_6 + (5 * 8)) = 61;
-                            *(u64*)(*(*var_6 + (5 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_6 + (5 * 8)) + 8) = 687;
-                            *(i32*)*(*var_6 + (6 * 8)) = 60;
-                            *(u64*)(*(*var_6 + (6 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_6 + (6 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_6 + (7 * 8)) = 75;
-                            *(u64*)(*(*var_6 + (7 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_6 + (7 * 8)) + 8) = *default-upperbody-gestures*;
+                            *(i32*)*var_6[0] = 10;
+                            *(u64*)(*var_6[0] + 8) = 0;
+                            *(u64*)(*var_6[0] + 8) = get-spawner-locator(var_4, 1);
+                            *(i32*)*var_6[1] = 28;
+                            *(u64*)(*var_6[1] + 8) = 0;
+                            *(f32*)(*var_6[1] + 8) = 0.00;
+                            *(i32*)*var_6[2] = 45;
+                            *(u64*)(*var_6[2] + 8) = 0;
+                            *(f32*)(*var_6[2] + 8) = 0.00;
+                            *(i32*)*var_6[3] = 30;
+                            *(u64*)(*var_6[3] + 8) = 0;
+                            *(f32*)(*var_6[3] + 8) = 1.00;
+                            *(i32*)*var_6[4] = 57;
+                            *(u64*)(*var_6[4] + 8) = 0;
+                            *(f32*)(*var_6[4] + 8) = 650.00;
+                            *(i32*)*var_6[5] = 61;
+                            *(u64*)(*var_6[5] + 8) = 0;
+                            *(i32*)(*var_6[5] + 8) = 687;
+                            *(i32*)*var_6[6] = 60;
+                            *(u64*)(*var_6[6] + 8) = 0;
+                            *(f32*)(*var_6[6] + 8) = 1.00;
+                            *(i32*)*var_6[7] = 75;
+                            *(u64*)(*var_6[7] + 8) = 0;
+                            *(u64*)(*var_6[7] + 8) = *default-upperbody-gestures*;
                             animate_(player, aef-fight-hunt-stab-leg-success--abby, var_6);
                             wait-one-frame();
                             camera-look-at-dir-vec(get-local-z(get-object-rotation(player)), 1000.00, 0.00);
@@ -699,24 +699,24 @@ statescript {
                         set-boolean(task-in?, 1, self);
                         if (!task-continue-active?(abby-ellie-fight, aef-fight-ellie-hunt, checkpoint)) {
                             u64? var_3 = #%alloc-array(single-frame, 16, 6, 1);
-                            *(i32*)*(*var_3 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-or-object-locator(ap-aef-chase-abby-enters-backstage-1);
-                            *(i32*)*(*var_3 + (1 * 8)) = 59;
-                            *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                            *(i32*)*(*var_3 + (2 * 8)) = 58;
-                            *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (2 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_3 + (3 * 8)) = 56;
-                            *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_3 + (4 * 8)) = 46;
-                            *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (4 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_3 + (5 * 8)) = 45;
-                            *(u64*)(*(*var_3 + (5 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_3 + (5 * 8)) + 8) = 0.00;
+                            *(i32*)*var_3[0] = 10;
+                            *(u64*)(*var_3[0] + 8) = 0;
+                            *(u64*)(*var_3[0] + 8) = get-spawner-or-object-locator(ap-aef-chase-abby-enters-backstage-1);
+                            *(i32*)*var_3[1] = 59;
+                            *(u64*)(*var_3[1] + 8) = 0;
+                            *(i32*)(*var_3[1] + 8) = 0;
+                            *(i32*)*var_3[2] = 58;
+                            *(u64*)(*var_3[2] + 8) = 0;
+                            *(f32*)(*var_3[2] + 8) = 1.00;
+                            *(i32*)*var_3[3] = 56;
+                            *(u64*)(*var_3[3] + 8) = 0;
+                            *(f32*)(*var_3[3] + 8) = 0.00;
+                            *(i32*)*var_3[4] = 46;
+                            *(u64*)(*var_3[4] + 8) = 0;
+                            *(f32*)(*var_3[4] + 8) = 0.00;
+                            *(i32*)*var_3[5] = 45;
+                            *(u64*)(*var_3[5] + 8) = 0;
+                            *(f32*)(*var_3[5] + 8) = 0.00;
                             animate_(npc-enemy-ellie-pistol-1, aef-fight-chase-abby-enters-backstage-start--ellie, var_3);
                         }
                         aef-set-ellie-bleeding-head(0, start-head);
@@ -864,7 +864,7 @@ statescript {
                     }
                 }
                 lambda {
-                    broadcast-event(npc-ellie-start, new-boxed-value(1, get-boolean(task-in?, self)));
+                    broadcast-event(npc-ellie-start, boxed_bool(get-boolean(task-in?, self)));
                 }
                 lambda {
                     start-timer(checkpoint-timer, 1.00, self, 1);
@@ -927,12 +927,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 5.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 5.00;
+                    *(i32*)*var_0[1] = 31;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(hanging-florescent-light-1, idle-a, var_0);
                 }
                 lambda {
@@ -968,7 +968,7 @@ statescript {
                     aef-hunt-set-starting-params(2);
                 }
                 lambda {
-                    broadcast-event(npc-ellie-start, new-boxed-value(1, get-boolean(task-in?, self)));
+                    broadcast-event(npc-ellie-start, boxed_bool(get-boolean(task-in?, self)));
                 }
                 lambda {
                     aef-hunt-set-light-dangling();
@@ -1061,12 +1061,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 3.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 3.00;
+                    *(i32*)*var_0[1] = 31;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 1;
                     animate_(hanging-florescent-light-1, idle-b, var_0);
                 }
                 lambda {
@@ -1104,7 +1104,7 @@ statescript {
                     broadcast-event(abby-start-phase-3);
                 }
                 lambda {
-                    broadcast-event(npc-ellie-start, new-boxed-value(1, get-boolean(task-in?, self)));
+                    broadcast-event(npc-ellie-start, boxed_bool(get-boolean(task-in?, self)));
                 }
                 lambda {
                     aef-hunt-set-light-dangling();
@@ -1236,31 +1236,31 @@ statescript {
                     u64? var_7 = aef-get-custom-death-ap(var_1, var_2);
                     player-enable-animated-camera-with-collision-checks(var_7, 0.00, var_1, var_2, npc-enemy-ellie-pistol-1, 1);
                     u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_8 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_8 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = var_7;
+                    *(i32*)*var_8[0] = 28;
+                    *(u64*)(*var_8[0] + 8) = 0;
+                    *(f32*)(*var_8[0] + 8) = 0.00;
+                    *(i32*)*var_8[1] = 10;
+                    *(u64*)(*var_8[1] + 8) = 0;
+                    *(u64*)(*var_8[1] + 8) = var_7;
                     animate_(npc-enemy-ellie-pistol-1, var_2, var_8);
                     if (!(var_3 == 0)) {
                         u64? var_10 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_10 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_10 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_10 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_10 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_10 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_10 + (1 * 8)) + 8) = var_7;
+                        *(i32*)*var_10[0] = 28;
+                        *(u64*)(*var_10[0] + 8) = 0;
+                        *(f32*)(*var_10[0] + 8) = 0.00;
+                        *(i32*)*var_10[1] = 10;
+                        *(u64*)(*var_10[1] + 8) = 0;
+                        *(u64*)(*var_10[1] + 8) = var_7;
                         animate_(npc-get-weapon-process-id(npc-enemy-ellie-pistol-1), var_3, var_10);
                     }
                     if (!(var_4 == 0)) {
                         u64? var_11 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_11 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = var_7;
+                        *(i32*)*var_11[0] = 28;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(f32*)(*var_11[0] + 8) = 0.00;
+                        *(i32*)*var_11[1] = 10;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(u64*)(*var_11[1] + 8) = var_7;
                         animate_(var_5, var_4, var_11);
                     }
                     stop-animating(player, 2, 0.00, 0, 0);
@@ -1276,18 +1276,18 @@ statescript {
                         0
                     );
                     u64? var_12 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_12 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_12 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_12 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_12 + (1 * 8)) + 8) = var_7;
-                    *(i32*)*(*var_12 + (2 * 8)) = 84;
-                    *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_12 + (2 * 8)) + 8) = 0;
-                    *(i32*)*(*var_12 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_12 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_12 + (3 * 8)) + 8) = 38;
+                    *(i32*)*var_12[0] = 28;
+                    *(u64*)(*var_12[0] + 8) = 0;
+                    *(f32*)(*var_12[0] + 8) = 0.00;
+                    *(i32*)*var_12[1] = 10;
+                    *(u64*)(*var_12[1] + 8) = 0;
+                    *(u64*)(*var_12[1] + 8) = var_7;
+                    *(i32*)*var_12[2] = 84;
+                    *(u64*)(*var_12[2] + 8) = 0;
+                    *(u8*)(*var_12[2] + 8) = 0;
+                    *(i32*)*var_12[3] = 24;
+                    *(u64*)(*var_12[3] + 8) = 0;
+                    *(i32*)(*var_12[3] + 8) = 38;
                     animate_(player, var_1, var_12);
                     if (get-boolean(test-custom-deaths?, self)) {
                         wait-for-animate-done(player);
@@ -1393,20 +1393,20 @@ statescript {
                     u64? var_0 = aef-get-custom-death-ap(abby-vs-ellie-pistol-machete-parry-right-kill--abby, abby-vs-ellie-pistol-machete-parry-right-kill--ellie);
                     player-enable-animated-camera-with-collision-checks(var_0, 0.00, abby-vs-ellie-pistol-machete-parry-right-kill--abby, abby-vs-ellie-pistol-machete-parry-right-kill--ellie, npc-enemy-ellie-pistol-1, 0);
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = var_0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 0.00;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = var_0;
                     animate_(player, abby-vs-ellie-pistol-machete-parry-right-kill--abby, var_1);
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = var_0;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.00;
+                    *(i32*)*var_2[1] = 10;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u64*)(*var_2[1] + 8) = var_0;
                     animate_(npc-enemy-ellie-pistol-1, abby-vs-ellie-pistol-machete-parry-right-kill--ellie, var_2);
                     if (get-boolean(test-custom-deaths?, self)) {
                         wait-for-animate-done(player);
@@ -1531,20 +1531,20 @@ statescript {
                     u64? var_0 = aef-get-custom-death-ap(abby-vs-ellie-pistol-machete-parry-left-kill--abby, abby-vs-ellie-pistol-machete-parry-left-kill--ellie);
                     player-enable-animated-camera-with-collision-checks(var_0, 0.00, abby-vs-ellie-pistol-machete-parry-left-kill--abby, abby-vs-ellie-pistol-machete-parry-left-kill--ellie, npc-enemy-ellie-pistol-1, 0);
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = var_0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 0.00;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = var_0;
                     animate_(player, abby-vs-ellie-pistol-machete-parry-left-kill--abby, var_1);
                     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = var_0;
+                    *(i32*)*var_2[0] = 28;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(f32*)(*var_2[0] + 8) = 0.00;
+                    *(i32*)*var_2[1] = 10;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(u64*)(*var_2[1] + 8) = var_0;
                     animate_(npc-enemy-ellie-pistol-1, abby-vs-ellie-pistol-machete-parry-left-kill--ellie, var_2);
                     aef-task-fail-in-time-for-stinger(npc-enemy-ellie-pistol-1, abby-vs-ellie-pistol-machete-parry-left-kill--ellie);
                 }
@@ -1669,28 +1669,28 @@ statescript {
                     }
                     say(npc-enemy-ellie-pistol-1, vox-eff-gen-fight-give-hvy-long, 2, 0);
                     u64? var_12 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_12 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_12 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_12 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_12 + (1 * 8)) + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
+                    *(i32*)*var_12[0] = 28;
+                    *(u64*)(*var_12[0] + 8) = 0;
+                    *(f32*)(*var_12[0] + 8) = 0.30;
+                    *(i32*)*var_12[1] = 10;
+                    *(u64*)(*var_12[1] + 8) = 0;
+                    *(u64*)(*var_12[1] + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
                     wait-animate_(npc-enemy-ellie-pistol-1, var_3, var_12);
                     u64? var_15 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_15 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_15 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_15 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_15 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_15 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_15 + (1 * 8)) + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
+                    *(i32*)*var_15[0] = 28;
+                    *(u64*)(*var_15[0] + 8) = 0;
+                    *(f32*)(*var_15[0] + 8) = 0.30;
+                    *(i32*)*var_15[1] = 10;
+                    *(u64*)(*var_15[1] + 8) = 0;
+                    *(u64*)(*var_15[1] + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
                     animate_(npc-enemy-ellie-pistol-1, var_4, var_15);
                     u64? var_18 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_18 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_18 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_18 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_18 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_18 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_18 + (1 * 8)) + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
+                    *(i32*)*var_18[0] = 28;
+                    *(u64*)(*var_18[0] + 8) = 0;
+                    *(f32*)(*var_18[0] + 8) = 0.30;
+                    *(i32*)*var_18[1] = 10;
+                    *(u64*)(*var_18[1] + 8) = 0;
+                    *(u64*)(*var_18[1] + 8) = rotate-locator-angle(get-object-locator(player), 1, 180.00);
                     animate_(player, var_5, var_18);
                 }
                 lambda {
@@ -1700,26 +1700,26 @@ statescript {
                     u64? var_0 = aef-get-custom-death-ap(abby-vs-ellie-knife-stealth-kill--abby, abby-vs-ellie-knife-stealth-kill--ellie);
                     player-enable-animated-camera-with-collision-checks(var_0, 0.00, abby-vs-ellie-knife-stealth-kill--abby, abby-vs-ellie-knife-stealth-kill--ellie, npc-enemy-ellie-pistol-1, 0);
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = rotate-locator-angle(var_0, 1, 180.00);
-                    *(i32*)*(*var_1 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 0.00;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = rotate-locator-angle(var_0, 1, 180.00);
+                    *(i32*)*var_1[2] = 57;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.00;
                     animate_(player, abby-vs-ellie-knife-stealth-kill--abby, var_1);
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_3 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = rotate-locator-angle(var_0, 1, 180.00);
-                    *(i32*)*(*var_3 + (2 * 8)) = 57;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_3[0] = 28;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(f32*)(*var_3[0] + 8) = 0.00;
+                    *(i32*)*var_3[1] = 10;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(u64*)(*var_3[1] + 8) = rotate-locator-angle(var_0, 1, 180.00);
+                    *(i32*)*var_3[2] = 57;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.00;
                     animate_(npc-enemy-ellie-pistol-1, abby-vs-ellie-knife-stealth-kill--ellie, var_3);
                     aef-task-fail-in-time-for-stinger(npc-enemy-ellie-pistol-1, abby-vs-ellie-knife-stealth-kill--ellie);
                 }

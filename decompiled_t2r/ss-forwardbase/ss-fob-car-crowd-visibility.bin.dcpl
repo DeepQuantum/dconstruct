@@ -92,17 +92,7 @@ statescript {
         block event hide-street {
             track main {
                 lambda {
-                    foreach (u64? var_1 : first-street-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : first-street-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
@@ -119,34 +109,14 @@ statescript {
         block event hide-overpass {
             track main {
                 lambda {
-                    foreach (u64? var_1 : first-street-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : first-street-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : overpass-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : overpass-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
@@ -157,68 +127,28 @@ statescript {
         block event hide-all {
             track main {
                 lambda {
-                    foreach (u64? var_1 : first-street-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : first-street-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : farm-early-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : farm-early-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : overpass-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : overpass-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : farm-late-crowd) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : farm-late-crowd) {
                         if (entity-exists?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }

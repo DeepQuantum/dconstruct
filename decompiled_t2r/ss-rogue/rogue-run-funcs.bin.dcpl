@@ -80,12 +80,12 @@ u64? get-photo-widget-status(u64? arg_0, u16 arg_1) {
     get-photo-by-encounter-id(var_7, var_1);
     get-photo-by-encounter-id(var_4, var_1);
     u64? var_10 = marlene-has-path-reroute-available?();
-    darray-append(var_0, new-boxed-value(2, var_7), 0);
+    darray-append(var_0, boxed_i32(var_7), 0);
     if (var_9 > var_5) {
-        darray-append(var_0, new-boxed-value(2, 1), 0);
+        darray-append(var_0, boxed_i32(1), 0);
     } else if (var_9 == var_5) {
         if (var_9 == 0) {
-            darray-append(var_0, new-boxed-value(2, 0), 0);
+            darray-append(var_0, boxed_i32(0), 0);
         } else {
             u16 var_17;
             foreach (u64? var_18 : lambda-eval(
@@ -116,21 +116,21 @@ u64? get-photo-widget-status(u64? arg_0, u16 arg_1) {
                 var_17 = var_20;
             }
             if (var_17) {
-                var_22 = darray-append(var_0, new-boxed-value(2, 0), 0);
+                var_22 = darray-append(var_0, boxed_i32(0), 0);
             } else if (var_10) {
-                var_22 = darray-append(var_0, new-boxed-value(2, 4), 0);
+                var_22 = darray-append(var_0, boxed_i32(4), 0);
             } else {
-                var_22 = darray-append(var_0, new-boxed-value(2, 1), 0);
+                var_22 = darray-append(var_0, boxed_i32(1), 0);
             }
         }
     } else if (var_9 < var_5) {
         if (is-photo-widget-completed?(arg_0, arg_1)) {
-            darray-append(var_0, new-boxed-value(2, 2), 0);
+            darray-append(var_0, boxed_i32(2), 0);
         } else {
-            darray-append(var_0, new-boxed-value(2, 1), 0);
+            darray-append(var_0, boxed_i32(1), 0);
         }
     } else {
-        darray-append(var_0, new-boxed-value(2, -1), 0);
+        darray-append(var_0, boxed_i32(-1), 0);
     }
     if (var_10) {
         if (!is-final-build?()) {
@@ -297,7 +297,7 @@ u16 run--get-opposing-branch-indices-at-index(u16 arg_0) {
                     var_8 = 0;
                 }
                 if (var_8 != arg_0) {
-                    darray-append(var_5, new-boxed-value(2, var_8), 0);
+                    darray-append(var_5, boxed_i32(var_8), 0);
                 }
             }
             var_4 = var_5;
@@ -310,7 +310,7 @@ u16 run--get-opposing-branch-indices-at-index(u16 arg_0) {
 
 u64? run--complete-encounters-to-this-index(u64? arg_0) {
     u64? var_1 = darray-create(single-frame, -1, 0);
-    darray-append(var_1, new-boxed-value(2, 0), 0);
+    darray-append(var_1, boxed_i32(0), 0);
     while (!0) {
         u64? var_4 = darray-at(var_1, darray-count(var_1) - 1);
         u16 var_5;
@@ -330,7 +330,7 @@ u64? run--complete-encounters-to-this-index(u64? arg_0) {
             var_5 = 0;
         }
         u64? var_6 = run--get-connected-indices-at-index(var_5);
-        if (darray-contains?(var_6, new-boxed-value(2, arg_0))) {}
+        if (darray-contains?(var_6, boxed_i32(arg_0))) {}
  else {
             begin-foreach();
             for (u64 i = 0; i < darray-count(var_6); i++) {
@@ -353,7 +353,7 @@ u64? run--complete-encounters-to-this-index(u64? arg_0) {
                 }
                 if (!0) {
                     if (run--do-indices-connect?(var_13, arg_0)) {
-                        darray-append(var_1, new-boxed-value(2, var_13), 0);
+                        darray-append(var_1, boxed_i32(var_13), 0);
                     }
                 }
             }
@@ -502,17 +502,7 @@ u64? run--get-connected-indices-at-index(u64? arg_0) {
         0,
         0
     );
-    foreach (u64? var_6 : var_4) {
-        u16 var_7;
-        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-            var_7 = *(u64*)var_6;
-        } else {
-            var_7 = 0;
-        }
+    foreach (u64? var_7 : var_4) {
         u64? var_9 = ddict-get(*(u64*)(var_2 + 24), var_7);
         u16 var_10;
         if (var_9 && *(u16*)(var_9 + 12) == 1) {
@@ -530,7 +520,7 @@ u64? run--get-connected-indices-at-index(u64? arg_0) {
         } else {
             var_10 = 0;
         }
-        darray-append(var_0, new-boxed-value(2, var_10), 0);
+        darray-append(var_0, boxed_i32(var_10), 0);
     }
     darray-destroy(var_4);
     return var_0;
@@ -609,12 +599,12 @@ u64? get-photo-status(u64? arg_0, u16 arg_1) {
     }
     get-photo-by-encounter-id(var_4, var_1);
     u64? var_11 = marlene-has-path-reroute-available?();
-    darray-append(var_0, new-boxed-value(2, var_7), 0);
+    darray-append(var_0, boxed_i32(var_7), 0);
     if (var_9 > get-svar(encounter-depth) || var_11) {
         if (run--do-indices-connect?(var_4, var_7)) {
-            darray-append(var_0, new-boxed-value(2, 1), 0);
+            darray-append(var_0, boxed_i32(1), 0);
         } else {
-            darray-append(var_0, new-boxed-value(2, 3), 0);
+            darray-append(var_0, boxed_i32(3), 0);
         }
     }
     if (var_11) {
@@ -722,7 +712,7 @@ u16 run--index-leads-to-branch?(u64? arg_0) {
 u64? run--do-indices-connect?(u64? arg_0, u16 arg_1) {
     u64? var_0 = darray-create(single-frame, -1, 0);
     u64? var_1 = run--get-current-template();
-    darray-append(var_0, new-boxed-value(2, arg_0), 0);
+    darray-append(var_0, boxed_i32(arg_0), 0);
     u64? var_4;
     while (darray-count(var_0) > 0) {
         u64? var_5 = darray-at(var_0, 0);
@@ -776,17 +766,7 @@ u64? run--do-indices-connect?(u64? arg_0, u16 arg_1) {
                 0
             );
             if (!(darray-count(var_12) == 0)) {
-                foreach (u64? var_15 : var_12) {
-                    u16 var_16;
-                    if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                        var_16 = *(u64*)var_15;
-                    } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                        var_16 = *(u64*)var_15;
-                    } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                        var_16 = *(u64*)var_15;
-                    } else {
-                        var_16 = 0;
-                    }
+                foreach (u64? var_16 : var_12) {
                     u64? var_18 = ddict-get(*(u64*)(var_1 + 24), var_16);
                     u16 var_19;
                     if (var_18 && *(u16*)(var_18 + 12) == 1) {
@@ -804,7 +784,7 @@ u64? run--do-indices-connect?(u64? arg_0, u16 arg_1) {
                     } else {
                         var_19 = 0;
                     }
-                    darray-append(var_0, new-boxed-value(2, var_19), 0);
+                    darray-append(var_0, boxed_i32(var_19), 0);
                 }
             }
             darray-destroy(var_12);

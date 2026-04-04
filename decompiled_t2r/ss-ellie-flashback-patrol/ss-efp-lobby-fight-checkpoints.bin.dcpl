@@ -17,17 +17,7 @@ u64? efp-lobby-safe-to-checkpoint?(u64? arg_0) {
 
 u64? efp-lobby-no-clickers-in-group-alive?(u64? arg_0) {
     u64? var_1;
-    foreach (u64? var_2 : arg_0) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : arg_0) {
         var_1 = 1 || !(npc-alive?(var_3)) && !(npc-clicker?(var_3));
     }
     return var_1;

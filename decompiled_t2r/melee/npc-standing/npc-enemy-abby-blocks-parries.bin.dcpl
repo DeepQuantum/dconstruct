@@ -657,7 +657,7 @@ fist-exhausted-ellie-right-enemy-abby-parry-sync
 fist-exhausted-attack-2-block-hit-intro
 fist-exhausted-attack-3-block-hit-intro
 embedded@fcc8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
-    return broadcast-event(melee-player-sync-hit, new-boxed-value(7, arg_2));
+    return broadcast-event(melee-player-sync-hit, boxed_symbol(arg_2));
 }
 
 u16 switchblade-exhausted-ellie-right-enemy-abby-parry-sync
@@ -972,7 +972,7 @@ fist-exhausted-ellie-right-enemy-abby-parry-sync
 embedded@10730(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_5;
     if (npc-stalker?(arg_2) && get-closest-enemy-to-locator(get-object-locator(arg_2), 4.00, arg_2, 15) == 0 && !npc-last-alive?(arg_2) && npc-get-archetype-id(arg_2) != infected-stunner) {
-        var_5 = send-event(force-disengage, arg_2, new-boxed-value(6, 5.00));
+        var_5 = send-event(force-disengage, arg_2, boxed_f32(5.00));
     } else {
         var_5 = 0;
     }
@@ -1215,7 +1215,7 @@ fist-exhausted-attack-3-block-hit-intro
 embedded@11718(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     u16 var_1;
     if (npc-brute?(arg_2)) {
-        var_1 = send-event(brute-blocked-melee, ss-promote-death-hints, new-boxed-value(7, arg_2));
+        var_1 = send-event(brute-blocked-melee, ss-promote-death-hints, boxed_symbol(arg_2));
     } else {
         var_1 = 0;
     }

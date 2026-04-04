@@ -31,20 +31,20 @@ u64? ratking-destroy-door() {
         var_7 = ratking-break-door-opened--ratking;
     }
     u64? var_9 = #%alloc-array(single-frame, 16, 1, 1);
-    *(i32*)*(*var_9 + (0 * 8)) = 10;
-    *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
+    *(i32*)*var_9[0] = 10;
+    *(u64*)(*var_9[0] + 8) = 0;
+    *(u64*)(*var_9[0] + 8) = get-object-locator(tag-symbol(door, self));
     animate_(tag-symbol(door, self), var_5, var_9);
     u64? var_12 = #%alloc-array(single-frame, 16, 3, 1);
-    *(i32*)*(*var_12 + (0 * 8)) = 10;
-    *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-    *(u64*)(*(*var_12 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-    *(i32*)*(*var_12 + (1 * 8)) = 28;
-    *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_12 + (1 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_12 + (2 * 8)) = 30;
-    *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-    *(f32*)(*(*var_12 + (2 * 8)) + 8) = 0.50;
+    *(i32*)*var_12[0] = 10;
+    *(u64*)(*var_12[0] + 8) = 0;
+    *(u64*)(*var_12[0] + 8) = get-object-locator(tag-symbol(door, self));
+    *(i32*)*var_12[1] = 28;
+    *(u64*)(*var_12[1] + 8) = 0;
+    *(f32*)(*var_12[1] + 8) = 0.50;
+    *(i32*)*var_12[2] = 30;
+    *(u64*)(*var_12[2] + 8) = 0;
+    *(f32*)(*var_12[2] + 8) = 0.50;
     wait-animate_(npc-ratking-bloater-1, var_7, var_12);
     ratking-enable-door-open-blockers();
     ratking-wall-disable-taps();
@@ -249,15 +249,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, abby-open-door-enter--abby, var_0);
                 }
                 lambda {
@@ -280,15 +280,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(player, abby-open-door-idle--abby, var_0);
                 }
             }
@@ -322,22 +322,22 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-object-locator(tag-symbol(door, self));
                     animate_(tag-symbol(door, self), abby-open-door-struggle--door, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(player, abby-open-door-struggle--abby, var_0);
                 }
                 lambda {
@@ -393,18 +393,18 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-                    *(i32*)*(*var_1 + (1 * 8)) = 59;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (2 * 8)) = 56;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = -1.00;
-                    *(i32*)*(*var_1 + (3 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 1.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_1[1] = 59;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(i32*)(*var_1[1] + 8) = 1;
+                    *(i32*)*var_1[2] = 56;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = -1.00;
+                    *(i32*)*var_1[3] = 28;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 1.00;
                     wait-animate_(tag-symbol(door, self), abby-open-door-struggle--door, var_1);
                 }
                 lambda {
@@ -418,35 +418,35 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-object-locator(tag-symbol(door, self));
                     animate_(tag-symbol(door, self), abby-open-door-success--door, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(tag-symbol(door, self));
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 30;
-                    *(i32*)*(*var_0 + (4 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(tag-symbol(door, self));
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 61;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 30;
+                    *(i32*)*var_0[4] = 60;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
                     wait-animate_(player, abby-open-door-success--abby, var_0);
                 }
                 lambda {
                     send-event(enable, tag-symbol(squeeze-through, self));
                 }
                 lambda {
-                    broadcast-event(opened-powered-door, new-boxed-value(7, get-self-id()));
+                    broadcast-event(opened-powered-door, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(wait-bloater-destroy, 1);
@@ -528,7 +528,7 @@ statescript {
                     send-event(go-unpowered, tag-symbol(door, self));
                 }
                 lambda {
-                    broadcast-event(door-destroyed, new-boxed-value(7, get-self-id()));
+                    broadcast-event(door-destroyed, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (tag-boolean(hack-close-behind-ratking?, self)) {

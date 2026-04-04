@@ -66,8 +66,8 @@ statescript {
                     send-event(
                         update-selected-unlocks,
                         get-symbol(char-select-controller, self),
-                        new-boxed-value(2, event-arg-int32(2)),
-                        new-boxed-value(7, get-symbol(ds-id, self))
+                        boxed_i32(event-arg-int32(2)),
+                        boxed_symbol(get-symbol(ds-id, self))
                     );
                 }
                 lambda {
@@ -98,7 +98,7 @@ statescript {
         block event focus-gained {
             track main {
                 lambda {
-                    send-event(update-focused-skin-index, get-symbol(char-select-controller, self), new-boxed-value(2, event-arg-int32(2)));
+                    send-event(update-focused-skin-index, get-symbol(char-select-controller, self), boxed_i32(event-arg-int32(2)));
                 }
                 lambda {
                     set-int32(focused-index, event-arg-int32(2), self);
@@ -109,7 +109,7 @@ statescript {
             track main {
                 lambda {
                     if (joypad-command-active-and-enabled?(menu-action, 2) && joypad-command-active-and-enabled?(menu-action, 0)) {
-                        send-event(select-random-skins, get-symbol(char-select-controller, self), new-boxed-value(2, get-int32(skins-select-tab-type, self)));
+                        send-event(select-random-skins, get-symbol(char-select-controller, self), boxed_i32(get-int32(skins-select-tab-type, self)));
                     }
                 }
             }

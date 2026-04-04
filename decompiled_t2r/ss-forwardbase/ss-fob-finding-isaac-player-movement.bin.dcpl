@@ -87,10 +87,10 @@ statescript {
         block update {
             track main {
                 lambda {
-                    fact-set/f(global, disable-wi-trail?, new-boxed-value(1, 1));
+                    fact-set/f(global, disable-wi-trail?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set/f(global, disable-scent-trail, new-boxed-value(1, 1));
+                    fact-set/f(global, disable-scent-trail, boxed_bool(1));
                 }
                 lambda {
                     player-force-no-weapon-aim/f();

@@ -75,18 +75,8 @@ statescript {
                     set-hardpoint-enabled(hard-point-escape-gate-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : wat-gate-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        send-event(run-in-to-gate, self, new-boxed-value(7, var_2));
+                    foreach (u64? var_2 : wat-gate-militia) {
+                        send-event(run-in-to-gate, self, boxed_symbol(var_2));
                     }
                 }
                 lambda {
@@ -154,17 +144,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-gate-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-gate-militia) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-silent*);
                         }
@@ -195,17 +175,7 @@ statescript {
                         npc-make-aware-of(get-symbol(chase-npc, self), player, 2, 0);
                         npc-set-targeting-params(get-symbol(chase-npc, self), always-target-player);
                         npc-set-accuracy-multiplier(get-symbol(chase-npc, self), 0.40);
-                        foreach (u64? var_14 : wat-gate-militia) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : wat-gate-militia) {
                             if (var_15 != get-symbol(chase-npc, self)) {
                                 while (!!(is-speaking?(npc))) {
                                     wait(0.10);

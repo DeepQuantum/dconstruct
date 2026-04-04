@@ -22,17 +22,7 @@ u64? ss-downed-buddy--bud-is-close() {
 u64? ss-buddy-downed--find-closest-bud() {
     set-symbol(closest-buddy, 0, self);
     u16 var_1;
-    foreach (u64? var_2 : all-buddy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-buddy-npcs) {
         u64? var_4 = distance-between-objects(var_3, player);
         u16 var_5;
         if (var_4 < 99999.89) {
@@ -138,15 +128,15 @@ statescript {
                         var_7 = rotate-locator-axis-angle(ai-post-get-locator(var_3), alloc-vector(0.00, -1.00, 0.00, 1.00, 0), 90.00);
                     }
                     u64? var_12 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_12 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_12 + (0 * 8)) + 8) = var_7;
-                    *(i32*)*(*var_12 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_12 + (1 * 8)) + 8) = 1;
-                    *(i32*)*(*var_12 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_12 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_12 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_12[0] = 10;
+                    *(u64*)(*var_12[0] + 8) = 0;
+                    *(u64*)(*var_12[0] + 8) = var_7;
+                    *(i32*)*var_12[1] = 31;
+                    *(u64*)(*var_12[1] + 8) = 0;
+                    *(u8*)(*var_12[1] + 8) = 1;
+                    *(i32*)*var_12[2] = 28;
+                    *(u64*)(*var_12[2] + 8) = 0;
+                    *(f32*)(*var_12[2] + 8) = 0.50;
                     animate_(get-symbol(closest-buddy, self), npc-nw-injured-cover-low-idle, var_12);
                 }
                 lambda {

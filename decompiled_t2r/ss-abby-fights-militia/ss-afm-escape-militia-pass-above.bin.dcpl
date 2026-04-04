@@ -13,36 +13,36 @@
 
 u64? afm-militia-pass-by-anim-seq(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4) {
     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_0 + (0 * 8)) = 28;
-    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_0 + (1 * 8)) = 30;
-    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+    *(i32*)*var_0[0] = 28;
+    *(u64*)(*var_0[0] + 8) = 0;
+    *(f32*)(*var_0[0] + 8) = 0.50;
+    *(i32*)*var_0[1] = 30;
+    *(u64*)(*var_0[1] + 8) = 0;
+    *(f32*)(*var_0[1] + 8) = 0.50;
     wait-animate_(arg_0, arg_1, var_0);
     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_1 + (0 * 8)) = 28;
-    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_1 + (1 * 8)) = 30;
-    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+    *(i32*)*var_1[0] = 28;
+    *(u64*)(*var_1[0] + 8) = 0;
+    *(f32*)(*var_1[0] + 8) = 0.50;
+    *(i32*)*var_1[1] = 30;
+    *(u64*)(*var_1[1] + 8) = 0;
+    *(f32*)(*var_1[1] + 8) = 0.50;
     wait-animate_(arg_0, arg_2, var_1);
     u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_2 + (0 * 8)) = 28;
-    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_2 + (1 * 8)) = 30;
-    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
+    *(i32*)*var_2[0] = 28;
+    *(u64*)(*var_2[0] + 8) = 0;
+    *(f32*)(*var_2[0] + 8) = 0.50;
+    *(i32*)*var_2[1] = 30;
+    *(u64*)(*var_2[1] + 8) = 0;
+    *(f32*)(*var_2[1] + 8) = 0.50;
     wait-animate_(arg_0, arg_3, var_2);
     u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-    *(i32*)*(*var_3 + (0 * 8)) = 28;
-    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-    *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.50;
-    *(i32*)*(*var_3 + (1 * 8)) = 30;
-    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
+    *(i32*)*var_3[0] = 28;
+    *(u64*)(*var_3[0] + 8) = 0;
+    *(f32*)(*var_3[0] + 8) = 0.50;
+    *(i32*)*var_3[1] = 30;
+    *(u64*)(*var_3[1] + 8) = 0;
+    *(f32*)(*var_3[1] + 8) = 0.50;
     wait-animate_(arg_0, arg_4, var_3);
     return npc-move-to(arg_0, get-spawner-locator(pos-militia-pass-above-move-enemies-out-of-sight-1, 1), 0, 0, 0, 0, 0, 0);
 }
@@ -126,17 +126,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : grp-afm-escape-militia-pass-above-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : grp-afm-escape-militia-pass-above-npcs) {
                         npc-unholster-weapon(var_2, 4, -1.00, 0);
                         npc-set-ignore(var_2, 1);
                         npc-set-script-only-no-perception(var_2);

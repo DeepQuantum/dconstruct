@@ -45,7 +45,7 @@ u16 hud-boss-update-percent(u64? arg_0, u64? arg_1, u64? arg_2) {
         } else {
             var_5 = 0;
         }
-        var_2 = send-event(set-percent, var_5, new-boxed-value(2, arg_1), new-boxed-value(6, arg_2));
+        var_2 = send-event(set-percent, var_5, boxed_i32(arg_1), boxed_f32(arg_2));
     } else {
         var_2 = 0;
     }
@@ -70,11 +70,11 @@ u16 hud-boss-health-add(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
         send-event(
             setup,
             var_4,
-            new-boxed-value(2, arg_1),
-            new-boxed-value(7, arg_2),
-            new-boxed-value(19, arg_3)
+            boxed_i32(arg_1),
+            boxed_symbol(arg_2),
+            boxed_stringcopy(arg_3)
         );
-        ddict-set(get-symbol(health-bars-dict, self), arg_0, new-boxed-value(7, var_4));
+        ddict-set(get-symbol(health-bars-dict, self), arg_0, boxed_symbol(var_4));
         var_2 = gui2-update-widget-layout(var_3);
     } else {
         var_2 = 0;

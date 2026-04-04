@@ -114,17 +114,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : dog-street-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : dog-street-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -141,7 +131,7 @@ statescript {
                         add-checkpoint-npcs-to-group(dog-street-enemies, var_2, task-get-active-continue() != checkpoint);
                         if (get-svar-as-boolean(res-stores-reinf-spawned)) {
                             if (get-svar-as-boolean(res-stores-reinf-remove-dog)) {
-                                darray-find-remove(dog-street-reinf, new-boxed-value(7, npc-res-store-reinf-dog-1), 0);
+                                darray-find-remove(dog-street-reinf, boxed_symbol(npc-res-store-reinf-dog-1), 0);
                             }
                             add-checkpoint-npcs-to-group(dog-street-reinf, var_2, 0);
                         }
@@ -207,7 +197,7 @@ statescript {
                     if (!get-svar-as-boolean(res-stores-reinf-spawned)) {
                         wait-boolean(spawn-backup, 1, self);
                         if (!(npc-group-alive-count(dog-street-dogs) == 0)) {
-                            darray-find-remove(dog-street-reinf, new-boxed-value(7, npc-res-store-reinf-dog-1), 0);
+                            darray-find-remove(dog-street-reinf, boxed_symbol(npc-res-store-reinf-dog-1), 0);
                             set-svar-as-boolean(res-stores-reinf-remove-dog, 1);
                         }
                         if (get-svar-as-boolean(res-stores-reinf-disabled)) {
@@ -220,33 +210,13 @@ statescript {
                 }
                 lambda {
                     if (get-svar-as-boolean(res-stores-reinf-disabled)) {
-                        foreach (u64? var_2 : dog-street-reinf) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : dog-street-reinf) {
                             if (npc-alive?(var_3)) {
                                 npc-clear-zone(var_3);
                             }
                         }
                     } else {
-                        foreach (u64? var_7 : dog-street-enemies) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
+                        foreach (u64? var_8 : dog-street-enemies) {
                             if (npc-alive?(var_8)) {
                                 npc-clear-zone(var_8);
                             }
@@ -280,7 +250,7 @@ statescript {
                     if (res-street-fight-alive-count() == 0) {
                         go(combat-done, 1);
                     }
-                    if (get-boolean(still-start?, self) && darray-contains?(dog-street-enemies, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (get-boolean(still-start?, self) && darray-contains?(dog-street-enemies, boxed_symbol(event-arg-symbol(0)))) {
                         ++(near-bank-kills, self);
                     }
                     if (get-boolean(exited-bank, self) && !tension-mode-is?(2) && npc-group-alive-count(dog-street-enemies) < 4) {
@@ -386,17 +356,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : dog-street-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : dog-street-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

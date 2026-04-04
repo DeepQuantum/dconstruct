@@ -64,17 +64,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-infected) {
                         spawn-entity(var_2, 0, 1);
                         npc-set-excluded-from-tension-calculation(var_2, 1);
                         npc-set-hearing-multiplier(var_2, 0.10);
@@ -121,17 +111,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-infected-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-infected-clickers) {
                         if (npc-alive?(var_2)) {
                             if (npc-using-skill?(var_2, 11)) {
                                 npc-disable-perception(var_2);
@@ -169,17 +149,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-infected-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-infected-clickers) {
                         npc-set-hearing-multiplier(var_2, 1.00);
                         npc-enable-perception(var_2);
                         npc-set-script-low-priority(var_2);
@@ -191,17 +161,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-loc-prompts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-loc-prompts) {
                         send-event(turn-off, var_2);
                     }
                 }
@@ -221,17 +181,7 @@ statescript {
                     wait-spawn-npc-group-async(med-hospital-floor-1-infected, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-loc-prompts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-loc-prompts) {
                         send-event(turn-off, var_2);
                     }
                 }
@@ -264,17 +214,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_1 : med-hospital-floor-1-loc-prompts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : med-hospital-floor-1-loc-prompts) {
                         send-event(turn-off, var_2);
                     }
                 }
@@ -286,17 +226,7 @@ statescript {
                     if (no-npcs-in-group-alive?(med-hospital-floor-1-infected-clickers) || !(get-boolean(trap-has-emerged?, npc-trap-hospital-2)) && !(npc-alive?(npc-trap-hospital-2)) || !(get-boolean(trap-has-emerged?, npc-trap-hospital-4)) && !(npc-alive?(npc-trap-hospital-4))) {
                         set-boolean(combat-finished?, 1, self);
                         task-set-active-continue!(infected-dead, 1, 1, 0, 0.00, 0, 0);
-                        foreach (u64? var_10 : med-hospital-floor-1-loc-prompts) {
-                            u16 var_11;
-                            if (var_10 && *(u16*)(var_10 + 12) == 7) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 5) {
-                                var_11 = *(u64*)var_10;
-                            } else if (var_10 && *(u16*)(var_10 + 12) == 4) {
-                                var_11 = *(u64*)var_10;
-                            } else {
-                                var_11 = 0;
-                            }
+                        foreach (u64? var_11 : med-hospital-floor-1-loc-prompts) {
                             send-event(turn-on, var_11);
                         }
                     }
@@ -318,17 +248,7 @@ statescript {
             track main {
                 lambda {
                     if (task-continue-active?(medicine, med-hospital-basement-power-on, outside-clicker-hall)) {
-                        foreach (u64? var_2 : med-hospital-floor-1-infected) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : med-hospital-floor-1-infected) {
                             if (npc-alive?(var_3)) {
                                 npc-set-blind(var_3, 1);
                                 npc-set-deaf(var_3, 1);

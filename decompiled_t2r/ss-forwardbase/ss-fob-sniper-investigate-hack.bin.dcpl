@@ -44,17 +44,7 @@ statescript {
                     set-boolean(anyone-investigating, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-rifle-street-npcs-sniper-investigate-hack) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-rifle-street-npcs-sniper-investigate-hack) {
                         if (npc-alive?(var_2)) {
                             if (!(get-boolean(anyone-investigating, self)) && npc-in-investigation-role?(var_2, 1, 1, 1)) {
                                 set-boolean(anyone-investigating, 1, self);
@@ -121,9 +111,9 @@ statescript {
                 lambda {
                     if (npc-is-aiming-at-point?(self, npc-get-investigate-entity-position(self), 40.00)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (0 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 28;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(f32*)(*var_2[0] + 8) = 0.50;
                         animate_(self, npc-m-lg-mm-aggr-idle, var_2);
                         wait-one-frame();
                         stop-animating(self, 2, 0.50, npc-m-lg-mm-aggr-idle, 0);
@@ -164,17 +154,7 @@ statescript {
                     set-boolean(anyone-investigating, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-rifle-street-npcs-sniper-investigate-hack) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-rifle-street-npcs-sniper-investigate-hack) {
                         if (npc-alive?(var_2)) {
                             if (!(get-boolean(anyone-investigating, self)) && npc-in-investigation-role?(var_2, 1, 1, 1)) {
                                 set-boolean(anyone-investigating, 1, self);

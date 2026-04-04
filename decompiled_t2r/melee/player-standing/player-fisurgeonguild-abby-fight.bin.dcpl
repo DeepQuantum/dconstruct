@@ -45,20 +45,20 @@ u64? abby-punch-hit-gesture(bool arg_0) {
     } else {
         var_0 = group-random(face-hit-gestures);
     }
-    send-event(queue-gesture, ss-san-beach-fight-abby-gesture-controller-1, new-boxed-value(7, var_0));
+    send-event(queue-gesture, ss-san-beach-fight-abby-gesture-controller-1, boxed_symbol(var_0));
     send-event(
         set-material,
         ss-san-beach-fight-abby-gore-controller-1,
-        new-boxed-value(7, *abby-beach-fight-face-blood-01*),
-        new-boxed-value(6, 0.10),
-        new-boxed-value(6, 25.00)
+        boxed_symbol(*abby-beach-fight-face-blood-01*),
+        boxed_f32(0.10),
+        boxed_f32(25.00)
     );
     send-event(
         set-material,
         ss-san-beach-fight-abby-gore-controller-1,
-        new-boxed-value(7, *abby-beach-fight-face-blood-02*),
-        new-boxed-value(6, 0.15),
-        new-boxed-value(6, 6.00)
+        boxed_symbol(*abby-beach-fight-face-blood-02*),
+        boxed_f32(0.15),
+        boxed_f32(6.00)
     );
     if (melee-fact-get-int(npc-san-spikes-abby-1, abby-melee-hit-count) > 1) {
         abby-beach-fight-bloodied-nose(npc-san-spikes-abby-1);
@@ -66,16 +66,16 @@ u64? abby-punch-hit-gesture(bool arg_0) {
     send-event(
         set-material,
         ss-san-beach-fight-abby-gore-controller-1,
-        new-boxed-value(7, *abby-beach-fight-face-blood-03*),
-        new-boxed-value(6, 0.10),
-        new-boxed-value(6, 10.00)
+        boxed_symbol(*abby-beach-fight-face-blood-03*),
+        boxed_f32(0.10),
+        boxed_f32(10.00)
     );
     return send-event(
         set-material,
         ss-san-beach-fight-abby-gore-controller-1,
-        new-boxed-value(7, *abby-beach-fight-teeth-blood-01*),
-        new-boxed-value(6, 0.10),
-        new-boxed-value(6, 10.00)
+        boxed_symbol(*abby-beach-fight-teeth-blood-01*),
+        boxed_f32(0.10),
+        boxed_f32(10.00)
     );
 }
 

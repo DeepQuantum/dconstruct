@@ -42,34 +42,14 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : glt-forest-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : glt-forest-npcs) {
                         if (npc-alive?(var_3)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
-                    foreach (u64? var_8 : glt-garage-npcs) {
-                        u16 var_9;
-                        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                            var_9 = *(u64*)var_8;
-                        } else {
-                            var_9 = 0;
-                        }
+                    foreach (u64? var_9 : glt-garage-npcs) {
                         if (npc-alive?(var_9)) {
-                            darray-append(var_0, new-boxed-value(7, var_9), 1);
+                            darray-append(var_0, boxed_symbol(var_9), 1);
                         }
                     }
                     set-symbol(meetup-npc-a, get-furthest-in-group-offscreen(var_0, player), self);
@@ -124,30 +104,30 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 8, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-bridge-meetup-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.65;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (3 * 8)) + 8) = 5;
-                    *(i32*)*(*var_1 + (4 * 8)) = 1;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_1 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (6 * 8)) = 3;
-                    *(u64*)(*(*var_1 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (7 * 8)) = 2;
-                    *(u64*)(*(*var_1 + (7 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (7 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-nor-bridge-meetup-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.65;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
+                    *(i32*)*var_1[3] = 13;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(i32*)(*var_1[3] + 8) = 5;
+                    *(i32*)*var_1[4] = 1;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(u8*)(*var_1[4] + 8) = 1;
+                    *(i32*)*var_1[5] = 4;
+                    *(u64*)(*var_1[5] + 8) = 0;
+                    *(u8*)(*var_1[5] + 8) = 1;
+                    *(i32*)*var_1[6] = 3;
+                    *(u64*)(*var_1[6] + 8) = 0;
+                    *(u8*)(*var_1[6] + 8) = 1;
+                    *(i32*)*var_1[7] = 2;
+                    *(u64*)(*var_1[7] + 8) = 0;
+                    *(u8*)(*var_1[7] + 8) = 1;
                     wait-animate_(get-symbol(meetup-npc-a, self), npc-m-nw-pursue-meetup-vignette--npc-a, var_1);
                 }
                 lambda {
@@ -185,33 +165,33 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 9, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-nor-bridge-meetup-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 5;
-                    *(i32*)*(*var_0 + (4 * 8)) = 1;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (6 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (7 * 8)) = 2;
-                    *(u64*)(*(*var_0 + (7 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (7 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (8 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (8 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (8 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-nor-bridge-meetup-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.80;
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 5;
+                    *(i32*)*var_0[4] = 1;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 3;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(u8*)(*var_0[6] + 8) = 1;
+                    *(i32*)*var_0[7] = 2;
+                    *(u64*)(*var_0[7] + 8) = 0;
+                    *(u8*)(*var_0[7] + 8) = 1;
+                    *(i32*)*var_0[8] = 24;
+                    *(u64*)(*var_0[8] + 8) = 0;
+                    *(i32*)(*var_0[8] + 8) = 2;
                     wait-animate_(npc-glt-combat-bridge-1, npc-m-nw-pursue-meetup-vignette--npc-b, var_0);
                 }
                 lambda {

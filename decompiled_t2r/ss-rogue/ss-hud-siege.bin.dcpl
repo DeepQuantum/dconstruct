@@ -189,7 +189,7 @@ statescript {
                         var_13 = countdown-primary;
                     }
                     gui2-go-widget-state(get-symbol(w-panel-group, self), var_13, 0, 0, 0);
-                    gui2-set-widget-text-formatted(get-symbol(w-timer-text, self), new-boxed-value(19, get-time-string(event-arg-float(0))));
+                    gui2-set-widget-text-formatted(get-symbol(w-timer-text, self), boxed_stringcopy(get-time-string(event-arg-float(0))));
                     sid var_18;
                     if (event-arg-boolean(4) == 1) {
                         var_18 = t2-yellow;

@@ -68,7 +68,7 @@ u64? find-send-first-valid-reminder() {
             } else {
                 var_9 = 0;
             }
-            send-event(set-reminder-id, get-symbol(reminder-ref, self), new-boxed-value(7, var_9));
+            send-event(set-reminder-id, get-symbol(reminder-ref, self), boxed_symbol(var_9));
             set-int32(shown-reminder-index, i, self);
             var_5 = 1;
             var_6 = darray-count(reminder-queue);
@@ -82,13 +82,13 @@ u64? find-send-first-valid-reminder() {
 u16 attempt-push-reminder(u64? arg_0, u64? arg_1) {
     u16 var_2;
     if (valid-lookup-symbol?(arg_0) && !(lookup-symbol(arg_0, reminder) == 0)) {
-        if (!darray-contains?(reminder-queue, new-boxed-value(7, arg_0)) && !darray-contains?(get-symbol(delay-time-queue, self), new-boxed-value(7, arg_0)) && !reminder-suppressed-this-frame?() || arg_1) {
-            if (valid-reminder?(arg_0, 1, 0, 1) && !darray-contains?(disabled-reminders, new-boxed-value(7, arg_0))) {
-                darray-append(get-symbol(delay-time-queue, self), new-boxed-value(7, arg_0), 0);
-                darray-append(get-symbol(delay-timers-list, self), new-boxed-value(6, *(f32*)(lookup-symbol(arg_0, reminder) + 56)), 0);
+        if (!darray-contains?(reminder-queue, boxed_symbol(arg_0)) && !darray-contains?(get-symbol(delay-time-queue, self), boxed_symbol(arg_0)) && !reminder-suppressed-this-frame?() || arg_1) {
+            if (valid-reminder?(arg_0, 1, 0, 1) && !darray-contains?(disabled-reminders, boxed_symbol(arg_0))) {
+                darray-append(get-symbol(delay-time-queue, self), boxed_symbol(arg_0), 0);
+                darray-append(get-symbol(delay-timers-list, self), boxed_f32(*(f32*)(lookup-symbol(arg_0, reminder) + 56)), 0);
                 var_2 = 1;
             }
-        } else if (!darray-contains?(disabled-reminders, new-boxed-value(7, arg_0))) {}
+        } else if (!darray-contains?(disabled-reminders, boxed_symbol(arg_0))) {}
 
     } else if (!on-disc?()) {
         display-error(dc:format("Attempted to show an invalid reminder %s", string-debug(arg_0)));
@@ -117,8 +117,8 @@ u16 debug-reminder-fail-reason(f32 arg_0) {
     }
     u16 var_8;
     if (!(eval-reminder-lambda(*(var_0 + 40), 0))) {
-        if (!darray-contains?(get-symbol(debug-reminder-fail-valid-list, self), new-boxed-value(7, arg_0))) {
-            darray-insert(get-symbol(debug-reminder-fail-valid-list, self), new-boxed-value(7, arg_0), 0);
+        if (!darray-contains?(get-symbol(debug-reminder-fail-valid-list, self), boxed_symbol(arg_0))) {
+            darray-insert(get-symbol(debug-reminder-fail-valid-list, self), boxed_symbol(arg_0), 0);
             if (timer-running?(debug-valid-list-pop-timer, self) == 0) {
                 var_8 = start-timer(debug-valid-list-pop-timer, 5.00, self, 1);
             } else {
@@ -128,8 +128,8 @@ u16 debug-reminder-fail-reason(f32 arg_0) {
             var_8 = 0;
         }
     } else if (var_2 >= 0.00 && !((var_1 - var_2) >= (*(f32*)(var_0 + 80) * *(f32*)(*reminders-debug* + 8)))) {
-        if (!darray-contains?(get-symbol(debug-reminder-fail-action-list, self), new-boxed-value(7, arg_0))) {
-            darray-insert(get-symbol(debug-reminder-fail-action-list, self), new-boxed-value(7, arg_0), 0);
+        if (!darray-contains?(get-symbol(debug-reminder-fail-action-list, self), boxed_symbol(arg_0))) {
+            darray-insert(get-symbol(debug-reminder-fail-action-list, self), boxed_symbol(arg_0), 0);
             if (timer-running?(debug-action-list-pop-timer, self) == 0) {
                 var_8 = start-timer(debug-action-list-pop-timer, 5.00, self, 1);
             } else {
@@ -139,8 +139,8 @@ u16 debug-reminder-fail-reason(f32 arg_0) {
             var_8 = 0;
         }
     } else if (player-get-last-action-time(arg_0) >= 0.00 && !((var_1 - player-get-last-action-time(arg_0)) >= (*(f32*)(var_0 + 84) * *(f32*)(*reminders-debug* + 8)))) {
-        if (!darray-contains?(get-symbol(debug-reminder-fail-seen-list, self), new-boxed-value(7, arg_0))) {
-            darray-insert(get-symbol(debug-reminder-fail-seen-list, self), new-boxed-value(7, arg_0), 0);
+        if (!darray-contains?(get-symbol(debug-reminder-fail-seen-list, self), boxed_symbol(arg_0))) {
+            darray-insert(get-symbol(debug-reminder-fail-seen-list, self), boxed_symbol(arg_0), 0);
             if (timer-running?(debug-seen-list-pop-timer, self) == 0) {
                 var_8 = start-timer(debug-seen-list-pop-timer, 5.00, self, 1);
             } else {
@@ -491,7 +491,7 @@ statescript {
                                     } else {
                                         var_21 = 0;
                                     }
-                                    darray-append(reminder-queue, new-boxed-value(7, var_21), 0);
+                                    darray-append(reminder-queue, boxed_symbol(var_21), 0);
                                 }
                             }
                             darray-remove(get-symbol(delay-time-queue, self), 0);
@@ -504,7 +504,7 @@ statescript {
                             var_7 = i - 1;
                             i - 1;
                         } else {
-                            darray-set(get-symbol(delay-timers-list, self), var_6, new-boxed-value(6, var_4 - var_5));
+                            darray-set(get-symbol(delay-timers-list, self), var_6, boxed_f32(var_4 - var_5));
                             var_6 = var_6 + 1;
                             var_6 + 1;
                         }
@@ -535,17 +535,7 @@ statescript {
                             0,
                             1.00
                         );
-                        foreach (u64? var_5 : get-symbol(debug-reminder-fail-valid-list, self)) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : get-symbol(debug-reminder-fail-valid-list, self)) {
                             debug-draw-string-2d(
                                 alloc-point(100.00, (f32)(490 + (0 * 15)), 0.00, 0),
                                 dc:format("%s", *(i64*)(lookup-symbol(var_6, reminder) + 24)),
@@ -580,17 +570,7 @@ statescript {
                             0,
                             1.00
                         );
-                        foreach (u64? var_18 : get-symbol(debug-reminder-fail-action-list, self)) {
-                            u16 var_19;
-                            if (var_18 && *(u16*)(var_18 + 12) == 7) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 5) {
-                                var_19 = *(u64*)var_18;
-                            } else if (var_18 && *(u16*)(var_18 + 12) == 4) {
-                                var_19 = *(u64*)var_18;
-                            } else {
-                                var_19 = 0;
-                            }
+                        foreach (u64? var_19 : get-symbol(debug-reminder-fail-action-list, self)) {
                             debug-draw-string-2d(
                                 alloc-point(350.00, (f32)(490 + (0 * 15)), 0.00, 0),
                                 dc:format("%s", *(i64*)(lookup-symbol(var_19, reminder) + 24)),
@@ -625,17 +605,7 @@ statescript {
                             0,
                             1.00
                         );
-                        foreach (u64? var_31 : get-symbol(debug-reminder-fail-seen-list, self)) {
-                            u16 var_32;
-                            if (var_31 && *(u16*)(var_31 + 12) == 7) {
-                                var_32 = *(u64*)var_31;
-                            } else if (var_31 && *(u16*)(var_31 + 12) == 5) {
-                                var_32 = *(u64*)var_31;
-                            } else if (var_31 && *(u16*)(var_31 + 12) == 4) {
-                                var_32 = *(u64*)var_31;
-                            } else {
-                                var_32 = 0;
-                            }
+                        foreach (u64? var_32 : get-symbol(debug-reminder-fail-seen-list, self)) {
                             debug-draw-string-2d(
                                 alloc-point(600.00, (f32)(490 + (0 * 15)), 0.00, 0),
                                 dc:format("%s", *(i64*)(lookup-symbol(var_32, reminder) + 24)),
@@ -747,17 +717,7 @@ statescript {
                             0,
                             1.00
                         );
-                        foreach (u64? var_22 : reminder-queue) {
-                            u16 var_23;
-                            if (var_22 && *(u16*)(var_22 + 12) == 7) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 5) {
-                                var_23 = *(u64*)var_22;
-                            } else if (var_22 && *(u16*)(var_22 + 12) == 4) {
-                                var_23 = *(u64*)var_22;
-                            } else {
-                                var_23 = 0;
-                            }
+                        foreach (u64? var_23 : reminder-queue) {
                             if (valid-lookup-symbol?(var_23) && !(lookup-symbol(var_23, reminder) == 0)) {
                                 u64? var_26 = lookup-symbol(var_23, reminder);
                                 if (timer-running?(manager-sleep-timer, self)) {

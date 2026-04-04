@@ -18,8 +18,8 @@ i32 med-ratking-init-count() {
 u16 ratking-update-ammo-lists() {
     u64? var_0 = event-arg-symbol(0);
     u16 var_3;
-    if (darray-contains?(spawned-ammo, new-boxed-value(7, var_0))) {
-        u64? var_6 = darray-at(active-spawners, darray-find(spawned-ammo, new-boxed-value(7, var_0), 0));
+    if (darray-contains?(spawned-ammo, boxed_symbol(var_0))) {
+        u64? var_6 = darray-at(active-spawners, darray-find(spawned-ammo, boxed_symbol(var_0), 0));
         u16 var_7;
         if (var_6 && *(u16*)(var_6 + 12) == 7) {
             var_7 = *(u64*)var_6;
@@ -30,16 +30,16 @@ u16 ratking-update-ammo-lists() {
         } else {
             var_7 = 0;
         }
-        darray-find-remove(active-spawners, new-boxed-value(7, var_7), 0);
-        darray-find-remove(spawned-ammo, new-boxed-value(7, var_0), 0);
-        if (darray-contains?(available-init-ammo, new-boxed-value(7, var_7))) {
-            set-svar-bit(med-ratking-init-ammo-collected, darray-find(init-ammo-spawners, new-boxed-value(7, var_7), 0), 1);
+        darray-find-remove(active-spawners, boxed_symbol(var_7), 0);
+        darray-find-remove(spawned-ammo, boxed_symbol(var_0), 0);
+        if (darray-contains?(available-init-ammo, boxed_symbol(var_7))) {
+            set-svar-bit(med-ratking-init-ammo-collected, darray-find(init-ammo-spawners, boxed_symbol(var_7), 0), 1);
             --(active-init-spawns, self);
-            darray-find-remove(available-init-ammo, new-boxed-value(7, var_7), 0);
+            darray-find-remove(available-init-ammo, boxed_symbol(var_7), 0);
         }
         u16 var_17;
-        if (darray-contains?(respawnable-ammo-spawners, new-boxed-value(7, var_7))) {
-            var_17 = darray-append(available-ammo-spawners, new-boxed-value(7, var_7), 1);
+        if (darray-contains?(respawnable-ammo-spawners, boxed_symbol(var_7))) {
+            var_17 = darray-append(available-ammo-spawners, boxed_symbol(var_7), 1);
         } else {
             var_17 = 0;
         }
@@ -124,31 +124,21 @@ statescript {
                     set-svar(med-ratking-init-ammo-collected, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : init-ammo-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : init-ammo-spawners) {
                         if (get-int32(active-init-spawns, self) < med-ratking-init-count()) {
                             u64? var_5 = spawn-entity(var_2, 0, 0);
                             u64? var_7;
                             if (process-is-kind-of(var_5, ProcessWeapon)) {
                                 var_7 = get-ammo-process-from-weapon-pickup(var_5);
                             }
-                            darray-append(spawned-ammo, new-boxed-value(7, var_7), 1);
-                            darray-append(active-spawners, new-boxed-value(7, var_2), 1);
-                            if (darray-contains?(respawnable-ammo-spawners, new-boxed-value(7, var_2))) {
-                                darray-find-remove(available-ammo-spawners, new-boxed-value(7, var_2), 0);
+                            darray-append(spawned-ammo, boxed_symbol(var_7), 1);
+                            darray-append(active-spawners, boxed_symbol(var_2), 1);
+                            if (darray-contains?(respawnable-ammo-spawners, boxed_symbol(var_2))) {
+                                darray-find-remove(available-ammo-spawners, boxed_symbol(var_2), 0);
                             }
                             ++(active-init-spawns, self);
                             if (get-int32(active-init-spawns, self) >= med-ratking-init-count()) {
-                                set-svar-bit(med-ratking-init-ammo-collected, darray-find(init-ammo-spawners, new-boxed-value(7, var_2), 0), 1);
+                                set-svar-bit(med-ratking-init-ammo-collected, darray-find(init-ammo-spawners, boxed_symbol(var_2), 0), 1);
                             }
                         }
                     }
@@ -163,27 +153,17 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : init-ammo-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : init-ammo-spawners) {
                         if (!(get-svar-bit(med-ratking-init-ammo-collected, 0))) {
                             u64? var_5 = spawn-entity(var_2, 0, 0);
                             u64? var_7;
                             if (process-is-kind-of(var_5, ProcessWeapon)) {
                                 var_7 = get-ammo-process-from-weapon-pickup(var_5);
                             }
-                            darray-append(spawned-ammo, new-boxed-value(7, var_7), 1);
-                            darray-append(active-spawners, new-boxed-value(7, var_2), 1);
-                            if (darray-contains?(respawnable-ammo-spawners, new-boxed-value(7, var_2))) {
-                                darray-find-remove(available-ammo-spawners, new-boxed-value(7, var_2), 0);
+                            darray-append(spawned-ammo, boxed_symbol(var_7), 1);
+                            darray-append(active-spawners, boxed_symbol(var_2), 1);
+                            if (darray-contains?(respawnable-ammo-spawners, boxed_symbol(var_2))) {
+                                darray-find-remove(available-ammo-spawners, boxed_symbol(var_2), 0);
                             }
                             ++(active-init-spawns, self);
                         }
@@ -248,24 +228,14 @@ statescript {
                         } else {
                             var_3 = 0;
                         }
-                        darray-append(spawned-ammo, new-boxed-value(7, spawn-entity(var_3, 0, 0)), 1);
-                        darray-append(active-spawners, new-boxed-value(7, var_3), 1);
+                        darray-append(spawned-ammo, boxed_symbol(spawn-entity(var_3, 0, 0)), 1);
+                        darray-append(active-spawners, boxed_symbol(var_3), 1);
                         i = i + 1;
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : active-spawners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        darray-find-remove(available-ammo-spawners, new-boxed-value(7, var_2), 0);
+                    foreach (u64? var_2 : active-spawners) {
+                        darray-find-remove(available-ammo-spawners, boxed_symbol(var_2), 0);
                     }
                 }
                 lambda {

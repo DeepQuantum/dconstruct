@@ -138,12 +138,12 @@ statescript {
                             var_6 = 0;
                         }
                         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-sle-scar-island-farm-road-troops-landing-boats-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = boats;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-sle-scar-island-farm-road-troops-landing-boats-1, 1);
+                        *(i32*)*var_7[1] = 14;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(u64*)(*var_7[1] + 8) = boats;
                         animate_(var_2, var_6, var_7);
                     }
                 }
@@ -208,9 +208,9 @@ statescript {
                                 var_14 = 0;
                             }
                             u64? var_15 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_15 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_15 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_15 + (0 * 8)) + 8) = get-object-parented-bound-frame(var_1);
+                            *(i32*)*var_15[0] = 10;
+                            *(u64*)(*var_15[0] + 8) = 0;
+                            *(u64*)(*var_15[0] + 8) = get-object-parented-bound-frame(var_1);
                             animate_(var_7, var_14, var_15);
                         }
                     }

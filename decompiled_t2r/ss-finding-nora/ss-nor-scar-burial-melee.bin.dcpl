@@ -128,9 +128,9 @@ statescript {
                         npc-set-script-high-priority(npc-nor-scar-burial-melee-1);
                         if (!task-complete?(greenlight, glt-forest-sneak)) {
                             u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(npc-nor-scar-burial-melee-1, 1);
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(npc-nor-scar-burial-melee-1, 1);
                             animate_(npc-nor-scar-burial-melee-1, idle, var_2);
                         }
                     }
@@ -142,9 +142,9 @@ statescript {
                         npc-set-script-only-no-perception(npc-nor-scar-burial-melee-2);
                         if (!task-complete?(greenlight, glt-forest-sneak)) {
                             u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_2 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(npc-nor-scar-burial-melee-2, 1);
+                            *(i32*)*var_2[0] = 10;
+                            *(u64*)(*var_2[0] + 8) = 0;
+                            *(u64*)(*var_2[0] + 8) = get-spawner-locator(npc-nor-scar-burial-melee-2, 1);
                             animate_(npc-nor-scar-burial-melee-2, bindpose, var_2);
                         }
                     }
@@ -318,17 +318,7 @@ statescript {
         block start {
             track all {
                 lambda {
-                    foreach (u64? var_1 : e3-melee-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : e3-melee-npcs) {
                         npc-set-blind(var_2, 1);
                         npc-set-deaf(var_2, 1);
                         npc-make-aware-of(var_2, player, 0, 0);
@@ -358,24 +348,24 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = offset-locator(get-spawner-locator(pos-scar-machete-e3-spot-player-1, 1), alloc-vector(-0.30, 0.00, -1.00, 1.00, 0));
-                    *(i32*)*(*var_0 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.55;
-                    *(i32*)*(*var_0 + (4 * 8)) = 3;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (5 * 8)) = 4;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (5 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.00;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = offset-locator(get-spawner-locator(pos-scar-machete-e3-spot-player-1, 1), alloc-vector(-0.30, 0.00, -1.00, 1.00, 0));
+                    *(i32*)*var_0[2] = 13;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 58;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.55;
+                    *(i32*)*var_0[4] = 3;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(u8*)(*var_0[4] + 8) = 1;
+                    *(i32*)*var_0[5] = 4;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(u8*)(*var_0[5] + 8) = 1;
                     animate_(npc-nor-scar-burial-melee-2, glt-parking-2v1-melee-surprise--female, var_0);
                 }
                 lambda {
@@ -452,26 +442,26 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-scar-hammer-e3-investigate-car-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-scar-hammer-e3-investigate-car-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 13;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
                     wait-animate_(npc-nor-scar-burial-melee-1, cap-npc-m-nw-check-prone-space-enter-fw, var_0);
                 }
                 lambda {
                     while (!(get-boolean(machete-spotted, self))) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-scar-hammer-e3-investigate-car-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 13;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (1 * 8)) + 8) = 2;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-scar-hammer-e3-investigate-car-1, 1);
+                        *(i32*)*var_2[1] = 13;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(i32*)(*var_2[1] + 8) = 2;
                         wait-animate_(npc-nor-scar-burial-melee-1, cap-npc-m-nw-check-prone-space-loop, var_2);
                     }
                 }
@@ -663,12 +653,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(player);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(player);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
                     animate_(player, ellie-mm-tense-idle-turns-90-r, var_0);
                 }
                 lambda {
@@ -809,18 +799,18 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-hammer-approach-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 2.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (3 * 8)) = 27;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-hammer-approach-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 2.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 0;
+                    *(i32*)*var_0[3] = 27;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(u8*)(*var_0[3] + 8) = 1;
                     animate_(npc-nor-scar-burial-melee-2, bindpose, var_0);
                 }
                 lambda {
@@ -863,15 +853,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(pos-dodge-point-2, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (2 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(pos-dodge-point-2, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
+                    *(i32*)*var_0[2] = 70;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
                     animate_(player, e3-04-ellie-knife-dodge-lt^lwall--ellie, var_0);
                 }
                 lambda {
@@ -1032,9 +1022,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-melee-car-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-melee-car-1, 1);
                     animate_(melee-2v1-car-1, e3-04-ellie-knife-dodge-lt^lwall--car, var_0);
                 }
                 lambda {
@@ -1042,9 +1032,9 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-melee-car-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-melee-car-1, 1);
                     animate_(melee-2v1-car-1, e3-05-ellie-knife-dodge-lwall^counter-backhand--car, var_0);
                 }
             }

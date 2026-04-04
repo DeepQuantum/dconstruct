@@ -87,17 +87,7 @@ statescript {
                 }
                 lambda {
                     if (!task-continue-active?(eschatz, wild-test-onramp, checkpoint)) {
-                        foreach (u64? var_2 : onramp-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : onramp-npcs) {
                             spawn-entity(var_3, 0, 0);
                         }
                         wait(4.00);
@@ -177,81 +167,31 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : onramp-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : onramp-npcs) {
                         if (npc-alive-in-checkpoint?(var_3)) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
-                    foreach (u64? var_8 : taco-npcs) {
-                        u16 var_9;
-                        if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                            var_9 = *(u64*)var_8;
-                        } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                            var_9 = *(u64*)var_8;
-                        } else {
-                            var_9 = 0;
-                        }
+                    foreach (u64? var_9 : taco-npcs) {
                         if (npc-alive-in-checkpoint?(var_9)) {
-                            darray-append(var_0, new-boxed-value(7, var_9), 1);
+                            darray-append(var_0, boxed_symbol(var_9), 1);
                         }
                     }
-                    foreach (u64? var_14 : utility-npcs) {
-                        u16 var_15;
-                        if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                            var_15 = *(u64*)var_14;
-                        } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                            var_15 = *(u64*)var_14;
-                        } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                            var_15 = *(u64*)var_14;
-                        } else {
-                            var_15 = 0;
-                        }
+                    foreach (u64? var_15 : utility-npcs) {
                         if (npc-alive-in-checkpoint?(var_15)) {
-                            darray-append(var_0, new-boxed-value(7, var_15), 1);
+                            darray-append(var_0, boxed_symbol(var_15), 1);
                             set-boolean(utility-spawned, 1, self);
                         }
                     }
-                    foreach (u64? var_20 : train-npcs) {
-                        u16 var_21;
-                        if (var_20 && *(u16*)(var_20 + 12) == 7) {
-                            var_21 = *(u64*)var_20;
-                        } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-                            var_21 = *(u64*)var_20;
-                        } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-                            var_21 = *(u64*)var_20;
-                        } else {
-                            var_21 = 0;
-                        }
+                    foreach (u64? var_21 : train-npcs) {
                         if (npc-alive-in-checkpoint?(var_21)) {
-                            darray-append(var_0, new-boxed-value(7, var_21), 1);
+                            darray-append(var_0, boxed_symbol(var_21), 1);
                             set-boolean(train-spawned, 1, self);
                         }
                     }
-                    foreach (u64? var_26 : train-npcs-backup) {
-                        u16 var_27;
-                        if (var_26 && *(u16*)(var_26 + 12) == 7) {
-                            var_27 = *(u64*)var_26;
-                        } else if (var_26 && *(u16*)(var_26 + 12) == 5) {
-                            var_27 = *(u64*)var_26;
-                        } else if (var_26 && *(u16*)(var_26 + 12) == 4) {
-                            var_27 = *(u64*)var_26;
-                        } else {
-                            var_27 = 0;
-                        }
+                    foreach (u64? var_27 : train-npcs-backup) {
                         if (npc-alive-in-checkpoint?(var_27)) {
-                            darray-append(var_0, new-boxed-value(7, var_27), 1);
+                            darray-append(var_0, boxed_symbol(var_27), 1);
                             set-boolean(train-spawned-backup, 1, self);
                         }
                     }
@@ -272,17 +212,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(taco-spawn, self) == 0) {
-                        foreach (u64? var_2 : taco-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : taco-npcs) {
                             spawn-entity(var_3, 0, 0);
                             npc-set-script-low-priority(var_3);
                         }

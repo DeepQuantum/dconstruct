@@ -29,7 +29,7 @@ u64? start-dead-drop-tts-timer() {
 u64? speak-items-missing() {
     start-dead-drop-tts-timer();
     darray-clear(tts-dead-drop-deposit-frames);
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, HUD_TUTORIAL_ROGUE_TITLE_DEAD_DROP), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_TUTORIAL_ROGUE_TITLE_DEAD_DROP), 2, 0, 1)), 0);
     if (darray-count(grp-missing-deposit-item-index) == 1) {
         u64? var_4 = darray-at(grp-missing-deposit-item-index, 0);
         u16 var_5;
@@ -98,26 +98,16 @@ u64? speak-items-missing() {
             1
         )), 0);
     }
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
     speak-items-required();
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
     return speak-items-have();
 }
 
 u64? speak-items-have() {
-    foreach (u64? var_1 : grp-picked-deposit-item-index) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : grp-picked-deposit-item-index) {
         darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(
-            new-boxed-value(7, *(u64*)((**t2r-dead-drop-item-info-array* + (var_2 * 32)) + 8)),
+            boxed_symbol(*(u64*)((**t2r-dead-drop-item-info-array* + (var_2 * 32)) + 8)),
             2,
             0,
             1
@@ -140,28 +130,18 @@ u64? speak-items-have() {
 u64? speak-items-enough() {
     start-dead-drop-tts-timer();
     darray-clear(tts-dead-drop-deposit-frames);
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, CHALLENGE_DEPOSIT_TO_DEAD_DROP), 2, 0, 1)), 0);
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, CHALLENGE_DEPOSIT_TO_DEAD_DROP), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_DEPOSIT_REQUIRE), 2, 0, 1)), 0);
     speak-items-required();
-    darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
+    darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_INGREDIENT_COUNT_YOU_HAVE), 2, 0, 1)), 0);
     speak-items-have();
-    return darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_PRESS_DEPOSIT), 2, 0, 1)), 0);
+    return darray-append(tts-dead-drop-deposit-frames, boxed_u64(speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_DEAD_DROP_PRESS_DEPOSIT), 2, 0, 1)), 0);
 }
 
 u64? speak-items-required() {
-    foreach (u64? var_1 : grp-picked-deposit-item-index) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : grp-picked-deposit-item-index) {
         darray-append(tts-dead-drop-deposit-frames, new-boxed-value(5, speak-text-to-speech-formatted(
-            new-boxed-value(7, *(u64*)((**t2r-dead-drop-item-info-array* + (var_2 * 32)) + 8)),
+            boxed_symbol(*(u64*)((**t2r-dead-drop-item-info-array* + (var_2 * 32)) + 8)),
             2,
             0,
             1
@@ -449,12 +429,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = reverse-locator(rotate-locator-lookat-object(get-bound-frame(box-ap-ref, self), player, 1.00, 0));
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-best-entry-phase(
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = reverse-locator(rotate-locator-lookat-object(get-bound-frame(box-ap-ref, self), player, 1.00, 0));
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-best-entry-phase(
                         player,
                         ellie-dead-drop--enter,
                         reverse-locator(rotate-locator-lookat-object(get-bound-frame(box-ap-ref, self), player, 1.00, 0)),
@@ -462,44 +442,44 @@ statescript {
                         apReference,
                         0
                     );
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 11;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 11;
                     animate_(player, ellie-dead-drop--enter, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(entry-ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(best-entry-phase, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (4 * 8)) = 70;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 11;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(entry-ap-ref, self);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(best-entry-phase, self);
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
+                    *(i32*)*var_0[4] = 70;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 11;
                     animate_(player, ellie-dead-drop--enter, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(box-ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 58;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = get-float(best-entry-phase, self);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(box-ap-ref, self);
+                    *(i32*)*var_0[1] = 58;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = get-float(best-entry-phase, self);
                     animate_(self, ellie-dead-drop--box, var_0);
                 }
                 lambda {

@@ -87,17 +87,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : gasmask-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : gasmask-infected) {
                         spawn-entity(var_2, 0, 0);
                         npc-set-script-only-no-perception(var_2);
                         listen-mode-visible(var_2, 0, 1, -1.00);
@@ -119,17 +109,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : gasmask-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : gasmask-infected) {
                         if (npc-alive?(var_2)) {
                             shut-up(var_2, 0.10);
                             shut-up-murmuration(var_2, 0.10);
@@ -146,17 +126,7 @@ statescript {
                     set-symbol(zone-region, rgn-stalkers-away-from-bedroom-1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : gasmask-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : gasmask-infected) {
                         npc-set-script-low-priority(var_2);
                         npc-clear-zone(var_2);
                         shut-up(var_2, 3.00);
@@ -196,17 +166,7 @@ statescript {
                         if (!(get-boolean(zone-set?, self)) && get-boolean(player-outside-fight?, self)) {
                             send-event(vox-run-past-stalkers, ss-vox-med-infected-building-look-for-gasmask-1);
                             set-boolean(zone-set?, 1, self);
-                            foreach (u64? var_4 : gasmask-infected) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : gasmask-infected) {
                                 if (npc-alive?(var_5)) {
                                     npc-set-zone-region(var_5, get-symbol(zone-region, self));
                                     npc-set-melee-settings(var_5, *ai-melee-settings-stalker-ski-coast*);
@@ -223,17 +183,7 @@ statescript {
                             wait-boolean(player-outside-fight?, 0, self);
                         } else if (get-boolean(zone-set?, self) && !(get-boolean(player-outside-fight?, self))) {
                             set-boolean(zone-set?, 0, self);
-                            foreach (u64? var_14 : gasmask-infected) {
-                                u16 var_15;
-                                if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                    var_15 = *(u64*)var_14;
-                                } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                    var_15 = *(u64*)var_14;
-                                } else {
-                                    var_15 = 0;
-                                }
+                            foreach (u64? var_15 : gasmask-infected) {
                                 npc-clear-zone-if-alive(var_15);
                                 npc-set-melee-settings(var_15, *ai-melee-settings-stalker*);
                                 set-focusable-ignore(var_15, 0);
@@ -249,17 +199,7 @@ statescript {
             track keep-stalkers-zoned {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : gasmask-infected) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : gasmask-infected) {
                             if (get-boolean(zone-set?, self) && npc-alive?(var_2) && npc-using-skill?(var_2, 5)) {
                                 send-event(disable-last-stalker-charge, var_2);
                                 send-event(disable-overwhelm, var_2);

@@ -36,7 +36,7 @@ statescript {
                 }
                 lambda {
                     if (*(u64*)(event::get-attack-info(get-event()) + 80) == ammo-arrow-fire) {
-                        send-event(flaming-arrow-hit, ss-test-burning-grass-manager-1, new-boxed-value(18, get-object-locator(get-self-id())));
+                        send-event(flaming-arrow-hit, ss-test-burning-grass-manager-1, boxed_boundframe(get-object-locator(get-self-id())));
                     }
                 }
             }
@@ -48,14 +48,14 @@ statescript {
                     event-arg-symbol(3);
                     if (event-arg-symbol(0) == get-self-id()) {
                         set-bound-frame(arrow-loc, get-object-locator(get-self-id()), self);
-                        broadcast-event(flaming-arrow-hit, new-boxed-value(18, get-bound-frame(arrow-loc, self)));
+                        broadcast-event(flaming-arrow-hit, boxed_boundframe(get-bound-frame(arrow-loc, self)));
                         var_2 = go(done, 1);
                     }
                 }
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
                     if (!(*(i32*)npc-get-archetype(var_0) == 7)) {
-                        broadcast-event(npc-on-fire, new-boxed-value(18, get-object-locator(var_0)));
+                        broadcast-event(npc-on-fire, boxed_boundframe(get-object-locator(var_0)));
                         u64? var_5 = event-arg-point(1);
                         u16 var_9;
                         if (is-left?(alloc-bound-frame(var_5, 0, 0, 0, 0), get-joint-locator(var_0, r_clavicle_helper), 180.00)) {
@@ -87,7 +87,7 @@ statescript {
                         ), self);
                         set-int32(last-joint-impact-index, get-int32(closest-joint-index, self), var_0);
                         set-effect-scale(get-uint64(particle-handle, self), *((*(flame-joint-info-data + 8) + (get-int32(closest-joint-index, self) * 48)) + 32));
-                        var_2 = darray-append(get-symbol(particle-handles, var_0), new-boxed-value(4, get-uint64(particle-handle, self)), 0);
+                        var_2 = darray-append(get-symbol(particle-handles, var_0), boxed_i64(get-uint64(particle-handle, self)), 0);
                     }
                 }
             }

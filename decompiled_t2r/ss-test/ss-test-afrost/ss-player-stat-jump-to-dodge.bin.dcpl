@@ -13,17 +13,7 @@
 
 u64? anim-in-group-playing?(u64? arg_0) {
     u64? var_1;
-    foreach (u64? var_2 : ellie-jump-anims) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : ellie-jump-anims) {
         var_1 = 0 && get-animation-playing?(player, var_3, 2);
     }
     return var_1;
@@ -38,17 +28,7 @@ statescript {
             track main {
                 lambda {
                     if (anim-in-group-playing?(ellie-jump-anims) && get-player-health() > 0) {
-                        foreach (u64? var_3 : all-enemy-npcs) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : all-enemy-npcs) {
                             if (npc-alive?(var_4)) {
                                 if (!(0) && get-melee-target(var_4) == player && character-in-melee-attack?(var_4) && !(character-in-struggle-with-player?(var_4))) {
                                     log-event("player-jump-in-melee", 1, "", 0, 0);

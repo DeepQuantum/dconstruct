@@ -13,23 +13,23 @@
 
 u64? update-abby-upgrade-manuals(u64? arg_0) {
     if (!task-complete?(saving-kids, ski-scar-hanging)) {
-        darray-find-remove(arg_0, new-boxed-value(7, upgrade-manual-weapons), 0);
+        darray-find-remove(arg_0, boxed_symbol(upgrade-manual-weapons), 0);
     }
     if (!task-complete?(medicine, med-aquarium-mel-b)) {
-        darray-find-remove(arg_0, new-boxed-value(7, upgrade-manual-crafting), 0);
+        darray-find-remove(arg_0, boxed_symbol(upgrade-manual-crafting), 0);
     }
     return arg_0;
 }
 
 u64? update-ellie-upgrade-manuals(u64? arg_0) {
     if (!task-complete?(watchtower, wat-explore-start)) {
-        darray-find-remove(arg_0, new-boxed-value(7, upgrade-manual-stealth), 0);
+        darray-find-remove(arg_0, boxed_symbol(upgrade-manual-stealth), 0);
     }
     if (!task-complete?(rescue-jesse, res-stores-intro)) {
-        darray-find-remove(arg_0, new-boxed-value(7, upgrade-manual-hawkeye), 0);
+        darray-find-remove(arg_0, boxed_symbol(upgrade-manual-hawkeye), 0);
     }
     if (!task-complete?(find-nora, nor-ellie-leaves-theater-intro)) {
-        darray-find-remove(arg_0, new-boxed-value(7, upgrade-manual-explosives), 0);
+        darray-find-remove(arg_0, boxed_symbol(upgrade-manual-explosives), 0);
     }
     return arg_0;
 }
@@ -59,7 +59,7 @@ u64? get-available-upgrade-manuals() {
 
 u64? is-this-upgrade-manual-available?() {
     u64? var_0 = get-available-upgrade-manuals();
-    return darray-count(var_0) > 0 || tag-symbol(item-id, self) == upgrade-manual-random && darray-contains?(var_0, new-boxed-value(7, tag-symbol(item-id, self)));
+    return darray-count(var_0) > 0 || tag-symbol(item-id, self) == upgrade-manual-random && darray-contains?(var_0, boxed_symbol(tag-symbol(item-id, self)));
 }
 
 statescript {
@@ -247,59 +247,59 @@ statescript {
                         );
                     }
                     u64? var_15 = #%alloc-array(single-frame, 16, 9, 1);
-                    *(i32*)*(*var_15 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_15 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_15 + (0 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_15 + (1 * 8)) = 27;
-                    *(u64*)(*(*var_15 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_15 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_15 + (2 * 8)) = 45;
-                    *(u64*)(*(*var_15 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_15 + (2 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_15 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_15 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_15 + (3 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_15 + (4 * 8)) = 13;
-                    *(u64*)(*(*var_15 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_15 + (4 * 8)) + 8) = 3;
-                    *(i32*)*(*var_15 + (5 * 8)) = 49;
-                    *(u64*)(*(*var_15 + (5 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_15 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_15 + (6 * 8)) = 10;
-                    *(u64*)(*(*var_15 + (6 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_15 + (6 * 8)) + 8) = get-bound-frame(radial-apRef, self);
-                    *(i32*)*(*var_15 + (7 * 8)) = 1;
-                    *(u64*)(*(*var_15 + (7 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_15 + (7 * 8)) + 8) = 1;
-                    *(i32*)*(*var_15 + (8 * 8)) = 24;
-                    *(u64*)(*(*var_15 + (8 * 8)) + 8) = 0;
+                    *(i32*)*var_15[0] = 28;
+                    *(u64*)(*var_15[0] + 8) = 0;
+                    *(f32*)(*var_15[0] + 8) = 0.60;
+                    *(i32*)*var_15[1] = 27;
+                    *(u64*)(*var_15[1] + 8) = 0;
+                    *(u8*)(*var_15[1] + 8) = 2;
+                    *(i32*)*var_15[2] = 45;
+                    *(u64*)(*var_15[2] + 8) = 0;
+                    *(f32*)(*var_15[2] + 8) = 0.20;
+                    *(i32*)*var_15[3] = 30;
+                    *(u64*)(*var_15[3] + 8) = 0;
+                    *(f32*)(*var_15[3] + 8) = 0.60;
+                    *(i32*)*var_15[4] = 13;
+                    *(u64*)(*var_15[4] + 8) = 0;
+                    *(i32*)(*var_15[4] + 8) = 3;
+                    *(i32*)*var_15[5] = 49;
+                    *(u64*)(*var_15[5] + 8) = 0;
+                    *(u8*)(*var_15[5] + 8) = 1;
+                    *(i32*)*var_15[6] = 10;
+                    *(u64*)(*var_15[6] + 8) = 0;
+                    *(u64*)(*var_15[6] + 8) = get-bound-frame(radial-apRef, self);
+                    *(i32*)*var_15[7] = 1;
+                    *(u64*)(*var_15[7] + 8) = 0;
+                    *(u8*)(*var_15[7] + 8) = 1;
+                    *(i32*)*var_15[8] = 24;
+                    *(u64*)(*var_15[8] + 8) = 0;
                     u16 var_17;
                     if (var_4) {
                         var_17 = 18;
                     } else {
                         var_17 = 1;
                     }
-                    *(i32*)(*(*var_15 + (8 * 8)) + 8) = var_17;
+                    *(i32*)(*var_15[8] + 8) = var_17;
                     animate_(player, get-symbol(pickup-manual-animation, self), var_15);
                     u64? var_19 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_19 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_19 + (0 * 8)) + 8) = get-float(pickup-manual-attach-frame, self) / 30.00;
-                    *(i32*)*(*var_19 + (1 * 8)) = 27;
-                    *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_19 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_19 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_19 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_19 + (3 * 8)) = 1;
-                    *(u64*)(*(*var_19 + (3 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_19 + (3 * 8)) + 8) = 1;
-                    *(i32*)*(*var_19 + (4 * 8)) = 40;
-                    *(u64*)(*(*var_19 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_19 + (4 * 8)) + 8) = 1;
-                    *(i32*)*(*var_19 + (5 * 8)) = 75;
-                    *(u64*)(*(*var_19 + (5 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_19 + (5 * 8)) + 8) = *scav-pickup-gesture-left*;
+                    *(i32*)*var_19[0] = 28;
+                    *(u64*)(*var_19[0] + 8) = 0;
+                    *(f32*)(*var_19[0] + 8) = get-float(pickup-manual-attach-frame, self) / 30.00;
+                    *(i32*)*var_19[1] = 27;
+                    *(u64*)(*var_19[1] + 8) = 0;
+                    *(u8*)(*var_19[1] + 8) = 2;
+                    *(i32*)*var_19[2] = 30;
+                    *(u64*)(*var_19[2] + 8) = 0;
+                    *(f32*)(*var_19[2] + 8) = 0.00;
+                    *(i32*)*var_19[3] = 1;
+                    *(u64*)(*var_19[3] + 8) = 0;
+                    *(u8*)(*var_19[3] + 8) = 1;
+                    *(i32*)*var_19[4] = 40;
+                    *(u64*)(*var_19[4] + 8) = 0;
+                    *(i32*)(*var_19[4] + 8) = 1;
+                    *(i32*)*var_19[5] = 75;
+                    *(u64*)(*var_19[5] + 8) = 0;
+                    *(u64*)(*var_19[5] + 8) = *scav-pickup-gesture-left*;
                     animate_(player, get-symbol(pickup-manual-animation, self), var_19);
                 }
                 lambda {
@@ -334,7 +334,7 @@ statescript {
                     if (var_2 == 0 && !is-final-build?()) {
                         script-caption(player, "[BUG] Player received blank upgrade manual", 5.00, 0, 0);
                     }
-                    darray-find-remove(var_0, new-boxed-value(7, var_2), 0);
+                    darray-find-remove(var_0, boxed_symbol(var_2), 0);
                     u64? var_15;
                     if (is-player-ellie?(player)) {
                         var_15 = string-debug(symbol-concat-string(var_2, "-ellie"));
@@ -345,7 +345,7 @@ statescript {
                     while (!get-boolean(manual-picked-up?, self)) {
                         wait-one-frame();
                     }
-                    broadcast-event(manual-picked-up, new-boxed-value(2, darray-count(var_0)));
+                    broadcast-event(manual-picked-up, boxed_i32(darray-count(var_0)));
                     send-event(manual-pickedup, get-self-id());
                     if (any-enemy-aware-of-player?() && get-tension-mode() == 3) {
                         wait-one-frame();

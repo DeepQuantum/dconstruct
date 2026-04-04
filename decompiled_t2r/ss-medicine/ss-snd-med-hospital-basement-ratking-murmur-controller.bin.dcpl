@@ -142,7 +142,7 @@ statescript {
                         override-murmuration-event/f(player, vox-event-abby-murmur-igc-med-ratking-chase);
                         override-heart-rate-tension/f(player, 2);
                         override-breath-anim-table/f(player, *abby-med-ratking-chase-stage2-breath-anim-table*);
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 1));
+                        fact-set(global, player-chased-mode, boxed_bool(1));
                     }
                 }
                 lambda {
@@ -150,7 +150,7 @@ statescript {
                         override-murmuration-event/f(player, vox-event-abby-murmur-igc-med-ratking-chase);
                         override-heart-rate-tension/f(player, 2);
                         override-breath-anim-table/f(player, *abby-med-ratking-chase-stage2-breath-anim-table*);
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 1));
+                        fact-set(global, player-chased-mode, boxed_bool(1));
                     }
                 }
                 lambda {
@@ -158,7 +158,7 @@ statescript {
                         override-murmuration-event/f(player, vox-event-abby-murmur-igc-med-ratking-chase);
                         override-heart-rate-tension/f(player, 3);
                         override-breath-anim-table/f(player, *abby-med-ratking-chase-stage3-breath-anim-table*);
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 1));
+                        fact-set(global, player-chased-mode, boxed_bool(1));
                     }
                 }
             }
@@ -209,7 +209,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(medicine, med-hospital-basement-ratking-chase-end)) {
-                        fact-set(global, player-chased-mode, new-boxed-value(1, 0));
+                        fact-set(global, player-chased-mode, boxed_bool(0));
                         go(basement-fight, 1);
                     }
                 }

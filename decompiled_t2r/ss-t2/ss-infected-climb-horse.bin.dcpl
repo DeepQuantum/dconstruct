@@ -140,17 +140,7 @@ statescript {
                     if (player-on-horse?(player-horse, 0, 1, 1) && player-in-horse-seat?(0, 0)) {
                         if (get-boolean(enabled, self)) {
                             if (get-object-speed(self) < 6.50) {
-                                foreach (u64? var_5 : all-infected-npcs) {
-                                    u16 var_6;
-                                    if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                        var_6 = *(u64*)var_5;
-                                    } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                        var_6 = *(u64*)var_5;
-                                    } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                        var_6 = *(u64*)var_5;
-                                    } else {
-                                        var_6 = 0;
-                                    }
+                                foreach (u64? var_6 : all-infected-npcs) {
                                     if (distance-between-objects-less-than?(self, var_6, 2.50)) {
                                         u64? var_10 = vector-between-points(get-object-position(self), get-object-position(var_6));
                                         if (vector-dot(get-z-vec-from-object(self), var_10) > 0.00) {
@@ -202,73 +192,73 @@ statescript {
                 lambda {
                     if (get-boolean(left-side, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (2 * 8)) = 0;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_2 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_2 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (3 * 8)) + 8) = 1.70;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.50;
+                        *(i32*)*var_2[2] = 0;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(u8*)(*var_2[2] + 8) = 1;
+                        *(i32*)*var_2[3] = 56;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(f32*)(*var_2[3] + 8) = 1.70;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-intro-move, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_4 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (4 * 8)) + 8) = 8;
-                        *(i32*)*(*var_4 + (5 * 8)) = 24;
-                        *(u64*)(*(*var_4 + (5 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (5 * 8)) + 8) = 9;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_4[1] = 28;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.50;
+                        *(i32*)*var_4[2] = 74;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(u8*)(*var_4[2] + 8) = 1;
+                        *(i32*)*var_4[3] = 56;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(f32*)(*var_4[3] + 8) = 1.70;
+                        *(i32*)*var_4[4] = 12;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(i32*)(*var_4[4] + 8) = 8;
+                        *(i32*)*var_4[5] = 24;
+                        *(u64*)(*var_4[5] + 8) = 0;
+                        *(i32*)(*var_4[5] + 8) = 9;
                         wait-animate_(player, ellie-horse-v-human-struggle-left-intro-move, var_4);
                     } else {
                         u64? var_7 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_7 + (2 * 8)) = 0;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_7 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_7 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (3 * 8)) + 8) = 1.70;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.50;
+                        *(i32*)*var_7[2] = 0;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(u8*)(*var_7[2] + 8) = 1;
+                        *(i32*)*var_7[3] = 56;
+                        *(u64*)(*var_7[3] + 8) = 0;
+                        *(f32*)(*var_7[3] + 8) = 1.70;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-intro-move, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_9 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_9 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (4 * 8)) + 8) = 8;
-                        *(i32*)*(*var_9 + (5 * 8)) = 24;
-                        *(u64*)(*(*var_9 + (5 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (5 * 8)) + 8) = 9;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
+                        *(i32*)*var_9[2] = 74;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(u8*)(*var_9[2] + 8) = 1;
+                        *(i32*)*var_9[3] = 56;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(f32*)(*var_9[3] + 8) = 1.70;
+                        *(i32*)*var_9[4] = 12;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(i32*)(*var_9[4] + 8) = 8;
+                        *(i32*)*var_9[5] = 24;
+                        *(u64*)(*var_9[5] + 8) = 0;
+                        *(i32*)(*var_9[5] + 8) = 9;
                         wait-animate_(player, ellie-horse-v-human-struggle-right-intro-move, var_9);
                     }
                 }
@@ -324,17 +314,7 @@ statescript {
                     if (get-boolean(allow-second-infected-pull, self)) {
                         if (get-object-speed(self) < 6.50) {
                             if (get-float(second-infected-cooldown, self) <= 0.00) {
-                                foreach (u64? var_4 : all-infected-npcs) {
-                                    u16 var_5;
-                                    if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                        var_5 = *(u64*)var_4;
-                                    } else {
-                                        var_5 = 0;
-                                    }
+                                foreach (u64? var_5 : all-infected-npcs) {
                                     if (var_5 != get-symbol(climbing-infected, self)) {
                                         if (distance-between-objects-less-than?(self, var_5, 2.50)) {
                                             if (vector-dot(get-z-vec-from-object(self), vector-between-points(get-object-position(self), get-object-position(var_5))) > 0.00) {
@@ -371,55 +351,55 @@ statescript {
                 lambda {
                     if (get-boolean(left-side, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_2 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.70;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_2[1] = 56;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 1.70;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-move, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 74;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (2 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_4 + (3 * 8)) = 12;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (3 * 8)) + 8) = 8;
-                        *(i32*)*(*var_4 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (4 * 8)) + 8) = 9;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_4[1] = 74;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(u8*)(*var_4[1] + 8) = 1;
+                        *(i32*)*var_4[2] = 56;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(f32*)(*var_4[2] + 8) = 1.70;
+                        *(i32*)*var_4[3] = 12;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(i32*)(*var_4[3] + 8) = 8;
+                        *(i32*)*var_4[4] = 24;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(i32*)(*var_4[4] + 8) = 9;
                         wait-animate_(player, ellie-horse-v-human-struggle-left-move, var_4);
                     } else {
                         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_7 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1.70;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_7[1] = 56;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 1.70;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-move, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 74;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (2 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_9 + (3 * 8)) = 12;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (3 * 8)) + 8) = 8;
-                        *(i32*)*(*var_9 + (4 * 8)) = 24;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (4 * 8)) + 8) = 9;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_9[1] = 74;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(u8*)(*var_9[1] + 8) = 1;
+                        *(i32*)*var_9[2] = 56;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(f32*)(*var_9[2] + 8) = 1.70;
+                        *(i32*)*var_9[3] = 12;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(i32*)(*var_9[3] + 8) = 8;
+                        *(i32*)*var_9[4] = 24;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(i32*)(*var_9[4] + 8) = 9;
                         wait-animate_(player, ellie-horse-v-human-struggle-right-move, var_9);
                     }
                 }
@@ -472,17 +452,7 @@ statescript {
                     if (get-boolean(allow-second-infected-pull, self)) {
                         if (get-object-speed(self) < 6.50) {
                             if (get-float(second-infected-cooldown, self) <= 0.00) {
-                                foreach (u64? var_4 : all-infected-npcs) {
-                                    u16 var_5;
-                                    if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                        var_5 = *(u64*)var_4;
-                                    } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                        var_5 = *(u64*)var_4;
-                                    } else {
-                                        var_5 = 0;
-                                    }
+                                foreach (u64? var_5 : all-infected-npcs) {
                                     if (var_5 != get-symbol(climbing-infected, self)) {
                                         if (distance-between-objects-less-than?(self, var_5, 2.50)) {
                                             if (vector-dot(get-z-vec-from-object(self), vector-between-points(get-object-position(self), get-object-position(var_5))) > 0.00) {
@@ -519,61 +489,61 @@ statescript {
                 lambda {
                     if (get-boolean(left-side, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_2 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_2 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_2[1] = 56;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 1.70;
+                        *(i32*)*var_2[2] = 13;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(i32*)(*var_2[2] + 8) = 2;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-success-move, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 24;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (1 * 8)) + 8) = 9;
-                        *(i32*)*(*var_4 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_4 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (4 * 8)) + 8) = 8;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_4[1] = 24;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(i32*)(*var_4[1] + 8) = 9;
+                        *(i32*)*var_4[2] = 74;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(u8*)(*var_4[2] + 8) = 1;
+                        *(i32*)*var_4[3] = 56;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(f32*)(*var_4[3] + 8) = 1.70;
+                        *(i32*)*var_4[4] = 12;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(i32*)(*var_4[4] + 8) = 8;
                         wait-animate_(player, ellie-horse-v-human-struggle-left-success-move, var_4);
                     } else {
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_7 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_7 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_7[1] = 56;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 1.70;
+                        *(i32*)*var_7[2] = 13;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(i32*)(*var_7[2] + 8) = 2;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-success-move, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 24;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (1 * 8)) + 8) = 9;
-                        *(i32*)*(*var_9 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_9 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (4 * 8)) + 8) = 8;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_9[1] = 24;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(i32*)(*var_9[1] + 8) = 9;
+                        *(i32*)*var_9[2] = 74;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(u8*)(*var_9[2] + 8) = 1;
+                        *(i32*)*var_9[3] = 56;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(f32*)(*var_9[3] + 8) = 1.70;
+                        *(i32*)*var_9[4] = 12;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(i32*)(*var_9[4] + 8) = 8;
                         wait-animate_(player, ellie-horse-v-human-struggle-right-success-move, var_9);
                     }
                 }
@@ -625,31 +595,31 @@ statescript {
                 lambda {
                     if (get-boolean(left-side, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(self);
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(self);
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-move, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 13;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (1 * 8)) + 8) = 10;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_4[1] = 13;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(i32*)(*var_4[1] + 8) = 10;
                         wait-animate_(player, ellie-horse-v-human-struggle-left-fail-move, var_4);
                     } else {
                         u64? var_7 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(self);
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(self);
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-fail-move, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 13;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (1 * 8)) + 8) = 10;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_9[1] = 13;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(i32*)(*var_9[1] + 8) = 10;
                         wait-animate_(player, ellie-horse-v-human-struggle-right-fail-move, var_9);
                     }
                 }
@@ -659,34 +629,34 @@ statescript {
                         if (get-boolean(left-side, self)) {
                             animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-stand, #%alloc-array(single-frame, 16, 0, 1));
                             u64? var_5 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_5 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_5 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_5 + (1 * 8)) = 61;
-                            *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_5 + (1 * 8)) + 8) = 35;
-                            *(i32*)*(*var_5 + (2 * 8)) = 60;
-                            *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_5 + (2 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_5 + (3 * 8)) = 13;
-                            *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_5 + (3 * 8)) + 8) = 2;
+                            *(i32*)*var_5[0] = 24;
+                            *(u64*)(*var_5[0] + 8) = 0;
+                            *(i32*)(*var_5[0] + 8) = 1;
+                            *(i32*)*var_5[1] = 61;
+                            *(u64*)(*var_5[1] + 8) = 0;
+                            *(i32*)(*var_5[1] + 8) = 35;
+                            *(i32*)*var_5[2] = 60;
+                            *(u64*)(*var_5[2] + 8) = 0;
+                            *(f32*)(*var_5[2] + 8) = 1.00;
+                            *(i32*)*var_5[3] = 13;
+                            *(u64*)(*var_5[3] + 8) = 0;
+                            *(i32*)(*var_5[3] + 8) = 2;
                             wait-animate_(player, ellie-horse-v-human-struggle-left-fail-stand, var_5);
                         } else {
                             animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-fail-stand, #%alloc-array(single-frame, 16, 0, 1));
                             u64? var_8 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 24;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_8 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_8 + (1 * 8)) = 61;
-                            *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_8 + (1 * 8)) + 8) = 35;
-                            *(i32*)*(*var_8 + (2 * 8)) = 60;
-                            *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_8 + (2 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_8 + (3 * 8)) = 13;
-                            *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_8 + (3 * 8)) + 8) = 2;
+                            *(i32*)*var_8[0] = 24;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(i32*)(*var_8[0] + 8) = 1;
+                            *(i32*)*var_8[1] = 61;
+                            *(u64*)(*var_8[1] + 8) = 0;
+                            *(i32*)(*var_8[1] + 8) = 35;
+                            *(i32*)*var_8[2] = 60;
+                            *(u64*)(*var_8[2] + 8) = 0;
+                            *(f32*)(*var_8[2] + 8) = 1.00;
+                            *(i32*)*var_8[3] = 13;
+                            *(u64*)(*var_8[3] + 8) = 0;
+                            *(i32*)(*var_8[3] + 8) = 2;
                             wait-animate_(player, ellie-horse-v-human-struggle-right-fail-stand, var_8);
                         }
                         send-event(knock-off-horse, player);
@@ -745,61 +715,61 @@ statescript {
                 lambda {
                     if (get-boolean(left-side, self)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_2 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_2 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_2[1] = 56;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 1.70;
+                        *(i32*)*var_2[2] = 13;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(i32*)(*var_2[2] + 8) = 2;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-success-move, var_2);
                         u64? var_4 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 24;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (1 * 8)) + 8) = 9;
-                        *(i32*)*(*var_4 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_4 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_4 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_4 + (4 * 8)) + 8) = 8;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_4[1] = 24;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(i32*)(*var_4[1] + 8) = 9;
+                        *(i32*)*var_4[2] = 74;
+                        *(u64*)(*var_4[2] + 8) = 0;
+                        *(u8*)(*var_4[2] + 8) = 1;
+                        *(i32*)*var_4[3] = 56;
+                        *(u64*)(*var_4[3] + 8) = 0;
+                        *(f32*)(*var_4[3] + 8) = 1.70;
+                        *(i32*)*var_4[4] = 12;
+                        *(u64*)(*var_4[4] + 8) = 0;
+                        *(i32*)(*var_4[4] + 8) = 8;
                         wait-animate_(player, ellie-horse-1hblade-slash-left, var_4);
                     } else {
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_7 + (1 * 8)) = 56;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_7 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (2 * 8)) + 8) = 2;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_7[1] = 56;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 1.70;
+                        *(i32*)*var_7[2] = 13;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(i32*)(*var_7[2] + 8) = 2;
                         animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-right-success-move, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-object-locator(self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 24;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (1 * 8)) + 8) = 9;
-                        *(i32*)*(*var_9 + (2 * 8)) = 74;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (3 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (3 * 8)) + 8) = 1.70;
-                        *(i32*)*(*var_9 + (4 * 8)) = 12;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (4 * 8)) + 8) = 8;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-object-locator(self);
+                        *(i32*)*var_9[1] = 24;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(i32*)(*var_9[1] + 8) = 9;
+                        *(i32*)*var_9[2] = 74;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(u8*)(*var_9[2] + 8) = 1;
+                        *(i32*)*var_9[3] = 56;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(f32*)(*var_9[3] + 8) = 1.70;
+                        *(i32*)*var_9[4] = 12;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(i32*)(*var_9[4] + 8) = 8;
                         wait-animate_(player, ellie-horse-1hblade-slash-right, var_9);
                     }
                 }
@@ -847,31 +817,31 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 44;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (1 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (2 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_1[1] = 44;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u8*)(*var_1[1] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_1[2] = 13;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(i32*)(*var_1[2] + 8) = 2;
                     animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-struggle-enter, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (3 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_0[1] = 44;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_0[2] = 13;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 2;
+                    *(i32*)*var_0[3] = 24;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 1;
                     wait-animate_(player, ellie-horse-v-human-struggle-left-fail-struggle-enter, var_0);
                 }
                 lambda {
@@ -917,37 +887,37 @@ statescript {
             track animate {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 44;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_1 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 31;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_1[2] = 44;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_1[3] = 13;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(i32*)(*var_1[3] + 8) = 2;
                     animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-struggle-loop, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (4 * 8)) + 8) = 1;
+                    *(i32*)*var_0[0] = 31;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u8*)(*var_0[0] + 8) = 1;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_0[2] = 44;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 24;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(i32*)(*var_0[4] + 8) = 1;
                     animate_(player, ellie-horse-v-human-struggle-left-fail-struggle-loop, var_0);
                 }
                 lambda {
@@ -1011,43 +981,43 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 7, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 150;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (4 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (5 * 8)) = 24;
-                    *(u64*)(*(*var_0 + (5 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (5 * 8)) + 8) = 1;
-                    *(i32*)*(*var_0 + (6 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (6 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (6 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_0[1] = 44;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 150;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.00;
+                    *(i32*)*var_0[4] = 28;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = 0.50;
+                    *(i32*)*var_0[5] = 24;
+                    *(u64*)(*var_0[5] + 8) = 0;
+                    *(i32*)(*var_0[5] + 8) = 1;
+                    *(i32*)*var_0[6] = 13;
+                    *(u64*)(*var_0[6] + 8) = 0;
+                    *(i32*)(*var_0[6] + 8) = 2;
                     animate_(player, ellie-horse-v-human-struggle-left-fail-struggle-success, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 44;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (1 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_1[1] = 44;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u8*)(*var_1[1] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
+                    *(i32*)*var_1[3] = 13;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(i32*)(*var_1[3] + 8) = 2;
                     wait-animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-struggle-success, var_1);
                 }
                 lambda {
@@ -1064,34 +1034,34 @@ statescript {
             track main {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_1 + (2 * 8)) = 44;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (2 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_1 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 0.50;
+                    *(i32*)*var_1[1] = 10;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u64*)(*var_1[1] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_1[2] = 44;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(u8*)(*var_1[2] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_1[3] = 13;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(i32*)(*var_1[3] + 8) = 2;
                     animate_(get-symbol(climbing-infected, self), thug-ellie-horse-v-human-struggle-left-fail-struggle-fail, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-bound-frame(ground-struggle-ap-ref, self);
-                    *(i32*)*(*var_0 + (2 * 8)) = 44;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = !get-boolean(left-side, self);
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.50;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-bound-frame(ground-struggle-ap-ref, self);
+                    *(i32*)*var_0[2] = 44;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = !get-boolean(left-side, self);
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(player, ellie-horse-v-human-struggle-left-fail-struggle-fail, var_0);
                 }
                 lambda {

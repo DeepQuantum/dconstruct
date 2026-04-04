@@ -23,7 +23,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(ss-forklift-able-group, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(ss-forklift-able-group, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     if (!is-final-build?()) {

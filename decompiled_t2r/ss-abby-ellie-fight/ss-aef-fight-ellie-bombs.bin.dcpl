@@ -72,17 +72,7 @@ statescript {
                 }
                 lambda {
                     if (!(darray-count(aef-bomb-group) == 0)) {
-                        foreach (u64? var_2 : aef-bomb-group) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : aef-bomb-group) {
                             if (get-object-distance(player, var_3) < 1.00 && get-player-speed() > 1.35) {
                                 set-symbol(bomb-to-splod, var_3, self);
                                 go(explode, 1);
@@ -97,7 +87,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(aef-bomb-group, new-boxed-value(7, get-symbol(bomb-to-splod, self)), 0);
+                    darray-find-remove(aef-bomb-group, boxed_symbol(get-symbol(bomb-to-splod, self)), 0);
                 }
                 lambda {
                     spawn-explosion(

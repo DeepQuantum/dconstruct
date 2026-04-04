@@ -89,7 +89,7 @@ statescript {
                     set-boolean(ignore-exit?, 1, obj-far-explore-joels-watch-1);
                 }
                 lambda {
-                    send-event(investigate-object, obj-far-explore-joels-watch-1, new-boxed-value(7, obj-far-explore-joels-watch-1));
+                    send-event(investigate-object, obj-far-explore-joels-watch-1, boxed_symbol(obj-far-explore-joels-watch-1));
                 }
                 lambda {
                     start-timer(watch-inspect-timeout, get-float(time-in-inspect, self), self, 1);
@@ -150,7 +150,7 @@ statescript {
                     wait(1.50);
                 }
                 lambda {
-                    send-event(investigate-begin-exit, obj-far-explore-joels-watch-1, new-boxed-value(7, obj-far-explore-joels-watch-1));
+                    send-event(investigate-begin-exit, obj-far-explore-joels-watch-1, boxed_symbol(obj-far-explore-joels-watch-1));
                 }
                 lambda {
                     detach(obj-far-explore-joels-watch-1);

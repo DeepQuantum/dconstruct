@@ -166,7 +166,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(active-bloater-clouds, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(active-bloater-clouds, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-int64(cloud, spawn-particles-at-bound-frame(bloater-cloud-1, get-object-locator(self), none), self);
@@ -198,13 +198,13 @@ statescript {
                     play-sound-at-position(sfx-bltr-pustule-explosion, get-object-position(self), 0, 0);
                 }
                 lambda {
-                    broadcast-event(spore-cloud-kill-grass, new-boxed-value(18, get-object-locator(self)), new-boxed-value(6, get-float(radius, self)));
+                    broadcast-event(spore-cloud-kill-grass, boxed_boundframe(get-object-locator(self)), boxed_f32(get-float(radius, self)));
                 }
                 lambda {
                     wait(get-float(lifespan, self));
                 }
                 lambda {
-                    darray-find-remove(active-bloater-clouds, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(active-bloater-clouds, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     go(done, 1);

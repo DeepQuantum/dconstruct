@@ -84,32 +84,12 @@ statescript {
                 lambda {
                     while (1) {
                         wait-boolean(pause-fight, 1, self);
-                        foreach (u64? var_1 : all-enemy-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-enemy-npcs) {
                             set-focusable-ignore(var_2, 1);
                             npc-set-excluded-from-tension-calculation(var_2, 1);
                         }
                         wait-boolean(pause-fight, 0, self);
-                        foreach (u64? var_5 : all-enemy-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : all-enemy-npcs) {
                             set-focusable-ignore(var_6, 0);
                             npc-set-excluded-from-tension-calculation(var_6, 0);
                         }
@@ -252,17 +232,7 @@ statescript {
                     task-complete!(santa-barbara, san-outpost-suburbs-street-end);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-only-no-perception(var_2);
                             character-set-invincibility(var_2, 4, 0);
@@ -276,17 +246,7 @@ statescript {
                     wait(20.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
@@ -300,7 +260,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    if (darray-contains?(all-enemy-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(all-enemy-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         kill-entity-if-spawned(event-arg-symbol(0));
                     }
                 }

@@ -73,7 +73,7 @@ statescript {
             track main {
                 lambda {
                     if (event-arg-symbol(0) == obj-wat-hanging-body-4 && event-arg-symbol(0) == obj-wat-hanging-body-2) {
-                        fact-set(global, do-not-cut-bodies-down?, new-boxed-value(1, 1));
+                        fact-set(global, do-not-cut-bodies-down?, boxed_bool(1));
                     }
                 }
             }

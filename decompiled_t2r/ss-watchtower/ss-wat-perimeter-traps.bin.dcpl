@@ -40,17 +40,7 @@ statescript {
             track main {
                 lambda {
                     if (!is-navigation-assistance-accessibility?()) {
-                        foreach (u64? var_2 : trap-mines-access-disabled) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : trap-mines-access-disabled) {
                             spawn-entity(var_3, 0, 0);
                         }
                     }

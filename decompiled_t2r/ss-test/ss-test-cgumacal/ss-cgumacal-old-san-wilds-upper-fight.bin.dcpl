@@ -50,17 +50,7 @@ statescript {
                     wait-spawn-npc-group-async(san-wilds-upper-npcs, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-disable-perception(var_2);
                         }
@@ -87,17 +77,7 @@ statescript {
         block start {
             track spawn {
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave1) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                         }
@@ -161,17 +141,7 @@ statescript {
                     set-int32(wave-1-count, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npc-despawnable) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npc-despawnable) {
                         if (npc-alive?(var_2)) {
                             if (get-int32(wave-1-count, self) < 2) {
                                 if (npc-has-awareness?(var_2, player, 2)) {
@@ -186,17 +156,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave3) {
                         if (npc-alive?(var_2)) {
                             npc-disable-perception(var_2);
                         }
@@ -211,17 +171,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave2) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                         }
@@ -238,17 +188,7 @@ statescript {
                     wait-spawn-npc-group-async(san-wilds-upper-npcs-wave3, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave3) {
                         if (npc-alive?(var_2)) {
                             npc-disable-perception(var_2);
                         }
@@ -355,17 +295,7 @@ statescript {
         block start {
             track spawn {
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave1) {
                         if (npc-alive?(var_2)) {
                             if (!npc-has-awareness?(var_2, player, 2)) {
                                 npc-kill(var_2);
@@ -374,17 +304,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave2) {
                         if (npc-alive?(var_2)) {
                             if (!npc-has-awareness?(var_2, player, 2)) {
                                 npc-kill(var_2);
@@ -393,34 +313,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave3) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-stalkers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-stalkers) {
                         if (npc-alive?(var_2)) {
                             if (!npc-has-awareness?(var_2, player, 2)) {
                                 npc-kill(var_2);
@@ -471,17 +371,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave3) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                         }
@@ -492,17 +382,7 @@ statescript {
         block event exit {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-wilds-upper-npcs-wave3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-wilds-upper-npcs-wave3) {
                         if (npc-alive?(var_2)) {
                             npc-disable-perception(var_2);
                         }

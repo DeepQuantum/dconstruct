@@ -102,9 +102,9 @@ u64? populate-character-traits(u64? arg_0, i64 arg_1) {
 
 u64? send-show-reward-anim-event(u16 arg_0, u64? arg_1) {
     return match (arg_0) {
-        9        , 10       , 11        -> send-event(show-reward-animation-default, self, new-boxed-value(7, arg_1)),
-        6        , 8        , 7         -> send-event(show-reward-animation-feature, self, new-boxed-value(7, arg_1)),
-        else      -> send-event(show-reward-animation-default, self, new-boxed-value(7, arg_1))
+        9        , 10       , 11        -> send-event(show-reward-animation-default, self, boxed_symbol(arg_1)),
+        6        , 8        , 7         -> send-event(show-reward-animation-feature, self, boxed_symbol(arg_1)),
+        else      -> send-event(show-reward-animation-default, self, boxed_symbol(arg_1))
     };
 }
 
@@ -166,7 +166,7 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
             0,
             0
         ), *(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 128));
-        send-event(set-last-loaded-reward-texture, get-symbol(event-sender, self), new-boxed-value(7, string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 128))));
+        send-event(set-last-loaded-reward-texture, get-symbol(event-sender, self), boxed_symbol(string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 128))));
         if (gui2-widget-exists?(gui2-build-widget-path(
             var_1,
             "unblurredGroup.unblurredIcon",
@@ -203,7 +203,7 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
             0,
             0
         ), *(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 152));
-        send-event(set-last-loaded-reward-texture, get-symbol(event-sender, self), new-boxed-value(7, string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 152))));
+        send-event(set-last-loaded-reward-texture, get-symbol(event-sender, self), boxed_symbol(string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 152))));
     }
     if (*(i32*)*((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 64) == 3) {
         gui2-set-widget-visible(gui2-find-widget-path("spores", self), 1);
@@ -245,7 +245,7 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
     }
     if (*(i32*)*((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 64) == 1 || *(i32*)*((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 64) == 3 || *(i32*)*((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 64) == 5 && *(i32*)*((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 64) == 2) {
         gui2-set-widget-image(gui2-find-widget-path("whiteFill", var_1), *(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 144));
-        send-event(set-last-loaded-reward-white-texture, get-symbol(event-sender, self), new-boxed-value(7, string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 144))));
+        send-event(set-last-loaded-reward-white-texture, get-symbol(event-sender, self), boxed_symbol(string-to-symbol(*(i64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 144))));
     }
     if (gui2-widget-exists?(gui2-build-widget-path(
         var_1,
@@ -316,7 +316,7 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
             0,
             0,
             0
-        ), new-boxed-value(2, t2r-meta-trial-get-skull-track-index-by-cipher-id(*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 104))));
+        ), boxed_i32(t2r-meta-trial-get-skull-track-index-by-cipher-id(*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 104))));
         var_56 = 1;
     }
     u16 var_62;
@@ -342,39 +342,39 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
             0,
             0,
             0
-        ), new-boxed-value(2, t2r-meta-trial-get-gambit-track-index-by-cipher-id(*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 104))));
+        ), boxed_i32(t2r-meta-trial-get-gambit-track-index-by-cipher-id(*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 104))));
         var_62 = 1;
     }
     if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-enemy-complete-runs-a) {
-        send-event(reward-page-trigger-sfx-timer, self, new-boxed-value(7, sfx-hud-rl-unlock-boss-super-stalker), new-boxed-value(6, 1.40));
+        send-event(reward-page-trigger-sfx-timer, self, boxed_symbol(sfx-hud-rl-unlock-boss-super-stalker), boxed_f32(1.40));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-enemy-complete-runs-b) {
-        send-event(vox-unlock-boss, ss-vox-rl-encounter-controller-1, new-boxed-value(7, rattler));
+        send-event(vox-unlock-boss, ss-vox-rl-encounter-controller-1, boxed_symbol(rattler));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-enemy-complete-runs-c) {
-        send-event(reward-page-trigger-sfx-timer, self, new-boxed-value(7, sfx-hud-rl-unlock-boss-bloater), new-boxed-value(6, 1.40));
+        send-event(reward-page-trigger-sfx-timer, self, boxed_symbol(sfx-hud-rl-unlock-boss-bloater), boxed_f32(1.40));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-enemy-complete-runs-d) {
-        send-event(vox-unlock-boss, ss-vox-rl-encounter-controller-1, new-boxed-value(7, seraphite));
+        send-event(vox-unlock-boss, ss-vox-rl-encounter-controller-1, boxed_symbol(seraphite));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-enemy-complete-runs-e) {
-        send-event(reward-page-trigger-sfx-timer, self, new-boxed-value(7, sfx-hud-rl-unlock-boss-rat-king), new-boxed-value(6, 1.40));
+        send-event(reward-page-trigger-sfx-timer, self, boxed_symbol(sfx-hud-rl-unlock-boss-rat-king), boxed_f32(1.40));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-ellie) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, dina));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(dina));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-dina) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, jesse));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(jesse));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-jesse) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, tommy));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(tommy));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-tommy) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, joel));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(joel));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-abby) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, lev));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(lev));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-lev) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, yara));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(yara));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-yara) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, mel));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(mel));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-encounter-complete-mel) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, manny));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(manny));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-dead-drop-complete-for-bill) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, bill));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(bill));
     } else if (*(u64*)((**(***meta-set* + (arg_0 * 72)) + (arg_1 * 184)) + 8) == meta-gambits-complete-for-marlene) {
-        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, new-boxed-value(7, marlene));
+        send-event(vox-unlock-char, ss-vox-rl-encounter-controller-1, boxed_symbol(marlene));
     }
     u64? var_86 = gui2-build-widget-path(
         var_1,
@@ -478,15 +478,15 @@ u64? populate-rewards-page(i64 arg_0, i64 arg_1) {
     send-event(
         reward-tts,
         self,
-        new-boxed-value(2, arg_0),
-        new-boxed-value(2, arg_1),
-        new-boxed-value(1, var_37),
-        new-boxed-value(1, var_56),
-        new-boxed-value(1, var_62),
-        new-boxed-value(1, var_91)
+        boxed_i32(arg_0),
+        boxed_i32(arg_1),
+        boxed_bool(var_37),
+        boxed_bool(var_56),
+        boxed_bool(var_62),
+        boxed_bool(var_91)
     );
-    send-event(set-reward-page, get-symbol(event-sender, self), new-boxed-value(7, self));
-    send-event(set-reward-flow, get-symbol(event-sender, self), new-boxed-value(7, var_1));
+    send-event(set-reward-page, get-symbol(event-sender, self), boxed_symbol(self));
+    send-event(set-reward-flow, get-symbol(event-sender, self), boxed_symbol(var_1));
     return set-symbol(w-reward-flow, var_1, self);
 }
 
@@ -567,14 +567,14 @@ statescript {
                     }
                     wait-one-frame();
                     speak-text-to-speech-formatted(
-                        new-boxed-value(7, *(u64*)(*((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 64) + 16)),
+                        boxed_symbol(*(u64*)(*((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 64) + 16)),
                         var_7,
                         0,
                         1
                     );
                     if (!(*(u64*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 104) == 0)) {
                         speak-text-to-speech-formatted(
-                            new-boxed-value(7, *(u64*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 104)),
+                            boxed_symbol(*(u64*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 104)),
                             var_7,
                             0,
                             1
@@ -601,7 +601,7 @@ statescript {
                                 var_17 = 0;
                             }
                             speak-text-to-speech-formatted(
-                                new-boxed-value(7, *(u64*)(skull--get-skull-by-index(var_17) + 16)),
+                                boxed_symbol(*(u64*)(skull--get-skull-by-index(var_17) + 16)),
                                 var_7,
                                 0,
                                 1
@@ -623,7 +623,7 @@ statescript {
                                 var_27 = 0;
                             }
                             speak-text-to-speech-formatted(
-                                new-boxed-value(7, *(u64*)(var_27 + 40)),
+                                boxed_symbol(*(u64*)(var_27 + 40)),
                                 var_7,
                                 0,
                                 1
@@ -632,14 +632,14 @@ statescript {
                     }
                     if (event-arg-boolean(2)) {
                         speak-text-to-speech-formatted(
-                            new-boxed-value(7, *(u64*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 88)),
+                            boxed_symbol(*(u64*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 88)),
                             var_7,
                             0,
                             1
                         );
                     }
                     speak-text-to-speech-formatted(
-                        new-boxed-value(7, *(u64*)(*((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 64) + 24)),
+                        boxed_symbol(*(u64*)(*((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 64) + 24)),
                         var_7,
                         0,
                         1
@@ -647,7 +647,7 @@ statescript {
                     if (event-arg-boolean(5)) {
                         u16 var_36;
                         if (*(i32*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 96) >= 0 && *(i32*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 96) < *(i32*)(*ss-player-selection-array* + 8)) {
-                            speak-text-to-speech-formatted(new-boxed-value(7, ROGUE_CHARACTER_SELECT_TRAITS), 0, 0, 1);
+                            speak-text-to-speech-formatted(boxed_symbol(ROGUE_CHARACTER_SELECT_TRAITS), 0, 0, 1);
                             for (u64 i = 0; i < *(i32*)(*(*(**ss-player-selection-array* + (*(i32*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 96) * 8)) + 72) + 8); i++) {
                                 speak-text-to-speech-formatted(
                                     *(**(*(**ss-player-selection-array* + (*(i32*)((**(***meta-set* + (var_0 * 72)) + (var_1 * 184)) + 96) * 8)) + 72) + (i * 8)),

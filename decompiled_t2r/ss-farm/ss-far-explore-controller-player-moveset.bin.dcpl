@@ -249,7 +249,7 @@ statescript {
                     player-set-prop-visible(ellie-babycarrier-flap-cloth, 0);
                 }
                 lambda {
-                    fact-set(player, right-arm-only, new-boxed-value(1, 1));
+                    fact-set(player, right-arm-only, boxed_bool(1));
                 }
                 lambda {
                     wait-boolean(baby-picked-up?, 1, self);
@@ -283,7 +283,7 @@ statescript {
                     baby-ik(player, obj-far-explore-baby-1, *baby-no-hand-ik-settings*);
                 }
                 lambda {
-                    fact-set(player, right-arm-only, new-boxed-value(1, 1));
+                    fact-set(player, right-arm-only, boxed_bool(1));
                 }
             }
         }
@@ -309,7 +309,7 @@ statescript {
                     set-int32(never-repeat-a-gesture-played-in-the-last-, 2, ss-idle-controller--player);
                 }
                 lambda {
-                    fact-set(player, right-arm-only, new-boxed-value(1, 1));
+                    fact-set(player, right-arm-only, boxed_bool(1));
                 }
                 lambda {
                     player-set-prop-visible(ellie-babycarrier-flap-cloth, 0);

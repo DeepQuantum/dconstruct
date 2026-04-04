@@ -111,7 +111,7 @@ embedded@2900(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? npc-enemy-ellie-switchblade-left-slice-finisher
 embedded@26e8(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-enemy-ellie-switchblade-left-slice-finisher), 0, 0);
 }
@@ -298,9 +298,9 @@ npc-enemy-ellie-switchblade-right-finisher
 embedded@2b78(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     return broadcast-event(
         melee-damage,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(6, 1000.00)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_f32(1000.00)
     );
 }
 
@@ -378,7 +378,7 @@ embedded@2e70(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? a
 u64? npc-enemy-ellie-switchblade-right-finisher
 embedded@29b0(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u64? arg_10, u64? arg_11) {
     if (is-player?(arg_2)) {
-        send-event(synced-finisher-v-player, ss-promote-death-hints, new-boxed-value(7, arg_1));
+        send-event(synced-finisher-v-player, ss-promote-death-hints, boxed_symbol(arg_1));
     }
     return log-event("melee-npc-finisher", 1, string-debug(npc-enemy-ellie-switchblade-right-finisher), 0, 0);
 }

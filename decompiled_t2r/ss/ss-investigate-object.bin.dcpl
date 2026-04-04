@@ -342,18 +342,18 @@ statescript {
                 lambda {
                     if (!(tag-symbol(obj-anim-start, self) == null)) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 56;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 56;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(f32*)(*var_3[0] + 8) = 0.00;
+                        *(i32*)*var_3[1] = 10;
+                        *(u64*)(*var_3[1] + 8) = 0;
                         u64? var_5;
                         if (tag-specified?(ap-ref, self)) {
                             var_5 = get-spawner-locator(get-symbol(ap-ref, self), 1);
                         } else {
                             var_5 = get-object-locator(self);
                         }
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = var_5;
+                        *(u64*)(*var_3[1] + 8) = var_5;
                         animate_(get-self-id(), tag-symbol(obj-anim-start, self), var_3);
                     }
                 }
@@ -402,7 +402,7 @@ statescript {
                             wait-one-frame();
                         }
                         interactable-disable(get-self-id());
-                        broadcast-event(disabling-investigate-object, new-boxed-value(7, get-self-id()));
+                        broadcast-event(disabling-investigate-object, boxed_symbol(get-self-id()));
                     }
                 }
             }
@@ -513,7 +513,7 @@ statescript {
                     }
                 }
                 lambda {
-                    broadcast-event(done-with-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(done-with-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     while (entity-exists?(ss-sea-horse-map-writing-1) || timer-running?(kill-map, ss-sea-horse-map-writing-1) && !((get-current-time(0) - get-current-time(0)) > 5.00)) {
@@ -725,7 +725,7 @@ statescript {
                                 1
                             );
                         }
-                        broadcast-event(entering-investigate, new-boxed-value(7, get-self-id()));
+                        broadcast-event(entering-investigate, boxed_symbol(get-self-id()));
                         signal(start-igc, 0);
                         if (tag-specified?(recalculate-ap, self)) {
                             u64? var_35;
@@ -771,11 +771,11 @@ statescript {
                             var_70 = get-symbol(enter-anim, self);
                         }
                         u64? var_73 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_73 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_73 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_73 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, self);
-                        *(i32*)*(*var_73 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_73 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_73[0] = 10;
+                        *(u64*)(*var_73[0] + 8) = 0;
+                        *(u64*)(*var_73[0] + 8) = get-bound-frame(calculated-ap-loc, self);
+                        *(i32*)*var_73[1] = 28;
+                        *(u64*)(*var_73[1] + 8) = 0;
                         f32 var_78;
                         if (tag-boolean(use-best-entry-phase?, self) && !(tag-boolean(attach-on-enter-1-frame, self))) {
                             f32 var_80;
@@ -796,19 +796,19 @@ statescript {
                         } else {
                             var_78 = get-float(enter-anim-fade-in, self);
                         }
-                        *(f32*)(*(*var_73 + (1 * 8)) + 8) = var_78;
-                        *(i32*)*(*var_73 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_73 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_73 + (2 * 8)) + 8) = get-float(enter-anim-fade-out, self);
-                        *(i32*)*(*var_73 + (3 * 8)) = 27;
-                        *(u64*)(*(*var_73 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_73 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_73 + (4 * 8)) = 58;
-                        *(u64*)(*(*var_73 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_73 + (4 * 8)) + 8) = var_6;
-                        *(i32*)*(*var_73 + (5 * 8)) = 14;
-                        *(u64*)(*(*var_73 + (5 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_73 + (5 * 8)) + 8) = apReference;
+                        *(f32*)(*var_73[1] + 8) = var_78;
+                        *(i32*)*var_73[2] = 30;
+                        *(u64*)(*var_73[2] + 8) = 0;
+                        *(f32*)(*var_73[2] + 8) = get-float(enter-anim-fade-out, self);
+                        *(i32*)*var_73[3] = 27;
+                        *(u64*)(*var_73[3] + 8) = 0;
+                        *(u8*)(*var_73[3] + 8) = 2;
+                        *(i32*)*var_73[4] = 58;
+                        *(u64*)(*var_73[4] + 8) = 0;
+                        *(f32*)(*var_73[4] + 8) = var_6;
+                        *(i32*)*var_73[5] = 14;
+                        *(u64*)(*var_73[5] + 8) = 0;
+                        *(u64*)(*var_73[5] + 8) = apReference;
                         wait-animate_(player, var_70, var_73);
                     }
                 }
@@ -819,7 +819,7 @@ statescript {
                     set-boolean(enter-anim-2-start, 1, self);
                 }
                 lambda {
-                    broadcast-event(entering-investigate-cut, new-boxed-value(7, get-self-id()));
+                    broadcast-event(entering-investigate-cut, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-high-contrast-mode-type(get-self-id(), 1);
@@ -857,24 +857,24 @@ statescript {
                             signal-camera-cut(0);
                         }
                         u64? var_19 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_19 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_19 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, self);
-                        *(i32*)*(*var_19 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_19 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (1 * 8)) + 8) = get-float(enter-anim-2-fade-in, self);
-                        *(i32*)*(*var_19 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_19 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_19 + (2 * 8)) + 8) = get-float(enter-anim-2-fade-out, self);
-                        *(i32*)*(*var_19 + (3 * 8)) = 14;
-                        *(u64*)(*(*var_19 + (3 * 8)) + 8) = 0;
+                        *(i32*)*var_19[0] = 10;
+                        *(u64*)(*var_19[0] + 8) = 0;
+                        *(u64*)(*var_19[0] + 8) = get-bound-frame(calculated-ap-loc, self);
+                        *(i32*)*var_19[1] = 28;
+                        *(u64*)(*var_19[1] + 8) = 0;
+                        *(f32*)(*var_19[1] + 8) = get-float(enter-anim-2-fade-in, self);
+                        *(i32*)*var_19[2] = 30;
+                        *(u64*)(*var_19[2] + 8) = 0;
+                        *(f32*)(*var_19[2] + 8) = get-float(enter-anim-2-fade-out, self);
+                        *(i32*)*var_19[3] = 14;
+                        *(u64*)(*var_19[3] + 8) = 0;
                         sid var_24;
                         if (tag-specified?(interior-apref-ch, self)) {
                             var_24 = tag-symbol(interior-apref-ch, self);
                         } else {
                             var_24 = apReference;
                         }
-                        *(u64*)(*(*var_19 + (3 * 8)) + 8) = var_24;
+                        *(u64*)(*var_19[3] + 8) = var_24;
                         wait-animate_(player, get-symbol(enter-anim-2, self), var_19);
                     }
                 }
@@ -885,7 +885,7 @@ statescript {
                     player-clear-look-at();
                 }
                 lambda {
-                    broadcast-event(entered-into-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(entered-into-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-high-contrast-mode-type(get-self-id(), 1);
@@ -977,12 +977,12 @@ statescript {
                 }
                 lambda {
                     if (is-text-to-speech-enabled?()) {
-                        speak-text-to-speech-formatted(new-boxed-value(7, INVESTIGATE_HUD_ROTATE_OBJECT), 1, 0, 1);
-                        speak-text-to-speech-formatted(new-boxed-value(7, HUD_READ_MODE), 1, 0, 1);
-                        speak-text-to-speech-formatted(new-boxed-value(7, INVESTIGATE_HUD_PUT_BACK), 1, 0, 1);
-                        speak-text-to-speech-formatted(new-boxed-value(7, INVESTIGATE_HUD_ZOOM), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(INVESTIGATE_HUD_ROTATE_OBJECT), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(HUD_READ_MODE), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(INVESTIGATE_HUD_PUT_BACK), 1, 0, 1);
+                        speak-text-to-speech-formatted(boxed_symbol(INVESTIGATE_HUD_ZOOM), 1, 0, 1);
                         if (get-boolean(allow-flip?, self)) {
-                            speak-text-to-speech-formatted(new-boxed-value(7, INVESTIGATE_HUD_FLIP), 1, 0, 1);
+                            speak-text-to-speech-formatted(boxed_symbol(INVESTIGATE_HUD_FLIP), 1, 0, 1);
                         }
                     }
                 }
@@ -1068,27 +1068,27 @@ statescript {
                 lambda {
                     if (!(get-symbol(enter-anim-2-obj, self) == null-anim)) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, self);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (3 * 8)) = 32;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (4 * 8)) = 14;
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-bound-frame(calculated-ap-loc, self);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
+                        *(i32*)*var_3[3] = 32;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(u8*)(*var_3[3] + 8) = 1;
+                        *(i32*)*var_3[4] = 14;
+                        *(u64*)(*var_3[4] + 8) = 0;
                         sid var_6;
                         if (tag-specified?(interior-apref-ch, self)) {
                             var_6 = tag-symbol(interior-apref-ch, self);
                         } else {
                             var_6 = apReference;
                         }
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = var_6;
+                        *(u64*)(*var_3[4] + 8) = var_6;
                         wait-animate_(get-self-id(), get-symbol(enter-anim-2-obj, self), var_3);
                     }
                 }
@@ -1348,7 +1348,7 @@ statescript {
                     camera-fade-out-animated(0.50, 0);
                 }
                 lambda {
-                    broadcast-event(disabling-investigate-object, new-boxed-value(7, get-self-id()));
+                    broadcast-event(disabling-investigate-object, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(complete, 1);
@@ -1533,13 +1533,13 @@ statescript {
                     send-event(pop-flashlight, player);
                 }
                 lambda {
-                    broadcast-event(exiting-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
-                    broadcast-event(exiting-investigate-cut, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate-cut, boxed_symbol(get-self-id()));
                 }
                 lambda {
-                    broadcast-event(done-with-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(done-with-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (!get-boolean(picked-up-treasure, self)) {
@@ -1586,13 +1586,13 @@ statescript {
                     player-flashlight-set-particle-fade(1.00, 0.00);
                 }
                 lambda {
-                    broadcast-event(exiting-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
-                    broadcast-event(exiting-investigate-cut, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate-cut, boxed_symbol(get-self-id()));
                 }
                 lambda {
-                    broadcast-event(done-with-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(done-with-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     player-investigate-clear-readable();
@@ -1627,7 +1627,7 @@ statescript {
                     }
                 }
                 lambda {
-                    broadcast-event(exiting-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (!(get-symbol(exit-anim, self) == null-anim)) {
@@ -1639,27 +1639,27 @@ statescript {
                         }
                         camera-enable-animated(var_3, 0.00, get-int32(camera-index-inspect, self), 1000, 0, 0, 0);
                         u64? var_8 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, self);
-                        *(i32*)*(*var_8 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = get-float(exit-anim-fade-in, self);
-                        *(i32*)*(*var_8 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (2 * 8)) + 8) = get-float(exit-anim-fade-out, self);
-                        *(i32*)*(*var_8 + (3 * 8)) = 12;
-                        *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_8 + (3 * 8)) + 8) = 11;
-                        *(i32*)*(*var_8 + (4 * 8)) = 14;
-                        *(u64*)(*(*var_8 + (4 * 8)) + 8) = 0;
+                        *(i32*)*var_8[0] = 10;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(u64*)(*var_8[0] + 8) = get-bound-frame(calculated-ap-loc, self);
+                        *(i32*)*var_8[1] = 28;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = get-float(exit-anim-fade-in, self);
+                        *(i32*)*var_8[2] = 30;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(f32*)(*var_8[2] + 8) = get-float(exit-anim-fade-out, self);
+                        *(i32*)*var_8[3] = 12;
+                        *(u64*)(*var_8[3] + 8) = 0;
+                        *(i32*)(*var_8[3] + 8) = 11;
+                        *(i32*)*var_8[4] = 14;
+                        *(u64*)(*var_8[4] + 8) = 0;
                         sid var_13;
                         if (tag-specified?(interior-apref-ch, self)) {
                             var_13 = tag-symbol(interior-apref-ch, self);
                         } else {
                             var_13 = apReference;
                         }
-                        *(u64*)(*(*var_8 + (4 * 8)) + 8) = var_13;
+                        *(u64*)(*var_8[4] + 8) = var_13;
                         wait-animate_(player, get-symbol(exit-anim, self), var_8);
                         if (tag-specified?(exit-camera-1-fade-out, self)) {
                             camera-fade-out-animated(tag-float(exit-camera-1-fade-out, self), 0);
@@ -1689,7 +1689,7 @@ statescript {
                     }
                 }
                 lambda {
-                    broadcast-event(exiting-investigate-cut, new-boxed-value(7, get-self-id()));
+                    broadcast-event(exiting-investigate-cut, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     if (!(get-symbol(exit-anim-2, self) == null-anim)) {
@@ -1714,64 +1714,64 @@ statescript {
                             var_10 = get-symbol(exit-anim-2, self);
                         }
                         u64? var_13 = #%alloc-array(single-frame, 16, 9, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-bound-frame(calculated-ap-loc, self);
-                        *(i32*)*(*var_13 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = get-float(exit-anim-2-fade-in, self);
-                        *(i32*)*(*var_13 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_13 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (2 * 8)) + 8) = get-float(exit-anim-2-fade-out, self);
-                        *(i32*)*(*var_13 + (3 * 8)) = 29;
-                        *(u64*)(*(*var_13 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_13 + (3 * 8)) + 8) = 2;
-                        *(i32*)*(*var_13 + (4 * 8)) = 61;
-                        *(u64*)(*(*var_13 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_13 + (4 * 8)) + 8) = get-int32(stick-abort-frame, self);
-                        *(i32*)*(*var_13 + (5 * 8)) = 60;
-                        *(u64*)(*(*var_13 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (5 * 8)) + 8) = get-float(stick-abort-fade-sec, self);
-                        *(i32*)*(*var_13 + (6 * 8)) = 13;
-                        *(u64*)(*(*var_13 + (6 * 8)) + 8) = 0;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-bound-frame(calculated-ap-loc, self);
+                        *(i32*)*var_13[1] = 28;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = get-float(exit-anim-2-fade-in, self);
+                        *(i32*)*var_13[2] = 30;
+                        *(u64*)(*var_13[2] + 8) = 0;
+                        *(f32*)(*var_13[2] + 8) = get-float(exit-anim-2-fade-out, self);
+                        *(i32*)*var_13[3] = 29;
+                        *(u64*)(*var_13[3] + 8) = 0;
+                        *(u8*)(*var_13[3] + 8) = 2;
+                        *(i32*)*var_13[4] = 61;
+                        *(u64*)(*var_13[4] + 8) = 0;
+                        *(i32*)(*var_13[4] + 8) = get-int32(stick-abort-frame, self);
+                        *(i32*)*var_13[5] = 60;
+                        *(u64*)(*var_13[5] + 8) = 0;
+                        *(f32*)(*var_13[5] + 8) = get-float(stick-abort-fade-sec, self);
+                        *(i32*)*var_13[6] = 13;
+                        *(u64*)(*var_13[6] + 8) = 0;
                         u16 var_20;
                         if (tag-boolean(disallow-animate-exit-collision?, self)) {
                             var_20 = 0;
                         } else {
                             var_20 = 2;
                         }
-                        *(i32*)(*(*var_13 + (6 * 8)) + 8) = var_20;
-                        *(i32*)*(*var_13 + (7 * 8)) = 14;
-                        *(u64*)(*(*var_13 + (7 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (7 * 8)) + 8) = apReference;
-                        *(i32*)*(*var_13 + (8 * 8)) = 24;
-                        *(u64*)(*(*var_13 + (8 * 8)) + 8) = 0;
+                        *(i32*)(*var_13[6] + 8) = var_20;
+                        *(i32*)*var_13[7] = 14;
+                        *(u64*)(*var_13[7] + 8) = 0;
+                        *(u64*)(*var_13[7] + 8) = apReference;
+                        *(i32*)*var_13[8] = 24;
+                        *(u64*)(*var_13[8] + 8) = 0;
                         u16 var_24;
                         if (tag-boolean(end-crouched?, self) && tag-boolean(can-crouch-to, self) && get-boolean(crouched?, self)) {
                             var_24 = 18;
                         } else {
                             var_24 = 1;
                         }
-                        *(i32*)(*(*var_13 + (8 * 8)) + 8) = var_24;
+                        *(i32*)(*var_13[8] + 8) = var_24;
                         wait-animate_(player, var_10, var_13);
                         interactable-disable(get-self-id());
                         if (tag-specified?(feather-blend?, self) && !(object-anim-reached-fadeout?(player, get-symbol(exit-anim-2, self), 0.50, 2))) {
                             u64? var_31 = #%alloc-array(single-frame, 16, 5, 1);
-                            *(i32*)*(*var_31 + (0 * 8)) = 40;
-                            *(u64*)(*(*var_31 + (0 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_31 + (0 * 8)) + 8) = 1;
-                            *(i32*)*(*var_31 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_31 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_31 + (1 * 8)) + 8) = 0.00;
-                            *(i32*)*(*var_31 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_31 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_31 + (2 * 8)) + 8) = get-float(exit-anim-2-fade-out, self);
-                            *(i32*)*(*var_31 + (3 * 8)) = 57;
-                            *(u64*)(*(*var_31 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_31 + (3 * 8)) + 8) = get-animation-frame(player, 2, get-symbol(exit-anim-2, self));
-                            *(i32*)*(*var_31 + (4 * 8)) = 75;
-                            *(u64*)(*(*var_31 + (4 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_31 + (4 * 8)) + 8) = *default-upperbody-gestures*;
+                            *(i32*)*var_31[0] = 40;
+                            *(u64*)(*var_31[0] + 8) = 0;
+                            *(i32*)(*var_31[0] + 8) = 1;
+                            *(i32*)*var_31[1] = 28;
+                            *(u64*)(*var_31[1] + 8) = 0;
+                            *(f32*)(*var_31[1] + 8) = 0.00;
+                            *(i32*)*var_31[2] = 30;
+                            *(u64*)(*var_31[2] + 8) = 0;
+                            *(f32*)(*var_31[2] + 8) = get-float(exit-anim-2-fade-out, self);
+                            *(i32*)*var_31[3] = 57;
+                            *(u64*)(*var_31[3] + 8) = 0;
+                            *(f32*)(*var_31[3] + 8) = get-animation-frame(player, 2, get-symbol(exit-anim-2, self));
+                            *(i32*)*var_31[4] = 75;
+                            *(u64*)(*var_31[4] + 8) = 0;
+                            *(u64*)(*var_31[4] + 8) = *default-upperbody-gestures*;
                             animate_(player, get-symbol(exit-anim-2, self), var_31);
                         }
                     }
@@ -1780,7 +1780,7 @@ statescript {
                     signal(exit-2-done, 0);
                 }
                 lambda {
-                    broadcast-event(done-with-investigate, new-boxed-value(7, get-self-id()));
+                    broadcast-event(done-with-investigate, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     wait-for(detached);
@@ -1795,7 +1795,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(interaction-single-use?, self) && tag-boolean(kill-instead-detach, self)) {
-                        broadcast-event(disabling-investigate-object, new-boxed-value(7, get-self-id()));
+                        broadcast-event(disabling-investigate-object, boxed_symbol(get-self-id()));
                         if (!(null == tag-symbol(manual-id, self))) {
                             inventory-item-add-quantity(tag-symbol(manual-id, self), 1);
                             u64? var_7;
@@ -1952,18 +1952,18 @@ statescript {
                 lambda {
                     if (!(tag-symbol(obj-anim-start, self) == null) && tag-specified?(anim-startpose-early?, self)) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 56;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_5 + (1 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_5[0] = 56;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 0.00;
+                        *(i32*)*var_5[1] = 10;
+                        *(u64*)(*var_5[1] + 8) = 0;
                         u64? var_7;
                         if (tag-specified?(ap-ref, self)) {
                             var_7 = get-spawner-locator(get-symbol(ap-ref, self), 1);
                         } else {
                             var_7 = get-object-locator(self);
                         }
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = var_7;
+                        *(u64*)(*var_5[1] + 8) = var_7;
                         animate_(get-self-id(), tag-symbol(obj-anim-start, self), var_5);
                     }
                 }
@@ -2196,7 +2196,7 @@ statescript {
                     camera-fade-out-animated(0.50, 0);
                 }
                 lambda {
-                    broadcast-event(disabling-investigate-object, new-boxed-value(7, get-self-id()));
+                    broadcast-event(disabling-investigate-object, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(complete, 1);

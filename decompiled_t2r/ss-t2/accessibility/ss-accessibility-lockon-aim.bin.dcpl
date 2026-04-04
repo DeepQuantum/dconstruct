@@ -376,7 +376,7 @@ statescript {
                         if (nth-frame?(5, 0)) {
                             if (player-is-aiming-throwable?()) {
                                 u64? var_4 = player-get-aiming-arc-target(1);
-                                if (!(var_4 == 0) || darray-contains?(all-enemy-npcs, new-boxed-value(7, var_4)) && !(is-npc?(var_4)) && player-get-lock-on-aim-target() == var_4) {
+                                if (!(var_4 == 0) || darray-contains?(all-enemy-npcs, boxed_symbol(var_4)) && !(is-npc?(var_4)) && player-get-lock-on-aim-target() == var_4) {
                                     set-symbol(currently-locked-on-target, var_4, self);
                                     var_10 = go(target-locked-on, 1);
                                 }
@@ -387,17 +387,7 @@ statescript {
                                     set-symbol(currently-locked-on-target, var_16, self);
                                     var_21 = go(target-locked-on, 1);
                                 }
-                                foreach (u64? var_24 : all-enemy-npcs) {
-                                    u16 var_25;
-                                    if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                        var_25 = *(u64*)var_24;
-                                    } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                        var_25 = *(u64*)var_24;
-                                    } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                        var_25 = *(u64*)var_24;
-                                    } else {
-                                        var_25 = 0;
-                                    }
+                                foreach (u64? var_25 : all-enemy-npcs) {
                                     if (any-joint-centered-on-reticle?(var_25)) {
                                         i32 var_29;
                                         if (ddict-contains-key?(joint-to-targetable-mask, get-symbol(curr-joint-centered, self))) {
@@ -428,17 +418,7 @@ statescript {
                                         }
                                     }
                                 }
-                                foreach (u64? var_36 : accessibility-lock-on-targetable-actors) {
-                                    u16 var_37;
-                                    if (var_36 && *(u16*)(var_36 + 12) == 7) {
-                                        var_37 = *(u64*)var_36;
-                                    } else if (var_36 && *(u16*)(var_36 + 12) == 5) {
-                                        var_37 = *(u64*)var_36;
-                                    } else if (var_36 && *(u16*)(var_36 + 12) == 4) {
-                                        var_37 = *(u64*)var_36;
-                                    } else {
-                                        var_37 = 0;
-                                    }
+                                foreach (u64? var_37 : accessibility-lock-on-targetable-actors) {
                                     if (any-joint-centered-on-reticle?(var_37)) {
                                         i32 var_41;
                                         if (ddict-contains-key?(joint-to-targetable-mask, get-symbol(curr-joint-centered, self))) {

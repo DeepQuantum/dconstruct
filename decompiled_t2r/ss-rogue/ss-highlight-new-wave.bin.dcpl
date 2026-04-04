@@ -13,17 +13,7 @@
 
 f32 icon-weight-rating(u64? arg_0) {
     f32 var_2;
-    foreach (u64? var_4 : get-symbol(group-alive-npcs, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-symbol(group-alive-npcs, self)) {
         f32 var_7;
         if (object-in-region?(var_5, arg_0)) {
             var_7 = 0.00 + 1.00;
@@ -133,7 +123,7 @@ statescript {
                         display(dc:format("DEB-WM: %2s Looking for tag %s..", "", string-debug(var_1)), 19);
                     }
                     if (!(var_1 == 0)) {
-                        ddict-set(var_0, var_1, new-boxed-value(2, 1));
+                        ddict-set(var_0, var_1, boxed_i32(1));
                         var_5 = group-copy(get-regions-by-criteria(var_0), get-symbol(group-icon-weight-regions, self));
                     }
                 }
@@ -197,19 +187,9 @@ statescript {
                             } else {
                                 var_22 = 0;
                             }
-                            foreach (u64? var_26 : get-symbol(group-alive-npcs, self)) {
-                                u16 var_27;
-                                if (var_26 && *(u16*)(var_26 + 12) == 7) {
-                                    var_27 = *(u64*)var_26;
-                                } else if (var_26 && *(u16*)(var_26 + 12) == 5) {
-                                    var_27 = *(u64*)var_26;
-                                } else if (var_26 && *(u16*)(var_26 + 12) == 4) {
-                                    var_27 = *(u64*)var_26;
-                                } else {
-                                    var_27 = 0;
-                                }
+                            foreach (u64? var_27 : get-symbol(group-alive-npcs, self)) {
                                 if (object-in-region?(var_27, var_22)) {
-                                    darray-append(get-symbol(group-icon-weight-region-npcs, self), new-boxed-value(7, var_27), 1);
+                                    darray-append(get-symbol(group-icon-weight-region-npcs, self), boxed_symbol(var_27), 1);
                                 }
                             }
                             set-point(initial-wave-spawn-icon-loc, get-group-centroid(get-symbol(group-icon-weight-region-npcs, self)), self);
@@ -220,17 +200,7 @@ statescript {
                         set-float(npc-highlight-seconds, 7.00, self);
                         set-boolean(wave-started?, 1, self);
                     } else {
-                        foreach (u64? var_42 : get-symbol(group-alive-npcs, self)) {
-                            u16 var_43;
-                            if (var_42 && *(u16*)(var_42 + 12) == 7) {
-                                var_43 = *(u64*)var_42;
-                            } else if (var_42 && *(u16*)(var_42 + 12) == 5) {
-                                var_43 = *(u64*)var_42;
-                            } else if (var_42 && *(u16*)(var_42 + 12) == 4) {
-                                var_43 = *(u64*)var_42;
-                            } else {
-                                var_43 = 0;
-                            }
+                        foreach (u64? var_43 : get-symbol(group-alive-npcs, self)) {
                             if (npc-alive?(var_43)) {
                                 hud2-buddy-mark-npc(var_43);
                             }
@@ -260,17 +230,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(group-alive-npcs, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(group-alive-npcs, self)) {
                         if (npc-alive?(var_4)) {
                             hud2-buddy-unmark-npc(var_4);
                         }

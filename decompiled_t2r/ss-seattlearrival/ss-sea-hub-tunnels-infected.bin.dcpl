@@ -76,22 +76,12 @@ statescript {
                     set-region-enabled(rgn-accessibility-pathfind-override-520, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (get-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0)) && !npc-is-dead-in-checkpoint?(var_2)) {
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
+                        if (get-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0)) && !npc-is-dead-in-checkpoint?(var_2)) {
                             spawn-entity(var_2, 0, 1);
                             npc-set-excluded-from-tension-calculation(var_2, 1);
                             listen-mode-visible(var_2, 0, 1, -1.00);
-                            if (!(darray-contains?(sea-hub-tunnels-sleepers, new-boxed-value(7, var_2)))) {
+                            if (!(darray-contains?(sea-hub-tunnels-sleepers, boxed_symbol(var_2)))) {
                                 npc-set-script-only-no-perception(var_2);
                             }
                             npc-disable-perception(var_2);
@@ -112,17 +102,7 @@ statescript {
         block event player-entered-bank {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
                         if (npc-alive?(var_2)) {
                             npc-set-excluded-from-tension-calculation(var_2, 0);
                             listen-mode-visible(var_2, 1, 1, -1.00);
@@ -152,18 +132,8 @@ statescript {
                     set-region-enabled(rgn-accessibility-pathfind-override-520, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (get-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0)) && !npc-is-dead-in-checkpoint?(var_2)) {
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
+                        if (get-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0)) && !npc-is-dead-in-checkpoint?(var_2)) {
                             spawn-entity(var_2, 0, 1);
                             wait-one-frame();
                         }
@@ -320,19 +290,9 @@ statescript {
         block event on-set-active-continue {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (get-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0), self)) {
-                            set-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0), 1);
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
+                        if (get-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0), self)) {
+                            set-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0), 1);
                         }
                     }
                 }
@@ -341,17 +301,7 @@ statescript {
         block event player-entered-bank {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                             npc-set-script-low-priority(var_2);
@@ -377,17 +327,7 @@ statescript {
         block event player-left-bank {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-bank-away-from-entrance-1);
                             npc-disable-perception(var_2);
@@ -415,8 +355,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(sea-hub-tunnels-infected, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, event-arg-symbol(0)), 0), 1, self);
+                    if (darray-contains?(sea-hub-tunnels-infected, boxed_symbol(event-arg-symbol(0)))) {
+                        set-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, boxed_symbol(event-arg-symbol(0)), 0), 1, self);
                     }
                 }
                 lambda {
@@ -467,19 +407,9 @@ statescript {
                     clear-combat-checkpoint(seattle-arrival, sea-hub-explore);
                 }
                 lambda {
-                    foreach (u64? var_1 : sea-hub-tunnels-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (get-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0), self)) {
-                            set-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, new-boxed-value(7, var_2), 0), 1);
+                    foreach (u64? var_2 : sea-hub-tunnels-infected) {
+                        if (get-int32-bit(dead-count, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0), self)) {
+                            set-svar-bit(sea-horse-tunnels-infected-npcs, darray-find(sea-hub-tunnels-infected, boxed_symbol(var_2), 0), 1);
                         }
                         if (npc-alive?(var_2)) {
                             kill-entity(var_2);

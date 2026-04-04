@@ -26,7 +26,7 @@ u64? wait-until-done-speaking(u64? arg_0) {
 u64? wait-net-say(u64? arg_0, u64? arg_1, u64? arg_2) {
     u64? var_0;
     if (arg_2) {
-        var_0 = wait-say-with-context(new-fact-dictionary(ally-only, new-boxed-value(1, 1)), arg_0, arg_1, 1, 0);
+        var_0 = wait-say-with-context(new-fact-dictionary(ally-only, boxed_bool(1)), arg_0, arg_1, 1, 0);
     } else {
         var_0 = wait-say(arg_0, arg_1, 1, 0);
     }
@@ -43,7 +43,7 @@ u64? wait-dialog-acquire-exclusive-lock(u64? arg_0) {
 }
 
 u64? say-to(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    return say-with-context(new-fact-dictionary(listener, new-boxed-value(7, arg_1)), arg_0, arg_2, 2, arg_3);
+    return say-with-context(new-fact-dictionary(listener, boxed_symbol(arg_1)), arg_0, arg_2, 2, arg_3);
 }
 
 u64? wait-dialog-acquire-soundfx-lock() {
@@ -51,7 +51,7 @@ u64? wait-dialog-acquire-soundfx-lock() {
 }
 
 u64? wait-say-to(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    return wait-say-with-context(new-fact-dictionary(listener, new-boxed-value(7, arg_1)), arg_0, arg_2, 2, arg_3);
+    return wait-say-with-context(new-fact-dictionary(listener, boxed_symbol(arg_1)), arg_0, arg_2, 2, arg_3);
 }
 
 u16 wait-say-when-safe(sid arg_0, u64? arg_1, f32 arg_2, u64? arg_3) {
@@ -74,7 +74,7 @@ u64? dialog-acquire-vox-lock() {
 u16 on-tension-changed(u16 arg_0, u64? arg_1) {
     u16 var_0;
     if (arg_0 == 2 || arg_0 == 1 && arg_0 == 0) {
-        var_0 = fact-set(faction-enemy, test-fact-delete-me, new-boxed-value(1, 0));
+        var_0 = fact-set(faction-enemy, test-fact-delete-me, boxed_bool(0));
     } else {
         var_0 = 0;
     }
@@ -92,7 +92,7 @@ u64? dialog-acquire-soundfx-lock() {
 u64? net-say(u64? arg_0, u64? arg_1, u64? arg_2) {
     u64? var_0;
     if (arg_2) {
-        var_0 = say-with-context(new-fact-dictionary(ally-only, new-boxed-value(1, 1)), arg_0, arg_1, 1, 0);
+        var_0 = say-with-context(new-fact-dictionary(ally-only, boxed_bool(1)), arg_0, arg_1, 1, 0);
     } else {
         var_0 = say(arg_0, arg_1, 1, 0);
     }

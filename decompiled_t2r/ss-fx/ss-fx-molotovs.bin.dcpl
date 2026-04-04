@@ -53,21 +53,11 @@ u64? set-molotov-handle-rootvars() {
 
 u64? handle-npc-splashers() {
     set-symbol(npc-splash-array, darray-create(self, -1, 0), self);
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         if (npc-alive?(var_3)) {
             if (distance-between-locators(get-bound-frame(location, self), get-object-locator(var_3)) < get-float(weak, self)) {
                 u64? var_10 = spawn-particles-at-bound-frame(molotov-cocktail-character-splash, get-bound-frame(location, self), self);
-                darray-append(get-symbol(npc-splash-array, self), new-boxed-value(5, var_10), 0);
+                darray-append(get-symbol(npc-splash-array, self), boxed_u64(var_10), 0);
                 set-effect-vector(var_10, directionVector, vector-between-locators(get-bound-frame(location, self), get-object-locator(var_3)));
             }
         }

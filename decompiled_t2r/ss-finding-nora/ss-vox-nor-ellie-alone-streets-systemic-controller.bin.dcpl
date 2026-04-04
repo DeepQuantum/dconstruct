@@ -56,8 +56,8 @@ statescript {
             track main {
                 lambda {
                     while (1) {
-                        fact-set(faction-enemy, restrict-name-usage, new-boxed-value(8, get-current-timeframe(0)));
-                        fact-set(faction-enemy, restrict-name-callouts, new-boxed-value(8, get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-name-usage, boxed_timeframePOD(get-current-timeframe(0)));
+                        fact-set(faction-enemy, restrict-name-callouts, boxed_timeframePOD(get-current-timeframe(0)));
                         wait(10.00);
                     }
                 }

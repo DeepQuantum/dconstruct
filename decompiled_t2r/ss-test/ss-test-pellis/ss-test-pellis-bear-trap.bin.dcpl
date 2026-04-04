@@ -32,17 +32,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-npcs) {
                         if (get-locator-distance(get-object-locator(var_2), get-object-locator(get-self-id())) < 0.50) {
                             set-symbol(trapped-npc, var_2, self);
                             go(npc-trap, 1);
@@ -102,9 +92,9 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 3;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (0 * 8)) + 8) = 1;
+                    *(i32*)*var_1[0] = 3;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u8*)(*var_1[0] + 8) = 1;
                     animate_(get-symbol(trapped-npc, self), bindpose, var_1);
                 }
                 lambda {

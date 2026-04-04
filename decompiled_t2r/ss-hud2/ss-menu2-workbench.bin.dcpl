@@ -39,30 +39,20 @@ u16 get-workbench-weapon-slot-child(u64? arg_0, u64? arg_1) {
 
 u64? populate-workbench-upgrade-slot-child-darray() {
     set-symbol(workbench-upgrade-slot-child-darray, darray-create(self, -1, 0), self);
-    foreach (u64? var_2 : w-upgrade-slots--workbench) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : w-upgrade-slots--workbench) {
         u64? var_15 = darray-create(self, -1, 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("progressBar", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("upgradeIcon", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("wrenchVisibilityAnim", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("focusable", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("hoverable", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("selectedLines", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("bgIcon", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("bgIconRed", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("rect", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("capsule", var_3)), 0);
-        darray-append(var_15, new-boxed-value(7, gui2-find-widget-path("pulse", var_3)), 0);
-        darray-append(get-symbol(workbench-upgrade-slot-child-darray, self), new-boxed-value(7, var_15), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("progressBar", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("upgradeIcon", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("wrenchVisibilityAnim", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("focusable", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("hoverable", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("selectedLines", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("bgIcon", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("bgIconRed", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("rect", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("capsule", var_3)), 0);
+        darray-append(var_15, boxed_symbol(gui2-find-widget-path("pulse", var_3)), 0);
+        darray-append(get-symbol(workbench-upgrade-slot-child-darray, self), boxed_symbol(var_15), 0);
     }
 }
 
@@ -88,21 +78,11 @@ u16 get-tts-upgrade-symbol-from-index--workbench(u16 arg_0) {
 
 u64? reset-available-upgrades--workbench(u64? arg_0, u64? arg_1) {
     darray-clear(arg_0);
-    foreach (u64? var_3 : get-raw-weapon-upgrade-bundles(arg_1)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        if (!darray-contains?(excluded-upgrades, new-boxed-value(7, var_4))) {
+    foreach (u64? var_4 : get-raw-weapon-upgrade-bundles(arg_1)) {
+        if (!darray-contains?(excluded-upgrades, boxed_symbol(var_4))) {
             u64? var_7 = lookup-weapon-upgrade-bundle-resources(arg_1, var_4);
-            if (var_7 && *(u32*)(*(*((*var_7 + (0 * 32)) + 8) + 8) + (0 * 4)) > 0) {
-                var_8 = darray-append(arg_0, new-boxed-value(7, var_4), 0);
+            if (var_7 && *(u32*)(*(*(var_7[0] + 8) + 8) + (0 * 4)) > 0) {
+                var_8 = darray-append(arg_0, boxed_symbol(var_4), 0);
             }
         }
     }
@@ -110,28 +90,18 @@ u64? reset-available-upgrades--workbench(u64? arg_0, u64? arg_1) {
 
 u64? populate-workbench-weapon-slot-child-darray() {
     set-symbol(workbench-weapon-slot-child-darray, darray-create(self, -1, 0), self);
-    foreach (u64? var_2 : w-weapon-slots--workbench) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : w-weapon-slots--workbench) {
         u64? var_13 = darray-create(self, -1, 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("weaponIcon", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("weaponComponent", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("wrench", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow.dot0", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow.dot1", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow.dot2", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow.dot3", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow.dot4", var_3)), 0);
-        darray-append(var_13, new-boxed-value(7, gui2-find-widget-path("dots.flow", var_3)), 0);
-        darray-append(get-symbol(workbench-weapon-slot-child-darray, self), new-boxed-value(7, var_13), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("weaponIcon", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("weaponComponent", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("wrench", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow.dot0", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow.dot1", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow.dot2", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow.dot3", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow.dot4", var_3)), 0);
+        darray-append(var_13, boxed_symbol(gui2-find-widget-path("dots.flow", var_3)), 0);
+        darray-append(get-symbol(workbench-weapon-slot-child-darray, self), boxed_symbol(var_13), 0);
     }
 }
 
@@ -172,21 +142,21 @@ u64? update-info-pane-upgrades-page--workbench(u64? arg_0) {
             0,
             0,
             0
-        ), *(u32*)(*(*((*var_13 + (0 * 32)) + 8) + 8) + (0 * 4)));
+        ), *(u32*)(*(*(var_13[0] + 8) + 8) + (0 * 4)));
         if (var_16) {
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-cost, self), 0.00);
             gui2-go-widget-state-immediate(get-symbol(w-checkmark, self), active, 0, 0, 0);
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-inventory-icon, self), 1.00);
             gui2-set-widget-palette-tint(get-symbol(w-upgrades-page-parts-inventory-count, self), t2-white);
-            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_MENU_WORKBENCH_STATUS_UPGRADED), 0));
-        } else if (!(var_17 >= *(u32*)(*(*((*var_13 + (0 * 32)) + 8) + 8) + (0 * 4)))) {
+            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_MENU_WORKBENCH_STATUS_UPGRADED), 0));
+        } else if (!(var_17 >= *(u32*)(*(*(var_13[0] + 8) + 8) + (0 * 4)))) {
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-cost, self), 1.00);
             gui2-go-widget-state-immediate(get-symbol(w-checkmark, self), off, 0, 0, 0);
             gui2-set-widget-palette-tint(get-symbol(w-upgrades-page-parts-cost-count, self), t2-red);
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-cost-icon, self), 0.33);
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-inventory-icon, self), 0.33);
             gui2-set-widget-palette-tint(get-symbol(w-upgrades-page-parts-inventory-count, self), t2-red);
-            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_MENU_WORKBENCH_NOT_ENOUGH_PARTS), 0));
+            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_MENU_WORKBENCH_NOT_ENOUGH_PARTS), 0));
         } else {
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-cost, self), 1.00);
             gui2-go-widget-state-immediate(get-symbol(w-checkmark, self), off, 0, 0, 0);
@@ -194,42 +164,32 @@ u64? update-info-pane-upgrades-page--workbench(u64? arg_0) {
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-cost-icon, self), 1.00);
             gui2-set-widget-alpha(get-symbol(w-upgrades-page-parts-inventory-icon, self), 1.00);
             gui2-set-widget-palette-tint(get-symbol(w-upgrades-page-parts-inventory-count, self), t2-white);
-            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_HUD_CRAFTING_CRAFTABLE), 0));
+            fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_HUD_CRAFTING_CRAFTABLE), 0));
         }
-        menu2-legend-set-button-disabled(self, HUD_WORKBENCH_PROMPT_UPGRADE, !var_17 >= *(u32*)(*(*((*var_13 + (0 * 32)) + 8) + 8) + (0 * 4)) && !var_16);
-        hud2-set-button-hold-shimmer-enabled(menu2-legend-get-button-path(get-self-id(), HUD_WORKBENCH_PROMPT_UPGRADE, holdIcon), var_17 >= *(u32*)(*(*((*var_13 + (0 * 32)) + 8) + 8) + (0 * 4)) && !var_16);
+        menu2-legend-set-button-disabled(self, HUD_WORKBENCH_PROMPT_UPGRADE, !var_17 >= *(u32*)(*(*(var_13[0] + 8) + 8) + (0 * 4)) && !var_16);
+        hud2-set-button-hold-shimmer-enabled(menu2-legend-get-button-path(get-self-id(), HUD_WORKBENCH_PROMPT_UPGRADE, holdIcon), var_17 >= *(u32*)(*(*(var_13[0] + 8) + 8) + (0 * 4)) && !var_16);
         if (!var_16) {
             if (!is-final-build?()) {
                 display(dc:format("does not have upgrade"), 19);
             }
             u64? var_50 = #%alloc-array(single-frame, 1, 2, 0);
-            *(u64*)(*var_50 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_COST_N_WEAPON_PARTS);
-            *(u64*)(*var_50 + (1 * 8)) = new-boxed-value(2, *(u32*)(*(*((*var_13 + (0 * 32)) + 8) + 8) + (0 * 4)));
-            fact-set(self, tts-upgrade-cost, generate-text-to-speech-formatted(new-boxed-value(21, var_50), 0));
+            *(u64*)var_50[0] = boxed_symbol(A11Y_MENU_WORKBENCH_COST_N_WEAPON_PARTS);
+            *(u64*)var_50[1] = boxed_i32(*(u32*)(*(*(var_13[0] + 8) + 8) + (0 * 4)));
+            fact-set(self, tts-upgrade-cost, generate-text-to-speech-formatted(boxed_array(var_50), 0));
             u64? var_56 = #%alloc-array(single-frame, 1, 2, 0);
-            *(u64*)(*var_56 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_PART_COUNT);
-            *(u64*)(*var_56 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(parts));
-            var_47 = fact-set(self, tts-upgrade-part-quantity, generate-text-to-speech-formatted(new-boxed-value(21, var_56), 0));
+            *(u64*)var_56[0] = boxed_symbol(A11Y_MENU_WORKBENCH_PART_COUNT);
+            *(u64*)var_56[1] = boxed_i32(get-inventory-item-quantity(parts));
+            var_47 = fact-set(self, tts-upgrade-part-quantity, generate-text-to-speech-formatted(boxed_array(var_56), 0));
         }
     }
-    fact-set(self, tts-upgrade-name, generate-text-to-speech-formatted(new-boxed-value(7, var_5), 0));
-    fact-set(self, tts-upgrade-description, generate-text-to-speech-formatted(new-boxed-value(7, var_6), 0));
+    fact-set(self, tts-upgrade-name, generate-text-to-speech-formatted(boxed_symbol(var_5), 0));
+    fact-set(self, tts-upgrade-description, generate-text-to-speech-formatted(boxed_symbol(var_6), 0));
     return refresh-stats--workbench();
 }
 
 u64? adjust-weapons-sizer-worst-case--workbench() {
     u64? var_1;
-    foreach (u64? var_2 : all-weapons-acquired) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-weapons-acquired) {
         u64? var_7 = gui2-get-widget-predicted-line-count(get-symbol(w-weapon-page-weapon-description, self), *(u64*)(lookup-weapon-art-def(var_3, 0) + 32));
         u64? var_8;
         if (var_7 > 1) {
@@ -272,17 +232,7 @@ u64? populate-upgrades-list--workbench() {
     u16 var_2;
     u16 var_3;
     u16 var_4;
-    foreach (u64? var_5 : available-upgrades--workbench) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : available-upgrades--workbench) {
         u64? var_10 = lookup-weapon-upgrade-by-bundle-id(get-symbol(currently-selected-weapon, self), var_6);
         gui2-set-widget-max-width(get-workbench-upgrade-list-item-child(0, 3), 1670.00 / (f32)darray-count(available-upgrades--workbench));
         gui2-set-widget-text-cipher(get-workbench-upgrade-list-item-child(0, 3), *(u64*)(var_10 + 56));
@@ -315,7 +265,7 @@ u64? populate-upgrades-list--workbench() {
                 gui2-set-widget-alpha(var_23, 0.66);
                 var_26 = 0 + 1;
                 var_27 = 0;
-            } else if (get-int32(total-parts, self) < *(u32*)(*(*((*var_16 + (0 * 32)) + 8) + 8) + (0 * 4))) {
+            } else if (get-int32(total-parts, self) < *(u32*)(*(*(var_16[0] + 8) + 8) + (0 * 4))) {
                 gui2-set-widget-visible(var_21, 0);
                 gui2-set-widget-visible(var_22, 0);
                 gui2-set-widget-layout-mode(var_21, 3);
@@ -331,7 +281,7 @@ u64? populate-upgrades-list--workbench() {
                 gui2-set-widget-visible(var_23, 1);
                 gui2-set-widget-palette-tint(var_23, t2-white);
                 gui2-set-widget-alpha(var_23, 1.00);
-                fact-set(self, get-tts-upgrade-symbol-from-index--workbench(var_27), generate-text-to-speech-formatted(new-boxed-value(7, *(u64*)(var_10 + 56)), 0));
+                fact-set(self, get-tts-upgrade-symbol-from-index--workbench(var_27), generate-text-to-speech-formatted(boxed_symbol(*(u64*)(var_10 + 56)), 0));
                 var_27 = var_27 + 1;
             }
             var_17 = var_26;
@@ -344,11 +294,11 @@ u64? populate-upgrades-list--workbench() {
     }
     set-int32(affordable-count, var_4, self);
     if (var_3 == var_2) {
-        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_MENU_WORKBENCH_FULLY_UPGRADED), 0));
+        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_MENU_WORKBENCH_FULLY_UPGRADED), 0));
     } else if (var_4 == 0) {
-        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_MENU_WORKBENCH_NO_CRAFTABLE_UPDGRADE), 0));
+        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_MENU_WORKBENCH_NO_CRAFTABLE_UPDGRADE), 0));
     } else {
-        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(new-boxed-value(7, A11Y_MENU_WORKBENCH_AVAILABLE_UPGRADES), 0));
+        fact-set(self, tts-upgrade-status, generate-text-to-speech-formatted(boxed_symbol(A11Y_MENU_WORKBENCH_AVAILABLE_UPGRADES), 0));
     }
     gui2-set-widget-visible(get-workbench-upgrade-list-item-child(var_2 - 1, 4), 0);
     u64 i = 0;
@@ -400,7 +350,7 @@ u64? populate-upgrades-slots--workbench() {
             gui2-set-widget-image(var_8, *(i64*)(lookup-weapon-upgrade-by-bundle-id(get-symbol(currently-selected-weapon, self), var_7) + 24));
             if (var_11) {
                 u64? var_18 = player-has-upgrade?--workbench(get-symbol(currently-selected-weapon, self), var_7);
-                bool var_20 = get-int32(total-parts, self) < *(u32*)(*(*((*var_11 + (0 * 32)) + 8) + 8) + (0 * 4)) && !var_18;
+                bool var_20 = get-int32(total-parts, self) < *(u32*)(*(*(var_11[0] + 8) + 8) + (0 * 4)) && !var_18;
                 hud2-set-upgrade-component-upgraded(get-workbench-upgrade-slot-child(0, 3), var_18, 0, 8);
                 gui2-set-widget-visible(get-workbench-upgrade-slot-child(0, 7), var_20);
                 gui2-set-widget-visible(get-workbench-upgrade-slot-child(0, 6), !var_20);
@@ -496,17 +446,7 @@ u64? get-focused-weapon-slot-index--workbench() {
 
 u16 adjust-upgrades-sizer-worst-case--workbench() {
     u64? var_1;
-    foreach (u64? var_2 : available-upgrades--workbench) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : available-upgrades--workbench) {
         u64? var_5 = lookup-weapon-upgrade-by-bundle-id(get-symbol(currently-selected-weapon, self), var_3);
         u16 var_6;
         if (!(var_5 == 0)) {
@@ -555,12 +495,12 @@ u16 populate-workbench-upgrade-list-item-child-darray() {
     while (i < 4) {
         u64? var_2 = gui2-find-widget-path(dc:format("listItem%d", i), self);
         u64? var_8 = darray-create(self, -1, 0);
-        darray-append(var_8, new-boxed-value(7, var_2), 0);
-        darray-append(var_8, new-boxed-value(7, gui2-find-widget-path("checkContainer", var_2)), 0);
-        darray-append(var_8, new-boxed-value(7, gui2-find-widget-path("wrenchContainer", var_2)), 0);
-        darray-append(var_8, new-boxed-value(7, gui2-find-widget-path("text", var_2)), 0);
-        darray-append(var_8, new-boxed-value(7, gui2-find-widget-path(dc:format("divider%d", i), self)), 0);
-        darray-append(get-symbol(workbench-upgrade-list-item-child-darray, self), new-boxed-value(7, var_8), 0);
+        darray-append(var_8, boxed_symbol(var_2), 0);
+        darray-append(var_8, boxed_symbol(gui2-find-widget-path("checkContainer", var_2)), 0);
+        darray-append(var_8, boxed_symbol(gui2-find-widget-path("wrenchContainer", var_2)), 0);
+        darray-append(var_8, boxed_symbol(gui2-find-widget-path("text", var_2)), 0);
+        darray-append(var_8, boxed_symbol(gui2-find-widget-path(dc:format("divider%d", i), self)), 0);
+        darray-append(get-symbol(workbench-upgrade-list-item-child-darray, self), boxed_symbol(var_8), 0);
         i = i + 1;
     }
     return i;
@@ -640,13 +580,13 @@ u16 get-workbench-upgrade-list-item-child(u64? arg_0, u64? arg_1) {
 }
 
 u64? refresh-workbench() {
-    fact-set(self, tts-weapon-name, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-status, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-1, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-2, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-3, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-4, new-boxed-value(0, 0));
-    fact-set(self, tts-weapon-description, new-boxed-value(0, 0));
+    fact-set(self, tts-weapon-name, boxed_invalid(0));
+    fact-set(self, tts-upgrade-status, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-1, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-2, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-3, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-4, boxed_invalid(0));
+    fact-set(self, tts-weapon-description, boxed_invalid(0));
     populate-upgrades-list--workbench();
     update-info-pane-weapons-page--workbench();
     speak-text-to-speech-raw(fact-boxed(self, tts-weapon-name, 0), 0, 0, 1);
@@ -660,16 +600,16 @@ u64? refresh-workbench() {
     }
     speak-text-to-speech-raw(fact-boxed(self, tts-weapon-description, 0), 0, 0, 1);
     u64? var_14 = #%alloc-array(single-frame, 1, 2, 0);
-    *(u64*)(*var_14 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_PART_COUNT);
-    *(u64*)(*var_14 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(parts));
-    set-uint64(tts-frame, speak-text-to-speech-formatted(new-boxed-value(21, var_14), 1, 0, 1), self);
-    fact-set(self, tts-weapon-name, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-status, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-1, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-2, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-3, new-boxed-value(0, 0));
-    fact-set(self, tts-available-upgrade-4, new-boxed-value(0, 0));
-    return fact-set(self, tts-weapon-description, new-boxed-value(0, 0));
+    *(u64*)var_14[0] = boxed_symbol(A11Y_MENU_WORKBENCH_PART_COUNT);
+    *(u64*)var_14[1] = boxed_i32(get-inventory-item-quantity(parts));
+    set-uint64(tts-frame, speak-text-to-speech-formatted(boxed_array(var_14), 1, 0, 1), self);
+    fact-set(self, tts-weapon-name, boxed_invalid(0));
+    fact-set(self, tts-upgrade-status, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-1, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-2, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-3, boxed_invalid(0));
+    fact-set(self, tts-available-upgrade-4, boxed_invalid(0));
+    return fact-set(self, tts-weapon-description, boxed_invalid(0));
 }
 
 u64? populate-weapons--workbench() {
@@ -722,13 +662,13 @@ u64? populate-weapons--workbench() {
 }
 
 u64? update-info-pane-upgrades-page--workbench--with-tts() {
-    fact-set(self, tts-upgrade-status, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-cost, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-name, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-description, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-stat-1, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-stat-2, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-part-quantity, new-boxed-value(0, 0));
+    fact-set(self, tts-upgrade-status, boxed_invalid(0));
+    fact-set(self, tts-upgrade-cost, boxed_invalid(0));
+    fact-set(self, tts-upgrade-name, boxed_invalid(0));
+    fact-set(self, tts-upgrade-description, boxed_invalid(0));
+    fact-set(self, tts-upgrade-stat-1, boxed_invalid(0));
+    fact-set(self, tts-upgrade-stat-2, boxed_invalid(0));
+    fact-set(self, tts-upgrade-part-quantity, boxed_invalid(0));
     update-info-pane-upgrades-page--workbench(1);
     speak-text-to-speech-raw(fact-boxed(self, tts-upgrade-name, 0), 0, 0, 1);
     speak-text-to-speech-raw(fact-boxed(self, tts-upgrade-status, 0), 0, 0, 1);
@@ -737,20 +677,20 @@ u64? update-info-pane-upgrades-page--workbench--with-tts() {
     speak-text-to-speech-raw(fact-boxed(self, tts-upgrade-stat-2, 0), 0, 0, 1);
     speak-text-to-speech-raw(fact-boxed(self, tts-upgrade-cost, 0), 0, 0, 1);
     set-uint64(tts-frame, speak-text-to-speech-raw(fact-boxed(self, tts-upgrade-part-quantity, 0), 0, 0, 1), self);
-    fact-set(self, tts-upgrade-status, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-cost, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-name, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-description, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-stat-1, new-boxed-value(0, 0));
-    fact-set(self, tts-upgrade-stat-2, new-boxed-value(0, 0));
-    return fact-set(self, tts-upgrade-part-quantity, new-boxed-value(0, 0));
+    fact-set(self, tts-upgrade-status, boxed_invalid(0));
+    fact-set(self, tts-upgrade-cost, boxed_invalid(0));
+    fact-set(self, tts-upgrade-name, boxed_invalid(0));
+    fact-set(self, tts-upgrade-description, boxed_invalid(0));
+    fact-set(self, tts-upgrade-stat-1, boxed_invalid(0));
+    fact-set(self, tts-upgrade-stat-2, boxed_invalid(0));
+    return fact-set(self, tts-upgrade-part-quantity, boxed_invalid(0));
 }
 
 u64? initial-setup-upgrades--workbench() {
     darray-clear(w-upgrade-slots--workbench);
     u64 i = 0;
     while (i < 4) {
-        darray-append(w-upgrade-slots--workbench, new-boxed-value(7, gui2-find-widget-path(dc:format("upgradeSlot%d", i + 1), get-symbol(w-upgrades-page, self))), 0);
+        darray-append(w-upgrade-slots--workbench, boxed_symbol(gui2-find-widget-path(dc:format("upgradeSlot%d", i + 1), get-symbol(w-upgrades-page, self))), 0);
         i = i + 1;
     }
     set-symbol(w-upgrade-desc, gui2-find-widget-path("descriptionText", get-symbol(w-upgrades-page, self)), self);
@@ -832,8 +772,8 @@ u16 update-info-pane-weapons-page--workbench() {
         gui2-set-widget-text-cipher(get-symbol(w-weapon-name, self), *(u64*)(var_11 + 16));
         gui2-set-widget-text-cipher(get-symbol(w-weapon-page-weapon-description, self), *(u64*)(var_13 + 32));
         menu2-legend-set-button-disabled(self, HUD_WORKBENCH_PROMPT_INSPECT, 0);
-        fact-set(self, tts-weapon-name, generate-text-to-speech-formatted(new-boxed-value(7, *(u64*)(var_11 + 16)), 0));
-        var_6 = fact-set(self, tts-weapon-description, generate-text-to-speech-formatted(new-boxed-value(7, *(u64*)(var_13 + 32)), 0));
+        fact-set(self, tts-weapon-name, generate-text-to-speech-formatted(boxed_symbol(*(u64*)(var_11 + 16)), 0));
+        var_6 = fact-set(self, tts-weapon-description, generate-text-to-speech-formatted(boxed_symbol(*(u64*)(var_13 + 32)), 0));
     } else {
         var_6 = 0;
     }
@@ -914,9 +854,9 @@ u16 refresh-stats--workbench() {
                         } else {
                             var_38 = 0;
                         }
-                        *(u64*)(*var_35 + (0 * 8)) = new-boxed-value(7, var_38);
-                        *(u64*)(*var_35 + (1 * 8)) = new-boxed-value(2, (i32)var_28);
-                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(new-boxed-value(21, var_35), 0));
+                        *(u64*)var_35[0] = boxed_symbol(var_38);
+                        *(u64*)var_35[1] = boxed_i32((i32)var_28);
+                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(boxed_array(var_35), 0));
                     } else if (*(u64*)(*(*(var_1 + 440) + 8) + (i * 8)) == mag-capacity) {
                         u64? var_45 = ddict-get(stat-symbol-to-cipher, *(u64*)(*(*(var_1 + 440) + 8) + (i * 8)));
                         u16 var_46;
@@ -942,9 +882,9 @@ u16 refresh-stats--workbench() {
                         } else {
                             var_52 = 0;
                         }
-                        *(u64*)(*var_49 + (0 * 8)) = new-boxed-value(7, var_52);
-                        *(u64*)(*var_49 + (1 * 8)) = new-boxed-value(2, (i32)(var_28 - var_11));
-                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(new-boxed-value(21, var_49), 0));
+                        *(u64*)var_49[0] = boxed_symbol(var_52);
+                        *(u64*)var_49[1] = boxed_i32((i32)(var_28 - var_11));
+                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(boxed_array(var_49), 0));
                     } else {
                         u64? var_62 = absf((absf(var_11 - (var_28 - var_11)) / var_11) * 100.00);
                         u64? var_63 = mod-float(var_62, 5.00);
@@ -990,9 +930,9 @@ u16 refresh-stats--workbench() {
                             }
                             var_73 = var_76;
                         }
-                        *(u64*)(*var_71 + (0 * 8)) = new-boxed-value(7, var_73);
-                        *(u64*)(*var_71 + (1 * 8)) = new-boxed-value(2, (i32)var_64);
-                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(new-boxed-value(21, var_71), 0));
+                        *(u64*)var_71[0] = boxed_symbol(var_73);
+                        *(u64*)var_71[1] = boxed_i32((i32)var_64);
+                        var_26 = fact-set(self, var_21, generate-text-to-speech-formatted(boxed_array(var_71), 0));
                     }
                     var_15 = 0 + 1;
                     0 + 1;
@@ -1142,7 +1082,7 @@ statescript {
                     if (darray-count(w-weapon-slots--workbench) == 0) {
                         u64 i = 0;
                         while (i < 5) {
-                            darray-append(w-weapon-slots--workbench, new-boxed-value(7, gui2-find-widget-path(dc:format("weaponSlot%d", i), self)), 0);
+                            darray-append(w-weapon-slots--workbench, boxed_symbol(gui2-find-widget-path(dc:format("weaponSlot%d", i), self)), 0);
                             i = i + 1;
                         }
                     }
@@ -1180,7 +1120,7 @@ statescript {
                     gui2-set-widget-visible(self, 1);
                 }
                 lambda {
-                    set-int32(weapon-index, darray-find(all-weapons-acquired, new-boxed-value(7, get-symbol(currently-selected-weapon, self)), 0), self);
+                    set-int32(weapon-index, darray-find(all-weapons-acquired, boxed_symbol(get-symbol(currently-selected-weapon, self)), 0), self);
                 }
                 lambda {
                     u64? var_1 = darray-at(w-weapon-slots--workbench, get-int32(weapon-index, self));
@@ -1262,7 +1202,7 @@ statescript {
                     set-symbol(currently-selected-weapon, var_3, self);
                     refresh-workbench();
                     if (get-boolean(play-hover?, self) && get-symbol(currently-selected-weapon, self) != get-symbol(currently-selected-weapon, self)) {
-                        send-event(changed-currently-selected-weapon, get-symbol(workbench-object, self), new-boxed-value(7, get-symbol(currently-selected-weapon, self)));
+                        send-event(changed-currently-selected-weapon, get-symbol(workbench-object, self), boxed_symbol(get-symbol(currently-selected-weapon, self)));
                         var_6 = play-hover-weapon-sound--workbench(get-symbol(currently-selected-weapon, self));
                     } else {
                         var_6 = set-boolean(play-hover?, 1, self);
@@ -1334,7 +1274,7 @@ statescript {
                     set-symbol(w-upgrades-page, menu2-push-page(hudMenuStack, "pc/workbench/bench-upgrades-root-pc", 0), self);
                 }
                 lambda {
-                    send-event(pass-page-path, get-symbol(w-upgrades-page, self), new-boxed-value(7, get-self-id()));
+                    send-event(pass-page-path, get-symbol(w-upgrades-page, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     wait-one-frame();
@@ -1591,20 +1531,10 @@ statescript {
                         }
                         var_16 = var_14 - var_17;
                     }
-                    foreach (u64? var_19 : available-upgrades--workbench) {
-                        u16 var_20;
-                        if (var_19 && *(u16*)(var_19 + 12) == 7) {
-                            var_20 = *(u64*)var_19;
-                        } else if (var_19 && *(u16*)(var_19 + 12) == 5) {
-                            var_20 = *(u64*)var_19;
-                        } else if (var_19 && *(u16*)(var_19 + 12) == 4) {
-                            var_20 = *(u64*)var_19;
-                        } else {
-                            var_20 = 0;
-                        }
+                    foreach (u64? var_20 : available-upgrades--workbench) {
                         lookup-player-upgrade(var_20, 0);
                         if (var_16 < *(u32*)(*(*((*lookup-weapon-upgrade-bundle-resources(get-symbol(currently-selected-weapon, self), var_20) + (0 * 32)) + 8) + 8) + (0 * 4)) && var_14 >= var_9) {
-                            darray-append(get-symbol(disabled-upgrade-slots, self), new-boxed-value(2, 0), 0);
+                            darray-append(get-symbol(disabled-upgrade-slots, self), boxed_i32(0), 0);
                             gui2-set-widget-state(gui2-build-widget-path(
                                 get-workbench-upgrade-slot-child(0, 2),
                                 "fader",
@@ -1834,14 +1764,14 @@ statescript {
                     send-event(
                         apply-upgrade-event,
                         get-symbol(workbench-object, self),
-                        new-boxed-value(7, get-symbol(currently-selected-upgrade, self)),
-                        new-boxed-value(7, get-symbol(currently-selected-weapon, self))
+                        boxed_symbol(get-symbol(currently-selected-upgrade, self)),
+                        boxed_symbol(get-symbol(currently-selected-weapon, self))
                     );
                     broadcast-event(
                         workbench-upgrade-purchased,
-                        new-boxed-value(7, get-symbol(workbench-object, self)),
-                        new-boxed-value(7, get-symbol(currently-selected-upgrade, self)),
-                        new-boxed-value(7, get-symbol(currently-selected-weapon, self))
+                        boxed_symbol(get-symbol(workbench-object, self)),
+                        boxed_symbol(get-symbol(currently-selected-upgrade, self)),
+                        boxed_symbol(get-symbol(currently-selected-weapon, self))
                     );
                     player-weapon-upgrade-apply-bundle(player, get-symbol(currently-selected-weapon, self), get-symbol(currently-selected-upgrade, self));
                     gui2-set-widget-state(var_2, focused, 0, 0, 0);
@@ -1918,7 +1848,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    send-event(workbench-menu-exit-inspect, get-symbol(workbench-object, self), new-boxed-value(1, 0));
+                    send-event(workbench-menu-exit-inspect, get-symbol(workbench-object, self), boxed_bool(0));
                 }
                 lambda {
                     menu2-pop-page(hudMenuStack, workbench/null-page);

@@ -151,17 +151,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             u64? var_7 = distance-between-objects(var_3, self);
@@ -183,17 +173,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-enemy-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-enemy-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             u64? var_8 = distance-between-objects(var_3, get-symbol(investigating-npc, self));
@@ -217,18 +197,18 @@ statescript {
                     send-event(
                         screamer-detected,
                         get-symbol(investigating-npc, self),
-                        new-boxed-value(1, 1),
-                        new-boxed-value(7, get-symbol(buddy-npc, self)),
-                        new-boxed-value(7, get-symbol(throwable-instance, self))
+                        boxed_bool(1),
+                        boxed_symbol(get-symbol(buddy-npc, self)),
+                        boxed_symbol(get-symbol(throwable-instance, self))
                     );
                 }
                 lambda {
                     send-event(
                         screamer-detected,
                         get-symbol(buddy-npc, self),
-                        new-boxed-value(1, 0),
-                        new-boxed-value(7, get-symbol(investigating-npc, self)),
-                        new-boxed-value(7, get-symbol(throwable-instance, self))
+                        boxed_bool(0),
+                        boxed_symbol(get-symbol(investigating-npc, self)),
+                        boxed_symbol(get-symbol(throwable-instance, self))
                     );
                 }
             }
@@ -281,10 +261,10 @@ statescript {
                     stop-timer(active-timer, self);
                 }
                 lambda {
-                    send-event(alarm-off, get-symbol(investigating-npc, self), new-boxed-value(7, get-symbol(throwable-instance, self)));
+                    send-event(alarm-off, get-symbol(investigating-npc, self), boxed_symbol(get-symbol(throwable-instance, self)));
                 }
                 lambda {
-                    send-event(alarm-off, get-symbol(buddy-npc, self), new-boxed-value(7, get-symbol(throwable-instance, self)));
+                    send-event(alarm-off, get-symbol(buddy-npc, self), boxed_symbol(get-symbol(throwable-instance, self)));
                 }
                 lambda {
                     wait(2.00);

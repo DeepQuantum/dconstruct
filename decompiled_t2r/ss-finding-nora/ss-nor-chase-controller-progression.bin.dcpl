@@ -297,7 +297,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 12.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(12.00));
                 }
             }
         }
@@ -328,7 +328,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 18.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(18.00));
                 }
             }
         }
@@ -362,7 +362,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 30.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(30.00));
                 }
             }
         }
@@ -403,7 +403,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 25.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(25.00));
                 }
             }
         }
@@ -434,7 +434,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 14.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(14.00));
                 }
             }
         }
@@ -465,7 +465,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, new-boxed-value(6, 10.00));
+                    send-event(start-fail-timer, ss-nor-chase-controller-timer-1, boxed_f32(10.00));
                 }
             }
         }

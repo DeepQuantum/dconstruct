@@ -131,11 +131,11 @@ statescript {
                     send-event(
                         struggle-npc-start,
                         get-symbol(horse, self),
-                        new-boxed-value(7, get-self-id()),
-                        new-boxed-value(7, var_5),
-                        new-boxed-value(7, var_9),
-                        new-boxed-value(7, var_13),
-                        new-boxed-value(7, var_17)
+                        boxed_symbol(get-self-id()),
+                        boxed_symbol(var_5),
+                        boxed_symbol(var_9),
+                        boxed_symbol(var_13),
+                        boxed_symbol(var_17)
                     );
                 }
                 lambda {
@@ -151,15 +151,15 @@ statescript {
                         var_2 = 0;
                     }
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = horse-struggle-ap();
-                    *(i32*)*(*var_3 + (1 * 8)) = 54;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.30;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = horse-struggle-ap();
+                    *(i32*)*var_3[1] = 54;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.50;
+                    *(i32*)*var_3[2] = 28;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.30;
                     wait-animate_(self, var_2, var_3);
                 }
                 lambda {
@@ -175,9 +175,9 @@ statescript {
                         var_2 = 0;
                     }
                     u64? var_3 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = horse-struggle-ap();
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = horse-struggle-ap();
                     wait-animate_(self, var_2, var_3);
                 }
                 lambda {
@@ -197,12 +197,12 @@ statescript {
                             var_3 = 0;
                         }
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = horse-struggle-ap();
-                        *(i32*)*(*var_4 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.30;
+                        *(i32*)*var_4[0] = 10;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(u64*)(*var_4[0] + 8) = horse-struggle-ap();
+                        *(i32*)*var_4[1] = 28;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.30;
                         wait-animate_(self, var_3, var_4);
                         npc-die(self, 0, 0, 0, 1);
                         go(death, 1);
@@ -219,12 +219,12 @@ statescript {
                             var_8 = 0;
                         }
                         u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = horse-struggle-ap();
-                        *(i32*)*(*var_9 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.30;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = horse-struggle-ap();
+                        *(i32*)*var_9[1] = 28;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.30;
                         wait-animate_(self, var_8, var_9);
                         start-timer(struggle-cooldown, 4.00, self, 1);
                         go(wait-for-tackle, 1);

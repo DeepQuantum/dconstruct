@@ -40,17 +40,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : res-backyard-spillover-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-backyard-spillover-npcs) {
                         if (npc-alive?(var_2) || npc-get-lod(var_2) > 0 || distance-between-objects-greater-than?(player, var_2, 20.00, 1)) {
                             if (!locator-in-region?(get-object-locator(var_2), rgn-res-zone-backyard-end-1, player)) {
                                 kill-entity(var_2);
@@ -67,17 +57,7 @@ statescript {
                     set-hardpoint-enabled(hard-point-res-spillover-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-backyard-spillover-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-backyard-spillover-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-is-dog?(var_2)) {
                                 npc-set-script-only-with-perception(var_2);

@@ -73,7 +73,7 @@ statescript {
                             0,
                             0
                         ), self);
-                        broadcast-event(player-herding!, new-boxed-value(18, herd-target));
+                        broadcast-event(player-herding!, boxed_boundframe(herd-target));
                     }
                 }
                 lambda {

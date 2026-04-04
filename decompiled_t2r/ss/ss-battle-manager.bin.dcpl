@@ -14,17 +14,7 @@
 u16 update-leader-zoning() {
     if (tag-boolean(zone-use-leader?, self) && get-boolean(re-zone-to-leader, self)) {
         npc-clear-zone(get-symbol(npc-group-leader, self));
-        foreach (u64? var_6 : get-symbol(npc-group, self)) {
-            u16 var_7;
-            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                var_7 = *(u64*)var_6;
-            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                var_7 = *(u64*)var_6;
-            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                var_7 = *(u64*)var_6;
-            } else {
-                var_7 = 0;
-            }
+        foreach (u64? var_7 : get-symbol(npc-group, self)) {
             npc-set-zone-center-object(var_7, get-symbol(npc-group-leader, self), tag-float(leader-leash-radius, self));
             if (tag-int32(use-zone-locking, self) == 1) {
                 npc-lock-to-zone(var_7);
@@ -73,23 +63,23 @@ u16 setup-bm-npc(u16 arg_0, bool arg_1) {
         net-send-event-all(
             play-spawn-anim,
             get-self-id(),
-            new-boxed-value(7, arg_0),
-            new-boxed-value(7, tag-symbol(spawn-anim, arg_1))
+            boxed_symbol(arg_0),
+            boxed_symbol(tag-symbol(spawn-anim, arg_1))
         );
     }
     if (!(arg_1 == 0) && tag-specified?(spawn-anim, arg_1) && tag-int32(rope, arg_1) == 1) {
         net-send-event-all(
             play-spawn-anim-rope,
             get-self-id(),
-            new-boxed-value(7, arg_0),
-            new-boxed-value(7, tag-symbol(spawn-anim, arg_1))
+            boxed_symbol(arg_0),
+            boxed_symbol(tag-symbol(spawn-anim, arg_1))
         );
     }
-    net-send-event-all(add-npc-to-group, get-self-id(), new-boxed-value(7, arg_0));
-    broadcast-event(bm-npc-spawn, new-boxed-value(7, arg_0));
+    net-send-event-all(add-npc-to-group, get-self-id(), boxed_symbol(arg_0));
+    broadcast-event(bm-npc-spawn, boxed_symbol(arg_0));
     u16 var_36;
     if (net-is-host?()) {
-        var_36 = net-send-event-all(add-npc-to-radar, get-self-id(), new-boxed-value(7, arg_0));
+        var_36 = net-send-event-all(add-npc-to-radar, get-self-id(), boxed_symbol(arg_0));
     } else {
         var_36 = 0;
     }
@@ -106,29 +96,19 @@ u64? init-spawners() {
             while (i < 101) {
                 u64? var_4 = symbol-concat-int32(spawner-, i);
                 if (tag-specified?(var_4, self)) {
-                    var_6 = darray-append(get-symbol(spawner-group, self), new-boxed-value(7, tag-symbol(var_4, self)), 1);
+                    var_6 = darray-append(get-symbol(spawner-group, self), boxed_symbol(tag-symbol(var_4, self)), 1);
                 }
                 i = i + 1;
             }
         }
     }
     u64? var_11 = darray-create(self, -1, 0);
-    foreach (u64? var_15 : get-symbol(spawner-group, self)) {
-        u16 var_16;
-        if (var_15 && *(u16*)(var_15 + 12) == 7) {
-            var_16 = *(u64*)var_15;
-        } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-            var_16 = *(u64*)var_15;
-        } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-            var_16 = *(u64*)var_15;
-        } else {
-            var_16 = 0;
-        }
+    foreach (u64? var_16 : get-symbol(spawner-group, self)) {
         if (spawner-exists?(var_16)) {
             if (!is-final-build?()) {
                 display(dc:format("[0;36;40mBM[0;36m %s:[0m %s ", string-debug(get-object-id(self)), dc:format("%s is safe for spawner-group", string-debug(var_16))), 19);
             }
-            darray-append(var_11, new-boxed-value(7, var_16), 1);
+            darray-append(var_11, boxed_symbol(var_16), 1);
         }
     }
     darray-destroy(get-symbol(spawner-group, self));
@@ -137,17 +117,7 @@ u64? init-spawners() {
 
 u64? bm-set-zone-region(u64? arg_0, u64? arg_1) {
     set-symbol(zone-region, arg_1, arg_0);
-    foreach (u64? var_3 : get-symbol(npc-group, arg_0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-symbol(npc-group, arg_0)) {
         npc-set-zone-region(var_4, get-symbol(zone-region, arg_0));
         if (tag-int32(use-zone-locking, self) == 1) {
             npc-lock-to-zone(var_4);
@@ -199,17 +169,7 @@ u16 should-spawn?() {
 }
 
 u64? update-npc-awareness() {
-    foreach (u64? var_3 : get-symbol(npc-group, self)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : get-symbol(npc-group, self)) {
         u64 j = 0;
         while (j < 10) {
             u64? var_5 = net-get-net-id-by-normal-index(j);
@@ -229,17 +189,7 @@ u16 get-spawner-near-leader(u64? arg_0, f32 arg_1) {
         var_0 = tag-float(leader-leash-radius, self);
     }
     u16 var_5;
-    foreach (u64? var_6 : arg_0) {
-        u16 var_7;
-        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-            var_7 = *(u64*)var_6;
-        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-            var_7 = *(u64*)var_6;
-        } else {
-            var_7 = 0;
-        }
+    foreach (u64? var_7 : arg_0) {
         u16 var_9;
         if (!0) {
             u64? var_11 = distance-between-objects(var_7, get-object-locator(get-symbol(npc-group-leader, self)));
@@ -379,17 +329,7 @@ statescript {
         block event terminate-kill-npcs {
             track main {
                 lambda {
-                    foreach (u64? var_3 : tag-symbol(npc-group, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : tag-symbol(npc-group, self)) {
                         npc-kill(var_4);
                     }
                 }
@@ -413,7 +353,7 @@ statescript {
                     }
                 }
                 lambda {
-                    darray-append(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -438,9 +378,9 @@ statescript {
             track main {
                 lambda {
                     if (net-is-active?()) {
-                        if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)))) {
+                        if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)))) {
                             set-symbol(last-dead-npc, event-arg-symbol(0), self);
-                            darray-find-remove(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                            darray-find-remove(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)), 0);
                             if (net-is-host?()) {
                                 if (!(get-symbol(wave-manager, self) == 0)) {
                                     send-event(npc-killed-in-wave, get-symbol(wave-manager, self));
@@ -450,12 +390,12 @@ statescript {
                             }
                             broadcast-event(
                                 bm-npc-died,
-                                new-boxed-value(7, event-arg-symbol(0)),
-                                new-boxed-value(7, get-self-id()),
-                                new-boxed-value(2, event-arg-int32(1)),
-                                new-boxed-value(7, event-arg-symbol(2))
+                                boxed_symbol(event-arg-symbol(0)),
+                                boxed_symbol(get-self-id()),
+                                boxed_i32(event-arg-int32(1)),
+                                boxed_symbol(event-arg-symbol(2))
                             );
-                            broadcast-event(bm-npc-alive-count, new-boxed-value(2, get-int32(alive-count, self)));
+                            broadcast-event(bm-npc-alive-count, boxed_i32(get-int32(alive-count, self)));
                         }
                     } else {
                         set-int32(alive-count, get-int32(alive-count, self) - 1, self);
@@ -468,7 +408,7 @@ statescript {
             track main {
                 lambda {
                     if (net-is-active?()) {
-                        if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)))) {
+                        if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)))) {
                             if (net-is-host?()) {
                                 npc-clear-zone(event-arg-symbol(0));
                                 net-set-int32(alive-count, get-int32(alive-count, self) - 1, self);
@@ -499,24 +439,14 @@ statescript {
         block event npc-destroyed {
             track main {
                 lambda {
-                    if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)))) {
-                        darray-find-remove(get-symbol(npc-group, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    if (!(get-symbol(npc-group, self) == 0) && darray-contains?(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)))) {
+                        darray-find-remove(get-symbol(npc-group, self), boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
                 lambda {
                     if (tag-boolean(zone-use-leader?, self) && !npc-alive?(get-symbol(npc-group-leader, self))) {
                         set-boolean(set-leader-once, 0, self);
-                        foreach (u64? var_6 : get-symbol(npc-group, self)) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : get-symbol(npc-group, self)) {
                             if (!get-boolean(set-leader-once, self)) {
                                 set-symbol(npc-group-leader, var_7, self);
                             }
@@ -549,7 +479,7 @@ statescript {
                 lambda {
                     if (get-boolean(var-timer-visible-to-team-0, self) || net-get-team-from-joypad(2) == 0) {
                         if (get-boolean(var-timer-visible-to-team-1, self) && net-get-team-from-joypad(2) == 1) {
-                            send-event(set-timer-visible, get-self-id(), new-boxed-value(2, net-get-net-id-from-joypad(2)));
+                            send-event(set-timer-visible, get-self-id(), boxed_i32(net-get-net-id-from-joypad(2)));
                         }
                     }
                 }
@@ -656,7 +586,7 @@ statescript {
                             while (i < 101) {
                                 u64? var_10 = symbol-concat-int32(schema-, i);
                                 if (tag-specified?(var_10, self)) {
-                                    var_12 = darray-append(get-symbol(schema-group, self), new-boxed-value(7, tag-symbol(var_10, self)), 1);
+                                    var_12 = darray-append(get-symbol(schema-group, self), boxed_symbol(tag-symbol(var_10, self)), 1);
                                 }
                                 i = i + 1;
                             }
@@ -690,17 +620,7 @@ statescript {
                         }
                         if (!(get-symbol(var-ini-group, self) == 0)) {
                             net-set-boolean(ini-group-done, 0, self);
-                            foreach (u64? var_41 : get-symbol(var-ini-group, self)) {
-                                u16 var_42;
-                                if (var_41 && *(u16*)(var_41 + 12) == 7) {
-                                    var_42 = *(u64*)var_41;
-                                } else if (var_41 && *(u16*)(var_41 + 12) == 5) {
-                                    var_42 = *(u64*)var_41;
-                                } else if (var_41 && *(u16*)(var_41 + 12) == 4) {
-                                    var_42 = *(u64*)var_41;
-                                } else {
-                                    var_42 = 0;
-                                }
+                            foreach (u64? var_42 : get-symbol(var-ini-group, self)) {
                                 u64? var_43 = spawn-npc(var_42, 0, 0);
                                 setup-bm-npc(var_43, 0);
                                 if (!(get-symbol(ini-group-zone-override, self) == 0)) {
@@ -898,7 +818,7 @@ statescript {
                             if (!(tag-symbol(completion-reward, self) == none)) {
                                 net-spawn-entity-at(tag-symbol(completion-reward, self), get-object-locator(get-symbol(last-dead-npc, self)), 0, 0, 0, 0);
                             }
-                            broadcast-event(battle-manager-finished, new-boxed-value(7, get-self-id()));
+                            broadcast-event(battle-manager-finished, boxed_symbol(get-self-id()));
                             wait(3.00);
                             net-go(pending-activation);
                         } else {

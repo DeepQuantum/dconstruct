@@ -30,19 +30,19 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (1 * 8)) = 9;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_1[0] = 28;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 0.50;
+                    *(i32*)*var_1[1] = 9;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(u8*)(*var_1[1] + 8) = 0;
                     animate_(tag-symbol(horse, self), horse-mm-gallop-fw-loop, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 83;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = alloc-horse-binding(tag-symbol(horse, self), 0, 0);
+                    *(i32*)*var_1[0] = 83;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = alloc-horse-binding(tag-symbol(horse, self), 0, 0);
                     animate_(get-self-id(), horse-mm-gallop-fw-loop--npc, var_1);
                 }
                 lambda {

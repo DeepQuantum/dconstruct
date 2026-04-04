@@ -64,7 +64,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(skull-activate, new-boxed-value(7, photo-mode-filters));
+                    broadcast-event(skull-activate, boxed_symbol(photo-mode-filters));
                 }
                 lambda {
                     darray-create(single-frame, -1, 0);
@@ -91,8 +91,8 @@ statescript {
                     bool var_8 = !(var_5 == 0) && !(var_0 == 0);
                     u64 i = 0;
                     while (i < *(i32*)(*skull-photo-mode-filter-rs* + 8)) {
-                        if (!var_8 && var_8 && !darray-contains?(var_5, new-boxed-value(7, *(u64*)(**skull-photo-mode-filter-rs* + (i * 8)))) && !darray-contains?(var_0, new-boxed-value(7, *(u64*)(**skull-photo-mode-filter-rs* + (i * 8))))) {
-                            darray-append(var_1, new-boxed-value(2, i), 0);
+                        if (!var_8 && var_8 && !darray-contains?(var_5, boxed_symbol(*(u64*)(**skull-photo-mode-filter-rs* + (i * 8)))) && !darray-contains?(var_0, boxed_symbol(*(u64*)(**skull-photo-mode-filter-rs* + (i * 8))))) {
+                            darray-append(var_1, boxed_i32(i), 0);
                         }
                         i = i + 1;
                     }

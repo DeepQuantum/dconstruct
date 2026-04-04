@@ -260,7 +260,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    send-event(activate, rgn-nor-stalker-office-lobby-flashlight-flicker-1, new-boxed-value(7, rgn-nor-stalker-office-lobby-flashlight-flicker-1));
+                    send-event(activate, rgn-nor-stalker-office-lobby-flashlight-flicker-1, boxed_symbol(rgn-nor-stalker-office-lobby-flashlight-flicker-1));
                 }
                 lambda {
                     wait(0.40);

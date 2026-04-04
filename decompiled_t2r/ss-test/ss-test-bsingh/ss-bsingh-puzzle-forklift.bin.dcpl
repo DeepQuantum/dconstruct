@@ -50,17 +50,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ss-forklift-able-group) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ss-forklift-able-group) {
                         if (locator-in-region?(get-spawner-locator(tag-symbol(grab-position, self), 1), tag-symbol(lift-region, var_2), player)) {
                             set-symbol(current-forklift-able, var_2, self);
                             go(touching-forklift-able, 1);
@@ -109,7 +99,7 @@ statescript {
                         if (!is-final-build?()) {
                             display(dc:format("INTERACT WITH MEEE"), 19);
                         }
-                        send-event(forklift-interact, get-symbol(current-forklift-able, self), new-boxed-value(7, tag-symbol(target-object, self)));
+                        send-event(forklift-interact, get-symbol(current-forklift-able, self), boxed_symbol(tag-symbol(target-object, self)));
                     }
                 }
             }

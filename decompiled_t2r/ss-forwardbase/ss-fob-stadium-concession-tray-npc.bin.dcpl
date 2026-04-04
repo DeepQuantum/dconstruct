@@ -263,7 +263,7 @@ statescript {
                     set-overlay-set(get-self-id(), anim-overlay-thug-level-no-change);
                 }
                 lambda {
-                    send-event(evt-tray-delivered, tag-symbol(washer-name, self), new-boxed-value(7, get-symbol(tray, self)));
+                    send-event(evt-tray-delivered, tag-symbol(washer-name, self), boxed_symbol(get-symbol(tray, self)));
                 }
                 lambda {
                     detach-without-physicalizing(get-symbol(tray, self), 0.00);

@@ -55,17 +55,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback-interacts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback-interacts) {
                         interactable-enable(var_2);
                     }
                 }
@@ -91,7 +81,7 @@ statescript {
                     }
                 }
                 lambda {
-                    if (darray-contains?(ski-aquarium-flashback-interacts, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(ski-aquarium-flashback-interacts, boxed_symbol(event-arg-symbol(0)))) {
                         set-symbol(active-interact, event-arg-symbol(0), self);
                         go(wait-while-interact-in-progress, 1);
                     }
@@ -123,17 +113,7 @@ statescript {
                     set-boolean(interact-in-progress?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback-interacts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback-interacts) {
                         interactable-disable(var_2);
                     }
                 }
@@ -143,21 +123,11 @@ statescript {
             track main {
                 lambda {
                     if (darray-count(ski-aquarium-flashback-interacts) == 0 && !(event-arg-count() < 1)) {
-                        darray-find-remove(ski-aquarium-flashback-interacts, new-boxed-value(7, event-arg-symbol(0)), 0);
+                        darray-find-remove(ski-aquarium-flashback-interacts, boxed_symbol(event-arg-symbol(0)), 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback-interacts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback-interacts) {
                         interactable-enable(var_2);
                     }
                 }
@@ -213,17 +183,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : ski-aquarium-flashback-interacts) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : ski-aquarium-flashback-interacts) {
                         interactable-disable(var_2);
                     }
                 }

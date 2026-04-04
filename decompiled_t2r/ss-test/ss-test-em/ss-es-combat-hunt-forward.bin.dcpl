@@ -25,17 +25,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
@@ -67,17 +57,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         npc-disable-skill(var_2, 38);
                     }
                 }
@@ -122,17 +102,7 @@ statescript {
                     set-boolean(cp-1, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         set-boolean(cp-1, 1, var_2);
                     }
                 }
@@ -154,17 +124,7 @@ statescript {
                     set-boolean(cp-2, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         set-boolean(cp-2, 1, var_2);
                     }
                 }
@@ -176,17 +136,7 @@ statescript {
                     set-boolean(cp-3, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         set-boolean(cp-3, 1, var_2);
                     }
                 }
@@ -195,17 +145,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : es-combat-hunt-forward-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : es-combat-hunt-forward-1) {
                         if (!npc-target-location-known?(var_2, player)) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }

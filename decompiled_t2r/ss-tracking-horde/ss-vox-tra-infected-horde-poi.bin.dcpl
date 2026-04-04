@@ -13,17 +13,7 @@
 
 u16 on-screen-enemy-count-greater-than?(u16 arg_0) {
     u16 var_1;
-    foreach (u64? var_2 : all-enemy-npcs) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : all-enemy-npcs) {
         u16 var_5;
         if (npc-alive?(var_3)) {
             if (npc-on-screen-and-visible?(var_3, -1, 0)) {
@@ -151,17 +141,7 @@ statescript {
                             wait(0.10);
                         }
                         set-int32(vox-infected-on-screen-count, 0, self);
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-on-screen-and-visible?(var_5, -1, 0)) {
                                     ++(vox-infected-on-screen-count, self);
@@ -199,17 +179,7 @@ statescript {
                             wait(0.10);
                         }
                         set-int32(vox-infected-on-screen-count, 0, self);
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-on-screen-and-visible?(var_5, -1, 0)) {
                                     ++(vox-infected-on-screen-count, self);
@@ -246,17 +216,7 @@ statescript {
                             wait(0.10);
                         }
                         set-int32(vox-infected-on-screen-count, 0, self);
-                        foreach (u64? var_4 : all-enemy-npcs) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : all-enemy-npcs) {
                             if (npc-alive?(var_5)) {
                                 if (npc-on-screen-and-visible?(var_5, -1, 0)) {
                                     ++(vox-infected-on-screen-count, self);

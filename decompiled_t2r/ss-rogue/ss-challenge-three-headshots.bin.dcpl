@@ -67,7 +67,7 @@ statescript {
                     u64? var_12;
                     i32 var_13;
                     u64? var_14;
-                    if (weapon-is-bow?(*(u64*)(var_1 + 72)) || darray-contains?(rogue-headshot-joint-group, new-boxed-value(7, event-get-attack-joint())) || *(u8*)(var_1 + 99)) {
+                    if (weapon-is-bow?(*(u64*)(var_1 + 72)) || darray-contains?(rogue-headshot-joint-group, boxed_symbol(event-get-attack-joint())) || *(u8*)(var_1 + 99)) {
                         var_9 = var_1;
                         var_10 = var_2;
                         var_11 = *(u64*)(var_1 + 8);

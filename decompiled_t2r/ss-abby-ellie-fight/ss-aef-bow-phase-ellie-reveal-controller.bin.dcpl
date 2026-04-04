@@ -98,7 +98,7 @@ statescript {
                 lambda {
                     if (darray-count(aef-vox-abby-cant-find-ellie-lines) > 0) {
                         u64? var_1 = group-random(aef-vox-abby-cant-find-ellie-lines);
-                        darray-find-remove(aef-vox-abby-cant-find-ellie-line, new-boxed-value(7, var_1), 0);
+                        darray-find-remove(aef-vox-abby-cant-find-ellie-line, boxed_symbol(var_1), 0);
                         say(player, var_1, 2, 0);
                         go(waiting, 1);
                     }
@@ -113,8 +113,8 @@ statescript {
                     u64? var_0 = group-random(aef-bow-phase-ellie-reveal-breakables);
                     u64? var_2 = spawn-entity-at(var_0, get-object-locator(npc-enemy-ellie-pistol-1), 0);
                     u64? var_3 = group-random(aef-bow-phase-ellie-reveal-vox-lines);
-                    darray-find-remove(aef-bow-phase-ellie-reveal-breakables, new-boxed-value(7, var_0), 0);
-                    darray-find-remove(aef-bow-phase-ellie-reveal-vox-lines, new-boxed-value(7, var_3), 0);
+                    darray-find-remove(aef-bow-phase-ellie-reveal-breakables, boxed_symbol(var_0), 0);
+                    darray-find-remove(aef-bow-phase-ellie-reveal-vox-lines, boxed_symbol(var_3), 0);
                     if (darray-count(aef-bow-phase-ellie-reveal-breakables) == 0) {
                         darray-reset(aef-bow-phase-ellie-reveal-breakables);
                     }

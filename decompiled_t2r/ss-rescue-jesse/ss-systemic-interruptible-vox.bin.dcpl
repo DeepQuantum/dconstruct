@@ -42,7 +42,7 @@ u64? say-interrupt-line() {
     u64? var_1;
     if (get-symbol(interrupt-event, self) == higher-priority-line-interrupt) {
         say(speaker, line, 2, 0);
-        var_1 = send-event(transition-line, self, new-boxed-value(7, higher-priority-line-transition));
+        var_1 = send-event(transition-line, self, boxed_symbol(higher-priority-line-transition));
     } else {
         var_1 = broadcast-event(get-symbol(interrupt-event, self));
     }
@@ -96,7 +96,7 @@ statescript {
                             while (script-in-state?(self, clear-speaker)) {
                                 wait-one-frame();
                             }
-                            send-event(interrupt-line, self, new-boxed-value(7, higher-priority-line-interrupt));
+                            send-event(interrupt-line, self, boxed_symbol(higher-priority-line-interrupt));
                         }
                     }
                 }

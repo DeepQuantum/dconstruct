@@ -298,7 +298,7 @@ statescript {
                         } else if (var_3 == get-symbol(npc-3, self)) {
                             set-boolean(npc-3-taken-recent-damage?, 1, self);
                         }
-                        if (var_8 > 0.00 || darray-contains?(afm-horse-chase-cavalry-npcs, new-boxed-value(7, var_3)) && darray-contains?(afm-horse-chase-cavalry-backup-npcs, new-boxed-value(7, var_3))) {
+                        if (var_8 > 0.00 || darray-contains?(afm-horse-chase-cavalry-npcs, boxed_symbol(var_3)) && darray-contains?(afm-horse-chase-cavalry-backup-npcs, boxed_symbol(var_3))) {
                             if (npc-alive?(var_3)) {
                                 set-object-health(var_3, var_8);
                             }
@@ -385,33 +385,13 @@ statescript {
                     wait-spawn-npc-group-async(afm-horse-chase-field-enter-on-foot-militia, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-cavalry-npcs-and-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-cavalry-npcs-and-horses) {
                         set-object-health(var_2, 50.00);
                         npc-enable-stun(var_2, 0);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-field-enter-on-foot-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-field-enter-on-foot-militia) {
                         npc-set-script-only-no-perception(var_2);
                         set-object-health(var_2, 10.00);
                     }
@@ -800,12 +780,12 @@ statescript {
                     }
                     if (npc-alive?(npc-afm-horse-cavalry-field-enemy-3)) {
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 28;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (0 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_4 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_4[0] = 28;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(f32*)(*var_4[0] + 8) = 0.50;
+                        *(i32*)*var_4[1] = 30;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(f32*)(*var_4[1] + 8) = 0.50;
                         var_3 = animate_(npc-afm-horse-cavalry-field-enemy-3, horse-tense-b-short-idle, var_4);
                     }
                 }
@@ -954,15 +934,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-afm-horse-chase-gate-collapse-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-afm-horse-chase-gate-collapse-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(obj-afm-horse-chase-gate-1, afm-horse-chase-capitol-gate-collapse--gate, var_0);
                 }
             }
@@ -984,32 +964,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-cavalry-cleanup-first-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-cavalry-cleanup-first-npcs) {
                         npc-die-if-alive(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-cavalry-cleanup-first-horses) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-cavalry-cleanup-first-horses) {
                         kill-entity(var_2);
                         clear-harvested-bodies();
                     }

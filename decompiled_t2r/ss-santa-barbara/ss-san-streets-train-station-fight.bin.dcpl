@@ -17,17 +17,7 @@ u64? san-streets-wait-spawn-group-kill-overflow(u64? arg_0, sid arg_1) {
         kill-entity(get-furthest-in-group(all-enemy-npcs, player));
         wait-one-frame();
     }
-    foreach (u64? var_5 : arg_0) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : arg_0) {
         print-boolean(npc-is-dead-in-checkpoint?(var_6), self);
     }
     return wait-spawn-npc-group-async(arg_0, 0, 0);
@@ -96,138 +86,38 @@ statescript {
                 }
                 lambda {
                     if (player-in-region?(rgn-train-stations-hp-set-front-1, 2)) {
-                        foreach (u64? var_2 : san-streets-train-hardpoints) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : san-streets-train-hardpoints) {
                             set-hardpoint-disabled(var_3);
                         }
-                        foreach (u64? var_6 : san-streets-train-hp-set-front) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : san-streets-train-hp-set-front) {
                             set-hardpoint-enabled(var_7);
                         }
                     } else if (player-in-region?(rgn-train-stations-hp-set-left-1, 2)) {
-                        foreach (u64? var_11 : san-streets-train-hardpoints) {
-                            u16 var_12;
-                            if (var_11 && *(u16*)(var_11 + 12) == 7) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 5) {
-                                var_12 = *(u64*)var_11;
-                            } else if (var_11 && *(u16*)(var_11 + 12) == 4) {
-                                var_12 = *(u64*)var_11;
-                            } else {
-                                var_12 = 0;
-                            }
+                        foreach (u64? var_12 : san-streets-train-hardpoints) {
                             set-hardpoint-disabled(var_12);
                         }
-                        foreach (u64? var_15 : san-streets-train-hp-set-left) {
-                            u16 var_16;
-                            if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                var_16 = *(u64*)var_15;
-                            } else {
-                                var_16 = 0;
-                            }
+                        foreach (u64? var_16 : san-streets-train-hp-set-left) {
                             set-hardpoint-enabled(var_16);
                         }
                     } else if (player-in-region?(rgn-train-stations-hp-set-inside-2, 2)) {
-                        foreach (u64? var_20 : san-streets-train-hardpoints) {
-                            u16 var_21;
-                            if (var_20 && *(u16*)(var_20 + 12) == 7) {
-                                var_21 = *(u64*)var_20;
-                            } else if (var_20 && *(u16*)(var_20 + 12) == 5) {
-                                var_21 = *(u64*)var_20;
-                            } else if (var_20 && *(u16*)(var_20 + 12) == 4) {
-                                var_21 = *(u64*)var_20;
-                            } else {
-                                var_21 = 0;
-                            }
+                        foreach (u64? var_21 : san-streets-train-hardpoints) {
                             set-hardpoint-disabled(var_21);
                         }
-                        foreach (u64? var_24 : san-streets-train-hp-set-inside-front) {
-                            u16 var_25;
-                            if (var_24 && *(u16*)(var_24 + 12) == 7) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 5) {
-                                var_25 = *(u64*)var_24;
-                            } else if (var_24 && *(u16*)(var_24 + 12) == 4) {
-                                var_25 = *(u64*)var_24;
-                            } else {
-                                var_25 = 0;
-                            }
+                        foreach (u64? var_25 : san-streets-train-hp-set-inside-front) {
                             set-hardpoint-enabled(var_25);
                         }
                     } else if (player-in-region?(rgn-train-stations-hp-set-right-1, 2)) {
-                        foreach (u64? var_29 : san-streets-train-hardpoints) {
-                            u16 var_30;
-                            if (var_29 && *(u16*)(var_29 + 12) == 7) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 5) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 4) {
-                                var_30 = *(u64*)var_29;
-                            } else {
-                                var_30 = 0;
-                            }
+                        foreach (u64? var_30 : san-streets-train-hardpoints) {
                             set-hardpoint-disabled(var_30);
                         }
-                        foreach (u64? var_33 : san-streets-train-hp-set-right) {
-                            u16 var_34;
-                            if (var_33 && *(u16*)(var_33 + 12) == 7) {
-                                var_34 = *(u64*)var_33;
-                            } else if (var_33 && *(u16*)(var_33 + 12) == 5) {
-                                var_34 = *(u64*)var_33;
-                            } else if (var_33 && *(u16*)(var_33 + 12) == 4) {
-                                var_34 = *(u64*)var_33;
-                            } else {
-                                var_34 = 0;
-                            }
+                        foreach (u64? var_34 : san-streets-train-hp-set-right) {
                             set-hardpoint-enabled(var_34);
                         }
                     } else if (player-in-region?(rgn-train-stations-hp-set-inside-1, 2)) {
-                        foreach (u64? var_38 : san-streets-train-hardpoints) {
-                            u16 var_39;
-                            if (var_38 && *(u16*)(var_38 + 12) == 7) {
-                                var_39 = *(u64*)var_38;
-                            } else if (var_38 && *(u16*)(var_38 + 12) == 5) {
-                                var_39 = *(u64*)var_38;
-                            } else if (var_38 && *(u16*)(var_38 + 12) == 4) {
-                                var_39 = *(u64*)var_38;
-                            } else {
-                                var_39 = 0;
-                            }
+                        foreach (u64? var_39 : san-streets-train-hardpoints) {
                             set-hardpoint-disabled(var_39);
                         }
-                        foreach (u64? var_42 : san-streets-train-hp-set-inside-back) {
-                            u16 var_43;
-                            if (var_42 && *(u16*)(var_42 + 12) == 7) {
-                                var_43 = *(u64*)var_42;
-                            } else if (var_42 && *(u16*)(var_42 + 12) == 5) {
-                                var_43 = *(u64*)var_42;
-                            } else if (var_42 && *(u16*)(var_42 + 12) == 4) {
-                                var_43 = *(u64*)var_42;
-                            } else {
-                                var_43 = 0;
-                            }
+                        foreach (u64? var_43 : san-streets-train-hp-set-inside-back) {
                             set-hardpoint-enabled(var_43);
                         }
                     }
@@ -249,28 +139,18 @@ statescript {
         block start {
             track spawn-fight {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
                 lambda {
-                    send-event(run-to-far-side, self, new-boxed-value(7, npc-san-train-3));
+                    send-event(run-to-far-side, self, boxed_symbol(npc-san-train-3));
                 }
                 lambda {
-                    send-event(walk-to-tree, self, new-boxed-value(7, npc-san-train-1));
+                    send-event(walk-to-tree, self, boxed_symbol(npc-san-train-1));
                 }
                 lambda {
-                    send-event(walk-to-car, self, new-boxed-value(7, npc-san-train-2));
+                    send-event(walk-to-car, self, boxed_symbol(npc-san-train-2));
                 }
                 lambda {
                     wait-spawn-npc-group-async(san-streets-train-fight, 0, 0);
@@ -297,32 +177,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hp-set-front) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hp-set-front) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -331,32 +191,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hp-set-left) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hp-set-left) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -365,32 +205,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hp-set-inside-front) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hp-set-inside-front) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -399,32 +219,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hp-set-right) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hp-set-right) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -433,32 +233,12 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hp-set-inside-back) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hp-set-inside-back) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -542,32 +322,12 @@ statescript {
         block start {
             track spawn-fight {
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-compound-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-compound-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -589,17 +349,7 @@ statescript {
                     wait-spawn-npc-group-async(san-streets-slavers-reinforcements-compound-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-pre-fight) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-pre-fight) {
                         if (npc-alive?(var_2)) {
                             if (get-player-to-object-distance(var_2) > 120.00) {
                                 npc-kill(var_2);
@@ -608,17 +358,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-fight) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-fight) {
                         if (npc-alive?(var_2)) {
                             if (get-player-to-object-distance(var_2) > 120.00) {
                                 npc-kill(var_2);
@@ -641,17 +381,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -697,32 +427,12 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-train-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-train-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-streets-compound-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-streets-compound-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

@@ -44,7 +44,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, snow, new-boxed-value(1, 1));
+                    fact-set(global, snow, boxed_bool(1));
                 }
             }
         }

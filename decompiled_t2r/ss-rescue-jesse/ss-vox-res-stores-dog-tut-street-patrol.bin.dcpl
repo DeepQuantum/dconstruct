@@ -202,7 +202,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 1));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(1));
                 }
                 lambda {
                     while (!entity-exists?(npc-res-store-human-with-dog-2)) {
@@ -240,16 +240,16 @@ statescript {
                     wait-boolean(res-stores-dog-tut-street-patrol-convo-played?, 1, self);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -263,9 +263,9 @@ statescript {
                         clear-speech-suppression(15);
                         set-boolean(vox-went-in-combat?, 1, self);
                         set-svar(vox-res-neighborhood-fight-houses-street-patrol-combat, 1);
-                        fact-set(global, allow-search-location?, new-boxed-value(1, 1));
-                        fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
-                        fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                        fact-set(global, allow-search-location?, boxed_bool(1));
+                        fact-set(global, allow-search-check-in?, boxed_bool(1));
+                        fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                         go(wait-combat-over, 1);
                     }
                 }
@@ -279,13 +279,13 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     clear-speech-suppression(15);
@@ -301,13 +301,13 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -320,13 +320,13 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(done, 1);
@@ -360,9 +360,9 @@ statescript {
                 lambda {
                     if (get-desired-tension-mode() == 3) {
                         clear-speech-suppression(15);
-                        fact-set(global, allow-search-location?, new-boxed-value(1, 1));
-                        fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
-                        fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                        fact-set(global, allow-search-location?, boxed_bool(1));
+                        fact-set(global, allow-search-check-in?, boxed_bool(1));
+                        fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                         go(wait-for-event, 1);
                     }
                 }
@@ -408,13 +408,13 @@ statescript {
                     wait-boolean(res-stores-dog-tut-street-patrol-bank-inv-played?, 1, self);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     clear-speech-suppression(15);
@@ -429,9 +429,9 @@ statescript {
                 lambda {
                     if (get-desired-tension-mode() == 3) {
                         clear-speech-suppression(15);
-                        fact-set(global, allow-search-location?, new-boxed-value(1, 1));
-                        fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
-                        fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                        fact-set(global, allow-search-location?, boxed_bool(1));
+                        fact-set(global, allow-search-check-in?, boxed_bool(1));
+                        fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                         set-boolean(vox-went-in-combat?, 1, self);
                         set-svar(vox-res-neighborhood-fight-houses-street-patrol-combat, 1);
                         go(wait-combat-over, 1);
@@ -445,13 +445,13 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -464,13 +464,13 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -483,13 +483,13 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, playing-beginning-dog-tut, new-boxed-value(1, 0));
+                    fact-set(global, playing-beginning-dog-tut, boxed_bool(0));
                 }
                 lambda {
                     go(done, 1);
@@ -550,10 +550,10 @@ statescript {
         block event conversation-ended {
             track main {
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
                     clear-speech-suppression(15);
@@ -566,10 +566,10 @@ statescript {
         block event conversation-interrupted {
             track main {
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
                     clear-speech-suppression(15);
@@ -585,10 +585,10 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
                 lambda {
                     go(done, 1);
@@ -633,10 +633,10 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, allow-search-location?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-location?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, allow-search-check-in?, new-boxed-value(1, 1));
+                    fact-set(global, allow-search-check-in?, boxed_bool(1));
                 }
             }
         }

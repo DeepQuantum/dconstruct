@@ -52,7 +52,7 @@ statescript {
                 lambda {
                     u64? var_4 = group-get-last-valid-index(flo-horde-infected-intro-anims);
                     u64? var_5;
-                    if (darray-find(flo-horde-boat-attack-npcs, new-boxed-value(7, string-to-symbol(get-self-name())), 0) > var_4) {
+                    if (darray-find(flo-horde-boat-attack-npcs, boxed_symbol(string-to-symbol(get-self-name())), 0) > var_4) {
                         var_5 = random-integer(var_4 + 1, 0, 0);
                     }
                     set-int32(my-index, var_5, self);
@@ -79,18 +79,18 @@ statescript {
                         var_2 = 0;
                     }
                     u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-flo-boat-explore-horde-escape-1, 1);
-                    *(i32*)*(*var_3 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_3 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (3 * 8)) = 58;
-                    *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.18;
+                    *(i32*)*var_3[0] = 10;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-flo-boat-explore-horde-escape-1, 1);
+                    *(i32*)*var_3[1] = 28;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 1.00;
+                    *(i32*)*var_3[2] = 30;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(f32*)(*var_3[2] + 8) = 0.50;
+                    *(i32*)*var_3[3] = 58;
+                    *(u64*)(*var_3[3] + 8) = 0;
+                    *(f32*)(*var_3[3] + 8) = 0.18;
                     animate_(self, var_2, var_3);
                 }
                 lambda {
@@ -111,7 +111,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(go-infected-attack, ss-flo-boat-explore-horde-escape-igc-1, new-boxed-value(7, get-self-id()));
+                    send-event(go-infected-attack, ss-flo-boat-explore-horde-escape-igc-1, boxed_symbol(get-self-id()));
                 }
             }
         }

@@ -195,17 +195,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : joe-npcs-first-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : joe-npcs-first-wave) {
                         npc-set-zone-region(var_2, rgn-zone-joe-school-1);
                         npc-set-script-only-with-perception(var_2);
                         npc-set-combat-params(var_2, *joe-pistol-combat-params*);
@@ -495,17 +485,7 @@ statescript {
                     wait(5.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : joe-npcs-first-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : joe-npcs-first-wave) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -544,17 +524,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : joe-npcs-first-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : joe-npcs-first-wave) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                             npc-set-script-low-priority(var_2);
@@ -571,17 +541,7 @@ statescript {
                 }
                 lambda {
                     while (get-boolean(end-flank-tutorial, self) == 0) {
-                        foreach (u64? var_2 : joe-npcs-first-wave) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : joe-npcs-first-wave) {
                             if (npc-alive?(var_3)) {
                                 if (!locator-in-region?(alloc-bound-frame(npc-get-entity-position(var_3, player), 0, 0, 0, 0), rgn-joe-opening-room-1, player)) {
                                     var_8 = set-boolean(end-flank-tutorial, 1, self);
@@ -597,17 +557,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-boolean(end-flank-tutorial, self)) {
-                        foreach (u64? var_2 : joe-npcs-first-wave) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : joe-npcs-first-wave) {
                             if (npc-alive?(var_3)) {
                                 if (!locator-in-region?(alloc-bound-frame(npc-get-entity-position(var_3, player), 0, 0, 0, 0), rgn-joe-opening-room-1, player)) {
                                     var_8 = set-boolean(end-flank-tutorial, 1, self);
@@ -641,22 +591,12 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(joe-npcs-first-wave, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(joe-npcs-first-wave, boxed_symbol(event-arg-symbol(0)))) {
                         if (!player-in-region?(rgn-joe-opening-room-1, 2)) {
                             set-boolean(end-flank-tutorial, 1, self);
                         }
                         if (npc-group-alive-count(joe-npcs-first-wave) == 1) {
-                            foreach (u64? var_6 : joe-npcs-first-wave) {
-                                u16 var_7;
-                                if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                    var_7 = *(u64*)var_6;
-                                } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                    var_7 = *(u64*)var_6;
-                                } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                    var_7 = *(u64*)var_6;
-                                } else {
-                                    var_7 = 0;
-                                }
+                            foreach (u64? var_7 : joe-npcs-first-wave) {
                                 if (npc-alive?(var_7)) {
                                     if (!npc-buddy-has-kill-token?(dina)) {
                                         npc-buddy-give-kill-token(dina);
@@ -677,7 +617,7 @@ statescript {
         block event npc-attacked {
             track main {
                 lambda {
-                    if (darray-contains?(joe-npcs-first-wave, new-boxed-value(7, event-arg-symbol(1))) && !player-in-region?(rgn-joe-opening-room-1, 2)) {
+                    if (darray-contains?(joe-npcs-first-wave, boxed_symbol(event-arg-symbol(1))) && !player-in-region?(rgn-joe-opening-room-1, 2)) {
                         set-boolean(end-flank-tutorial, 1, self);
                     }
                 }
@@ -748,17 +688,7 @@ statescript {
                 }
                 lambda {
                     if (get-boolean(from-task-in?, self) && !get-svar-as-boolean(joe-classroom-done)) {
-                        foreach (u64? var_3 : joe-npcs-first-wave) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : joe-npcs-first-wave) {
                             if (is-npc-in-checkpoint?(var_4)) {
                                 spawn-npc(var_4, 0, 0);
                             }
@@ -766,17 +696,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : joe-npcs-first-wave) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : joe-npcs-first-wave) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                             npc-set-script-low-priority(var_2);
@@ -799,7 +719,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(joe-npcs-first-wave, new-boxed-value(7, event-arg-symbol(0))) && npc-group-alive-count(joe-npcs-first-wave) == 0) {
+                    if (darray-contains?(joe-npcs-first-wave, boxed_symbol(event-arg-symbol(0))) && npc-group-alive-count(joe-npcs-first-wave) == 0) {
                         set-svar-as-boolean(joe-classroom-done, 1);
                         go(done, 1);
                     }

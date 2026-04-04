@@ -30,7 +30,7 @@ statescript {
                     while (i < get-int32(max-npcs, self)) {
                         u64? var_1 = get-closest-spawner-in-group-to-object(infected-locations, player);
                         add-npc-to-inf-swap-manager(spawn-npc(npc-multi-infected-swap-1, var_1, 0), ss-inf-swap-manager-1);
-                        darray-find-remove(infected-locations, new-boxed-value(7, var_1), 0);
+                        darray-find-remove(infected-locations, boxed_symbol(var_1), 0);
                         i = i + 1;
                     }
                 }
@@ -39,7 +39,7 @@ statescript {
                     while (i < get-int32(max-snpcs, self)) {
                         u64? var_1 = get-closest-spawner-in-group-to-object(infected-locations, player);
                         add-snpc-to-inf-swap-manager(spawn-entity-at(snpc-multi-infected-swap-1, get-spawner-locator(var_1, 1), 0), ss-inf-swap-manager-1);
-                        darray-find-remove(infected-locations, new-boxed-value(7, var_1), 0);
+                        darray-find-remove(infected-locations, boxed_symbol(var_1), 0);
                         i = i + 1;
                     }
                 }

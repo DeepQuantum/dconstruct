@@ -35,7 +35,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(hybrid-npcs, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(hybrid-npcs, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     go(gun-mode, 1);
@@ -68,10 +68,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(hybrid-npcs-melee, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(hybrid-npcs-melee, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-append(hybrid-npcs-gun, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(hybrid-npcs-gun, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-symbol(attach, spawn-attachable("machete-blade", self, "macheteHolster", 0, 0), self);
@@ -122,10 +122,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(hybrid-npcs-gun, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(hybrid-npcs-gun, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-append(hybrid-npcs-melee, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(hybrid-npcs-melee, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-symbol(attach, spawn-attachable("pistol-9mm", self, "ropeAttach", 0, 0), self);
@@ -158,13 +158,13 @@ statescript {
                     kill-entity-if-spawned(get-symbol(attach, self));
                 }
                 lambda {
-                    darray-find-remove(hybrid-npcs, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(hybrid-npcs, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(hybrid-npcs-gun, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(hybrid-npcs-gun, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
-                    darray-find-remove(hybrid-npcs-melee, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(hybrid-npcs-melee, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

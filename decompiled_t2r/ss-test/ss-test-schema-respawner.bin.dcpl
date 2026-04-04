@@ -51,7 +51,7 @@ statescript {
             track main {
                 lambda {
                     if (ddict-contains-key?(get-symbol(npc-respawn-ddict, self), event-arg-symbol(0))) {
-                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), event-arg-symbol(0), new-boxed-value(6, get-current-time(0)));
+                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), event-arg-symbol(0), boxed_f32(get-current-time(0)));
                     }
                 }
             }
@@ -90,8 +90,8 @@ statescript {
                             );
                             schema-respawner-set-npc-perception(var_20);
                             npc-unholster-weapon(var_20, 4, -1.00, 0);
-                            ddict-set(get-symbol(npc-respawn-ddict, self), var_20, new-boxed-value(7, tag-symbol(var_0, self)));
-                            var_4 = ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_20, new-boxed-value(18, get-spawner-locator(tag-symbol(var_1, self), 1)));
+                            ddict-set(get-symbol(npc-respawn-ddict, self), var_20, boxed_symbol(tag-symbol(var_0, self)));
+                            var_4 = ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_20, boxed_boundframe(get-spawner-locator(tag-symbol(var_1, self), 1)));
                         }
                         i = i + 1;
                     }
@@ -103,20 +103,10 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-die(var_2, 0, 0, 0, 1);
                         kill-entity(var_2);
-                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), var_2, new-boxed-value(6, get-current-time(0)));
+                        ddict-set(get-symbol(npc-respawn-queue-ddict, self), var_2, boxed_f32(get-current-time(0)));
                     }
                 }
                 lambda {
@@ -191,7 +181,7 @@ statescript {
                                 );
                                 schema-respawner-set-npc-perception(var_34);
                                 npc-unholster-weapon(var_34, 4, -1.00, 0);
-                                ddict-set(get-symbol(npc-respawn-ddict, self), var_34, new-boxed-value(7, var_21));
+                                ddict-set(get-symbol(npc-respawn-ddict, self), var_34, boxed_symbol(var_21));
                                 u64? var_39 = ddict-get(get-symbol(npc-respawn-locator-ddict, self), var_18);
                                 u64? var_40;
                                 if (var_39 && *(u16*)(var_39 + 12) == 18) {
@@ -199,9 +189,9 @@ statescript {
                                 } else {
                                     var_40 = identity-bound-frame();
                                 }
-                                ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_34, new-boxed-value(18, var_40));
+                                ddict-set(get-symbol(npc-respawn-locator-ddict, self), var_34, boxed_boundframe(var_40));
                                 ddict-remove-at(get-symbol(npc-respawn-queue-ddict, self), 0);
-                                ddict-set(get-symbol(cleanup-queue-ddict, self), var_18, new-boxed-value(6, get-current-time(0)));
+                                ddict-set(get-symbol(cleanup-queue-ddict, self), var_18, boxed_f32(get-current-time(0)));
                                 if (tag-specified?(respawn-cooldown-time, self)) {
                                     set-float(respawn-cooldown-time, tag-float(respawn-cooldown-time, self), self);
                                 }

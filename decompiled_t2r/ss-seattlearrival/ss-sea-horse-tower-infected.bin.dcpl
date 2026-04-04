@@ -62,8 +62,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(sea-horse-tower-enemies, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-svar-bit(sea-horse-tower-infect-npcs, darray-find(sea-horse-tower-enemies, new-boxed-value(7, event-arg-symbol(0)), 0), 1);
+                    if (darray-contains?(sea-horse-tower-enemies, boxed_symbol(event-arg-symbol(0)))) {
+                        set-svar-bit(sea-horse-tower-infect-npcs, darray-find(sea-horse-tower-enemies, boxed_symbol(event-arg-symbol(0)), 0), 1);
                         auto-save-game();
                     }
                 }
@@ -103,8 +103,8 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(sea-horse-tower-enemies, new-boxed-value(7, event-arg-symbol(0)))) {
-                        set-svar-bit(sea-horse-tower-infect-npcs, darray-find(sea-horse-tower-enemies, new-boxed-value(7, event-arg-symbol(0)), 0), 1);
+                    if (darray-contains?(sea-horse-tower-enemies, boxed_symbol(event-arg-symbol(0)))) {
+                        set-svar-bit(sea-horse-tower-infect-npcs, darray-find(sea-horse-tower-enemies, boxed_symbol(event-arg-symbol(0)), 0), 1);
                         auto-save-game();
                     }
                 }
@@ -122,18 +122,8 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-horse-tower-enemies) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (!get-svar-bit(sea-horse-hotel-infect-npcs, darray-find(sea-horse-tower-enemies, new-boxed-value(7, var_2), 0))) {
+                    foreach (u64? var_2 : sea-horse-tower-enemies) {
+                        if (!get-svar-bit(sea-horse-hotel-infect-npcs, darray-find(sea-horse-tower-enemies, boxed_symbol(var_2), 0))) {
                             wait-spawn-npc(var_2, 0, 0);
                         }
                     }
@@ -152,17 +142,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-horse-tower-enemies) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-horse-tower-enemies) {
                         if (npc-alive?(var_2)) {
                             npc-kill(var_2);
                             wait-one-frame();

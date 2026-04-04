@@ -65,7 +65,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(stalker-posts, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(stalker-posts, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     start-timer(update-timer, deterministic-random-float(0.00, 1.00, self), self, 1);
@@ -127,17 +127,7 @@ statescript {
                     set-float(score, (curve-scale(5.00, 50.00, 1.00, 0.00, get-float(dist-to-player, self), 5) * curve-scale(0.00, 3.00, 0.00, 1.00, get-float(dist-to-player, self), 1)) * get-float(score, self), self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         if (get-locator-distance(get-object-locator(var_2), get-spawner-locator(self, 1)) < 5.00) {
                             set-float(score, 0.00, self);
                         }
@@ -253,7 +243,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(stalker-posts, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(stalker-posts, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     kill-entity(self);

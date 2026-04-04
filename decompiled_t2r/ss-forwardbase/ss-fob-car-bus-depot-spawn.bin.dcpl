@@ -73,17 +73,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        foreach (u64? var_1 : fob-store-bus-corner) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : fob-store-bus-corner) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                         wait-one-frame();
@@ -110,17 +100,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        foreach (u64? var_1 : fob-store-pre-array) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : fob-store-pre-array) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                         wait-one-frame();
@@ -145,17 +125,7 @@ statescript {
                 lambda {
                     u64 i = 0;
                     while (i < 10) {
-                        foreach (u64? var_1 : fob-store-array) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : fob-store-array) {
                             npc-make-aware-of(var_2, player, 2, 0);
                         }
                         wait-frames(1);

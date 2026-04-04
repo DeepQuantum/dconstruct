@@ -27,7 +27,7 @@ u64? shambler-can-chase?(u64? arg_0) {
 u64? spawn-weakpoint(u64? arg_0, u64? arg_1) {
     u64? var_2 = spawn-entity-at(shambler-weak-point-spawner-1, offset-locator(get-joint-locator(self, pelvis), arg_1), 0);
     parent(var_2, self, spined);
-    return darray-append(arg_0, new-boxed-value(7, var_2), 1);
+    return darray-append(arg_0, boxed_symbol(var_2), 1);
 }
 
 u64? allow-spore-attack?() {
@@ -84,17 +84,7 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(weakpoints, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(weakpoints, self)) {
                         set-symbol(npc, get-self-id(), var_4);
                     }
                 }
@@ -154,17 +144,7 @@ statescript {
                     npc-set-demeanor(self, 2, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-buddy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-buddy-npcs) {
                         npc-nonprefer-target(var_2, self);
                     }
                 }
@@ -244,7 +224,7 @@ statescript {
                     set-boolean(allow-interrupt, 0, self);
                 }
                 lambda {
-                    broadcast-event(start-spore-cloud, new-boxed-value(7, get-self-id()));
+                    broadcast-event(start-spore-cloud, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     npc-set-script-only-with-perception(self);
@@ -263,24 +243,24 @@ statescript {
                         var_7 = gaseous-infected-attack-moving--infected;
                     }
                     u64? var_8 = #%alloc-array(single-frame, 16, 6, 1);
-                    *(i32*)*(*var_8 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = rotate-locator-lookat(get-object-locator(self), get-object-locator(var_0), 1.00, 0);
-                    *(i32*)*(*var_8 + (1 * 8)) = 3;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(i32*)*(*var_8 + (2 * 8)) = 2;
-                    *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_8 + (2 * 8)) + 8) = 1;
-                    *(i32*)*(*var_8 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_8 + (3 * 8)) + 8) = 5;
-                    *(i32*)*(*var_8 + (4 * 8)) = 28;
-                    *(u64*)(*(*var_8 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (4 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_8 + (5 * 8)) = 30;
-                    *(u64*)(*(*var_8 + (5 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (5 * 8)) + 8) = 0.30;
+                    *(i32*)*var_8[0] = 10;
+                    *(u64*)(*var_8[0] + 8) = 0;
+                    *(u64*)(*var_8[0] + 8) = rotate-locator-lookat(get-object-locator(self), get-object-locator(var_0), 1.00, 0);
+                    *(i32*)*var_8[1] = 3;
+                    *(u64*)(*var_8[1] + 8) = 0;
+                    *(u8*)(*var_8[1] + 8) = 0;
+                    *(i32*)*var_8[2] = 2;
+                    *(u64*)(*var_8[2] + 8) = 0;
+                    *(u8*)(*var_8[2] + 8) = 1;
+                    *(i32*)*var_8[3] = 13;
+                    *(u64*)(*var_8[3] + 8) = 0;
+                    *(i32*)(*var_8[3] + 8) = 5;
+                    *(i32*)*var_8[4] = 28;
+                    *(u64*)(*var_8[4] + 8) = 0;
+                    *(f32*)(*var_8[4] + 8) = 0.30;
+                    *(i32*)*var_8[5] = 30;
+                    *(u64*)(*var_8[5] + 8) = 0;
+                    *(f32*)(*var_8[5] + 8) = 0.30;
                     animate_(self, var_7, var_8);
                 }
                 lambda {
@@ -370,17 +350,7 @@ statescript {
                     audio-gameplay-event(molotov, get-object-position(self), self);
                     spawn-particles-at-bound-frame(molotov-cocktail-ceiling, var_0, none);
                     spawn-particles-at-bound-frame(molotov-cocktail-wall, var_0, none);
-                    foreach (u64? var_6 : get-symbol(weakpoints, self)) {
-                        u16 var_7;
-                        if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                            var_7 = *(u64*)var_6;
-                        } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                            var_7 = *(u64*)var_6;
-                        } else {
-                            var_7 = 0;
-                        }
+                    foreach (u64? var_7 : get-symbol(weakpoints, self)) {
                         kill-entity(var_7);
                     }
                 }
@@ -403,18 +373,8 @@ statescript {
                 }
                 lambda {
                     if (!(get-symbol(weakpoints, self) == 0)) {
-                        foreach (u64? var_4 : get-symbol(weakpoints, self)) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
-                            send-event(start-spore-cloud, var_5, new-boxed-value(7, get-self-id()));
+                        foreach (u64? var_5 : get-symbol(weakpoints, self)) {
+                            send-event(start-spore-cloud, var_5, boxed_symbol(get-self-id()));
                         }
                         darray-destroy(get-symbol(weakpoints, self));
                         set-symbol(weakpoints, 0, self);

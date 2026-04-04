@@ -80,22 +80,12 @@ u16 get-current-challenge-unlock-level() {
 }
 
 u64? append-challenge-script-as-spawned(u64? arg_0) {
-    return darray-append(get-symbol(darray-symbol-run-challenge-scripts-spawned, self), new-boxed-value(7, arg_0), 0);
+    return darray-append(get-symbol(darray-symbol-run-challenge-scripts-spawned, self), boxed_symbol(arg_0), 0);
 }
 
 u16 was-challenge-script-spawned-this-run?(u64? arg_0) {
     u16 var_2;
-    foreach (u64? var_4 : get-symbol(darray-symbol-run-challenge-scripts-spawned, self)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-symbol(darray-symbol-run-challenge-scripts-spawned, self)) {
         u16 var_8;
         if (tag-symbol(state-script, var_5) == tag-symbol(state-script, arg_0)) {
             var_8 = 1;
@@ -134,9 +124,9 @@ u64? get-challenges-by-unlock-level(i32 arg_0, u64? arg_1) {
         u64 j = 0;
         while (j < *(i32*)(*((**t2r-challenge-groups* + (i * 16)) + 8) + 8)) {
             if (arg_1 && *(u8*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 8) && *(i32*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 32) == arg_0) {
-                if (!darray-contains?(var_1, new-boxed-value(7, *(u64*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 40)))) {
-                    darray-append(var_1, new-boxed-value(7, *(u64*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 40)), 0);
-                    darray-append(var_0, new-boxed-value(7, **((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)), 0);
+                if (!darray-contains?(var_1, boxed_symbol(*(u64*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 40)))) {
+                    darray-append(var_1, boxed_symbol(*(u64*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 40)), 0);
+                    darray-append(var_0, boxed_symbol(**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)), 0);
                 }
             }
             j = j + 1;
@@ -183,26 +173,26 @@ u64? log-rogue-challenge-status-focus-test-debug-only!(u16 arg_0) {
 }
 
 u64? append-challenge-criteria-for-next-encounter(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
-    darray-append(get-symbol(darray-symbol-run-challenge-groups, self), new-boxed-value(7, arg_0), 0);
-    darray-append(get-symbol(darray-symbol-run-challenge-rewards, self), new-boxed-value(7, arg_1), 0);
-    darray-append(get-symbol(darray-int32-run-challenge-activation-number, self), new-boxed-value(2, arg_3), 0);
-    return darray-append(get-symbol(darray-int32-run-challenge-activation-type, self), new-boxed-value(2, arg_2), 0);
+    darray-append(get-symbol(darray-symbol-run-challenge-groups, self), boxed_symbol(arg_0), 0);
+    darray-append(get-symbol(darray-symbol-run-challenge-rewards, self), boxed_symbol(arg_1), 0);
+    darray-append(get-symbol(darray-int32-run-challenge-activation-number, self), boxed_i32(arg_3), 0);
+    return darray-append(get-symbol(darray-int32-run-challenge-activation-type, self), boxed_i32(arg_2), 0);
 }
 
 u64? speak-text-to-speech-formatted-challenge-reward() {
     u64? var_1;
     if (health == get-symbol(challenge-reward, self)) {
         u64? var_2 = #%alloc-array(single-frame, 1, 2, 0);
-        *(u64*)(*var_2 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_CHALLENGE_REWARD_DESCP_1);
-        *(u64*)(*var_2 + (1 * 8)) = new-boxed-value(2, get-int32(challenge-currency, self));
-        var_1 = speak-text-to-speech-formatted(new-boxed-value(21, var_2), 1, 0, 1);
+        *(u64*)var_2[0] = boxed_symbol(HUD_ROGUE_CHALLENGE_REWARD_DESCP_1);
+        *(u64*)var_2[1] = boxed_i32(get-int32(challenge-currency, self));
+        var_1 = speak-text-to-speech-formatted(boxed_array(var_2), 1, 0, 1);
     } else {
         u64? var_8 = #%alloc-array(single-frame, 1, 4, 0);
-        *(u64*)(*var_8 + (0 * 8)) = new-boxed-value(7, HUD_ROGUE_CHALLENGE_REWARD_DESCP_2);
-        *(u64*)(*var_8 + (1 * 8)) = new-boxed-value(2, get-int32(challenge-ammo-reward-count, self));
-        *(u64*)(*var_8 + (2 * 8)) = new-boxed-value(7, *(u64*)(lookup-weapon-art-def(get-symbol(challenge-ammo-reward-weapon, self), 0) + 16));
-        *(u64*)(*var_8 + (3 * 8)) = new-boxed-value(2, get-int32(challenge-currency, self));
-        var_1 = speak-text-to-speech-formatted(new-boxed-value(21, var_8), 1, 0, 1);
+        *(u64*)var_8[0] = boxed_symbol(HUD_ROGUE_CHALLENGE_REWARD_DESCP_2);
+        *(u64*)var_8[1] = boxed_i32(get-int32(challenge-ammo-reward-count, self));
+        *(u64*)var_8[2] = boxed_symbol(*(u64*)(lookup-weapon-art-def(get-symbol(challenge-ammo-reward-weapon, self), 0) + 16));
+        *(u64*)var_8[3] = boxed_i32(get-int32(challenge-currency, self));
+        var_1 = speak-text-to-speech-formatted(boxed_array(var_8), 1, 0, 1);
     }
     return var_1;
 }
@@ -214,8 +204,8 @@ u16 copy-unlocked-challenge-groups-into-group(u64? arg_0) {
         u64 j = 0;
         while (j < *(i32*)(*((**t2r-challenge-groups* + (i * 16)) + 8) + 8)) {
             if (*(i32*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 32) >= 0 && *(i32*)((**((**t2r-challenge-groups* + (i * 16)) + 8) + (j * 88)) + 32) <= get-current-challenge-unlock-level()) {
-                if (!darray-contains?(arg_0, new-boxed-value(7, *(u64*)(**t2r-challenge-groups* + (i * 16))))) {
-                    var_1 = darray-append(arg_0, new-boxed-value(7, *(u64*)(**t2r-challenge-groups* + (i * 16))), 1);
+                if (!darray-contains?(arg_0, boxed_symbol(*(u64*)(**t2r-challenge-groups* + (i * 16))))) {
+                    var_1 = darray-append(arg_0, boxed_symbol(*(u64*)(**t2r-challenge-groups* + (i * 16))), 1);
                 }
             }
             j = j + 1;
@@ -229,12 +219,12 @@ u16 speak-challenge-tts-new(u64? arg_0, u16 arg_1) {
     u16 var_1;
     if (is-text-to-speech-enabled?()) {
         if (arg_1 == 0) {
-            speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_ACTIVE), 1, 0, 1);
-            var_1 = speak-text-to-speech-formatted(new-boxed-value(7, arg_0), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_ACTIVE), 1, 0, 1);
+            var_1 = speak-text-to-speech-formatted(boxed_symbol(arg_0), 1, 0, 1);
         } else if (arg_1 == 1) {
-            speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_NEW), 1, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, arg_0), 1, 0, 1);
-            speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_FOR_REWARD), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_NEW), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(arg_0), 1, 0, 1);
+            speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_FOR_REWARD), 1, 0, 1);
             var_1 = speak-text-to-speech-formatted-challenge-reward();
         } else {
             var_1 = 0;
@@ -248,8 +238,8 @@ u16 speak-challenge-tts-new(u64? arg_0, u16 arg_1) {
 u16 speak-challenge-tts-complete(u64? arg_0) {
     u16 var_1;
     if (is-text-to-speech-enabled?()) {
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_COMPLETE), 1, 0, 1);
-        speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_GOT_REWARD), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_COMPLETE), 1, 0, 1);
+        speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_GOT_REWARD), 1, 0, 1);
         var_1 = speak-text-to-speech-formatted-challenge-reward();
     } else {
         var_1 = 0;
@@ -274,7 +264,7 @@ u16 convert-challenge-reward-coins-for-character-trait!(f32 arg_0) {
 u16 speak-challenge-tts-fail(u64? arg_0) {
     u16 var_1;
     if (is-text-to-speech-enabled?()) {
-        var_1 = speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_CHALLENGE_FAIL), 1, 0, 1);
+        var_1 = speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_CHALLENGE_FAIL), 1, 0, 1);
     } else {
         var_1 = 0;
     }
@@ -482,17 +472,7 @@ statescript {
                     u64? var_10 = darray-create(self, -1, 0);
                     copy-unlocked-challenge-groups-into-group(var_10);
                     u64? var_12;
-                    foreach (u64? var_13 : var_10) {
-                        u16 var_14;
-                        if (var_13 && *(u16*)(var_13 + 12) == 7) {
-                            var_14 = *(u64*)var_13;
-                        } else if (var_13 && *(u16*)(var_13 + 12) == 5) {
-                            var_14 = *(u64*)var_13;
-                        } else if (var_13 && *(u16*)(var_13 + 12) == 4) {
-                            var_14 = *(u64*)var_13;
-                        } else {
-                            var_14 = 0;
-                        }
+                    foreach (u64? var_14 : var_10) {
                         var_12 = dc:format("%s%s ", "", string-debug(var_14));
                     }
                     if (!is-final-build?()) {
@@ -515,40 +495,20 @@ statescript {
                         u64? var_27 = darray-create(self, -1, 0);
                         u64 j = 0;
                         while (j < *(i32*)(*(**t2r-challenge-groups-probability* + (i * 16)) + 8)) {
-                            darray-append(var_27, new-boxed-value(7, *(u64*)(**(**t2r-challenge-groups-probability* + (i * 16)) + (j * 8))), 1);
+                            darray-append(var_27, boxed_symbol(*(u64*)(**(**t2r-challenge-groups-probability* + (i * 16)) + (j * 8))), 1);
                             j = j + 1;
                         }
                         u64? var_31;
-                        foreach (u64? var_32 : var_27) {
-                            u16 var_33;
-                            if (var_32 && *(u16*)(var_32 + 12) == 7) {
-                                var_33 = *(u64*)var_32;
-                            } else if (var_32 && *(u16*)(var_32 + 12) == 5) {
-                                var_33 = *(u64*)var_32;
-                            } else if (var_32 && *(u16*)(var_32 + 12) == 4) {
-                                var_33 = *(u64*)var_32;
-                            } else {
-                                var_33 = 0;
-                            }
+                        foreach (u64? var_33 : var_27) {
                             var_31 = dc:format("%s%s ", "", string-debug(var_33));
                         }
                         if (!is-final-build?()) {
                             display(dc:format("DEB-EC:    %d has unlocked-groups: %s", i, var_31), 19);
                         }
                         u16 var_40;
-                        foreach (u64? var_41 : var_10) {
-                            u16 var_42;
-                            if (var_41 && *(u16*)(var_41 + 12) == 7) {
-                                var_42 = *(u64*)var_41;
-                            } else if (var_41 && *(u16*)(var_41 + 12) == 5) {
-                                var_42 = *(u64*)var_41;
-                            } else if (var_41 && *(u16*)(var_41 + 12) == 4) {
-                                var_42 = *(u64*)var_41;
-                            } else {
-                                var_42 = 0;
-                            }
+                        foreach (u64? var_42 : var_10) {
                             u16 var_45;
-                            if (!darray-contains?(var_27, new-boxed-value(7, var_42))) {
+                            if (!darray-contains?(var_27, boxed_symbol(var_42))) {
                                 var_45 = 0;
                             }
                             var_40 = var_45;
@@ -595,12 +555,12 @@ statescript {
                         u64? var_71 = run--get-encounter-depth-at-index(i);
                         u64 j = 0;
                         while (j < *(i32*)(*(**((**t2r-challenge-groups-probability* + (var_26 * 16)) + 8) + (var_71 * 8)) + 8)) {
-                            darray-append(var_2, new-boxed-value(7, *(u64*)(**(**((**t2r-challenge-groups-probability* + (var_26 * 16)) + 8) + (var_71 * 8)) + (j * 8))), 0);
+                            darray-append(var_2, boxed_symbol(*(u64*)(**(**((**t2r-challenge-groups-probability* + (var_26 * 16)) + 8) + (var_71 * 8)) + (j * 8))), 0);
                             j = j + 1;
                         }
                         darray-clear(var_3);
-                        darray-append(var_3, new-boxed-value(7, ammo), 0);
-                        darray-append(var_3, new-boxed-value(7, health), 0);
+                        darray-append(var_3, boxed_symbol(ammo), 0);
+                        darray-append(var_3, boxed_symbol(health), 0);
                         u64? var_78 = encounter--get-mode(encounter--get-encounter-ddict-at(encounter--get-run-structure(), i));
                         u64? var_81 = rogue-get-next-random-number-for-category(rng-challenge-activation-wave, 0);
                         rogue-get-next-random-number-for-category(rng-challenge-activation-seconds, 0);
@@ -998,7 +958,7 @@ statescript {
                             );
                             bool var_19 = was-challenge-script-spawned-this-run?(*(u64*)((**((**t2r-challenge-groups* + (var_1 * 16)) + 8) + (i * 88)) + 48)) && !get-boolean(challenge-request-active?, self);
                             if (!(get-symbol(requested-challenge-cipher-id, self) == 0) && i == get-int32(requested-challenge-index, self)) {
-                                darray-append(var_2, new-boxed-value(3, i), 0);
+                                darray-append(var_2, boxed_u32(i), 0);
                                 if (!is-final-build?()) {
                                     var_22 = display(dc:format(
                                         "DEB-EC:     %2d. %-11s %s",
@@ -1027,7 +987,7 @@ statescript {
                                 }
                             } else if (var_3 == 10 && var_19 && var_15) {
                                 if (!!(get-symbol(requested-challenge-cipher-id, self) == 0)) {
-                                    darray-append(var_4, new-boxed-value(3, i), 0);
+                                    darray-append(var_4, boxed_u32(i), 0);
                                 }
                                 if (!is-final-build?()) {
                                     var_22 = display(dc:format(
@@ -1048,7 +1008,7 @@ statescript {
                                 }
                             } else if (var_15) {
                                 if (!!(get-symbol(requested-challenge-cipher-id, self) == 0)) {
-                                    darray-append(var_2, new-boxed-value(3, i), 0);
+                                    darray-append(var_2, boxed_u32(i), 0);
                                 }
                                 if (!is-final-build?()) {
                                     var_22 = display(dc:format(
@@ -1156,20 +1116,10 @@ statescript {
                                             display(dc:format("DEB-EC: Scanning player inventory for ammo reward.."), 19);
                                         }
                                         f32 var_102;
-                                        foreach (u64? var_104 : get-player-all-weapons()) {
-                                            u16 var_105;
-                                            if (var_104 && *(u16*)(var_104 + 12) == 7) {
-                                                var_105 = *(u64*)var_104;
-                                            } else if (var_104 && *(u16*)(var_104 + 12) == 5) {
-                                                var_105 = *(u64*)var_104;
-                                            } else if (var_104 && *(u16*)(var_104 + 12) == 4) {
-                                                var_105 = *(u64*)var_104;
-                                            } else {
-                                                var_105 = 0;
-                                            }
+                                        foreach (u64? var_105 : get-player-all-weapons()) {
                                             f32 var_107;
                                             if (!(weapon-get-default-ammo-id(var_105) == 0)) {
-                                                darray-append(var_94, new-boxed-value(7, var_105), 1);
+                                                darray-append(var_94, boxed_symbol(var_105), 1);
                                                 u64? var_109 = weapon-get-default-ammo-id(var_105);
                                                 u64? var_110 = get-inventory-item-max-count(var_109);
                                                 u64? var_111 = get-ammo-count-from-inventory-and-weapon-clip(var_109, var_105);
@@ -1199,23 +1149,13 @@ statescript {
                                         if (!is-final-build?()) {
                                             display(dc:format("DEB-EC: Guns with lowest ammo inventory are"), 19);
                                         }
-                                        foreach (u64? var_125 : var_94) {
-                                            u16 var_126;
-                                            if (var_125 && *(u16*)(var_125 + 12) == 7) {
-                                                var_126 = *(u64*)var_125;
-                                            } else if (var_125 && *(u16*)(var_125 + 12) == 5) {
-                                                var_126 = *(u64*)var_125;
-                                            } else if (var_125 && *(u16*)(var_125 + 12) == 4) {
-                                                var_126 = *(u64*)var_125;
-                                            } else {
-                                                var_126 = 0;
-                                            }
+                                        foreach (u64? var_126 : var_94) {
                                             u64? var_127 = weapon-get-default-ammo-id(var_126);
                                             if (((f32)get-ammo-count-from-inventory-and-weapon-clip(var_127, var_126) / (f32)get-inventory-item-max-count(var_127)) <= var_120) {
                                                 if (!is-final-build?()) {
                                                     display(dc:format("DEB-EC:   -> %s", string-debug(var_126)), 19);
                                                 }
-                                                var_130 = darray-append(var_95, new-boxed-value(7, var_126), 1);
+                                                var_130 = darray-append(var_95, boxed_symbol(var_126), 1);
                                             }
                                         }
                                         u64? var_138;
@@ -1437,7 +1377,7 @@ statescript {
                     log-rogue-challenge-status-focus-test-debug-only!(2);
                 }
                 lambda {
-                    broadcast-event(rogue-challenge-failed, new-boxed-value(7, get-symbol(challenge-cipher-id, self)), new-boxed-value(7, get-symbol(challenge-group, self)));
+                    broadcast-event(rogue-challenge-failed, boxed_symbol(get-symbol(challenge-cipher-id, self)), boxed_symbol(get-symbol(challenge-group, self)));
                 }
             }
             track text-to-speech-complete {
@@ -1464,7 +1404,7 @@ statescript {
                     log-rogue-challenge-status-focus-test-debug-only!(1);
                 }
                 lambda {
-                    broadcast-event(rogue-challenge-complete, new-boxed-value(7, get-symbol(challenge-cipher-id, self)), new-boxed-value(7, get-symbol(challenge-group, self)));
+                    broadcast-event(rogue-challenge-complete, boxed_symbol(get-symbol(challenge-cipher-id, self)), boxed_symbol(get-symbol(challenge-group, self)));
                 }
             }
         }

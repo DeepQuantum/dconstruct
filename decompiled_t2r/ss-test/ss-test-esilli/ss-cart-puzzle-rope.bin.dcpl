@@ -156,15 +156,15 @@ statescript {
                         signal(anim-start, 0);
                         camera-enable-animated(1.30, -1.00, 1, 1000, 0, 0, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = rotate-locator-angle(rotate-locator-lookat-object(flatten-locator(get-object-locator(tag-symbol(int-rope-end, self))), player, 1.00, 0), 1, 180.00);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.80;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = rotate-locator-angle(rotate-locator-lookat-object(flatten-locator(get-object-locator(tag-symbol(int-rope-end, self))), player, 1.00, 0), 1, 180.00);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.80;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.80;
                         wait-animate_(player, ellie-rope-pick-up, var_1);
                         camera-fade-out-animated(0.80, 0);
                         signal(done-anim, 0);
@@ -172,15 +172,15 @@ statescript {
                         signal(anim-start, 0);
                         camera-enable-animated(1.30, -1.00, 1, 1000, 0, 0, 0);
                         u64? var_8 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = rotate-locator-angle(flatten-locator(rotate-object-lookat-locator(obj-cart-puzz-cart-1, alloc-bound-frame(get-point(end-position, self), 0, 0, 0, 0), 1.00, 0)), 1, 180.00);
-                        *(i32*)*(*var_8 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_8 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (2 * 8)) + 8) = 0.80;
+                        *(i32*)*var_8[0] = 10;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(u64*)(*var_8[0] + 8) = rotate-locator-angle(flatten-locator(rotate-object-lookat-locator(obj-cart-puzz-cart-1, alloc-bound-frame(get-point(end-position, self), 0, 0, 0, 0), 1.00, 0)), 1, 180.00);
+                        *(i32*)*var_8[1] = 28;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 0.80;
+                        *(i32*)*var_8[2] = 30;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(f32*)(*var_8[2] + 8) = 0.80;
                         wait-animate_(player, ellie-rope-tie, var_8);
                         camera-fade-out-animated(0.80, 0);
                         signal(done-anim, 0);
@@ -259,17 +259,7 @@ statescript {
                 }
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : cart-puzz-interact-points) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : cart-puzz-interact-points) {
                         u16 var_7;
                         if (999.00 > get-locator-distance(get-spawner-locator(var_3, 1), get-object-locator(player))) {
                             var_7 = var_3;
@@ -318,15 +308,15 @@ statescript {
                         camera-enable-animated(1.30, -1.00, 1, 1000, 0, 0, 0);
                         signal(anim-start, 0);
                         u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = rotate-locator-angle(rotate-locator-lookat-object(flatten-locator(get-object-locator(obj-cart-puzz-cart-1)), player, 1.00, 0), 1, 180.00);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.80;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = rotate-locator-angle(rotate-locator-lookat-object(flatten-locator(get-object-locator(obj-cart-puzz-cart-1)), player, 1.00, 0), 1, 180.00);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.80;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.80;
                         wait-animate_(player, ellie-rope-tie, var_1);
                         camera-fade-out-animated(0.80, 0);
                     }

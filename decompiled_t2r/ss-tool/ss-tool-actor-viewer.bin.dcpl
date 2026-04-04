@@ -46,13 +46,13 @@ statescript {
                     set-string(level2, "gen-night", self);
                 }
                 lambda {
-                    darray-append(level-list, new-boxed-value(7, level0), 1);
+                    darray-append(level-list, boxed_symbol(level0), 1);
                 }
                 lambda {
-                    darray-append(level-list, new-boxed-value(7, level1), 1);
+                    darray-append(level-list, boxed_symbol(level1), 1);
                 }
                 lambda {
-                    darray-append(level-list, new-boxed-value(7, level2), 1);
+                    darray-append(level-list, boxed_symbol(level2), 1);
                 }
                 lambda {
                     set-string(sky0, "sky-gen-noon", self);
@@ -64,13 +64,13 @@ statescript {
                     set-string(sky2, "sky-gen-night", self);
                 }
                 lambda {
-                    darray-append(sky-list, new-boxed-value(7, sky0), 1);
+                    darray-append(sky-list, boxed_symbol(sky0), 1);
                 }
                 lambda {
-                    darray-append(sky-list, new-boxed-value(7, sky1), 1);
+                    darray-append(sky-list, boxed_symbol(sky1), 1);
                 }
                 lambda {
-                    darray-append(sky-list, new-boxed-value(7, sky2), 1);
+                    darray-append(sky-list, boxed_symbol(sky2), 1);
                 }
                 lambda {
                     u64? var_1 = darray-at(level-list, get-int32(currentLevelIndex, self));

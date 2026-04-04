@@ -35,7 +35,7 @@ u16 spawn-next-wave() {
             net-set-symbol(spawner-group, *(u64*)(var_6 + 8), var_10);
             net-set-int32(to-spawn-count, *(i32*)(var_6 + 16), var_10);
             net-set-symbol(wave-manager, get-self-id(), var_10);
-            var_11 = send-event(add-spawn-count, self, new-boxed-value(2, get-int32(to-spawn-count, var_10)));
+            var_11 = send-event(add-spawn-count, self, boxed_i32(get-int32(to-spawn-count, var_10)));
         }
         darray-remove(tag-symbol(wave-pattern, self), 0);
         if (darray-count(tag-symbol(wave-pattern, self)) > 0) {

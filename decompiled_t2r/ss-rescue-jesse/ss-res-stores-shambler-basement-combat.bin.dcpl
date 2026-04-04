@@ -66,18 +66,8 @@ statescript {
                         if (task-active?(rescue-jesse, res-stores-infected-streets)) {
                             task-set-active-continue!(basement, 0, 0, 0, 0.00, 0, 0);
                         }
-                        foreach (u64? var_6 : res-stores-infected-basement) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
-                            if (!(get-svar-bit(res-neighborhood-basement-killed, darray-find(res-stores-infected-basement, new-boxed-value(7, var_7), 0)))) {
+                        foreach (u64? var_7 : res-stores-infected-basement) {
+                            if (!(get-svar-bit(res-neighborhood-basement-killed, darray-find(res-stores-infected-basement, boxed_symbol(var_7), 0)))) {
                                 wait-spawn-npc(var_7, 0, 0);
                                 wait-one-frame();
                             }
@@ -116,8 +106,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(res-stores-infected-basement, new-boxed-value(7, var_0))) {
-                        var_3 = set-svar-bit(res-neighborhood-basement-killed, darray-find(res-stores-infected-basement, new-boxed-value(7, var_0), 0), 1);
+                    if (darray-contains?(res-stores-infected-basement, boxed_symbol(var_0))) {
+                        var_3 = set-svar-bit(res-neighborhood-basement-killed, darray-find(res-stores-infected-basement, boxed_symbol(var_0), 0), 1);
                     }
                 }
                 lambda {
@@ -147,17 +137,7 @@ statescript {
                 lambda {
                     if (player-in-region?(rgn-in-toy-store-1, 2)) {
                         set-tension-mode(2);
-                        foreach (u64? var_2 : res-stores-infected-basement) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : res-stores-infected-basement) {
                             if (entity-exists?(var_3) && npc-alive?(var_3) && !(npc-has-awareness?(var_3, player, 0))) {
                                 npc-make-aware-of(var_3, player, 0, 0);
                             }
@@ -196,17 +176,7 @@ statescript {
                     set-combat-checkpoint(rescue-jesse, res-stores-infected-streets, checkpoint, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : res-stores-infected-basement) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : res-stores-infected-basement) {
                         if (npc-alive?(var_2) && entity-exists?(var_2)) {
                             kill-entity(var_2);
                         }

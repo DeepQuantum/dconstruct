@@ -26,10 +26,10 @@ statescript {
                     if (task-active?(t1-hunter-city, t1-hun-bookstore)) {
                         go(setup, 1);
                     } else if (task-active?(mgallant, bookstore-with-dogs)) {
-                        darray-append(npcs-bookstore, new-boxed-value(7, npc-bookstore-dog-1), 1);
-                        darray-append(npcs-bookstore, new-boxed-value(7, npc-bookstore-dog-2), 1);
-                        darray-append(npcs-bookstore, new-boxed-value(7, npc-bookstore-chained-dog-1), 1);
-                        darray-append(npcs-bookstore-downstairs, new-boxed-value(7, npc-bookstore-dog-2), 1);
+                        darray-append(npcs-bookstore, boxed_symbol(npc-bookstore-dog-1), 1);
+                        darray-append(npcs-bookstore, boxed_symbol(npc-bookstore-dog-2), 1);
+                        darray-append(npcs-bookstore, boxed_symbol(npc-bookstore-chained-dog-1), 1);
+                        darray-append(npcs-bookstore-downstairs, boxed_symbol(npc-bookstore-dog-2), 1);
                         go(setup, 1);
                     } else if (task-active?(mgallant, bookstore-with-buddy)) {
                         spawn-npc(npc-bookstore-dina-1, 0, 0);
@@ -46,34 +46,14 @@ statescript {
                     wait-spawn-npc-group-async(npcs-bookstore, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : npcs-bookstore-upstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npcs-bookstore-upstairs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-upstairs-1);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : npcs-bookstore-downstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npcs-bookstore-downstairs) {
                         if (npc-alive?(var_2)) {
                             npc-set-zone-region(var_2, rgn-zone-downstairs-1);
                         }
@@ -90,17 +70,7 @@ statescript {
         block event unzone-downstairs {
             track main {
                 lambda {
-                    foreach (u64? var_1 : npcs-bookstore-downstairs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : npcs-bookstore-downstairs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -124,21 +94,11 @@ statescript {
                 lambda {
                     if (!get-boolean(reinf-spawned, self) && npc-group-alive-count(npcs-bookstore-outside) == 0 && npc-group-alive-count(npcs-bookstore) < 7) {
                         set-boolean(reinf-spawned, 1, self);
-                        foreach (u64? var_4 : npcs-bookstore-reinf) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : npcs-bookstore-reinf) {
                             u64? var_6 = get-furthest-in-group(bookstore-reinf-spawn-points, player);
                             spawn-entity-at(var_5, get-spawner-locator(var_6, 1), 0);
-                            darray-find-remove(bookstore-reinf-spawn-points, new-boxed-value(7, var_6), 0);
-                            darray-append(npcs-bookstore, new-boxed-value(7, var_5), 1);
+                            darray-find-remove(bookstore-reinf-spawn-points, boxed_symbol(var_6), 0);
+                            darray-append(npcs-bookstore, boxed_symbol(var_5), 1);
                         }
                     }
                 }

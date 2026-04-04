@@ -54,17 +54,7 @@ statescript {
             track main {
                 lambda {
                     if (player-in-region?(rgn-toggle-wat-laundry-1, 2)) {
-                        foreach (u64? var_2 : wat-laundry-hardpoints) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-laundry-hardpoints) {
                             set-hardpoint-enabled(var_3);
                         }
                     }
@@ -97,17 +87,7 @@ statescript {
             track main {
                 lambda {
                     if (!get-svar-as-boolean(wat-explore-laundry-combat-started)) {
-                        foreach (u64? var_2 : wat-laundry-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-laundry-npcs) {
                             u64? var_5 = npc-get-awareness(var_3, player);
                             if (npc-alive?(var_3) || var_5 == 2 || var_5 == 3) {
                                 if (var_5 == 4) {
@@ -116,17 +96,7 @@ statescript {
                             }
                         }
                     } else {
-                        foreach (u64? var_8 : wat-laundry-npcs) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : wat-laundry-npcs) {
                             if (npc-alive?(var_9)) {
                                 if (locator-in-region?(alloc-bound-frame(npc-get-entity-position(var_9, player), 0, 0, 0, 0), rgn-laundry-zone-1, player)) {
                                     var_14 = npc-set-zone-region(var_9, rgn-laundry-zone-1);
@@ -148,17 +118,7 @@ statescript {
             track main {
                 lambda {
                     if (!tension-mode-is?(1)) {
-                        foreach (u64? var_2 : wat-laundry-npcs) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-laundry-npcs) {
                             if (npc-alive?(var_3)) {
                                 set-focusable-ignore(var_3, 0);
                             }
@@ -194,17 +154,7 @@ statescript {
             track main {
                 lambda {
                     if (npc-alive?(npc-wat-laundry-militia-4)) {
-                        foreach (u64? var_2 : wat-laundry-hardpoints) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-laundry-hardpoints) {
                             set-hardpoint-enabled(var_3);
                         }
                     }
@@ -215,17 +165,7 @@ statescript {
             track main {
                 lambda {
                     if (!npc-alive?(npc-wat-laundry-militia-4)) {
-                        foreach (u64? var_2 : wat-laundry-hardpoints) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : wat-laundry-hardpoints) {
                             set-hardpoint-disabled(var_3);
                         }
                     }
@@ -239,17 +179,7 @@ statescript {
                         alloc-point(0.00, 0.00, 0.00, 0);
                         u16 var_3;
                         u64? var_4;
-                        foreach (u64? var_5 : wat-laundry-npcs) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : wat-laundry-npcs) {
                             u16 var_8;
                             u64? var_9;
                             if (npc-alive?(var_6)) {
@@ -270,7 +200,7 @@ statescript {
                             var_4 = var_9;
                         }
                         if (var_3) {
-                            var_18 = send-event(spillover-knowledge, ss-wat-explore-gas-fight-1, new-boxed-value(14, var_4));
+                            var_18 = send-event(spillover-knowledge, ss-wat-explore-gas-fight-1, boxed_point(var_4));
                         }
                     }
                 }
@@ -279,17 +209,7 @@ statescript {
         block event spillover-knowledge {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-laundry-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-laundry-npcs) {
                         if (npc-alive?(var_2)) {
                             if (npc-get-awareness(var_2, player) != 2 && locator-in-region?(get-object-locator(var_2), rgn-laundry-zone-1, player)) {
                                 npc-make-aware-of-at(var_2, player, event-arg-point(0), 2, "", 0);
@@ -314,17 +234,7 @@ statescript {
                 }
                 lambda {
                     if (!npc-alive?(npc-wat-laundry-militia-4) && !player-in-region?(rgn-toggle-wat-laundry-1, 2)) {
-                        foreach (u64? var_3 : wat-laundry-hardpoints) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : wat-laundry-hardpoints) {
                             set-hardpoint-disabled(var_4);
                         }
                     }
@@ -336,17 +246,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : wat-laundry-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : wat-laundry-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }

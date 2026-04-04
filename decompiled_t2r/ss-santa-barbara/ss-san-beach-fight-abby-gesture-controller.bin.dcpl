@@ -84,13 +84,13 @@ statescript {
                 }
                 lambda {
                     u64? var_3 = get-object-distance(get-symbol(abby, self), player);
-                    new-boxed-value(7, true);
-                    u64? var_9 = new-boxed-value(7, false);
+                    boxed_symbol(true);
+                    u64? var_9 = boxed_symbol(false);
                     do-melee-log(
                         "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                        new-boxed-value(6, var_3),
-                        new-boxed-value(6, 2.25),
-                        new-boxed-value(6, 999.00),
+                        boxed_f32(var_3),
+                        boxed_f32(2.25),
+                        boxed_f32(999.00),
                         var_9
                     );
                     while (!get-current-melee-attack(get-symbol(abby, self)) && !(get-symbol(abby, self) == 0) && !(player == 0) && var_3 < 999.00 || var_3 > 2.25 && var_3 > 2.25 || var_3 || var_9 && var_3 > 2.25 && !(get-float(gesture-timer, self) > get-float(gesture-cooldown, self))) {
@@ -110,15 +110,15 @@ statescript {
                         bool var_5 = !(get-symbol(abby, self) == 0) && !(player == 0) && var_3 < 999.00 && var_3 > 2.25;
                         u64? var_9;
                         if (var_5) {
-                            var_9 = new-boxed-value(7, true);
+                            var_9 = boxed_symbol(true);
                         } else {
-                            var_9 = new-boxed-value(7, false);
+                            var_9 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_3),
-                            new-boxed-value(6, 2.25),
-                            new-boxed-value(6, 999.00),
+                            boxed_f32(var_3),
+                            boxed_f32(2.25),
+                            boxed_f32(999.00),
                             var_9
                         );
                         if (var_5) {

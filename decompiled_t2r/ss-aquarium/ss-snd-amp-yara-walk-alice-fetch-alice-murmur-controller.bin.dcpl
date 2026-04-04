@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? amp-alice-murmer-controller--go-to-state(u64? arg_0) {
-    return send-event(go-to-state, ss-snd-amp-yara-walk-alice-fetch-alice-murmur-controller-1, new-boxed-value(7, arg_0));
+    return send-event(go-to-state, ss-snd-amp-yara-walk-alice-fetch-alice-murmur-controller-1, boxed_symbol(arg_0));
 }
 
 statescript {

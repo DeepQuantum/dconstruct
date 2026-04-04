@@ -58,15 +58,15 @@ statescript {
                 lambda {
                     while (!get-animation-playing?(self, tag-symbol(emerge, self), 2)) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-bound-frame(ap-ref-var, self);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_3 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-bound-frame(ap-ref-var, self);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.00;
+                        *(i32*)*var_3[2] = 56;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.00;
                         animate_(self, tag-symbol(emerge, self), var_3);
                         wait-one-frame();
                     }
@@ -76,15 +76,15 @@ statescript {
                         enable-collision(tag-symbol(trap-wrapper, self), 0, 0, 0.00);
                         set-bound-frame(trap-ap-ref-var, get-spawner-locator(tag-symbol(trap-wrapper, self), 1), self);
                         u64? var_5 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-bound-frame(trap-ap-ref-var, self);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_5 + (2 * 8)) = 56;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.00;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-bound-frame(trap-ap-ref-var, self);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.00;
+                        *(i32*)*var_5[2] = 56;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.00;
                         animate_(tag-symbol(trap-wrapper, self), attack, var_5);
                     }
                 }
@@ -216,7 +216,7 @@ statescript {
                     set-boolean(trap-has-emerged?, 1, self);
                 }
                 lambda {
-                    broadcast-event(trap-emerged, new-boxed-value(7, get-self-id()));
+                    broadcast-event(trap-emerged, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     set-overlay-set(self, anim-overlay-infected-runner-level-no-change);
@@ -238,23 +238,23 @@ statescript {
                         set-boolean(fg-enabled?, 1, self);
                         enable-collision(tag-symbol(trap-wrapper, self), 1, 0, 0.00);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-bound-frame(trap-ap-ref-var, self);
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-bound-frame(trap-ap-ref-var, self);
                         animate_(tag-symbol(trap-wrapper, self), attack, var_5);
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(ap-ref-var, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.20;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.30;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(ap-ref-var, self);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.20;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.30;
                     wait-animate_(self, tag-symbol(emerge, self), var_1);
                 }
                 lambda {
@@ -343,9 +343,9 @@ statescript {
                         set-boolean(fg-enabled?, 1, self);
                         enable-collision(tag-symbol(trap-wrapper, self), 1, 0, 0.00);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-bound-frame(trap-ap-ref-var, self);
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-bound-frame(trap-ap-ref-var, self);
                         animate_(tag-symbol(trap-wrapper, self), attack, var_5);
                     }
                 }

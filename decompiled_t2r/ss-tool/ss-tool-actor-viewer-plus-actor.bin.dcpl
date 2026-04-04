@@ -89,17 +89,7 @@ statescript {
         block event clear-actor-viewer {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(actor-and-props, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(actor-and-props, self)) {
                         kill-entity-if-spawned(var_4);
                     }
                 }
@@ -149,17 +139,17 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = ddict-create(self, -1, 0);
-                    ddict-set(var_0, anim, new-boxed-value(7, event-arg-symbol(0)));
-                    ddict-set(var_0, layer, new-boxed-value(2, event-arg-int32(1)));
-                    ddict-set(var_0, fade-in, new-boxed-value(6, event-arg-float(2)));
-                    ddict-set(var_0, fade-out, new-boxed-value(6, event-arg-float(3)));
-                    ddict-set(var_0, fade-in-curve, new-boxed-value(2, event-arg-int32(4)));
-                    ddict-set(var_0, fade-out-curve, new-boxed-value(2, event-arg-int32(5)));
-                    ddict-set(var_0, start-frame, new-boxed-value(6, event-arg-float(6)));
-                    ddict-set(var_0, end-frame, new-boxed-value(6, event-arg-float(7)));
-                    ddict-set(var_0, bundle, new-boxed-value(19, event-arg-string(8)));
-                    ddict-set(var_0, anim-actor, new-boxed-value(19, event-arg-string(9)));
-                    darray-append(get-symbol(anim-darray, self), new-boxed-value(7, var_0), 0);
+                    ddict-set(var_0, anim, boxed_symbol(event-arg-symbol(0)));
+                    ddict-set(var_0, layer, boxed_i32(event-arg-int32(1)));
+                    ddict-set(var_0, fade-in, boxed_f32(event-arg-float(2)));
+                    ddict-set(var_0, fade-out, boxed_f32(event-arg-float(3)));
+                    ddict-set(var_0, fade-in-curve, boxed_i32(event-arg-int32(4)));
+                    ddict-set(var_0, fade-out-curve, boxed_i32(event-arg-int32(5)));
+                    ddict-set(var_0, start-frame, boxed_f32(event-arg-float(6)));
+                    ddict-set(var_0, end-frame, boxed_f32(event-arg-float(7)));
+                    ddict-set(var_0, bundle, boxed_stringcopy(event-arg-string(8)));
+                    ddict-set(var_0, anim-actor, boxed_stringcopy(event-arg-string(9)));
+                    darray-append(get-symbol(anim-darray, self), boxed_symbol(var_0), 0);
                 }
                 lambda {
                     if (event-arg-int32(1) == 0 && get-int32(full-body-anim-index, self) == -1) {
@@ -174,10 +164,10 @@ statescript {
         block event setup-prop-actor {
             track main {
                 lambda {
-                    darray-append(get-symbol(prop-actors, self), new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-append(get-symbol(prop-actors, self), boxed_symbol(event-arg-symbol(0)), 0);
                 }
                 lambda {
-                    darray-append(get-symbol(prop-anims, self), new-boxed-value(7, event-arg-symbol(1)), 0);
+                    darray-append(get-symbol(prop-anims, self), boxed_symbol(event-arg-symbol(1)), 0);
                 }
                 lambda {
                     if (!(event-arg-symbol(2) == None)) {
@@ -192,21 +182,11 @@ statescript {
                     darray-clear(get-symbol(actor-and-props, self));
                 }
                 lambda {
-                    darray-append(get-symbol(actor-and-props, self), new-boxed-value(7, get-symbol(actor, self)), 1);
+                    darray-append(get-symbol(actor-and-props, self), boxed_symbol(get-symbol(actor, self)), 1);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(prop-actors, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(get-symbol(actor-and-props, self), new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-symbol(prop-actors, self)) {
+                        darray-append(get-symbol(actor-and-props, self), boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -264,12 +244,12 @@ statescript {
                                     var_11 = 0;
                                 }
                                 u64? var_12 = #%alloc-array(single-frame, 16, 2, 1);
-                                *(i32*)*(*var_12 + (0 * 8)) = 56;
-                                *(u64*)(*(*var_12 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_12 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                *(i32*)*(*var_12 + (1 * 8)) = 32;
-                                *(u64*)(*(*var_12 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_12 + (1 * 8)) + 8) = 1;
+                                *(i32*)*var_12[0] = 56;
+                                *(u64*)(*var_12[0] + 8) = 0;
+                                *(f32*)(*var_12[0] + 8) = get-float(animation-speed, self);
+                                *(i32*)*var_12[1] = 32;
+                                *(u64*)(*var_12[1] + 8) = 0;
+                                *(u8*)(*var_12[1] + 8) = 1;
                                 animate_(var_8, var_11, var_12);
                             }
                             i = i + 1;
@@ -421,104 +401,104 @@ statescript {
                         }
                         if (var_23 == 1 && !(get-int32(current-anim-index, self) == (get-int32(animation-count, self) - 1))) {
                             u64? var_42 = #%alloc-array(single-frame, 16, 9, 1);
-                            *(i32*)*(*var_42 + (0 * 8)) = 56;
-                            *(u64*)(*(*var_42 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_42 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                            *(i32*)*(*var_42 + (1 * 8)) = 32;
-                            *(u64*)(*(*var_42 + (1 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_42 + (1 * 8)) + 8) = 1;
-                            *(i32*)*(*var_42 + (2 * 8)) = 28;
-                            *(u64*)(*(*var_42 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_42 + (2 * 8)) + 8) = var_25;
-                            *(i32*)*(*var_42 + (3 * 8)) = 27;
-                            *(u64*)(*(*var_42 + (3 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_42 + (3 * 8)) + 8) = get-curve-type(var_30);
-                            *(i32*)*(*var_42 + (4 * 8)) = 30;
-                            *(u64*)(*(*var_42 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_42 + (4 * 8)) + 8) = var_27;
-                            *(i32*)*(*var_42 + (5 * 8)) = 29;
-                            *(u64*)(*(*var_42 + (5 * 8)) + 8) = 0;
-                            *(u8*)(*(*var_42 + (5 * 8)) + 8) = get-curve-type(var_33);
-                            *(i32*)*(*var_42 + (6 * 8)) = 57;
-                            *(u64*)(*(*var_42 + (6 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_42 + (6 * 8)) + 8) = var_35;
-                            *(i32*)*(*var_42 + (7 * 8)) = 20;
-                            *(u64*)(*(*var_42 + (7 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_42 + (7 * 8)) + 8) = var_37;
-                            *(i32*)*(*var_42 + (8 * 8)) = 40;
-                            *(u64*)(*(*var_42 + (8 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_42 + (8 * 8)) + 8) = get-layer-type(var_23);
+                            *(i32*)*var_42[0] = 56;
+                            *(u64*)(*var_42[0] + 8) = 0;
+                            *(f32*)(*var_42[0] + 8) = get-float(animation-speed, self);
+                            *(i32*)*var_42[1] = 32;
+                            *(u64*)(*var_42[1] + 8) = 0;
+                            *(u8*)(*var_42[1] + 8) = 1;
+                            *(i32*)*var_42[2] = 28;
+                            *(u64*)(*var_42[2] + 8) = 0;
+                            *(f32*)(*var_42[2] + 8) = var_25;
+                            *(i32*)*var_42[3] = 27;
+                            *(u64*)(*var_42[3] + 8) = 0;
+                            *(u8*)(*var_42[3] + 8) = get-curve-type(var_30);
+                            *(i32*)*var_42[4] = 30;
+                            *(u64*)(*var_42[4] + 8) = 0;
+                            *(f32*)(*var_42[4] + 8) = var_27;
+                            *(i32*)*var_42[5] = 29;
+                            *(u64*)(*var_42[5] + 8) = 0;
+                            *(u8*)(*var_42[5] + 8) = get-curve-type(var_33);
+                            *(i32*)*var_42[6] = 57;
+                            *(u64*)(*var_42[6] + 8) = 0;
+                            *(f32*)(*var_42[6] + 8) = var_35;
+                            *(i32*)*var_42[7] = 20;
+                            *(u64*)(*var_42[7] + 8) = 0;
+                            *(f32*)(*var_42[7] + 8) = var_37;
+                            *(i32*)*var_42[8] = 40;
+                            *(u64*)(*var_42[8] + 8) = 0;
+                            *(i32*)(*var_42[8] + 8) = get-layer-type(var_23);
                             var_40 = animate_(get-symbol(actor, self), var_21, var_42);
                         } else {
-                            send-event(anim-changed, actorviewerplus, new-boxed-value(7, get-symbol(actor, self)));
+                            send-event(anim-changed, actorviewerplus, boxed_symbol(get-symbol(actor, self)));
                             if (get-boolean(animate-align?, self)) {
                                 u64? var_52 = #%alloc-array(single-frame, 16, 9, 1);
-                                *(i32*)*(*var_52 + (0 * 8)) = 56;
-                                *(u64*)(*(*var_52 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_52 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                *(i32*)*(*var_52 + (1 * 8)) = 32;
-                                *(u64*)(*(*var_52 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_52 + (1 * 8)) + 8) = 1;
-                                *(i32*)*(*var_52 + (2 * 8)) = 28;
-                                *(u64*)(*(*var_52 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_52 + (2 * 8)) + 8) = var_25;
-                                *(i32*)*(*var_52 + (3 * 8)) = 27;
-                                *(u64*)(*(*var_52 + (3 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_52 + (3 * 8)) + 8) = get-curve-type(var_30);
-                                *(i32*)*(*var_52 + (4 * 8)) = 30;
-                                *(u64*)(*(*var_52 + (4 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_52 + (4 * 8)) + 8) = var_27;
-                                *(i32*)*(*var_52 + (5 * 8)) = 29;
-                                *(u64*)(*(*var_52 + (5 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_52 + (5 * 8)) + 8) = get-curve-type(var_33);
-                                *(i32*)*(*var_52 + (6 * 8)) = 57;
-                                *(u64*)(*(*var_52 + (6 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_52 + (6 * 8)) + 8) = var_35;
-                                *(i32*)*(*var_52 + (7 * 8)) = 20;
-                                *(u64*)(*(*var_52 + (7 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_52 + (7 * 8)) + 8) = var_37;
-                                *(i32*)*(*var_52 + (8 * 8)) = 40;
-                                *(u64*)(*(*var_52 + (8 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_52 + (8 * 8)) + 8) = get-layer-type(var_23);
+                                *(i32*)*var_52[0] = 56;
+                                *(u64*)(*var_52[0] + 8) = 0;
+                                *(f32*)(*var_52[0] + 8) = get-float(animation-speed, self);
+                                *(i32*)*var_52[1] = 32;
+                                *(u64*)(*var_52[1] + 8) = 0;
+                                *(u8*)(*var_52[1] + 8) = 1;
+                                *(i32*)*var_52[2] = 28;
+                                *(u64*)(*var_52[2] + 8) = 0;
+                                *(f32*)(*var_52[2] + 8) = var_25;
+                                *(i32*)*var_52[3] = 27;
+                                *(u64*)(*var_52[3] + 8) = 0;
+                                *(u8*)(*var_52[3] + 8) = get-curve-type(var_30);
+                                *(i32*)*var_52[4] = 30;
+                                *(u64*)(*var_52[4] + 8) = 0;
+                                *(f32*)(*var_52[4] + 8) = var_27;
+                                *(i32*)*var_52[5] = 29;
+                                *(u64*)(*var_52[5] + 8) = 0;
+                                *(u8*)(*var_52[5] + 8) = get-curve-type(var_33);
+                                *(i32*)*var_52[6] = 57;
+                                *(u64*)(*var_52[6] + 8) = 0;
+                                *(f32*)(*var_52[6] + 8) = var_35;
+                                *(i32*)*var_52[7] = 20;
+                                *(u64*)(*var_52[7] + 8) = 0;
+                                *(f32*)(*var_52[7] + 8) = var_37;
+                                *(i32*)*var_52[8] = 40;
+                                *(u64*)(*var_52[8] + 8) = 0;
+                                *(i32*)(*var_52[8] + 8) = get-layer-type(var_23);
                                 var_40 = wait-animate_(get-symbol(actor, self), var_21, var_52);
                             } else {
                                 u64? var_59 = #%alloc-array(single-frame, 16, 10, 1);
-                                *(i32*)*(*var_59 + (0 * 8)) = 56;
-                                *(u64*)(*(*var_59 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_59 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                *(i32*)*(*var_59 + (1 * 8)) = 32;
-                                *(u64*)(*(*var_59 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_59 + (1 * 8)) + 8) = 1;
-                                *(i32*)*(*var_59 + (2 * 8)) = 28;
-                                *(u64*)(*(*var_59 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_59 + (2 * 8)) + 8) = var_25;
-                                *(i32*)*(*var_59 + (3 * 8)) = 27;
-                                *(u64*)(*(*var_59 + (3 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_59 + (3 * 8)) + 8) = get-curve-type(var_30);
-                                *(i32*)*(*var_59 + (4 * 8)) = 30;
-                                *(u64*)(*(*var_59 + (4 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_59 + (4 * 8)) + 8) = var_27;
-                                *(i32*)*(*var_59 + (5 * 8)) = 29;
-                                *(u64*)(*(*var_59 + (5 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_59 + (5 * 8)) + 8) = get-curve-type(var_33);
-                                *(i32*)*(*var_59 + (6 * 8)) = 57;
-                                *(u64*)(*(*var_59 + (6 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_59 + (6 * 8)) + 8) = var_35;
-                                *(i32*)*(*var_59 + (7 * 8)) = 20;
-                                *(u64*)(*(*var_59 + (7 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_59 + (7 * 8)) + 8) = var_37;
-                                *(i32*)*(*var_59 + (8 * 8)) = 40;
-                                *(u64*)(*(*var_59 + (8 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_59 + (8 * 8)) + 8) = get-layer-type(var_23);
-                                *(i32*)*(*var_59 + (9 * 8)) = 10;
-                                *(u64*)(*(*var_59 + (9 * 8)) + 8) = 0;
+                                *(i32*)*var_59[0] = 56;
+                                *(u64*)(*var_59[0] + 8) = 0;
+                                *(f32*)(*var_59[0] + 8) = get-float(animation-speed, self);
+                                *(i32*)*var_59[1] = 32;
+                                *(u64*)(*var_59[1] + 8) = 0;
+                                *(u8*)(*var_59[1] + 8) = 1;
+                                *(i32*)*var_59[2] = 28;
+                                *(u64*)(*var_59[2] + 8) = 0;
+                                *(f32*)(*var_59[2] + 8) = var_25;
+                                *(i32*)*var_59[3] = 27;
+                                *(u64*)(*var_59[3] + 8) = 0;
+                                *(u8*)(*var_59[3] + 8) = get-curve-type(var_30);
+                                *(i32*)*var_59[4] = 30;
+                                *(u64*)(*var_59[4] + 8) = 0;
+                                *(f32*)(*var_59[4] + 8) = var_27;
+                                *(i32*)*var_59[5] = 29;
+                                *(u64*)(*var_59[5] + 8) = 0;
+                                *(u8*)(*var_59[5] + 8) = get-curve-type(var_33);
+                                *(i32*)*var_59[6] = 57;
+                                *(u64*)(*var_59[6] + 8) = 0;
+                                *(f32*)(*var_59[6] + 8) = var_35;
+                                *(i32*)*var_59[7] = 20;
+                                *(u64*)(*var_59[7] + 8) = 0;
+                                *(f32*)(*var_59[7] + 8) = var_37;
+                                *(i32*)*var_59[8] = 40;
+                                *(u64*)(*var_59[8] + 8) = 0;
+                                *(i32*)(*var_59[8] + 8) = get-layer-type(var_23);
+                                *(i32*)*var_59[9] = 10;
+                                *(u64*)(*var_59[9] + 8) = 0;
                                 u64? var_67;
                                 if (!get-boolean(loop-current-anim?, self) && !(get-int32(current-anim-index, self) == get-int32(full-body-anim-index, self))) {
                                     var_67 = get-ap-ref-from-align(get-symbol(actor, self), var_21, get-object-locator(get-symbol(actor, self)), 0.00, apReference, 0);
                                 } else {
                                     var_67 = get-object-locator(fpark-actor-viewer-ap-1);
                                 }
-                                *(u64*)(*(*var_59 + (9 * 8)) + 8) = var_67;
+                                *(u64*)(*var_59[9] + 8) = var_67;
                                 var_40 = wait-animate_(get-symbol(actor, self), var_21, var_59);
                             }
                         }
@@ -531,7 +511,7 @@ statescript {
                     wait(0.70);
                     if (get-boolean(loop?, self)) {
                         emit-redis-message("reset-particles");
-                        send-event(anim-sequence-finished, actorviewerplus, new-boxed-value(2, darray-count(get-symbol(actor-and-props, self))));
+                        send-event(anim-sequence-finished, actorviewerplus, boxed_i32(darray-count(get-symbol(actor-and-props, self))));
                     }
                     wait-boolean(is-waiting?, 0, self);
                     set-float(animation-speed, 1.00, self);
@@ -574,12 +554,12 @@ statescript {
                                         var_91 = 0;
                                     }
                                     u64? var_92 = #%alloc-array(single-frame, 16, 2, 1);
-                                    *(i32*)*(*var_92 + (0 * 8)) = 56;
-                                    *(u64*)(*(*var_92 + (0 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_92 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                    *(i32*)*(*var_92 + (1 * 8)) = 32;
-                                    *(u64*)(*(*var_92 + (1 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_92 + (1 * 8)) + 8) = 1;
+                                    *(i32*)*var_92[0] = 56;
+                                    *(u64*)(*var_92[0] + 8) = 0;
+                                    *(f32*)(*var_92[0] + 8) = get-float(animation-speed, self);
+                                    *(i32*)*var_92[1] = 32;
+                                    *(u64*)(*var_92[1] + 8) = 0;
+                                    *(u8*)(*var_92[1] + 8) = 1;
                                     animate_(var_88, var_91, var_92);
                                 }
                                 i = i + 1;
@@ -731,104 +711,104 @@ statescript {
                             }
                             if (var_103 == 1 && !(get-int32(current-anim-index, self) == (get-int32(animation-count, self) - 1))) {
                                 u64? var_122 = #%alloc-array(single-frame, 16, 9, 1);
-                                *(i32*)*(*var_122 + (0 * 8)) = 56;
-                                *(u64*)(*(*var_122 + (0 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_122 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                *(i32*)*(*var_122 + (1 * 8)) = 32;
-                                *(u64*)(*(*var_122 + (1 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_122 + (1 * 8)) + 8) = 1;
-                                *(i32*)*(*var_122 + (2 * 8)) = 28;
-                                *(u64*)(*(*var_122 + (2 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_122 + (2 * 8)) + 8) = var_105;
-                                *(i32*)*(*var_122 + (3 * 8)) = 27;
-                                *(u64*)(*(*var_122 + (3 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_122 + (3 * 8)) + 8) = get-curve-type(var_110);
-                                *(i32*)*(*var_122 + (4 * 8)) = 30;
-                                *(u64*)(*(*var_122 + (4 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_122 + (4 * 8)) + 8) = var_107;
-                                *(i32*)*(*var_122 + (5 * 8)) = 29;
-                                *(u64*)(*(*var_122 + (5 * 8)) + 8) = 0;
-                                *(u8*)(*(*var_122 + (5 * 8)) + 8) = get-curve-type(var_113);
-                                *(i32*)*(*var_122 + (6 * 8)) = 57;
-                                *(u64*)(*(*var_122 + (6 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_122 + (6 * 8)) + 8) = var_115;
-                                *(i32*)*(*var_122 + (7 * 8)) = 20;
-                                *(u64*)(*(*var_122 + (7 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_122 + (7 * 8)) + 8) = var_117;
-                                *(i32*)*(*var_122 + (8 * 8)) = 40;
-                                *(u64*)(*(*var_122 + (8 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_122 + (8 * 8)) + 8) = get-layer-type(var_103);
+                                *(i32*)*var_122[0] = 56;
+                                *(u64*)(*var_122[0] + 8) = 0;
+                                *(f32*)(*var_122[0] + 8) = get-float(animation-speed, self);
+                                *(i32*)*var_122[1] = 32;
+                                *(u64*)(*var_122[1] + 8) = 0;
+                                *(u8*)(*var_122[1] + 8) = 1;
+                                *(i32*)*var_122[2] = 28;
+                                *(u64*)(*var_122[2] + 8) = 0;
+                                *(f32*)(*var_122[2] + 8) = var_105;
+                                *(i32*)*var_122[3] = 27;
+                                *(u64*)(*var_122[3] + 8) = 0;
+                                *(u8*)(*var_122[3] + 8) = get-curve-type(var_110);
+                                *(i32*)*var_122[4] = 30;
+                                *(u64*)(*var_122[4] + 8) = 0;
+                                *(f32*)(*var_122[4] + 8) = var_107;
+                                *(i32*)*var_122[5] = 29;
+                                *(u64*)(*var_122[5] + 8) = 0;
+                                *(u8*)(*var_122[5] + 8) = get-curve-type(var_113);
+                                *(i32*)*var_122[6] = 57;
+                                *(u64*)(*var_122[6] + 8) = 0;
+                                *(f32*)(*var_122[6] + 8) = var_115;
+                                *(i32*)*var_122[7] = 20;
+                                *(u64*)(*var_122[7] + 8) = 0;
+                                *(f32*)(*var_122[7] + 8) = var_117;
+                                *(i32*)*var_122[8] = 40;
+                                *(u64*)(*var_122[8] + 8) = 0;
+                                *(i32*)(*var_122[8] + 8) = get-layer-type(var_103);
                                 var_120 = animate_(get-symbol(actor, self), var_101, var_122);
                             } else {
-                                send-event(anim-changed, actorviewerplus, new-boxed-value(7, get-symbol(actor, self)));
+                                send-event(anim-changed, actorviewerplus, boxed_symbol(get-symbol(actor, self)));
                                 if (get-boolean(animate-align?, self)) {
                                     u64? var_132 = #%alloc-array(single-frame, 16, 9, 1);
-                                    *(i32*)*(*var_132 + (0 * 8)) = 56;
-                                    *(u64*)(*(*var_132 + (0 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_132 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                    *(i32*)*(*var_132 + (1 * 8)) = 32;
-                                    *(u64*)(*(*var_132 + (1 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_132 + (1 * 8)) + 8) = 1;
-                                    *(i32*)*(*var_132 + (2 * 8)) = 28;
-                                    *(u64*)(*(*var_132 + (2 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_132 + (2 * 8)) + 8) = var_105;
-                                    *(i32*)*(*var_132 + (3 * 8)) = 27;
-                                    *(u64*)(*(*var_132 + (3 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_132 + (3 * 8)) + 8) = get-curve-type(var_110);
-                                    *(i32*)*(*var_132 + (4 * 8)) = 30;
-                                    *(u64*)(*(*var_132 + (4 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_132 + (4 * 8)) + 8) = var_107;
-                                    *(i32*)*(*var_132 + (5 * 8)) = 29;
-                                    *(u64*)(*(*var_132 + (5 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_132 + (5 * 8)) + 8) = get-curve-type(var_113);
-                                    *(i32*)*(*var_132 + (6 * 8)) = 57;
-                                    *(u64*)(*(*var_132 + (6 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_132 + (6 * 8)) + 8) = var_115;
-                                    *(i32*)*(*var_132 + (7 * 8)) = 20;
-                                    *(u64*)(*(*var_132 + (7 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_132 + (7 * 8)) + 8) = var_117;
-                                    *(i32*)*(*var_132 + (8 * 8)) = 40;
-                                    *(u64*)(*(*var_132 + (8 * 8)) + 8) = 0;
-                                    *(i32*)(*(*var_132 + (8 * 8)) + 8) = get-layer-type(var_103);
+                                    *(i32*)*var_132[0] = 56;
+                                    *(u64*)(*var_132[0] + 8) = 0;
+                                    *(f32*)(*var_132[0] + 8) = get-float(animation-speed, self);
+                                    *(i32*)*var_132[1] = 32;
+                                    *(u64*)(*var_132[1] + 8) = 0;
+                                    *(u8*)(*var_132[1] + 8) = 1;
+                                    *(i32*)*var_132[2] = 28;
+                                    *(u64*)(*var_132[2] + 8) = 0;
+                                    *(f32*)(*var_132[2] + 8) = var_105;
+                                    *(i32*)*var_132[3] = 27;
+                                    *(u64*)(*var_132[3] + 8) = 0;
+                                    *(u8*)(*var_132[3] + 8) = get-curve-type(var_110);
+                                    *(i32*)*var_132[4] = 30;
+                                    *(u64*)(*var_132[4] + 8) = 0;
+                                    *(f32*)(*var_132[4] + 8) = var_107;
+                                    *(i32*)*var_132[5] = 29;
+                                    *(u64*)(*var_132[5] + 8) = 0;
+                                    *(u8*)(*var_132[5] + 8) = get-curve-type(var_113);
+                                    *(i32*)*var_132[6] = 57;
+                                    *(u64*)(*var_132[6] + 8) = 0;
+                                    *(f32*)(*var_132[6] + 8) = var_115;
+                                    *(i32*)*var_132[7] = 20;
+                                    *(u64*)(*var_132[7] + 8) = 0;
+                                    *(f32*)(*var_132[7] + 8) = var_117;
+                                    *(i32*)*var_132[8] = 40;
+                                    *(u64*)(*var_132[8] + 8) = 0;
+                                    *(i32*)(*var_132[8] + 8) = get-layer-type(var_103);
                                     var_120 = wait-animate_(get-symbol(actor, self), var_101, var_132);
                                 } else {
                                     u64? var_139 = #%alloc-array(single-frame, 16, 10, 1);
-                                    *(i32*)*(*var_139 + (0 * 8)) = 56;
-                                    *(u64*)(*(*var_139 + (0 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_139 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                                    *(i32*)*(*var_139 + (1 * 8)) = 32;
-                                    *(u64*)(*(*var_139 + (1 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_139 + (1 * 8)) + 8) = 1;
-                                    *(i32*)*(*var_139 + (2 * 8)) = 28;
-                                    *(u64*)(*(*var_139 + (2 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_139 + (2 * 8)) + 8) = var_105;
-                                    *(i32*)*(*var_139 + (3 * 8)) = 27;
-                                    *(u64*)(*(*var_139 + (3 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_139 + (3 * 8)) + 8) = get-curve-type(var_110);
-                                    *(i32*)*(*var_139 + (4 * 8)) = 30;
-                                    *(u64*)(*(*var_139 + (4 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_139 + (4 * 8)) + 8) = var_107;
-                                    *(i32*)*(*var_139 + (5 * 8)) = 29;
-                                    *(u64*)(*(*var_139 + (5 * 8)) + 8) = 0;
-                                    *(u8*)(*(*var_139 + (5 * 8)) + 8) = get-curve-type(var_113);
-                                    *(i32*)*(*var_139 + (6 * 8)) = 57;
-                                    *(u64*)(*(*var_139 + (6 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_139 + (6 * 8)) + 8) = var_115;
-                                    *(i32*)*(*var_139 + (7 * 8)) = 20;
-                                    *(u64*)(*(*var_139 + (7 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_139 + (7 * 8)) + 8) = var_117;
-                                    *(i32*)*(*var_139 + (8 * 8)) = 40;
-                                    *(u64*)(*(*var_139 + (8 * 8)) + 8) = 0;
-                                    *(i32*)(*(*var_139 + (8 * 8)) + 8) = get-layer-type(var_103);
-                                    *(i32*)*(*var_139 + (9 * 8)) = 10;
-                                    *(u64*)(*(*var_139 + (9 * 8)) + 8) = 0;
+                                    *(i32*)*var_139[0] = 56;
+                                    *(u64*)(*var_139[0] + 8) = 0;
+                                    *(f32*)(*var_139[0] + 8) = get-float(animation-speed, self);
+                                    *(i32*)*var_139[1] = 32;
+                                    *(u64*)(*var_139[1] + 8) = 0;
+                                    *(u8*)(*var_139[1] + 8) = 1;
+                                    *(i32*)*var_139[2] = 28;
+                                    *(u64*)(*var_139[2] + 8) = 0;
+                                    *(f32*)(*var_139[2] + 8) = var_105;
+                                    *(i32*)*var_139[3] = 27;
+                                    *(u64*)(*var_139[3] + 8) = 0;
+                                    *(u8*)(*var_139[3] + 8) = get-curve-type(var_110);
+                                    *(i32*)*var_139[4] = 30;
+                                    *(u64*)(*var_139[4] + 8) = 0;
+                                    *(f32*)(*var_139[4] + 8) = var_107;
+                                    *(i32*)*var_139[5] = 29;
+                                    *(u64*)(*var_139[5] + 8) = 0;
+                                    *(u8*)(*var_139[5] + 8) = get-curve-type(var_113);
+                                    *(i32*)*var_139[6] = 57;
+                                    *(u64*)(*var_139[6] + 8) = 0;
+                                    *(f32*)(*var_139[6] + 8) = var_115;
+                                    *(i32*)*var_139[7] = 20;
+                                    *(u64*)(*var_139[7] + 8) = 0;
+                                    *(f32*)(*var_139[7] + 8) = var_117;
+                                    *(i32*)*var_139[8] = 40;
+                                    *(u64*)(*var_139[8] + 8) = 0;
+                                    *(i32*)(*var_139[8] + 8) = get-layer-type(var_103);
+                                    *(i32*)*var_139[9] = 10;
+                                    *(u64*)(*var_139[9] + 8) = 0;
                                     u64? var_147;
                                     if (!get-boolean(loop-current-anim?, self) && !(get-int32(current-anim-index, self) == get-int32(full-body-anim-index, self))) {
                                         var_147 = get-ap-ref-from-align(get-symbol(actor, self), var_101, get-object-locator(get-symbol(actor, self)), 0.00, apReference, 0);
                                     } else {
                                         var_147 = get-object-locator(fpark-actor-viewer-ap-1);
                                     }
-                                    *(u64*)(*(*var_139 + (9 * 8)) + 8) = var_147;
+                                    *(u64*)(*var_139[9] + 8) = var_147;
                                     var_120 = wait-animate_(get-symbol(actor, self), var_101, var_139);
                                 }
                             }
@@ -841,7 +821,7 @@ statescript {
                         wait(0.70);
                         if (get-boolean(loop?, self)) {
                             emit-redis-message("reset-particles");
-                            send-event(anim-sequence-finished, actorviewerplus, new-boxed-value(2, darray-count(get-symbol(actor-and-props, self))));
+                            send-event(anim-sequence-finished, actorviewerplus, boxed_i32(darray-count(get-symbol(actor-and-props, self))));
                         }
                         wait-boolean(is-waiting?, 0, self);
                         set-float(animation-speed, 1.00, self);
@@ -903,17 +883,7 @@ statescript {
                     u64? var_3 = get-animation-speed(var_2, 2, 0);
                     if (get-boolean(step-through-frame?, self)) {
                         if (var_3 == 1.00 && var_3 == -1.00) {
-                            foreach (u64? var_8 : get-symbol(actor-and-props, self)) {
-                                u16 var_9;
-                                if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                    var_9 = *(u64*)var_8;
-                                } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                    var_9 = *(u64*)var_8;
-                                } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                    var_9 = *(u64*)var_8;
-                                } else {
-                                    var_9 = 0;
-                                }
+                            foreach (u64? var_9 : get-symbol(actor-and-props, self)) {
                                 set-animation-speed(var_9, 0.00, 2, 0);
                             }
                         }
@@ -942,38 +912,18 @@ statescript {
                             } else {
                                 set-boolean(loop-current-anim?, 1, self);
                             }
-                            var_12 = send-event(toggled-single-looping, actorviewerplus, new-boxed-value(7, get-symbol(actor, self)));
+                            var_12 = send-event(toggled-single-looping, actorviewerplus, boxed_symbol(get-symbol(actor, self)));
                         }
                     } else {
                         if (shared-joypad-active?(debug-script-press-x)) {
                             if (!get-boolean(is-waiting?, self)) {
                                 if (var_3 == 1.00) {
-                                    foreach (u64? var_29 : get-symbol(actor-and-props, self)) {
-                                        u16 var_30;
-                                        if (var_29 && *(u16*)(var_29 + 12) == 7) {
-                                            var_30 = *(u64*)var_29;
-                                        } else if (var_29 && *(u16*)(var_29 + 12) == 5) {
-                                            var_30 = *(u64*)var_29;
-                                        } else if (var_29 && *(u16*)(var_29 + 12) == 4) {
-                                            var_30 = *(u64*)var_29;
-                                        } else {
-                                            var_30 = 0;
-                                        }
+                                    foreach (u64? var_30 : get-symbol(actor-and-props, self)) {
                                         set-animation-speed(var_30, 0.00, 2, 0);
                                     }
                                     set-float(animation-speed, 0.00, self);
                                 } else {
-                                    foreach (u64? var_35 : get-symbol(actor-and-props, self)) {
-                                        u16 var_36;
-                                        if (var_35 && *(u16*)(var_35 + 12) == 7) {
-                                            var_36 = *(u64*)var_35;
-                                        } else if (var_35 && *(u16*)(var_35 + 12) == 5) {
-                                            var_36 = *(u64*)var_35;
-                                        } else if (var_35 && *(u16*)(var_35 + 12) == 4) {
-                                            var_36 = *(u64*)var_35;
-                                        } else {
-                                            var_36 = 0;
-                                        }
+                                    foreach (u64? var_36 : get-symbol(actor-and-props, self)) {
                                         set-animation-speed(var_36, 1.00, 2, 0);
                                     }
                                     set-float(animation-speed, 1.00, self);
@@ -989,17 +939,7 @@ statescript {
                                     set-int32(step-delay?, 0, self);
                                     set-int32(step-delay-max?, 23, self);
                                     set-boolean(step-through-frame?, 1, self);
-                                    foreach (u64? var_44 : get-symbol(actor-and-props, self)) {
-                                        u16 var_45;
-                                        if (var_44 && *(u16*)(var_44 + 12) == 7) {
-                                            var_45 = *(u64*)var_44;
-                                        } else if (var_44 && *(u16*)(var_44 + 12) == 5) {
-                                            var_45 = *(u64*)var_44;
-                                        } else if (var_44 && *(u16*)(var_44 + 12) == 4) {
-                                            var_45 = *(u64*)var_44;
-                                        } else {
-                                            var_45 = 0;
-                                        }
+                                    foreach (u64? var_45 : get-symbol(actor-and-props, self)) {
                                         set-animation-speed(var_45, 1.00, 2, 0);
                                     }
                                 }
@@ -1010,17 +950,7 @@ statescript {
                                 set-int32(step-delay?, 0, self);
                                 set-int32(step-delay-max?, 3, self);
                                 set-boolean(step-through-frame?, 1, self);
-                                foreach (u64? var_53 : get-symbol(actor-and-props, self)) {
-                                    u16 var_54;
-                                    if (var_53 && *(u16*)(var_53 + 12) == 7) {
-                                        var_54 = *(u64*)var_53;
-                                    } else if (var_53 && *(u16*)(var_53 + 12) == 5) {
-                                        var_54 = *(u64*)var_53;
-                                    } else if (var_53 && *(u16*)(var_53 + 12) == 4) {
-                                        var_54 = *(u64*)var_53;
-                                    } else {
-                                        var_54 = 0;
-                                    }
+                                foreach (u64? var_54 : get-symbol(actor-and-props, self)) {
                                     set-animation-speed(var_54, 1.00, 2, 0);
                                 }
                             } else {
@@ -1033,17 +963,7 @@ statescript {
                                     set-int32(step-delay?, 0, self);
                                     set-int32(step-delay-max?, 23, self);
                                     set-boolean(step-through-frame?, 1, self);
-                                    foreach (u64? var_61 : get-symbol(actor-and-props, self)) {
-                                        u16 var_62;
-                                        if (var_61 && *(u16*)(var_61 + 12) == 7) {
-                                            var_62 = *(u64*)var_61;
-                                        } else if (var_61 && *(u16*)(var_61 + 12) == 5) {
-                                            var_62 = *(u64*)var_61;
-                                        } else if (var_61 && *(u16*)(var_61 + 12) == 4) {
-                                            var_62 = *(u64*)var_61;
-                                        } else {
-                                            var_62 = 0;
-                                        }
+                                    foreach (u64? var_62 : get-symbol(actor-and-props, self)) {
                                         set-animation-speed(var_62, -1.00, 2, 0);
                                     }
                                 }
@@ -1108,17 +1028,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(actor-and-props, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(actor-and-props, self)) {
                         stop-animating(var_4, 2, 0.00, 0, 0);
                     }
                 }
@@ -1155,17 +1065,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(actor-and-props, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(actor-and-props, self)) {
                         stop-animating(var_4, 2, 0.00, 0, 0);
                     }
                 }
@@ -1204,24 +1104,24 @@ statescript {
                     get-symbol(anim-actor-mode-anim, self);
                     if (get-boolean(animate-align?, self)) {
                         u64? var_4 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_4 + (0 * 8)) = 56;
-                        *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_4 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                        *(i32*)*(*var_4 + (1 * 8)) = 32;
-                        *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_4 + (1 * 8)) + 8) = 1;
+                        *(i32*)*var_4[0] = 56;
+                        *(u64*)(*var_4[0] + 8) = 0;
+                        *(f32*)(*var_4[0] + 8) = get-float(animation-speed, self);
+                        *(i32*)*var_4[1] = 32;
+                        *(u64*)(*var_4[1] + 8) = 0;
+                        *(u8*)(*var_4[1] + 8) = 1;
                         var_1 = wait-animate_(get-symbol(actor, self), get-symbol(anim-actor-mode-anim, self), var_4);
                     } else {
                         u64? var_9 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 56;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (0 * 8)) + 8) = get-float(animation-speed, self);
-                        *(i32*)*(*var_9 + (1 * 8)) = 32;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_9 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (2 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = get-object-locator(fpark-actor-viewer-ap-1);
+                        *(i32*)*var_9[0] = 56;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(f32*)(*var_9[0] + 8) = get-float(animation-speed, self);
+                        *(i32*)*var_9[1] = 32;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(u8*)(*var_9[1] + 8) = 1;
+                        *(i32*)*var_9[2] = 10;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(u64*)(*var_9[2] + 8) = get-object-locator(fpark-actor-viewer-ap-1);
                         var_1 = wait-animate_(get-symbol(actor, self), get-symbol(anim-actor-mode-anim, self), var_9);
                     }
                 }
@@ -1257,17 +1157,7 @@ statescript {
                     set-boolean(anim-actor-mode?, 0, self);
                 }
                 lambda {
-                    foreach (u64? var_3 : get-symbol(actor-and-props, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(actor-and-props, self)) {
                         stop-animating(var_4, 2, 0.00, 0, 0);
                     }
                 }
@@ -1309,7 +1199,7 @@ statescript {
                             } else {
                                 set-boolean(loop-current-anim?, 1, self);
                             }
-                            var_5 = send-event(toggled-single-looping, actorviewerplus, new-boxed-value(7, get-symbol(actor, self)));
+                            var_5 = send-event(toggled-single-looping, actorviewerplus, boxed_symbol(get-symbol(actor, self)));
                         }
                     } else {
                         if (shared-joypad-active?(debug-script-press-x)) {

@@ -71,7 +71,7 @@ u64? ss-fob-defend-wolf--get-enemy-target(sid arg_0, u64? arg_1) {
     u64? var_11;
     while (darray-count(arg_1) > 0 && !(0 == 0) || 0 == 0 && !(0 == 0) && get-float(time-not-firing, self) > 1.00 || !(0 == 0) && !(!(0 == 0))) {
         u64? var_12 = group-random(arg_1);
-        darray-find-remove(arg_1, new-boxed-value(7, var_12), 0);
+        darray-find-remove(arg_1, boxed_symbol(var_12), 0);
         u64? var_17;
         u16 var_18;
         u16 var_19;
@@ -445,7 +445,7 @@ statescript {
                                     }
                                     if (distance-between-locators-xz(get-object-locator(var_3), get-spawner-locator(var_10, 1)) < 5.00) {
                                         set-symbol(current-target, var_3, self);
-                                        darray-append(fob-defend-taken-npcs, new-boxed-value(7, var_3), 1);
+                                        darray-append(fob-defend-taken-npcs, boxed_symbol(var_3), 1);
                                         set-boolean(quick-kill, 1, self);
                                         go(kill-target, 1);
                                     }
@@ -509,7 +509,7 @@ statescript {
                                     }
                                     if (distance-between-locators-xz(get-object-locator(var_3), get-spawner-locator(var_10, 1)) < 8.00) {
                                         set-symbol(current-target, var_3, self);
-                                        darray-append(fob-defend-taken-npcs, new-boxed-value(7, var_3), 1);
+                                        darray-append(fob-defend-taken-npcs, boxed_symbol(var_3), 1);
                                         set-boolean(quick-kill, 1, self);
                                         go(kill-target, 1);
                                     }
@@ -713,7 +713,7 @@ statescript {
                         if (get-symbol(wolf-attacker, var_0) == get-self-id()) {
                             set-symbol(wolf-attacker, 0, var_0);
                         }
-                        darray-find-remove(fob-defend-taken-npcs, new-boxed-value(7, var_0), 0);
+                        darray-find-remove(fob-defend-taken-npcs, boxed_symbol(var_0), 0);
                         var_1 = set-symbol(current-target, 0, self);
                     }
                 }
@@ -745,7 +745,7 @@ statescript {
                         if (get-symbol(wolf-attacker, var_0) == get-self-id()) {
                             set-symbol(wolf-attacker, 0, var_0);
                         }
-                        darray-find-remove(fob-defend-taken-npcs, new-boxed-value(7, var_0), 0);
+                        darray-find-remove(fob-defend-taken-npcs, boxed_symbol(var_0), 0);
                         npc-cancel-fire-command(self);
                         var_1 = set-symbol(current-target, 0, self);
                     }
@@ -1040,7 +1040,7 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = get-symbol(current-target, self);
-                    send-event(wolf-attacking, var_0, new-boxed-value(7, get-self-id()));
+                    send-event(wolf-attacking, var_0, boxed_symbol(get-self-id()));
                     if (get-int32(rescue-stage, self) == 2 && get-character-health(var_0) > 39) {
                         u64? var_5 = random-int32-min-max(15, 39, 0);
                         set-health-parameters(var_0, 1.00, 0.00, var_5, var_5);
@@ -1098,7 +1098,7 @@ statescript {
                 lambda {
                     u64? var_0 = get-symbol(current-target, self);
                     current-time(1);
-                    send-event(wolf-attacking, var_0, new-boxed-value(7, get-self-id()));
+                    send-event(wolf-attacking, var_0, boxed_symbol(get-self-id()));
                     if (var_0 == npc-fob-defend-scar-roof-1 && get-int32(rescue-stage, self) == 2 && get-character-health(var_0) > 39) {
                         u64? var_5 = random-int32-min-max(15, 39, 0);
                         set-health-parameters(var_0, 1.00, 0.00, var_5, var_5);

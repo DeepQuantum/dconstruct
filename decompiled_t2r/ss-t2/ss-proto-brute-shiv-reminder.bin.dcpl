@@ -75,7 +75,7 @@ statescript {
                             if (joypad-command-active?(melee-attack-shiv, 6)) {
                                 play-no-shiv-error-anim();
                                 if (is-text-to-speech-enabled?() && !text-to-speech-playing?() && enough-time-since-player-fact?(accessibility-shiv-required, 1.00)) {
-                                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_SHIV_REQUIRED), 1, 0, 1);
+                                    speak-text-to-speech-formatted(boxed_symbol(HUD_SHIV_REQUIRED), 1, 0, 1);
                                     var_15 = set-player-fact-time(accessibility-shiv-required);
                                 }
                             }

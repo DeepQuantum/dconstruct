@@ -173,7 +173,7 @@ statescript {
                         var_0 = CHALLENGE_FEED_RUNNER_TO_CLICKER;
                     }
                     if (!(var_0 == 0)) {
-                        var_1 = send-event(activate-new-challenge, ss-challenges-controller-1, new-boxed-value(7, var_0));
+                        var_1 = send-event(activate-new-challenge, ss-challenges-controller-1, boxed_symbol(var_0));
                     }
                 }
             }

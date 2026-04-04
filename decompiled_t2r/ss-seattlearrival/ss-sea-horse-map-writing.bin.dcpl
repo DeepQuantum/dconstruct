@@ -80,19 +80,9 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-horse-note-layers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-horse-note-layers) {
                         f32 var_6;
-                        if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-note-layers, new-boxed-value(7, var_2), 0))) {
+                        if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-note-layers, boxed_symbol(var_2), 0))) {
                             var_6 = 1.00;
                         } else {
                             var_6 = 0.00;
@@ -109,38 +99,18 @@ statescript {
                             }
                             set-svar-bit(sea-horse-poi-check, 4, 1);
                         }
-                        foreach (u64? var_6 : sea-horse-map-Q-layers) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : sea-horse-map-Q-layers) {
                             f32 var_11;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, new-boxed-value(7, var_7), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, boxed_symbol(var_7), 0))) {
                                 var_11 = 0.25;
                             } else {
                                 var_11 = 0.00;
                             }
                             set-table-shader-material-values-param(var_7, var_11);
                         }
-                        foreach (u64? var_14 : sea-horse-map-X-layers) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : sea-horse-map-X-layers) {
                             f32 var_19;
-                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_15), 0))) {
+                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-horse-map-X-layers, boxed_symbol(var_15), 0))) {
                                 var_19 = 0.25;
                             } else {
                                 var_19 = 0.00;
@@ -168,30 +138,10 @@ statescript {
                             }
                         }
                     } else {
-                        foreach (u64? var_29 : sea-horse-map-Q-layers) {
-                            u16 var_30;
-                            if (var_29 && *(u16*)(var_29 + 12) == 7) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 5) {
-                                var_30 = *(u64*)var_29;
-                            } else if (var_29 && *(u16*)(var_29 + 12) == 4) {
-                                var_30 = *(u64*)var_29;
-                            } else {
-                                var_30 = 0;
-                            }
+                        foreach (u64? var_30 : sea-horse-map-Q-layers) {
                             set-table-shader-material-values-param(var_30, 0.00);
                         }
-                        foreach (u64? var_33 : sea-horse-map-X-layers) {
-                            u16 var_34;
-                            if (var_33 && *(u16*)(var_33 + 12) == 7) {
-                                var_34 = *(u64*)var_33;
-                            } else if (var_33 && *(u16*)(var_33 + 12) == 5) {
-                                var_34 = *(u64*)var_33;
-                            } else if (var_33 && *(u16*)(var_33 + 12) == 4) {
-                                var_34 = *(u64*)var_33;
-                            } else {
-                                var_34 = 0;
-                            }
+                        foreach (u64? var_34 : sea-horse-map-X-layers) {
                             set-table-shader-material-values-param(var_34, 0.00);
                         }
                         set-table-shader-material-values-param(*sea-horse-map-phase2*, 0.00);
@@ -257,41 +207,21 @@ statescript {
                             }
                             set-svar-bit(sea-horse-poi-check, 4, 1);
                         }
-                        foreach (u64? var_6 : sea-horse-map-Q-layers) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : sea-horse-map-Q-layers) {
                             f32 var_11;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, new-boxed-value(7, var_7), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, boxed_symbol(var_7), 0))) {
                                 var_11 = 0.25;
                             } else {
                                 var_11 = 0.00;
                             }
                             set-table-shader-material-values-param(var_7, var_11);
-                            if (get-int32-bit(fresh-q-adds, darray-find(sea-horse-map-Q-layers, new-boxed-value(7, var_7), 0), self)) {
+                            if (get-int32-bit(fresh-q-adds, darray-find(sea-horse-map-Q-layers, boxed_symbol(var_7), 0), self)) {
                                 set-table-shader-material-values-param(var_7, 1.00);
                             }
                         }
-                        foreach (u64? var_17 : sea-horse-map-X-layers) {
-                            u16 var_18;
-                            if (var_17 && *(u16*)(var_17 + 12) == 7) {
-                                var_18 = *(u64*)var_17;
-                            } else if (var_17 && *(u16*)(var_17 + 12) == 5) {
-                                var_18 = *(u64*)var_17;
-                            } else if (var_17 && *(u16*)(var_17 + 12) == 4) {
-                                var_18 = *(u64*)var_17;
-                            } else {
-                                var_18 = 0;
-                            }
+                        foreach (u64? var_18 : sea-horse-map-X-layers) {
                             f32 var_22;
-                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_18), 0))) {
+                            if (get-svar-bit(sea-horse-poi-comp, darray-find(sea-horse-map-X-layers, boxed_symbol(var_18), 0))) {
                                 var_22 = 0.25;
                             } else {
                                 var_22 = 0.00;
@@ -304,18 +234,8 @@ statescript {
                         if (get-svar-bit(sea-horse-poi-comp, 2)) {
                             set-table-shader-material-values-param(*sea-horse-map-dome-X*, 0.25);
                         }
-                        foreach (u64? var_27 : sea-horse-map-X-layers) {
-                            u16 var_28;
-                            if (var_27 && *(u16*)(var_27 + 12) == 7) {
-                                var_28 = *(u64*)var_27;
-                            } else if (var_27 && *(u16*)(var_27 + 12) == 5) {
-                                var_28 = *(u64*)var_27;
-                            } else if (var_27 && *(u16*)(var_27 + 12) == 4) {
-                                var_28 = *(u64*)var_27;
-                            } else {
-                                var_28 = 0;
-                            }
-                            if (get-int32-bit(fresh-x-adds, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_28), 0), self)) {
+                        foreach (u64? var_28 : sea-horse-map-X-layers) {
+                            if (get-int32-bit(fresh-x-adds, darray-find(sea-horse-map-X-layers, boxed_symbol(var_28), 0), self)) {
                                 set-table-shader-material-values-param(var_28, 1.00);
                             }
                         }
@@ -346,30 +266,10 @@ statescript {
                             set-table-shader-material-values-param(*sea-horse-map-need-gas*, 0.25);
                             set-svar-bit(sea-horse-poi-check, 4, 1);
                         }
-                        foreach (u64? var_43 : sea-horse-map-Q-layers) {
-                            u16 var_44;
-                            if (var_43 && *(u16*)(var_43 + 12) == 7) {
-                                var_44 = *(u64*)var_43;
-                            } else if (var_43 && *(u16*)(var_43 + 12) == 5) {
-                                var_44 = *(u64*)var_43;
-                            } else if (var_43 && *(u16*)(var_43 + 12) == 4) {
-                                var_44 = *(u64*)var_43;
-                            } else {
-                                var_44 = 0;
-                            }
+                        foreach (u64? var_44 : sea-horse-map-Q-layers) {
                             set-table-shader-material-values-param(var_44, 0.00);
                         }
-                        foreach (u64? var_47 : sea-horse-map-X-layers) {
-                            u16 var_48;
-                            if (var_47 && *(u16*)(var_47 + 12) == 7) {
-                                var_48 = *(u64*)var_47;
-                            } else if (var_47 && *(u16*)(var_47 + 12) == 5) {
-                                var_48 = *(u64*)var_47;
-                            } else if (var_47 && *(u16*)(var_47 + 12) == 4) {
-                                var_48 = *(u64*)var_47;
-                            } else {
-                                var_48 = 0;
-                            }
+                        foreach (u64? var_48 : sea-horse-map-X-layers) {
                             set-table-shader-material-values-param(var_48, 0.00);
                         }
                         set-table-shader-material-values-param(*sea-horse-map-phase2*, 0.00);
@@ -416,33 +316,13 @@ statescript {
             track main {
                 lambda {
                     if (*(u8*)*mburro-test*) {
-                        foreach (u64? var_1 : sea-horse-map-Q-layers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : sea-horse-map-Q-layers) {
                             set-table-shader-material-values-param(var_2, 0.25);
                         }
                     } else {
-                        foreach (u64? var_5 : sea-horse-map-Q-layers) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : sea-horse-map-Q-layers) {
                             f32 var_10;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, new-boxed-value(7, var_6), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, boxed_symbol(var_6), 0))) {
                                 var_10 = 0.25;
                             } else {
                                 var_10 = 0.00;
@@ -453,33 +333,13 @@ statescript {
                 }
                 lambda {
                     if (*(u8*)(*mburro-test* + 1)) {
-                        foreach (u64? var_1 : sea-horse-map-X-layers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : sea-horse-map-X-layers) {
                             set-table-shader-material-values-param(var_2, 0.25);
                         }
                     } else {
-                        foreach (u64? var_5 : sea-horse-map-X-layers) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : sea-horse-map-X-layers) {
                             f32 var_10;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_6), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, boxed_symbol(var_6), 0))) {
                                 var_10 = 0.25;
                             } else {
                                 var_10 = 0.00;
@@ -813,19 +673,9 @@ statescript {
         block event done-with-investigate {
             track main {
                 lambda {
-                    foreach (u64? var_1 : sea-horse-map-X-layers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : sea-horse-map-X-layers) {
                         f32 var_6;
-                        if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_2), 0))) {
+                        if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, boxed_symbol(var_2), 0))) {
                             var_6 = 0.25;
                         } else {
                             var_6 = 0.00;
@@ -858,7 +708,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(tent-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 14), new-boxed-value(6, 1.80));
+                        send-event(complete-poi, self, boxed_i32(14), boxed_f32(1.80));
                     }
                 }
             }
@@ -870,7 +720,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(tent-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 14), new-boxed-value(6, 1.80));
+                        send-event(complete-poi, self, boxed_i32(14), boxed_f32(1.80));
                     }
                 }
             }
@@ -882,7 +732,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(tent-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 14), new-boxed-value(6, 1.80));
+                        send-event(complete-poi, self, boxed_i32(14), boxed_f32(1.80));
                     }
                 }
             }
@@ -894,7 +744,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(tent-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 14), new-boxed-value(6, 1.80));
+                        send-event(complete-poi, self, boxed_i32(14), boxed_f32(1.80));
                     }
                 }
             }
@@ -903,7 +753,7 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(tent-count, self) > 1) {
-                        send-event(complete-poi, self, new-boxed-value(2, 14), new-boxed-value(6, 0.30));
+                        send-event(complete-poi, self, boxed_i32(14), boxed_f32(0.30));
                     }
                 }
             }
@@ -911,7 +761,7 @@ statescript {
         block event player-requested-interact {
             track main {
                 lambda {
-                    send-event(complete-poi, self, new-boxed-value(2, 8), new-boxed-value(6, 0.60));
+                    send-event(complete-poi, self, boxed_i32(8), boxed_f32(0.60));
                 }
             }
         }
@@ -942,7 +792,7 @@ statescript {
                     wait(0.60);
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 16));
+                    send-event(enter-poi, self, boxed_i32(16));
                 }
             }
         }
@@ -953,7 +803,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(ruins-done, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 12), new-boxed-value(6, 3.50));
+                        send-event(complete-poi, self, boxed_i32(12), boxed_f32(3.50));
                         send-event(complete-old-city-hall, ss-vox-sea-hub-trucks-1);
                     }
                 }
@@ -966,7 +816,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(ruins-done, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 12), new-boxed-value(6, 3.50));
+                        send-event(complete-poi, self, boxed_i32(12), boxed_f32(3.50));
                         send-event(complete-old-city-hall, ss-vox-sea-hub-trucks-1);
                     }
                 }
@@ -979,7 +829,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(ruins-done, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 12), new-boxed-value(6, 3.50));
+                        send-event(complete-poi, self, boxed_i32(12), boxed_f32(3.50));
                         send-event(complete-old-city-hall, ss-vox-sea-hub-trucks-1);
                     }
                 }
@@ -992,7 +842,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(ruins-done, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 12), new-boxed-value(6, 3.50));
+                        send-event(complete-poi, self, boxed_i32(12), boxed_f32(3.50));
                         send-event(complete-old-city-hall, ss-vox-sea-hub-trucks-1);
                     }
                 }
@@ -1003,7 +853,7 @@ statescript {
                 lambda {
                     if (get-int32(ruins-done, self) > 1) {
                         set-boolean(ruins-done, 0, self);
-                        send-event(complete-poi, self, new-boxed-value(2, 12), new-boxed-value(6, 1.00));
+                        send-event(complete-poi, self, boxed_i32(12), boxed_f32(1.00));
                         send-event(complete-old-city-hall, ss-vox-sea-hub-trucks-1);
                     }
                 }
@@ -1023,7 +873,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(checkpt-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 16), new-boxed-value(6, 3.00));
+                        send-event(complete-poi, self, boxed_i32(16), boxed_f32(3.00));
                     }
                 }
             }
@@ -1035,7 +885,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(checkpt-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 16), new-boxed-value(6, 3.00));
+                        send-event(complete-poi, self, boxed_i32(16), boxed_f32(3.00));
                     }
                 }
             }
@@ -1047,7 +897,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(checkpt-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 16), new-boxed-value(6, 3.00));
+                        send-event(complete-poi, self, boxed_i32(16), boxed_f32(3.00));
                     }
                 }
             }
@@ -1059,7 +909,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(checkpt-count, self) > 3) {
-                        send-event(complete-poi, self, new-boxed-value(2, 16), new-boxed-value(6, 3.00));
+                        send-event(complete-poi, self, boxed_i32(16), boxed_f32(3.00));
                     }
                 }
             }
@@ -1068,7 +918,7 @@ statescript {
             track main {
                 lambda {
                     if (!(get-svar-bit(sea-horse-poi-comp, 16)) && get-int32(checkpt-count, self) > 1) {
-                        send-event(complete-poi, self, new-boxed-value(2, 16), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(16), boxed_f32(0.60));
                     }
                 }
             }
@@ -1080,7 +930,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(pet-pickups, self) > 10 && !(event-arg-symbol(0) == col-sea-hub-wlf-flyer-1) && !(event-arg-symbol(0) == inv-sea-hub-stun-bomb-4) && !(event-arg-symbol(0) == holster-pistol-6) && !(event-arg-symbol(0) == holster-long-gun-20)) {
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 1.20));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(1.20));
                     }
                 }
             }
@@ -1089,7 +939,7 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(pet-pickups, self) > 10) {
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(0.60));
                     }
                 }
             }
@@ -1098,7 +948,7 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(pet-pickups, self) > 10) {
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(0.60));
                     }
                 }
             }
@@ -1113,7 +963,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(pet-pickups, self) > 10) {
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(0.60));
                     }
                 }
             }
@@ -1128,7 +978,7 @@ statescript {
                 }
                 lambda {
                     if (get-int32(pet-pickups, self) > 10) {
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(0.60));
                     }
                 }
             }
@@ -1139,7 +989,7 @@ statescript {
                     spawn-entity(interact-loc-36, 0, 0);
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 11));
+                    send-event(enter-poi, self, boxed_i32(11));
                 }
             }
         }
@@ -1153,16 +1003,16 @@ statescript {
         block event wait-final-map {
             track main {
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 1), new-boxed-value(1, 1));
+                    send-event(enter-poi, self, boxed_i32(1), boxed_bool(1));
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 10), new-boxed-value(1, 1));
+                    send-event(enter-poi, self, boxed_i32(10), boxed_bool(1));
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 13), new-boxed-value(1, 1));
+                    send-event(enter-poi, self, boxed_i32(13), boxed_bool(1));
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 16), new-boxed-value(1, 0));
+                    send-event(enter-poi, self, boxed_i32(16), boxed_bool(0));
                 }
             }
         }
@@ -1181,7 +1031,7 @@ statescript {
                 lambda {
                     if (get-boolean(acquired-holster, self)) {
                         set-boolean(acquired-holster, 0, self);
-                        send-event(complete-poi, self, new-boxed-value(2, 6), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(6), boxed_f32(0.60));
                     }
                 }
             }
@@ -1190,7 +1040,7 @@ statescript {
             track main {
                 lambda {
                     if (get-int32(convoy-count, self) > 0) {
-                        send-event(complete-poi, self, new-boxed-value(2, 10), new-boxed-value(6, 0.60));
+                        send-event(complete-poi, self, boxed_i32(10), boxed_f32(0.60));
                     }
                 }
             }
@@ -1201,7 +1051,7 @@ statescript {
                     wait(0.70);
                 }
                 lambda {
-                    send-event(enter-poi, self, new-boxed-value(2, 6));
+                    send-event(enter-poi, self, boxed_i32(6));
                 }
             }
         }
@@ -1334,33 +1184,13 @@ statescript {
             track main {
                 lambda {
                     if (*(u8*)*mburro-test*) {
-                        foreach (u64? var_1 : sea-horse-map-Q-layers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : sea-horse-map-Q-layers) {
                             set-table-shader-material-values-param(var_2, 0.25);
                         }
                     } else {
-                        foreach (u64? var_5 : sea-horse-map-Q-layers) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : sea-horse-map-Q-layers) {
                             f32 var_10;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, new-boxed-value(7, var_6), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-Q-layers, boxed_symbol(var_6), 0))) {
                                 var_10 = 0.25;
                             } else {
                                 var_10 = 0.00;
@@ -1371,33 +1201,13 @@ statescript {
                 }
                 lambda {
                     if (*(u8*)(*mburro-test* + 1)) {
-                        foreach (u64? var_1 : sea-horse-map-X-layers) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : sea-horse-map-X-layers) {
                             set-table-shader-material-values-param(var_2, 0.25);
                         }
                     } else {
-                        foreach (u64? var_5 : sea-horse-map-X-layers) {
-                            u16 var_6;
-                            if (var_5 && *(u16*)(var_5 + 12) == 7) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-                                var_6 = *(u64*)var_5;
-                            } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-                                var_6 = *(u64*)var_5;
-                            } else {
-                                var_6 = 0;
-                            }
+                        foreach (u64? var_6 : sea-horse-map-X-layers) {
                             f32 var_10;
-                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, new-boxed-value(7, var_6), 0))) {
+                            if (get-svar-bit(sea-horse-poi-check, darray-find(sea-horse-map-X-layers, boxed_symbol(var_6), 0))) {
                                 var_10 = 0.25;
                             } else {
                                 var_10 = 0.00;

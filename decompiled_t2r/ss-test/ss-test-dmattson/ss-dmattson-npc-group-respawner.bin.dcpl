@@ -22,10 +22,10 @@ statescript {
         block start {
             track main {
                 lambda {
-                    ddict-set(npc-ddict, tag-symbol-at(npcs, get-int32(iterator, self), self), new-boxed-value(7, wait-spawn-npc(tag-symbol-at(npcs, get-int32(iterator, self), self), 0, 0)));
+                    ddict-set(npc-ddict, tag-symbol-at(npcs, get-int32(iterator, self), self), boxed_symbol(wait-spawn-npc(tag-symbol-at(npcs, get-int32(iterator, self), self), 0, 0)));
                     ++(iterator, self);
                     while (!(get-int32(iterator, self) >= tag-array-size?(npcs, self))) {
-                        ddict-set(npc-ddict, tag-symbol-at(npcs, get-int32(iterator, self), self), new-boxed-value(7, wait-spawn-npc(tag-symbol-at(npcs, get-int32(iterator, self), self), 0, 0)));
+                        ddict-set(npc-ddict, tag-symbol-at(npcs, get-int32(iterator, self), self), boxed_symbol(wait-spawn-npc(tag-symbol-at(npcs, get-int32(iterator, self), self), 0, 0)));
                         ++(iterator, self);
                     }
                 }
@@ -55,7 +55,7 @@ statescript {
                         var_4 = 0;
                     }
                     if (event-arg-symbol(0) == var_4) {
-                        var_5 = ddict-set(npc-ddict, var_1, new-boxed-value(7, spawn-npc(var_1, 0, 0)));
+                        var_5 = ddict-set(npc-ddict, var_1, boxed_symbol(spawn-npc(var_1, 0, 0)));
                     }
                     ++(iterator, self);
                     while (!(get-int32(iterator, self) >= tag-array-size?(npcs, self))) {
@@ -72,7 +72,7 @@ statescript {
                             var_15 = 0;
                         }
                         if (event-arg-symbol(0) == var_15) {
-                            var_16 = ddict-set(npc-ddict, var_12, new-boxed-value(7, spawn-npc(var_12, 0, 0)));
+                            var_16 = ddict-set(npc-ddict, var_12, boxed_symbol(spawn-npc(var_12, 0, 0)));
                         }
                         ++(iterator, self);
                     }

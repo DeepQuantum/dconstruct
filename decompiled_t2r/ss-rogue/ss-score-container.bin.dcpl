@@ -82,12 +82,12 @@ u64? ss-score-container-setup(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
         send-event(
             setup,
             var_2,
-            new-boxed-value(2, i),
-            new-boxed-value(7, var_11),
-            new-boxed-value(7, var_14),
-            new-boxed-value(7, var_17),
-            new-boxed-value(13, var_20),
-            new-boxed-value(1, i == (var_0 - 1))
+            boxed_i32(i),
+            boxed_symbol(var_11),
+            boxed_symbol(var_14),
+            boxed_symbol(var_17),
+            boxed_p64(var_20),
+            boxed_bool(i == (var_0 - 1))
         );
         gui2-set-widget-text-formatted-numeric(gui2-build-widget-path(
             var_4,
@@ -174,7 +174,7 @@ u64? ss-score-container-setup(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
         0,
         0,
         0
-    ), new-boxed-value(7, arg_3));
+    ), boxed_symbol(arg_3));
 }
 
 statescript {

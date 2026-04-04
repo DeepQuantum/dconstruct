@@ -199,7 +199,7 @@ statescript {
                     }
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_MIN_CROUCH_ACCESSIBLE), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_MIN_CROUCH_ACCESSIBLE), 1, 0, 1);
                 }
             }
         }

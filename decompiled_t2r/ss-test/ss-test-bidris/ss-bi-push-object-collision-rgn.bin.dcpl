@@ -39,7 +39,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    send-event(hit-by-push-object, event-arg-symbol(0), new-boxed-value(7, get-parent(get-self-id(), 0)));
+                    send-event(hit-by-push-object, event-arg-symbol(0), boxed_symbol(get-parent(get-self-id(), 0)));
                 }
             }
         }

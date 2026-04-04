@@ -18,17 +18,7 @@ u64? stealth-meter-unavailable?() {
 u16 any-npc-certain?() {
     u16 var_1;
     if (!(darray-count(all-enemy-npcs) == 0)) {
-        foreach (u64? var_3 : all-enemy-npcs) {
-            u16 var_4;
-            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                var_4 = *(u64*)var_3;
-            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                var_4 = *(u64*)var_3;
-            } else {
-                var_4 = 0;
-            }
+        foreach (u64? var_4 : all-enemy-npcs) {
             if (npc-alive?(var_4)) {
                 if (npc-get-awareness(var_4, player) == 2) {}
 

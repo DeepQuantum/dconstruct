@@ -12,17 +12,7 @@
 // ####################################################################################################
 
 u64? rogue-suppress-pickup-shimmer() {
-    foreach (u64? var_1 : grp-all-items) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : grp-all-items) {
         if (entity-exists?(var_2)) {
             set-shimmer-intensity(var_2, 0.00, 0.00);
         }
@@ -48,18 +38,8 @@ u16 rogue-spawn-items(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4
 
 u16 spawn-def-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
     darray-clear(arg_1);
-    foreach (u64? var_3 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        darray-append(arg_1, new-boxed-value(7, var_4), 1);
+    foreach (u64? var_4 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
+        darray-append(arg_1, boxed_symbol(var_4), 1);
     }
     for (u64 i = 0; i < arg_2; i++) {
         if (darray-count(arg_1) > 0) {
@@ -144,7 +124,7 @@ u16 spawn-def-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
             } else {
                 var_46 = 0;
             }
-            darray-append(grp-all-items, new-boxed-value(7, spawn-item-pickup(get-symbol(random-throwable, ss-rogue-encounter-item-spawner-1), get-spawner-locator(var_46, 1), 1, 0, interact-scavenge-pickup)), 1);
+            darray-append(grp-all-items, boxed_symbol(spawn-item-pickup(get-symbol(random-throwable, ss-rogue-encounter-item-spawner-1), get-spawner-locator(var_46, 1), 1, 0, interact-scavenge-pickup)), 1);
             u64? var_51 = darray-at(arg_1, get-int32(random-pos, ss-rogue-encounter-item-spawner-1));
             u16 var_52;
             if (var_51 && *(u16*)(var_51 + 12) == 7) {
@@ -190,18 +170,8 @@ u16 spawn-def-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
 
 u16 spawn-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
     darray-clear(arg_1);
-    foreach (u64? var_3 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        darray-append(arg_1, new-boxed-value(7, var_4), 1);
+    foreach (u64? var_4 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
+        darray-append(arg_1, boxed_symbol(var_4), 1);
     }
     for (u64 i = 0; i < arg_2; i++) {
         if (darray-count(arg_1) > 0) {
@@ -217,7 +187,7 @@ u16 spawn-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
             } else {
                 var_12 = 0;
             }
-            darray-append(grp-all-items, new-boxed-value(7, spawn-entity(var_12, 0, 0)), 1);
+            darray-append(grp-all-items, boxed_symbol(spawn-entity(var_12, 0, 0)), 1);
             if (get-boolean(draw-debug, ss-rogue-encounter-item-spawner-1)) {
                 u64? var_17 = darray-at(arg_1, get-int32(random-pos, ss-rogue-encounter-item-spawner-1));
                 u16 var_18;
@@ -241,18 +211,8 @@ u16 spawn-item(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
 u16 def-spawn-ammo(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
     alloc-bound-frame(alloc-point(0.00, 0.00, 0.00, 0), 0, 0, 0, 0);
     darray-clear(arg_1);
-    foreach (u64? var_4 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
-        darray-append(arg_1, new-boxed-value(7, var_5), 1);
+    foreach (u64? var_5 : get-spawners-by-tag-int32(arg_0, 1, 0, 0)) {
+        darray-append(arg_1, boxed_symbol(var_5), 1);
     }
     for (u64 i = 0; i < arg_2; i++) {
         if (darray-count(arg_1) > 0) {
@@ -269,7 +229,7 @@ u16 def-spawn-ammo(u64? arg_0, u64? arg_1, u16 arg_2, u64? arg_3) {
                 var_13 = 0;
             }
             u64? var_14 = wait-spawn-entity(var_13, 0);
-            darray-append(grp-all-items, new-boxed-value(7, var_14), 1);
+            darray-append(grp-all-items, boxed_symbol(var_14), 1);
             if (!is-final-build?()) {
                 display(dc:format("DEV-IS : spawning %s with object look %s", string-debug(var_14), string-debug(get-object-look(var_14, 0))), 19);
             }
@@ -337,30 +297,10 @@ statescript {
                 lambda {
                     if (task-active?(t2r-assault, t2r-jackson-assault) || task-active?(t2r-survival, t2r-jackson-mainstreet-survival) || task-active?(t2r-survival, t2r-police-office-survival) && task-active?(t2r-survival, t2r-police-basement-survival)) {
                         wait-for-want-load-levels-fully-spawned();
-                        foreach (u64? var_7 : get-spawners-by-tag-int32(rogue-ingredient-spawner, 1, 0, 0)) {
-                            u16 var_8;
-                            if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                var_8 = *(u64*)var_7;
-                            } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                var_8 = *(u64*)var_7;
-                            } else {
-                                var_8 = 0;
-                            }
-                            darray-append(grp-all-items, new-boxed-value(7, var_8), 1);
+                        foreach (u64? var_8 : get-spawners-by-tag-int32(rogue-ingredient-spawner, 1, 0, 0)) {
+                            darray-append(grp-all-items, boxed_symbol(var_8), 1);
                         }
-                        foreach (u64? var_12 : grp-all-items) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : grp-all-items) {
                             if (entity-exists?(var_13)) {
                                 set-shader-instance-blend-offset(var_13, -1.00, 0);
                             }

@@ -24,17 +24,7 @@ statescript {
                 lambda {
                     if (!*hud-prototypes* && *(u8*)(*hud-prototypes* + 2)) {
                         if (!is-rogue-mode?() || get-no-return-enemy-markers-mode() == 1 && get-no-return-enemy-markers-mode() == 3) {
-                            foreach (u64? var_4 : enemies-marked) {
-                                u16 var_5;
-                                if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                    var_5 = *(u64*)var_4;
-                                } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                    var_5 = *(u64*)var_4;
-                                } else {
-                                    var_5 = 0;
-                                }
+                            foreach (u64? var_5 : enemies-marked) {
                                 sid var_7;
                                 if (npc-is-dog?(var_5)) {
                                     var_7 = head;
@@ -65,7 +55,7 @@ statescript {
                                 display(dc:format("NPC marked: %s", string-debug(event-arg-symbol(0))), 19);
                             }
                         }
-                        darray-append(enemies-marked, new-boxed-value(7, event-arg-symbol(0)), 1);
+                        darray-append(enemies-marked, boxed_symbol(event-arg-symbol(0)), 1);
                     } else if (*buddy-prototypes* != nullptr && *(u8*)(*buddy-prototypes* + 39)) {
                         display-error(dc:format("Attempted to mark invalid NPC %s", string-debug(event-arg-symbol(0))));
                     }
@@ -75,21 +65,21 @@ statescript {
         block event buddy-unmark-npc {
             track main {
                 lambda {
-                    darray-find-remove(enemies-marked, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(enemies-marked, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block event npc-destroyed {
             track main {
                 lambda {
-                    darray-find-remove(enemies-marked, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(enemies-marked, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }
         block event npc-died {
             track main {
                 lambda {
-                    darray-find-remove(enemies-marked, new-boxed-value(7, event-arg-symbol(0)), 0);
+                    darray-find-remove(enemies-marked, boxed_symbol(event-arg-symbol(0)), 0);
                 }
             }
         }

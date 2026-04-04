@@ -12,11 +12,11 @@
 // ####################################################################################################
 
 u64? rk-sneak-target-spawner() {
-    return symbol-concat-int32(pos-rk-sneak-target-, darray-find(rk-sneak-regions, new-boxed-value(7, get-symbol(sneak-region, self)), 0) + 1);
+    return symbol-concat-int32(pos-rk-sneak-target-, darray-find(rk-sneak-regions, boxed_symbol(get-symbol(sneak-region, self)), 0) + 1);
 }
 
 u64? rk-sneak-start-spawner() {
-    return symbol-concat-int32(pos-rk-sneak-start-, darray-find(rk-sneak-regions, new-boxed-value(7, get-symbol(sneak-region, self)), 0) + 1);
+    return symbol-concat-int32(pos-rk-sneak-start-, darray-find(rk-sneak-regions, boxed_symbol(get-symbol(sneak-region, self)), 0) + 1);
 }
 
 statescript {

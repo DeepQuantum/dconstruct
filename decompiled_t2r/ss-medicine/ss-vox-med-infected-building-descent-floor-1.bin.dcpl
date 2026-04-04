@@ -67,7 +67,7 @@ statescript {
                 }
                 lambda {
                     if (!no-npcs-in-group-alive?(vox-descent-floor-1-inf)) {
-                        fact-set(global, vox-med-infected-descent, new-boxed-value(1, 1));
+                        fact-set(global, vox-med-infected-descent, boxed_bool(1));
                     }
                 }
             }
@@ -76,7 +76,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(medicine, med-infected-building-descent)) {
-                        fact-set(global, vox-med-infected-descent, new-boxed-value(1, 0));
+                        fact-set(global, vox-med-infected-descent, boxed_bool(0));
                         go(done, 1);
                     }
                 }
@@ -158,7 +158,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, vox-med-infected-descent, new-boxed-value(1, 0));
+                    fact-set(global, vox-med-infected-descent, boxed_bool(0));
                 }
                 lambda {
                     wait(5.00);

@@ -108,7 +108,7 @@ statescript {
                     wait(0.60);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(7));
                 }
                 lambda {
                     go(complete, 1);
@@ -121,7 +121,7 @@ statescript {
                     wait(0.60);
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 7));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(7));
                 }
                 lambda {
                     go(complete, 1);

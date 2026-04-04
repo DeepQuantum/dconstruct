@@ -46,7 +46,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(ski-aquarium--bow-minigame-unhit-targets, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(ski-aquarium--bow-minigame-unhit-targets, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     set-high-contrast-mode-type(self, 7);
@@ -102,7 +102,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(ski-aquarium--bow-minigame-unhit-targets, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(ski-aquarium--bow-minigame-unhit-targets, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     enable-physics(self, 0, 0.00);
@@ -121,7 +121,7 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(target-hit, ss-ski-aquarium-flashback-target-practice-1, new-boxed-value(7, get-self-id()));
+                    send-event(target-hit, ss-ski-aquarium-flashback-target-practice-1, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(already-hit, 1);
@@ -149,7 +149,7 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(target-meleed, ss-aquarium-narrative-mode-manager-1, new-boxed-value(7, get-self-id()));
+                    send-event(target-meleed, ss-aquarium-narrative-mode-manager-1, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(already-hit, 1);

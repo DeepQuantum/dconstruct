@@ -20,14 +20,14 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(disable-legless-regions, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(disable-legless-regions, boxed_symbol(get-self-id()), 1);
                 }
             }
         }
         block end {
             track main {
                 lambda {
-                    darray-find-remove(disable-legless-regions, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(disable-legless-regions, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

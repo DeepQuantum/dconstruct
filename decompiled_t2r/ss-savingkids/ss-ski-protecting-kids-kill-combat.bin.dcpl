@@ -32,17 +32,7 @@ u64? ski-dynamically-refil-health() {
 }
 
 u64? wait-ski-refill-stalkers() {
-    foreach (u64? var_1 : ski-stalker-kill-group) {
-        u16 var_2;
-        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-            var_2 = *(u64*)var_1;
-        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-            var_2 = *(u64*)var_1;
-        } else {
-            var_2 = 0;
-        }
+    foreach (u64? var_2 : ski-stalker-kill-group) {
         if (npc-group-alive-count(all-infected-npcs) < 2 && get-int32(num-replacement-infected-spawned, self) <= 3 && !is-spawner-on-screen?(var_2)) {
             npc-make-aware-of(wait-spawn-npc(var_2, 0, 0), player, 2, *npc-awareness-options-no-surprise*);
             ++(num-replacement-infected-spawned, self);
@@ -295,7 +285,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    darray-append(ski-combat-dead-npcs, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(ski-combat-dead-npcs, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -353,17 +343,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         send-event(enable-overwhelm, var_2);
                     }
                 }
@@ -452,17 +432,7 @@ statescript {
             track stalker-move-back {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : all-infected-npcs) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : all-infected-npcs) {
                         u16 var_5;
                         if (npc-alive?(var_3)) {
                             if (var_3 != get-symbol(last-infected, self)) {
@@ -511,17 +481,7 @@ statescript {
                 }
                 lambda {
                     u64? var_2 = offset-locator(get-object-locator(player), alloc-vector(0.00, 0.00, 1.00, 1.00, 0));
-                    foreach (u64? var_4 : ski-combat-dead-npcs) {
-                        u16 var_5;
-                        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                            var_5 = *(u64*)var_4;
-                        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                            var_5 = *(u64*)var_4;
-                        } else {
-                            var_5 = 0;
-                        }
+                    foreach (u64? var_5 : ski-combat-dead-npcs) {
                         if (!(var_5 == get-symbol(defender, self)) || distance-between-locators(var_2, get-joint-locator(var_5, l_elbow)) < 1.50 || distance-between-locators(var_2, get-joint-locator(var_5, r_elbow)) < 1.50 || distance-between-locators(var_2, get-joint-locator(var_5, l_knee)) < 1.50 || distance-between-locators(var_2, get-joint-locator(var_5, r_knee)) < 1.50 || distance-between-locators(var_2, get-joint-locator(var_5, spined)) < 1.50 && distance-between-locators(var_2, get-joint-locator(var_5, neck)) < 1.50) {
                             kill-entity(var_5);
                         }
@@ -566,40 +526,40 @@ statescript {
                 lambda {
                     if (get-symbol(direction-for-success, self) != front) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 86;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (1 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (2 * 8)) = 31;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (3 * 8)) + 8) = 0.50;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
+                        *(i32*)*var_3[1] = 86;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(u8*)(*var_3[1] + 8) = 1;
+                        *(i32*)*var_3[2] = 31;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(u8*)(*var_3[2] + 8) = 1;
+                        *(i32*)*var_3[3] = 30;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(f32*)(*var_3[3] + 8) = 0.50;
                         animate_(get-symbol(last-infected, self), get-symbol(stalker-death-anim, self), var_3);
                         set-object-teleport(get-symbol(last-infected, self));
                     } else {
                         u64? var_8 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-object-locator(player);
-                        *(i32*)*(*var_8 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = player;
-                        *(i32*)*(*var_8 + (2 * 8)) = 86;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_8 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_8 + (3 * 8)) = 31;
-                        *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_8 + (3 * 8)) + 8) = 1;
-                        *(i32*)*(*var_8 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (4 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_8 + (5 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (5 * 8)) + 8) = 0.50;
+                        *(i32*)*var_8[0] = 10;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(u64*)(*var_8[0] + 8) = get-object-locator(player);
+                        *(i32*)*var_8[1] = 14;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(u64*)(*var_8[1] + 8) = player;
+                        *(i32*)*var_8[2] = 86;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(u8*)(*var_8[2] + 8) = 1;
+                        *(i32*)*var_8[3] = 31;
+                        *(u64*)(*var_8[3] + 8) = 0;
+                        *(u8*)(*var_8[3] + 8) = 1;
+                        *(i32*)*var_8[4] = 28;
+                        *(u64*)(*var_8[4] + 8) = 0;
+                        *(f32*)(*var_8[4] + 8) = 0.50;
+                        *(i32*)*var_8[5] = 30;
+                        *(u64*)(*var_8[5] + 8) = 0;
+                        *(f32*)(*var_8[5] + 8) = 0.50;
                         animate_(get-symbol(last-infected, self), get-symbol(stalker-death-anim, self), var_8);
                     }
                 }
@@ -616,15 +576,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.70;
                     wait-animate_(yara, ski-protecting-kids-kill-stalker-hammer-success--yara, var_0);
                 }
                 lambda {
@@ -659,33 +619,33 @@ statescript {
                 lambda {
                     if (get-symbol(direction-for-success, self) == front && distance-between-locators(get-animation-entry(lev, ski-protecting-kids-kill-stalker-hammer-success--lev, get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1), 0, 0.00, apReference), get-object-locator(player)) < 4.00) {
                         u64? var_5 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = find-closest-point-on-nav-mesh(get-bound-frame(end-anim-success-loc, self), 10.00, 5.00, 0.50, 0, 0);
-                        *(i32*)*(*var_5 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = apReference-lev;
-                        *(i32*)*(*var_5 + (2 * 8)) = 13;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_5 + (2 * 8)) + 8) = 2;
-                        *(i32*)*(*var_5 + (3 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (3 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_5 + (4 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = find-closest-point-on-nav-mesh(get-bound-frame(end-anim-success-loc, self), 10.00, 5.00, 0.50, 0, 0);
+                        *(i32*)*var_5[1] = 14;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(u64*)(*var_5[1] + 8) = apReference-lev;
+                        *(i32*)*var_5[2] = 13;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(i32*)(*var_5[2] + 8) = 2;
+                        *(i32*)*var_5[3] = 28;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(f32*)(*var_5[3] + 8) = 0.00;
+                        *(i32*)*var_5[4] = 30;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(f32*)(*var_5[4] + 8) = 0.50;
                         animate_(lev, ski-protecting-kids-kill-stalker-hammer-success--lev, var_5);
                     } else {
                         u64? var_8 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_8 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
-                        *(i32*)*(*var_8 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_8 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_8 + (2 * 8)) + 8) = 0.50;
+                        *(i32*)*var_8[0] = 10;
+                        *(u64*)(*var_8[0] + 8) = 0;
+                        *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
+                        *(i32*)*var_8[1] = 28;
+                        *(u64*)(*var_8[1] + 8) = 0;
+                        *(f32*)(*var_8[1] + 8) = 0.00;
+                        *(i32*)*var_8[2] = 30;
+                        *(u64*)(*var_8[2] + 8) = 0;
+                        *(f32*)(*var_8[2] + 8) = 0.50;
                         animate_(lev, ski-protecting-kids-kill-stalker-hammer-success--lev, var_8);
                     }
                 }
@@ -694,43 +654,43 @@ statescript {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         set-object-teleport(player);
                         u64? var_2 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
-                        *(i32*)*(*var_2 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_2 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_2 + (3 * 8)) + 8) = 85;
-                        *(i32*)*(*var_2 + (4 * 8)) = 60;
-                        *(u64*)(*(*var_2 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(ap-ski-protecting-kids-kill-stalker-hammer-1, 1);
+                        *(i32*)*var_2[1] = 28;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 0.00;
+                        *(i32*)*var_2[2] = 30;
+                        *(u64*)(*var_2[2] + 8) = 0;
+                        *(f32*)(*var_2[2] + 8) = 0.50;
+                        *(i32*)*var_2[3] = 61;
+                        *(u64*)(*var_2[3] + 8) = 0;
+                        *(i32*)(*var_2[3] + 8) = 85;
+                        *(i32*)*var_2[4] = 60;
+                        *(u64*)(*var_2[4] + 8) = 0;
+                        *(f32*)(*var_2[4] + 8) = 0.50;
                         wait-animate_(player, get-symbol(chosen-success-anim, self), var_2);
                     } else {
                         camera-enable-animated(4.00, -1.00, 1, 1000, 0, 0, 0);
                         u64? var_5 = #%alloc-array(single-frame, 16, 6, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-object-locator(player);
-                        *(i32*)*(*var_5 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = player;
-                        *(i32*)*(*var_5 + (2 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (2 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_5 + (3 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (3 * 8)) + 8) = 0.50;
-                        *(i32*)*(*var_5 + (4 * 8)) = 61;
-                        *(u64*)(*(*var_5 + (4 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_5 + (4 * 8)) + 8) = 85;
-                        *(i32*)*(*var_5 + (5 * 8)) = 60;
-                        *(u64*)(*(*var_5 + (5 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (5 * 8)) + 8) = 0.50;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-object-locator(player);
+                        *(i32*)*var_5[1] = 14;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(u64*)(*var_5[1] + 8) = player;
+                        *(i32*)*var_5[2] = 28;
+                        *(u64*)(*var_5[2] + 8) = 0;
+                        *(f32*)(*var_5[2] + 8) = 0.50;
+                        *(i32*)*var_5[3] = 30;
+                        *(u64*)(*var_5[3] + 8) = 0;
+                        *(f32*)(*var_5[3] + 8) = 0.50;
+                        *(i32*)*var_5[4] = 61;
+                        *(u64*)(*var_5[4] + 8) = 0;
+                        *(i32*)(*var_5[4] + 8) = 85;
+                        *(i32*)*var_5[5] = 60;
+                        *(u64*)(*var_5[5] + 8) = 0;
+                        *(f32*)(*var_5[5] + 8) = 0.50;
                         wait-animate_(player, get-symbol(chosen-success-anim, self), var_5);
                     }
                 }

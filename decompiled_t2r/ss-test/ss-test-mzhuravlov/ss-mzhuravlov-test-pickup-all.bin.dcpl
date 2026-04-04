@@ -769,7 +769,7 @@ statescript {
                     utility();
                 }
                 lambda {
-                    send-event(teleport-player, player, new-boxed-value(18, get-object-locator(player-pos-proxy-1)));
+                    send-event(teleport-player, player, boxed_boundframe(get-object-locator(player-pos-proxy-1)));
                 }
                 lambda {
                     camera-fade-out-animated-stick(0.00);
@@ -799,69 +799,69 @@ statescript {
                 lambda {
                     if (!darray-is-valid?(get-symbol(columns-array, self))) {
                         set-symbol(columns-array, darray-create(self, -1, 0), self);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-100), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-101), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-102), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-103), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-104), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-105), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-106), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-200), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-201), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-202), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-203), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-204), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-205), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-206), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-300), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-301), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-302), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-303), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-304), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-305), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-400), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-401), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-402), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-403), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-404), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-405), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-406), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-500), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-501), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-502), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-503), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-504), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-600), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-601), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-602), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-603), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-604), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-605), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-606), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-607), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-close-1), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-close-2), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-close-3), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-arrow-ammo-1), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-arrow-ammo-2), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-arrow-ammo-3), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, colum-arrow-ammo-4), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-16), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-1), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-2), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-3), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-4), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-5), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-6), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-7), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-8), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-9), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-10), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-11), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-12), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-13), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-14), 0);
-                        darray-append(get-symbol(columns-array, self), new-boxed-value(7, cover-low-15), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-100), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-101), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-102), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-103), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-104), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-105), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-106), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-200), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-201), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-202), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-203), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-204), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-205), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-206), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-300), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-301), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-302), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-303), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-304), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-305), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-400), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-401), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-402), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-403), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-404), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-405), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-406), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-500), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-501), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-502), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-503), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-504), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-600), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-601), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-602), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-603), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-604), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-605), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-606), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-607), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-close-1), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-close-2), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-close-3), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-arrow-ammo-1), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-arrow-ammo-2), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-arrow-ammo-3), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(colum-arrow-ammo-4), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-16), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-1), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-2), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-3), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-4), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-5), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-6), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-7), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-8), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-9), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-10), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-11), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-12), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-13), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-14), 0);
+                        darray-append(get-symbol(columns-array, self), boxed_symbol(cover-low-15), 0);
                     }
                 }
                 lambda {
@@ -883,7 +883,7 @@ statescript {
                             } else {
                                 var_8 = 0;
                             }
-                            darray-append(get-symbol(pickups-array, self), new-boxed-value(7, symbol-concat-string(var_8, "-pickup-1")), 0);
+                            darray-append(get-symbol(pickups-array, self), boxed_symbol(symbol-concat-string(var_8, "-pickup-1")), 0);
                             i = i + 1;
                         }
                     }
@@ -1018,15 +1018,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(last-pos, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_0 + (2 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (2 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(last-pos, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
+                    *(i32*)*var_0[2] = 31;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u8*)(*var_0[2] + 8) = 0;
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -1065,15 +1065,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(last-pos, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 31;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(last-pos, self);
+                    *(i32*)*var_0[1] = 31;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u8*)(*var_0[1] + 8) = 0;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.00;
                     animate_(player, bindpose, var_0);
                 }
                 lambda {
@@ -1137,7 +1137,7 @@ statescript {
                                     } else {
                                         var_13 = 0;
                                     }
-                                    set-int32(temp-item-num, darray-find(get-symbol(pickups-array, self), new-boxed-value(7, var_13), 0), self);
+                                    set-int32(temp-item-num, darray-find(get-symbol(pickups-array, self), boxed_symbol(var_13), 0), self);
                                     if (get-int32(temp-item-num, self) > -1) {
                                         u64? var_19 = darray-at(get-symbol(columns-array, self), get-int32(temp-item-num, self));
                                         u16 var_20;
@@ -1205,7 +1205,7 @@ statescript {
                                         }
                                         set-symbol(temp-item-spawned, spawn-item-pickup(var_38, get-bound-frame(temp-spawner, self), 1, 0, 0), self);
                                         darray-remove(get-symbol(pickups-array, self), get-int32(temp-item-num, self));
-                                        darray-insert(get-symbol(pickups-array, self), new-boxed-value(7, get-symbol(temp-item-spawned, self)), get-int32(temp-item-num, self));
+                                        darray-insert(get-symbol(pickups-array, self), boxed_symbol(get-symbol(temp-item-spawned, self)), get-int32(temp-item-num, self));
                                         darray-remove(get-symbol(picked-up-items-array, self), i);
                                         darray-remove(get-symbol(picked-up-id-array, self), i);
                                     }
@@ -1231,8 +1231,8 @@ statescript {
                         if (get-inventory-item-quantity(ammo-arrow) > 3) {
                             inventory-item-consume(ammo-arrow, 4);
                         }
-                        darray-append(get-symbol(picked-up-items-array, self), new-boxed-value(7, get-symbol(cur_pickup, self)), 0);
-                        darray-append(get-symbol(picked-up-id-array, self), new-boxed-value(7, item-pickup-get-item-id(get-symbol(cur_pickup, self))), 0);
+                        darray-append(get-symbol(picked-up-items-array, self), boxed_symbol(get-symbol(cur_pickup, self)), 0);
+                        darray-append(get-symbol(picked-up-id-array, self), boxed_symbol(item-pickup-get-item-id(get-symbol(cur_pickup, self))), 0);
                         start-timer-if-not-running(cooldown, get-float(pickup-respawn-timer, self), self);
                         debug-draw-string-2d(
                             alloc-point(600.00, 610.00, -4.00, 0),

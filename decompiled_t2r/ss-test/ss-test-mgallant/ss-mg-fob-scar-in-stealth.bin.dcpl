@@ -14,41 +14,21 @@
 u64? update-stealth-target() {
     u64? var_0 = darray-create(self, -1, 0);
     u64? var_1 = darray-create(self, -1, 0);
-    foreach (u64? var_3 : fob-sniper-with-infected-npcs) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : fob-sniper-with-infected-npcs) {
         if (npc-alive?(var_4)) {
             group-copy(fob-sniper-with-infected-npcs, var_1);
             darray-clear(var_1);
-            foreach (u64? var_7 : fob-sniper-with-infected-npcs) {
-                u16 var_8;
-                if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                    var_8 = *(u64*)var_7;
-                } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                    var_8 = *(u64*)var_7;
-                } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                    var_8 = *(u64*)var_7;
-                } else {
-                    var_8 = 0;
-                }
+            foreach (u64? var_8 : fob-sniper-with-infected-npcs) {
                 if (npc-alive?(var_8)) {
                     if (var_4 != var_8) {
-                        darray-append(var_1, new-boxed-value(7, var_8), 1);
+                        darray-append(var_1, boxed_symbol(var_8), 1);
                     }
                 }
             }
             u64? var_12 = get-closest-living-npc-in-group(var_1, var_4, 0);
             if (npc-using-skill?(var_4, 9) || npc-using-skill?(var_4, 8) && npc-using-skill?(var_4, 11)) {
                 if (var_12 == 0 && distance-between-objects-greater-than?(var_4, var_12, 10.00, 1)) {
-                    darray-append(var_0, new-boxed-value(7, var_4), 1);
+                    darray-append(var_0, boxed_symbol(var_4), 1);
                 }
             }
         }
@@ -179,32 +159,32 @@ statescript {
                     u64? var_3 = rotate-locator-lookat(get-object-locator(get-symbol(target, self)), get-object-locator(self), 1.00, 0);
                     set-focusable-ignore(get-symbol(target, self), 1);
                     u64? var_6 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_6 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_6 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_6 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_6 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_6 + (3 * 8)) = 22;
-                    *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_6 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_6[0] = 10;
+                    *(u64*)(*var_6[0] + 8) = 0;
+                    *(u64*)(*var_6[0] + 8) = var_3;
+                    *(i32*)*var_6[1] = 28;
+                    *(u64*)(*var_6[1] + 8) = 0;
+                    *(f32*)(*var_6[1] + 8) = 0.30;
+                    *(i32*)*var_6[2] = 30;
+                    *(u64*)(*var_6[2] + 8) = 0;
+                    *(f32*)(*var_6[2] + 8) = 0.30;
+                    *(i32*)*var_6[3] = 22;
+                    *(u64*)(*var_6[3] + 8) = 0;
+                    *(f32*)(*var_6[3] + 8) = 0.50;
                     animate_(get-symbol(target, self), ellie-machete-sneak-kill-leg-hack-back--ellie--npc-f, var_6);
                     u64? var_7 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_7 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_7 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_7 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_7 + (3 * 8)) = 22;
-                    *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_7[0] = 10;
+                    *(u64*)(*var_7[0] + 8) = 0;
+                    *(u64*)(*var_7[0] + 8) = var_3;
+                    *(i32*)*var_7[1] = 28;
+                    *(u64*)(*var_7[1] + 8) = 0;
+                    *(f32*)(*var_7[1] + 8) = 0.30;
+                    *(i32*)*var_7[2] = 30;
+                    *(u64*)(*var_7[2] + 8) = 0;
+                    *(f32*)(*var_7[2] + 8) = 0.30;
+                    *(i32*)*var_7[3] = 22;
+                    *(u64*)(*var_7[3] + 8) = 0;
+                    *(f32*)(*var_7[3] + 8) = 0.50;
                     wait-animate_(self, ellie-machete-sneak-kill-leg-hack-back--ellie, var_7);
                 }
                 lambda {

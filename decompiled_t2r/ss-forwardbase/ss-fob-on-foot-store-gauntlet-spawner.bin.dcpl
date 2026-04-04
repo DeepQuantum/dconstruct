@@ -16,19 +16,9 @@ u64? spawn-runner-offscreen() {
         go(wait-for-gauntlet-start, 1);
     }
     u64? var_1 = darray-create(self, -1, 0);
-    foreach (u64? var_3 : fob-appliances-runner-spawners) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
-        if (!is-on-screen?(get-spawner-position(var_4, 1), 0.00) && spawner-further-than-distance-to-object?(var_4, player, 10.00, 1) && !darray-contains?(fob-recent-multispawners-used, new-boxed-value(7, var_4))) {
-            darray-append(var_1, new-boxed-value(7, var_4), 1);
+    foreach (u64? var_4 : fob-appliances-runner-spawners) {
+        if (!is-on-screen?(get-spawner-position(var_4, 1), 0.00) && spawner-further-than-distance-to-object?(var_4, player, 10.00, 1) && !darray-contains?(fob-recent-multispawners-used, boxed_symbol(var_4))) {
+            darray-append(var_1, boxed_symbol(var_4), 1);
         }
     }
     if (darray-count(var_1) > 0) {
@@ -36,8 +26,8 @@ u64? spawn-runner-offscreen() {
         if (!(darray-count(fob-recent-multispawners-used) < 2)) {
             darray-remove(fob-recent-multispawners-used, 0);
         }
-        darray-append(fob-recent-multispawners-used, new-boxed-value(7, var_13), 1);
-        darray-append(fob-appliances-active-runners, new-boxed-value(7, spawn-npc(var_13, 0, 0)), 1);
+        darray-append(fob-recent-multispawners-used, boxed_symbol(var_13), 1);
+        darray-append(fob-appliances-active-runners, boxed_symbol(spawn-npc(var_13, 0, 0)), 1);
         npc-make-aware-of(spawn-npc(var_13, 0, 0), player, 2, *npc-awareness-options-silent*);
     }
     return darray-destroy(var_1);

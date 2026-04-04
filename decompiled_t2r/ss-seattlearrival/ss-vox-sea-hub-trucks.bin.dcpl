@@ -196,7 +196,7 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 11));
+                    send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(11));
                 }
             }
         }
@@ -976,7 +976,7 @@ statescript {
                         wait-say(dina, vox-igc-din-gam-sea-hub-explore-music-shop-billboard-sp-003, 2, 0);
                         wait(0.30);
                         wait-say(dina, vox-igc-din-gam-sea-hub-explore-music-shop-billboard-sp-004, 2, 0);
-                        send-event(enter-poi, ss-sea-horse-map-writing-1, new-boxed-value(2, 11));
+                        send-event(enter-poi, ss-sea-horse-map-writing-1, boxed_i32(11));
                         wait(1.00);
                         wait-say(dina, vox-igc-din-gam-sea-hub-explore-bus-stop-sp-005, 2, 0);
                         wait(0.30);

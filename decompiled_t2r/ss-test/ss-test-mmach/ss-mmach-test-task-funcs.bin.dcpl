@@ -428,7 +428,7 @@ u16 draw-gestures-help(u64? arg_0, u64? arg_1, u64? arg_2) {
 u64? issue-mm-teleport(sid arg_0, u64? arg_1) {
     u64? var_0;
     if (arg_0 == player) {
-        var_0 = send-event(teleport-player, player, new-boxed-value(18, arg_1));
+        var_0 = send-event(teleport-player, player, boxed_boundframe(arg_1));
     } else {
         var_0 = npc-teleport-to(arg_0, arg_1);
     }

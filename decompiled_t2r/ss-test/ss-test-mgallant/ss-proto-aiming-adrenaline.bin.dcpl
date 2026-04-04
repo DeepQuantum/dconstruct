@@ -97,17 +97,7 @@ statescript {
                     player-force-best-accuracy();
                 }
                 lambda {
-                    foreach (u64? var_3 : all-enemy-npcs) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : all-enemy-npcs) {
                         npc-set-accuracy-multiplier(var_4, lerp-scale(0.00, 0.50, 0.00, 1.00, get-state-time(self)));
                     }
                 }
@@ -119,17 +109,7 @@ statescript {
                     broadcast-event(unsuspend-adrenaline-prototypes);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         npc-set-accuracy-multiplier(var_2, 1.00);
                     }
                 }

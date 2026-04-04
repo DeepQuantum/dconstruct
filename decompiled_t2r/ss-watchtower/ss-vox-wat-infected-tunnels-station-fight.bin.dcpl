@@ -31,7 +31,7 @@ statescript {
             track main {
                 lambda {
                     if (any-enemy-aware-of-player?()) {
-                        fact-set(global, stealth-infected-mode, new-boxed-value(1, 0));
+                        fact-set(global, stealth-infected-mode, boxed_bool(0));
                     }
                 }
             }
@@ -39,7 +39,7 @@ statescript {
         block event tension-changed {
             track main {
                 lambda {
-                    fact-set(global, stealth-infected-mode, new-boxed-value(1, 1));
+                    fact-set(global, stealth-infected-mode, boxed_bool(1));
                 }
             }
         }
@@ -59,7 +59,7 @@ statescript {
                 }
                 lambda {
                     if (task-range-active?(watchtower, wat-infected-tunnels-escape-tunnel, watchtower, wat-infected-tunnels-station-fight)) {
-                        fact-set(global, stealth-infected-mode, new-boxed-value(1, 1));
+                        fact-set(global, stealth-infected-mode, boxed_bool(1));
                         go(wait-for-event, 1);
                     }
                 }
@@ -69,7 +69,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(watchtower, wat-infected-tunnels-escape-tunnel)) {
-                        fact-set(global, stealth-infected-mode, new-boxed-value(1, 1));
+                        fact-set(global, stealth-infected-mode, boxed_bool(1));
                         go(wait-for-event, 1);
                     }
                 }
@@ -110,46 +110,26 @@ statescript {
         block event entity-awareness {
             track main {
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (entity-exists?(var_2) && npc-alive?(var_2) && npc-using-skill?(var_2, 20) || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-1) == 2 || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-2) == 2 || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-3) == 2 && npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-6) == 2) {
                             if (npc-group-alive-count(station-fight-clickers) > 0 && npc-group-alive-count(station-fight-militia) > 1 && !(fact-bool(get-closest-living-npc-in-group(station-fight-militia, player, 0), has-faction-ever-seen-player-or-buddy, 1, 0)) && !(get-boolean(engage-infected-played?, self))) {
                                 set-boolean(engage-infected-played?, 1, self);
-                                fact-set(faction-enemy, restrict-initial-attack-infected, new-boxed-value(8, get-current-timeframe(0)));
-                                fact-set(faction-enemy, restrict-kill-infected-taunt, new-boxed-value(8, get-current-timeframe(0)));
-                                fact-set(faction-enemy, restrict-kill-infected, new-boxed-value(8, get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-initial-attack-infected, boxed_timeframePOD(get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-kill-infected-taunt, boxed_timeframePOD(get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-kill-infected, boxed_timeframePOD(get-current-timeframe(0)));
                                 go(militia-engage-infected-distraction, 1);
                             }
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (entity-exists?(var_2) && npc-alive?(var_2) && !(npc-using-skill?(var_2, 20)) || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-1) == 2 || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-2) == 2 || npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-3) == 2 && npc-get-awareness(var_2, npc-wat-infected-tunnels-clicker-6) == 2) {
                             if (npc-group-alive-count(station-fight-clickers) > 0 && npc-group-alive-count(station-fight-militia) > 1 && !(fact-bool(get-closest-living-npc-in-group(station-fight-militia, player, 0), has-faction-ever-seen-player-or-buddy, 1, 0)) && !(get-boolean(engage-infected-played?, self))) {
                                 set-boolean(engage-infected-played?, 1, self);
-                                fact-set(faction-enemy, restrict-initial-attack-infected, new-boxed-value(8, get-current-timeframe(0)));
-                                fact-set(faction-enemy, restrict-kill-infected-taunt, new-boxed-value(8, get-current-timeframe(0)));
-                                fact-set(faction-enemy, restrict-kill-infected, new-boxed-value(8, get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-initial-attack-infected, boxed_timeframePOD(get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-kill-infected-taunt, boxed_timeframePOD(get-current-timeframe(0)));
+                                fact-set(faction-enemy, restrict-kill-infected, boxed_timeframePOD(get-current-timeframe(0)));
                                 go(militia-engage-infected-other, 1);
                             }
                         }
@@ -237,17 +217,7 @@ statescript {
             track main {
                 lambda {
                     if (get-tension-mode() == 2) {
-                        foreach (u64? var_2 : station-fight-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : station-fight-militia) {
                             if (entity-exists?(var_3) && npc-alive?(var_3) && !(npc-using-skill?(var_3, 20))) {
                                 go(search-unaware-convo, 1);
                             }
@@ -271,17 +241,7 @@ statescript {
                     wait(3.30);
                 }
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (entity-exists?(var_2) && npc-alive?(var_2) && !(npc-using-skill?(var_2, 20))) {
                             if (!tension-mode-is?(3)) {
                                 request-dialog(wat-search-unaware-convo-4-001, npc-wat-infected-tunnels-militia-1, npc-wat-infected-tunnels-militia-4, 0, 0, 0, 0);
@@ -319,17 +279,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(station-fight-clickers, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(station-fight-clickers, single-frame, 0)) {
                         if (npc-using-skill?(var_3, 16) && npc-using-skill?(var_3, 5)) {
                             set-boolean(militia-engage-infected?, 1, self);
                         }
@@ -355,17 +305,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_2 : darray-clone(station-fight-clickers, single-frame, 0)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : darray-clone(station-fight-clickers, single-frame, 0)) {
                         if (npc-using-skill?(var_3, 5)) {
                             set-boolean(militia-engage-infected?, 1, self);
                         }
@@ -384,7 +324,7 @@ statescript {
                     request-dialog(wat-infected-tunnels-station-fight-militia-flee-infected-001, get-closest-living-npc-in-group(all-human-enemy-npcs, player, 0), 0, 0, 0, 0, 0);
                 }
                 lambda {
-                    fact-set(faction-enemy, restrict-kill-infected, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(faction-enemy, restrict-kill-infected, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -402,10 +342,10 @@ statescript {
                     request-dialog(wat-infected-tunnels-station-fight-search-start-001, get-closest-living-npc-in-group(all-human-enemy-npcs, player, 0), 0, 0, 0, 0, 0);
                 }
                 lambda {
-                    fact-set(global, search-start-played?, new-boxed-value(1, 1));
+                    fact-set(global, search-start-played?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, stealth-infected-mode, new-boxed-value(1, 0));
+                    fact-set(global, stealth-infected-mode, boxed_bool(0));
                 }
                 lambda {
                     go(wait-for-event, 1);
@@ -464,7 +404,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, stealth-infected-mode, new-boxed-value(1, 0));
+                    fact-set(global, stealth-infected-mode, boxed_bool(0));
                 }
             }
         }

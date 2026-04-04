@@ -36,7 +36,7 @@ f32 rb-playtest-mult-dec(f32 arg_0) {
 }
 
 u64? rb-playtest-set-bump-height(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(set-bump-height, arg_0, new-boxed-value(6, arg_1), new-boxed-value(6, arg_2));
+    return send-event(set-bump-height, arg_0, boxed_f32(arg_1), boxed_f32(arg_2));
 }
 
 f32 rb-playtest-mult-inc(f32 arg_0) {
@@ -370,37 +370,37 @@ statescript {
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-1, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-1, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-1, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 2, self);
                     }
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-2, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-2, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-2, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 3, self);
                     }
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-3, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-3, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-3, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 4, self);
                     }
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-4, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-4, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-4, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 5, self);
                     }
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-5, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-5, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-5, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 6, self);
                     }
                 }
                 lambda {
                     if (!(tag-symbol(rb-playtest-script-6, self) == 0)) {
-                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-6, self), new-boxed-value(7, get-self-id()));
+                        send-event(set-base-obj-id, tag-symbol(rb-playtest-script-6, self), boxed_symbol(get-self-id()));
                         set-int32(rb-playtest-max-scripts, 7, self);
                     }
                 }
@@ -489,22 +489,22 @@ statescript {
                     send-event(update-position, get-symbol(rb-playtest-base-obj-id, self));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-1, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-1, self), boxed_bool(0));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-2, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-2, self), boxed_bool(0));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-3, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-3, self), boxed_bool(0));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-4, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-4, self), boxed_bool(0));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-5, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-5, self), boxed_bool(0));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-6, self), new-boxed-value(1, 0));
+                    send-event(set-active, tag-symbol(rb-playtest-script-6, self), boxed_bool(0));
                 }
                 lambda {
                     wait-one-frame();
@@ -929,22 +929,22 @@ statescript {
                     );
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-1, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 1));
+                    send-event(set-active, tag-symbol(rb-playtest-script-1, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 1));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-2, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 2));
+                    send-event(set-active, tag-symbol(rb-playtest-script-2, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 2));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-3, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 3));
+                    send-event(set-active, tag-symbol(rb-playtest-script-3, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 3));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-4, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 4));
+                    send-event(set-active, tag-symbol(rb-playtest-script-4, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 4));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-5, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 5));
+                    send-event(set-active, tag-symbol(rb-playtest-script-5, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 5));
                 }
                 lambda {
-                    send-event(set-active, tag-symbol(rb-playtest-script-6, self), new-boxed-value(1, get-int32(rb-playtest-active-script, self) == 6));
+                    send-event(set-active, tag-symbol(rb-playtest-script-6, self), boxed_bool(get-int32(rb-playtest-active-script, self) == 6));
                 }
                 lambda {
                     if (get-int32(rb-playtest-active-script, self) == 0) {

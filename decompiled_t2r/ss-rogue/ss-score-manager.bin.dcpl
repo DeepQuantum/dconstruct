@@ -137,9 +137,9 @@ i32 run-gen--encounter-reward-supplements(u16 arg_0) {
 }
 
 u64? score-manager-add-new-encounter() {
-    darray-append(get-symbol(score-data, self), new-boxed-value(7, darray-create(self, -1, 1)), 0);
-    darray-append(get-symbol(bonus-score-data, self), new-boxed-value(7, darray-create(self, -1, 1)), 0);
-    darray-append(get-symbol(multiplier-data, self), new-boxed-value(7, darray-create(self, -1, 1)), 0);
+    darray-append(get-symbol(score-data, self), boxed_symbol(darray-create(self, -1, 1)), 0);
+    darray-append(get-symbol(bonus-score-data, self), boxed_symbol(darray-create(self, -1, 1)), 0);
+    darray-append(get-symbol(multiplier-data, self), boxed_symbol(darray-create(self, -1, 1)), 0);
     u64? var_9 = #%alloc-mem-typed(rogue, 64, 0, rogue-score-container);
     if (!(var_9 == 0)) {
         *(u64*)var_9 = 0;
@@ -147,7 +147,7 @@ u64? score-manager-add-new-encounter() {
         *(u64*)(var_9 + 32) = int-value;
         *(i32*)(var_9 + 40) = 0;
     }
-    return darray-append(get-symbol(overview-data, self), new-boxed-value(13, var_9), 0);
+    return darray-append(get-symbol(overview-data, self), boxed_p64(var_9), 0);
 }
 
 u16 score-manager--generate-random-score() {
@@ -312,7 +312,7 @@ u64? calculate-encounter-score() {
                 *(i32*)(var_43 + 52) = *(i32*)((**t2r-score-info-array* + (i * 80)) + 72);
                 *(i32*)(var_43 + 56) = *(i32*)((**t2r-score-info-array* + (i * 80)) + 76);
             }
-            var_42 = darray-append(var_5, new-boxed-value(13, var_43), 0);
+            var_42 = darray-append(var_5, boxed_p64(var_43), 0);
         }
         var_14 = 0 + var_31;
         i = i + 1;
@@ -379,7 +379,7 @@ u64? calculate-encounter-score() {
                 *(u8*)(var_65 + 48) = 1;
                 *(i32*)(var_65 + 52) = *(i32*)((**t2r-bonus-score-info-array* + (i * 80)) + 72);
             }
-            var_64 = darray-append(var_8, new-boxed-value(13, var_65), 0);
+            var_64 = darray-append(var_8, boxed_p64(var_65), 0);
         }
         var_46 = var_14 + var_51;
         i = i + 1;
@@ -421,7 +421,7 @@ u64? calculate-encounter-score() {
                 *(f32*)(var_79 + 40) = var_70;
                 *(u8*)(var_79 + 48) = 1;
             }
-            var_78 = darray-append(var_11, new-boxed-value(13, var_79), 0);
+            var_78 = darray-append(var_11, boxed_p64(var_79), 0);
         }
         var_68 = score-add-multiplier(0.00, var_70, 0.00);
         i = i + 1;
@@ -664,10 +664,10 @@ u64? init-score-data() {
     set-symbol(bonus-score-data, darray-create(self, -1, 1), self);
     set-symbol(multiplier-data, darray-create(self, -1, 1), self);
     set-symbol(overview-data, darray-create(self, -1, 1), self);
-    darray-append(get-symbol(all-score-data, self), new-boxed-value(7, get-symbol(score-data, self)), 0);
-    darray-append(get-symbol(all-score-data, self), new-boxed-value(7, get-symbol(bonus-score-data, self)), 0);
-    darray-append(get-symbol(all-score-data, self), new-boxed-value(7, get-symbol(multiplier-data, self)), 0);
-    darray-append(get-symbol(all-score-data, self), new-boxed-value(7, get-symbol(overview-data, self)), 0);
+    darray-append(get-symbol(all-score-data, self), boxed_symbol(get-symbol(score-data, self)), 0);
+    darray-append(get-symbol(all-score-data, self), boxed_symbol(get-symbol(bonus-score-data, self)), 0);
+    darray-append(get-symbol(all-score-data, self), boxed_symbol(get-symbol(multiplier-data, self)), 0);
+    darray-append(get-symbol(all-score-data, self), boxed_symbol(get-symbol(overview-data, self)), 0);
     return rogue-set-all-score-data(get-symbol(all-score-data, self));
 }
 
@@ -1065,16 +1065,16 @@ statescript {
                 lambda {
                     u64? var_1 = event::get-attack-info(get-event());
                     bool var_2 = *(i32*)(var_1 + 48) != 0 && *(i32*)(var_1 + 48) != 4 && *(i32*)(var_1 + 48) != 6;
-                    u64? var_5 = darray-contains?(rogue-headshot-joint-group, new-boxed-value(7, event-get-attack-joint()));
+                    u64? var_5 = darray-contains?(rogue-headshot-joint-group, boxed_symbol(event-get-attack-joint()));
                     u64? var_6 = event-arg-symbol(1);
                     u64? var_7 = get-object-health(var_6);
-                    if (player == *(u64*)(var_1 + 8) && *(i32*)(var_1 + 24) == 0 && *(i32*)(var_1 + 48) == 4 || bottle == *(u64*)(var_1 + 72) && brick == *(u64*)(var_1 + 72) && !darray-contains?(grp-enemies-stunned, new-boxed-value(7, var_6))) {
-                        darray-append(grp-enemies-stunned, new-boxed-value(7, var_6), 1);
+                    if (player == *(u64*)(var_1 + 8) && *(i32*)(var_1 + 24) == 0 && *(i32*)(var_1 + 48) == 4 || bottle == *(u64*)(var_1 + 72) && brick == *(u64*)(var_1 + 72) && !darray-contains?(grp-enemies-stunned, boxed_symbol(var_6))) {
+                        darray-append(grp-enemies-stunned, boxed_symbol(var_6), 1);
                         ++(encounter-stun-count, self);
                         debug-print-scoring("stun + 1");
                     }
-                    if (player == *(u64*)(var_1 + 8) && var_2 && *(u8*)(var_1 + 97) && !darray-contains?(grp-enemies-stunned, new-boxed-value(7, var_6))) {
-                        darray-append(grp-enemies-stunned, new-boxed-value(7, var_6), 1);
+                    if (player == *(u64*)(var_1 + 8) && var_2 && *(u8*)(var_1 + 97) && !darray-contains?(grp-enemies-stunned, boxed_symbol(var_6))) {
+                        darray-append(grp-enemies-stunned, boxed_symbol(var_6), 1);
                         ++(encounter-stun-count, self);
                         debug-print-scoring("stun + 1");
                     }
@@ -1123,8 +1123,8 @@ statescript {
                                 }
                                 var_27 = var_34;
                             }
-                            darray-append(molotovs-attacked-enemy, new-boxed-value(7, var_27), 1);
-                            ddict-set(ddict-enemy-last-attacking-molotov, var_6, new-boxed-value(7, var_27));
+                            darray-append(molotovs-attacked-enemy, boxed_symbol(var_27), 1);
+                            ddict-set(ddict-enemy-last-attacking-molotov, var_6, boxed_symbol(var_27));
                             if (!is-final-build?()) {
                                 var_25 = display(dc:format("DEB-SCORE: npc: %s - attacked by molotov %s", string-debug(var_6), string-debug(var_27)), 19);
                             }
@@ -1213,17 +1213,7 @@ statescript {
                         } else {
                             wait(0.10);
                             u16 var_5;
-                            foreach (u64? var_7 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                                u16 var_8;
-                                if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                                    var_8 = *(u64*)var_7;
-                                } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                                    var_8 = *(u64*)var_7;
-                                } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                                    var_8 = *(u64*)var_7;
-                                } else {
-                                    var_8 = 0;
-                                }
+                            foreach (u64? var_8 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                                 u16 var_10;
                                 if (npc-alive?(var_8)) {
                                     if (npc-get-awareness(var_8, player) == 2) {
@@ -1247,7 +1237,7 @@ statescript {
                         debug-print-scoring("kill while grabbing their ally + 1");
                     }
                     if (ddict-find-key(ddict-enemy-last-attacking-molotov, var_0) > -1 && var_2 != molotov) {
-                        var_7 = ddict-set(ddict-enemy-last-attacking-molotov, var_0, new-boxed-value(0, 0));
+                        var_7 = ddict-set(ddict-enemy-last-attacking-molotov, var_0, boxed_invalid(0));
                     }
                 }
             }
@@ -1257,8 +1247,8 @@ statescript {
                 lambda {
                     u64? var_1 = event-arg-symbol(0);
                     if (event-arg-symbol(3) == thrown-molotov-bullet) {
-                        ddict-set(ddict-active-molotov-time, var_1, new-boxed-value(6, get-current-time(0)));
-                        ddict-set(ddict-active-motolov-location, var_1, new-boxed-value(18, event-arg-bound-frame(1)));
+                        ddict-set(ddict-active-molotov-time, var_1, boxed_f32(get-current-time(0)));
+                        ddict-set(ddict-active-motolov-location, var_1, boxed_boundframe(event-arg-bound-frame(1)));
                         if (!is-final-build?()) {
                             display(dc:format("DEB-SCORE: molotov activated %s", string-debug(var_1)), 19);
                         }
@@ -1365,17 +1355,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                         if (npc-alive?(var_4)) {
                             if (npc-get-awareness(var_4, player) == 2) {
                                 if (!is-final-build?()) {
@@ -1444,8 +1424,8 @@ statescript {
                                 var_6 = 0.00;
                             }
                             if (time-elapsed(var_6) > 14.00) {
-                                ddict-set(ddict-active-molotov-time, var_4, new-boxed-value(0, 0));
-                                ddict-set(ddict-active-motolov-location, var_4, new-boxed-value(0, 0));
+                                ddict-set(ddict-active-molotov-time, var_4, boxed_invalid(0));
+                                ddict-set(ddict-active-motolov-location, var_4, boxed_invalid(0));
                                 if (!is-final-build?()) {
                                     display(dc:format("DEB-SCORE: molotov %s became inactive", string-debug(var_4)), 19);
                                 }
@@ -1495,24 +1475,14 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
-                            if (!(stun-bomb-explosion-process == 0) && npc-is-stunned?(var_2) && !darray-contains?(grp-enemies-stunned, new-boxed-value(7, var_2)) && !npc-is-buddy?(var_2) && 5.00 > distance-between-locators(get-object-locator(var_2), get-bound-frame(stun-bomb-explosion-location, self))) {
+                            if (!(stun-bomb-explosion-process == 0) && npc-is-stunned?(var_2) && !darray-contains?(grp-enemies-stunned, boxed_symbol(var_2)) && !npc-is-buddy?(var_2) && 5.00 > distance-between-locators(get-object-locator(var_2), get-bound-frame(stun-bomb-explosion-location, self))) {
                                 if (!is-final-build?()) {
                                     display(dc:format("DEB-SCORE: %s just added as stunned from a bomb", string-debug(var_2)), 19);
                                 }
                                 set-int32(encounter-stun-count, 1 + get-int32(encounter-stun-count, self), self);
-                                darray-append(grp-enemies-stunned, new-boxed-value(7, var_2), 1);
+                                darray-append(grp-enemies-stunned, boxed_symbol(var_2), 1);
                             }
                         }
                     }

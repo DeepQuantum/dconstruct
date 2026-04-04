@@ -13,17 +13,7 @@
 
 u16 player-has-upgradeable-weapon?() {
     u16 var_2;
-    foreach (u64? var_4 : get-player-all-weapons()) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : get-player-all-weapons()) {
         u16 var_7;
         if (ss-workbench--workbench-upgrade-def-map-valid?(var_5)) {
             var_7 = 1;
@@ -224,21 +214,21 @@ statescript {
                 lambda {
                     if (!is-rogue-in-post-encounter-flow?()) {
                         u64? var_1 = #%alloc-array(single-frame, 1, 1, 0);
-                        *(u64*)(*var_1 + (0 * 8)) = new-boxed-value(7, get-symbol(nav-assist-point-name, self));
-                        speak-text-to-speech-formatted(new-boxed-value(21, var_1), 1, 0, 1);
+                        *(u64*)var_1[0] = boxed_symbol(get-symbol(nav-assist-point-name, self));
+                        speak-text-to-speech-formatted(boxed_array(var_1), 1, 0, 1);
                         u64? var_5 = #%alloc-array(single-frame, 1, 2, 0);
-                        *(u64*)(*var_5 + (0 * 8)) = new-boxed-value(7, A11Y_MENU_WORKBENCH_PART_COUNT);
-                        *(u64*)(*var_5 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(parts));
-                        speak-text-to-speech-formatted(new-boxed-value(21, var_5), 1, 0, 1);
+                        *(u64*)var_5[0] = boxed_symbol(A11Y_MENU_WORKBENCH_PART_COUNT);
+                        *(u64*)var_5[1] = boxed_i32(get-inventory-item-quantity(parts));
+                        speak-text-to-speech-formatted(boxed_array(var_5), 1, 0, 1);
                         u64? var_10 = #%alloc-array(single-frame, 1, 2, 0);
-                        *(u64*)(*var_10 + (0 * 8)) = new-boxed-value(7, ACCESSIBILITY_STATUS_SUPPLEMENTS);
-                        *(u64*)(*var_10 + (1 * 8)) = new-boxed-value(2, get-inventory-item-quantity(player-upgrade-supplements));
-                        speak-text-to-speech-formatted(new-boxed-value(21, var_10), 1, 0, 1);
+                        *(u64*)var_10[0] = boxed_symbol(ACCESSIBILITY_STATUS_SUPPLEMENTS);
+                        *(u64*)var_10[1] = boxed_i32(get-inventory-item-quantity(player-upgrade-supplements));
+                        speak-text-to-speech-formatted(boxed_array(var_10), 1, 0, 1);
                         u64? var_15 = #%alloc-array(single-frame, 1, 2, 0);
-                        *(u64*)(*var_15 + (0 * 8)) = new-boxed-value(7, SINGLE_NUMBER);
-                        *(u64*)(*var_15 + (1 * 8)) = new-boxed-value(2, get-svar(vendor-currency));
+                        *(u64*)var_15[0] = boxed_symbol(SINGLE_NUMBER);
+                        *(u64*)var_15[1] = boxed_i32(get-svar(vendor-currency));
                         speak-text-to-speech-raw(
-                            concat-boxed-arrays(generate-text-to-speech-formatted(new-boxed-value(21, var_15), 0), generate-text-to-speech-formatted(new-boxed-value(7, HUD_PICKUP_CURRENCY), 0), 0, 0, 0, 0, 0, 0),
+                            concat-boxed-arrays(generate-text-to-speech-formatted(boxed_array(var_15), 0), generate-text-to-speech-formatted(boxed_symbol(HUD_PICKUP_CURRENCY), 0), 0, 0, 0, 0, 0, 0),
                             0,
                             0,
                             1
@@ -444,7 +434,7 @@ statescript {
                             wait-one-frame();
                         }
                         set-svar(dead-drop-deficit, 0);
-                        broadcast-event(spawn-empty-hub-lockbox, new-boxed-value(18, get-spawner-locator(rogue-lockbox-spawner-1, 1)));
+                        broadcast-event(spawn-empty-hub-lockbox, boxed_boundframe(get-spawner-locator(rogue-lockbox-spawner-1, 1)));
                     }
                 }
                 lambda {
@@ -452,7 +442,7 @@ statescript {
                         while (!is-script-running?(ss-hub-lockbox-1)) {
                             wait-one-frame();
                         }
-                        broadcast-event(spawn-hub-lockbox, new-boxed-value(18, get-spawner-locator(rogue-lockbox-spawner-1, 1)));
+                        broadcast-event(spawn-hub-lockbox, boxed_boundframe(get-spawner-locator(rogue-lockbox-spawner-1, 1)));
                         if (task-active?(t2r-hub-proto, t2r-theater-hub) && task-active?(t2r-hub-proto, t2r-aquarium-hub)) {
                             if (get-svar-as-boolean(dead-drop-wait-pick-up-recipe) && get-svar-as-boolean(dead-drop-wait-pick-up-weapon)) {
                                 player-teleport(player, cp-player-spawner-4);
@@ -777,18 +767,18 @@ statescript {
                         var_1 = t2r-hub-aquarium-map-board-enter;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-map-table-player-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (3 * 8)) = 54;
-                    *(u64*)(*(*var_2 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (3 * 8)) + 8) = 0.05;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-map-table-player-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.50;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
+                    *(i32*)*var_2[3] = 54;
+                    *(u64*)(*var_2[3] + 8) = 0;
+                    *(f32*)(*var_2[3] + 8) = 0.05;
                     wait-animate_(player, var_1, var_2);
                 }
                 lambda {
@@ -799,15 +789,15 @@ statescript {
                         var_1 = t2r-hub-aquarium-map-board-idle;
                     }
                     u64? var_2 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_2 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(pos-map-table-player-1, 1);
-                    *(i32*)*(*var_2 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (1 * 8)) + 8) = 0.00;
-                    *(i32*)*(*var_2 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_2 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_2 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_2[0] = 10;
+                    *(u64*)(*var_2[0] + 8) = 0;
+                    *(u64*)(*var_2[0] + 8) = get-spawner-locator(pos-map-table-player-1, 1);
+                    *(i32*)*var_2[1] = 28;
+                    *(u64*)(*var_2[1] + 8) = 0;
+                    *(f32*)(*var_2[1] + 8) = 0.00;
+                    *(i32*)*var_2[2] = 30;
+                    *(u64*)(*var_2[2] + 8) = 0;
+                    *(f32*)(*var_2[2] + 8) = 0.00;
                     animate_(player, var_1, var_2);
                 }
                 lambda {
@@ -960,36 +950,36 @@ statescript {
                 lambda {
                     if (task-active?(t2r-hub-proto, t2r-theater-hub)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(pos-map-table-player-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.25;
-                        *(i32*)*(*var_1 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_1 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (3 * 8)) + 8) = 50;
-                        *(i32*)*(*var_1 + (4 * 8)) = 60;
-                        *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (4 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(pos-map-table-player-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.25;
+                        *(i32*)*var_1[2] = 30;
+                        *(u64*)(*var_1[2] + 8) = 0;
+                        *(f32*)(*var_1[2] + 8) = 0.80;
+                        *(i32*)*var_1[3] = 61;
+                        *(u64*)(*var_1[3] + 8) = 0;
+                        *(i32*)(*var_1[3] + 8) = 50;
+                        *(i32*)*var_1[4] = 60;
+                        *(u64*)(*var_1[4] + 8) = 0;
+                        *(f32*)(*var_1[4] + 8) = 0.50;
                         animate_(player, t2r-hub-theater-map-board-exit, var_1);
                     } else {
                         u64? var_3 = #%alloc-array(single-frame, 16, 4, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(pos-map-table-player-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.25;
-                        *(i32*)*(*var_3 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (2 * 8)) + 8) = 0.80;
-                        *(i32*)*(*var_3 + (3 * 8)) = 61;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (3 * 8)) + 8) = 35;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(pos-map-table-player-1, 1);
+                        *(i32*)*var_3[1] = 28;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.25;
+                        *(i32*)*var_3[2] = 30;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(f32*)(*var_3[2] + 8) = 0.80;
+                        *(i32*)*var_3[3] = 61;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(i32*)(*var_3[3] + 8) = 35;
                         animate_(player, t2r-hub-aquarium-map-board-exit, var_3);
                     }
                 }

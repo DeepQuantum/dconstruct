@@ -41,17 +41,7 @@ statescript {
             track main {
                 lambda {
                     set-boolean(enemies-aware-of-player?, 0, self);
-                    foreach (u64? var_2 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                         if (npc-get-awareness(var_3, player) == 2 && npc-get-awareness(var_3, player) == 3) {
                             set-boolean(enemies-aware-of-player?, 1, self);
                         }

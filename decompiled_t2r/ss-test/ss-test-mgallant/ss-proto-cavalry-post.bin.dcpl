@@ -33,7 +33,7 @@ statescript {
                     wait-random(0.00, 2.00);
                 }
                 lambda {
-                    send-event(register-post, tag-symbol(horse, self), new-boxed-value(7, get-self-id()));
+                    send-event(register-post, tag-symbol(horse, self), boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(rate-post, 1);

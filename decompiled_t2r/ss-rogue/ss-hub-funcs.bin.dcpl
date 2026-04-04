@@ -28,7 +28,7 @@ u64? hub-library-turn-on-workbench() {
     turn-on-light(rt-workbench-a-1, 0);
     turn-on-light(rt-workbench-b-1, 0);
     turn-on-light(rt-workbench-c-1, 0);
-    return darray-append(workbench-spawned-light-effects, new-boxed-value(7, spawn-entity(fx-workbench-light-flare-beam-1, 0, 0)), 0);
+    return darray-append(workbench-spawned-light-effects, boxed_symbol(spawn-entity(fx-workbench-light-flare-beam-1, 0, 0)), 0);
 }
 
 u64? hub-library-turn-on-map-workbench() {

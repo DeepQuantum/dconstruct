@@ -30,9 +30,9 @@ u16 count-kill-towards-gun-without-reload(u64? arg_0) {
         } else {
             var_2 = 0;
         }
-        ddict-set(kill-count-by-gun, arg_0, new-boxed-value(2, var_2 + 1));
+        ddict-set(kill-count-by-gun, arg_0, boxed_i32(var_2 + 1));
     } else {
-        ddict-set(kill-count-by-gun, arg_0, new-boxed-value(2, 1));
+        ddict-set(kill-count-by-gun, arg_0, boxed_i32(1));
     }
     u64? var_5 = ddict-get(kill-count-by-gun, arg_0);
     u16 var_6;
@@ -72,7 +72,7 @@ statescript {
             track main {
                 lambda {
                     if (ddict-contains-key?(kill-count-by-gun, get-player-weapon-id())) {
-                        ddict-set(kill-count-by-gun, get-player-weapon-id(), new-boxed-value(2, 0));
+                        ddict-set(kill-count-by-gun, get-player-weapon-id(), boxed_i32(0));
                     }
                 }
             }

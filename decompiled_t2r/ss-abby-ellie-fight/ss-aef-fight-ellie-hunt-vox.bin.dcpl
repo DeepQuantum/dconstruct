@@ -57,7 +57,7 @@ u16 aef-fight-vox-say-random-line-from-group(u64? arg_0, u64? arg_1, u64? arg_2)
     u64? var_1 = group-random(arg_0);
     u16 var_2;
     if (!(var_1 == 0)) {
-        darray-find-remove(arg_0, new-boxed-value(7, var_1), 0);
+        darray-find-remove(arg_0, boxed_symbol(var_1), 0);
         say(arg_2, var_1, 2, 0);
         var_2 = send-event(var_1, get-self-id());
     } else {

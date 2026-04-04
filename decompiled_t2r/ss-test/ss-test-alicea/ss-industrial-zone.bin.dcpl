@@ -12,7 +12,7 @@
 // ####################################################################################################
 
 u64? throw-molotov-at-grass?(bool arg_0) {
-    return !(arg_0 == 0) && !darray-contains?(already-targeted, new-boxed-value(7, arg_0)) && get-closest-in-group(molotov-npcs, arg_0, 0, 0, 1, 0) == get-self-id();
+    return !(arg_0 == 0) && !darray-contains?(already-targeted, boxed_symbol(arg_0)) && get-closest-in-group(molotov-npcs, arg_0, 0, 0, 1, 0) == get-self-id();
 }
 
 statescript {
@@ -31,7 +31,7 @@ statescript {
             track main {
                 lambda {
                     if (get-self-id() == event-arg-symbol(0)) {
-                        darray-find-remove(molotov-npcs, new-boxed-value(7, get-self-id()), 0);
+                        darray-find-remove(molotov-npcs, boxed_symbol(get-self-id()), 0);
                         go(complete, 1);
                     }
                 }
@@ -42,7 +42,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(molotov-npcs, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(molotov-npcs, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     wait(3.00);
@@ -97,19 +97,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = darray-create(self, -1, 0);
-                    foreach (u64? var_2 : throw-spawners) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : throw-spawners) {
                         if (get-locator-distance(get-spawner-locator(get-symbol(grass-target, self), 1), get-spawner-locator(var_3, 1)) < 10.00) {
-                            darray-append(var_0, new-boxed-value(7, var_3), 1);
+                            darray-append(var_0, boxed_symbol(var_3), 1);
                         }
                     }
                     set-symbol(throw-goto, get-closest-in-group(var_0, self, 0, 0, 1, 0), self);
@@ -150,25 +140,25 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(already-targeted, new-boxed-value(7, get-symbol(grass-target, self)), 1);
+                    darray-append(already-targeted, boxed_symbol(get-symbol(grass-target, self)), 1);
                 }
                 lambda {
                     set-bound-frame(ap-ref-throw, rotate-locator-lookat(get-object-locator(self), get-spawner-locator(get-symbol(grass-target, self), 1), 1.00, 0), self);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(ap-ref-throw, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(ap-ref-throw, self);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 28;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
+                    *(i32*)*var_0[3] = 30;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     animate_(self, thug-throw, var_0);
                 }
                 lambda {

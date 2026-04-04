@@ -55,26 +55,16 @@ statescript {
                     darray-clear(tree-platforms-exclude);
                 }
                 lambda {
-                    foreach (u64? var_1 : tree-platforms) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tree-platforms) {
                         if (get-locator-distance-xz(get-spawner-locator(var_2, 1), get-object-locator(player)) < 8.00) {
-                            darray-append(tree-platforms-exclude, new-boxed-value(7, var_2), 1);
+                            darray-append(tree-platforms-exclude, boxed_symbol(var_2), 1);
                         }
                     }
                 }
                 lambda {
                     u64? var_0 = get-closest-in-group(tree-platforms, self, tree-platforms-exclude, 0, 1, 0);
                     set-symbol(tree-platform, var_0, self);
-                    darray-find-remove(tree-platforms, new-boxed-value(7, var_0), 0);
+                    darray-find-remove(tree-platforms, boxed_symbol(var_0), 0);
                     wait-npc-move-to-spawner(
                         self,
                         var_0,

@@ -384,7 +384,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(interactable-done, ss-ski-aquarium-flashback-interactable-manager-1, new-boxed-value(7, look-vox-look-at-cup-1));
+                    send-event(interactable-done, ss-ski-aquarium-flashback-interactable-manager-1, boxed_symbol(look-vox-look-at-cup-1));
                 }
                 lambda {
                     if (mid-convo?(get-symbol(cur-convo, ss-conversation-manager-1))) {

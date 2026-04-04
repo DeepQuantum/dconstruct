@@ -154,13 +154,13 @@ u64? setup-fg-photo-anim(u64? arg_0) {
     }
     u64? var_4;
     if (darray-count(fg-photo-anims-used) > 0) {
-        while (darray-contains?(fg-photo-anims-used, new-boxed-value(7, group-random(fg-photo-anims))) == 1) {
+        while (darray-contains?(fg-photo-anims-used, boxed_symbol(group-random(fg-photo-anims))) == 1) {
             group-random(fg-photo-anims);
         }
         var_4 = var_7;
     }
     set-symbol(encounter-anim, var_4, self);
-    return darray-append(fg-photo-anims-used, new-boxed-value(7, var_4), 0);
+    return darray-append(fg-photo-anims-used, boxed_symbol(var_4), 0);
 }
 
 statescript {

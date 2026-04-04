@@ -26,7 +26,7 @@ u64? is-crafting-tutorial?(u64? arg_0) {
 }
 
 u64? hud2-e3-only-kill-threat-indicator(u64? arg_0) {
-    return send-event(kill-threat-indicator-e3, canvas.hudRoot.threatIndicators, new-boxed-value(7, arg_0));
+    return send-event(kill-threat-indicator-e3, canvas.hudRoot.threatIndicators, boxed_symbol(arg_0));
 }
 
 u64? hud2-weapon-cross-end-tutorial() {
@@ -70,11 +70,11 @@ u64? gui2-register-widget-path(u16 arg_0, u64? arg_1) {
 }
 
 u64? hud2-disable-lock-minigame-prompt(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(hud-disable-prompt, arg_0, new-boxed-value(2, arg_1), new-boxed-value(1, arg_2));
+    return send-event(hud-disable-prompt, arg_0, boxed_i32(arg_1), boxed_bool(arg_2));
 }
 
 u64? set-npc-hit-tick-by-damage(u64? arg_0, u64? arg_1) {
-    return fact-set(arg_0, hit-tick-by-damage?, new-boxed-value(1, arg_1));
+    return fact-set(arg_0, hit-tick-by-damage?, boxed_bool(arg_1));
 }
 
 u64? should-show-throwable-prompt?() {
@@ -129,7 +129,7 @@ u64? menu2-crafting-menu-active?() {
 }
 
 u64? hud2-lock-minigame-submit-input(u64? arg_0, u64? arg_1, u64? arg_2) {
-    return send-event(hud-lock-in-code, arg_0, new-boxed-value(2, arg_1), new-boxed-value(2, arg_2));
+    return send-event(hud-lock-in-code, arg_0, boxed_i32(arg_1), boxed_i32(arg_2));
 }
 
 u64? hud2-reset-lock-minigame(u64? arg_0) {
@@ -167,7 +167,7 @@ bool hud2-weapon-cross-active?(u64? arg_0) {
 }
 
 u64? hud2-hide-lock-minigame(u64? arg_0, u64? arg_1) {
-    return send-event(kill-hud, arg_0, new-boxed-value(1, arg_1));
+    return send-event(kill-hud, arg_0, boxed_bool(arg_1));
 }
 
 u64? hud2-simulate-player-death/f() {
@@ -204,7 +204,7 @@ u64? wait-hud2-show-titlecard(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u6
 }
 
 u64? hud2-buddy-unmark-npc(u64? arg_0) {
-    return send-event(buddy-unmark-npc, player, new-boxed-value(7, arg_0));
+    return send-event(buddy-unmark-npc, player, boxed_symbol(arg_0));
 }
 
 u64? projectile-hit-tick-func-sp(u64? arg_0, u64? arg_1, u64? arg_2, bool arg_3, u64? arg_4, u64? arg_5, bool arg_6, u64? arg_7, u64? arg_8, u64? arg_9, u16 arg_10, bool arg_11) {
@@ -256,7 +256,7 @@ u64? projectile-hit-tick-func-mp(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3,
 }
 
 u64? hud2-request-pick-up-notification(u64? arg_0, u64? arg_1) {
-    return send-event(request-pickup-notification, hud2-get-notification-manager-path(), new-boxed-value(7, arg_0), new-boxed-value(1, arg_1));
+    return send-event(request-pickup-notification, hud2-get-notification-manager-path(), boxed_symbol(arg_0), boxed_bool(arg_1));
 }
 
 u16 gui2-joypad-command-to-string() {
@@ -318,7 +318,7 @@ u16 menu2-get-crafting-menu-path() {
 }
 
 u64? hud2-set-lock-minigame-curr-input(u64? arg_0, u64? arg_1) {
-    return send-event(hud-input-changed, arg_0, new-boxed-value(2, arg_1));
+    return send-event(hud-input-changed, arg_0, boxed_i32(arg_1));
 }
 
 u16 hud2-e3-only-force-healthbar-wrench-visible(u64? arg_0) {
@@ -354,7 +354,7 @@ u64? hud2-prevent-weapon-cross-fade-out/f(u64? arg_0) {
         0,
         0,
         0
-    ), new-boxed-value(1, arg_0));
+    ), boxed_bool(arg_0));
 }
 
 u64? hud2-show-button-prompt-stack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7, u64? arg_8) {
@@ -377,19 +377,19 @@ u64? hud2-show-button-prompt-stack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_
         var_2 = var_3;
     }
     u64? var_5 = #%alloc-array(single-frame, 1, 4, 0);
-    *(u64*)(*var_5 + (0 * 8)) = new-boxed-value(7, arg_0);
-    *(u64*)(*var_5 + (1 * 8)) = new-boxed-value(7, arg_2);
-    *(u64*)(*var_5 + (2 * 8)) = new-boxed-value(7, arg_4);
-    *(u64*)(*var_5 + (3 * 8)) = new-boxed-value(7, arg_6);
+    *(u64*)var_5[0] = boxed_symbol(arg_0);
+    *(u64*)var_5[1] = boxed_symbol(arg_2);
+    *(u64*)var_5[2] = boxed_symbol(arg_4);
+    *(u64*)var_5[3] = boxed_symbol(arg_6);
     u64? var_11 = #%alloc-array(single-frame, 1, 4, 0);
-    *(u64*)(*var_11 + (0 * 8)) = new-boxed-value(19, arg_1);
-    *(u64*)(*var_11 + (1 * 8)) = new-boxed-value(19, arg_3);
-    *(u64*)(*var_11 + (2 * 8)) = new-boxed-value(19, arg_5);
-    *(u64*)(*var_11 + (3 * 8)) = new-boxed-value(19, arg_7);
+    *(u64*)var_11[0] = boxed_stringcopy(arg_1);
+    *(u64*)var_11[1] = boxed_stringcopy(arg_3);
+    *(u64*)var_11[2] = boxed_stringcopy(arg_5);
+    *(u64*)var_11[3] = boxed_stringcopy(arg_7);
     u64? var_17 = #%alloc-array(single-frame, 1, 3, 0);
-    *(u64*)(*var_17 + (0 * 8)) = new-boxed-value(7, *invalid-symbol*);
-    *(u64*)(*var_17 + (1 * 8)) = new-boxed-value(7, *invalid-symbol*);
-    *(u64*)(*var_17 + (2 * 8)) = new-boxed-value(7, *invalid-symbol*);
+    *(u64*)var_17[0] = boxed_symbol(*invalid-symbol*);
+    *(u64*)var_17[1] = boxed_symbol(*invalid-symbol*);
+    *(u64*)var_17[2] = boxed_symbol(*invalid-symbol*);
     return hud2-set-button-prompt-stack-ciphers(
         gui2-build-widget-path(
             var_2,
@@ -402,9 +402,9 @@ u64? hud2-show-button-prompt-stack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_
             0,
             0
         ),
-        new-boxed-value(21, var_5),
-        new-boxed-value(21, var_11),
-        new-boxed-value(21, var_17),
+        boxed_array(var_5),
+        boxed_array(var_11),
+        boxed_array(var_17),
         arg_8
     );
 }
@@ -482,13 +482,13 @@ u16 menu2-get-inventory-menu-path() {
 }
 
 u64? hud2-buddy-mark-npc(u64? arg_0) {
-    return send-event(buddy-mark-npc, player, new-boxed-value(7, arg_0));
+    return send-event(buddy-mark-npc, player, boxed_symbol(arg_0));
 }
 
 u64? menu2-wait-push-player-upgrades-menu(u64? arg_0) {
     menu2-push-player-menu(1);
     wait-one-frame();
-    return send-event(focused-branch-index, menu2-get-player-upgrades-menu-path(), new-boxed-value(2, arg_0));
+    return send-event(focused-branch-index, menu2-get-player-upgrades-menu-path(), boxed_i32(arg_0));
 }
 
 u64? hud2-weapon-cross-start-tutorial() {
@@ -578,15 +578,15 @@ u16 hud2-request-dodge-reminder(u64? arg_0, sid arg_1, u64? arg_2, u64? arg_3, u
     u16 var_3;
     if (arg_1 == player && !(rogue-get-player-character() == 3) && !(rogue-get-player-character() == 5) && !(rogue-get-player-character() == 11)) {
         if (net-is-active?()) {
-            var_3 = net-send-event-to-net-id(request-dodge-reminder, player, net-get-net-id-from-player(arg_1), new-boxed-value(6, arg_3));
+            var_3 = net-send-event-to-net-id(request-dodge-reminder, player, net-get-net-id-from-player(arg_1), boxed_f32(arg_3));
         } else {
             var_3 = send-event(
                 request-dodge-reminder,
                 player,
-                new-boxed-value(7, arg_0),
-                new-boxed-value(1, arg_2),
-                new-boxed-value(6, arg_3),
-                new-boxed-value(1, arg_4)
+                boxed_symbol(arg_0),
+                boxed_bool(arg_2),
+                boxed_f32(arg_3),
+                boxed_bool(arg_4)
             );
         }
     } else {
@@ -596,7 +596,7 @@ u16 hud2-request-dodge-reminder(u64? arg_0, sid arg_1, u64? arg_2, u64? arg_3, u
 }
 
 u16 hud2-request-reminder(u64? arg_0, u64? arg_1) {
-    u64? var_2 = send-event-box-result(request-reminder, player, new-boxed-value(7, arg_0), new-boxed-value(1, arg_1));
+    u64? var_2 = send-event-box-result(request-reminder, player, boxed_symbol(arg_0), boxed_bool(arg_1));
     u16 var_3;
     if (var_2 && *(u16*)(var_2 + 12) == 1) {
         var_3 = *(u8*)var_2;
@@ -675,7 +675,7 @@ u64? hud2-set-arrow-prompt-progress(u64? arg_0, bool arg_1) {
     if (!!(arg_1 == 0)) {
         var_0 = hud2-get-arrow-status-prompt();
     }
-    return send-event(set-progress-percent, var_0, new-boxed-value(6, arg_0));
+    return send-event(set-progress-percent, var_0, boxed_f32(arg_0));
 }
 
 u64? hud2-reset-weapon-cross() {
@@ -705,8 +705,8 @@ u16 hud2-show-interactable-hold(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
         var_1 = gui2-show-permanent-attachable-widget-at(canvas.hudRoot.rootFullscreen.attachableWidgets, "pc/button-prompt/button-hold-pc", arg_1, "button-hold", 6, 0);
     }
     request-shiv-prompt(arg_0, arg_1, canvas.hudRoot.rootFullscreen.attachableWidgets, "pc/button-prompt/button-hold-pc", "button-hold");
-    send-event(set-interactable-id, var_1, new-boxed-value(7, arg_0));
-    send-event(set-progress, var_1, new-boxed-value(6, arg_2));
+    send-event(set-interactable-id, var_1, boxed_symbol(arg_0));
+    send-event(set-progress, var_1, boxed_f32(arg_2));
     u16 var_7;
     if (arg_3 && arg_0 == interact-default-hold) {
         var_7 = play-accessibility-interact-hold-sound-at-position(get-locator-position(arg_1), 0);
@@ -723,15 +723,15 @@ u64? hud2-suppress-dodge-reminders/f() {
 u16 hud2-set-reminder-disabled(u64? arg_0, u64? arg_1) {
     u16 var_0;
     if (arg_1) {
-        if (!darray-contains?(disabled-reminders, new-boxed-value(7, arg_0))) {
+        if (!darray-contains?(disabled-reminders, boxed_symbol(arg_0))) {
             log-event("hud-reminder-disabled", 0, string-debug(arg_0), 0, 0);
-            var_0 = darray-append(disabled-reminders, new-boxed-value(7, arg_0), 1);
+            var_0 = darray-append(disabled-reminders, boxed_symbol(arg_0), 1);
         } else {
             var_0 = 0;
         }
-    } else if (darray-contains?(disabled-reminders, new-boxed-value(7, arg_0))) {
+    } else if (darray-contains?(disabled-reminders, boxed_symbol(arg_0))) {
         log-event("hud-reminder-enabled", 0, string-debug(arg_0), 0, 0);
-        var_0 = darray-find-remove(disabled-reminders, new-boxed-value(7, arg_0), 0);
+        var_0 = darray-find-remove(disabled-reminders, boxed_symbol(arg_0), 0);
     } else {
         var_0 = 0;
     }
@@ -741,7 +741,7 @@ u16 hud2-set-reminder-disabled(u64? arg_0, u64? arg_1) {
 u16 hud2-set-button-prompt-visibility-health-ammo(u64? arg_0) {
     u16 var_2;
     if (gui2-widget-exists?(hud2-get-health-ammo-path())) {
-        var_2 = send-event(enable-disable-triangle, hud2-get-health-ammo-path(), new-boxed-value(1, arg_0));
+        var_2 = send-event(enable-disable-triangle, hud2-get-health-ammo-path(), boxed_bool(arg_0));
     } else {
         var_2 = 0;
     }
@@ -756,13 +756,13 @@ u64? hud2-set-lock-minigame-data(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3,
     return send-event(
         hud-set-data,
         arg_0,
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(2, arg_3),
-        new-boxed-value(1, arg_6),
-        new-boxed-value(7, arg_4),
-        new-boxed-value(7, arg_5),
-        new-boxed-value(1, arg_7)
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_i32(arg_3),
+        boxed_bool(arg_6),
+        boxed_symbol(arg_4),
+        boxed_symbol(arg_5),
+        boxed_bool(arg_7)
     );
 }
 
@@ -945,7 +945,7 @@ u64? hud2-set-arrow-prompt-visibility(u64? arg_0, u64? arg_1, bool arg_2) {
     }
     u64? var_2;
     if (arg_0) {
-        var_2 = send-event(visible, var_0, new-boxed-value(6, arg_1));
+        var_2 = send-event(visible, var_0, boxed_f32(arg_1));
     } else {
         var_2 = send-event(invisible, var_0);
     }
@@ -987,8 +987,8 @@ u16 hud2-show-worldspace-arrow-prompt(f32 arg_0, u64? arg_1, u64? arg_2, u64? ar
     gui2-assign-to-category(var_1, 512);
     u16 var_2;
     if (arg_0 != -1.00) {
-        send-event(set-progress-percent, var_1, new-boxed-value(6, arg_0));
-        var_2 = send-event(set-play-icon-sounds, var_1, new-boxed-value(1, arg_4));
+        send-event(set-progress-percent, var_1, boxed_f32(arg_0));
+        var_2 = send-event(set-play-icon-sounds, var_1, boxed_bool(arg_4));
     } else {
         var_2 = 0;
     }
@@ -1001,8 +1001,8 @@ u64? show-simple-death-tips?() {
 
 u16 hud2-show-interactable-hold-on-object(sid arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? arg_4, u64? arg_5, u64? arg_6, u64? arg_7) {
     u64? var_0 = gui2-show-permanent-attachable-widget(canvas.hudRoot.rootFullscreen.attachableWidgets, "pc/button-prompt/button-hold-pc", arg_1, arg_2, 0, 6, 0.00, 0);
-    send-event(set-interactable-id, var_0, new-boxed-value(7, arg_0));
-    send-event(set-progress, var_0, new-boxed-value(6, arg_3));
+    send-event(set-interactable-id, var_0, boxed_symbol(arg_0));
+    send-event(set-progress, var_0, boxed_f32(arg_3));
     gui2-set-attachable-widget-offsets(var_0, arg_6, arg_5, arg_4);
     u16 var_4;
     if (arg_7 && arg_0 == interact-default-hold) {
@@ -1044,16 +1044,16 @@ u64? hud2-suppress-reminders/f() {
 }
 
 u64? hud2-show-dodge-reminder-at(u64? arg_0, u64? arg_1) {
-    return send-event(request-dodge-reminder-at, player, new-boxed-value(14, arg_0), new-boxed-value(6, arg_1));
+    return send-event(request-dodge-reminder-at, player, boxed_point(arg_0), boxed_f32(arg_1));
 }
 
 u64? hud2-request-new-item-notification(u64? arg_0, u64? arg_1, u64? arg_2) {
     return send-event(
         new-item-recieved,
         hud2-get-notification-manager-path(),
-        new-boxed-value(7, arg_0),
-        new-boxed-value(6, arg_1),
-        new-boxed-value(1, arg_2)
+        boxed_symbol(arg_0),
+        boxed_f32(arg_1),
+        boxed_bool(arg_2)
     );
 }
 
@@ -1113,13 +1113,13 @@ u64? hud2-show-titlecard(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3, u64? ar
     return send-event(
         show-titlecard,
         ss-hud2-titlecard,
-        new-boxed-value(2, arg_0),
-        new-boxed-value(19, arg_1),
-        new-boxed-value(19, arg_2),
-        new-boxed-value(7, arg_3),
-        new-boxed-value(7, arg_4),
-        new-boxed-value(6, arg_5),
-        new-boxed-value(1, arg_6)
+        boxed_i32(arg_0),
+        boxed_stringcopy(arg_1),
+        boxed_stringcopy(arg_2),
+        boxed_symbol(arg_3),
+        boxed_symbol(arg_4),
+        boxed_f32(arg_5),
+        boxed_bool(arg_6)
     );
 }
 

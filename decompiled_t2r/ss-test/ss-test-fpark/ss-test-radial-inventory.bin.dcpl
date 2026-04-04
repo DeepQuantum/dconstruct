@@ -32,7 +32,7 @@ u16 sp-get-item-type(sid arg_0) {
 }
 
 u64? sp-assign-to-quarter(u64? arg_0, u64? arg_1) {
-    darray-set(sp-quarter, arg_1, new-boxed-value(7, arg_0));
+    darray-set(sp-quarter, arg_1, boxed_symbol(arg_0));
     return refresh-quarter();
 }
 
@@ -159,7 +159,7 @@ u64? sp-radial-disable-commands() {
 }
 
 u16 sp-radial-darray-add-int32-circular-buffer(u64? arg_0, u64? arg_1, i64 arg_2) {
-    darray-append(arg_0, new-boxed-value(2, arg_1), 0);
+    darray-append(arg_0, boxed_i32(arg_1), 0);
     u16 var_2;
     if (darray-count(arg_0) > arg_2) {
         var_2 = darray-remove(arg_0, 0);
@@ -231,7 +231,7 @@ u16 refresh-quarter() {
             else -> 0
         };
         if (player-inventory-get-item-quantity(var_9) == 0) {
-            darray-set(sp-quarter, i, new-boxed-value(7, null));
+            darray-set(sp-quarter, i, boxed_symbol(null));
         }
         u64? var_19 = darray-at(sp-quarter, i);
         u16 var_20;
@@ -510,12 +510,12 @@ i32 sp-radial-darray-get-most-int32(u64? arg_0) {
         } else {
             var_5 = 0;
         }
-        if (!darray-contains?(var_0, new-boxed-value(2, var_5))) {
-            darray-append(var_0, new-boxed-value(2, var_5), 0);
-            darray-append(var_1, new-boxed-value(2, 1), 0);
-            var_8 = darray-append(var_2, new-boxed-value(2, i), 0);
+        if (!darray-contains?(var_0, boxed_i32(var_5))) {
+            darray-append(var_0, boxed_i32(var_5), 0);
+            darray-append(var_1, boxed_i32(1), 0);
+            var_8 = darray-append(var_2, boxed_i32(i), 0);
         } else {
-            u64? var_17 = darray-at(var_1, darray-find(var_0, new-boxed-value(2, var_5), 0));
+            u64? var_17 = darray-at(var_1, darray-find(var_0, boxed_i32(var_5), 0));
             u16 var_18;
             if (var_17 && *(u16*)(var_17 + 12) == 1) {
                 var_18 = *(u8*)var_17;
@@ -532,8 +532,8 @@ i32 sp-radial-darray-get-most-int32(u64? arg_0) {
             } else {
                 var_18 = 0;
             }
-            darray-set(var_1, darray-find(var_0, new-boxed-value(2, var_5), 0), new-boxed-value(2, 1 + var_18));
-            var_8 = darray-set(var_2, darray-find(var_0, new-boxed-value(2, var_5), 0), new-boxed-value(2, i));
+            darray-set(var_1, darray-find(var_0, boxed_i32(var_5), 0), boxed_i32(1 + var_18));
+            var_8 = darray-set(var_2, darray-find(var_0, boxed_i32(var_5), 0), boxed_i32(i));
         }
         i = i + 1;
     }
@@ -1582,7 +1582,7 @@ statescript {
                                         set-boolean(in-backpack?, 1, self);
                                     }
                                     set-symbol(eighth-selected-item, var_17, self);
-                                    darray-set(sp-quarter, get-int32(quarter-index, self), new-boxed-value(7, get-symbol(eighth-selected-item, self)));
+                                    darray-set(sp-quarter, get-int32(quarter-index, self), boxed_symbol(get-symbol(eighth-selected-item, self)));
                                     var_22 = sp-radial-update-slice(get-int32(eighth-select, self), var_17);
                                 } else if (!sp-radial-is-gun?(var_17)) {
                                     var_22 = sp-radial-update-slice(get-int32(eighth-select, self), var_17);

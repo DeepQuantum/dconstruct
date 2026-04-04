@@ -58,7 +58,7 @@ statescript {
         block event breakable-collapsed {
             track main {
                 lambda {
-                    broadcast-event(infected-glass-broke, new-boxed-value(7, get-self-id()));
+                    broadcast-event(infected-glass-broke, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     go(cleanup, 1);
@@ -173,7 +173,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    broadcast-event(bloater-broke-wall, new-boxed-value(7, get-self-id()));
+                    broadcast-event(bloater-broke-wall, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     while (1) {

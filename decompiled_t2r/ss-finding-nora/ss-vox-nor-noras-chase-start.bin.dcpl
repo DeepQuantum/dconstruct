@@ -60,7 +60,7 @@ statescript {
         block start {
             track vox {
                 lambda {
-                    fact-set(global, ellie-chase-efforts, new-boxed-value(1, 1));
+                    fact-set(global, ellie-chase-efforts, boxed_bool(1));
                 }
                 lambda {
                     wait(1.00);
@@ -131,7 +131,7 @@ statescript {
                     clear-speech-suppression(15);
                 }
                 lambda {
-                    fact-set(global, ellie-chase-efforts, new-boxed-value(1, 0));
+                    fact-set(global, ellie-chase-efforts, boxed_bool(0));
                 }
             }
         }

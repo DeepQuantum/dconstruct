@@ -47,7 +47,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(go-motor-off, boat, new-boxed-value(7, motor-minigame-flo-ocean-impulse-levels), new-boxed-value(7, ellie-boat-reaction-stalling));
+                    send-event(go-motor-off, boat, boxed_symbol(motor-minigame-flo-ocean-impulse-levels), boxed_symbol(ellie-boat-reaction-stalling));
                 }
                 lambda {
                     go(wait-for-boat-restart, 1);
@@ -80,7 +80,7 @@ statescript {
                     wait(1.00);
                 }
                 lambda {
-                    send-event(go-vox, ss-flo-approach-bay-vox-1, new-boxed-value(7, breakdown-vox));
+                    send-event(go-vox, ss-flo-approach-bay-vox-1, boxed_symbol(breakdown-vox));
                 }
                 lambda {
                     while (!script-in-state?(boat, player-driving)) {

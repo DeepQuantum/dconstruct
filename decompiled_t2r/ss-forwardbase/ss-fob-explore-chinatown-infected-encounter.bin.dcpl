@@ -50,21 +50,11 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-pre-chinatown-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-pre-chinatown-infected) {
                         spawn-entity(var_2, 0, 1);
                         npc-set-excluded-from-tension-calculation(var_2, 1);
                         listen-mode-visible(var_2, 0, 1, -1.00);
-                        if (!(darray-contains?(fob-pre-sleeping-infected, new-boxed-value(7, var_2)))) {
+                        if (!(darray-contains?(fob-pre-sleeping-infected, boxed_symbol(var_2)))) {
                             npc-set-script-only-no-perception(var_2);
                         }
                         npc-disable-perception(var_2);
@@ -105,17 +95,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : fob-pre-chinatown-infected) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-pre-chinatown-infected) {
                         npc-set-excluded-from-tension-calculation(var_2, 0);
                         listen-mode-visible(var_2, 1, 1, -1.00);
                         npc-set-script-low-priority(var_2);

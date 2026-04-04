@@ -63,9 +63,9 @@ statescript {
                     if (!is-final-build?()) {
                         display(dc:format("[KK] Adding objects to a DArray"), 19);
                     }
-                    darray-append(get-symbol(array-of-types, self), new-boxed-value(13, var_0), 0);
-                    darray-append(get-symbol(array-of-types, self), new-boxed-value(13, var_1), 0);
-                    darray-append(get-symbol(array-of-types, self), new-boxed-value(13, ""), 0);
+                    darray-append(get-symbol(array-of-types, self), boxed_p64(var_0), 0);
+                    darray-append(get-symbol(array-of-types, self), boxed_p64(var_1), 0);
+                    darray-append(get-symbol(array-of-types, self), boxed_p64(""), 0);
                 }
             }
         }

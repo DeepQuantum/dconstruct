@@ -97,19 +97,9 @@ statescript {
             track buddy-proximity-threats {
                 lambda {
                     while (1) {
-                        foreach (u64? var_1 : all-enemy-npcs) {
-                            u16 var_2;
-                            if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                                var_2 = *(u64*)var_1;
-                            } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                                var_2 = *(u64*)var_1;
-                            } else {
-                                var_2 = 0;
-                            }
+                        foreach (u64? var_2 : all-enemy-npcs) {
                             if (npc-alive?(var_2)) {
-                                if (*(i32*)(*buddy-prototypes* + 32) == 1 && get-object-health-percentage(get-self-id()) < 0.50 && timer-running?(attack-timer, self) && darray-contains?(highlighted-attacking-npcs, new-boxed-value(7, var_2)) && !npc-on-screen-and-visible?(var_2, -1, 0) && !npc-on-screen-and-visible?(get-self-id(), -1, 0) && tension-mode-is?(3) && distance-between-objects(var_2, get-self-id()) < 8.00 && npc-is-aware-of?(var_2, get-self-id()) && npc-can-see?(var_2, get-self-id())) {
+                                if (*(i32*)(*buddy-prototypes* + 32) == 1 && get-object-health-percentage(get-self-id()) < 0.50 && timer-running?(attack-timer, self) && darray-contains?(highlighted-attacking-npcs, boxed_symbol(var_2)) && !npc-on-screen-and-visible?(var_2, -1, 0) && !npc-on-screen-and-visible?(get-self-id(), -1, 0) && tension-mode-is?(3) && distance-between-objects(var_2, get-self-id()) < 8.00 && npc-is-aware-of?(var_2, get-self-id()) && npc-can-see?(var_2, get-self-id())) {
                                     listen-mode-mark-always-visible(var_2, 5);
                                 }
                             }
@@ -129,21 +119,11 @@ statescript {
         block event Attack {
             track main {
                 lambda {
-                    foreach (u64? var_3 : all-enemy-npcs) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : all-enemy-npcs) {
                         if (npc-alive?(var_4)) {
                             if (*(u64*)(event::get-attack-info(get-event()) + 8) == var_4) {
                                 start-timer(attack-timer, get-float(PULSE-TIME, self), self, 1);
-                                darray-append(highlighted-attacking-npcs, new-boxed-value(7, var_4), 1);
+                                darray-append(highlighted-attacking-npcs, boxed_symbol(var_4), 1);
                             }
                         }
                     }

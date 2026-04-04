@@ -16,8 +16,8 @@ u16 build-npc-anim-group() {
     while (i < 101) {
         u64? var_0 = symbol-concat-int32(npc-, i);
         if (tag-specified?(var_0, self)) {
-            darray-append(get-symbol(npcs, self), new-boxed-value(7, tag-symbol(var_0, self)), 1);
-            var_2 = darray-append(get-symbol(npcs-anims, self), new-boxed-value(7, tag-symbol(symbol-concat-string(var_0, "-anim"), self)), 1);
+            darray-append(get-symbol(npcs, self), boxed_symbol(tag-symbol(var_0, self)), 1);
+            var_2 = darray-append(get-symbol(npcs-anims, self), boxed_symbol(tag-symbol(symbol-concat-string(var_0, "-anim"), self)), 1);
         }
         i = i + 1;
     }
@@ -54,17 +54,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_3 : get-symbol(npcs, self)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : get-symbol(npcs, self)) {
                         enable-camera-updates(var_4);
                         wait-spawn-entity(var_4, 0);
                         if (tag-specified?(attachable, var_4)) {
@@ -99,9 +89,9 @@ statescript {
                                     var_12 = 0;
                                 }
                                 u64? var_13 = #%alloc-array(single-frame, 16, 1, 1);
-                                *(i32*)*(*var_13 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(tag-symbol(ap, self), 1);
+                                *(i32*)*var_13[0] = 10;
+                                *(u64*)(*var_13[0] + 8) = 0;
+                                *(u64*)(*var_13[0] + 8) = get-spawner-locator(tag-symbol(ap, self), 1);
                                 animate_(var_6, var_12, var_13);
                             }
                         }

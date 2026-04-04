@@ -145,8 +145,8 @@ statescript {
                     send-event(
                         attach-rope-to-spawner,
                         carry-object-pat-cord-1,
-                        new-boxed-value(7, npc-pat-jackson-maria-2),
-                        new-boxed-value(18, get-joint-locator(npc-pat-jackson-maria-2, l_hand_prop_attachment))
+                        boxed_symbol(npc-pat-jackson-maria-2),
+                        boxed_boundframe(get-joint-locator(npc-pat-jackson-maria-2, l_hand_prop_attachment))
                     );
                 }
                 lambda {

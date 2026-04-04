@@ -38,7 +38,7 @@ u64? update-accessibility-goal() {
         darray-clear(hub-goal-positions);
         filter-hub-goals(hub-goal-positions);
         u64? var_5 = get-closest-in-group(hub-goal-positions, player, 0, 0, 1, 0);
-        if (darray-contains?(hub-goal-positions, new-boxed-value(7, get-symbol(current-goal, self)))) {
+        if (darray-contains?(hub-goal-positions, boxed_symbol(get-symbol(current-goal, self)))) {
             if (!((distance-between-locators(get-object-locator(player), get-spawner-locator(get-symbol(current-goal, self), 1)) - 5.00) < distance-between-locators(get-object-locator(player), get-spawner-locator(var_5, 1)))) {
                 var_14 = set-symbol(current-goal, var_5, self);
             }
@@ -77,7 +77,7 @@ u64? update-accessibility-goal() {
                         var_33 = 0;
                     }
                     if (is-navmesh-loaded?(var_33) && is-point-on-nav-mesh?(get-spawner-position(var_29, 1), 2.00, 5.00, 0)) {
-                        darray-append(hud-active-breadcrumbs, new-boxed-value(7, var_29), 1);
+                        darray-append(hud-active-breadcrumbs, boxed_symbol(var_29), 1);
                     }
                 }
             }
@@ -129,81 +129,81 @@ u16 filter-hub-goals(u64? arg_0) {
     u16 var_1;
     if (get-svar(sea-horse-finding-gas) < 8) {
         if (!get-svar-as-boolean(sea-horse-court-window)) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-enter-courthouse-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-enter-courthouse-1), 1);
         }
         if (!get-svar-as-boolean(sea-horse-stealth-grass-tut)) {
             if (is-navmesh-loaded?(sea-hub-dome-parking)) {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-enter-synagogue-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-enter-synagogue-1), 1);
             } else {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-enter-synagogue-2), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-enter-synagogue-2), 1);
             }
         }
         if (has-collected-treasure?(collectible-sea-hub-pet-key, 0) && !get-svar-as-boolean(sea-horse-petstore-open)) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-barkos-entrance-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-barkos-entrance-1), 1);
         }
         if (has-collected-treasure?(collectible-sea-hub-pet-key, 0) && get-svar-as-boolean(sea-horse-petstore-open) && !get-svar-as-boolean(sea-horse-petstore-holster-acquired) || !player-upgrade-active?(short-gun-second-holster) && !player-upgrade-active?(long-gun-second-holster)) {
             if (is-navmesh-loaded?(sea-hub-storefronts-int)) {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-barkos-reward-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-barkos-reward-1), 1);
             } else {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-barkos-entrance-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-barkos-entrance-1), 1);
             }
         }
         if (!get-svar-as-boolean(sea-horse-guitar-played)) {
             if (is-navmesh-loaded?(sea-hub-guitar-store) && !player-on-any-horse?(1, 1, 1)) {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-guitar-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-guitar-1), 1);
             } else {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-guitar-store-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-guitar-store-1), 1);
             }
         }
         if (!player-in-region?(rgn-accessibility-player-in-bank-1, 2) && get-svar(sea-horse-bank-vault) < 2) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-bank-entrance-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-bank-entrance-1), 1);
         }
         if (player-in-region?(rgn-accessibility-player-in-bank-1, 2) && get-svar(sea-horse-bank-vault) == 0 && is-navmesh-loaded?(sea-hub-bank)) {
             if (has-collected-treasure?(collectible-sea-vault-code-note, 0)) {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-bank-vault-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-bank-vault-1), 1);
             } else {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-bank-note-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-bank-note-1), 1);
             }
         }
         if (player-in-region?(rgn-accessibility-player-in-bank-1, 2) && get-svar(sea-horse-bank-vault) == 1 && is-navmesh-loaded?(sea-hub-bank)) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-bank-shotgun-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-bank-shotgun-1), 1);
         }
         if (has-collected-treasure?(collectible-sea-hidden-checkpoint-note, 0) && entity-exists?(item-pickup-player-upgrade-generic-360)) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-checkpoint-safe-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-checkpoint-safe-1), 1);
         }
         if (!get-svar-as-boolean(sea-horse-tank-hatch)) {
-            darray-append(arg_0, new-boxed-value(7, int-sea-horse-tank-hatch-1), 1);
+            darray-append(arg_0, boxed_symbol(int-sea-horse-tank-hatch-1), 1);
         }
         if (!has-collected-treasure?(collectible-sea-hub-pet-key, 0)) {
             if (is-navmesh-loaded?(sea-hub-coffee-shop-int)) {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-coffee-bathroom-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-coffee-bathroom-1), 1);
             } else {
-                darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-coffee-note-1), 1);
+                darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-coffee-note-1), 1);
             }
         }
         if (!get-svar-as-boolean(ss-svar(opened, ss-sea-horse-truck-tomb-1))) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-lagoon-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-lagoon-1), 1);
         }
         if (get-svar(sea-horse-finding-gas) == 6 || get-svar(sea-horse-finding-gas) == 5 && task-active?(seattle-arrival, sea-hub-explore-intro) && get-svar-as-boolean(sea-horse-hotel-keypad-tried) && !get-boolean(tried-once, ss-sea-horse-hotel-generator-1)) {
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-deliver-gas-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-deliver-gas-1), 1);
         }
         if (get-svar(sea-horse-finding-gas) == 7 && task-active?(seattle-arrival, sea-hub-explore-intro) && !interactable-enabled?(horse) && !get-svar-as-boolean(sea-horse-hotel-keypad-tried)) {
-            var_1 = darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-code-east-2), 1);
+            var_1 = darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-code-east-2), 1);
         } else {
             var_1 = 0;
         }
     } else {
         if (get-boolean(gate-open, ss-sea-horse-leave-hub-1)) {
             set-region-enabled(rgn-sea-hub-accessibility-pathfind-override-1, 0, 0);
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-horse-trap-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-horse-trap-1), 1);
         }
         if (get-svar-as-boolean(sea-horse-code-found) && !get-boolean(gate-open, ss-sea-horse-leave-hub-1)) {
             set-region-enabled(rgn-sea-hub-accessibility-pathfind-override-1, 0, 0);
-            darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-code-east-1), 1);
+            darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-code-east-1), 1);
         }
         if (!get-svar-as-boolean(sea-horse-code-found)) {
             set-region-enabled(rgn-sea-hub-accessibility-pathfind-override-1, 1, 0);
-            var_1 = darray-append(arg_0, new-boxed-value(7, pos-sea-hub-goal-hotel-courtyard-1), 1);
+            var_1 = darray-append(arg_0, boxed_symbol(pos-sea-hub-goal-hotel-courtyard-1), 1);
         } else {
             var_1 = 0;
         }

@@ -376,10 +376,10 @@ u64? ss-afm-horse-chase-spline-manager--send-splines-event(u64? arg_0, u64? arg_
     return send-event(
         set-horse-splines,
         ss-afm-horse-chase-spline-1,
-        new-boxed-value(7, arg_0),
-        new-boxed-value(7, arg_1),
-        new-boxed-value(7, arg_2),
-        new-boxed-value(7, arg_3)
+        boxed_symbol(arg_0),
+        boxed_symbol(arg_1),
+        boxed_symbol(arg_2),
+        boxed_symbol(arg_3)
     );
 }
 
@@ -604,7 +604,7 @@ statescript {
                         set-boolean(magnetize-started?, 1, self);
                         start-timer(post-branch-magnetize-timer, 1.25, self, 1);
                         if (!get-boolean(last-branch-left-chosen?, self)) {
-                            send-event(assign-new-grapple-npc, ss-afm-horse-chase-grapple-systemic-1, new-boxed-value(7, npc-afm-horse-chase-bg-fleeing-scars--militia-3));
+                            send-event(assign-new-grapple-npc, ss-afm-horse-chase-grapple-systemic-1, boxed_symbol(npc-afm-horse-chase-bg-fleeing-scars--militia-3));
                         }
                     }
                 }
@@ -920,17 +920,7 @@ statescript {
                     horse-set-barrier-spline-disabled(spl-afm-horse-chase-route-right-forest-1, 1, player-horse);
                 }
                 lambda {
-                    foreach (u64? var_1 : afm-horse-chase-forest-collision) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : afm-horse-chase-forest-collision) {
                         spawn-entity(var_2, 0, 0);
                     }
                 }
@@ -939,17 +929,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(last-branch-left-chosen?, self)) {
-                        foreach (u64? var_2 : afm-horse-chase-forest-collision) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-horse-chase-forest-collision) {
                             kill-entity-if-spawned(var_3);
                         }
                     }
@@ -984,17 +964,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(last-branch-left-chosen?, self)) {
-                        foreach (u64? var_2 : afm-horse-chase-forest-collision) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : afm-horse-chase-forest-collision) {
                             kill-entity-if-spawned(var_3);
                         }
                     }

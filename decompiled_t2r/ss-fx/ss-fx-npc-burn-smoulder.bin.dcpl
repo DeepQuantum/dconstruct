@@ -39,7 +39,7 @@ u16 wait-spawn-burn-info-list-smoulder(u64? arg_0) {
     start-timer(main-timer, 0.50, self, 1);
     for (u64 i = 0; i < *(i32*)(var_0 + 12); i++) {
         map-lookup-ptr(lookup-symbol(*default-burn-wound-info-map*, map), *(u64*)((*(var_0 + 16) + (i * 40)) + 24));
-        u64? var_7 = darray-find(all-damage-joints, new-boxed-value(7, *(u64*)((*(var_0 + 16) + (i * 40)) + 24)), 0);
+        u64? var_7 = darray-find(all-damage-joints, boxed_symbol(*(u64*)((*(var_0 + 16) + (i * 40)) + 24)), 0);
         u16 var_8;
         if (var_7 >= 0) {
             u64? var_9 = darray-at(all-damage-areas, var_7);
@@ -105,7 +105,7 @@ u16 wait-spawn-burn-info-list-smoulder(u64? arg_0) {
                 var_44 = 0.00;
             }
             set-effect-float(var_41, toggleGeoFire, var_44);
-            darray-append(get-symbol(handle-array, self), new-boxed-value(5, var_41), 0);
+            darray-append(get-symbol(handle-array, self), boxed_u64(var_41), 0);
             set-effect-sprite-scale(var_41, *(*var_34 + 32));
             set-effect-float(var_41, decayStartTime, get-timer-value(main-timer, self));
             set-effect-float(var_41, decayDuration, 0.50);

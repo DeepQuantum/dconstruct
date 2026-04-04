@@ -77,12 +77,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
                     wait-animate_(player, igc-template-double-squeezethrough-enter--ellie, var_0);
                 }
                 lambda {
@@ -115,22 +115,22 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     animate_(dina, igc-template-double-squeezethrough-forward--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                    *(i32*)*var_0[1] = 56;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.00;
                     wait-animate_(player, igc-template-double-squeezethrough-forward--ellie, var_0);
                 }
                 lambda {
@@ -202,24 +202,24 @@ statescript {
                             if (get-boolean(npc-ik-on?, self)) {
                                 clear-gesture(dina, -1, -1.00, 0);
                                 u64? var_4 = #%alloc-array(single-frame, 16, 6, 1);
-                                *(i32*)*(*var_4 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                                *(i32*)*(*var_4 + (1 * 8)) = 56;
-                                *(u64*)(*(*var_4 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_4 + (1 * 8)) + 8) = get-float(dina-anim-speed, self);
-                                *(i32*)*(*var_4 + (2 * 8)) = 59;
-                                *(u64*)(*(*var_4 + (2 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_4 + (2 * 8)) + 8) = 1;
-                                *(i32*)*(*var_4 + (3 * 8)) = 37;
-                                *(u64*)(*(*var_4 + (3 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (3 * 8)) + 8) = apReference-hand-l-dina;
-                                *(i32*)*(*var_4 + (4 * 8)) = 38;
-                                *(u64*)(*(*var_4 + (4 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_4 + (4 * 8)) + 8) = apReference-hand-r-dina;
-                                *(i32*)*(*var_4 + (5 * 8)) = 28;
-                                *(u64*)(*(*var_4 + (5 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_4 + (5 * 8)) + 8) = 1.00;
+                                *(i32*)*var_4[0] = 10;
+                                *(u64*)(*var_4[0] + 8) = 0;
+                                *(u64*)(*var_4[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                                *(i32*)*var_4[1] = 56;
+                                *(u64*)(*var_4[1] + 8) = 0;
+                                *(f32*)(*var_4[1] + 8) = get-float(dina-anim-speed, self);
+                                *(i32*)*var_4[2] = 59;
+                                *(u64*)(*var_4[2] + 8) = 0;
+                                *(i32*)(*var_4[2] + 8) = 1;
+                                *(i32*)*var_4[3] = 37;
+                                *(u64*)(*var_4[3] + 8) = 0;
+                                *(u64*)(*var_4[3] + 8) = apReference-hand-l-dina;
+                                *(i32*)*var_4[4] = 38;
+                                *(u64*)(*var_4[4] + 8) = 0;
+                                *(u64*)(*var_4[4] + 8) = apReference-hand-r-dina;
+                                *(i32*)*var_4[5] = 28;
+                                *(u64*)(*var_4[5] + 8) = 0;
+                                *(f32*)(*var_4[5] + 8) = 1.00;
                                 animate_(dina, igc-template-double-squeezethrough-forward--dina, var_4);
                                 set-boolean(npc-ik-on?, 0, self);
                             }
@@ -228,27 +228,27 @@ statescript {
                             set-character-ik-mode-override(player, 2, 1.00);
                             if (!get-boolean(npc-ik-on?, self)) {
                                 u64? var_8 = #%alloc-array(single-frame, 16, 7, 1);
-                                *(i32*)*(*var_8 + (0 * 8)) = 10;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                                *(i32*)*(*var_8 + (1 * 8)) = 56;
-                                *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (1 * 8)) + 8) = get-float(dina-anim-speed, self);
-                                *(i32*)*(*var_8 + (2 * 8)) = 59;
-                                *(u64*)(*(*var_8 + (2 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_8 + (2 * 8)) + 8) = 1;
-                                *(i32*)*(*var_8 + (3 * 8)) = 35;
-                                *(u64*)(*(*var_8 + (3 * 8)) + 8) = 0;
-                                *(i32*)(*(*var_8 + (3 * 8)) + 8) = 2;
-                                *(i32*)*(*var_8 + (4 * 8)) = 37;
-                                *(u64*)(*(*var_8 + (4 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (4 * 8)) + 8) = apReference-hand-l-dina;
-                                *(i32*)*(*var_8 + (5 * 8)) = 38;
-                                *(u64*)(*(*var_8 + (5 * 8)) + 8) = 0;
-                                *(u64*)(*(*var_8 + (5 * 8)) + 8) = apReference-hand-r-dina;
-                                *(i32*)*(*var_8 + (6 * 8)) = 28;
-                                *(u64*)(*(*var_8 + (6 * 8)) + 8) = 0;
-                                *(f32*)(*(*var_8 + (6 * 8)) + 8) = 1.00;
+                                *(i32*)*var_8[0] = 10;
+                                *(u64*)(*var_8[0] + 8) = 0;
+                                *(u64*)(*var_8[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                                *(i32*)*var_8[1] = 56;
+                                *(u64*)(*var_8[1] + 8) = 0;
+                                *(f32*)(*var_8[1] + 8) = get-float(dina-anim-speed, self);
+                                *(i32*)*var_8[2] = 59;
+                                *(u64*)(*var_8[2] + 8) = 0;
+                                *(i32*)(*var_8[2] + 8) = 1;
+                                *(i32*)*var_8[3] = 35;
+                                *(u64*)(*var_8[3] + 8) = 0;
+                                *(i32*)(*var_8[3] + 8) = 2;
+                                *(i32*)*var_8[4] = 37;
+                                *(u64*)(*var_8[4] + 8) = 0;
+                                *(u64*)(*var_8[4] + 8) = apReference-hand-l-dina;
+                                *(i32*)*var_8[5] = 38;
+                                *(u64*)(*var_8[5] + 8) = 0;
+                                *(u64*)(*var_8[5] + 8) = apReference-hand-r-dina;
+                                *(i32*)*var_8[6] = 28;
+                                *(u64*)(*var_8[6] + 8) = 0;
+                                *(f32*)(*var_8[6] + 8) = 1.00;
                                 animate_(dina, igc-template-double-squeezethrough-forward--dina, var_8);
                                 u64? var_11 = alloc-gesture-play-params();
                                 *(i32*)(var_11 + 36) = 19;
@@ -274,41 +274,41 @@ statescript {
                 lambda {
                     if (object-anim-playing?(dina, igc-template-double-squeezethrough-forward--dina, 0)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 59;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_1 + (1 * 8)) + 8) = 1;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                        *(i32*)*var_1[1] = 59;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(i32*)(*var_1[1] + 8) = 1;
                         wait-animate_(dina, igc-template-double-squeezethrough-forward--dina, var_1);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(dina, igc-template-double-squeezethrough-success--dina, var_0);
                 }
             }
             track main {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.80;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 1.00;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-igc-template-double-squeezethrough-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.80;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 60;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 1.00;
                     wait-animate_(player, igc-template-double-squeezethrough-success--ellie, var_0);
                 }
                 lambda {

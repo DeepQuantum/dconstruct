@@ -50,14 +50,14 @@ statescript {
                     }
                 }
                 lambda {
-                    send-event(suspend-idle-gestures, player-horse, new-boxed-value(1, 1));
+                    send-event(suspend-idle-gestures, player-horse, boxed_bool(1));
                 }
             }
         }
         block end {
             track main {
                 lambda {
-                    send-event(suspend-idle-gestures, player-horse, new-boxed-value(1, 0));
+                    send-event(suspend-idle-gestures, player-horse, boxed_bool(0));
                 }
             }
         }

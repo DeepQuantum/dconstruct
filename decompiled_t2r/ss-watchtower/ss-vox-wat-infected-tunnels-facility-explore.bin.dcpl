@@ -357,7 +357,7 @@ statescript {
                     wait(3.50);
                 }
                 lambda {
-                    fact-set(global, disable-shambler-callouts?, new-boxed-value(1, 0));
+                    fact-set(global, disable-shambler-callouts?, boxed_bool(0));
                 }
                 lambda {
                     wait-say(player, vox-igc-ell-gam-wat-infected-tunnels-shambler-intro-fight-done-spj-001, 2, 0);

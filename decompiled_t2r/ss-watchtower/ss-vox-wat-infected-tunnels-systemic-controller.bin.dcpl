@@ -35,25 +35,25 @@ statescript {
                             u64? var_5;
                             if (var_0 == wat-infected-tunnels-escape-station-start) {
                                 clear-speech-suppression(15);
-                                fact-set(global, infected-tunnels-escape?, new-boxed-value(1, 1));
+                                fact-set(global, infected-tunnels-escape?, boxed_bool(1));
                                 set-boolean(vox-suppress-callouts, 1, self);
                                 var_5 = suppress-speech(*suppress-all-combat-dialog*, 15);
                             } else {
                                 u64? var_8;
                                 if (var_0 == wat-infected-tunnels-station-gate-approach) {
                                     clear-speech-suppression(15);
-                                    fact-set(global, infected-tunnels-escape?, new-boxed-value(1, 1));
+                                    fact-set(global, infected-tunnels-escape?, boxed_bool(1));
                                     set-boolean(vox-suppress-callouts, 1, self);
                                     var_8 = suppress-speech(*suppress-all-combat-dialog*, 15);
                                 } else {
                                     u64? var_11;
                                     if (var_0 == wat-infected-tunnels-station-gate) {
                                         clear-speech-suppression(15);
-                                        fact-set(global, infected-tunnels-escape?, new-boxed-value(1, 1));
+                                        fact-set(global, infected-tunnels-escape?, boxed_bool(1));
                                         set-boolean(vox-suppress-callouts, 1, self);
                                         var_11 = suppress-speech(*suppress-all-combat-dialog*, 15);
                                     } else {
-                                        fact-set(global, infected-tunnels-escape?, new-boxed-value(1, 0));
+                                        fact-set(global, infected-tunnels-escape?, boxed_bool(0));
                                         set-boolean(vox-suppress-callouts, 0, self);
                                         set-float(vox-minimum-heart-rate-value, 0.00, self);
                                         var_11 = clear-speech-suppression(15);

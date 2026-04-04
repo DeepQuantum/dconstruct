@@ -30,17 +30,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-school-3, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-3) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-3) {
                         npc-make-aware-of-at(var_2, player, get-spawner-position(pos-petest-joe-opening-room-1, 1), 2, 0, 0);
                     }
                 }
@@ -94,17 +84,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-1) {
                         npc-make-aware-of-at(var_2, player, get-spawner-position(pos-petest-joe-corridor-1, 1), 2, 0, 0);
                     }
                 }
@@ -168,17 +148,7 @@ statescript {
                     wait-spawn-npc-group-async(testellis-npcs-school-2, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : testellis-npcs-school-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : testellis-npcs-school-2) {
                         npc-make-aware-of(var_2, player, 2, 0);
                         npc-set-zone-region(var_2, rgn-pe-test-joe-courtyard-1);
                     }

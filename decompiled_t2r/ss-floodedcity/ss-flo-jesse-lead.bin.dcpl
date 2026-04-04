@@ -205,17 +205,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : flo-tunnel-jesse-caps) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : flo-tunnel-jesse-caps) {
                         if (spawner-within-distance-to-object-xz?(var_2, jesse, 7.00, 1)) {
                             npc-use-cinematic-action-pack(jesse, var_2, 0, 0, 0);
                             go(wait-for-events, 1);

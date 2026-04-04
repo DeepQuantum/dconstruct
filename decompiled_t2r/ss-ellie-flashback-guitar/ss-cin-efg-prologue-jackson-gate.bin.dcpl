@@ -68,74 +68,74 @@ statescript {
                 lambda {
                     if (entity-exists?(tommy)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
                         f32 var_4;
                         if (get-boolean(task-in?, self)) {
                             var_4 = 0.00;
                         } else {
                             var_4 = 1.00;
                         }
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
+                        *(f32*)(*var_1[1] + 8) = var_4;
                         animate_(tommy, tommy=cin-efg-prologue-jackson-gate, var_1);
                     }
                 }
                 lambda {
                     if (entity-exists?(npc-efg-tommy-horse-1)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
                         f32 var_4;
                         if (get-boolean(task-in?, self)) {
                             var_4 = 0.00;
                         } else {
                             var_4 = 1.00;
                         }
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
+                        *(f32*)(*var_1[1] + 8) = var_4;
                         animate_(npc-efg-tommy-horse-1, horse-main-a=cin-efg-prologue-jackson-gate, var_1);
                     }
                 }
                 lambda {
                     if (entity-exists?(player-horse)) {
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
+                        *(i32*)*var_1[1] = 28;
+                        *(u64*)(*var_1[1] + 8) = 0;
                         f32 var_4;
                         if (get-boolean(task-in?, self)) {
                             var_4 = 0.00;
                         } else {
                             var_4 = 1.00;
                         }
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = var_4;
+                        *(f32*)(*var_1[1] + 8) = var_4;
                         animate_(player-horse, horse-main=cin-efg-prologue-jackson-gate, var_1);
                     }
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-efg-prologue-jackson-gate-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
                     f32 var_3;
                     if (get-boolean(task-in?, self)) {
                         var_3 = 0.00;
                     } else {
                         var_3 = 1.00;
                     }
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = var_3;
-                    *(i32*)*(*var_0 + (2 * 8)) = 85;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = cin-efg-prologue-jackson-gate-cam;
+                    *(f32*)(*var_0[1] + 8) = var_3;
+                    *(i32*)*var_0[2] = 85;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(u64*)(*var_0[2] + 8) = cin-efg-prologue-jackson-gate-cam;
                     wait-animate_(player, joel=cin-efg-prologue-jackson-gate, var_0);
                 }
                 lambda {

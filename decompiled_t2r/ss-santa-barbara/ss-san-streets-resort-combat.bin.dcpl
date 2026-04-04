@@ -17,17 +17,7 @@ u64? san-wait-spawn-group-kill-overflow(u64? arg_0, sid arg_1) {
         kill-entity(get-furthest-in-group(all-enemy-npcs, player));
         wait-one-frame();
     }
-    foreach (u64? var_5 : arg_0) {
-        u16 var_6;
-        if (var_5 && *(u16*)(var_5 + 12) == 7) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 5) {
-            var_6 = *(u64*)var_5;
-        } else if (var_5 && *(u16*)(var_5 + 12) == 4) {
-            var_6 = *(u64*)var_5;
-        } else {
-            var_6 = 0;
-        }
+    foreach (u64? var_6 : arg_0) {
         print-boolean(npc-is-dead-in-checkpoint?(var_6), self);
     }
     return wait-spawn-npc-group-async(arg_0, 0, 0);
@@ -102,17 +92,7 @@ statescript {
                     wait-spawn-npc-group-async(san-resort-farm-wave-1, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-farm-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-farm-wave-1) {
                         if (npc-alive?(var_2)) {
                             npc-disable-perception(var_2);
                         }
@@ -143,17 +123,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-resort-farm-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-farm-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -163,17 +133,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-farm-wave-1) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-farm-wave-1) {
                         if (npc-alive?(var_2)) {
                             npc-enable-perception(var_2);
                         }
@@ -267,17 +227,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -345,32 +295,12 @@ statescript {
                     send-event(turn-off, hint-san-streets-resort-farm-exit-1);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-farm-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-farm-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-farm-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-farm-npcs) {
                         if (npc-alive?(var_2)) {
                             if (!npc-has-awareness?(var_2, player, 2)) {
                                 kill-entity(var_2);
@@ -384,17 +314,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-hotel-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-hotel-hardpoints) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -420,17 +340,7 @@ statescript {
                 }
                 lambda {
                     if (!get-boolean(entered-pool-area, self)) {
-                        foreach (u64? var_2 : san-resort-pool-npcs-wave-1) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : san-resort-pool-npcs-wave-1) {
                             npc-disable-perception(var_3);
                             npc-make-aware-of(var_3, player, 0, 0);
                         }
@@ -465,17 +375,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-resort-hotel-outside-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-hotel-outside-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
@@ -489,17 +389,7 @@ statescript {
                     set-svar-as-boolean(san-streets-resort-pool-wave-3, 1);
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-pool-npcs-wave-2) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-pool-npcs-wave-2) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -509,17 +399,7 @@ statescript {
                     if (!npc-has-awareness?(get-closest-in-group(all-enemy-npcs, player, all-infected-npcs, 1, 1, 0), player, 2) && !get-boolean(pool-search-started, self) && get-boolean(enemies-killed, self)) {
                         set-boolean(pool-search-started, 1, self);
                         script-caption(group-get-first-member(all-enemy-npcs), "Someone has infiltrated the base! Be alert!", -1.00, 0, 0);
-                        foreach (u64? var_6 : all-enemy-npcs) {
-                            u16 var_7;
-                            if (var_6 && *(u16*)(var_6 + 12) == 7) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 5) {
-                                var_7 = *(u64*)var_6;
-                            } else if (var_6 && *(u16*)(var_6 + 12) == 4) {
-                                var_7 = *(u64*)var_6;
-                            } else {
-                                var_7 = 0;
-                            }
+                        foreach (u64? var_7 : all-enemy-npcs) {
                             if (!npc-has-awareness?(var_7, player, 2)) {
                                 npc-set-demeanor(var_7, 5, 0);
                                 npc-draw-firearm(var_7, 2, -1.00, 0);
@@ -532,17 +412,7 @@ statescript {
         block event enter {
             track main {
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-enemy-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -582,32 +452,12 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : san-resort-hotel-hardpoints) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-hotel-hardpoints) {
                         set-hardpoint-disabled(var_2);
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-lobby-hard-points) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-lobby-hard-points) {
                         set-hardpoint-enabled(var_2);
                     }
                 }
@@ -615,36 +465,16 @@ statescript {
                     san-wait-spawn-group-kill-overflow(san-resort-lobby-npcs, 12);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-enemy-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
-                        if (npc-alive?(var_2) || darray-contains?(san-resort-lobby-npcs, new-boxed-value(7, var_2))) {
-                            if (!darray-contains?(san-resort-lobby-reinf, new-boxed-value(7, var_2))) {
+                    foreach (u64? var_2 : all-enemy-npcs) {
+                        if (npc-alive?(var_2) || darray-contains?(san-resort-lobby-npcs, boxed_symbol(var_2))) {
+                            if (!darray-contains?(san-resort-lobby-reinf, boxed_symbol(var_2))) {
                                 npc-clear-zone(var_2);
                             }
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : san-resort-lobby-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : san-resort-lobby-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-set-script-low-priority(var_2);
                         }
@@ -711,7 +541,7 @@ statescript {
         block event npc-died {
             track main {
                 lambda {
-                    if (darray-contains?(san-resort-lobby-npcs, new-boxed-value(7, event-arg-symbol(0)))) {
+                    if (darray-contains?(san-resort-lobby-npcs, boxed_symbol(event-arg-symbol(0)))) {
                         if (is-combat-or-search?() && npc-group-alive-count(san-resort-lobby-npcs) < 7 && !get-svar-as-boolean(san-streets-resort-lobby-reinf-disabled)) {
                             set-boolean(spawn-lobby-reinf, 1, self);
                         }
@@ -727,17 +557,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(santa-barbara, san-streets-resort)) {
-                        foreach (u64? var_2 : san-resort-lobby-hard-points) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : san-resort-lobby-hard-points) {
                             set-hardpoint-disabled(var_3);
                         }
                         go(cleanup, 1);

@@ -183,7 +183,7 @@ statescript {
                     wait-say(yara, vox-igc-yar-gam-amp-yara-walk-exhibits-spj-001, 2, 0);
                 }
                 lambda {
-                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, new-boxed-value(7, fast));
+                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, boxed_symbol(fast));
                 }
                 lambda {
                     wait-say(yara, vox-igc-yar-gam-amp-yara-walk-exhibits-spj-002, 2, 0);
@@ -213,7 +213,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, new-boxed-value(7, slow));
+                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, boxed_symbol(slow));
                 }
                 lambda {
                     npc-block-all-move-performances-except-type(yara, conversation-point);
@@ -225,7 +225,7 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    fact-set(global, is-important-conversation, new-boxed-value(1, 1));
+                    fact-set(global, is-important-conversation, boxed_bool(1));
                 }
                 lambda {
                     wait-say(player, vox-igc-abb-gam-amp-yara-walk-exhibits-sp-002, 2, 0);
@@ -285,7 +285,7 @@ statescript {
                     fact-remove(global, is-important-conversation);
                 }
                 lambda {
-                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, new-boxed-value(7, fast));
+                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, boxed_symbol(fast));
                 }
                 lambda {
                     npc-clear-look-at(yara);
@@ -294,13 +294,13 @@ statescript {
                     amp--wait-yara-do-whistle(vox-igc-yar-gam-amp-yara-walk-exhibits-pr-007);
                 }
                 lambda {
-                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, new-boxed-value(7, slow));
+                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, boxed_symbol(slow));
                 }
                 lambda {
                     wait(0.60);
                 }
                 lambda {
-                    fact-set(global, is-important-conversation, new-boxed-value(1, 1));
+                    fact-set(global, is-important-conversation, boxed_bool(1));
                 }
                 lambda {
                     wait-say(player, vox-igc-abb-gam-amp-yara-walk-exhibits-sp-004, 2, 0);
@@ -384,7 +384,7 @@ statescript {
                     fact-remove(global, is-important-conversation);
                 }
                 lambda {
-                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, new-boxed-value(7, fast));
+                    send-event(amp--switch-yara-lead-settings, ss-amp-yara-walk-exhibits-1, boxed_symbol(fast));
                 }
                 lambda {
                     set-boolean(amp-mom-convo-done?, 1, ss-aquarium-narrative-mode-manager-1);
@@ -620,7 +620,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    fact-set(global, is-important-conversation, new-boxed-value(1, 0));
+                    fact-set(global, is-important-conversation, boxed_bool(0));
                 }
             }
         }
@@ -828,7 +828,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    fact-set/f(global, is-important-conversation, new-boxed-value(1, 1));
+                    fact-set/f(global, is-important-conversation, boxed_bool(1));
                 }
                 lambda {
                     suspend-idle-gestures/f(player);

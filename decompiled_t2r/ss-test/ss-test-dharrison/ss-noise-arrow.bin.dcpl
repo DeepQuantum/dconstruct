@@ -14,17 +14,7 @@
 u64? wait-noise-arrow-alert-npcs() {
     u64? var_0;
     while (0 < 5) {
-        foreach (u64? var_2 : all-enemy-npcs) {
-            u16 var_3;
-            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                var_3 = *(u64*)var_2;
-            } else {
-                var_3 = 0;
-            }
+        foreach (u64? var_3 : all-enemy-npcs) {
             if (entity-exists?(npc-1215) && distance-between-objects-less-than?(var_3, get-self-id(), 20.00)) {
                 npc-make-aware-of-at(var_3, npc-1215, get-object-position(get-self-id()), 2, 0, 0);
             }

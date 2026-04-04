@@ -20,7 +20,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(disallow-checkpoint-regions, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(disallow-checkpoint-regions, boxed_symbol(get-self-id()), 1);
                 }
             }
         }
@@ -34,7 +34,7 @@ statescript {
         block end {
             track main {
                 lambda {
-                    darray-find-remove(disallow-checkpoint-regions, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(disallow-checkpoint-regions, boxed_symbol(get-self-id()), 0);
                 }
             }
         }

@@ -298,7 +298,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 1));
+                    fact-set(global, disable-scent-trail, boxed_bool(1));
                 }
                 lambda {
                     npc-set-script-only-with-perception(alice);
@@ -728,21 +728,21 @@ statescript {
             track anim {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-bound-frame(alice-drop-toy-target-ap, self);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
-                    *(i32*)*(*var_0 + (4 * 8)) = 56;
-                    *(u64*)(*(*var_0 + (4 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (4 * 8)) + 8) = random-float-range(1.00, 1.30, 0);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-bound-frame(alice-drop-toy-target-ap, self);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
+                    *(i32*)*var_0[4] = 56;
+                    *(u64*)(*var_0[4] + 8) = 0;
+                    *(f32*)(*var_0[4] + 8) = random-float-range(1.00, 1.30, 0);
                     wait-animate_(alice, fob-alice-fetch-drop-get-ball--alice, var_0);
                 }
                 lambda {
@@ -812,18 +812,18 @@ statescript {
             track alice-back-away {
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-object-locator(alice);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.60;
-                    *(i32*)*(*var_0 + (3 * 8)) = 13;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (3 * 8)) + 8) = 2;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-object-locator(alice);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.60;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.60;
+                    *(i32*)*var_0[3] = 13;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(i32*)(*var_0[3] + 8) = 2;
                     wait-animate_(alice, dog-mm-ambi-reposition-bw, var_0);
                 }
                 lambda {
@@ -1080,7 +1080,7 @@ statescript {
                     amp--attach-dog-toy(get-symbol(dog-toy-id, self), alice, 0.40);
                 }
                 lambda {
-                    broadcast-event(alice-picked-up-toy, new-boxed-value(7, get-symbol(dog-toy-id, self)));
+                    broadcast-event(alice-picked-up-toy, boxed_symbol(get-symbol(dog-toy-id, self)));
                 }
                 lambda {
                     amp-alice-murmer-controller--go-to-state(alice-holding-toy);
@@ -1093,7 +1093,7 @@ statescript {
                     if (!(get-parent-attach-object(get-symbol(dog-toy-id, self)) == alice)) {
                         interactable-disable(get-symbol(dog-toy-id, self));
                         amp--attach-dog-toy(get-symbol(dog-toy-id, self), alice, 0.40);
-                        broadcast-event(alice-picked-up-toy, new-boxed-value(7, get-symbol(dog-toy-id, self)));
+                        broadcast-event(alice-picked-up-toy, boxed_symbol(get-symbol(dog-toy-id, self)));
                         amp-alice-murmer-controller--go-to-state(alice-holding-toy);
                     }
                 }
@@ -1444,18 +1444,18 @@ statescript {
                                         var_33 = 0;
                                     }
                                     u64? var_34 = #%alloc-array(single-frame, 16, 4, 1);
-                                    *(i32*)*(*var_34 + (0 * 8)) = 10;
-                                    *(u64*)(*(*var_34 + (0 * 8)) + 8) = 0;
-                                    *(u64*)(*(*var_34 + (0 * 8)) + 8) = alloc-bound-frame(get-object-position(alice), get-locator-rotation(get-bound-frame(alice-move-to-goal-loc, self)), 0, 0, 0);
-                                    *(i32*)*(*var_34 + (1 * 8)) = 28;
-                                    *(u64*)(*(*var_34 + (1 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_34 + (1 * 8)) + 8) = 0.50;
-                                    *(i32*)*(*var_34 + (2 * 8)) = 30;
-                                    *(u64*)(*(*var_34 + (2 * 8)) + 8) = 0;
-                                    *(f32*)(*(*var_34 + (2 * 8)) + 8) = 0.50;
-                                    *(i32*)*(*var_34 + (3 * 8)) = 13;
-                                    *(u64*)(*(*var_34 + (3 * 8)) + 8) = 0;
-                                    *(i32*)(*(*var_34 + (3 * 8)) + 8) = 2;
+                                    *(i32*)*var_34[0] = 10;
+                                    *(u64*)(*var_34[0] + 8) = 0;
+                                    *(u64*)(*var_34[0] + 8) = alloc-bound-frame(get-object-position(alice), get-locator-rotation(get-bound-frame(alice-move-to-goal-loc, self)), 0, 0, 0);
+                                    *(i32*)*var_34[1] = 28;
+                                    *(u64*)(*var_34[1] + 8) = 0;
+                                    *(f32*)(*var_34[1] + 8) = 0.50;
+                                    *(i32*)*var_34[2] = 30;
+                                    *(u64*)(*var_34[2] + 8) = 0;
+                                    *(f32*)(*var_34[2] + 8) = 0.50;
+                                    *(i32*)*var_34[3] = 13;
+                                    *(u64*)(*var_34[3] + 8) = 0;
+                                    *(i32*)(*var_34[3] + 8) = 2;
                                     wait-animate_(alice, var_33, var_34);
                                     npc-turn-to(alice, get-object-position(get-symbol(dog-toy-id, self)), 1, 0);
                                 }
@@ -1973,37 +1973,37 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(pick-up-toy-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.70;
-                    *(i32*)*(*var_1 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 0.15;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(pick-up-toy-ap, self);
+                    *(i32*)*var_1[1] = 13;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(i32*)(*var_1[1] + 8) = 2;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.70;
+                    *(i32*)*var_1[3] = 30;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 0.15;
                     wait-animate_(alice, get-symbol(pick-up-toy-anim, self), var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 5, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-bound-frame(pick-up-toy-ap, self);
-                    *(i32*)*(*var_1 + (1 * 8)) = 13;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (1 * 8)) + 8) = 2;
-                    *(i32*)*(*var_1 + (2 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.15;
-                    *(i32*)*(*var_1 + (3 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_1 + (4 * 8)) = 24;
-                    *(u64*)(*(*var_1 + (4 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_1 + (4 * 8)) + 8) = 2;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-bound-frame(pick-up-toy-ap, self);
+                    *(i32*)*var_1[1] = 13;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(i32*)(*var_1[1] + 8) = 2;
+                    *(i32*)*var_1[2] = 28;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.15;
+                    *(i32*)*var_1[3] = 30;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 1.00;
+                    *(i32*)*var_1[4] = 24;
+                    *(u64*)(*var_1[4] + 8) = 0;
+                    *(i32*)(*var_1[4] + 8) = 2;
                     wait-animate_(alice, get-symbol(pick-up-toy-exit, self), var_1);
                 }
                 lambda {
@@ -2020,7 +2020,7 @@ statescript {
                     amp--attach-dog-toy(get-symbol(dog-toy-id, self), alice, 0.40);
                 }
                 lambda {
-                    broadcast-event(alice-picked-up-toy, new-boxed-value(7, get-symbol(dog-toy-id, self)));
+                    broadcast-event(alice-picked-up-toy, boxed_symbol(get-symbol(dog-toy-id, self)));
                 }
                 lambda {
                     amp-alice-murmer-controller--go-to-state(alice-holding-toy);
@@ -2033,7 +2033,7 @@ statescript {
                     if (!(get-parent-attach-object(get-symbol(dog-toy-id, self)) == alice)) {
                         enable-collision-gamedriven(get-symbol(dog-toy-id, self), 0, 0.00);
                         amp--attach-dog-toy(get-symbol(dog-toy-id, self), alice, 0.40);
-                        broadcast-event(alice-picked-up-toy, new-boxed-value(7, get-symbol(dog-toy-id, self)));
+                        broadcast-event(alice-picked-up-toy, boxed_symbol(get-symbol(dog-toy-id, self)));
                         amp-alice-murmer-controller--go-to-state(alice-holding-toy);
                     }
                 }
@@ -2096,32 +2096,32 @@ statescript {
                         var_6 = dog-ambi-lie-down-chew-toy-enter-flipped--toy;
                     }
                     u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_7 + (0 * 8)) = 40;
-                    *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_7 + (0 * 8)) + 8) = 1;
-                    *(i32*)*(*var_7 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_7 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.00;
+                    *(i32*)*var_7[0] = 40;
+                    *(u64*)(*var_7[0] + 8) = 0;
+                    *(i32*)(*var_7[0] + 8) = 1;
+                    *(i32*)*var_7[1] = 28;
+                    *(u64*)(*var_7[1] + 8) = 0;
+                    *(f32*)(*var_7[1] + 8) = 0.50;
+                    *(i32*)*var_7[2] = 30;
+                    *(u64*)(*var_7[2] + 8) = 0;
+                    *(f32*)(*var_7[2] + 8) = 0.00;
                     animate_(get-symbol(dog-toy-id, self), var_6, var_7);
                     u64? var_8 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_8 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_8 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_8 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_8 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_8[0] = 28;
+                    *(u64*)(*var_8[0] + 8) = 0;
+                    *(f32*)(*var_8[0] + 8) = 0.50;
+                    *(i32*)*var_8[1] = 30;
+                    *(u64*)(*var_8[1] + 8) = 0;
+                    *(f32*)(*var_8[1] + 8) = 0.00;
                     wait-animate_(alice, dog-ambi-lie-down-chew-toy-enter, var_8);
                     amp-alice-murmer-controller--go-to-state(alice-sitting-chewing-on-toy);
                     u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_9 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_9 + (0 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_9 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.00;
+                    *(i32*)*var_9[0] = 28;
+                    *(u64*)(*var_9[0] + 8) = 0;
+                    *(f32*)(*var_9[0] + 8) = 0.50;
+                    *(i32*)*var_9[1] = 30;
+                    *(u64*)(*var_9[1] + 8) = 0;
+                    *(f32*)(*var_9[1] + 8) = 0.00;
                     animate_(alice, dog-ambi-lie-down-chew-toy-loop, var_9);
                 }
             }
@@ -2141,7 +2141,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, disable-scent-trail, new-boxed-value(1, 0));
+                    fact-set(global, disable-scent-trail, boxed_bool(0));
                 }
                 lambda {
                     detach(get-symbol(dog-toy-id, self));

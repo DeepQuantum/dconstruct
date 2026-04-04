@@ -84,18 +84,8 @@ statescript {
             }
             track player {
                 lambda {
-                    foreach (u64? var_3 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
-                        darray-append(player-hard-assault-spawn-points, new-boxed-value(7, var_4), 1);
+                    foreach (u64? var_4 : get-spawners-by-tag-int32(rogue-player-spawner, 1, 0, 0)) {
+                        darray-append(player-hard-assault-spawn-points, boxed_symbol(var_4), 1);
                     }
                 }
                 lambda {
@@ -142,17 +132,7 @@ statescript {
                         player-remove-weapons();
                         player-clear-inventory();
                         player-inventory-add-item-quantity(switchblade, 1);
-                        foreach (u64? var_3 : grp-debug-ellie-recipes) {
-                            u16 var_4;
-                            if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                                var_4 = *(u64*)var_3;
-                            } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                                var_4 = *(u64*)var_3;
-                            } else {
-                                var_4 = 0;
-                            }
+                        foreach (u64? var_4 : grp-debug-ellie-recipes) {
                             player-inventory-add-item-quantity(var_4, 1);
                         }
                         u64 i = 0;
@@ -229,13 +209,13 @@ statescript {
                     send-event(reset, rogue-ui--get-t2r-timer-path());
                 }
                 lambda {
-                    send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
+                    send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_WAVE_INCOMING));
                 }
                 lambda {
-                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, ENCOUNTER_CRAFTING_PERIOD_ALT));
+                    send-event(set-paused-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(ENCOUNTER_CRAFTING_PERIOD_ALT));
                 }
                 lambda {
-                    send-event(countdown, rogue-ui--get-t2r-timer-path(), new-boxed-value(6, (f32)get-int32(hard-assault-prep-time, self)));
+                    send-event(countdown, rogue-ui--get-t2r-timer-path(), boxed_f32((f32)get-int32(hard-assault-prep-time, self)));
                 }
                 lambda {
                     set-int32(hard-assault-time-countdown, get-int32(hard-assault-prep-time, self), self);
@@ -247,9 +227,9 @@ statescript {
                     while (get-int32(hard-assault-time-countdown, self) > 0) {
                         if (timer-done?(acc-time-repeat-timer, self) && !text-to-speech-playing?() && !(hud-tutorial-active?(0)) && mod-int32(get-int32(hard-assault-time-countdown, self), 5) == 0) {
                             u64? var_7 = #%alloc-array(single-frame, 1, 2, 0);
-                            *(u64*)(*var_7 + (0 * 8)) = new-boxed-value(7, ROGUE_WAVE_INCOMING_TIMER);
-                            *(u64*)(*var_7 + (1 * 8)) = new-boxed-value(2, get-int32(hard-assault-time-countdown, self));
-                            speak-text-to-speech-formatted(new-boxed-value(21, var_7), 1, 0, 1);
+                            *(u64*)var_7[0] = boxed_symbol(ROGUE_WAVE_INCOMING_TIMER);
+                            *(u64*)var_7[1] = boxed_i32(get-int32(hard-assault-time-countdown, self));
+                            speak-text-to-speech-formatted(boxed_array(var_7), 1, 0, 1);
                             start-timer(acc-time-repeat-timer, 5.00, self, 1);
                         }
                         if (*encounter-tweaks* != nullptr) {
@@ -269,7 +249,7 @@ statescript {
                     set-boolean(hard-assault-countdown-active, 0, self);
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_WAVE_INCOMING), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_WAVE_INCOMING), 1, 0, 1);
                 }
                 lambda {
                     wait(2.00);
@@ -356,21 +336,11 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_3 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
-                        u16 var_4;
-                        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-                            var_4 = *(u64*)var_3;
-                        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-                            var_4 = *(u64*)var_3;
-                        } else {
-                            var_4 = 0;
-                        }
+                    foreach (u64? var_4 : wave-manager-get-npc-alive-group(ss-wave-manager-1)) {
                         if (!is-final-build?()) {
                             display(dc:format("Alive: %s", string-debug(var_4)), 19);
                         }
-                        send-event(buddy-mark-npc, player, new-boxed-value(7, var_4));
+                        send-event(buddy-mark-npc, player, boxed_symbol(var_4));
                     }
                 }
             }
@@ -439,37 +409,27 @@ statescript {
                 lambda {
                     if (event-arg-symbol(0) == int-lockbox-hard-assault-1) {
                         interactable-disable(int-lockbox-hard-assault-1);
-                        foreach (u64? var_2 : grp-post-combat-rewards) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : grp-post-combat-rewards) {
                             spawn-entity(var_3, 0, 0);
                         }
                         u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-object-locator(mp-chest-wood-2);
-                        *(i32*)*(*var_5 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.30;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-object-locator(mp-chest-wood-2);
+                        *(i32*)*var_5[1] = 28;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.30;
                         animate_(mp-chest-wood-2, open, var_5);
                         u64? var_7 = #%alloc-array(single-frame, 16, 3, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-object-locator(player);
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.20;
-                        *(i32*)*(*var_7 + (2 * 8)) = 40;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (2 * 8)) + 8) = 1;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-object-locator(player);
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.20;
+                        *(i32*)*var_7[2] = 40;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(i32*)(*var_7[2] + 8) = 1;
                         animate_(player, ellie-scav-pickup-grip-r-hand--blade-box-cutter, var_7);
                         go(wrap-up, 1);
                     }
@@ -496,27 +456,27 @@ statescript {
                     send-event(reset, rogue-ui--get-t2r-timer-path());
                 }
                 lambda {
-                    send-event(set-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_MISSION_COMPLETE));
+                    send-event(set-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_MISSION_COMPLETE));
                 }
                 lambda {
                     play-sound(sfx-rl-round-end-win, 0);
                 }
                 lambda {
-                    send-event(set-secondary-message, rogue-ui--get-t2r-timer-path(), new-boxed-value(7, HUD_NOTIFICATION_ROGUE_EXITING));
+                    send-event(set-secondary-message, rogue-ui--get-t2r-timer-path(), boxed_symbol(HUD_NOTIFICATION_ROGUE_EXITING));
                 }
                 lambda {
-                    send-event(set-hide-delay, rogue-ui--get-t2r-timer-path(), new-boxed-value(6, 4.00));
+                    send-event(set-hide-delay, rogue-ui--get-t2r-timer-path(), boxed_f32(4.00));
                 }
                 lambda {
                     send-event(
                         countdown,
                         rogue-ui--get-t2r-timer-path(),
-                        new-boxed-value(6, (f32)get-int32(hard-assault-wrapup-time, self)),
-                        new-boxed-value(1, 0)
+                        boxed_f32((f32)get-int32(hard-assault-wrapup-time, self)),
+                        boxed_bool(0)
                     );
                 }
                 lambda {
-                    speak-text-to-speech-formatted(new-boxed-value(7, HUD_ROGUE_ASSAULT_COMPLETED), 1, 0, 1);
+                    speak-text-to-speech-formatted(boxed_symbol(HUD_ROGUE_ASSAULT_COMPLETED), 1, 0, 1);
                 }
                 lambda {
                     broadcast-event(encounter-combat-complete);

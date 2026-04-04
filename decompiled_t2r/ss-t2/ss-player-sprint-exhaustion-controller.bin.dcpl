@@ -30,9 +30,9 @@ statescript {
                 lambda {
                     while (1) {
                         wait-frames(20);
-                        fact-set(faction-player, tired-breath?, new-boxed-value(1, get-boolean(breathing-hard?, self)));
-                        fact-set(faction-player, heavy-breath?, new-boxed-value(1, get-boolean(sprint-exhausted?, self)));
-                        fact-set(faction-player, recovery-breath?, new-boxed-value(1, get-boolean(recovery-breath?, self)));
+                        fact-set(faction-player, tired-breath?, boxed_bool(get-boolean(breathing-hard?, self)));
+                        fact-set(faction-player, heavy-breath?, boxed_bool(get-boolean(sprint-exhausted?, self)));
+                        fact-set(faction-player, recovery-breath?, boxed_bool(get-boolean(recovery-breath?, self)));
                         if (player-get-stamina-percentage() <= 0.91 && get-boolean(sprint-exhausted?, self)) {
                             request-dialog(player-sprint-run, player, 0, 0, 0, 0, 0);
                         }

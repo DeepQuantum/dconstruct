@@ -25,15 +25,15 @@ statescript {
                 lambda {
                     if (object-in-region?(yara, huld-rgn-ellie-test-store-1)) {}
  else if (object-in-region?(yara, huld-rgn-ellie-test-street-1)) {
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-1), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-2), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-3), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-1), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-2), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-3), 0);
                     } else if (object-in-region?(yara, huld-rgn-ellie-test-alley-1)) {
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-1), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-2), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-3), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-4), 0);
-                        darray-find-remove(huld-ellie-explore-walk, new-boxed-value(7, huld-ellie-explore-walk-5), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-1), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-2), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-3), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-4), 0);
+                        darray-find-remove(huld-ellie-explore-walk, boxed_symbol(huld-ellie-explore-walk-5), 0);
                     } else {
                         go(search-from-near-door, 1);
                     }
@@ -120,15 +120,15 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(huld-garage-door-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(huld-garage-door-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     wait-animate_(yara, t1x-hun1-underp-street-attempt-door--ellie, var_0);
                 }
                 lambda {

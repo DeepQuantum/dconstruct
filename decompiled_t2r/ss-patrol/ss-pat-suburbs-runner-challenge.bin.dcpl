@@ -126,17 +126,7 @@ statescript {
                     wait-spawn-npc-group-async(pat-house-runners, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : pat-house-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : pat-house-runners) {
                         npc-set-script-only-no-perception(var_2);
                     }
                 }
@@ -144,17 +134,7 @@ statescript {
                     wait-for(release-runners);
                 }
                 lambda {
-                    foreach (u64? var_1 : pat-house-runners) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : pat-house-runners) {
                         npc-set-script-low-priority(var_2);
                     }
                 }

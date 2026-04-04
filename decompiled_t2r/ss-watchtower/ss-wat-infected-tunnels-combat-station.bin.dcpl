@@ -24,34 +24,14 @@ statescript {
         block event unzone-militia {
             track main {
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : station-fight-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-clickers) {
                         if (npc-alive?(var_2)) {
                             npc-clear-zone(var_2);
                         }
@@ -116,17 +96,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(wat-infected-tunnels-unzone-enemies)) {
-                        foreach (u64? var_2 : station-fight-clickers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : station-fight-clickers) {
                             if (npc-alive?(var_3)) {
                                 npc-set-zone-region(var_3, rgn-zone-tunnels-station-1);
                             }
@@ -138,17 +108,7 @@ statescript {
                 }
                 lambda {
                     if (!task-continue-active?(watchtower, wat-infected-tunnels-station-fight, checkpoint)) {
-                        foreach (u64? var_2 : station-fight-clickers) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : station-fight-clickers) {
                             set-invisible-to-npcs(var_3, 1);
                         }
                     }
@@ -175,12 +135,12 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 0.30;
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.30;
+                    *(i32*)*var_0[0] = 28;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 0.30;
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.30;
                     wait-animate_(npc-wat-infected-tunnels-clicker-2, clkr-ambi-idle^surprise-mild-inplace-lt, var_0);
                 }
                 lambda {
@@ -204,17 +164,7 @@ statescript {
                 }
                 lambda {
                     if (!get-svar-as-boolean(wat-infected-tunnels-unzone-enemies)) {
-                        foreach (u64? var_2 : station-fight-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : station-fight-militia) {
                             if (npc-alive?(var_3)) {
                                 npc-set-zone-region(var_3, rgn-zone-tunnels-station-1);
                             }
@@ -278,17 +228,7 @@ statescript {
                     wait(10.00);
                 }
                 lambda {
-                    foreach (u64? var_1 : station-fight-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-clickers) {
                         if (npc-alive?(var_2)) {
                             set-invisible-to-npcs(var_2, 0);
                         }
@@ -305,17 +245,7 @@ statescript {
             track main {
                 lambda {
                     if (tension-mode-is?(3)) {
-                        foreach (u64? var_2 : station-fight-militia) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : station-fight-militia) {
                             if (npc-alive?(var_3)) {
                                 npc-force-lod(var_3, 0);
                             }
@@ -327,17 +257,7 @@ statescript {
         block event evt-player-trying-to-escape {
             track main {
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (npc-alive?(var_2) || npc-get-awareness(var_2, player) == 2) {
                             if (npc-get-awareness(var_2, player) == 3) {
                                 u64? var_6 = get-object-position(player);
@@ -360,17 +280,7 @@ statescript {
         block event evt-player-failed-escape {
             track main {
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (npc-alive?(var_2)) {
                             npc-set-targeting-params(var_2, default);
                             npc-set-perfect-aim(var_2, 0);
@@ -421,17 +331,7 @@ statescript {
                 lambda {
                     if (event-arg-symbol(1) == player || event-arg-symbol(0) == brick && event-arg-symbol(0) == bottle && npc-group-alive-count(station-fight-militia) > 0 && !(tension-mode-is?(3))) {
                         u16 var_7;
-                        foreach (u64? var_8 : station-fight-militia) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : station-fight-militia) {
                             u16 var_11;
                             if (npc-alive?(var_9)) {
                                 if (0 == 0) {
@@ -440,17 +340,7 @@ statescript {
                             }
                             var_7 = var_11;
                         }
-                        foreach (u64? var_14 : station-fight-clickers) {
-                            u16 var_15;
-                            if (var_14 && *(u16*)(var_14 + 12) == 7) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 5) {
-                                var_15 = *(u64*)var_14;
-                            } else if (var_14 && *(u16*)(var_14 + 12) == 4) {
-                                var_15 = *(u64*)var_14;
-                            } else {
-                                var_15 = 0;
-                            }
+                        foreach (u64? var_15 : station-fight-clickers) {
                             if (npc-alive?(var_15)) {
                                 npc-make-aware-of-at(var_15, var_7, event-arg-point(2), 1, 0, 0);
                             }
@@ -476,37 +366,17 @@ statescript {
                         npc-set-global-combat-params(*wat-watchtower-escape-station-dark*);
                         u64? var_1 = darray-create(self, -1, 0);
                         u64? var_2 = darray-create(self, -1, 0);
-                        foreach (u64? var_4 : station-fight-militia) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
+                        foreach (u64? var_5 : station-fight-militia) {
                             if (npc-alive?(var_5)) {
                                 if (!npc-on-screen-and-visible?(var_5, -1, 0) && !is-speaking?(var_5) && distance-between-objects-greater-than?(var_5, player, 30.00, 1) && !npc-can-see?(var_5, player) && !npc-using-skill?(var_5, 31)) {
-                                    darray-append(var_1, new-boxed-value(7, var_5), 1);
+                                    darray-append(var_1, boxed_symbol(var_5), 1);
                                 }
                             }
                         }
-                        foreach (u64? var_15 : station-fight-clickers) {
-                            u16 var_16;
-                            if (var_15 && *(u16*)(var_15 + 12) == 7) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 5) {
-                                var_16 = *(u64*)var_15;
-                            } else if (var_15 && *(u16*)(var_15 + 12) == 4) {
-                                var_16 = *(u64*)var_15;
-                            } else {
-                                var_16 = 0;
-                            }
+                        foreach (u64? var_16 : station-fight-clickers) {
                             if (npc-alive?(var_16)) {
                                 if (!npc-on-screen-and-visible?(var_16, -1, 0) && distance-between-objects-greater-than?(var_16, player, 30.00, 1)) {
-                                    darray-append(var_2, new-boxed-value(7, var_16), 1);
+                                    darray-append(var_2, boxed_symbol(var_16), 1);
                                 }
                             }
                         }
@@ -551,34 +421,14 @@ statescript {
         block event evt-door-success-clear-militia {
             track main {
                 lambda {
-                    foreach (u64? var_1 : station-fight-militia) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-militia) {
                         if (npc-alive?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : station-fight-clickers) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : station-fight-clickers) {
                         if (npc-alive?(var_2)) {
                             kill-entity-if-spawned(var_2);
                         }

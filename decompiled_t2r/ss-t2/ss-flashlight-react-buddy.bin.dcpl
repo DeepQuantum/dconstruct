@@ -29,7 +29,7 @@ u64? flashlight-react--buddy-doing-other-anim?() {
 }
 
 u64? set-buddy-flashlight-react-enabled(u64? arg_0, u64? arg_1) {
-    return send-event(set-flashlight-react-enabled, arg_0, new-boxed-value(1, arg_1));
+    return send-event(set-flashlight-react-enabled, arg_0, boxed_bool(arg_1));
 }
 
 bool flashlight-react--buddy-in-dark-space?() {
@@ -147,7 +147,7 @@ statescript {
                     fact-set-bool-in-dict(fact-get-dictionary(get-symbol(buddy-name, self)), blinded?, 1);
                 }
                 lambda {
-                    broadcast-event(buddy-flashlight-react-start, new-boxed-value(7, get-symbol(buddy-name, self)));
+                    broadcast-event(buddy-flashlight-react-start, boxed_symbol(get-symbol(buddy-name, self)));
                 }
                 lambda {
                     u64? var_2 = alloc-gesture-play-params();
@@ -212,7 +212,7 @@ statescript {
                     gesture_(get-symbol(buddy-name, self), get-symbol(outro-anim, self), var_2);
                 }
                 lambda {
-                    broadcast-event(buddy-flashlight-react-end, new-boxed-value(7, get-symbol(buddy-name, self)));
+                    broadcast-event(buddy-flashlight-react-end, boxed_symbol(get-symbol(buddy-name, self)));
                 }
                 lambda {
                     go(idle, 1);

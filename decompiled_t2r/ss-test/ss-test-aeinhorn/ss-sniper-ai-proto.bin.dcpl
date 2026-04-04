@@ -24,7 +24,7 @@ statescript {
         block event register-hide-post {
             track main {
                 lambda {
-                    darray-append(sniper-positions, new-boxed-value(7, event-arg-symbol(0)), 1);
+                    darray-append(sniper-positions, boxed_symbol(event-arg-symbol(0)), 1);
                 }
             }
         }
@@ -56,17 +56,7 @@ statescript {
             track main {
                 lambda {
                     u16 var_1;
-                    foreach (u64? var_2 : sniper-positions) {
-                        u16 var_3;
-                        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                            var_3 = *(u64*)var_2;
-                        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                            var_3 = *(u64*)var_2;
-                        } else {
-                            var_3 = 0;
-                        }
+                    foreach (u64? var_3 : sniper-positions) {
                         u16 var_6;
                         if (get-float(score, var_3) > 0.00) {
                             var_5 = get-float(score, var_3);

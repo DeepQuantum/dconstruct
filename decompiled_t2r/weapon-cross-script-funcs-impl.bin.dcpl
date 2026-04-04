@@ -138,7 +138,7 @@ u16 player-weapon-toggle-ammo-type(bool arg_0) {
     if (!(arg_0 == 0) && !(lookup-weapon-gameplay-def(arg_0, 1) == 0)) {
         u64? var_2 = get-weapon-ammo-names(arg_0, 0);
         if (darray-count(var_2) > 1) {
-            u64? var_8 = darray-at(var_2, mod-int32(darray-find(var_2, new-boxed-value(7, player-get-weapon-current-ammo-name(arg_0)), 0) + 1, 2));
+            u64? var_8 = darray-at(var_2, mod-int32(darray-find(var_2, boxed_symbol(player-get-weapon-current-ammo-name(arg_0)), 0) + 1, 2));
             u16 var_9;
             if (var_8 && *(u16*)(var_8 + 12) == 7) {
                 var_9 = *(u64*)var_8;

@@ -26,11 +26,11 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-append(unburnt-grass, new-boxed-value(7, get-self-id()), 1);
+                    darray-append(unburnt-grass, boxed_symbol(get-self-id()), 1);
                 }
                 lambda {
                     if (tag-boolean(targetable, self)) {
-                        darray-append(unburnt-grass-targets, new-boxed-value(7, get-self-id()), 1);
+                        darray-append(unburnt-grass-targets, boxed_symbol(get-self-id()), 1);
                     }
                 }
             }
@@ -45,7 +45,7 @@ statescript {
         block event explosion {
             track main {
                 lambda {
-                    if (darray-contains?(explosions-can-set-fire, new-boxed-value(7, event-arg-symbol(3))) && get-locator-distance(get-object-locator(self), event-arg-bound-frame(0)) < 3.00) {
+                    if (darray-contains?(explosions-can-set-fire, boxed_symbol(event-arg-symbol(3))) && get-locator-distance(get-object-locator(self), event-arg-bound-frame(0)) < 3.00) {
                         go(burn-spreading, 1);
                     }
                 }
@@ -67,11 +67,11 @@ statescript {
         block start {
             track main {
                 lambda {
-                    darray-find-remove(unburnt-grass, new-boxed-value(7, get-self-id()), 0);
+                    darray-find-remove(unburnt-grass, boxed_symbol(get-self-id()), 0);
                 }
                 lambda {
                     if (tag-boolean(targetable, self)) {
-                        darray-find-remove(unburnt-grass-targets, new-boxed-value(7, get-self-id()), 0);
+                        darray-find-remove(unburnt-grass-targets, boxed_symbol(get-self-id()), 0);
                     }
                 }
                 lambda {
@@ -113,17 +113,7 @@ statescript {
                     if (var_3 > 0.00 && !get-boolean(no-flame, self)) {
                         u64? var_6 = darray-create(self, -1, 0);
                         group-copy(unburnt-grass, var_6);
-                        foreach (u64? var_8 : var_6) {
-                            u16 var_9;
-                            if (var_8 && *(u16*)(var_8 + 12) == 7) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 5) {
-                                var_9 = *(u64*)var_8;
-                            } else if (var_8 && *(u16*)(var_8 + 12) == 4) {
-                                var_9 = *(u64*)var_8;
-                            } else {
-                                var_9 = 0;
-                            }
+                        foreach (u64? var_9 : var_6) {
                             if (get-object-distance(self, var_9) < var_3) {
                                 send-event(burn, var_9);
                             }

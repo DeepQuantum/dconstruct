@@ -54,26 +54,16 @@ statescript {
                         wait-random(1.00, 3.00);
                         u64? var_0 = darray-create(self, -1, 0);
                         group-copy(fob-car-ride-deer, var_0);
-                        darray-find-remove(var_0, new-boxed-value(7, get-self-id()), 0);
-                        foreach (u64? var_4 : fob-car-ride-deer-targets) {
-                            u16 var_5;
-                            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                                var_5 = *(u64*)var_4;
-                            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                                var_5 = *(u64*)var_4;
-                            } else {
-                                var_5 = 0;
-                            }
-                            darray-find-remove(var_0, new-boxed-value(7, var_5), 0);
+                        darray-find-remove(var_0, boxed_symbol(get-self-id()), 0);
+                        foreach (u64? var_5 : fob-car-ride-deer-targets) {
+                            darray-find-remove(var_0, boxed_symbol(var_5), 0);
                         }
                         u16 var_9;
                         if (!(darray-count(var_0) == 0)) {
                             u64? var_11 = get-furthest-in-group(var_0, get-self-id());
-                            darray-append(fob-car-ride-deer-targets, new-boxed-value(7, var_11), 1);
+                            darray-append(fob-car-ride-deer-targets, boxed_symbol(var_11), 1);
                             wait-npc-move-to(self, get-object-locator(var_11), 0, 0, walk, 0, 0, 0);
-                            var_9 = darray-find-remove(fob-car-ride-deer-targets, new-boxed-value(7, var_11), 0);
+                            var_9 = darray-find-remove(fob-car-ride-deer-targets, boxed_symbol(var_11), 0);
                         } else {
                             var_9 = 0;
                         }
@@ -120,17 +110,7 @@ statescript {
                     npc-move-to(get-self-id(), get-spawner-locator(pos-fob-car-deer-flee-point-1, 1), 2, 2, gallop, 0, 0, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : fob-car-ride-deer) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : fob-car-ride-deer) {
                         send-event(start-flee, var_2);
                     }
                 }
@@ -172,18 +152,18 @@ statescript {
                         wait-random(1.00, 3.00);
                         if (facing-point-xz?(get-object-locator(self), get-spawner-locator(pos-fob-car-deer-flee-point-1, 1), 60.00)) {
                             u64? var_7 = #%alloc-array(single-frame, 16, 4, 1);
-                            *(i32*)*(*var_7 + (0 * 8)) = 45;
-                            *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (0 * 8)) + 8) = 0.50;
-                            *(i32*)*(*var_7 + (1 * 8)) = 28;
-                            *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (1 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_7 + (2 * 8)) = 30;
-                            *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_7 + (2 * 8)) + 8) = 1.00;
-                            *(i32*)*(*var_7 + (3 * 8)) = 24;
-                            *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_7 + (3 * 8)) + 8) = 2;
+                            *(i32*)*var_7[0] = 45;
+                            *(u64*)(*var_7[0] + 8) = 0;
+                            *(f32*)(*var_7[0] + 8) = 0.50;
+                            *(i32*)*var_7[1] = 28;
+                            *(u64*)(*var_7[1] + 8) = 0;
+                            *(f32*)(*var_7[1] + 8) = 1.00;
+                            *(i32*)*var_7[2] = 30;
+                            *(u64*)(*var_7[2] + 8) = 0;
+                            *(f32*)(*var_7[2] + 8) = 1.00;
+                            *(i32*)*var_7[3] = 24;
+                            *(u64*)(*var_7[3] + 8) = 0;
+                            *(i32*)(*var_7[3] + 8) = 2;
                             wait-animate_(get-self-id(), doe-jump-gallop, var_7);
                         }
                     }

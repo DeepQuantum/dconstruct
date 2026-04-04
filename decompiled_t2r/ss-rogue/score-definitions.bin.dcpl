@@ -126,17 +126,7 @@ u64? cal-score-linear(f32 arg_0, f32 arg_1, f32 arg_2, f32 arg_3, f32 arg_4) {
 f32 cal-skulls-multiplier(bool arg_0) {
     f32 var_0;
     if (!(arg_0 == 0)) {
-        foreach (u64? var_2 : arg_0) {
-            u16 var_3;
-            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                var_3 = *(u64*)var_2;
-            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                var_3 = *(u64*)var_2;
-            } else {
-                var_3 = 0;
-            }
+        foreach (u64? var_3 : arg_0) {
             u64? var_4 = skull--get-skull-by-id(var_3);
             if (var_4) {
                 u16 var_8;

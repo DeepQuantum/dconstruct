@@ -88,7 +88,7 @@ statescript {
                         }
                         stop-sound(var_7);
                     }
-                    ddict-set(snd-herd-of-sheep, var_0, new-boxed-value(2, play-sound-at-joint(symbol-concat-string(get-symbol(sheep-pushed-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
+                    ddict-set(snd-herd-of-sheep, var_0, boxed_i32(play-sound-at-joint(symbol-concat-string(get-symbol(sheep-pushed-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
                 }
             }
         }
@@ -133,7 +133,7 @@ statescript {
                         }
                         stop-sound(var_7);
                     }
-                    ddict-set(snd-herd-of-sheep, var_0, new-boxed-value(2, play-sound-at-joint(symbol-concat-string(get-symbol(sheep-moved-to-pen-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
+                    ddict-set(snd-herd-of-sheep, var_0, boxed_i32(play-sound-at-joint(symbol-concat-string(get-symbol(sheep-moved-to-pen-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
                 }
             }
         }
@@ -178,7 +178,7 @@ statescript {
                         }
                         stop-sound(var_7);
                     }
-                    ddict-set(snd-herd-of-sheep, var_0, new-boxed-value(2, play-sound-at-joint(symbol-concat-string(get-symbol(sheep-idle-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
+                    ddict-set(snd-herd-of-sheep, var_0, boxed_i32(play-sound-at-joint(symbol-concat-string(get-symbol(sheep-idle-prefix, self), tag-string(dog-sfx-profile, var_0, 0, 0)), var_0, jaw, 0, 0)));
                 }
             }
         }
@@ -223,7 +223,7 @@ statescript {
                         }
                         stop-sound(var_4);
                     }
-                    ddict-set(snd-herd-of-sheep, var_0, new-boxed-value(2, 0));
+                    ddict-set(snd-herd-of-sheep, var_0, boxed_i32(0));
                 }
             }
         }

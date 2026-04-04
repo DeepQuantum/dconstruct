@@ -45,15 +45,15 @@ statescript {
             track main {
                 lambda {
                     u64? var_3 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_3 + (0 * 8)) = 58;
-                    *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (0 * 8)) + 8) = get-animation-phase(get-symbol(swap-from-entity, self), 2, 0);
-                    *(i32*)*(*var_3 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_3 + (2 * 8)) = 32;
-                    *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                    *(u8*)(*(*var_3 + (2 * 8)) + 8) = 1;
+                    *(i32*)*var_3[0] = 58;
+                    *(u64*)(*var_3[0] + 8) = 0;
+                    *(f32*)(*var_3[0] + 8) = get-animation-phase(get-symbol(swap-from-entity, self), 2, 0);
+                    *(i32*)*var_3[1] = 30;
+                    *(u64*)(*var_3[1] + 8) = 0;
+                    *(f32*)(*var_3[1] + 8) = 0.50;
+                    *(i32*)*var_3[2] = 32;
+                    *(u64*)(*var_3[2] + 8) = 0;
+                    *(u8*)(*var_3[2] + 8) = 1;
                     animate_(get-self-id(), get-object-anim(get-symbol(swap-from-entity, self), 1), var_3);
                     wait-one-frame();
                     set-visible(get-self-id(), 1);
@@ -114,7 +114,7 @@ statescript {
                     if (!is-final-build?()) {
                         display(dc:format("new entity %s's look is %s", string-debug(var_5), string-debug(get-object-look(var_5, 0))), 19);
                     }
-                    broadcast-event(swap-groups, new-boxed-value(7, get-self-id()), new-boxed-value(7, var_5));
+                    broadcast-event(swap-groups, boxed_symbol(get-self-id()), boxed_symbol(var_5));
                     set-symbol(swap-from-entity, get-self-id(), var_5);
                 }
             }

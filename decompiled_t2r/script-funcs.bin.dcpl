@@ -15,14 +15,14 @@ u64? clear-gesture(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
     return send-event(
         clear-gesture,
         arg_0,
-        new-boxed-value(2, arg_1),
-        new-boxed-value(6, arg_2),
-        new-boxed-value(3, arg_3)
+        boxed_i32(arg_1),
+        boxed_f32(arg_2),
+        boxed_u32(arg_3)
     );
 }
 
 u64? stop-player-script-ik(u64? arg_0) {
-    return send-event(stop-script-ik, player, new-boxed-value(6, arg_0));
+    return send-event(stop-script-ik, player, boxed_f32(arg_0));
 }
 
 u64? eff-is-grabbing-piton?(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
@@ -32,7 +32,7 @@ u64? eff-is-grabbing-piton?(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {
 u64? clear-gesture-instantly(u64? arg_0, u16 arg_1) {
     u64? var_0;
     if (arg_1 >= 0) {
-        var_0 = send-event(clear-gesture-instantly, arg_0, new-boxed-value(3, arg_1));
+        var_0 = send-event(clear-gesture-instantly, arg_0, boxed_u32(arg_1));
     } else {
         var_0 = send-event(clear-gesture-instantly, arg_0);
     }
@@ -68,7 +68,7 @@ u64? npc-turret-disable-script-control(u64? arg_0) {
 }
 
 u64? npc-turret-set-aim-point(u64? arg_0, u64? arg_1) {
-    return send-event(set-aim-point, arg_0, new-boxed-value(15, arg_1));
+    return send-event(set-aim-point, arg_0, boxed_vector(arg_1));
 }
 
 u64? set-svar-as-boolean(u64? arg_0, u64? arg_1) {
@@ -90,7 +90,7 @@ u64? set-svar-bit(u64? arg_0, u64? arg_1, u64? arg_2) {
 }
 
 u64? player-set-breathing-accumulator(u64? arg_0) {
-    return send-event(set-breathing-accumulator, player, new-boxed-value(6, arg_0));
+    return send-event(set-breathing-accumulator, player, boxed_f32(arg_0));
 }
 
 u64? boat-remove-driver(u64? arg_0, u64? arg_1) {
@@ -110,7 +110,7 @@ u64? increment-svar(u64? arg_0, u64? arg_1) {
 }
 
 u64? horse-set-trample-settings(u64? arg_0, u64? arg_1) {
-    return send-event(set-horse-trample-settings, arg_0, new-boxed-value(7, arg_1));
+    return send-event(set-horse-trample-settings, arg_0, boxed_symbol(arg_1));
 }
 
 u64? disable-reload-pistol-if-empty() {
@@ -126,7 +126,7 @@ u64? player-force-enable-breathing() {
 }
 
 u64? boat-remove-rider(u64? arg_0, u64? arg_1) {
-    return send-event(exit-vehicle, arg_1, new-boxed-value(2, -1));
+    return send-event(exit-vehicle, arg_1, boxed_i32(-1));
 }
 
 u64? new-opening?() {
@@ -184,12 +184,12 @@ u64? boat-set-rider(u64? arg_0, u64? arg_1, u64? arg_2) {
     return send-event(
         enter-vehicle,
         arg_1,
-        new-boxed-value(7, arg_0),
-        new-boxed-value(2, 0),
-        new-boxed-value(2, 0),
-        new-boxed-value(13, 0),
-        new-boxed-value(1, 0),
-        new-boxed-value(7, arg_2)
+        boxed_symbol(arg_0),
+        boxed_i32(0),
+        boxed_i32(0),
+        boxed_p64(0),
+        boxed_bool(0),
+        boxed_symbol(arg_2)
     );
 }
 
@@ -205,7 +205,7 @@ u64? hours-since-last-action?(u64? arg_0) {
 }
 
 u64? stop-joint-ik(u64? arg_0, u64? arg_1) {
-    return send-event(stop-sync, arg_0, new-boxed-value(6, arg_1));
+    return send-event(stop-sync, arg_0, boxed_f32(arg_1));
 }
 
 u64? script-caption-no-stack(u64? arg_0, u64? arg_1, u64? arg_2, u64? arg_3) {

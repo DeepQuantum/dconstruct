@@ -21,13 +21,13 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(patrol-jackson, pat-jackson-assignments)) {
-                        fact-set(global, snow, new-boxed-value(1, 1));
+                        fact-set(global, snow, boxed_bool(1));
                         go(complete, 1);
                     }
                 }
                 lambda {
                     if (task-active?(patrol-jackson, pat-jackson-enter-bar) || task-active?(patrol-jackson, pat-jackson-exit-bar) && task-active?(patrol-jackson, pat-seth-apology)) {
-                        fact-set(global, snow, new-boxed-value(1, 1));
+                        fact-set(global, snow, boxed_bool(1));
                         go(disable-cold-breath, 1);
                     }
                 }
@@ -38,7 +38,7 @@ statescript {
                 }
                 lambda {
                     if (task-range-active?(patrol-jackson, pat-jackson-back-alley, patrol-jackson, pat-jackson-approach-barn)) {
-                        fact-set(global, snow, new-boxed-value(1, 1));
+                        fact-set(global, snow, boxed_bool(1));
                         go(enable-cold-breath, 1);
                     }
                 }
@@ -48,7 +48,7 @@ statescript {
             track main {
                 lambda {
                     if (task-active?(patrol-jackson, pat-ellie-at-home)) {
-                        fact-set(global, snow, new-boxed-value(1, 1));
+                        fact-set(global, snow, boxed_bool(1));
                         go(wait-in-jackson, 1);
                     }
                 }
@@ -70,33 +70,33 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, snow, new-boxed-value(1, 1));
+                    fact-set(global, snow, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(1));
                 }
             }
         }
         block event player-outside {
             track main {
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(1));
                 }
             }
         }
         block event player-inside {
             track main {
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(0));
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(0));
                 }
             }
         }
@@ -104,7 +104,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(patrol-jackson, pat-jackson-approach-barn)) {
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(0));
                         go(complete, 1);
                     }
                 }
@@ -115,30 +115,30 @@ statescript {
         block start {
             track main {
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(0));
                 }
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(0));
                 }
             }
         }
         block event player-outside {
             track main {
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 1));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(1));
                 }
             }
         }
         block event player-inside {
             track main {
                 lambda {
-                    fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(player, cold-breath-heavy?, boxed_bool(0));
                 }
                 lambda {
-                    fact-set(global, cold-breath-heavy?, new-boxed-value(1, 0));
+                    fact-set(global, cold-breath-heavy?, boxed_bool(0));
                 }
             }
         }
@@ -146,7 +146,7 @@ statescript {
             track main {
                 lambda {
                     if (task-complete?(patrol-jackson, pat-jackson-approach-barn)) {
-                        fact-set(player, cold-breath-heavy?, new-boxed-value(1, 0));
+                        fact-set(player, cold-breath-heavy?, boxed_bool(0));
                         go(complete, 1);
                     }
                 }

@@ -27,7 +27,7 @@ statescript {
                 }
                 lambda {
                     if (player-in-region?(get-self-id(), 2) && get-boolean(active, self)) {
-                        send-event(add-override-region, ss-accessibility-pathfind, new-boxed-value(7, get-self-id()));
+                        send-event(add-override-region, ss-accessibility-pathfind, boxed_symbol(get-self-id()));
                     }
                 }
             }
@@ -36,7 +36,7 @@ statescript {
             track main {
                 lambda {
                     if (get-boolean(active, self)) {
-                        send-event(add-override-region, ss-accessibility-pathfind, new-boxed-value(7, get-self-id()));
+                        send-event(add-override-region, ss-accessibility-pathfind, boxed_symbol(get-self-id()));
                     }
                 }
             }
@@ -44,7 +44,7 @@ statescript {
         block event exit {
             track main {
                 lambda {
-                    send-event(remove-override-region, ss-accessibility-pathfind, new-boxed-value(7, get-self-id()));
+                    send-event(remove-override-region, ss-accessibility-pathfind, boxed_symbol(get-self-id()));
                 }
             }
         }
@@ -76,7 +76,7 @@ statescript {
             track main {
                 lambda {
                     if (is-script-running?(ss-accessibility-pathfind)) {
-                        send-event(remove-override-region, ss-accessibility-pathfind, new-boxed-value(7, get-self-id()));
+                        send-event(remove-override-region, ss-accessibility-pathfind, boxed_symbol(get-self-id()));
                     }
                 }
             }

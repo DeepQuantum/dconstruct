@@ -62,8 +62,8 @@ u64? hud-boss-health-bar-build(u16 arg_0) {
         gui2-update-widget-layout(var_11);
         gui2-set-progress-bar-percent(var_8, 1.00, 0.00, 12);
         gui2-set-progress-bar-percent(var_11, 1.00, 0.00, 12);
-        darray-append(get-symbol(current-progress-value-array, self), new-boxed-value(6, 1.00), 0);
-        darray-append(get-symbol(progress-pip-group, self), new-boxed-value(7, var_5), 1);
+        darray-append(get-symbol(current-progress-value-array, self), boxed_f32(1.00), 0);
+        darray-append(get-symbol(progress-pip-group, self), boxed_symbol(var_5), 1);
     }
     gui2-update-widget-layout(var_0);
     return set-int32(stages, arg_0, self);
@@ -115,7 +115,7 @@ u16 hud-boss-bar-update-percent(i32 arg_0, u64? arg_1) {
             0,
             0
         );
-        var_1 = send-event(set-progress, var_4, new-boxed-value(6, arg_1));
+        var_1 = send-event(set-progress, var_4, boxed_f32(arg_1));
     } else {
         var_1 = 0;
     }
@@ -185,7 +185,7 @@ statescript {
                             var_5 = 0.00;
                         }
                         if (var_5 != var_2) {
-                            darray-set(get-symbol(current-progress-value-array, self), var_1 - 1, new-boxed-value(6, var_2));
+                            darray-set(get-symbol(current-progress-value-array, self), var_1 - 1, boxed_f32(var_2));
                             var_6 = go(update-progress, 1);
                         }
                     }

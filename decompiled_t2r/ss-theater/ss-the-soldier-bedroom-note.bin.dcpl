@@ -77,7 +77,7 @@ statescript {
                     send-event(interact-request-in-examine, exa-the-soldier-bedroom-1);
                 }
                 lambda {
-                    send-event(player-requested-interact, obj-col-the-soldier-note-1, new-boxed-value(7, obj-col-the-soldier-note-1));
+                    send-event(player-requested-interact, obj-col-the-soldier-note-1, boxed_symbol(obj-col-the-soldier-note-1));
                 }
             }
         }

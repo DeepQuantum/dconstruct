@@ -147,30 +147,20 @@ statescript {
                         group-copy(debris-instances-always, debris-instances-current);
                     }
                     u16 var_6;
-                    foreach (u64? var_7 : debris-instances-current) {
-                        u16 var_8;
-                        if (var_7 && *(u16*)(var_7 + 12) == 7) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 5) {
-                            var_8 = *(u64*)var_7;
-                        } else if (var_7 && *(u16*)(var_7 + 12) == 4) {
-                            var_8 = *(u64*)var_7;
-                        } else {
-                            var_8 = 0;
-                        }
+                    foreach (u64? var_8 : debris-instances-current) {
                         u16 var_10;
                         if (0 == 0 && okay-to-drop-debris?(var_8)) {
                             var_10 = var_8;
                         }
                         var_6 = var_10;
                     }
-                    darray-find-remove(debris-instances-current, new-boxed-value(7, var_6), 0);
+                    darray-find-remove(debris-instances-current, boxed_symbol(var_6), 0);
                     if (get-boolean(debug-on?, self)) {
                         if (!is-final-build?()) {
                             display(dc:format("Post drop has %d members. We are removing %s", darray-count(debris-instances-current), string-debug(var_6)), 19);
                         }
                     }
-                    send-event(activate, var_6, new-boxed-value(1, !(var_0 > 0)));
+                    send-event(activate, var_6, boxed_bool(!(var_0 > 0)));
                 }
                 lambda {
                     go(wait-break-moment, 1);

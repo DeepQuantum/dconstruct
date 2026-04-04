@@ -145,15 +145,15 @@ statescript {
                         bool var_64 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_61 < 4.50 && var_61 > 0.00;
                         u64? var_68;
                         if (var_64) {
-                            var_68 = new-boxed-value(7, true);
+                            var_68 = boxed_symbol(true);
                         } else {
-                            var_68 = new-boxed-value(7, false);
+                            var_68 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_61),
-                            new-boxed-value(6, 0.00),
-                            new-boxed-value(6, 4.50),
+                            boxed_f32(var_61),
+                            boxed_f32(0.00),
+                            boxed_f32(4.50),
                             var_68
                         );
                         if (var_64) {
@@ -163,15 +163,15 @@ statescript {
                                 bool var_77 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_74 < 1.50 && var_74 > 0.00;
                                 u64? var_81;
                                 if (var_77) {
-                                    var_81 = new-boxed-value(7, true);
+                                    var_81 = boxed_symbol(true);
                                 } else {
-                                    var_81 = new-boxed-value(7, false);
+                                    var_81 = boxed_symbol(false);
                                 }
                                 do-melee-log(
                                     "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                                    new-boxed-value(6, var_74),
-                                    new-boxed-value(6, 0.00),
-                                    new-boxed-value(6, 1.50),
+                                    boxed_f32(var_74),
+                                    boxed_f32(0.00),
+                                    boxed_f32(1.50),
                                     var_81
                                 );
                                 if (var_77) {
@@ -199,15 +199,15 @@ statescript {
                         bool var_121 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_118 < 999.00 && var_118 > 7.00;
                         u64? var_125;
                         if (var_121) {
-                            var_125 = new-boxed-value(7, true);
+                            var_125 = boxed_symbol(true);
                         } else {
-                            var_125 = new-boxed-value(7, false);
+                            var_125 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_118),
-                            new-boxed-value(6, 7.00),
-                            new-boxed-value(6, 999.00),
+                            boxed_f32(var_118),
+                            boxed_f32(7.00),
+                            boxed_f32(999.00),
                             var_125
                         );
                         if (var_121 && melee-fact-get-bool(get-symbol(defender, self), infinite-beg-for-life?) || var_13 > 90.00 && var_13 < -90.00) {
@@ -232,15 +232,15 @@ statescript {
                         bool var_15 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_12 < 999.00 && var_12 > 5.00;
                         u64? var_19;
                         if (var_15) {
-                            var_19 = new-boxed-value(7, true);
+                            var_19 = boxed_symbol(true);
                         } else {
-                            var_19 = new-boxed-value(7, false);
+                            var_19 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_12),
-                            new-boxed-value(6, 5.00),
-                            new-boxed-value(6, 999.00),
+                            boxed_f32(var_12),
+                            boxed_f32(5.00),
+                            boxed_f32(999.00),
                             var_19
                         );
                         f32 var_22;
@@ -274,15 +274,15 @@ statescript {
                         bool var_5 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_2 < 7.00 && var_2 > 0.00;
                         u64? var_9;
                         if (var_5) {
-                            var_9 = new-boxed-value(7, true);
+                            var_9 = boxed_symbol(true);
                         } else {
-                            var_9 = new-boxed-value(7, false);
+                            var_9 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_2),
-                            new-boxed-value(6, 0.00),
-                            new-boxed-value(6, 7.00),
+                            boxed_f32(var_2),
+                            boxed_f32(0.00),
+                            boxed_f32(7.00),
                             var_9
                         );
                         if (var_5) {
@@ -292,15 +292,15 @@ statescript {
                                 bool var_19 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_15 < get-float(strike-distance, self) && var_15 > 0.00;
                                 u64? var_24;
                                 if (var_19) {
-                                    var_24 = new-boxed-value(7, true);
+                                    var_24 = boxed_symbol(true);
                                 } else {
-                                    var_24 = new-boxed-value(7, false);
+                                    var_24 = boxed_symbol(false);
                                 }
                                 do-melee-log(
                                     "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                                    new-boxed-value(6, var_15),
-                                    new-boxed-value(6, 0.00),
-                                    new-boxed-value(6, get-float(strike-distance, self)),
+                                    boxed_f32(var_15),
+                                    boxed_f32(0.00),
+                                    boxed_f32(get-float(strike-distance, self)),
                                     var_24
                                 );
                                 if (var_19 && !get-current-melee-attack(get-symbol(attacker, self))) {
@@ -338,15 +338,15 @@ statescript {
                             bool var_7 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_4 < 3.50 && var_4 > 0.00;
                             u64? var_11;
                             if (var_7) {
-                                var_11 = new-boxed-value(7, true);
+                                var_11 = boxed_symbol(true);
                             } else {
-                                var_11 = new-boxed-value(7, false);
+                                var_11 = boxed_symbol(false);
                             }
                             do-melee-log(
                                 "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                                new-boxed-value(6, var_4),
-                                new-boxed-value(6, 0.00),
-                                new-boxed-value(6, 3.50),
+                                boxed_f32(var_4),
+                                boxed_f32(0.00),
+                                boxed_f32(3.50),
                                 var_11
                             );
                             if (!var_7) {
@@ -364,15 +364,15 @@ statescript {
                         bool var_8 = !(get-symbol(attacker, self) == 0) && !(get-symbol(defender, self) == 0) && var_4 < get-float(strike-distance, self) && var_4 > 0.00;
                         u64? var_13;
                         if (var_8) {
-                            var_13 = new-boxed-value(7, true);
+                            var_13 = boxed_symbol(true);
                         } else {
-                            var_13 = new-boxed-value(7, false);
+                            var_13 = boxed_symbol(false);
                         }
                         do-melee-log(
                             "characters-in-range? [[f]] [[f]] [[f]] [[s]]",
-                            new-boxed-value(6, var_4),
-                            new-boxed-value(6, 0.00),
-                            new-boxed-value(6, get-float(strike-distance, self)),
+                            boxed_f32(var_4),
+                            boxed_f32(0.00),
+                            boxed_f32(get-float(strike-distance, self)),
                             var_13
                         );
                         if (var_8) {

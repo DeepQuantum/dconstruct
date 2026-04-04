@@ -20,17 +20,7 @@ statescript {
         block start {
             track main {
                 lambda {
-                    foreach (u64? var_1 : thrower-slide-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : thrower-slide-npcs) {
                         spawn-npc(var_2, 0, 0);
                     }
                 }
@@ -41,7 +31,7 @@ statescript {
                 lambda {
                     u64? var_0 = group-random(thrower-slide-npcs);
                     spawn-entity-at(var_0, get-spawner-locator(get-furthest-in-group(thrower-slide-spawners, player), 1), 0);
-                    darray-find-remove(thrower-slide-npcs, new-boxed-value(7, var_0), 0);
+                    darray-find-remove(thrower-slide-npcs, boxed_symbol(var_0), 0);
                     if (darray-count(thrower-slide-npcs) == 0) {
                         var_5 = darray-reset(thrower-slide-npcs);
                     }

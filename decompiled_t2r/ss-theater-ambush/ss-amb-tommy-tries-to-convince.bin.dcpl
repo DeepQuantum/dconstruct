@@ -97,151 +97,151 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1365.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_1[1] = 20;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 1365.00;
                     animate_(player-get-weapon-instance(0), rifle=cin-amb-tommy-tries-to-convince-a, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 20;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (0 * 8)) + 8) = 1365.00;
+                    *(i32*)*var_1[0] = 20;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(f32*)(*var_1[0] + 8) = 1365.00;
                     animate_(player-get-weapon-strap-by-slot(0), rifle-1-strap=cin-amb-tommy-tries-to-convince-a, var_1);
                 }
                 lambda {
                     if (!(player-get-weapon-instance(1) == 0)) {
                         u64? var_2 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_2 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_2 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                        *(i32*)*(*var_2 + (1 * 8)) = 20;
-                        *(u64*)(*(*var_2 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_2 + (1 * 8)) + 8) = 1365.00;
+                        *(i32*)*var_2[0] = 10;
+                        *(u64*)(*var_2[0] + 8) = 0;
+                        *(u64*)(*var_2[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                        *(i32*)*var_2[1] = 20;
+                        *(u64*)(*var_2[1] + 8) = 0;
+                        *(f32*)(*var_2[1] + 8) = 1365.00;
                         animate_(player-get-weapon-instance(1), rifle2-ellie=cin-amb-tommy-tries-to-convince-a, var_2);
                         u64? var_5 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 20;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (0 * 8)) + 8) = 1365.00;
+                        *(i32*)*var_5[0] = 20;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(f32*)(*var_5[0] + 8) = 1365.00;
                         animate_(player-get-weapon-strap-by-slot(1), rifle-2-strap=cin-amb-tommy-tries-to-convince-a, var_5);
                     }
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 20;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 1365.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_1[1] = 20;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 1365.00;
                     animate_(player-get-anim-backpack(), backpack=cin-amb-tommy-tries-to-convince-a, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-blanket-1, blanket=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-pillow-1, pillow-c=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-1, the-ottoman-def=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-2, the-ottoman-a-def=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-3, the-ottoman-b-def=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-4, the-ottoman-c-def=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(dina, dina=cin-amb-tommy-tries-to-convince-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (0 * 8)) + 8) = 1.00;
-                    *(i32*)*(*var_0 + (1 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 1280;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 30;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(f32*)(*var_0[0] + 8) = 1.00;
+                    *(i32*)*var_0[1] = 10;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(u64*)(*var_0[1] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 1280;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.50;
                     wait-animate_(player, ellie=cin-amb-tommy-tries-to-convince-a, var_0);
                     bool var_6 = !(get-animation-playing?(player, ellie=cin-amb-tommy-tries-to-convince-a=010, 2)) && get-animation-frame(player, 2, ellie=cin-amb-tommy-tries-to-convince-a=010) >= ((get-animation-duration(player, ellie=cin-amb-tommy-tries-to-convince-a=010) - 1.00) * 30.00);
                     if (!var_6) {
                         u64? var_7 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 40;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_7 + (0 * 8)) + 8) = 1;
-                        *(i32*)*(*var_7 + (1 * 8)) = 28;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.10;
-                        *(i32*)*(*var_7 + (2 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (2 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (2 * 8)) + 8) = 0.70;
-                        *(i32*)*(*var_7 + (3 * 8)) = 57;
-                        *(u64*)(*(*var_7 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (3 * 8)) + 8) = get-animation-frame(player, 2, ellie=cin-amb-tommy-tries-to-convince-a=010);
-                        *(i32*)*(*var_7 + (4 * 8)) = 75;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (4 * 8)) + 8) = *default-upperbody-gestures*;
+                        *(i32*)*var_7[0] = 40;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(i32*)(*var_7[0] + 8) = 1;
+                        *(i32*)*var_7[1] = 28;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.10;
+                        *(i32*)*var_7[2] = 30;
+                        *(u64*)(*var_7[2] + 8) = 0;
+                        *(f32*)(*var_7[2] + 8) = 0.70;
+                        *(i32*)*var_7[3] = 57;
+                        *(u64*)(*var_7[3] + 8) = 0;
+                        *(f32*)(*var_7[3] + 8) = get-animation-frame(player, 2, ellie=cin-amb-tommy-tries-to-convince-a=010);
+                        *(i32*)*var_7[4] = 75;
+                        *(u64*)(*var_7[4] + 8) = 0;
+                        *(u64*)(*var_7[4] + 8) = *default-upperbody-gestures*;
                         animate_(player, ellie=cin-amb-tommy-tries-to-convince-a=010, var_7);
                         wait-one-frame();
                     }
@@ -255,161 +255,161 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-pillow-1, amb-dina-sleep--pillow-c, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-blanket-1, amb-dina-sleep--dina-ellie-blanket, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(dina, amb-dina-sleep--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-1, amb-dina-sleep--the-ottoman, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-2, amb-dina-sleep--the-ottoman-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-3, amb-dina-sleep--the-ottoman-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-4, amb-dina-sleep--the-ottoman-c, var_0);
                 }
                 lambda {
                     if (object-playing-feather-blend?(player, ellie=cin-amb-tommy-tries-to-convince-a=010) && get-animation-frame(player, 2, ellie=cin-amb-tommy-tries-to-convince-a=010) < 1365.00) {
                         u64? var_3 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                        *(i32*)*(*var_3 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = apReference-spine-d;
-                        *(i32*)*(*var_3 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_3 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_3 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_3 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_3 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (3 * 8)) + 8) = 1365.00;
-                        *(i32*)*(*var_3 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_3 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (4 * 8)) + 8) = 0.10;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                        *(i32*)*var_3[1] = 14;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(u64*)(*var_3[1] + 8) = apReference-spine-d;
+                        *(i32*)*var_3[2] = 59;
+                        *(u64*)(*var_3[2] + 8) = 0;
+                        *(i32*)(*var_3[2] + 8) = 1;
+                        *(i32*)*var_3[3] = 20;
+                        *(u64*)(*var_3[3] + 8) = 0;
+                        *(f32*)(*var_3[3] + 8) = 1365.00;
+                        *(i32*)*var_3[4] = 28;
+                        *(u64*)(*var_3[4] + 8) = 0;
+                        *(f32*)(*var_3[4] + 8) = 0.10;
                         animate_(player-get-anim-backpack(), backpack=cin-amb-tommy-tries-to-convince-a=010, var_3);
                         u64? var_6 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_6 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                        *(i32*)*(*var_6 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_6 + (1 * 8)) + 8) = apReference-spine-d;
-                        *(i32*)*(*var_6 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_6 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_6 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_6 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_6 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (3 * 8)) + 8) = 1365.00;
-                        *(i32*)*(*var_6 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_6 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_6 + (4 * 8)) + 8) = 0.10;
+                        *(i32*)*var_6[0] = 10;
+                        *(u64*)(*var_6[0] + 8) = 0;
+                        *(u64*)(*var_6[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                        *(i32*)*var_6[1] = 14;
+                        *(u64*)(*var_6[1] + 8) = 0;
+                        *(u64*)(*var_6[1] + 8) = apReference-spine-d;
+                        *(i32*)*var_6[2] = 59;
+                        *(u64*)(*var_6[2] + 8) = 0;
+                        *(i32*)(*var_6[2] + 8) = 1;
+                        *(i32*)*var_6[3] = 20;
+                        *(u64*)(*var_6[3] + 8) = 0;
+                        *(f32*)(*var_6[3] + 8) = 1365.00;
+                        *(i32*)*var_6[4] = 28;
+                        *(u64*)(*var_6[4] + 8) = 0;
+                        *(f32*)(*var_6[4] + 8) = 0.10;
                         animate_(player-get-weapon-instance(0), rifle=cin-amb-tommy-tries-to-convince-a=010, var_6);
                         u64? var_9 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                        *(i32*)*(*var_9 + (1 * 8)) = 14;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = apReference-spine-d;
-                        *(i32*)*(*var_9 + (2 * 8)) = 59;
-                        *(u64*)(*(*var_9 + (2 * 8)) + 8) = 0;
-                        *(i32*)(*(*var_9 + (2 * 8)) + 8) = 1;
-                        *(i32*)*(*var_9 + (3 * 8)) = 20;
-                        *(u64*)(*(*var_9 + (3 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (3 * 8)) + 8) = 1365.00;
-                        *(i32*)*(*var_9 + (4 * 8)) = 28;
-                        *(u64*)(*(*var_9 + (4 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (4 * 8)) + 8) = 0.10;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                        *(i32*)*var_9[1] = 14;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(u64*)(*var_9[1] + 8) = apReference-spine-d;
+                        *(i32*)*var_9[2] = 59;
+                        *(u64*)(*var_9[2] + 8) = 0;
+                        *(i32*)(*var_9[2] + 8) = 1;
+                        *(i32*)*var_9[3] = 20;
+                        *(u64*)(*var_9[3] + 8) = 0;
+                        *(f32*)(*var_9[3] + 8) = 1365.00;
+                        *(i32*)*var_9[4] = 28;
+                        *(u64*)(*var_9[4] + 8) = 0;
+                        *(f32*)(*var_9[4] + 8) = 0.10;
                         animate_(player-get-weapon-strap-by-slot(0), rifle-1-strap=cin-amb-tommy-tries-to-convince-a=010, var_9);
                         if (!(player-get-weapon-instance(1) == 0)) {
                             u64? var_13 = #%alloc-array(single-frame, 16, 5, 1);
-                            *(i32*)*(*var_13 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                            *(i32*)*(*var_13 + (1 * 8)) = 14;
-                            *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_13 + (1 * 8)) + 8) = apReference-spine-d;
-                            *(i32*)*(*var_13 + (2 * 8)) = 59;
-                            *(u64*)(*(*var_13 + (2 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_13 + (2 * 8)) + 8) = 1;
-                            *(i32*)*(*var_13 + (3 * 8)) = 20;
-                            *(u64*)(*(*var_13 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_13 + (3 * 8)) + 8) = 1365.00;
-                            *(i32*)*(*var_13 + (4 * 8)) = 28;
-                            *(u64*)(*(*var_13 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_13 + (4 * 8)) + 8) = 0.10;
+                            *(i32*)*var_13[0] = 10;
+                            *(u64*)(*var_13[0] + 8) = 0;
+                            *(u64*)(*var_13[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                            *(i32*)*var_13[1] = 14;
+                            *(u64*)(*var_13[1] + 8) = 0;
+                            *(u64*)(*var_13[1] + 8) = apReference-spine-d;
+                            *(i32*)*var_13[2] = 59;
+                            *(u64*)(*var_13[2] + 8) = 0;
+                            *(i32*)(*var_13[2] + 8) = 1;
+                            *(i32*)*var_13[3] = 20;
+                            *(u64*)(*var_13[3] + 8) = 0;
+                            *(f32*)(*var_13[3] + 8) = 1365.00;
+                            *(i32*)*var_13[4] = 28;
+                            *(u64*)(*var_13[4] + 8) = 0;
+                            *(f32*)(*var_13[4] + 8) = 0.10;
                             animate_(player-get-weapon-instance(1), rifle2-ellie=cin-amb-tommy-tries-to-convince-a=010, var_13);
                             u64? var_16 = #%alloc-array(single-frame, 16, 5, 1);
-                            *(i32*)*(*var_16 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-joint-parented-bound-frame(player, spined);
-                            *(i32*)*(*var_16 + (1 * 8)) = 14;
-                            *(u64*)(*(*var_16 + (1 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_16 + (1 * 8)) + 8) = apReference-spine-d;
-                            *(i32*)*(*var_16 + (2 * 8)) = 59;
-                            *(u64*)(*(*var_16 + (2 * 8)) + 8) = 0;
-                            *(i32*)(*(*var_16 + (2 * 8)) + 8) = 1;
-                            *(i32*)*(*var_16 + (3 * 8)) = 20;
-                            *(u64*)(*(*var_16 + (3 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_16 + (3 * 8)) + 8) = 1365.00;
-                            *(i32*)*(*var_16 + (4 * 8)) = 28;
-                            *(u64*)(*(*var_16 + (4 * 8)) + 8) = 0;
-                            *(f32*)(*(*var_16 + (4 * 8)) + 8) = 0.10;
+                            *(i32*)*var_16[0] = 10;
+                            *(u64*)(*var_16[0] + 8) = 0;
+                            *(u64*)(*var_16[0] + 8) = get-joint-parented-bound-frame(player, spined);
+                            *(i32*)*var_16[1] = 14;
+                            *(u64*)(*var_16[1] + 8) = 0;
+                            *(u64*)(*var_16[1] + 8) = apReference-spine-d;
+                            *(i32*)*var_16[2] = 59;
+                            *(u64*)(*var_16[2] + 8) = 0;
+                            *(i32*)(*var_16[2] + 8) = 1;
+                            *(i32*)*var_16[3] = 20;
+                            *(u64*)(*var_16[3] + 8) = 0;
+                            *(f32*)(*var_16[3] + 8) = 1365.00;
+                            *(i32*)*var_16[4] = 28;
+                            *(u64*)(*var_16[4] + 8) = 0;
+                            *(f32*)(*var_16[4] + 8) = 0.10;
                             animate_(player-get-weapon-strap-by-slot(1), rifle-2-strap=cin-amb-tommy-tries-to-convince-a=010, var_16);
                         }
                     }
@@ -532,72 +532,72 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-pillow-1, amb-dina-sleep--pillow-c, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-amb-blanket-1, amb-dina-sleep--dina-ellie-blanket, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(dina, amb-dina-sleep--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-1, amb-dina-sleep--the-ottoman, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-2, amb-dina-sleep--the-ottoman-a, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-3, amb-dina-sleep--the-ottoman-b, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.70;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(cin-amb-tommy-tries-to-convince-a-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.70;
                     animate_(obj-the-amb-backstage-ottoman-4, amb-dina-sleep--the-ottoman-c, var_0);
                 }
                 lambda {

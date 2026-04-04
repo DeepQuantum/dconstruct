@@ -63,40 +63,40 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(self, boxedBool, new-boxed-value(1, 1));
+                    fact-set(self, boxedBool, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(self, boxedI32, new-boxed-value(2, -5));
+                    fact-set(self, boxedI32, boxed_i32(-5));
                 }
                 lambda {
-                    fact-set(self, boxedU32, new-boxed-value(3, 17));
+                    fact-set(self, boxedU32, boxed_u32(17));
                 }
                 lambda {
-                    fact-set(self, boxedI64, new-boxed-value(4, -5));
+                    fact-set(self, boxedI64, boxed_i64(-5));
                 }
                 lambda {
-                    fact-set(self, boxedU64, new-boxed-value(5, 17));
+                    fact-set(self, boxedU64, boxed_u64(17));
                 }
                 lambda {
-                    fact-set(self, boxedF32, new-boxed-value(6, 3.14));
+                    fact-set(self, boxedF32, boxed_f32(3.14));
                 }
                 lambda {
-                    fact-set(self, boxedSid, new-boxed-value(7, somesymbol));
+                    fact-set(self, boxedSid, boxed_symbol(somesymbol));
                 }
                 lambda {
-                    fact-set(self, boxedPoint, new-boxed-value(14, ""));
+                    fact-set(self, boxedPoint, boxed_point(""));
                 }
                 lambda {
-                    fact-set(self, boxedVector, new-boxed-value(15, ""));
+                    fact-set(self, boxedVector, boxed_vector(""));
                 }
                 lambda {
-                    fact-set(self, boxedLocator, new-boxed-value(17, ""));
+                    fact-set(self, boxedLocator, boxed_locator(""));
                 }
                 lambda {
-                    fact-set(self, boxedString, new-boxed-value(19, "fooey"));
+                    fact-set(self, boxedString, boxed_stringcopy("fooey"));
                 }
                 lambda {
-                    fact-set(self, boxedTimeFrame, new-boxed-value(8, get-current-timeframe(0)));
+                    fact-set(self, boxedTimeFrame, boxed_timeframePOD(get-current-timeframe(0)));
                 }
                 lambda {
                     set-int32(anint, get-int32(anint, self) + 1, self);

@@ -16,7 +16,7 @@ u16 wait-npc-spawn-then-move(u64? arg_0, u64? arg_1) {
     if (*fpark-test* != nullptr) {
         if (!*(u8*)*fpark-test*) {
             u64? var_1 = wait-spawn-npc(arg_0, 0, 0);
-            darray-append(tra-horde-joel-tommy-escape-npcs, new-boxed-value(7, var_1), 1);
+            darray-append(tra-horde-joel-tommy-escape-npcs, boxed_symbol(var_1), 1);
             npc-set-demeanor(var_1, 2, 0);
             var_0 = wait-npc-move-to(var_1, get-spawner-locator(arg_1, 1), 1, 0, 0, 0, 0, 0);
         } else {
@@ -223,9 +223,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, new-boxed-value(7, var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0))) {
+                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, boxed_symbol(var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0))) {
                         npc-abandon-interrupted-nav-command(var_0);
-                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0), 1);
+                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -233,17 +233,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-escape-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-escape-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, tommy, 2, *npc-awareness-options-no-surprise*);
@@ -311,9 +301,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, new-boxed-value(7, var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0))) {
+                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, boxed_symbol(var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0))) {
                         npc-abandon-interrupted-nav-command(var_0);
-                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0), 1);
+                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -338,17 +328,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-escape-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-escape-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, tommy, 2, *npc-awareness-options-no-surprise*);
@@ -416,9 +396,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, new-boxed-value(7, var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0))) {
+                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, boxed_symbol(var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0))) {
                         npc-abandon-interrupted-nav-command(var_0);
-                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0), 1);
+                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0), 1);
                     }
                 }
             }
@@ -426,17 +406,7 @@ statescript {
         block update {
             track main {
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-escape-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-escape-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-make-aware-of(var_2, player, 2, *npc-awareness-options-no-surprise*);
                             npc-make-aware-of(var_2, tommy, 2, *npc-awareness-options-no-surprise*);
@@ -500,17 +470,7 @@ statescript {
                     wait-boolean(door-blocked?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             if (locator-in-region?(get-object-locator(var_2), rgn-tra-horde-pre-defend-fight-1, player)) {
                                 npc-kill(var_2);
@@ -519,17 +479,7 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-escape-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-escape-npcs) {
                         if (npc-alive?(var_2)) {
                             npc-kill(var_2);
                         }
@@ -569,17 +519,7 @@ statescript {
                     wait-boolean(door-blocked?, 1, self);
                 }
                 lambda {
-                    foreach (u64? var_1 : all-infected-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : all-infected-npcs) {
                         if (npc-alive?(var_2)) {
                             if (locator-in-region?(get-object-locator(var_2), rgn-tra-horde-pre-defend-fight-1, player)) {
                                 npc-kill(var_2);
@@ -588,19 +528,9 @@ statescript {
                     }
                 }
                 lambda {
-                    foreach (u64? var_1 : tra-horde-joel-tommy-escape-npcs) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : tra-horde-joel-tommy-escape-npcs) {
                         if (npc-alive?(var_2)) {
-                            darray-append(tra-horde-joel-tommy-defend-fight-npcs, new-boxed-value(7, var_2), 1);
+                            darray-append(tra-horde-joel-tommy-defend-fight-npcs, boxed_symbol(var_2), 1);
                         }
                     }
                 }
@@ -616,9 +546,9 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(1);
-                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, new-boxed-value(7, var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0))) {
+                    if (darray-contains?(tra-horde-joel-tommy-escape-npcs, boxed_symbol(var_0)) && !darray-contains?(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0))) {
                         npc-abandon-interrupted-nav-command(var_0);
-                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, new-boxed-value(7, var_0), 1);
+                        var_5 = darray-append(tra-horde-joel-tommy-escape-npcs-interrupted, boxed_symbol(var_0), 1);
                     }
                 }
             }

@@ -24,7 +24,7 @@ statescript {
                     set-in-vertigo-region(player, 1);
                 }
                 lambda {
-                    fact-set(global, player-vertigo-mode, new-boxed-value(1, 1));
+                    fact-set(global, player-vertigo-mode, boxed_bool(1));
                 }
             }
         }
@@ -34,7 +34,7 @@ statescript {
                     set-in-vertigo-region(player, 0);
                 }
                 lambda {
-                    fact-set(global, player-vertigo-mode, new-boxed-value(1, 0));
+                    fact-set(global, player-vertigo-mode, boxed_bool(0));
                 }
             }
         }

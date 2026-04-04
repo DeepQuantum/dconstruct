@@ -51,8 +51,8 @@ statescript {
             track main {
                 lambda {
                     u64? var_0 = event-arg-symbol(0);
-                    if (darray-contains?(get-symbol(group-this-wave-npcs, self), new-boxed-value(7, var_0))) {
-                        darray-find-remove(get-symbol(group-this-wave-npcs, self), new-boxed-value(7, var_0), 0);
+                    if (darray-contains?(get-symbol(group-this-wave-npcs, self), boxed_symbol(var_0))) {
+                        darray-find-remove(get-symbol(group-this-wave-npcs, self), boxed_symbol(var_0), 0);
                         ++(num-enemies-killed, self);
                         if (*encounter-tweaks* != nullptr && *(f32*)(*encounter-tweaks* + 88) >= 0.00) {
                             wait(*(f32*)(*encounter-tweaks* + 88));

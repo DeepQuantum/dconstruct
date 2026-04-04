@@ -45,7 +45,7 @@ statescript {
                     set-breakable-collapsed(get-self-id(), 0);
                 }
                 lambda {
-                    send-event(cabinet-destroyed, ss-flo-arcade-bloater-fight-destruction-1, new-boxed-value(7, get-self-id()));
+                    send-event(cabinet-destroyed, ss-flo-arcade-bloater-fight-destruction-1, boxed_symbol(get-self-id()));
                 }
                 lambda {
                     wait-frames(3);

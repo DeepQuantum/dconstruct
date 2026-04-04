@@ -100,10 +100,10 @@ statescript {
                     }
                 }
                 lambda {
-                    fact-set(global, snowball-fight?, new-boxed-value(1, 1));
+                    fact-set(global, snowball-fight?, boxed_bool(1));
                 }
                 lambda {
-                    fact-set(global, suppress-stealth-vox?, new-boxed-value(1, 1));
+                    fact-set(global, suppress-stealth-vox?, boxed_bool(1));
                 }
                 lambda {
                     wait-spawn-npc(npc-pat-snowball-child-1, 0, 0);
@@ -146,61 +146,41 @@ statescript {
                         set-visible(npc-pat-snowball-child-2, 0);
                         set-visible(npc-pat-snowball-child-3, 0);
                         set-visible(npc-pat-snowball-child-1, 1);
-                        foreach (u64? var_2 : snowball-final-hit-aps) {
-                            u16 var_3;
-                            if (var_2 && *(u16*)(var_2 + 12) == 7) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-                                var_3 = *(u64*)var_2;
-                            } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-                                var_3 = *(u64*)var_2;
-                            } else {
-                                var_3 = 0;
-                            }
+                        foreach (u64? var_3 : snowball-final-hit-aps) {
                             camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                             set-boolean(in-final-hit, 1, self);
                             u64? var_4 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_4 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_4 + (0 * 8)) + 8) = get-spawner-locator(var_3, 1);
+                            *(i32*)*var_4[0] = 10;
+                            *(u64*)(*var_4[0] + 8) = 0;
+                            *(u64*)(*var_4[0] + 8) = get-spawner-locator(var_3, 1);
                             animate_(obj-pat-jackson-debug-trailer-camera-1, pat-jackson-snowball-victory-hit-reaction--cam, var_4);
                             u64? var_6 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_6 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_6 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_6 + (0 * 8)) + 8) = get-spawner-locator(var_3, 1);
+                            *(i32*)*var_6[0] = 10;
+                            *(u64*)(*var_6[0] + 8) = 0;
+                            *(u64*)(*var_6[0] + 8) = get-spawner-locator(var_3, 1);
                             animate_(pat-jackson-snowball-victory-hit-reaction-light-object-1, pat-jackson-snowball-victory-hit-reaction--teen--light-skel, var_6);
                             u64? var_8 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_8 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_8 + (0 * 8)) + 8) = get-spawner-locator(var_3, 1);
+                            *(i32*)*var_8[0] = 10;
+                            *(u64*)(*var_8[0] + 8) = 0;
+                            *(u64*)(*var_8[0] + 8) = get-spawner-locator(var_3, 1);
                             wait-animate_(npc-pat-snowball-child-1, pat-jackson-snowball-victory-hit-reaction--teen, var_8);
                             camera-fade-out-animated(0.00, 0);
                             wait-one-frame();
                         }
                         set-visible(npc-pat-snowball-child-1, 0);
                         set-visible(player, 1);
-                        foreach (u64? var_12 : snowball-final-hit-aps) {
-                            u16 var_13;
-                            if (var_12 && *(u16*)(var_12 + 12) == 7) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 5) {
-                                var_13 = *(u64*)var_12;
-                            } else if (var_12 && *(u16*)(var_12 + 12) == 4) {
-                                var_13 = *(u64*)var_12;
-                            } else {
-                                var_13 = 0;
-                            }
+                        foreach (u64? var_13 : snowball-final-hit-aps) {
                             camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                             set-boolean(in-final-hit, 1, self);
                             u64? var_14 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_14 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_14 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_14 + (0 * 8)) + 8) = get-spawner-locator(var_13, 1);
+                            *(i32*)*var_14[0] = 10;
+                            *(u64*)(*var_14[0] + 8) = 0;
+                            *(u64*)(*var_14[0] + 8) = get-spawner-locator(var_13, 1);
                             animate_(pat-jackson-snowball-failure-hit-reaction-light-object-1, pat-jackson-snowball-failure-hit-reaction--ellie--light-skel, var_14);
                             u64? var_16 = #%alloc-array(single-frame, 16, 1, 1);
-                            *(i32*)*(*var_16 + (0 * 8)) = 10;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = 0;
-                            *(u64*)(*(*var_16 + (0 * 8)) + 8) = get-spawner-locator(var_13, 1);
+                            *(i32*)*var_16[0] = 10;
+                            *(u64*)(*var_16[0] + 8) = 0;
+                            *(u64*)(*var_16[0] + 8) = get-spawner-locator(var_13, 1);
                             wait-animate_(player, pat-jackson-snowball-failure-hit-reaction--ellie, var_16);
                             camera-fade-out-animated(0.00, 0);
                             wait-one-frame();
@@ -254,60 +234,60 @@ statescript {
                         disable-collision(npc-pat-snowball-child-3, 0);
                         wait-one-frame();
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_1[1] = 30;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = 0.50;
                         animate_(dina, pat-crowd-kids-playing-jungle-gym-start-loop--dina, var_1);
                         u64? var_3 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_3 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_3 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_3 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_3 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_3 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_3[0] = 10;
+                        *(u64*)(*var_3[0] + 8) = 0;
+                        *(u64*)(*var_3[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_3[1] = 30;
+                        *(u64*)(*var_3[1] + 8) = 0;
+                        *(f32*)(*var_3[1] + 8) = 0.50;
                         animate_(npc-pat-snowball-child-1, pat-crowd-kids-playing-jungle-gym-start-loop--teen-a, var_3);
                         u64? var_5 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_5 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_5 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_5 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_5 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_5 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_5[0] = 10;
+                        *(u64*)(*var_5[0] + 8) = 0;
+                        *(u64*)(*var_5[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_5[1] = 30;
+                        *(u64*)(*var_5[1] + 8) = 0;
+                        *(f32*)(*var_5[1] + 8) = 0.50;
                         animate_(npc-pat-snowball-child-2, pat-crowd-kids-playing-jungle-gym-start-loop--teen-b, var_5);
                         u64? var_7 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_7 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_7 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_7 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_7 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_7 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_7[0] = 10;
+                        *(u64*)(*var_7[0] + 8) = 0;
+                        *(u64*)(*var_7[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_7[1] = 30;
+                        *(u64*)(*var_7[1] + 8) = 0;
+                        *(f32*)(*var_7[1] + 8) = 0.50;
                         animate_(npc-pat-snowball-child-3, pat-crowd-kids-playing-jungle-gym-start-loop--teen, var_7);
                         u64? var_9 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_9 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_9 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_9 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_9 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_9 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_9[0] = 10;
+                        *(u64*)(*var_9[0] + 8) = 0;
+                        *(u64*)(*var_9[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_9[1] = 30;
+                        *(u64*)(*var_9[1] + 8) = 0;
+                        *(f32*)(*var_9[1] + 8) = 0.50;
                         animate_(obj-pat-jackson-jungle-gym-igc-snowball-1, pat-crowd-kids-playing-jungle-gym-start-loop--snowball, var_9);
                         u64? var_11 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_11 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_11 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_11 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_11 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_11 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_11[0] = 10;
+                        *(u64*)(*var_11[0] + 8) = 0;
+                        *(u64*)(*var_11[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_11[1] = 30;
+                        *(u64*)(*var_11[1] + 8) = 0;
+                        *(f32*)(*var_11[1] + 8) = 0.50;
                         animate_(obj-pat-jackson-jungle-gym-igc-snowball-2, pat-crowd-kids-playing-jungle-gym-start-loop--snowball-a, var_11);
                         u64? var_13 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_13 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_13 + (0 * 8)) + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
-                        *(i32*)*(*var_13 + (1 * 8)) = 30;
-                        *(u64*)(*(*var_13 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_13 + (1 * 8)) + 8) = 0.50;
+                        *(i32*)*var_13[0] = 10;
+                        *(u64*)(*var_13[0] + 8) = 0;
+                        *(u64*)(*var_13[0] + 8) = get-spawner-locator(ap-snowball-kids-playing-jungle-gym-1, 1);
+                        *(i32*)*var_13[1] = 30;
+                        *(u64*)(*var_13[1] + 8) = 0;
+                        *(f32*)(*var_13[1] + 8) = 0.50;
                         animate_(obj-pat-jackson-jungle-gym-igc-snowball-3, pat-crowd-kids-playing-jungle-gym-start-loop--snowball-b, var_13);
                         enable-collision(npc-pat-snowball-child-1, 1, 0, 0.00);
                         enable-collision(npc-pat-snowball-child-2, 1, 0, 0.00);
@@ -408,17 +388,7 @@ statescript {
                     send-event(fight-began, npc-pat-snowball-child-3);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-kids) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-kids) {
                         set-focusable-ignore(var_2, 0);
                         set-overlay-set(var_2, anim-overlay-thug-level-pat-kid);
                         npc-set-hit-reaction-set-id(var_2, *kids-snowball-fight-hit-reactions*);
@@ -442,8 +412,8 @@ statescript {
                         send-event(
                             set-team-names,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(7, HUD_SNOWBALL_FIGHT_ADULTS),
-                            new-boxed-value(7, HUD_SNOWBALL_FIGHT_KIDS)
+                            boxed_symbol(HUD_SNOWBALL_FIGHT_ADULTS),
+                            boxed_symbol(HUD_SNOWBALL_FIGHT_KIDS)
                         );
                         send-event(scoreboard-hide-dots, get-symbol(w-score-root, self));
                     }
@@ -455,16 +425,16 @@ statescript {
                         send-event(
                             hud2-score-update,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(2, get-int32(total-num-hits-on-adults, self)),
-                            new-boxed-value(1, 0),
-                            new-boxed-value(1, 0)
+                            boxed_i32(get-int32(total-num-hits-on-adults, self)),
+                            boxed_bool(0),
+                            boxed_bool(0)
                         );
                         send-event(
                             hud2-score-update,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(2, get-int32(total-num-hits, self)),
-                            new-boxed-value(1, 1),
-                            new-boxed-value(1, 0)
+                            boxed_i32(get-int32(total-num-hits, self)),
+                            boxed_bool(1),
+                            boxed_bool(0)
                         );
                     }
                 }
@@ -721,17 +691,7 @@ statescript {
                     set-player-global-boolean(0 + 261, player-pickup-running-scripted-move, 0);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-kids) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-kids) {
                         npc-make-aware-of(var_2, player, 2, 0);
                     }
                 }
@@ -763,9 +723,9 @@ statescript {
                         send-event(
                             hud2-score-update,
                             get-symbol(w-score-root, self),
-                            new-boxed-value(2, get-int32(total-num-hits-on-adults, self)),
-                            new-boxed-value(1, 0),
-                            new-boxed-value(1, 0)
+                            boxed_i32(get-int32(total-num-hits-on-adults, self)),
+                            boxed_bool(0),
+                            boxed_bool(0)
                         );
                     }
                 }
@@ -809,9 +769,9 @@ statescript {
                                         send-event(
                                             hud2-score-update,
                                             get-symbol(w-score-root, self),
-                                            new-boxed-value(2, get-int32(total-num-hits, self)),
-                                            new-boxed-value(1, 1),
-                                            new-boxed-value(1, 0)
+                                            boxed_i32(get-int32(total-num-hits, self)),
+                                            boxed_bool(1),
+                                            boxed_bool(0)
                                         );
                                     }
                                 }
@@ -906,17 +866,7 @@ statescript {
                     npc-set-script-only-with-perception(dina);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-kids) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-kids) {
                         npc-set-script-only-with-perception(var_2);
                         npc-set-demeanor(var_2, 0, 0);
                         npc-drop-held-grenade(var_2);
@@ -968,26 +918,26 @@ statescript {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         set-boolean(in-final-hit, 1, self);
                         u64? var_32 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_32 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_32 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_32 + (0 * 8)) + 8) = get-bound-frame(hit-reaction-ap, self);
+                        *(i32*)*var_32[0] = 10;
+                        *(u64*)(*var_32[0] + 8) = 0;
+                        *(u64*)(*var_32[0] + 8) = get-bound-frame(hit-reaction-ap, self);
                         animate_(pat-jackson-snowball-victory-hit-reaction-light-object-1, pat-jackson-snowball-victory-hit-reaction--teen--light-skel, var_32);
                         u64? var_35 = #%alloc-array(single-frame, 16, 5, 1);
-                        *(i32*)*(*var_35 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_35 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_35 + (0 * 8)) + 8) = get-bound-frame(hit-reaction-ap, self);
-                        *(i32*)*(*var_35 + (1 * 8)) = 3;
-                        *(u64*)(*(*var_35 + (1 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_35 + (1 * 8)) + 8) = 0;
-                        *(i32*)*(*var_35 + (2 * 8)) = 2;
-                        *(u64*)(*(*var_35 + (2 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_35 + (2 * 8)) + 8) = 0;
-                        *(i32*)*(*var_35 + (3 * 8)) = 84;
-                        *(u64*)(*(*var_35 + (3 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_35 + (3 * 8)) + 8) = 0;
-                        *(i32*)*(*var_35 + (4 * 8)) = 1;
-                        *(u64*)(*(*var_35 + (4 * 8)) + 8) = 0;
-                        *(u8*)(*(*var_35 + (4 * 8)) + 8) = 0;
+                        *(i32*)*var_35[0] = 10;
+                        *(u64*)(*var_35[0] + 8) = 0;
+                        *(u64*)(*var_35[0] + 8) = get-bound-frame(hit-reaction-ap, self);
+                        *(i32*)*var_35[1] = 3;
+                        *(u64*)(*var_35[1] + 8) = 0;
+                        *(u8*)(*var_35[1] + 8) = 0;
+                        *(i32*)*var_35[2] = 2;
+                        *(u64*)(*var_35[2] + 8) = 0;
+                        *(u8*)(*var_35[2] + 8) = 0;
+                        *(i32*)*var_35[3] = 84;
+                        *(u64*)(*var_35[3] + 8) = 0;
+                        *(u8*)(*var_35[3] + 8) = 0;
+                        *(i32*)*var_35[4] = 1;
+                        *(u64*)(*var_35[4] + 8) = 0;
+                        *(u8*)(*var_35[4] + 8) = 0;
                         wait-animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-victory-hit-reaction--teen, var_35);
                         set-visible(player, 1);
                         set-visible(dina, 1);
@@ -1015,16 +965,16 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(dina, pat-jackson-snowball-victory-tackle--dina, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-victory-tackle--teen, var_1);
                 }
                 lambda {
@@ -1032,30 +982,30 @@ statescript {
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-victory-tackle--teen-a, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-victory-tackle--teen-b, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(pat-jackson-snowball-victory-light-object-1, pat-jackson-snowball-victory-tackle--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(player, pat-jackson-snowball-victory-tackle--ellie, var_0);
                 }
                 lambda {
@@ -1072,30 +1022,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(dina, pat-jackson-snowball-dog-pile-tackle--dina, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-dog-pile-tackle--teen, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-dog-pile-tackle--teen-a, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     wait-animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-dog-pile-tackle--teen-b, var_1);
                 }
                 lambda {
@@ -1110,12 +1060,12 @@ statescript {
                     if (!get-boolean(skip-last-hit, self)) {
                         wait-frames(2);
                         u64? var_1 = #%alloc-array(single-frame, 16, 2, 1);
-                        *(i32*)*(*var_1 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(get-closest-in-group(snowball-final-hit-aps, get-symbol(last-hit-kid, self), 0, 0, 1, 0), 1);
-                        *(i32*)*(*var_1 + (1 * 8)) = 57;
-                        *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                        *(f32*)(*(*var_1 + (1 * 8)) + 8) = get-animation-frame(get-symbol(last-hit-kid, self), 2, pat-jackson-snowball-victory-hit-reaction--teen);
+                        *(i32*)*var_1[0] = 10;
+                        *(u64*)(*var_1[0] + 8) = 0;
+                        *(u64*)(*var_1[0] + 8) = get-spawner-locator(get-closest-in-group(snowball-final-hit-aps, get-symbol(last-hit-kid, self), 0, 0, 1, 0), 1);
+                        *(i32*)*var_1[1] = 57;
+                        *(u64*)(*var_1[1] + 8) = 0;
+                        *(f32*)(*var_1[1] + 8) = get-animation-frame(get-symbol(last-hit-kid, self), 2, pat-jackson-snowball-victory-hit-reaction--teen);
                         animate_(obj-pat-jackson-debug-trailer-camera-1, pat-jackson-snowball-victory-hit-reaction--cam, var_1);
                     }
                 }
@@ -1126,28 +1076,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(pat-jackson-snowball-victory-light-object-1, pat-jackson-snowball-dog-pile-tackle--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 30;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.60;
                     wait-animate_(player, pat-jackson-snowball-dog-pile-tackle--ellie, var_0);
                 }
             }
@@ -1235,17 +1185,7 @@ statescript {
                     npc-set-script-only-with-perception(dina);
                 }
                 lambda {
-                    foreach (u64? var_1 : snowball-kids) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-kids) {
                         npc-set-script-only-with-perception(var_2);
                         npc-set-demeanor(var_2, 0, 0);
                         npc-drop-held-grenade(var_2);
@@ -1291,14 +1231,14 @@ statescript {
                         camera-enable-animated(0.00, -1.00, 1, 1000, 0, 0, 0);
                         clear-gesture-instantly(player, -1);
                         u64? var_21 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_21 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_21 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_21 + (0 * 8)) + 8) = get-bound-frame(hit-reaction-ap, self);
+                        *(i32*)*var_21[0] = 10;
+                        *(u64*)(*var_21[0] + 8) = 0;
+                        *(u64*)(*var_21[0] + 8) = get-bound-frame(hit-reaction-ap, self);
                         animate_(pat-jackson-snowball-failure-hit-reaction-light-object-1, pat-jackson-snowball-failure-hit-reaction--ellie--light-skel, var_21);
                         u64? var_23 = #%alloc-array(single-frame, 16, 1, 1);
-                        *(i32*)*(*var_23 + (0 * 8)) = 10;
-                        *(u64*)(*(*var_23 + (0 * 8)) + 8) = 0;
-                        *(u64*)(*(*var_23 + (0 * 8)) + 8) = get-bound-frame(hit-reaction-ap, self);
+                        *(i32*)*var_23[0] = 10;
+                        *(u64*)(*var_23[0] + 8) = 0;
+                        *(u64*)(*var_23[0] + 8) = get-bound-frame(hit-reaction-ap, self);
                         wait-animate_(player, pat-jackson-snowball-failure-hit-reaction--ellie, var_23);
                         set-visible(player, 1);
                         set-visible(dina, 1);
@@ -1330,37 +1270,37 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(dina, pat-jackson-snowball-failure-tackle--dina, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-failure-tackle--teen, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-failure-tackle--teen-a, var_1);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(pat-jackson-snowball-victory-light-object-1, pat-jackson-snowball-failure-tackle--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     wait-animate_(player, pat-jackson-snowball-failure-tackle--ellie, var_0);
                 }
                 lambda {
@@ -1368,30 +1308,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(dina, pat-jackson-snowball-dog-pile-tackle--dina, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-dog-pile-tackle--teen, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-dog-pile-tackle--teen-a, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     wait-animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-dog-pile-tackle--teen-b, var_1);
                 }
                 lambda {
@@ -1404,28 +1344,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 2, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
                     animate_(pat-jackson-snowball-victory-light-object-1, pat-jackson-snowball-dog-pile-tackle--ellie--light-skel, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.75;
-                    *(i32*)*(*var_0 + (2 * 8)) = 61;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(i32*)(*(*var_0 + (2 * 8)) + 8) = 30;
-                    *(i32*)*(*var_0 + (3 * 8)) = 60;
-                    *(u64*)(*(*var_0 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (3 * 8)) + 8) = 0.60;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 30;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.75;
+                    *(i32*)*var_0[2] = 61;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(i32*)(*var_0[2] + 8) = 30;
+                    *(i32*)*var_0[3] = 60;
+                    *(u64*)(*var_0[3] + 8) = 0;
+                    *(f32*)(*var_0[3] + 8) = 0.60;
                     wait-animate_(player, pat-jackson-snowball-dog-pile-tackle--ellie, var_0);
                 }
                 lambda {
@@ -1484,30 +1424,30 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(dina, pat-jackson-snowball-dog-pile-idle--dina, var_0);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-dog-pile-idle--teen, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-dog-pile-idle--teen-a, var_1);
                 }
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 1, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
                     animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-dog-pile-idle--teen-b, var_1);
                 }
                 lambda {
@@ -1578,28 +1518,28 @@ statescript {
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.50;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.50;
                     animate_(dina, pat-jackson-snowball-dog-pile-exit--dina, var_0);
                 }
                 lambda {
                     u64? var_0 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_0 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_0 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_0 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_0 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_0 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_0 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_0 + (2 * 8)) + 8) = 0.65;
+                    *(i32*)*var_0[0] = 10;
+                    *(u64*)(*var_0[0] + 8) = 0;
+                    *(u64*)(*var_0[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_0[1] = 28;
+                    *(u64*)(*var_0[1] + 8) = 0;
+                    *(f32*)(*var_0[1] + 8) = 0.50;
+                    *(i32*)*var_0[2] = 30;
+                    *(u64*)(*var_0[2] + 8) = 0;
+                    *(f32*)(*var_0[2] + 8) = 0.65;
                     wait-animate_(player, pat-jackson-snowball-dog-pile-exit--ellie, var_0);
                 }
                 lambda {
@@ -1646,18 +1586,18 @@ statescript {
             track kid-1 {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 4, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (3 * 8)) = 20;
-                    *(u64*)(*(*var_1 + (3 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (3 * 8)) + 8) = 225.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 0.50;
+                    *(i32*)*var_1[3] = 20;
+                    *(u64*)(*var_1[3] + 8) = 0;
+                    *(f32*)(*var_1[3] + 8) = 225.00;
                     wait-animate_(get-symbol(first-dogpile-kid, self), pat-jackson-snowball-dog-pile-exit--teen, var_1);
                 }
                 lambda {
@@ -1667,15 +1607,15 @@ statescript {
             track kid-2 {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 1.00;
                     wait-animate_(get-symbol(second-dogpile-kid, self), pat-jackson-snowball-dog-pile-exit--teen-a, var_1);
                 }
                 lambda {
@@ -1685,15 +1625,15 @@ statescript {
             track kid-3 {
                 lambda {
                     u64? var_1 = #%alloc-array(single-frame, 16, 3, 1);
-                    *(i32*)*(*var_1 + (0 * 8)) = 10;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = 0;
-                    *(u64*)(*(*var_1 + (0 * 8)) + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
-                    *(i32*)*(*var_1 + (1 * 8)) = 28;
-                    *(u64*)(*(*var_1 + (1 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (1 * 8)) + 8) = 0.50;
-                    *(i32*)*(*var_1 + (2 * 8)) = 30;
-                    *(u64*)(*(*var_1 + (2 * 8)) + 8) = 0;
-                    *(f32*)(*(*var_1 + (2 * 8)) + 8) = 1.00;
+                    *(i32*)*var_1[0] = 10;
+                    *(u64*)(*var_1[0] + 8) = 0;
+                    *(u64*)(*var_1[0] + 8) = get-spawner-locator(ap-pat-jackson-snowball-victory-1, 1);
+                    *(i32*)*var_1[1] = 28;
+                    *(u64*)(*var_1[1] + 8) = 0;
+                    *(f32*)(*var_1[1] + 8) = 0.50;
+                    *(i32*)*var_1[2] = 30;
+                    *(u64*)(*var_1[2] + 8) = 0;
+                    *(f32*)(*var_1[2] + 8) = 1.00;
                     wait-animate_(get-symbol(last-hit-kid, self), pat-jackson-snowball-dog-pile-exit--teen-b, var_1);
                 }
                 lambda {
@@ -1723,17 +1663,7 @@ statescript {
         block start {
             track vox {
                 lambda {
-                    foreach (u64? var_1 : snowball-kids) {
-                        u16 var_2;
-                        if (var_1 && *(u16*)(var_1 + 12) == 7) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 5) {
-                            var_2 = *(u64*)var_1;
-                        } else if (var_1 && *(u16*)(var_1 + 12) == 4) {
-                            var_2 = *(u64*)var_1;
-                        } else {
-                            var_2 = 0;
-                        }
+                    foreach (u64? var_2 : snowball-kids) {
                         npc-set-script-only-no-perception(var_2);
                         set-focusable-ignore(var_2, 1);
                     }

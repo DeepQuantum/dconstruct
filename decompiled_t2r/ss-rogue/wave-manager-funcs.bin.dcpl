@@ -14,17 +14,7 @@
 u16 wave-manager-get-npc-alive-count-by-faction(u64? arg_0, i64 arg_1) {
     u64? var_0 = wave-manager-get-npc-alive-group(arg_0);
     u16 var_3;
-    foreach (u64? var_4 : var_0) {
-        u16 var_5;
-        if (var_4 && *(u16*)(var_4 + 12) == 7) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-            var_5 = *(u64*)var_4;
-        } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-            var_5 = *(u64*)var_4;
-        } else {
-            var_5 = 0;
-        }
+    foreach (u64? var_5 : var_0) {
         u16 var_7;
         if (arg_1 != npc-get-faction(var_5, 0)) {
             var_7 = darray-count(var_0) - 1;
@@ -100,7 +90,7 @@ u64? wave-manager-get-next-spawning-wave-npc-schemas-group(sid arg_0) {
                 u64 i = 0;
                 while (i < *(i32*)(*(**((**(var_0 + 32) + (var_4 * 24)) + 8) + (var_20 * 8)) + 8)) {
                     if (wave-manager-npc-safe-to-spawn?(**(**((**(var_0 + 32) + (var_4 * 24)) + 8) + (var_20 * 8)) + (i * 16))) {
-                        darray-append(var_5, new-boxed-value(7, *(u64*)(**(**((**(var_0 + 32) + (var_4 * 24)) + 8) + (var_20 * 8)) + (i * 16))), 0);
+                        darray-append(var_5, boxed_symbol(*(u64*)(**(**((**(var_0 + 32) + (var_4 * 24)) + 8) + (var_20 * 8)) + (i * 16))), 0);
                         if (!is-final-build?()) {
                             var_23 = display(dc:format("DEB-WMF:     > %-40s", string-debug(*(u64*)(**(**((**(var_0 + 32) + (var_4 * 24)) + 8) + (var_20 * 8)) + (i * 16)))), 19);
                         }
@@ -160,19 +150,9 @@ u64? wave-manager-spawn-next-wave!(sid arg_0) {
 
 u64? wave-manager-get-npc-alive-group(u64? arg_0) {
     u64? var_0 = darray-create(single-frame, -1, 0);
-    foreach (u64? var_2 : group-npcs-spawned-by-wave-manager) {
-        u16 var_3;
-        if (var_2 && *(u16*)(var_2 + 12) == 7) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 5) {
-            var_3 = *(u64*)var_2;
-        } else if (var_2 && *(u16*)(var_2 + 12) == 4) {
-            var_3 = *(u64*)var_2;
-        } else {
-            var_3 = 0;
-        }
+    foreach (u64? var_3 : group-npcs-spawned-by-wave-manager) {
         if (npc-alive?(var_3)) {
-            darray-append(var_0, new-boxed-value(7, var_3), 1);
+            darray-append(var_0, boxed_symbol(var_3), 1);
         }
     }
     return var_0;
@@ -181,17 +161,7 @@ u64? wave-manager-get-npc-alive-group(u64? arg_0) {
 u16 wave-manager-kill-all-npcs(u64? arg_0) {
     u16 var_1;
     if (wave-manager-get-npc-alive-count(arg_0) != 0) {
-        foreach (u64? var_4 : wave-manager-get-npc-alive-group(arg_0)) {
-            u16 var_5;
-            if (var_4 && *(u16*)(var_4 + 12) == 7) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 5) {
-                var_5 = *(u64*)var_4;
-            } else if (var_4 && *(u16*)(var_4 + 12) == 4) {
-                var_5 = *(u64*)var_4;
-            } else {
-                var_5 = 0;
-            }
+        foreach (u64? var_5 : wave-manager-get-npc-alive-group(arg_0)) {
             stop-animating(var_5, 2, 0.00, 0, 0);
         }
         var_1 = group-kill-entity(wave-manager-get-npc-alive-group(arg_0), 0);
@@ -203,19 +173,9 @@ u16 wave-manager-kill-all-npcs(u64? arg_0) {
 
 u64? wave-manager-get-lost-player-npc-group(u64? arg_0) {
     u64? var_1 = darray-create(single-frame, -1, 0);
-    foreach (u64? var_3 : wave-manager-get-npc-alive-group(arg_0)) {
-        u16 var_4;
-        if (var_3 && *(u16*)(var_3 + 12) == 7) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 5) {
-            var_4 = *(u64*)var_3;
-        } else if (var_3 && *(u16*)(var_3 + 12) == 4) {
-            var_4 = *(u64*)var_3;
-        } else {
-            var_4 = 0;
-        }
+    foreach (u64? var_4 : wave-manager-get-npc-alive-group(arg_0)) {
         if (wave-manager-npc-lost-player?(var_4)) {
-            darray-append(var_1, new-boxed-value(7, var_4), 1);
+            darray-append(var_1, boxed_symbol(var_4), 1);
         }
     }
     return var_1;

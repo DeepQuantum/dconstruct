@@ -340,7 +340,7 @@ u64? populate-paths-available(u16 arg_0) {
         var_11 = 0;
     }
     u16 var_14;
-    if (!darray-contains?(paths-obtained, new-boxed-value(7, var_11))) {
+    if (!darray-contains?(paths-obtained, boxed_symbol(var_11))) {
         u64? var_15 = darray-at(var_2, var_9);
         u16 var_16;
         if (var_15 && *(u16*)(var_15 + 12) == 7) {
@@ -352,7 +352,7 @@ u64? populate-paths-available(u16 arg_0) {
         } else {
             var_16 = 0;
         }
-        if (!darray-contains?(paths-available, new-boxed-value(7, var_16))) {
+        if (!darray-contains?(paths-available, boxed_symbol(var_16))) {
             u64? var_19 = darray-at(var_2, var_9);
             u16 var_20;
             if (var_19 && *(u16*)(var_19 + 12) == 7) {
@@ -364,7 +364,7 @@ u64? populate-paths-available(u16 arg_0) {
             } else {
                 var_20 = 0;
             }
-            darray-append(paths-available, new-boxed-value(7, var_20), 1);
+            darray-append(paths-available, boxed_symbol(var_20), 1);
             if (!is-final-build?()) {
                 u64? var_23 = darray-at(var_2, var_9);
                 u16 var_24;
@@ -457,7 +457,7 @@ u16 populate-paths-obtained() {
         } else {
             var_16 = 0;
         }
-        darray-append(paths-obtained, new-boxed-value(7, var_16), 1);
+        darray-append(paths-obtained, boxed_symbol(var_16), 1);
         if (!is-final-build?()) {
             u64? var_19 = darray-at(var_2, 0);
             u16 var_20;
@@ -534,7 +534,7 @@ u16 populate-paths-obtained() {
             } else {
                 var_37 = 0;
             }
-            darray-append(paths-obtained, new-boxed-value(7, var_37), 1);
+            darray-append(paths-obtained, boxed_symbol(var_37), 1);
             if (!is-final-build?()) {
                 u64? var_40 = darray-at(var_2, i);
                 u16 var_41;

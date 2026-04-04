@@ -158,8 +158,8 @@ statescript {
                     set-symbol(player-current-explore-region, event-arg-symbol(1), self);
                 }
                 lambda {
-                    u64? var_2 = darray-find(pat-packing-joel-house-explore-rgns, new-boxed-value(7, get-symbol(player-current-explore-region, self)), 0);
-                    u64? var_5 = darray-find(pat-packing-joel-house-explore-rgns, new-boxed-value(7, get-symbol(player-last-explore-region, self)), 0);
+                    u64? var_2 = darray-find(pat-packing-joel-house-explore-rgns, boxed_symbol(get-symbol(player-current-explore-region, self)), 0);
+                    u64? var_5 = darray-find(pat-packing-joel-house-explore-rgns, boxed_symbol(get-symbol(player-last-explore-region, self)), 0);
                     u16 var_8;
                     if (absf((f32)(var_2 - var_5)) == 1.00) {
                         if (var_2 > var_5) {

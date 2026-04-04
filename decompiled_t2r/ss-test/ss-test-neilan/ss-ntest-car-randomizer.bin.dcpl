@@ -25,19 +25,19 @@ statescript {
                     wait-one-frame();
                 }
                 lambda {
-                    send-event(physicalize-gamedriven, self, new-boxed-value(7, body));
+                    send-event(physicalize-gamedriven, self, boxed_symbol(body));
                 }
                 lambda {
-                    send-event(physicalize-gamedriven, self, new-boxed-value(7, door_f_l));
+                    send-event(physicalize-gamedriven, self, boxed_symbol(door_f_l));
                 }
                 lambda {
-                    send-event(physicalize-gamedriven, self, new-boxed-value(7, door_f_r));
+                    send-event(physicalize-gamedriven, self, boxed_symbol(door_f_r));
                 }
                 lambda {
-                    send-event(physicalize-gamedriven, self, new-boxed-value(7, door_b_l));
+                    send-event(physicalize-gamedriven, self, boxed_symbol(door_b_l));
                 }
                 lambda {
-                    send-event(physicalize-gamedriven, self, new-boxed-value(7, door_b_r));
+                    send-event(physicalize-gamedriven, self, boxed_symbol(door_b_r));
                 }
                 lambda {
                     wait-one-frame();
@@ -66,19 +66,19 @@ statescript {
                     wait(0.50);
                 }
                 lambda {
-                    send-event(physicalize-live, self, new-boxed-value(7, body));
+                    send-event(physicalize-live, self, boxed_symbol(body));
                 }
                 lambda {
-                    send-event(physicalize-live, self, new-boxed-value(7, door_f_l));
+                    send-event(physicalize-live, self, boxed_symbol(door_f_l));
                 }
                 lambda {
-                    send-event(physicalize-live, self, new-boxed-value(7, door_f_r));
+                    send-event(physicalize-live, self, boxed_symbol(door_f_r));
                 }
                 lambda {
-                    send-event(physicalize-live, self, new-boxed-value(7, door_b_l));
+                    send-event(physicalize-live, self, boxed_symbol(door_b_l));
                 }
                 lambda {
-                    send-event(physicalize-live, self, new-boxed-value(7, door_b_r));
+                    send-event(physicalize-live, self, boxed_symbol(door_b_r));
                 }
             }
         }
