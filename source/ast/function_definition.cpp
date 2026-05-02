@@ -73,7 +73,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         scope.define(param.m_name, param.m_type);
     }
     std::vector<semantic_check_error> res = m_body.check_semantics(scope);
-    if (std::holds_alternative<primitive_type>(*scope.m_expectedReturnType) && std::get<primitive_type>(*scope.m_expectedReturnType).m_type == primitive_kind::NOTHING && !scope.m_computedReturnType) {
+    if (std::holds_alternative<primitive_type>(*scope.m_expectedReturnType) && std::get<primitive_type>(*scope.m_expectedReturnType).m_type != primitive_kind::NOTHING && !scope.m_computedReturnType) {
         return {semantic_check_error{"function expects a value to be returned"}};
     }
     return res;

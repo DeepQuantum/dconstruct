@@ -57,7 +57,7 @@ void sid_identifier::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res sid_identifier::emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const u8 index = fn.add_to_symbol_table(SID(m_name.m_lexeme.c_str()));
+    const u8 index = fn.add_to_symbol_table(SID(m_name.m_lexeme.c_str() + 1));
 
     emission_res true_destination = fn.get_destination(destination);
     if (!true_destination) {
@@ -69,7 +69,7 @@ void sid_identifier::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] emission_res sid_identifier::emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept {
-    const u8 index = fn.add_to_symbol_table(SID(m_name.m_lexeme.c_str()));
+    const u8 index = fn.add_to_symbol_table(SID(m_name.m_lexeme.c_str() + 1));
 
     emission_res true_destination = fn.get_destination(destination);
     if (!true_destination) {

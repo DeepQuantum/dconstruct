@@ -1,25 +1,42 @@
 @target "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/build/pc/main/bin_unpacked/dc1/rogue/script-callbacks.bin"
 @output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/rogue/script-callbacks.bin"
 @modules "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/modules.bin"
-@sidbase "C:/Program Files/dconstruct-518-1-52-0-1768320617/bin/sidbase.bin"
+@sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
 @repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
 
 
-using #BB24279A62563A6F as near () -> u0 set_scripts;
-using #36CA198623425C72 as near (string, string, u64) -> u0 set_script;
+using #spawn-persistent-script as near (string, string, u64) -> u0;
 using #unparented as u64;
-using #5445173390656D6D as far (string, f32, f32) -> string format;
-using #display as far (string, u64) -> u0;
+using #dc:format as far (string) -> u0;
 
-using ##%alloc-mem as far (u64, u64, f32) -> u0*;
-// using #int32 as sid;
-// using #single-frame as u64 single_frame;
-// using #rogue as u64;
+using #set-gas-mask-setting-id as far (u64, u64) -> u0;
+using #player as u64;
+using #self as u64;
+using #*ellie-gas-mask-setup* as u64;
+using #wait-equip-gas-mask as near (u64, u64, u32) -> u0;
+using #set-symbol as far (u64, u64, u64) -> u0;
+using #get-equipped-gas-mask as near (u64) -> u64;
+using #player-gas-mask as u64;
+using #internal-put-on-gas-mask-immediately as near (u64, u32) -> u0;
+using #spawn-gas-mask as near (u64) -> u64;
 
-//using #debug-draw-string-2d as far (u0*, string, u64, f32, f32, u64, u64, u64, f32) -> u0 draw_string;
-//using #alloc-point as far (f32, f32, f32, u64) -> u0* alloc_point;
-using #wait-one-frame as far () -> u0 wait_one_frame;
 
-//using #get-float as far (sid, sid) -> f32 get_float;
+u0 #activated-rogue-manager-callback() {
+    #spawn-persistent-script("ss-rogue-run", "ss-rogue-run-1", #unparented);
+    #spawn-persistent-script("ss-encounter-manager", "ss-encounter-manager-1", #unparented);
+    #spawn-persistent-script("ss-score-manager", "ss-score-manager-1", #unparented);
+    #spawn-persistent-script("ss-challenges-controller", "ss-challenges-controller-1", #unparented);
+    #spawn-persistent-script("ss-challenges-debug-menu", "ss-challenges-debug-menu-1", #unparented);
+    #spawn-persistent-script("ss-wave-manager-debug-menu", "ss-wave-manager-debug-menu-1", #unparented);
+    #spawn-persistent-script("ss-wave-manager-level-set-loader", "ss-wave-manager-level-set-loader-1", #unparented);
+    #spawn-persistent-script("ss-encounter-perception-controller", "ss-encounter-perception-controller-1", #unparented);
+    #spawn-persistent-script("ss-rogue-trapdoor-controller", "ss-rogue-trapdoor-controller-1", #unparented);
+    #spawn-persistent-script("ss-vendor-manager", "ss-vendor-manager-1", #unparented);
+    #spawn-persistent-script("ss-post-encounter-flow", "ss-post-encounter-flow-1", #unparented);
 
-
+    #dc:format("hello world");
+    
+    #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
+    u64 gas_mask = #spawn-gas-mask(#player);
+    //#wait-equip-gas-mask(#player, gas_mask, 0);
+}

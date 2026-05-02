@@ -15,7 +15,7 @@ namespace dconstruct::compilation {
         }
         return std::stoull(identifier.substr(1), nullptr, 16);
     }
-    return SID(identifier.c_str());
+    return SID(identifier.c_str() + 1);
 }
 
 

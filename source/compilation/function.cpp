@@ -17,8 +17,10 @@ namespace dconstruct::compilation {
 
     program_binary_element element{get_size_in_bytes()};
 
+    const sid64 name_id = std::holds_alternative<std::string>(m_name) ? SID(std::get<std::string>(m_name).c_str()) : std::get<sid64>(m_name);
+
     element.m_entry = {
-        .m_nameID = SID(std::get<std::string>(m_name).c_str()),
+        .m_nameID = name_id,
         .m_typeId = script_lambda_sid,
         .m_entryPtr = nullptr
     };

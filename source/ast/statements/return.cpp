@@ -19,11 +19,9 @@ void return_stmt::pseudo_py(std::ostream& os) const {
 }
 
 void return_stmt::pseudo_racket(std::ostream& os) const {
-    os << "(return";
     if (m_expr) {
-        os << " " << *m_expr;
+        os << *m_expr;
     }
-    os << ")";
 }
 
 [[nodiscard]] bool return_stmt::equals(const statement& rhs) const noexcept {

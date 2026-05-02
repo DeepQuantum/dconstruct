@@ -307,8 +307,13 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         return nullptr;
     }
 
-    const token* func_name = consume(token_type::IDENTIFIER, "expected function name");
-    if (!func_name) {
+    std::string func_name;
+    if (match({token_type::IDENTIFIER})) {
+        func_name = previous().m_lexeme;
+    } else if (match({token_type::SID})) {
+        func_name = previous().m_lexeme.substr(1, peek().m_lexeme.size() - 2);
+    } else {
+        m_errors.emplace_back(previous(), "expected function name or sid");
         return nullptr;
     }
 
@@ -317,7 +322,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
 
     std::unique_ptr<ast::function_definition> func_def = std::make_unique<ast::function_definition>();
-    func_def->m_name = func_name->m_lexeme;
+    func_def->m_name = func_name;
     func_def->m_type.m_return = std::make_unique<ast::full_type>(std::move(*return_type));
 
     while (!check(token_type::RIGHT_PAREN) && !is_at_end()) {
@@ -384,7 +389,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         }
     } else { 
         if (far_spec) {
-            m_errors.emplace_back(previous(), "unexpecteded 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
+            m_errors.emplace_back(previous(), "unexpected 'near' or 'far' specification on non-function alias but got '" + far_spec->m_lexeme + "'");
             return std::nullopt;
         }
     }
@@ -447,7 +452,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] std::unique_ptr<ast::variable_declaration> Parser::make_var_declaration(ast::full_type type) {
-    const token* name = consume(token_type::IDENTIFIER, "expected variable name.");
+    const token* name = consume(token_type::IDENTIFIER, "expected variable name");
     if (!name) {
         return nullptr;
     }
@@ -456,7 +461,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (match({token_type::EQUAL})) {
         init = make_expression();
     }
-    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration.")) {
+    if (!consume(token_type::SEMICOLON, "expected ';' after variable declaration")) {
         return nullptr;
     }
 
@@ -483,7 +488,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] std::unique_ptr<ast::while_stmt> Parser::make_while() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'while'.")) {
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'while'")) {
         return nullptr;
     }
     expr_uptr condition = make_expression();
@@ -621,14 +626,14 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 }
 
 [[nodiscard]] std::unique_ptr<ast::if_stmt> Parser::make_if() {
-    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'if'.")) {
+    if (!consume(token_type::LEFT_PAREN, "expected '(' after 'if'")) {
         return nullptr;
     }
     expr_uptr condition = make_expression();
     if (!condition) {
         return nullptr;
     }
-    if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition.")) {
+    if (!consume(token_type::RIGHT_PAREN, "expected ')' after if-condition")) {
         return nullptr;
     }
     stmnt_uptr then_branch = make_statement();
@@ -664,7 +669,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     }
     expr_uptr expression = make_expression();
 
-    if (!consume(token_type::SEMICOLON, "expected ';' after return value.")) {
+    if (!consume(token_type::SEMICOLON, "expected ';' after return value")) {
         return nullptr;
     }
 
@@ -676,7 +681,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     if (!expr) {
         return nullptr;
     }
-    if (!consume(token_type::SEMICOLON, "expected ';' after expression.")) {
+    if (!consume(token_type::SEMICOLON, "expected ';' after expression")) {
         return nullptr;
     }
     return std::make_unique<ast::expression_stmt>(std::move(expr));

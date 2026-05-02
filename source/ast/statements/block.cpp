@@ -34,13 +34,13 @@ void block::pseudo_py(std::ostream& os) const {
 }
 
 void block::pseudo_racket(std::ostream& os) const {
-    os << "(begin\n";
+    os << "\n";
     os << indent_more;
     for (const auto& stmnt : m_statements) {
         os << indent << *stmnt << '\n';
     } 
     os << indent_less;
-    os << indent << ')';
+    os << indent;
 }
 
 [[nodiscard]] bool block::equals(const statement& rhs) const noexcept {

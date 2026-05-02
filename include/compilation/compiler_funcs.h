@@ -79,7 +79,7 @@ namespace dconstruct::compilation {
     std::vector<compilation::program_binary_element> converted;
 
     for (const auto& f : funcs) {
-        function cf;
+        function cf{};
         const std::string id = f->get_id();
         if (id.starts_with("#")) {
             cf.m_name = std::stoull(id.substr(1, id.size() - 1), nullptr, 16);
