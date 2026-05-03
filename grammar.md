@@ -254,9 +254,10 @@ Comments and whitespace:
 Precompiler directives are line-based instructions that begin with `@` and are consumed before parsing the main language grammar.
 
 ```ebnf
-precompiler_directive ::= "@" directive_name " " quoted_path
+precompiler_directive ::= "@" path_directive_name " " quoted_path
+                        | "@standalone"
 
-directive_name        ::= "target"
+path_directive_name   ::= "target"
                         | "output"
                         | "modules"
                         | "sidbase"
@@ -268,8 +269,9 @@ quoted_path           ::= '"' path_char* '"'
 Currently supported directives:
 
 - `@target "<path>"` — path to the original game binary being edited/recompiled (for adding new functions and hooking existing ones).
+- `@standalone` — compile only the functions in this file into a new binary and write them to `@output`, without requiring or reading `@target`.
 - `@output "<path>"` — destination path for the newly compiled binary.
-- `@modules "<path>"` — path to `modules.bin`, which maps script files in the game; the compiler updates the recompiled script size there.
+- `@modules "<path>"` — path to `modules.bin`, which maps script files in the game; the compiler updates the recompiled script size there. Required for target-based compiles and optional for `@standalone`.
 - `@sidbase "<path>"` — path to the SID base map (`hash -> string`) used to resolve string IDs.
 - `@repackage "<path>"` — path to a mod directory that is repacked into a `.psarc` archive; this automates the repackaging step as part of compile flow.
 

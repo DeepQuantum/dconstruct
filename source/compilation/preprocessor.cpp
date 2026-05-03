@@ -26,7 +26,7 @@ namespace dconstruct::compilation {
        sidbase_filepath = args["s"].as<std::string>();
     }
 
-    std::filesystem::path repackage_filepath;
+    std::optional<std::filesystem::path> repackage_filepath;
     if (args.count("r") == 1) {
        repackage_filepath = args["r"].as<std::string>();
     }
@@ -42,11 +42,20 @@ namespace dconstruct::compilation {
     stripped_source.reserve(source.size());
 
     for (std::string line; std::getline(iss, line);) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
         if (!line.starts_with("@")) {
             stripped_source += line;
             stripped_source += '\n';
             continue;
         }
+
+        if (line == "@standalone") {
+            out.m_standalone = true;
+            continue;
+        }
+
         const u64 first_space = line.find_first_of(' ', 1);
         if (first_space == std::string::npos) {
             return std::unexpected{"malformed precompiler directive"};
@@ -55,7 +64,9 @@ namespace dconstruct::compilation {
         const std::string_view directive_name(line.data() + 1, first_space - 1);
         const std::string_view path(line.data() + first_space + 2, line.size() - first_space - 3);
 
-        if (directive_name == "target") {
+        if (directive_name == "standalone") {
+            return std::unexpected{"@standalone does not take a path"};
+        } else if (directive_name == "target") {
             out.m_target = path;
         } else if (directive_name == "output") {
             out.m_output = path;
@@ -112,14 +123,36 @@ namespace dconstruct::compilation {
         return std::unexpected{std::move(output_res.error())};
     }
 
-    std::expected<std::filesystem::path, std::string> target_res = check_single_path_provided(from_args->m_target, from_dcpl->m_target, "target");
-    if (!target_res) {
-        return std::unexpected{std::move(target_res.error())};
+    const bool standalone = from_args->m_standalone || from_dcpl->m_standalone;
+
+    std::filesystem::path target;
+    if (!standalone) {
+        std::expected<std::filesystem::path, std::string> target_res = check_single_path_provided(from_args->m_target, from_dcpl->m_target, "target");
+        if (!target_res) {
+            return std::unexpected{std::move(target_res.error())};
+        }
+        target = std::move(*target_res);
+    } else if (!from_args->m_target.empty() && !from_dcpl->m_target.empty()) {
+        return std::unexpected{"provided both a command line argument and a precompiler directive for the option 'target'. please only provide one or the other."};
+    } else if (!from_args->m_target.empty()) {
+        target = std::move(from_args->m_target);
+    } else {
+        target = std::move(from_dcpl->m_target);
     }
 
-    std::expected<std::filesystem::path, std::string> modules_res = check_single_path_provided(from_args->m_modules, from_dcpl->m_modules, "modules");
-    if (!modules_res) {
-        return std::unexpected{std::move(modules_res.error())};
+    std::filesystem::path modules;
+    if (!standalone) {
+        std::expected<std::filesystem::path, std::string> modules_res = check_single_path_provided(from_args->m_modules, from_dcpl->m_modules, "modules");
+        if (!modules_res) {
+            return std::unexpected{std::move(modules_res.error())};
+        }
+        modules = std::move(*modules_res);
+    } else if (!from_args->m_modules.empty() || !from_dcpl->m_modules.empty()) {
+        std::expected<std::filesystem::path, std::string> modules_res = check_single_path_provided(from_args->m_modules, from_dcpl->m_modules, "modules");
+        if (!modules_res) {
+            return std::unexpected{std::move(modules_res.error())};
+        }
+        modules = std::move(*modules_res);
     }
 
     std::expected<std::filesystem::path, std::string> sidbase_res = check_single_path_provided(from_args->m_sidbase, from_dcpl->m_sidbase, "sidbase");
@@ -129,7 +162,9 @@ namespace dconstruct::compilation {
 
     std::optional<std::filesystem::path> repackage_res = std::nullopt;
     if (from_args->m_repackage || from_dcpl->m_repackage) {
-        std::expected<std::filesystem::path, std::string> repackage_exp = check_single_path_provided(*from_args->m_repackage, *from_dcpl->m_repackage, "repackage");
+        const std::filesystem::path args_repackage = from_args->m_repackage.value_or(std::filesystem::path{});
+        const std::filesystem::path dcpl_repackage = from_dcpl->m_repackage.value_or(std::filesystem::path{});
+        std::expected<std::filesystem::path, std::string> repackage_exp = check_single_path_provided(args_repackage, dcpl_repackage, "repackage");
         if (!repackage_exp) {
             return std::unexpected{std::move(repackage_exp.error())};
         } else if (!std::filesystem::is_directory(*repackage_exp)) {
@@ -139,7 +174,7 @@ namespace dconstruct::compilation {
     }
     
 
-    return compiler_options{std::move(*target_res), std::move(*output_res), std::move(*modules_res), std::move(*sidbase_res), std::move(repackage_res)};
+    return compiler_options{std::move(target), std::move(*output_res), std::move(modules), std::move(*sidbase_res), std::move(repackage_res), standalone};
 }
 
 

@@ -45,6 +45,8 @@ namespace dconstruct::compilation {
 
         STATESCRIPT, DECLARATIONS, OPTIONS, STATE, BLOCK, TRACK, LAMBDA,
 
+        START, END, EVENT, UPDATE, VIRTUAL,
+
         _EOF, EMPTY
     };
 

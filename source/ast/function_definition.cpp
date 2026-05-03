@@ -28,6 +28,8 @@ void function_definition::pseudo_c(std::ostream& os) const {
             os << param;
         } 
         os << ") ";
+    } else {
+        os << "lambda ";
     }
     os << m_body;
 }
@@ -47,7 +49,7 @@ void function_definition::pseudo_py(std::ostream& os) const {
         os << "):";
         os << m_body;
     } else {
-        os << m_body;
+        os << "lambda " << m_body;
     }
 }
 
@@ -61,7 +63,7 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         }
         os << ") " << m_body << ")";
     } else {
-        os << m_body;
+        os << "(lambda " << m_body << ")";
     }
 }
 
@@ -101,8 +103,6 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         fn.emit_instruction(Opcode::Move, *new_var_reg, ARGUMENT_REGISTERS_IDX + i);
     }
 
-
-
     const emission_err body_err = m_body.emit_dc(fn, global);
     if (body_err) {
         return std::unexpected{*body_err};
@@ -124,6 +124,9 @@ void function_definition::pseudo_racket(std::ostream& os) const {
         assert(branch.destination == compilation::function::BRANCH_PLACEHOLDER);
         branch.set_lo_hi(return_location);
     }
+
+
+    assert(fn.m_instructions.back().opcode == Opcode::Return);
     return fn.to_binary_element();
 }
 

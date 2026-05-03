@@ -61,6 +61,7 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 
     if (!cond_type) {
         errors.push_back(std::move(cond_type.error()));
+        return errors;
     }
 
     std::optional<std::string> invalid_condition = std::visit([](auto&& cond) -> std::optional<std::string> {

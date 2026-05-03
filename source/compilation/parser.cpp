@@ -1219,8 +1219,26 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 [[nodiscard]] std::vector<ast::state_script_block> Parser::make_statescript_blocks() {
     std::vector<ast::state_script_block> blocks;
     while (match({token_type::BLOCK}) && !is_at_end()) {
-        const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected block name after 'block' in statescript definition");
-        if (!block_name) {
+
+        BLOCK_TYPE block_type;
+        std::string event_name = "";
+        if (match({token_type::START})) {
+            block_type = BLOCK_TYPE::START;
+        } else if (match({token_type::END})) {
+            block_type = BLOCK_TYPE::END;
+        } else if (match({token_type::EVENT})) {
+            block_type = BLOCK_TYPE::EVENT;
+            const token* block_name = consume({token_type::SID, token_type::IDENTIFIER}, "expected name after 'event'");
+            if (!block_name) {
+                return {};
+            }
+            event_name = statescript_name_from_token(*block_name);
+        } else if (match({token_type::UPDATE})) {
+            block_type = BLOCK_TYPE::UPDATE;
+        } else if (match({token_type::VIRTUAL})) {
+            block_type = BLOCK_TYPE::VIRTUAL;
+        } else {
+            m_errors.emplace_back(peek(), "expected one of 'start', 'end', 'event', 'update' or 'virtual' but got " + peek().m_lexeme);
             return {};
         }
 
@@ -1230,14 +1248,18 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
 
         std::vector<ast::state_script_track> tracks = make_statescript_tracks();
         if (tracks.empty()) {
-            m_errors.emplace_back(peek(), "expected at least one track in block " + block_name->m_lexeme + " definition but got none");
+            m_errors.emplace_back(peek(), "expected at least one track in block definition but got none");
         }
 
         if (!consume(token_type::RIGHT_BRACE, "expected '}' after block body in statescript definition")) {
             return {};
         }
 
-        blocks.emplace_back(statescript_name_from_token(*block_name), std::move(tracks));
+        if (event_name != "") {
+            blocks.emplace_back(std::move(event_name), std::move(tracks));
+        } else {
+            blocks.emplace_back(block_type, std::move(tracks));
+        }
     }
 
     return blocks;
@@ -1255,7 +1277,7 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
             return {};
         }
 
-        std::vector<ast::state_script_lambda> lambdas = make_statescript_lambdas();
+        std::vector<ast::function_definition> lambdas = make_statescript_lambdas();
         if (lambdas.empty()) {
             m_errors.emplace_back(peek(), "expected at least one lambda in track " + track_name->m_lexeme + " definition but got none");
         }
@@ -1270,8 +1292,8 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
     return tracks;
 }
 
-[[nodiscard]] std::vector<ast::state_script_lambda> Parser::make_statescript_lambdas() {
-    std::vector<ast::state_script_lambda> lambdas;
+[[nodiscard]] std::vector<ast::function_definition> Parser::make_statescript_lambdas() {
+    std::vector<ast::function_definition> lambdas;
     while (match({token_type::LAMBDA}) && !is_at_end()) {
         stmnt_uptr body = make_statement();
         if (!body) {
@@ -1280,7 +1302,11 @@ const token* Parser::consume(const std::initializer_list<token_type> types, cons
         }
         assert(body);
         assert(dynamic_cast<ast::block*>(body.get()));
-        lambdas.emplace_back(std::move(*static_cast<ast::block*>(body.release())));
+        ast::function_definition lambda;
+        lambda.m_name = state_script_function_id{};
+        lambda.m_type.m_return = std::make_shared<ast::full_type>(ast::make_type_from_prim(ast::primitive_kind::NOTHING));
+        lambda.m_body = std::move(*static_cast<ast::block*>(body.release()));
+        lambdas.push_back(std::move(lambda));
     }
     return lambdas;
 }

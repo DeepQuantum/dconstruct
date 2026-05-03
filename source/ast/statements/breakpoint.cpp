@@ -33,7 +33,7 @@ VAR_OPTIMIZATION_ACTION breakpoint::var_optimization_pass(var_optimization_env& 
 
 
 [[nodiscard]] emission_err breakpoint::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
-    fn.emit_instruction(Opcode::StoreArray, 00, 0x69, 0x69);
+    fn.emit_instruction(Opcode::StoreArray, 00, 00, 00);
     return std::nullopt;
 }
 

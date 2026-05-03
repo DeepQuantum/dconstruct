@@ -63,6 +63,11 @@ private:
         {"block", token_type::BLOCK},
         {"track", token_type::TRACK},
         {"lambda", token_type::LAMBDA},
+        {"start", token_type::START},
+        {"end", token_type::END},
+        {"event", token_type::EVENT},
+        {"update", token_type::UPDATE},
+        {"virtual", token_type::VIRTUAL},
     };
     std::vector<token> m_tokens;
     std::vector<lexing_error> m_errors;

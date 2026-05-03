@@ -96,9 +96,17 @@ namespace dconstruct {
         const ScriptLambda*  m_rareScriptLambda;   ///< <c>0x30</c>:
     };
 
+    enum class BLOCK_TYPE : u32 {
+        START,
+        END,
+        EVENT,
+        UPDATE,
+        VIRTUAL,
+    };
+
     struct SsOnBlock //
     {
-        i32           m_blockType;       ///< <c>0x00</c>: //on start || on update || on event etc
+        BLOCK_TYPE    m_blockType;       ///< <c>0x00</c>: //on start || on update || on event etc
         u32           m_always0;         ///< <c>0x04</c>: unk number
         sid64         m_blockEventId;    ///< <c>0x08</c>: UNSURE. Can be null. if its null there's no script lambda ptr
         void*         m_pScriptLambda;   ///< <c>0x10</c>: ptr to the script Lambda

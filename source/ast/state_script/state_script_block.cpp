@@ -7,7 +7,7 @@ namespace dconstruct::ast {
 }
 
 void state_script_block::pseudo_c(std::ostream& os) const {
-    os << "block " << m_name << " {\n";
+    os << "block " << block_type_to_string() << " {\n";
     os << indent_more;
     for (const auto& t : m_tracks) {
         os << indent << t << "\n";
@@ -17,14 +17,14 @@ void state_script_block::pseudo_c(std::ostream& os) const {
 }
 
 void state_script_block::pseudo_py(std::ostream& os) const {
-    os << "block " << m_name << ":";
+    os << "block " << block_type_to_string() << ":";
     for (const auto& t : m_tracks) {
         os << "\n  " << t;
     }
 }
 
 void state_script_block::pseudo_racket(std::ostream& os) const {
-    os << "(block " << m_name;
+    os << "(block " << block_type_to_string();
     for (const auto& t : m_tracks) {
         os << " " << t;
     }
@@ -32,7 +32,7 @@ void state_script_block::pseudo_racket(std::ostream& os) const {
 }
 
 [[nodiscard]] bool state_script_block::equals(const state_script_block& rhs) const noexcept {
-    if (m_name != rhs.m_name || m_tracks.size() != rhs.m_tracks.size()) {
+    if (block_type_to_string() != rhs.block_type_to_string() || m_tracks.size() != rhs.m_tracks.size()) {
         return false;
     }
     for (size_t i = 0; i < m_tracks.size(); ++i) {
@@ -43,18 +43,5 @@ void state_script_block::pseudo_racket(std::ostream& os) const {
     return true;
 }
 
-[[nodiscard]] std::pair<u64, sid64> state_script_block::get_block_struct_info() const noexcept {
-    if (m_name == "start") {
-        return {0, SID("start")};
-    } else if (m_name == "end") {
-        return {1, SID("end")};
-    } else if (m_name.starts_with("event ")) {
-        return {2, SID(m_name.substr(6).c_str())};
-    } else if (m_name == "update") {
-        return {3, SID("update")};
-    } else {
-        return {4, SID("virtual")};
-    }
-}
 
 }

@@ -146,7 +146,7 @@ state_script_functions::state_script_functions(const std::vector<ast::function_d
                 os << ast::indent << "track " << track_name << " {\n";
                 os << ast::indent_more;
                 for (const auto* function : functions) {
-                    os << ast::indent << "lambda " << *function;
+                    os << ast::indent << *function;
                     os << "\n";
                 }
                 os << ast::indent_less;
@@ -520,11 +520,16 @@ void decomp_function::parse_basic_block(const control_flow_node &node) {
                 continue;
             }
 
-            case Opcode::Return:{
+            case Opcode::Return: {
 				if (!m_disassembly.m_isScriptFunction) {
                     insert_return(istr.destination); 
                 }
                 return;
+            }
+
+            case Opcode::StoreArray: {
+                append_to_current_block(std::make_unique<ast::breakpoint>());
+                break;
             }
             default: {
 				std::cerr << "unhandled opcode " << static_cast<u64>(istr.opcode) << " at " << std::hex << line.m_location << std::dec << std::endl;

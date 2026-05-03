@@ -945,7 +945,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, ParseStateScriptBasic) {
         const std::string code =
-            "statescript {"
+            "statescript #parse-basic {"
             "  options {"
             "    #player"
             "  }"
@@ -953,7 +953,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "    u32 #counter = 5;"
             "  }"
             "  state Idle {"
-            "    block Main {"
+            "    block start {"
             "      track Base {"
             "        lambda { counter = counter - 1; }"
             "      }"
@@ -972,7 +972,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_NE(parsed, nullptr);
 
         ASSERT_EQ(parsed->m_options.size(), 1);
-        EXPECT_EQ(parsed->m_options[0], ast::sid_identifier("opt_idle"));
+        EXPECT_EQ(parsed->m_options[0], ast::sid_identifier("#player"));
 
         ASSERT_EQ(parsed->m_declarations.size(), 1);
         EXPECT_EQ(parsed->m_declarations[0].m_identifier, "#counter");
@@ -980,7 +980,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         ASSERT_EQ(parsed->m_states.size(), 1);
         EXPECT_EQ(parsed->m_states[0].m_name, "Idle");
         ASSERT_EQ(parsed->m_states[0].m_blocks.size(), 1);
-        EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_name, "Main");
+        EXPECT_EQ(parsed->m_states[0].m_blocks[0].block_type_to_string(), "start");
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks.size(), 1);
         EXPECT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_name, "Base");
         ASSERT_EQ(parsed->m_states[0].m_blocks[0].m_tracks[0].m_lambdas.size(), 1);
@@ -990,7 +990,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     
     TEST(COMPILER, CompileStateScriptBasicNoErrors) {
         const std::string code =
-            "statescript {"
+            "statescript #compile-basic {"
             "  options {"
             "    #opt_idle"
             "  }"
@@ -998,7 +998,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             "    i32 #counter = 5;"
             "  }"
             "  state Idle {"
-            "    block Main {"
+            "    block start {"
             "      track Base {"
             "        lambda { i32 var = #counter - 1; }"
             "      }"
@@ -1069,7 +1069,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, ParseStateScriptErrorNoStates) {
         const std::string code =
-            "statescript {"
+            "statescript #no-states {"
             "  options { #opt_idle }"
             "  declarations { u32 #counter; }"
             "}";
@@ -1084,7 +1084,7 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, ParseStateScriptErrorNoBlocks) {
         const std::string code =
-            "statescript {"
+            "statescript #no-blocks {"
             "  options { #opt_idle }"
             "  declarations { u32 #counter; }"
             "  state Idle { }"
@@ -1100,11 +1100,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
     TEST(COMPILER, ParseStateScriptErrorNoTracks) {
         const std::string code =
-            "statescript {"
+            "statescript #no-tracks {"
             "  options { #opt_idle }"
             "  declarations { u32 #counter; }"
             "  state Idle {"
-            "    block Main { }"
+            "    block start { }"
             "  }"
             "}";
 
@@ -1113,16 +1113,16 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
 
         EXPECT_EQ(lex_errors.size(), 0);
         ASSERT_EQ(parse_errors.size(), 1);
-        EXPECT_EQ(parse_errors[0].m_message, "expected at least one track in block Main definition but got none");
+        EXPECT_EQ(parse_errors[0].m_message, "expected at least one track in block definition but got none");
     }
 
     TEST(COMPILER, ParseStateScriptErrorNoLambdas) {
         const std::string code =
-            "statescript {"
+            "statescript #no-lambdas {"
             "  options { #opt_idle }"
             "  declarations { u32 #counter; }"
             "  state Idle {"
-            "    block Main {"
+            "    block start {"
             "      track Base { }"
             "    }"
             "  }"

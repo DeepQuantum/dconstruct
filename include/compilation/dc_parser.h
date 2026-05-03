@@ -105,7 +105,7 @@ namespace dconstruct::compilation {
         [[nodiscard]] std::vector<ast::state_script_state> make_statescript_states();
         [[nodiscard]] std::vector<ast::state_script_block> make_statescript_blocks();
         [[nodiscard]] std::vector<ast::state_script_track> make_statescript_tracks();
-        [[nodiscard]] std::vector<ast::state_script_lambda> make_statescript_lambdas();
+        [[nodiscard]] std::vector<ast::function_definition> make_statescript_lambdas();
     };
 
     [[nodiscard]] bool operator==(const parsing_error& lhs, const parsing_error& rhs) noexcept;

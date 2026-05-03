@@ -497,24 +497,24 @@ void Disassembler::insert_variable(const SsDeclaration *var, const u32 indent) {
 
 void Disassembler::insert_on_block(const SsOnBlock *block, const u32 indent, state_script_function_id& function_name) {
     switch (block->m_blockType) {
-        case 0: {
+        case BLOCK_TYPE::START: {
             function_name.m_event.m_name = "start";
             break;
         }
-        case 1: {
+        case BLOCK_TYPE::END: {
             function_name.m_event.m_name = "end";
             break;
         }
-        case 2: {
+        case BLOCK_TYPE::EVENT: {
             function_name.m_event.m_name = std::string("event ").append(lookup(block->m_blockEventId));
             break;
         }
-        case 3: {
+        case BLOCK_TYPE::UPDATE: {
             function_name.m_event.m_name = "update";
             break;
         }
-        case 4: {
-            function_name.m_event.m_name= "virtual";
+        case BLOCK_TYPE::VIRTUAL: {
+            function_name.m_event.m_name = "virtual";
             break;
         }
         default: {
@@ -1680,6 +1680,11 @@ void Disassembler::process_instruction(const u32 istr_idx, function_disassembly 
             frame[dest].set_first_type(ast::ptr_type{});
             std::snprintf(varying, disassembly_text_size, "r%d", dest);
             std::snprintf(interpreted, interpreted_buffer_size, "r%d != nullptr", dest);
+            break;
+        }
+        case Opcode::StoreArray: {
+            std::snprintf(varying, disassembly_text_size, " ");
+            std::snprintf(interpreted, interpreted_buffer_size, "DCC BREAKPOINT");
             break;
         }
         default: {

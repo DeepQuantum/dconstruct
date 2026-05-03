@@ -5,11 +5,14 @@
 @repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
 
 
-using #spawn-persistent-script as near (string, string, u64) -> u0;
+using #spawn-persistent-script as near (string, string, u64) -> u64;
 using #unparented as u64;
-using #dc:format as far (string) -> u0;
+using #display as far (string, u64) -> u0;
+using #dc:format as far (string, u64, u64) -> string;
 
 using #set-gas-mask-setting-id as far (u64, u64) -> u0;
+using #get-gas-mask-setting-id as far (u64) -> u64;
+using #lookup-symbol as far (u64, u64) -> u64;
 using #player as u64;
 using #self as u64;
 using #*ellie-gas-mask-setup* as u64;
@@ -19,6 +22,22 @@ using #get-equipped-gas-mask as near (u64) -> u64;
 using #player-gas-mask as u64;
 using #internal-put-on-gas-mask-immediately as near (u64, u32) -> u0;
 using #spawn-gas-mask as near (u64) -> u64;
+using #wait-one-frame as far () -> u0;
+using #is-script-running? as near (u64) -> bool;
+using #ss-gas-mask-material-controller-1 as u64;
+using #spawn-script as far (string, string, u64, u64) -> u0;
+using #get-script-state as far (u64) -> u64;
+
+using #new-boxed-value as far (u64, u64) -> u64;
+
+using #gas-mask-equipped as u64;
+
+using #send-event as far (u64, u64, u64) -> u0;
+
+using #ss-player-peek-mode as u64;
+using #ss-player-peek-mode-1 as u64;
+using #gas-mask-setup as u64;
+using #get-gas-mask as far (u64) -> u64;
 
 
 u0 #activated-rogue-manager-callback() {
@@ -34,9 +53,30 @@ u0 #activated-rogue-manager-callback() {
     #spawn-persistent-script("ss-vendor-manager", "ss-vendor-manager-1", #unparented);
     #spawn-persistent-script("ss-post-encounter-flow", "ss-post-encounter-flow-1", #unparented);
 
-    #dc:format("hello world");
+    // u64 sid = #spawn-persistent-script("ss-player-peek-mode", "ss-player-peek-mode-1", #unparented);
     
+    // string sid_output = #dc:format("ss-player-peek-mode instance sid: %16X", #ss-player-peek-mode-1);
+    // #display(sid_output, 8);
+
+    //u64 _player = #new-boxed-value(7, #player);
+  //  #send-event(#gas-mask-equipped, sid, _player);
+
+    // string output = #dc:format("state script state: %d", script_state);
+    // #display(output, 8);
+    
+    u64 gas_mask = #get-gas-mask(#player);
+
+    #display(#dc:format("gas mask %16X", gas_mask, 0), 8);
+
+    breakpoint;
     #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);
-    u64 gas_mask = #spawn-gas-mask(#player);
-    //#wait-equip-gas-mask(#player, gas_mask, 0);
+
+    u64 test = #get-gas-mask-setting-id(#player);
+    u64 test1 = 0; //#lookup-symbol(test, #gas-mask-setup);
+
+    #display(#dc:format("set gas mask setting id with params: %16X %16X", test, test1), 8);
+
+    //#wait-equip-gas-mask(#player, 0, 1);
+
+    // #display("equipped gas mask", 8);
 }

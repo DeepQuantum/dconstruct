@@ -13,6 +13,7 @@ namespace dconstruct::compilation {
         std::filesystem::path m_modules;
         std::filesystem::path m_sidbase;
         std::optional<std::filesystem::path> m_repackage;
+        bool m_standalone = false;
 
         
         [[nodiscard]] static std::expected<compiler_options, std::string> parse(const cxxopts::ParseResult& args, std::string& source) noexcept;

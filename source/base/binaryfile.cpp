@@ -125,7 +125,7 @@ namespace dconstruct {
             if (m_relocTable.get<u8>(i / 8) & (1 << (i % 8))) {
                 u64* entry = reinterpret_cast<u64*>(m_bytes.get() + i * 8);
                 u64 offset = *entry;
-                *entry = reinterpret_cast<u64>(m_bytes.get() + offset);
+                *entry = reinterpret_cast<u64>(m_bytes.get() + offset) * (offset != 0);
                 reinterpret_cast<u8*>(m_pointedAtTable.get())[offset / 64] |= (1 << ((offset / 8) % 8));
             }
         }

@@ -38,7 +38,10 @@ namespace dconstruct::compilation {
     const std::vector<ast::semantic_check_error> semantic_errors = program.check_semantics(base_scope);
     if (!semantic_errors.empty()) {
         for (const auto& err : semantic_errors) {
-            std::cerr << "[semantic error] " << err.m_message << " checking expression " << err.m_expr->to_c_string();  
+            std::cerr << "[semantic error] " << err.m_message;   
+            if (err.m_expr) {
+                std::cerr << " checking expression " << err.m_expr->to_c_string();
+            }
         }
         return std::nullopt;
     }
@@ -192,7 +195,10 @@ static i32 create_output(
     const std::vector<dconstruct::compilation::program_binary_element> &functions, 
     dconstruct::compilation::global_state &global
 ) {
-    const auto binary_res = dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
+    const auto binary_res = filepaths->m_standalone ? 
+        dconstruct::ast::program::make_binary(functions, global) 
+        : dconstruct::compilation::disassemble_target(filepaths->m_target, sidbase, functions, global);
+        
     if (!binary_res) {
         std::cerr << binary_res.error() << "\n";
         return -1;
@@ -207,10 +213,12 @@ static i32 create_output(
     of.write(reinterpret_cast<const char*>(bytes.get()), size);
     of.flush();
 
-    const std::optional<std::string> patch_err = patch_modules_size(filepaths->m_modules, filepaths->m_output, size);
-    if (patch_err) {
-        std::cerr << *patch_err << "\n";
-        return -1;
+    if (!filepaths->m_modules.empty()) {
+        const std::optional<std::string> patch_err = patch_modules_size(filepaths->m_modules, filepaths->m_output, size);
+        if (patch_err) {
+            std::cerr << *patch_err << "\n";
+            return -1;
+        }
     }
 
     return 0;
