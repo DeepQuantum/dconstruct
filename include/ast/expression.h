@@ -47,6 +47,7 @@ namespace dconstruct::ast {
 
     // using llvm_res = std::expected<llvm::Value*, llvm_error>;
     using semantic_check_res = std::expected<ast::full_type, semantic_check_error>;
+    using condition_branch_res = std::expected<std::vector<u64>, std::string>;
 
     enum class DC_LVALUE_TYPE : u8 {
         REGISTER, 
@@ -84,6 +85,22 @@ namespace dconstruct::ast {
         [[nodiscard]] virtual full_type compute_type_unchecked(const compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual semantic_check_res compute_type_checked(compilation::scope& env) const noexcept = 0;
         [[nodiscard]] virtual emission_res emit_dc( compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return 0; }
+        [[nodiscard]] virtual condition_branch_res emit_dc_branch(compilation::function& fn, compilation::global_state& global, const bool branch_when_true) const noexcept {
+            const emission_res condition = emit_dc(fn, global);
+            if (!condition) {
+                return std::unexpected{condition.error()};
+            }
+
+            const u64 branch_location = fn.m_instructions.size();
+            fn.emit_instruction(
+                branch_when_true ? Opcode::BranchIf : Opcode::BranchIfNot,
+                compilation::function::BRANCH_PLACEHOLDER,
+                *condition,
+                compilation::function::BRANCH_PLACEHOLDER
+            );
+            fn.free_register(*condition);
+            return std::vector<u64>{branch_location};
+        }
         [[nodiscard]] virtual emission_res emit_dc_callee(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination = std::nullopt) const noexcept { return emit_dc(fn, global, destination); }
         [[nodiscard]] virtual bool is_l_evaluable() const noexcept { return false; }
 
@@ -132,6 +149,12 @@ namespace dconstruct::ast {
         mutable std::optional<full_type> m_type;
         mutable std::optional<u16> m_complexity;
     };
+
+    inline void patch_branch_targets(compilation::function& fn, const std::vector<u64>& branch_locations, const u16 target) noexcept {
+        for (const u64 branch_location : branch_locations) {
+            fn.m_instructions[branch_location].set_lo_hi(target);
+        }
+    }
 
     [[nodiscard]] inline bool operator==(const expression& lhs, const expression& rhs) noexcept {
         return lhs.equals(rhs);

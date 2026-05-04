@@ -2,6 +2,7 @@
 #include "DCHeader.h"
 #include "DCScript.h"
 
+#include <cstring>
 #include <numeric>
 
 namespace dconstruct::ast {
@@ -108,12 +109,32 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     u64 byte_offset = 0, bit_offset = 0;
 
     auto push_bytes = [&out, &current_size, &reloc_table_ptr, &byte_offset, &bit_offset](auto&& arg, auto&& ...bits) -> void {
+        const std::byte* p = reinterpret_cast<const std::byte*>(std::addressof(arg));
         insert_into_bytestream(out, current_size, arg);
         const std::vector<u8> bits_list = {static_cast<u8>(bits)...};
+
+        const auto non_null_reloc_bits = [p](const u8 reloc_bits, const u64 chunk_offset, const u64 num_bits) noexcept -> u8 {
+            u8 filtered_bits = 0;
+            for (u64 i = 0; i < num_bits; ++i) {
+                const u8 bit = 1 << i;
+                if ((reloc_bits & bit) == 0) {
+                    continue;
+                }
+
+                u64 value = 0;
+                std::memcpy(&value, p + (chunk_offset + i) * sizeof(u64), sizeof(value));
+                if (value != 0) {
+                    filtered_bits |= bit;
+                }
+            }
+            return filtered_bits;
+        };
+
         for (u32 i = 0; i < bits_list.size() - 1; ++i) {
-            insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits_list[i], 8);
+            insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, non_null_reloc_bits(bits_list[i], i * 8, 8), 8);
         }
-        insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bits_list.back(), sizeof(arg) / 8); 
+        const u64 remaining_bits = sizeof(arg) / sizeof(u64) - (bits_list.size() - 1) * 8;
+        insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, non_null_reloc_bits(bits_list.back(), (bits_list.size() - 1) * 8, remaining_bits), remaining_bits);
     };
 
     auto get_string_offset = [data_size, &global](const u32 index) -> u64 {
@@ -152,7 +173,13 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
         }
         fn.adjust_offsets(current_size);
         insert_into_bytestream(out, current_size, fn.m_rawData);
-        for (const auto& bit : fn.m_relocTable) {
+        for (u64 i = 0; i < fn.m_relocTable.size(); ++i) {
+            bool bit = fn.m_relocTable[i];
+            if (bit) {
+                u64 value = 0;
+                std::memcpy(&value, fn.m_rawData.data() + i * sizeof(u64), sizeof(value));
+                bit = value != 0;
+            }
             insert_into_reloctable(reloc_table_ptr, byte_offset, bit_offset, bit, sizeof(bool));
         }
     }
@@ -215,4 +242,4 @@ void program::insert_into_reloctable(u8* out, u64& byte_offset, u64& bit_offset,
     return compile_binary_elements(scope, global);
 }
 
-} 
+}

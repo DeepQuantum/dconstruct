@@ -1321,13 +1321,11 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
     TEST(COMPILER, IfElseReturn) {
         expect_instructions("i32 main() { if (1) { return 2; } return 3; }", {
             Instruction{Opcode::LoadU16Imm, 0, 1, 0},
-            Instruction{Opcode::BranchIfNot, 6, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 1, 2, 0},
+            Instruction{Opcode::BranchIfNot, 4, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 0, 2, 0},
+            Instruction{Opcode::Branch, 6, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 1, 3, 0},
             Instruction{Opcode::Move, 0, 1, 0},
-            Instruction{Opcode::Branch, 8, 0, 0},
-            Instruction{Opcode::Branch, 8, 0, 0},
-            Instruction{Opcode::LoadU16Imm, 2, 3, 0},
-            Instruction{Opcode::Move, 0, 2, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }
@@ -1340,7 +1338,6 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
             Instruction{Opcode::BranchIfNot, 6, 2, 0},
             Instruction{Opcode::IAdd, 0, 0, 1},
             Instruction{Opcode::Branch, 2, 0, 0},
-            Instruction{Opcode::Move, 0, 0, 0},
             Instruction{Opcode::Return, 0, 0, 0},
         });
     }
@@ -1370,6 +1367,51 @@ const std::string DCPL_PATH = "C:/Users/damix/Documents/GitHub/TLOU2Modding/dcon
         EXPECT_LT(lhs_branch_index, rhs_load_index);
         EXPECT_GT(lhs_branch_target, rhs_load_index);
         EXPECT_EQ(instructions.back().opcode, Opcode::Return);
+    }
+
+    TEST(COMPILER, IfLogicalAndBranchesDirectly) {
+        expect_instructions("i32 main(i32 a, i32 b) { if (a && b) { return 1; } return 0; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::Move, 1, 50, 0},
+            Instruction{Opcode::BranchIfNot, 7, 0, 0},
+            Instruction{Opcode::BranchIfNot, 7, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Branch, 9, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+            Instruction{Opcode::Move, 0, 3, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, IfLogicalOrBranchesDirectly) {
+        expect_instructions("i32 main(i32 a, i32 b) { if (a || b) { return 1; } return 0; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::Move, 1, 50, 0},
+            Instruction{Opcode::BranchIf, 4, 0, 0},
+            Instruction{Opcode::BranchIfNot, 7, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Branch, 9, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+            Instruction{Opcode::Move, 0, 3, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
+    }
+
+    TEST(COMPILER, IfGroupedLogicalBranchesDirectly) {
+        expect_instructions("i32 main(i32 a, i32 b) { if ((a && b)) { return 1; } return 0; }", {
+            Instruction{Opcode::Move, 0, 49, 0},
+            Instruction{Opcode::Move, 1, 50, 0},
+            Instruction{Opcode::BranchIfNot, 7, 0, 0},
+            Instruction{Opcode::BranchIfNot, 7, 1, 0},
+            Instruction{Opcode::LoadU16Imm, 2, 1, 0},
+            Instruction{Opcode::Move, 0, 2, 0},
+            Instruction{Opcode::Branch, 9, 0, 0},
+            Instruction{Opcode::LoadU16Imm, 3, 0, 0},
+            Instruction{Opcode::Move, 0, 3, 0},
+            Instruction{Opcode::Return, 0, 0, 0},
+        });
     }
 
     TEST(COMPILER, Subscript1) {

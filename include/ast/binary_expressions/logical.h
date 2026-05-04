@@ -9,6 +9,7 @@ namespace dconstruct::ast {
 
         [[nodiscard]] semantic_check_res compute_type_checked(compilation::scope& env) const noexcept final;
         [[nodiscard]] emission_res emit_dc(compilation::function& fn, compilation::global_state& global, const std::optional<reg_idx> destination) const noexcept final;
+        [[nodiscard]] condition_branch_res emit_dc_branch(compilation::function& fn, compilation::global_state& global, bool branch_when_true) const noexcept final;
 
         void pseudo_py(std::ostream& os) const final;
         void pseudo_racket(std::ostream& os) const final;

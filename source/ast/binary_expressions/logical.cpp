@@ -3,6 +3,12 @@
 
 namespace dconstruct::ast {
 
+namespace {
+void append_branch_locations(std::vector<u64>& destination, std::vector<u64>&& source) noexcept {
+    destination.insert(destination.end(), source.begin(), source.end());
+}
+}
+
 [[nodiscard]] expr_uptr logical_expr::simplify() const {
     return nullptr;
 }
@@ -115,6 +121,68 @@ namespace dconstruct::ast {
     fn.m_instructions[done_branch].set_lo_hi(end_location);
 
     return *logical_destination;
+}
+
+[[nodiscard]] condition_branch_res logical_expr::emit_dc_branch(compilation::function& fn, compilation::global_state& global, const bool branch_when_true) const noexcept {
+    const bool is_and = m_operator.m_lexeme == "&&";
+
+    if (is_and && !branch_when_true) {
+        condition_branch_res lhs_false = m_lhs->emit_dc_branch(fn, global, false);
+        if (!lhs_false) {
+            return std::unexpected{lhs_false.error()};
+        }
+
+        condition_branch_res rhs_false = m_rhs->emit_dc_branch(fn, global, false);
+        if (!rhs_false) {
+            return std::unexpected{rhs_false.error()};
+        }
+
+        append_branch_locations(*lhs_false, std::move(*rhs_false));
+        return lhs_false;
+    }
+
+    if (is_and) {
+        condition_branch_res lhs_false = m_lhs->emit_dc_branch(fn, global, false);
+        if (!lhs_false) {
+            return std::unexpected{lhs_false.error()};
+        }
+
+        condition_branch_res rhs_true = m_rhs->emit_dc_branch(fn, global, true);
+        if (!rhs_true) {
+            return std::unexpected{rhs_true.error()};
+        }
+
+        patch_branch_targets(fn, *lhs_false, static_cast<u16>(fn.m_instructions.size()));
+        return rhs_true;
+    }
+
+    if (branch_when_true) {
+        condition_branch_res lhs_true = m_lhs->emit_dc_branch(fn, global, true);
+        if (!lhs_true) {
+            return std::unexpected{lhs_true.error()};
+        }
+
+        condition_branch_res rhs_true = m_rhs->emit_dc_branch(fn, global, true);
+        if (!rhs_true) {
+            return std::unexpected{rhs_true.error()};
+        }
+
+        append_branch_locations(*lhs_true, std::move(*rhs_true));
+        return lhs_true;
+    }
+
+    condition_branch_res lhs_true = m_lhs->emit_dc_branch(fn, global, true);
+    if (!lhs_true) {
+        return std::unexpected{lhs_true.error()};
+    }
+
+    condition_branch_res rhs_false = m_rhs->emit_dc_branch(fn, global, false);
+    if (!rhs_false) {
+        return std::unexpected{rhs_false.error()};
+    }
+
+    patch_branch_targets(fn, *lhs_true, static_cast<u16>(fn.m_instructions.size()));
+    return rhs_false;
 }
 
 void logical_expr::pseudo_py(std::ostream& os) const {

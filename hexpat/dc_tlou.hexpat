@@ -360,7 +360,7 @@ struct SymbolLinkedChunk {
 };
 
 struct DC_Header {
-    padding[4];
+    u32   m_magic;
     u32   m_versionNumber;
     u32   m_textSize;
     u32   m_stringsOffset;
@@ -368,9 +368,9 @@ struct DC_Header {
     u32   m_numEntries;
     u64   m_pStartOfData;
     
-    //Entry entries[m_numEntries] @ m_pStartOfData; 
-    //SymbolTable symbolTable @ m_textSize;
+    Entry entries[m_numEntries] @ m_pStartOfData; 
+    SymbolTable symbolTable @ m_textSize;
 };
 
 DC_Header header @ 0x0;
-//SymbolLinkedChunk linkedChunks[(header.m_textSize + 7) / 8] @ 0x0;
+SymbolLinkedChunk linkedChunks[(header.m_textSize + 7) / 8] @ 0x0;

@@ -68,17 +68,12 @@ void while_stmt::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] emission_err while_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
 
-    constexpr u8 BRANCH_PLACEHOLDER = 0xFF;
+    u16 head_location = static_cast<u16>(fn.m_instructions.size());
 
-    u16 head_location = fn.m_instructions.size();
-
-    const emission_res condition_reg = m_condition->emit_dc(fn, global);
-    if (!condition_reg) {
-        return condition_reg.error();
+    const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
+    if (!false_branches) {
+        return false_branches.error();
     }
-    
-    const u16 branch_location = fn.m_instructions.size();
-    fn.emit_instruction(Opcode::BranchIfNot, BRANCH_PLACEHOLDER, *condition_reg, BRANCH_PLACEHOLDER);
 
     const emission_err body_err = m_body->emit_dc(fn, global);
     if (body_err) {
@@ -86,13 +81,12 @@ void while_stmt::pseudo_racket(std::ostream& os) const {
     }
 
     const u16 body_end = fn.m_instructions.size() + 1;
-    fn.m_instructions[branch_location].set_lo_hi(body_end);
+    patch_branch_targets(fn, *false_branches, body_end);
 
     const u8 start_branch_lo = head_location & 0xFF;
     const u8 start_branch_hi = (head_location >> 8) & 0xFF; 
 
     fn.emit_instruction(Opcode::Branch, start_branch_lo, 00, start_branch_hi);
-    fn.free_register(*condition_reg);
 
     return std::nullopt;
 }

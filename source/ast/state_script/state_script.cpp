@@ -208,7 +208,7 @@ void state_script::pseudo_racket(std::ostream& os) const {
     const StateScript ss = {
         script_name,
         nullptr,
-        m_initialStateIdx,
+        SID(m_states[0].m_name.c_str()),
         nullptr,
         0x0,
         nullptr,
@@ -258,9 +258,11 @@ void state_script::pseudo_racket(std::ostream& os) const {
         };
         element.push_bytes(symbol_array, 0b10);
 
+        element.push_bytes(array_sid, 0b0);
+
         const u64 symbol_data_offset = element.m_rawData.size();
         patch_u64(symbol_array_offset + offsetof(SymbolArray, m_pSymbols), symbol_data_offset);
-
+        
         for (const auto& opt : m_options) {
             const std::string opt_str = opt.get_raw_string();
             const u64 opt_sid = SID(opt_str.c_str());

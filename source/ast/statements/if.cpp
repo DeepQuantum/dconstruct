@@ -97,13 +97,10 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 
 [[nodiscard]] emission_err if_stmt::emit_dc(compilation::function& fn, compilation::global_state& global) const noexcept {
 
-    const emission_res condition = m_condition->emit_dc(fn, global);
-    if (!condition) {
-        return condition.error();
+    const condition_branch_res false_branches = m_condition->emit_dc_branch(fn, global, false);
+    if (!false_branches) {
+        return false_branches.error();
     }
-
-    const u64 conditional_branch_location = fn.m_instructions.size();
-    fn.emit_instruction(Opcode::BranchIfNot, compilation::function::BRANCH_PLACEHOLDER, *condition, compilation::function::BRANCH_PLACEHOLDER);
 
     const emission_err then_err = m_then->emit_dc(fn, global);
     if (then_err) {
@@ -123,9 +120,9 @@ void if_stmt::pseudo_racket(std::ostream& os) const {
 
     const u64 end_location = fn.m_instructions.size();
     if (else_skip_location == 0) {
-        fn.m_instructions[conditional_branch_location].set_lo_hi(end_location);
+        patch_branch_targets(fn, *false_branches, static_cast<u16>(end_location));
     } else {
-        fn.m_instructions[conditional_branch_location].set_lo_hi(else_skip_location + 1);
+        patch_branch_targets(fn, *false_branches, static_cast<u16>(else_skip_location + 1));
         fn.m_instructions[else_skip_location].set_lo_hi(end_location);
     }
 

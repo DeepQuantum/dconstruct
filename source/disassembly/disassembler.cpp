@@ -161,18 +161,18 @@ void Disassembler::insert_anonymous_array(const location anon_array, const u32 i
 
 [[nodiscard]] u32 Disassembler::get_size_array(const location array, const u32 indent) {
     u32 size_array_front = array.get<u32>(8);
-
     u32 size_array_back = array.get<u32>(-8);
-    u32 size_array;
+    u32 size_array = 0;
     constexpr u32 max_allowed_size_array_u32 = 100'000;
     constexpr u16 max_allowed_size_array_u16 = 1'000;
     constexpr u16 bit_mask_u16 = 0xFFFF;
-    if (size_array_front > max_allowed_size_array_u32) {
-        if ((size_array_front & bit_mask_u16) < max_allowed_size_array_u16) {
+    if (size_array_front > max_allowed_size_array_u32 || size_array_front == 0) {
+        const u16 small_size_front = size_array_front & bit_mask_u16;
+        if (small_size_front < max_allowed_size_array_u16 && size_array_front > 0) {
             size_array = size_array_front & bit_mask_u16;
         }
-        else if (size_array_back > max_allowed_size_array_u32) {
-            if ((size_array_back & bit_mask_u16) < max_allowed_size_array_u16) {
+        else if (size_array_back > max_allowed_size_array_u32 || size_array_back == 0) {
+            if ((size_array_back & bit_mask_u16) < max_allowed_size_array_u16 && size_array_back > 0) {
                 size_array = size_array_back & bit_mask_u16;
             }
             else {
