@@ -1,5 +1,5 @@
 @standalone
-@output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-rogue/ss-character-trait-dina.bin"
+@output "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/ss-rogue/test-script-qntm.bin"
 @modules "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked/bin/dc1/modules.bin"
 @sidbase "C:/Users/damix/Documents/GitHub/TLOU2Modding/dconstruct/test/dc_test_files/sidbase_new_fixed.bin"
 @repackage "C:/Program Files (x86)/Steam/steamapps/common/The Last of Us Part II/mods/ProjectFEDRA_unpacked"
@@ -30,8 +30,20 @@ using #get-inventory-item-quantity as near (u64) -> u64;
 using #inventory-item-add-quantity as near (u64, u64) -> u0;
 using #inventory-item-consume as near (u64, u64) -> u0;
 
+using #*ellie-gas-mask-setup* as u64;
+using #gas-mask-setup as u64;
 
-statescript #ss-character-trait-dina {
+using #set-gas-mask-setting-id as far (u64, u64) -> u0;
+using #get-gas-mask-setting-id as far (u64) -> u64;
+using #lookup-symbol as far (u64, u64) -> u64;
+using #dc:format as far (string, u64, u64) -> string;
+using #wait-equip-gas-mask as near (u64, u64, u64) -> u64;
+using #wait as far (f32) -> u0;
+using #spawn-gas-mask as near (u64) -> u64;
+using #keyboard-button-pressed? as far (u64) -> bool;
+
+
+statescript #test-script-qntm {
     options {
         #player
     }
@@ -40,20 +52,24 @@ statescript #ss-character-trait-dina {
             track #main {
                 lambda {
                     #display("Custom script", 19);
-                }
-            }
-        }
-        block event #run-complete {
-            track #main {
-                lambda {
-                    #display("run complete", 19);
+                    
+                    #set-gas-mask-setting-id(#player, #*ellie-gas-mask-setup*);   
                 }
             }
         }
         block update {
-            track main {
+            track #main {
                 lambda {
-                    #display("update", 19);
+                    if (#keyboard-button-pressed?(158)) {
+                        #display("pressed", 19);
+                        u64 test = #get-gas-mask-setting-id(#player);
+                        u64 test1 = #lookup-symbol(test, #gas-mask-setup);
+                        #display(#dc:format("set gas mask setting id with params: %016llx %016llx", test, test1), 8);
+                        
+                        u64 gas_mask = #wait-equip-gas-mask(#player, 0, 1);
+
+                        #display(#dc:format("gas mask: %016llx %d", gas_mask, 0), 19);    
+                    }
                 }
             }
         }
